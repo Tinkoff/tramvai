@@ -1,0 +1,5 @@
+# мы мокаем node_modules для теста, поэтому отключаем игнорирование
+!node_modules/
+
+stats.json
+dedupe/node_modules/.cache/

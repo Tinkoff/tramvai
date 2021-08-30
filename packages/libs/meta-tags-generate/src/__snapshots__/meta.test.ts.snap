@@ -1,0 +1,134 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`meta - integrate tests Наполнение данными и обновление в dom 1`] = `
+<head>
+  <title
+    data-meta-dynamic="true"
+  >
+    g
+  </title>
+  <meta
+    content="d"
+    data-meta-dynamic="true"
+    property="og:title"
+  />
+  <meta
+    data-meta-dynamic="true"
+    k="s"
+  />
+  <link
+    data-meta-dynamic="true"
+    href="l"
+    rel="canonical"
+  />
+</head>
+`;
+
+exports[`meta - integrate tests Наполнение данными и преобразование в строку 1`] = `
+Array [
+  Object {
+    "innerHtml": "g",
+    "tag": "title",
+  },
+  Object {
+    "attributes": Object {
+      "content": "d",
+      "property": "og:title",
+    },
+    "tag": "meta",
+  },
+  Object {
+    "attributes": Object {
+      "k": "s",
+    },
+    "tag": "meta",
+  },
+  Object {
+    "attributes": Object {
+      "href": "l",
+      "rel": "canonical",
+    },
+    "tag": "link",
+  },
+]
+`;
+
+exports[`meta - integrate tests Наполнение данными и преобразование в строку 2`] = `
+"<title data-meta-dynamic=\\"true\\">g</title>
+<meta property=\\"og:title\\" content=\\"d\\" data-meta-dynamic=\\"true\\">
+<meta k=\\"s\\" data-meta-dynamic=\\"true\\">
+<link rel=\\"canonical\\" href=\\"l\\" data-meta-dynamic=\\"true\\">"
+`;
+
+exports[`meta - integrate tests Очистка дефолтных meta параметров 1`] = `
+Array [
+  Object {
+    "attributes": Object {
+      "content": "d",
+      "property": "og:title",
+    },
+    "tag": "meta",
+  },
+  Object {
+    "attributes": Object {
+      "k": "s",
+    },
+    "tag": "meta",
+  },
+]
+`;
+
+exports[`meta - integrate tests Очистка дефолтных meta параметров 2`] = `
+"<meta property=\\"og:title\\" content=\\"d\\" data-meta-dynamic=\\"true\\">
+<meta k=\\"s\\" data-meta-dynamic=\\"true\\">"
+`;
+
+exports[`meta - integrate tests Очистка дефолтных meta параметров 3`] = `
+<head>
+  <meta
+    content="d"
+    data-meta-dynamic="true"
+    property="og:title"
+  />
+  <meta
+    data-meta-dynamic="true"
+    k="s"
+  />
+</head>
+`;
+
+exports[`meta - integrate tests Преобразовываем значения с приоритетом выше дефолтного 1`] = `
+Array [
+  Object {
+    "innerHtml": "transform",
+    "tag": "title",
+  },
+  Object {
+    "attributes": Object {
+      "content": "d",
+      "property": "og:title",
+    },
+    "tag": "meta",
+  },
+  Object {
+    "attributes": Object {
+      "k": "s",
+    },
+    "tag": "meta",
+  },
+  Object {
+    "attributes": Object {
+      "href": "transform",
+      "rel": "canonical",
+    },
+    "tag": "link",
+  },
+]
+`;
+
+exports[`meta - integrate tests Преобразовываем значения с приоритетом выше дефолтного 2`] = `
+"<title data-meta-dynamic=\\"true\\">transform</title>
+<meta property=\\"og:title\\" content=\\"d\\" data-meta-dynamic=\\"true\\">
+<meta k=\\"s\\" data-meta-dynamic=\\"true\\">
+<link rel=\\"canonical\\" href=\\"transform\\" data-meta-dynamic=\\"true\\">"
+`;

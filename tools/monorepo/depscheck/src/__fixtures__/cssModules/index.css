@@ -1,0 +1,9 @@
+@import "~pkg-m/m.css";
+@import "~@pkg-m/m/m.css";
+@value spacingXL from "pkg-m/m.css";
+@value spacingXL from "@pkg-m/m/m.css";
+
+.content {
+  composes: a from "~pkg-m/m.css";
+  composes: a from "~@pkg-m/m/m.css";
+}

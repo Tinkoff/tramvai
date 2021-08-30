@@ -1,0 +1,20 @@
+{
+    "extends": "../../../tsconfig.lib.json",
+    "include": [
+        "./src"
+    ],
+    "compilerOptions": {
+        "declarationDir": "./lib",
+        "outDir": "./lib",
+        "rootDir": "./src",
+        "strict": true
+    },
+    "references": [
+        {
+            "path": "../../libs/react-hooks"
+        },
+        {
+            "path": "../types-actions-state-context"
+        }
+    ]
+}

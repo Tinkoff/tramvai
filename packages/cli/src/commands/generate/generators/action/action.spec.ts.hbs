@@ -1,0 +1,14 @@
+import { actionRunner } from '@tramvai/test';
+import { {{ camelCase name }}Action } from './{{ name }}Action';
+
+describe('{{name}}Action', () => {
+  it('execution', async () => {
+    const { run, dispatchMock } = actionRunner();
+
+    await run({{ camelCase name }}Action, 'payload');
+
+    expect(dispatchMock.calls[0]).toEqual([
+      { type: 'FAKE_ACTION', payload: 'payload' },
+    ]);
+  });
+});

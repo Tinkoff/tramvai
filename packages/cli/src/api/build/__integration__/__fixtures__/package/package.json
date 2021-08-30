@@ -1,0 +1,21 @@
+{
+  "name": "example-cli-package",
+  "version": "0.0.0-stub",
+  "private": true,
+  "source": "src/index.ts",
+  "browserSource": "src/browser.ts",
+  "browser": "dist/browser.js",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "es2017": "dist/browser.es2017.js",
+  "typings": "src/index.ts",
+  "scripts": {
+    "build": "tramvai build package"
+  },
+  "sideEffects": false,
+  "dependencies": {},
+  "devDependencies": {
+    "@tramvai/cli": "0.0.0-stub"
+  },
+  "license": "Apache-2.0"
+}

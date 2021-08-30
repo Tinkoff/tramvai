@@ -1,0 +1,9 @@
+{
+  "name": "with-css-modules",
+  "version": "1.0.0",
+  "dependencies": {
+    "pkg-m": "^1.2.3",
+    "@pkg-m/m": "^1.2.3"
+  },
+  "license": "Apache-2.0"
+}

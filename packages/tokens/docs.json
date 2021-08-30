@@ -1,0 +1,56 @@
+[
+  {
+    "name": "references",
+    "label": "Справочник",
+    "items": [
+      {
+        "name": "tokens",
+        "label": "Токены",
+        "items": [
+          {
+            "path": "router/README.md",
+            "doc": {
+              "id": "router-tokens",
+              "title": "router-tokens"
+            }
+          },
+          {
+            "path": "render/README.md",
+            "doc": {
+              "id": "render-tokens",
+              "title": "render-tokens"
+            }
+          },
+          {
+            "path": "common/README.md",
+            "doc": {
+              "id": "common-tokens",
+              "title": "common-tokens"
+            }
+          },
+          {
+            "path": "metrics/README.md",
+            "doc": {
+              "id": "metrics-tokens",
+              "title": "metrics-tokens"
+            }
+          },
+          {
+            "path": "server/README.md",
+            "doc": {
+              "id": "server-tokens",
+              "title": "server-tokens"
+            }
+          },
+          {
+            "path": "http-client/README.md",
+            "doc": {
+              "id": "http-client-tokens",
+              "title": "http-client-tokens"
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,35 @@
+{
+  "name": "@tinkoff/minicss-class-generator",
+  "version": "0.0.0-stub",
+  "initialVersion": "0.1.8",
+  "description": "Css class name generator for webpack's css-loader",
+  "keywords": [
+    "webpack",
+    "css-loader",
+    "minicss"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "main": "./lib/index",
+  "bugs": {
+    "url": "https://tinkoff.slack.com/archives/CHF0KE8TX"
+  },
+  "files": [
+    "lib"
+  ],
+  "homepage": "https://github.com/TinkoffCreditSystems/tramvai",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+  },
+  "peerDependencies": {},
+  "dependencies": {
+    "css-class-generator": "^2.0.0",
+    "cssesc": "^3.0.0",
+    "loader-utils": "^2.0.0"
+  },
+  "devDependencies": {},
+  "license": "Apache-2.0"
+}

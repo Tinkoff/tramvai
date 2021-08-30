@@ -1,0 +1,28 @@
+{
+  "name": "@tinkoff/is-modern-lib",
+  "version": "0.0.0-stub",
+  "initialVersion": "1.2.3",
+  "description": "RegExp for modern libraries detection",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "homepage": "https://github.com/TinkoffCreditSystems/tramvai",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+  },
+  "devDependencies": {
+    "@types/semver": "^7.3.6"
+  },
+  "dependencies": {
+    "semver": "^7.3.5"
+  },
+  "sideEffects": false,
+  "license": "Apache-2.0"
+}

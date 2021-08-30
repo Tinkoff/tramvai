@@ -1,0 +1,1303 @@
+{
+  "type": "object",
+  "title": "platform.json schema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "required": [
+    "projects"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "projects": {
+      "type": "object",
+      "title": "Project configs",
+      "minProperties": 1,
+      "patternProperties": {
+        "^[$a-zA-Z_-][0-9a-zA-Z_$-]*$": {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "application"
+              }
+            }
+          },
+          "then": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "application"
+                ]
+              },
+              "commands": {
+                "default": {},
+                "type": "object",
+                "properties": {
+                  "build": {
+                    "default": {},
+                    "type": "object",
+                    "properties": {
+                      "options": {
+                        "default": {},
+                        "type": "object",
+                        "properties": {
+                          "vendor": {
+                            "title": "Path to vendor file",
+                            "default": "",
+                            "type": "string"
+                          },
+                          "polyfill": {
+                            "title": "Path to polyfill file",
+                            "default": "",
+                            "type": "string"
+                          },
+                          "server": {
+                            "title": "Path to server entry point",
+                            "default": "src/server",
+                            "type": "string"
+                          },
+                          "serverApiDir": {
+                            "title": "Path to folder with papi handlers",
+                            "default": "src/api",
+                            "type": "string"
+                          },
+                          "outputServer": {
+                            "title": "Path to build assets for server",
+                            "default": "dist/server",
+                            "type": "string"
+                          },
+                          "outputClient": {
+                            "title": "Path to build assets for client",
+                            "default": "dist/client",
+                            "type": "string"
+                          },
+                          "outputStatic": {
+                            "title": "Path to build static assets",
+                            "default": "dist/static",
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      "configurations": {
+                        "default": {},
+                        "additionalProperties": false,
+                        "type": "object",
+                        "properties": {
+                          "modern": {
+                            "title": "Enable production build for modern browsers",
+                            "default": false,
+                            "type": "boolean"
+                          },
+                          "dedupe": {
+                            "title": "Enable DedupePlugin",
+                            "default": false,
+                            "enum": [
+                              "equality",
+                              false,
+                              "semver"
+                            ]
+                          },
+                          "dedupeIgnore": {
+                            "title": "Sets ignore to DedupePlugin",
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "removeTypeofWindow": {
+                            "title": "Enable replacing `typeof window` expression",
+                            "default": true,
+                            "type": "boolean"
+                          },
+                          "sourceMap": {
+                            "title": "Enable source maps in production build",
+                            "default": false,
+                            "type": "boolean"
+                          },
+                          "sourceMapServer": {
+                            "title": "Enable source maps for server assets in production build",
+                            "default": false,
+                            "type": "boolean"
+                          },
+                          "terserParallel": {
+                            "title": "Configuration for enabling parallel compression for terser plugin",
+                            "default": true,
+                            "type": "boolean"
+                          },
+                          "excludesPresetEnv": {
+                            "title": "List of modules to exclude from",
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "threadLoader": {
+                            "description": "Construct a type with a set of properties K of type T",
+                            "title": "thread-loader config",
+                            "additionalProperties": true,
+                            "type": "object"
+                          },
+                          "definePlugin": {
+                            "description": "Construct a type with a set of properties K of type T",
+                            "title": "Define plugin config",
+                            "default": {
+                              "prod": {},
+                              "dev": {}
+                            },
+                            "additionalProperties": true,
+                            "type": "object"
+                          },
+                          "generateDataQaTag": {
+                            "default": false,
+                            "type": "boolean"
+                          },
+                          "enableFillActionNamePlugin": {
+                            "default": false,
+                            "type": "boolean"
+                          },
+                          "cssMinimize": {
+                            "title": "Set minimizer for css",
+                            "type": "string",
+                            "enum": [
+                              "csso"
+                            ]
+                          },
+                          "postcss": {
+                            "default": {
+                              "config": "postcss.config"
+                            },
+                            "type": "object",
+                            "properties": {
+                              "config": {
+                                "title": "Path to postcss config file",
+                                "type": "string"
+                              },
+                              "cssLocalIdentName": {
+                                "title": "CSS identifiers build algorythm",
+                                "type": "string"
+                              },
+                              "cssLocalIdentNameDev": {
+                                "title": "CSS identifiers build algorythm for development buld",
+                                "type": "string"
+                              },
+                              "cssLocalIdentNameProd": {
+                                "title": "CSS identifiers build algorythm for production build",
+                                "type": "string"
+                              },
+                              "assetsConfig": {
+                                "title": "Path to postcss config file for assets",
+                                "type": "string"
+                              }
+                            },
+                            "additionalProperties": false
+                          },
+                          "alias": {
+                            "description": "Construct a type with a set of properties K of type T",
+                            "title": "Aliases for project imports",
+                            "additionalProperties": true,
+                            "type": "object"
+                          },
+                          "svgo": {
+                            "title": "svgo-loader options",
+                            "type": "object",
+                            "properties": {
+                              "plugins": {
+                                "title": "svgo plugins",
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "additionalProperties": false
+                                }
+                              }
+                            },
+                            "additionalProperties": false
+                          },
+                          "imageOptimization": {
+                            "title": "Settings for image-webpack-loader",
+                            "type": "object",
+                            "properties": {
+                              "enabled": {
+                                "title": "Enable image-webpack-loader",
+                                "type": "boolean"
+                              },
+                              "options": {
+                                "description": "Construct a type with a set of properties K of type T",
+                                "title": "Pass options to image-webpack-loader",
+                                "additionalProperties": true,
+                                "type": "object"
+                              }
+                            },
+                            "additionalProperties": false
+                          },
+                          "transpileOnlyModernLibs": {
+                            "title": "transpile libs based only on @tinkoff/is-modern-lib",
+                            "default": true,
+                            "type": "boolean"
+                          },
+                          "granularChunks": {
+                            "title": "Separate one common chunk to many small dynamic chunks",
+                            "default": false,
+                            "type": "boolean"
+                          },
+                          "granularChunksSplitNumber": {
+                            "title": "Move module to shared chunk if used at least as many times in other chunks",
+                            "default": 2,
+                            "type": "number"
+                          },
+                          "granularChunksMinSize": {
+                            "title": "Minimum shared chunk size in bytes",
+                            "default": 20000,
+                            "type": "number"
+                          },
+                          "commonChunk": {
+                            "title": "Enable auto chunk splitting (`granularChunks` option alternative)",
+                            "default": true,
+                            "type": "boolean"
+                          },
+                          "commonChunkSplitNumber": {
+                            "title": "Move module to common chunk if used at least as many times in other chunks",
+                            "default": 3,
+                            "type": "number"
+                          },
+                          "checkAsyncTs": {
+                            "title": "Configuration for fork-ts-checker-webpack-plugin",
+                            "default": false,
+                            "anyOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "failOnBuild": {
+                                    "description": "при включении этого флага в build-сборку добавляется проверка типов\nпри невалидных типах сборка падает",
+                                    "type": "boolean"
+                                  },
+                                  "pluginOptions": {
+                                    "description": "дополнительные опции",
+                                    "type": "object",
+                                    "properties": {
+                                      "async": {
+                                        "type": "boolean"
+                                      },
+                                      "typescript": {
+                                        "anyOf": [
+                                          {
+                                            "type": "object",
+                                            "properties": {
+                                              "enabled": {
+                                                "type": "boolean"
+                                              },
+                                              "memoryLimit": {
+                                                "type": "number"
+                                              },
+                                              "configFile": {
+                                                "type": "string"
+                                              },
+                                              "configOverwrite": {
+                                                "type": "object",
+                                                "properties": {
+                                                  "extends": {
+                                                    "type": "string"
+                                                  },
+                                                  "compilerOptions": {
+                                                    "type": "object",
+                                                    "properties": {},
+                                                    "additionalProperties": true
+                                                  },
+                                                  "include": {
+                                                    "type": "array",
+                                                    "items": {
+                                                      "type": "string"
+                                                    }
+                                                  },
+                                                  "exclude": {
+                                                    "type": "array",
+                                                    "items": {
+                                                      "type": "string"
+                                                    }
+                                                  },
+                                                  "files": {
+                                                    "type": "array",
+                                                    "items": {
+                                                      "type": "string"
+                                                    }
+                                                  },
+                                                  "references": {
+                                                    "type": "array",
+                                                    "items": {
+                                                      "type": "object",
+                                                      "properties": {
+                                                        "path": {
+                                                          "type": "string"
+                                                        },
+                                                        "prepend": {
+                                                          "type": "boolean"
+                                                        }
+                                                      },
+                                                      "additionalProperties": false,
+                                                      "required": [
+                                                        "path"
+                                                      ]
+                                                    }
+                                                  }
+                                                },
+                                                "additionalProperties": false
+                                              },
+                                              "context": {
+                                                "type": "string"
+                                              },
+                                              "build": {
+                                                "type": "boolean"
+                                              },
+                                              "mode": {
+                                                "enum": [
+                                                  "readonly",
+                                                  "write-references",
+                                                  "write-tsbuildinfo"
+                                                ],
+                                                "type": "string"
+                                              },
+                                              "diagnosticOptions": {
+                                                "description": "Make all properties in T optional",
+                                                "type": "object",
+                                                "properties": {
+                                                  "syntactic": {
+                                                    "type": "boolean"
+                                                  },
+                                                  "semantic": {
+                                                    "type": "boolean"
+                                                  },
+                                                  "declaration": {
+                                                    "type": "boolean"
+                                                  },
+                                                  "global": {
+                                                    "type": "boolean"
+                                                  }
+                                                },
+                                                "additionalProperties": false
+                                              },
+                                              "extensions": {
+                                                "type": "object",
+                                                "properties": {
+                                                  "vue": {
+                                                    "anyOf": [
+                                                      {
+                                                        "type": "object",
+                                                        "properties": {
+                                                          "enabled": {
+                                                            "type": "boolean"
+                                                          },
+                                                          "compiler": {
+                                                            "type": "string"
+                                                          }
+                                                        },
+                                                        "additionalProperties": false
+                                                      },
+                                                      {
+                                                        "type": "boolean"
+                                                      }
+                                                    ]
+                                                  }
+                                                },
+                                                "additionalProperties": false
+                                              },
+                                              "profile": {
+                                                "type": "boolean"
+                                              },
+                                              "typescriptPath": {
+                                                "type": "string"
+                                              }
+                                            },
+                                            "additionalProperties": false
+                                          },
+                                          {
+                                            "type": "boolean"
+                                          }
+                                        ]
+                                      },
+                                      "eslint": {
+                                        "type": "object",
+                                        "properties": {
+                                          "files": {
+                                            "anyOf": [
+                                              {
+                                                "type": "array",
+                                                "items": {
+                                                  "type": "string"
+                                                }
+                                              },
+                                              {
+                                                "type": "string"
+                                              }
+                                            ]
+                                          },
+                                          "enabled": {
+                                            "type": "boolean"
+                                          },
+                                          "memoryLimit": {
+                                            "type": "number"
+                                          },
+                                          "options": {
+                                            "type": "object",
+                                            "additionalProperties": {},
+                                            "properties": {
+                                              "cwd": {
+                                                "type": "string"
+                                              },
+                                              "extensions": {
+                                                "type": "array",
+                                                "items": {
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "fix": {
+                                                "type": "boolean"
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "additionalProperties": false,
+                                        "required": [
+                                          "files"
+                                        ]
+                                      },
+                                      "formatter": {
+                                        "anyOf": [
+                                          {
+                                            "type": "object",
+                                            "additionalProperties": false
+                                          },
+                                          {
+                                            "type": "object",
+                                            "properties": {
+                                              "type": {
+                                                "anyOf": [
+                                                  {
+                                                    "type": "object",
+                                                    "additionalProperties": false
+                                                  },
+                                                  {
+                                                    "enum": [
+                                                      "basic",
+                                                      "codeframe"
+                                                    ],
+                                                    "type": "string"
+                                                  }
+                                                ]
+                                              },
+                                              "options": {
+                                                "type": "object",
+                                                "properties": {
+                                                  "highlightCode": {
+                                                    "description": "Syntax highlight the code as JavaScript for terminals. default: false",
+                                                    "type": "boolean"
+                                                  },
+                                                  "linesAbove": {
+                                                    "description": "The number of lines to show above the error. default: 2",
+                                                    "type": "number"
+                                                  },
+                                                  "linesBelow": {
+                                                    "description": "The number of lines to show below the error. default: 3",
+                                                    "type": "number"
+                                                  },
+                                                  "forceColor": {
+                                                    "description": "Forcibly syntax highlight the code as JavaScript (for non-terminals);\noverrides highlightCode.\ndefault: false",
+                                                    "type": "boolean"
+                                                  },
+                                                  "message": {
+                                                    "description": "Pass in a string to be displayed inline (if possible) next to the\nhighlighted location in the code. If it can't be positioned inline,\nit will be placed above the code frame.\ndefault: nothing",
+                                                    "type": "string"
+                                                  }
+                                                },
+                                                "additionalProperties": false
+                                              }
+                                            },
+                                            "additionalProperties": false,
+                                            "required": [
+                                              "type"
+                                            ]
+                                          },
+                                          {
+                                            "enum": [
+                                              "basic",
+                                              "codeframe"
+                                            ],
+                                            "type": "string"
+                                          }
+                                        ]
+                                      },
+                                      "issue": {
+                                        "type": "object",
+                                        "properties": {
+                                          "include": {
+                                            "anyOf": [
+                                              {
+                                                "type": "object",
+                                                "additionalProperties": false
+                                              },
+                                              {
+                                                "type": "object",
+                                                "properties": {
+                                                  "code": {
+                                                    "type": "string"
+                                                  },
+                                                  "origin": {
+                                                    "type": "string"
+                                                  },
+                                                  "severity": {
+                                                    "enum": [
+                                                      "error",
+                                                      "warning"
+                                                    ],
+                                                    "type": "string"
+                                                  },
+                                                  "file": {
+                                                    "type": "string"
+                                                  }
+                                                },
+                                                "additionalProperties": false
+                                              },
+                                              {
+                                                "type": "array",
+                                                "items": {
+                                                  "anyOf": [
+                                                    {
+                                                      "type": "object",
+                                                      "additionalProperties": false
+                                                    },
+                                                    {
+                                                      "type": "object",
+                                                      "properties": {
+                                                        "code": {
+                                                          "type": "string"
+                                                        },
+                                                        "origin": {
+                                                          "type": "string"
+                                                        },
+                                                        "severity": {
+                                                          "enum": [
+                                                            "error",
+                                                            "warning"
+                                                          ],
+                                                          "type": "string"
+                                                        },
+                                                        "file": {
+                                                          "type": "string"
+                                                        }
+                                                      },
+                                                      "additionalProperties": false
+                                                    }
+                                                  ]
+                                                }
+                                              }
+                                            ]
+                                          },
+                                          "exclude": {
+                                            "anyOf": [
+                                              {
+                                                "type": "object",
+                                                "additionalProperties": false
+                                              },
+                                              {
+                                                "type": "object",
+                                                "properties": {
+                                                  "code": {
+                                                    "type": "string"
+                                                  },
+                                                  "origin": {
+                                                    "type": "string"
+                                                  },
+                                                  "severity": {
+                                                    "enum": [
+                                                      "error",
+                                                      "warning"
+                                                    ],
+                                                    "type": "string"
+                                                  },
+                                                  "file": {
+                                                    "type": "string"
+                                                  }
+                                                },
+                                                "additionalProperties": false
+                                              },
+                                              {
+                                                "type": "array",
+                                                "items": {
+                                                  "anyOf": [
+                                                    {
+                                                      "type": "object",
+                                                      "additionalProperties": false
+                                                    },
+                                                    {
+                                                      "type": "object",
+                                                      "properties": {
+                                                        "code": {
+                                                          "type": "string"
+                                                        },
+                                                        "origin": {
+                                                          "type": "string"
+                                                        },
+                                                        "severity": {
+                                                          "enum": [
+                                                            "error",
+                                                            "warning"
+                                                          ],
+                                                          "type": "string"
+                                                        },
+                                                        "file": {
+                                                          "type": "string"
+                                                        }
+                                                      },
+                                                      "additionalProperties": false
+                                                    }
+                                                  ]
+                                                }
+                                              }
+                                            ]
+                                          }
+                                        },
+                                        "additionalProperties": false
+                                      },
+                                      "logger": {
+                                        "type": "object",
+                                        "properties": {
+                                          "infrastructure": {
+                                            "anyOf": [
+                                              {
+                                                "type": "object",
+                                                "properties": {
+                                                  "info": {
+                                                    "type": "object",
+                                                    "additionalProperties": false
+                                                  },
+                                                  "log": {
+                                                    "type": "object",
+                                                    "additionalProperties": false
+                                                  },
+                                                  "error": {
+                                                    "type": "object",
+                                                    "additionalProperties": false
+                                                  }
+                                                },
+                                                "additionalProperties": false,
+                                                "required": [
+                                                  "error",
+                                                  "info",
+                                                  "log"
+                                                ]
+                                              },
+                                              {
+                                                "enum": [
+                                                  "console",
+                                                  "silent",
+                                                  "webpack-infrastructure"
+                                                ],
+                                                "type": "string"
+                                              }
+                                            ]
+                                          },
+                                          "issues": {
+                                            "anyOf": [
+                                              {
+                                                "type": "object",
+                                                "properties": {
+                                                  "info": {
+                                                    "type": "object",
+                                                    "additionalProperties": false
+                                                  },
+                                                  "log": {
+                                                    "type": "object",
+                                                    "additionalProperties": false
+                                                  },
+                                                  "error": {
+                                                    "type": "object",
+                                                    "additionalProperties": false
+                                                  }
+                                                },
+                                                "additionalProperties": false,
+                                                "required": [
+                                                  "error",
+                                                  "info",
+                                                  "log"
+                                                ]
+                                              },
+                                              {
+                                                "enum": [
+                                                  "console",
+                                                  "silent",
+                                                  "webpack-infrastructure"
+                                                ],
+                                                "type": "string"
+                                              }
+                                            ]
+                                          },
+                                          "devServer": {
+                                            "type": "boolean"
+                                          }
+                                        },
+                                        "additionalProperties": false
+                                      }
+                                    },
+                                    "additionalProperties": false
+                                  }
+                                },
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "boolean"
+                              }
+                            ]
+                          },
+                          "externals": {
+                            "title": "Pass list to Webpack config externals field",
+                            "default": [],
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "serve": {
+                    "default": {},
+                    "additionalProperties": false,
+                    "type": "object",
+                    "properties": {
+                      "notifications": {
+                        "default": {},
+                        "additionalProperties": false,
+                        "type": "object",
+                        "properties": {
+                          "suppressSuccess": {
+                            "title": "Defines when success notifications are shown",
+                            "enum": [
+                              "always",
+                              false,
+                              "initial",
+                              true
+                            ]
+                          },
+                          "suppressWarning": {
+                            "title": "True to suppress the warning notifications, otherwise false",
+                            "type": "boolean"
+                          },
+                          "activateTerminalOnError": {
+                            "title": "True to activate (focus) the terminal window when a compilation error occurs",
+                            "type": "boolean"
+                          },
+                          "client": {
+                            "type": "object",
+                            "properties": {
+                              "suppressSuccess": {
+                                "title": "Defines when success notifications are shown",
+                                "enum": [
+                                  "always",
+                                  false,
+                                  "initial",
+                                  true
+                                ]
+                              },
+                              "suppressWarning": {
+                                "title": "True to suppress the warning notifications, otherwise false",
+                                "type": "boolean"
+                              },
+                              "activateTerminalOnError": {
+                                "title": "True to activate (focus) the terminal window when a compilation error occurs",
+                                "type": "boolean"
+                              }
+                            },
+                            "additionalProperties": false
+                          },
+                          "server": {
+                            "type": "object",
+                            "properties": {
+                              "suppressSuccess": {
+                                "title": "Defines when success notifications are shown",
+                                "enum": [
+                                  "always",
+                                  false,
+                                  "initial",
+                                  true
+                                ]
+                              },
+                              "suppressWarning": {
+                                "title": "True to suppress the warning notifications, otherwise false",
+                                "type": "boolean"
+                              },
+                              "activateTerminalOnError": {
+                                "title": "True to activate (focus) the terminal window when a compilation error occurs",
+                                "type": "boolean"
+                              }
+                            },
+                            "additionalProperties": false
+                          }
+                        }
+                      },
+                      "configurations": {
+                        "default": {},
+                        "additionalProperties": false,
+                        "type": "object",
+                        "properties": {
+                          "sourceMap": {
+                            "title": "Enable source maps in development build (for client and server build)",
+                            "default": false,
+                            "type": "boolean"
+                          },
+                          "modern": {
+                            "title": "Enable development build for modern browsers",
+                            "default": false,
+                            "type": "boolean"
+                          },
+                          "hotRefresh": {
+                            "title": "Enable react hot-refresh",
+                            "default": false,
+                            "type": "boolean"
+                          },
+                          "hotRefreshOptions": {
+                            "title": "Configure react hot-refresh https://github.com/pmmmwh/react-refresh-webpack-plugin#options",
+                            "type": "object",
+                            "additionalProperties": {},
+                            "properties": {
+                              "overlay": {
+                                "anyOf": [
+                                  {
+                                    "type": "object",
+                                    "additionalProperties": false
+                                  },
+                                  {
+                                    "type": "boolean"
+                                  }
+                                ]
+                              }
+                            }
+                          },
+                          "externals": {
+                            "title": "Pass list to Webpack config externals field",
+                            "default": [
+                              "react$",
+                              "react-dom",
+                              "prop-types",
+                              "express",
+                              "core-js"
+                            ],
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "additionalProperties": false
+              },
+              "name": {
+                "type": "string"
+              },
+              "root": {
+                "type": "string"
+              },
+              "version": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "root",
+              "type"
+            ]
+          },
+          "else": {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "module"
+                }
+              }
+            },
+            "then": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "module"
+                  ]
+                },
+                "commands": {
+                  "default": {},
+                  "type": "object",
+                  "properties": {
+                    "build": {
+                      "default": {},
+                      "type": "object",
+                      "properties": {
+                        "options": {
+                          "default": {},
+                          "type": "object",
+                          "properties": {
+                            "output": {
+                              "title": "Path to build module assets",
+                              "default": "dist/modules",
+                              "type": "string"
+                            }
+                          },
+                          "additionalProperties": false
+                        },
+                        "configurations": {
+                          "default": {},
+                          "additionalProperties": false,
+                          "type": "object",
+                          "properties": {
+                            "modern": {
+                              "title": "Enable production build for modern browsers",
+                              "default": false,
+                              "type": "boolean"
+                            },
+                            "dedupe": {
+                              "title": "Enable DedupePlugin",
+                              "default": false,
+                              "enum": [
+                                "equality",
+                                false,
+                                "semver"
+                              ]
+                            },
+                            "dedupeIgnore": {
+                              "title": "Sets ignore to DedupePlugin",
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "removeTypeofWindow": {
+                              "title": "Enable replacing `typeof window` expression",
+                              "default": true,
+                              "type": "boolean"
+                            },
+                            "sourceMap": {
+                              "title": "Enable source maps in production build",
+                              "default": false,
+                              "type": "boolean"
+                            },
+                            "sourceMapServer": {
+                              "title": "Enable source maps for server assets in production build",
+                              "default": false,
+                              "type": "boolean"
+                            },
+                            "terserParallel": {
+                              "title": "Configuration for enabling parallel compression for terser plugin",
+                              "default": true,
+                              "type": "boolean"
+                            },
+                            "excludesPresetEnv": {
+                              "title": "List of modules to exclude from",
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "threadLoader": {
+                              "description": "Construct a type with a set of properties K of type T",
+                              "title": "thread-loader config",
+                              "additionalProperties": true,
+                              "type": "object"
+                            },
+                            "definePlugin": {
+                              "description": "Construct a type with a set of properties K of type T",
+                              "title": "Define plugin config",
+                              "default": {
+                                "prod": {},
+                                "dev": {}
+                              },
+                              "additionalProperties": true,
+                              "type": "object"
+                            },
+                            "generateDataQaTag": {
+                              "default": false,
+                              "type": "boolean"
+                            },
+                            "enableFillActionNamePlugin": {
+                              "default": false,
+                              "type": "boolean"
+                            },
+                            "cssMinimize": {
+                              "title": "Set minimizer for css",
+                              "type": "string",
+                              "enum": [
+                                "csso"
+                              ]
+                            },
+                            "postcss": {
+                              "default": {
+                                "config": "postcss.config",
+                                "cssLocalIdentName": "[hash:base64:5]"
+                              },
+                              "type": "object",
+                              "properties": {
+                                "config": {
+                                  "title": "Path to postcss config file",
+                                  "type": "string"
+                                },
+                                "cssLocalIdentName": {
+                                  "title": "CSS identifiers build algorythm",
+                                  "type": "string"
+                                },
+                                "cssLocalIdentNameDev": {
+                                  "title": "CSS identifiers build algorythm for development buld",
+                                  "type": "string"
+                                },
+                                "cssLocalIdentNameProd": {
+                                  "title": "CSS identifiers build algorythm for production build",
+                                  "type": "string"
+                                },
+                                "assetsConfig": {
+                                  "title": "Path to postcss config file for assets",
+                                  "type": "string"
+                                }
+                              },
+                              "additionalProperties": false
+                            },
+                            "alias": {
+                              "description": "Construct a type with a set of properties K of type T",
+                              "title": "Aliases for project imports",
+                              "additionalProperties": true,
+                              "type": "object"
+                            },
+                            "svgo": {
+                              "title": "svgo-loader options",
+                              "type": "object",
+                              "properties": {
+                                "plugins": {
+                                  "title": "svgo plugins",
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "additionalProperties": false
+                                  }
+                                }
+                              },
+                              "additionalProperties": false
+                            },
+                            "imageOptimization": {
+                              "title": "Settings for image-webpack-loader",
+                              "type": "object",
+                              "properties": {
+                                "enabled": {
+                                  "title": "Enable image-webpack-loader",
+                                  "type": "boolean"
+                                },
+                                "options": {
+                                  "description": "Construct a type with a set of properties K of type T",
+                                  "title": "Pass options to image-webpack-loader",
+                                  "additionalProperties": true,
+                                  "type": "object"
+                                }
+                              },
+                              "additionalProperties": false
+                            },
+                            "transpileOnlyModernLibs": {
+                              "title": "transpile libs based only on @tinkoff/is-modern-lib",
+                              "default": true,
+                              "type": "boolean"
+                            }
+                          }
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "serve": {
+                      "default": {},
+                      "type": "object",
+                      "properties": {
+                        "notifications": {
+                          "default": {},
+                          "additionalProperties": false,
+                          "type": "object",
+                          "properties": {
+                            "suppressSuccess": {
+                              "title": "Defines when success notifications are shown",
+                              "enum": [
+                                "always",
+                                false,
+                                "initial",
+                                true
+                              ]
+                            },
+                            "suppressWarning": {
+                              "title": "True to suppress the warning notifications, otherwise false",
+                              "type": "boolean"
+                            },
+                            "activateTerminalOnError": {
+                              "title": "True to activate (focus) the terminal window when a compilation error occurs",
+                              "type": "boolean"
+                            },
+                            "client": {
+                              "type": "object",
+                              "properties": {
+                                "suppressSuccess": {
+                                  "title": "Defines when success notifications are shown",
+                                  "enum": [
+                                    "always",
+                                    false,
+                                    "initial",
+                                    true
+                                  ]
+                                },
+                                "suppressWarning": {
+                                  "title": "True to suppress the warning notifications, otherwise false",
+                                  "type": "boolean"
+                                },
+                                "activateTerminalOnError": {
+                                  "title": "True to activate (focus) the terminal window when a compilation error occurs",
+                                  "type": "boolean"
+                                }
+                              },
+                              "additionalProperties": false
+                            },
+                            "server": {
+                              "type": "object",
+                              "properties": {
+                                "suppressSuccess": {
+                                  "title": "Defines when success notifications are shown",
+                                  "enum": [
+                                    "always",
+                                    false,
+                                    "initial",
+                                    true
+                                  ]
+                                },
+                                "suppressWarning": {
+                                  "title": "True to suppress the warning notifications, otherwise false",
+                                  "type": "boolean"
+                                },
+                                "activateTerminalOnError": {
+                                  "title": "True to activate (focus) the terminal window when a compilation error occurs",
+                                  "type": "boolean"
+                                }
+                              },
+                              "additionalProperties": false
+                            }
+                          }
+                        },
+                        "configurations": {
+                          "default": {},
+                          "type": "object",
+                          "properties": {
+                            "sourceMap": {
+                              "title": "Enable source maps in development build (for client and server build)",
+                              "default": false,
+                              "type": "boolean"
+                            },
+                            "modern": {
+                              "title": "Enable development build for modern browsers",
+                              "default": false,
+                              "type": "boolean"
+                            },
+                            "hotRefresh": {
+                              "title": "Enable react hot-refresh",
+                              "default": false,
+                              "type": "boolean"
+                            },
+                            "hotRefreshOptions": {
+                              "title": "Configure react hot-refresh https://github.com/pmmmwh/react-refresh-webpack-plugin#options",
+                              "type": "object",
+                              "additionalProperties": {},
+                              "properties": {
+                                "overlay": {
+                                  "anyOf": [
+                                    {
+                                      "type": "object",
+                                      "additionalProperties": false
+                                    },
+                                    {
+                                      "type": "boolean"
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          },
+                          "additionalProperties": false
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "name": {
+                  "type": "string"
+                },
+                "root": {
+                  "type": "string"
+                },
+                "version": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "name",
+                "root",
+                "type"
+              ]
+            },
+            "else": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "package"
+                  ]
+                },
+                "name": {
+                  "title": "Package name",
+                  "type": "string"
+                },
+                "root": {
+                  "title": "Package root folder",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "name",
+                "type"
+              ]
+            }
+          }
+        }
+      },
+      "default": {}
+    },
+    "migrations": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sourcePattern": {
+          "title": "do migrations only for files that match a glob pattern",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ignorePattern": {
+          "title": "skip migrations for files that match a glob pattern",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

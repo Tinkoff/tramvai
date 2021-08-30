@@ -1,0 +1,143 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`seo ssr test common meta 1`] = `
+"
+<meta charset=\\"UTF-8\\">
+
+<title data-meta-dynamic=\\"true\\">common seo</title>
+<link rel=\\"canonical\\" href=\\"test-canonical\\" data-meta-dynamic=\\"true\\">
+<meta name=\\"keywords\\" content=\\"test,common,seo\\" data-meta-dynamic=\\"true\\">
+<meta name=\\"robots\\" content=\\"none\\" data-meta-dynamic=\\"true\\">
+<meta name=\\"robots\\" content=\\"noindex, nofollow\\" data-meta-dynamic=\\"true\\">
+<meta name=\\"robots\\" content=\\"noarchive\\" data-meta-dynamic=\\"true\\">
+<meta name=\\"viewport\\" content=\\"test seo\\" data-meta-dynamic=\\"true\\">
+<meta name=\\"metaCustomNameAttribute\\" content=\\"metaCustomContent\\" data-meta-dynamic=\\"true\\">
+
+
+<script></script>
+
+
+
+<style type=\\"text/css\\"></style>
+<link data-href=\\"http://localhost:4000/dist/client/root.chunk.css\\" rel=\\"stylesheet\\">
+
+
+
+
+
+
+<script defer=\\"defer\\" charset=\\"utf-8\\" crossorigin=\\"anonymous\\" data-critical=\\"true\\" src=\\"http://localhost:4000/dist/client/root.chunk.js\\"></script>
+<script defer=\\"defer\\" charset=\\"utf-8\\" crossorigin=\\"anonymous\\" data-critical=\\"true\\" src=\\"http://localhost:4000/dist/client/platform.js\\"></script>
+
+
+
+
+
+"
+`;
+
+exports[`seo ssr test default meta pack 1`] = `
+"
+<meta charset=\\"UTF-8\\">
+
+<title data-meta-dynamic=\\"true\\">Tramvai</title>
+<meta name=\\"metaCustomNameAttribute\\" content=\\"metaCustomContent\\" data-meta-dynamic=\\"true\\">
+
+
+<script></script>
+
+
+<link data-critical=\\"true\\" onload=\\"__preloadJS()\\" rel=\\"stylesheet\\" href=\\"http://localhost:4000/dist/client/root.chunk.css\\">
+
+
+
+
+
+
+<script defer=\\"defer\\" charset=\\"utf-8\\" crossorigin=\\"anonymous\\" data-critical=\\"true\\" src=\\"http://localhost:4000/dist/client/root.chunk.js\\"></script>
+<script defer=\\"defer\\" charset=\\"utf-8\\" crossorigin=\\"anonymous\\" data-critical=\\"true\\" src=\\"http://localhost:4000/dist/client/platform.js\\"></script>
+
+
+
+
+
+"
+`;
+
+exports[`seo ssr test og meta 1`] = `
+"
+<meta charset=\\"UTF-8\\">
+
+<title data-meta-dynamic=\\"true\\">og seo</title>
+<meta property=\\"og:description\\" content=\\"og desc\\" data-meta-dynamic=\\"true\\">
+<meta property=\\"og:image\\" content=\\"og img\\" data-meta-dynamic=\\"true\\">
+<meta property=\\"og:image:alt\\" content=\\"alt og img\\" data-meta-dynamic=\\"true\\">
+<meta property=\\"og:image:secure_url\\" content=\\"seo imageSecure\\" data-meta-dynamic=\\"true\\">
+<meta property=\\"og:image:height\\" content=\\"seo 630\\" data-meta-dynamic=\\"true\\">
+<meta property=\\"og:image:width\\" content=\\"seo 1200\\" data-meta-dynamic=\\"true\\">
+<meta property=\\"og:image:type\\" content=\\"ggog\\" data-meta-dynamic=\\"true\\">
+<meta property=\\"og:locale\\" content=\\"locog\\" data-meta-dynamic=\\"true\\">
+<meta property=\\"og:site_name\\" content=\\"site og name\\" data-meta-dynamic=\\"true\\">
+<meta property=\\"og:title\\" content=\\"hello, og\\" data-meta-dynamic=\\"true\\">
+<meta property=\\"og:type\\" content=\\"og typ\\" data-meta-dynamic=\\"true\\">
+<meta property=\\"og:url\\" content=\\"http://og.og/\\" data-meta-dynamic=\\"true\\">
+<meta name=\\"metaCustomNameAttribute\\" content=\\"metaCustomContent\\" data-meta-dynamic=\\"true\\">
+
+
+<script></script>
+
+
+
+<style type=\\"text/css\\"></style>
+<link data-href=\\"http://localhost:4000/dist/client/root.chunk.css\\" rel=\\"stylesheet\\">
+
+
+
+
+
+
+<script defer=\\"defer\\" charset=\\"utf-8\\" crossorigin=\\"anonymous\\" data-critical=\\"true\\" src=\\"http://localhost:4000/dist/client/root.chunk.js\\"></script>
+<script defer=\\"defer\\" charset=\\"utf-8\\" crossorigin=\\"anonymous\\" data-critical=\\"true\\" src=\\"http://localhost:4000/dist/client/platform.js\\"></script>
+
+
+
+
+
+"
+`;
+
+exports[`seo ssr test twitter meta 1`] = `
+"
+<meta charset=\\"UTF-8\\">
+
+<title data-meta-dynamic=\\"true\\">twitter seo</title>
+<meta name=\\"twitter:card\\" content=\\"twitter card\\" data-meta-dynamic=\\"true\\">
+<meta name=\\"twitter:creator\\" content=\\"creat\\" data-meta-dynamic=\\"true\\">
+<meta name=\\"twitter:image\\" content=\\"img tw\\" data-meta-dynamic=\\"true\\">
+<meta name=\\"twitter:image:alt\\" content=\\"seo tw im al\\" data-meta-dynamic=\\"true\\">
+<meta name=\\"twitter:site\\" content=\\"seo @tinkoff_bank\\" data-meta-dynamic=\\"true\\">
+<meta name=\\"twitter:title\\" content=\\"hello, twitter\\" data-meta-dynamic=\\"true\\">
+<meta name=\\"metaCustomNameAttribute\\" content=\\"metaCustomContent\\" data-meta-dynamic=\\"true\\">
+
+
+<script></script>
+
+
+
+<style type=\\"text/css\\"></style>
+<link data-href=\\"http://localhost:4000/dist/client/root.chunk.css\\" rel=\\"stylesheet\\">
+
+
+
+
+
+
+<script defer=\\"defer\\" charset=\\"utf-8\\" crossorigin=\\"anonymous\\" data-critical=\\"true\\" src=\\"http://localhost:4000/dist/client/root.chunk.js\\"></script>
+<script defer=\\"defer\\" charset=\\"utf-8\\" crossorigin=\\"anonymous\\" data-critical=\\"true\\" src=\\"http://localhost:4000/dist/client/platform.js\\"></script>
+
+
+
+
+
+"
+`;

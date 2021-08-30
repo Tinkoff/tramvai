@@ -1,0 +1,26 @@
+{
+    "extends": "../../../tsconfig.lib.json",
+    "include": [
+        "./src"
+    ],
+    "compilerOptions": {
+        "declarationDir": "./lib",
+        "outDir": "./lib",
+        "rootDir": "./src",
+        "strict": true
+    },
+    "references": [
+        {
+            "path": "../core"
+        },
+        {
+            "path": "../../modules/react-query"
+        },
+        {
+            "path": "../state"
+        },
+        {
+            "path": "../../libs/dippy"
+        }
+    ]
+}

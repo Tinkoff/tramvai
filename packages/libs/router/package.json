@@ -1,0 +1,38 @@
+{
+  "name": "@tinkoff/router",
+  "version": "0.0.0-stub",
+  "description": "router",
+  "main": "lib/index.js",
+  "typings": "src/index.ts",
+  "module": "lib/index.es.js",
+  "browser": {
+    "./lib/router/server.js": "./lib/router/browser.js"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+  },
+  "scripts": {
+    "build": "tramvai-build",
+    "watch": "tsc -w",
+    "build-for-publish": "true"
+  },
+  "dependencies": {
+    "@tinkoff/react-hooks": "0.0.0-stub",
+    "@tinkoff/url": "0.0.0-stub",
+    "@tinkoff/utils": "^2.1.2"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "tslib": "^2.0.3"
+  },
+  "sideEffects": false,
+  "es2017": "lib/index.es2017.js",
+  "devDependencies": {
+    "object-sizeof": "^1.6.1"
+  },
+  "license": "Apache-2.0"
+}

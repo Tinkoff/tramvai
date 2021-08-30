@@ -1,0 +1,56 @@
+{
+  "name": "@tramvai/module-server",
+  "version": "0.0.0-stub",
+  "description": "",
+  "browser": "lib/browser.js",
+  "main": "lib/server.js",
+  "typings": "src/server.ts",
+  "files": [
+    "lib"
+  ],
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+  },
+  "scripts": {
+    "build": "tramvai-build",
+    "watch": "tsc -w",
+    "build-for-publish": "true"
+  },
+  "dependencies": {
+    "@tinkoff/errors": "0.0.0-stub",
+    "@tinkoff/express-terminus": "0.0.0-stub",
+    "@tinkoff/monkeypatch": "0.0.0-stub",
+    "@tinkoff/url": "0.0.0-stub",
+    "@tramvai/module-cache-warmup": "0.0.0-stub",
+    "@tramvai/module-metrics": "0.0.0-stub",
+    "@tramvai/papi": "0.0.0-stub",
+    "@tramvai/tokens-server": "0.0.0-stub",
+    "body-parser": "^1.19.0",
+    "compression": "^1.7.4",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.17.1",
+    "finalhandler": "^1.1.2",
+    "http-proxy-middleware": "^1.0.1"
+  },
+  "peerDependencies": {
+    "@tinkoff/utils": "^2.1.2",
+    "@tramvai/cli": "0.0.0-stub",
+    "@tramvai/core": "0.0.0-stub",
+    "@tramvai/module-common": "0.0.0-stub",
+    "@tramvai/module-environment": "0.0.0-stub",
+    "@tramvai/tokens-common": "0.0.0-stub",
+    "@tinkoff/dippy": "0.0.0-stub",
+    "tslib": "^2.0.3"
+  },
+  "devDependencies": {
+    "@types/compression": "^1.7.0",
+    "@types/express": "^4.17.9",
+    "@types/finalhandler": "^1.1.0",
+    "@types/http-proxy-middleware": "^0.19.3"
+  },
+  "module": "lib/server.es.js",
+  "es2017": "lib/browser.es2017.js",
+  "license": "Apache-2.0"
+}

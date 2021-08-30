@@ -1,0 +1,28 @@
+{
+  "name": "@tinkoff/layout-factory",
+  "version": "0.0.0-stub",
+  "description": "",
+  "main": "lib/index.js",
+  "typings": "src/index.ts",
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+  },
+  "scripts": {
+    "build": "tramvai-build",
+    "watch": "tsc -w",
+    "build-for-publish": "true"
+  },
+  "dependencies": {
+    "tslib": "^2.0.3",
+    "@tinkoff/utils": "^2.1.2"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0"
+  },
+  "sideEffects": false,
+  "license": "Apache-2.0"
+}

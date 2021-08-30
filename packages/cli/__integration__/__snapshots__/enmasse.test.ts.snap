@@ -1,0 +1,235 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`enmasse test module platform --help module 1`] = `
+"Usage: bin-init <command> [options]
+
+Options:
+  -v, --version                                 output the version number
+  -h, --help                                    display help for command
+
+Commands:
+  build|b [options] <target>                    Команда сборки платформенных сущностей - приложений, модулей, библиотек
+  start-prod|sp [options] <target>              Команда сборки и запуска в прод режиме
+  start|s [options] <target>                    Команда для запуска в режиме разработки платформенных сущностей - приложений, модулей, библиотек
+  lint|l <target>                               Команда для запуска линтинга
+  task|t <name> [options]                       Запуск команд
+  analyze|a [options] <target>                  Команда для анализа приложений
+  generate|g [target] [generator]               Команда для кодогенерации
+    [target] - название приложения
+    [generator] - action|reducer|bundle|component|page|module
+  new|n [options] <name>                        Команда для генерации нового приложения
+  update|u [options]                            Команда обновления пакетов tramvai
+  static|st [options] <target>                  Команда для сборки приложения в статичную версию
+  benchmark|bench [options] <command> <target>  Команда для запуска бенчмарка работы @tramvai/cli
+
+  Run tramvai <command> --help
+ for detailed usage of given command.
+"
+`;
+
+exports[`enmasse test module platform build module 1`] = `
+Array [
+  Object {
+    "extension": ".js",
+    "name": "module_client.js",
+    "path": "dist/modules/module/prerelease/module_client.js",
+    "type": "file",
+  },
+  Object {
+    "extension": ".css",
+    "name": "module_server.css",
+    "path": "dist/modules/module/prerelease/module_server.css",
+    "type": "file",
+  },
+  Object {
+    "extension": ".js",
+    "name": "module_server.js",
+    "path": "dist/modules/module/prerelease/module_server.js",
+    "type": "file",
+  },
+  Object {
+    "extension": ".css",
+    "name": "module.css",
+    "path": "dist/modules/module/prerelease/module.css",
+    "type": "file",
+  },
+]
+`;
+
+exports[`enmasse test package platform --help package 1`] = `
+"Usage: bin-init <command> [options]
+
+Options:
+  -v, --version                                 output the version number
+  -h, --help                                    display help for command
+
+Commands:
+  build|b [options] <target>                    Команда сборки платформенных сущностей - приложений, модулей, библиотек
+  start-prod|sp [options] <target>              Команда сборки и запуска в прод режиме
+  start|s [options] <target>                    Команда для запуска в режиме разработки платформенных сущностей - приложений, модулей, библиотек
+  lint|l <target>                               Команда для запуска линтинга
+  task|t <name> [options]                       Запуск команд
+  analyze|a [options] <target>                  Команда для анализа приложений
+  generate|g [target] [generator]               Команда для кодогенерации
+    [target] - название приложения
+    [generator] - action|reducer|bundle|component|page|module
+  new|n [options] <name>                        Команда для генерации нового приложения
+  update|u [options]                            Команда обновления пакетов tramvai
+  static|st [options] <target>                  Команда для сборки приложения в статичную версию
+  benchmark|bench [options] <command> <target>  Команда для запуска бенчмарка работы @tramvai/cli
+
+  Run tramvai <command> --help
+ for detailed usage of given command.
+"
+`;
+
+exports[`enmasse test package platform build package 1`] = `
+Array [
+  Object {
+    "extension": ".js",
+    "name": "browser.es2017.js",
+    "path": "dist/browser.es2017.js",
+    "type": "file",
+  },
+  Object {
+    "extension": ".js",
+    "name": "browser.js",
+    "path": "dist/browser.js",
+    "type": "file",
+  },
+  Object {
+    "extension": ".js",
+    "name": "index.es.js",
+    "path": "dist/index.es.js",
+    "type": "file",
+  },
+  Object {
+    "extension": ".js",
+    "name": "index.js",
+    "path": "dist/index.js",
+    "type": "file",
+  },
+]
+`;
+
+exports[`enmasse test react-app platform --help react-app 1`] = `
+"Usage: bin-init <command> [options]
+
+Options:
+  -v, --version                                 output the version number
+  -h, --help                                    display help for command
+
+Commands:
+  build|b [options] <target>                    Команда сборки платформенных сущностей - приложений, модулей, библиотек
+  start-prod|sp [options] <target>              Команда сборки и запуска в прод режиме
+  start|s [options] <target>                    Команда для запуска в режиме разработки платформенных сущностей - приложений, модулей, библиотек
+  lint|l <target>                               Команда для запуска линтинга
+  task|t <name> [options]                       Запуск команд
+  analyze|a [options] <target>                  Команда для анализа приложений
+  generate|g [target] [generator]               Команда для кодогенерации
+    [target] - название приложения
+    [generator] - action|reducer|bundle|component|page|module
+  new|n [options] <name>                        Команда для генерации нового приложения
+  update|u [options]                            Команда обновления пакетов tramvai
+  static|st [options] <target>                  Команда для сборки приложения в статичную версию
+  benchmark|bench [options] <command> <target>  Команда для запуска бенчмарка работы @tramvai/cli
+
+  Run tramvai <command> --help
+ for detailed usage of given command.
+"
+`;
+
+exports[`enmasse test react-app platform build react-app 1`] = `
+Array [
+  Object {
+    "extension": ".js",
+    "name": "examples_react-app_src_bundles_first_ts.chunk.js",
+    "path": "dist/client/examples_react-app_src_bundles_first_ts.chunk.js",
+    "type": "file",
+  },
+  Object {
+    "extension": ".map",
+    "name": "examples_react-app_src_bundles_first_ts.chunk.js.map",
+    "path": "dist/client/examples_react-app_src_bundles_first_ts.chunk.js.map",
+    "type": "file",
+  },
+  Object {
+    "extension": ".js",
+    "name": "examples_react-app_src_bundles_main_ts.chunk.js",
+    "path": "dist/client/examples_react-app_src_bundles_main_ts.chunk.js",
+    "type": "file",
+  },
+  Object {
+    "extension": ".map",
+    "name": "examples_react-app_src_bundles_main_ts.chunk.js.map",
+    "path": "dist/client/examples_react-app_src_bundles_main_ts.chunk.js.map",
+    "type": "file",
+  },
+  Object {
+    "extension": ".js",
+    "name": "examples_react-app_src_bundles_second_ts.chunk.js",
+    "path": "dist/client/examples_react-app_src_bundles_second_ts.chunk.js",
+    "type": "file",
+  },
+  Object {
+    "extension": ".map",
+    "name": "examples_react-app_src_bundles_second_ts.chunk.js.map",
+    "path": "dist/client/examples_react-app_src_bundles_second_ts.chunk.js.map",
+    "type": "file",
+  },
+  Object {
+    "extension": ".js",
+    "name": "examples_react-app_src_bundles_third_ts.chunk.js",
+    "path": "dist/client/examples_react-app_src_bundles_third_ts.chunk.js",
+    "type": "file",
+  },
+  Object {
+    "extension": ".map",
+    "name": "examples_react-app_src_bundles_third_ts.chunk.js.map",
+    "path": "dist/client/examples_react-app_src_bundles_third_ts.chunk.js.map",
+    "type": "file",
+  },
+  Object {
+    "extension": ".css",
+    "name": "platform.css",
+    "path": "dist/client/platform.css",
+    "type": "file",
+  },
+  Object {
+    "extension": ".js",
+    "name": "platform.js",
+    "path": "dist/client/platform.js",
+    "type": "file",
+  },
+  Object {
+    "extension": ".map",
+    "name": "platform.js.map",
+    "path": "dist/client/platform.js.map",
+    "type": "file",
+  },
+  Object {
+    "extension": ".json",
+    "name": "stats",
+    "path": "dist/client/stats",
+    "type": "file",
+  },
+  Object {
+    "extension": ".js",
+    "name": "server",
+    "path": "dist/server/server",
+    "type": "file",
+  },
+  Object {
+    "extension": ".css",
+    "name": "server.css",
+    "path": "dist/server/server.css",
+    "type": "file",
+  },
+  Object {
+    "extension": ".json",
+    "name": "stats",
+    "path": "dist/server/stats",
+    "type": "file",
+  },
+]
+`;

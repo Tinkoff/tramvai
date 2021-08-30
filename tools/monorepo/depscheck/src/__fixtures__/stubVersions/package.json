@@ -1,0 +1,9 @@
+{
+  "name": "with-stub-deps",
+  "version": "2.3.3",
+  "dependencies": {
+    "pkg-gk": "0.0.0-stub",
+    "pkg-ggg": "0.0.0-stub"
+  },
+  "license": "Apache-2.0"
+}

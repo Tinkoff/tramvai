@@ -1,0 +1,45 @@
+{
+  "name": "@tramvai/state",
+  "version": "0.0.0-stub",
+  "description": "",
+  "main": "lib/index.js",
+  "typings": "src/index.ts",
+  "files": [
+    "lib"
+  ],
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+  },
+  "scripts": {
+    "build": "tramvai-build",
+    "watch": "tsc -w",
+    "build-for-publish": "true"
+  },
+  "dependencies": {
+    "@tinkoff/react-hooks": "0.0.0-stub",
+    "@tinkoff/utils": "^2.1.2",
+    "@tramvai/types-actions-state-context": "0.0.0-stub",
+    "@types/hoist-non-react-statics": "^3.3.1",
+    "invariant": "^2.2.4",
+    "react-is": "^17.0.1",
+    "tslib": "^2.0.3"
+  },
+  "peerDependencies": {
+    "hoist-non-react-statics": "^3.3.1",
+    "prop-types": "^15.6.2",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "devDependencies": {
+    "@reatom/core": "^1.1.5",
+    "@types/invariant": "^2.2.31",
+    "@types/react-is": "^17.0.0",
+    "redux": "^4.0.5"
+  },
+  "gitHead": "8e826a214c87b188fc4d254cdd8f2a2b2c55f3a8",
+  "module": "lib/index.es.js",
+  "es2017": "lib/index.es2017.js",
+  "license": "Apache-2.0"
+}

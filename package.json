@@ -1,0 +1,41 @@
+{
+  "name": "tramvai",
+  "version": "0.0.0-stub",
+  "license": "Apache-2.0",
+  "private": true,
+  "description": "A modular framework for universal React applications",
+  "keywords": [
+    "react",
+    "universal",
+    "isomorphic",
+    "framework",
+    "SSR"
+  ],
+  "scripts": {
+    "postinstall": "tsc -b tools/monorepo/fix-ts-references tools/monorepo/depscheck && wsrun -m copy-external-files",
+    "references": "fix-ts-references --fix",
+    "prewatch": "npm run cli:generate-schema",
+    "watch": "yarn references && tsc -b ./tsconfig.solution.json --watch",
+    "prebuild": "npm run cli:generate-schema",
+    "build": "yarn references && tsc -b ./tsconfig.solution.json"
+  },
+  "workspaces": [
+    "packages/cli",
+    "packages/tramvai/**",
+    "packages/libs/**",
+    "packages/modules/**",
+    "packages/tokens/**",
+    "examples/**",
+    "tools/migrate",
+    "tools/check-versions",
+    "tools/generate-schema",
+    "tools/monorepo/*"
+  ],
+  "devDependencies": {
+    "@types/jest": "^26.0.23",
+    "@types/node": "^13.13.2",
+    "typescript": "4.2.4",
+    "wsrun": "^5.2.0"
+  },
+  "dependencies": {}
+}

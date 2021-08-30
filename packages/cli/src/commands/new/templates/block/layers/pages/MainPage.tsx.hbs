@@ -1,0 +1,18 @@
+import React from 'react';
+import { useActions } from '@tramvai/state';
+import { Button } from '../../components/shared/Button/Button';
+import { navigateAction } from '../../actions/navigateAction';
+
+export const MainPage = () => {
+  // Привязываем экшен для навигации к стору
+  const navigate = useActions(navigateAction);
+
+  return (
+    <div>
+      Main Page{' '}
+      <Button onClick={() => navigate('/second/')}>to second page</Button>
+    </div>
+  );
+};
+
+export default MainPage;

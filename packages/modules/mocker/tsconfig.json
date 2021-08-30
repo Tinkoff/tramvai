@@ -1,0 +1,31 @@
+{
+    "extends": "../../../tsconfig.lib.json",
+    "include": [
+        "./src"
+    ],
+    "compilerOptions": {
+        "declarationDir": "./lib",
+        "outDir": "./lib",
+        "rootDir": "./src"
+    },
+    "references": [
+        {
+            "path": "../../libs/mocker"
+        },
+        {
+            "path": "../../tramvai/core"
+        },
+        {
+            "path": "../../tramvai/papi"
+        },
+        {
+            "path": "../common"
+        },
+        {
+            "path": "../../tokens/server"
+        },
+        {
+            "path": "../../libs/dippy"
+        }
+    ]
+}

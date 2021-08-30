@@ -1,0 +1,19 @@
+{
+  "name": "@tinkoff/browserslist-config",
+  "version": "0.0.0-stub",
+  "initialVersion": "0.1.6",
+  "description": "browserslist config",
+  "main": "index.js",
+  "typings": "index.d.ts",
+  "files": [
+    "index.js",
+    "index.d.ts"
+  ],
+  "homepage": "https://github.com/TinkoffCreditSystems/tramvai",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+  },
+  "sideEffects": false,
+  "license": "Apache-2.0"
+}

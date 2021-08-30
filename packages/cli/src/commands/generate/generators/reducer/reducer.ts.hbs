@@ -1,0 +1,15 @@
+import { createEvent, createReducer } from '@tramvai/state';
+
+export type {{ properCase name }}State = {
+  [key: string]: any;
+};
+
+export const change{{ properCase name }}Event = createEvent<{{ properCase name }}State>('change foo');
+
+export const {{ camelCase name }}Reducer = createReducer<{{ properCase name }}State>('{{ camelCase name }}', {}).on(
+  change{{ properCase name }}Event,
+  (state, payload) => ({
+    ...state,
+    ...payload,
+  })
+);

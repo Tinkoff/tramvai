@@ -1,0 +1,22 @@
+{
+  "name": "@tinkoff-monorepo/pkgs-collector-dir",
+  "version": "0.0.0-stub",
+  "description": "",
+  "main": "lib/index.js",
+  "typings": "src/index.ts",
+  "repository": "git@github.com:TinkoffCreditSystems/tramvai.git",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "prepare": "tsc"
+  },
+  "files": [
+    "lib",
+    "bin"
+  ],
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@tinkoff-monorepo/pkgs-collector": "0.0.0-stub",
+    "glob": "^7.1.6"
+  }
+}

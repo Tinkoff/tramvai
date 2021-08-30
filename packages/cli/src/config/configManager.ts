@@ -1,0 +1,229 @@
+import isNil from '@tinkoff/utils/is/nil';
+import prop from '@tinkoff/utils/object/prop';
+import { resolve } from 'path';
+import type { ProjectType, BuildType } from '../typings/projectType';
+import type { Env } from '../typings/Env';
+import type { ConfigEntry } from '../typings/configEntry/common';
+import { validate } from './validate';
+import moduleVersion from '../utils/moduleVersion';
+import type { DeduplicateStrategy } from '../library/webpack/plugins/DedupePlugin';
+import { showConfig } from './showConfig';
+import type { ModuleConfigEntry } from '../typings/configEntry/module';
+import type { Target } from '../typings/target';
+
+export interface Settings {
+  env?: Env;
+  rootDir?: string;
+  version?: string;
+  buildType?: BuildType;
+  debug?: boolean;
+  trace?: boolean;
+  removeTypeofWindow?: boolean;
+  sourceMap?: boolean;
+  host?: string;
+  port?: number;
+  staticHost?: string;
+  staticPort?: number;
+  profile?: boolean;
+  noServerRebuild?: boolean;
+  noClientRebuild?: boolean;
+  modern?: boolean;
+  resolveSymlinks?: boolean;
+  showConfig?: boolean;
+  onlyBundles?: string[];
+  disableProdOptimization?: boolean;
+}
+
+const getOption = <T>(optionName: string, cfgs: any[], dflt?: T): T => {
+  const getter = prop(optionName);
+
+  for (let i = 0; i < cfgs.length; i++) {
+    const value = getter(cfgs[i]);
+
+    if (!isNil(value)) {
+      return value;
+    }
+  }
+
+  return dflt;
+};
+
+export class ConfigManager<T extends ConfigEntry = ConfigEntry> implements Required<Settings> {
+  private configEntry: T;
+
+  public name: string;
+
+  public type: ProjectType;
+
+  public root: string;
+
+  public build: T['commands']['build'];
+
+  public serve: T['commands']['serve'];
+
+  private settings: Settings;
+
+  public version: string;
+
+  public env: Env;
+
+  public buildType: BuildType;
+
+  public rootDir: string;
+
+  public debug: boolean;
+
+  public trace: boolean;
+
+  public sourceMap: boolean;
+
+  public host: string;
+
+  public port: number;
+
+  public staticHost: string;
+
+  public staticPort: number;
+
+  public profile: boolean;
+
+  public noServerRebuild: boolean;
+
+  public noClientRebuild: boolean;
+
+  public modern: boolean;
+
+  public dedupe: DeduplicateStrategy | false;
+
+  public dedupeIgnore?: RegExp[];
+
+  public removeTypeofWindow: boolean;
+
+  public resolveSymlinks: boolean;
+
+  public hotRefresh: boolean;
+
+  public disableProdOptimization: boolean;
+
+  public target: Target;
+
+  public showConfig: boolean;
+  // eslint-disable-next-line complexity,max-statements
+  constructor(configEntry: T, settings: Settings) {
+    this.configEntry = configEntry;
+    this.name = configEntry.name;
+    this.type = configEntry.type;
+    this.root = configEntry.root;
+    this.build = configEntry.commands.build || {};
+    this.serve = configEntry.commands.serve || configEntry.serve || {};
+
+    this.settings = settings;
+    this.env = settings.env || 'development';
+    this.version =
+      settings.version ||
+      (this.type === 'module' ? moduleVersion(configEntry as ModuleConfigEntry) : '');
+    this.rootDir = settings.rootDir || process.cwd();
+    this.buildType = settings.buildType || 'client';
+    this.debug = settings.debug || false;
+    this.trace = settings.trace || false;
+    this.sourceMap =
+      this.buildType === 'server' && this.debug
+        ? true
+        : getOption(
+            'sourceMap',
+            [
+              settings,
+              this.env === 'development' ? this.serve.configurations : this.build.configurations,
+            ],
+            false
+          );
+    this.host = settings.host || '0.0.0.0';
+    this.port = Number(settings.port ?? 3000);
+    this.staticHost = settings.staticHost || 'localhost';
+    this.staticPort = Number(settings.staticPort ?? (this.type === 'module' ? 4040 : 4000));
+    this.profile = settings.profile || false;
+    this.noServerRebuild = settings.noServerRebuild || false;
+    this.noClientRebuild = settings.noClientRebuild || false;
+    this.modern = getOption(
+      'modern',
+      [
+        settings,
+        this.env === 'development' ? this.serve.configurations : this.build.configurations,
+      ],
+      false
+    );
+    this.dedupe = this.build.configurations?.dedupe;
+    this.dedupeIgnore = this.build.configurations?.dedupeIgnore?.map(
+      (ignore) => new RegExp(`^${ignore}`)
+    );
+    this.removeTypeofWindow = this.build.configurations?.removeTypeofWindow;
+    this.resolveSymlinks = settings.resolveSymlinks ?? true;
+    this.hotRefresh = this.env === 'development' && this.serve.configurations?.hotRefresh;
+    this.disableProdOptimization = settings.disableProdOptimization ?? false;
+    this.onlyBundles = settings.onlyBundles;
+    this.target = this.resolveTarget();
+    this.showConfig = settings.showConfig ?? false;
+
+    if (this.showConfig) {
+      showConfig(this);
+    }
+
+    validate(this);
+  }
+
+  public onlyBundles: string[];
+
+  getBuildPath() {
+    switch (this.type) {
+      case 'application':
+        return resolve(
+          this.rootDir,
+          this.buildType === 'server'
+            ? this.build.options.outputServer
+            : this.build.options.outputClient
+        );
+      case 'module':
+        return resolve(
+          this.rootDir,
+          ...this.build.options.output.split('/'),
+          this.name,
+          this.version
+        );
+    }
+
+    throw new Error('projectType not supported');
+  }
+
+  withSettings(settings: Settings) {
+    return new ConfigManager(this.configEntry, {
+      ...this.settings,
+      ...settings,
+    });
+  }
+
+  dehydrate() {
+    return {
+      configEntry: this.configEntry,
+      settings: {
+        ...this.settings,
+        rootDir: this.rootDir,
+      },
+    };
+  }
+
+  static rehydrate(state: ReturnType<ConfigManager['dehydrate']>) {
+    return new ConfigManager(state.configEntry, state.settings);
+  }
+
+  private resolveTarget(): Target {
+    if (this.buildType === 'server') {
+      return 'node';
+    }
+
+    if (this.modern) {
+      return 'modern';
+    }
+
+    return 'defaults';
+  }
+}

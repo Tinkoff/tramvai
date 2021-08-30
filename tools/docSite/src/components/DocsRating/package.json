@@ -1,0 +1,24 @@
+{
+  "name": "@tramvai/docsRating",
+  "version": "1.0.5",
+  "description": "Виджет оценки страницы для @docusaurus",
+  "main": "lib/DocsRating.js",
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc --build",
+    "watch": "tsc -w",
+    "build-for-publish": "true"
+  },
+  "peerDependencies": {
+    "@docusaurus": "*",
+    "react": "*"
+  },
+  "devDependencies": {
+    "typescript": "4.2.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://registry.npmjs.org/"
+  },
+  "license": "Apache-2.0"
+}

@@ -1,0 +1,8 @@
+{
+  "name": "pkg-b",
+  "version": "2.1.1",
+  "dependencies": {
+    "pkg-a": "^1.2.3"
+  },
+  "license": "Apache-2.0"
+}

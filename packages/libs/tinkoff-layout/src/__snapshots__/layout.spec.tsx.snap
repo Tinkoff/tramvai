@@ -1,0 +1,165 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createLayout layout with base layout, content and page components 1`] = `
+<div
+  class="layout"
+>
+  Base layout
+  <div
+    class="content"
+  >
+    Content page
+    <div
+      class="page"
+    >
+      Base page
+      <div>
+        Page
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`createLayout layout with empty parameters 1`] = `
+<div>
+  Page
+</div>
+`;
+
+exports[`createLayout layout with full options 1`] = `
+<div
+  class="layout"
+>
+  <div>
+    global component
+  </div>
+  <div>
+    global2 component
+  </div>
+  <div
+    class="page-wrapper"
+  >
+    <div
+      class="header-wrapper"
+    >
+      <div>
+        Header
+        <header>
+          head
+        </header>
+      </div>
+    </div>
+    <div
+      class="page-wrapper"
+    >
+      <div>
+        Page
+      </div>
+    </div>
+    <div>
+      Footer
+      <footer>
+        foot
+      </footer>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`createLayout layout with header and footer 1`] = `
+<div
+  class="layout"
+>
+  <div>
+    fedback
+  </div>
+  <div>
+    popup
+  </div>
+  <header>
+    head
+  </header>
+  <div>
+    Page
+  </div>
+  <footer>
+    foot
+  </footer>
+</div>
+`;
+
+exports[`createLayout layout with nothing 1`] = `
+<div>
+  Page
+</div>
+`;
+
+exports[`createLayout layout with only layout wrapper 1`] = `
+<div
+  class="layout"
+>
+  <div>
+    fedback
+  </div>
+  <div>
+    popup
+  </div>
+  <div>
+    Page
+  </div>
+</div>
+`;
+
+exports[`createLayout should not render Header when some of wrappers return null 1`] = `
+<div
+  class="layout"
+>
+  <div>
+    Page
+  </div>
+  <div
+    class="footer"
+  >
+    <footer>
+      foot
+    </footer>
+  </div>
+</div>
+`;
+
+exports[`createLayout should not render wrappers when Header and Footer is missing 1`] = `
+<div
+  class="layout"
+>
+  <div>
+    Page
+  </div>
+</div>
+`;
+
+exports[`createLayout should pass custom props from some of wrappers to Header and Footer 1`] = `
+<div
+  class="layout"
+>
+  <div
+    class="header"
+  >
+    <header>
+      head
+       prop=a
+    </header>
+  </div>
+  <div>
+    Page
+  </div>
+  <div
+    class="footer"
+  >
+    <footer>
+      foot
+       prop=b
+    </footer>
+  </div>
+</div>
+`;

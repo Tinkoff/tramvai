@@ -1,0 +1,29 @@
+{
+  "name": "@tinkoff/dippy",
+  "version": "0.0.0-stub",
+  "initialVersion": "0.7.27",
+  "description": "",
+  "main": "./lib/di.js",
+  "typings": "./lib/di.d.ts",
+  "files": [
+    "__migrations__",
+    "lib"
+  ],
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+  },
+  "scripts": {
+    "build": "tramvai-build",
+    "watch": "tsc -w",
+    "build-for-publish": "true"
+  },
+  "gitHead": "8e826a214c87b188fc4d254cdd8f2a2b2c55f3a8",
+  "dependencies": {
+    "tslib": "^2.0.3"
+  },
+  "module": "./lib/di.es.js",
+  "es2017": "./lib/di.es2017.js",
+  "license": "Apache-2.0"
+}

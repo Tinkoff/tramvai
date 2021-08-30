@@ -1,0 +1,13 @@
+import React from 'react';
+
+import styles from './{{ name }}.module.css';
+
+export type {{ properCase name }}Props = {
+  children?: React.ReactNode;
+};
+
+export const {{ properCase name }} = (props: {{ properCase name }}Props) => {
+  const { children } = props;
+
+  return <div className={styles.div}>{children}</div>;
+};

@@ -1,0 +1,17 @@
+{
+    "extends": "../../../tsconfig.lib.json",
+    "include": [
+        "./src"
+    ],
+    "compilerOptions": {
+        "declarationDir": "./lib",
+        "outDir": "./lib",
+        "strict": true,
+        "rootDir": "./src"
+    },
+    "references": [
+        {
+            "path": "../../cli"
+        }
+    ]
+}

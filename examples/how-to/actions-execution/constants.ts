@@ -1,0 +1,1 @@
+export const ACTION_EXECUTION_LIMIT = 1000;

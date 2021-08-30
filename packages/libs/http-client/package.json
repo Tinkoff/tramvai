@@ -1,0 +1,30 @@
+{
+  "name": "@tramvai/http-client",
+  "version": "0.0.0-stub",
+  "description": "",
+  "main": "./lib/index.js",
+  "browser": {
+    "./lib/agent/createAgent.js": "./lib/agent/createAgent.browser.js",
+    "./lib/index.es.js": "./lib/index.browser.js"
+  },
+  "typings": "./lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+  },
+  "scripts": {
+    "build": "tramvai-build",
+    "watch": "tsc -w",
+    "build-for-publish": "true"
+  },
+  "dependencies": {
+    "tslib": "^2.0.3"
+  },
+  "sideEffects": false,
+  "module": "./lib/index.es.js",
+  "es2017": "./lib/index.es2017.js",
+  "license": "Apache-2.0"
+}

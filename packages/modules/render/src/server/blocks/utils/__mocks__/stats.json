@@ -1,0 +1,102 @@
+{
+  "publicPath": "",
+  "namedChunkGroups": {
+    "platform": {
+      "chunks": [
+        "manifest",
+        "platform"
+      ],
+      "assets": [
+        "manifest.7fde3260cd45b71f40e4.js",
+        "platform.8e8cf615482fa889494e.chunk.js"
+      ],
+      "children": {},
+      "childAssets": {}
+    },
+    "polyfill": {
+      "chunks": [
+        "manifest",
+        "polyfill"
+      ],
+      "assets": [
+        "manifest.7fde3260cd45b71f40e4.js",
+        "polyfill.3641dbc6ffbad3dd6966.chunk.js"
+      ],
+      "children": {},
+      "childAssets": {}
+    },
+    "coin": {
+      "chunks": [
+        "coin"
+      ],
+      "assets": [
+        "coin.02dde9d95260c228c5fd.css",
+        "coin.43f21dd68938300fcd23.chunk.js"
+      ],
+      "children": {},
+      "childAssets": {}
+    },
+    "coin-test": {
+      "chunks": [
+        "coin-test"
+      ],
+      "assets": [
+        "coin-test.bcbdb86c31bc2031fc0a.chunk.js"
+      ],
+      "children": {},
+      "childAssets": {}
+    },
+    "coin-action-test": {
+      "chunks": [
+        "coin-action-test"
+      ],
+      "assets": [
+        "coin-action-test.9514f1ce154394ea10df.chunk.js"
+      ],
+      "children": {},
+      "childAssets": {}
+    },
+    "region-mobile-list": {
+      "chunks": [
+        "region-mobile-list"
+      ],
+      "assets": [
+        "region-mobile-list.bf61546bb55cc9ea8f7f.css",
+        "region-mobile-list.58229caf3710df5d41a0.chunk.js"
+      ],
+      "children": {},
+      "childAssets": {}
+    },
+    "region-desktop-list": {
+      "chunks": [
+        "region-desktop-list"
+      ],
+      "assets": [
+        "region-desktop-list.5c74a8d1f6ec62221c03.css",
+        "region-desktop-list.99ff3fefe2a929684c92.chunk.js"
+      ],
+      "children": {},
+      "childAssets": {}
+    }
+  },
+  "assetsByChunkName": {
+    "vendor": "vendor.fe87c85dfa655e250486.js",
+    "coin": [
+      "coin.02dde9d95260c228c5fd.css",
+      "coin.43f21dd68938300fcd23.chunk.js"
+    ],
+    "coin-action-test": "coin-action-test.9514f1ce154394ea10df.chunk.js",
+    "coin-test": "coin-test.bcbdb86c31bc2031fc0a.chunk.js",
+    "manifest": "manifest.7fde3260cd45b71f40e4.js",
+    "platform": "platform.8e8cf615482fa889494e.chunk.js",
+    "polyfill": "polyfill.3641dbc6ffbad3dd6966.chunk.js",
+    "region-desktop-list": [
+      "region-desktop-list.5c74a8d1f6ec62221c03.css",
+      "region-desktop-list.99ff3fefe2a929684c92.chunk.js"
+    ],
+    "region-mobile-list": [
+      "region-mobile-list.bf61546bb55cc9ea8f7f.css",
+      "region-mobile-list.58229caf3710df5d41a0.chunk.js"
+    ]
+  }
+}

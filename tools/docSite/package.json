@@ -1,0 +1,35 @@
+{
+  "scripts": {
+    "setup": "node ./tools/copyMdFiles.js",
+    "start": "docusaurus start",
+    "start:en": "yarn start --locale en",
+    "build": "docusaurus build",
+    "serve": "docusaurus serve",
+    "write-translations": "docusaurus write-translations",
+    "write-translations:en": "yarn write-translations --locale en"
+  },
+  "dependencies": {
+    "@docusaurus/theme-common": "2.0.0-beta.4",
+    "@tinkoff/utils": "^2.1.2",
+    "clsx": "^1.1.1",
+    "directory-tree": "^2.2.4",
+    "fs-extra": "^9.0.1",
+    "prism-react-renderer": "^1.1.1",
+    "prop-types": "^15.7.2",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-decorators": "*",
+    "@docusaurus/core": "2.0.0-beta.4",
+    "@docusaurus/plugin-google-analytics": "2.0.0-beta.4",
+    "@docusaurus/preset-classic": "2.0.0-beta.4",
+    "@types/prop-types": "^15.7.3",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "docusaurus-lunr-search": "^2.1.14",
+    "indent-string": "^4.0.0",
+    "unist-util-visit": "^2.0.3"
+  },
+  "license": "Apache-2.0"
+}

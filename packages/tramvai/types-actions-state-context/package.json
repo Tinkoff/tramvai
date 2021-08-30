@@ -1,0 +1,28 @@
+{
+  "name": "@tramvai/types-actions-state-context",
+  "version": "0.0.0-stub",
+  "description": "",
+  "main": "lib/index.js",
+  "typings": "src/index.ts",
+  "files": [
+    "lib"
+  ],
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+  },
+  "scripts": {
+    "build": "tramvai-build",
+    "watch": "tsc -w",
+    "build-for-publish": "true"
+  },
+  "dependencies": {
+    "tslib": "^2.0.3"
+  },
+  "peerDependencies": {
+    "@tinkoff/dippy": "0.0.0-stub"
+  },
+  "devDependencies": {},
+  "license": "Apache-2.0"
+}

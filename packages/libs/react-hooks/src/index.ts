@@ -1,0 +1,1 @@
+export { useShallowEqual } from './useShallowEqual';

@@ -1,0 +1,15 @@
+import { Module } from '@tramvai/core';
+import { {{ constantCase name }}_TOKEN } from './tokens';
+
+export * from './tokens';
+
+@Module({
+  imports: [],
+  providers: [
+    {
+      provide: {{ constantCase name }}_TOKEN,
+      useValue: 'client',
+    },
+  ],
+})
+export class {{ properCase name }}Module {}

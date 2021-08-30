@@ -1,0 +1,67 @@
+{
+  "projects": {
+    "dedupe-no": {
+      "name": "dedupe-no",
+      "root": "src",
+      "type": "application",
+      "commands": {
+        "build": {
+          "configurations": {
+            "dedupe": false
+          },
+          "options": {
+            "server": "src/index"
+          }
+        }
+      }
+    },
+    "dedupe-eq": {
+      "name": "dedupe-eq",
+      "root": "src",
+      "type": "application",
+      "commands": {
+        "build": {
+          "configurations": {
+            "dedupe": "equality"
+          },
+          "options": {
+            "server": "src/index"
+          }
+        }
+      }
+    },
+    "dedupe-sem": {
+      "name": "dedupe-sem",
+      "root": "src",
+      "type": "application",
+      "commands": {
+        "build": {
+          "configurations": {
+            "dedupe": "semver"
+          },
+          "options": {
+            "server": "src/index"
+          }
+        }
+      }
+    },
+    "dedupe-ignore": {
+      "name": "dedupe",
+      "root": "src",
+      "type": "application",
+      "commands": {
+        "build": {
+          "configurations": {
+            "dedupe": "semver",
+            "dedupeIgnore": [
+              "package-dep$"
+            ]
+          },
+          "options": {
+            "server": "src/index"
+          }
+        }
+      }
+    }
+  }
+}

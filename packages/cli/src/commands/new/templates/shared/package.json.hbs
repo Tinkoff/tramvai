@@ -1,0 +1,25 @@
+{
+  "name": "{{configEntry.name}}",
+  "private": true,
+  "scripts": {
+    "start": "tramvai start {{configEntry.name}}",
+    "build": "tramvai build {{configEntry.name}}",
+    "lint": "eslint --ext .ts,.tsx --ignore-path .gitignore ."{{#if isJest}},
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:integration": "jest -w=3 --config ./jest.integration.config.js",
+    "test:integration:watch": "jest --runInBand --watch --config ./jest.integration.config.js"{{/if}}
+  },
+  "devDependencies": {},
+  "dependencies": {},
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix"
+    ]
+  }
+}

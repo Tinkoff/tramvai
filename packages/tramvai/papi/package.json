@@ -1,0 +1,41 @@
+{
+  "name": "@tramvai/papi",
+  "version": "0.0.0-stub",
+  "description": "",
+  "main": "lib/server.js",
+  "browser": "lib/browser.js",
+  "typings": "src/server.ts",
+  "files": [
+    "lib",
+    "__migrations__"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+  },
+  "scripts": {
+    "build": "tramvai-build",
+    "watch": "tsc -w",
+    "build-for-publish": "true"
+  },
+  "dependencies": {
+    "@tinkoff/utils": "^2.1.2",
+    "@types/connect-timeout": "^0.0.34",
+    "ajv": "^6.5.4",
+    "body-parser": "^1.18.3",
+    "connect-timeout": "^1.9.0",
+    "cookie-parser": "^1.4.5",
+    "express": "^4.17.1",
+    "tslib": "^2.0.3"
+  },
+  "devDependencies": {
+    "@types/connect-timeout": "^0.0.34",
+    "@types/cookie-parser": "^1.4.2",
+    "@types/express": "^4.17.9",
+    "supertest": "^3.3.0"
+  },
+  "gitHead": "8e826a214c87b188fc4d254cdd8f2a2b2c55f3a8",
+  "module": "lib/server.es.js",
+  "es2017": "lib/browser.es2017.js",
+  "license": "Apache-2.0"
+}

@@ -1,0 +1,64 @@
+[
+  {
+    "name": "how-to",
+    "label": "Рецепты",
+    "items": [
+      {
+        "path": "actions-conditions/README.md",
+        "priority": 50,
+        "doc": {
+          "id": "actions-conditions",
+          "title": "Выполнение экшенов в зависимости от условий"
+        }
+      },
+      {
+        "path": "actions-execution/README.md",
+        "priority": 50,
+        "doc": {
+          "id": "actions-execution",
+          "title": "Выполнение экшенов на отдельных страницах"
+        }
+      },
+      {
+        "path": "feature-toggle-async/README.md",
+        "priority": 50,
+        "doc": {
+          "id": "feature-toggle-async",
+          "title": "Загрузка асинхронных компонентов в зависимости от feature-toggle"
+        }
+      },
+      {
+        "path": "react-query-usage/README.md",
+        "priority": 50,
+        "doc": {
+          "id": "react-query-usage",
+          "title": "Использование библиотеки @tramvai/react-query"
+        }
+      },
+      {
+        "path": "ssr-async-components/README.md",
+        "priority": 50,
+        "doc": {
+          "id": "ssr-async-components",
+          "title": "SSR при использование асинхронных компонентов"
+        }
+      },
+      {
+        "path": "ssr-dynamic-components/README.md",
+        "priority": 50,
+        "doc": {
+          "id": "ssr-dynamic-components",
+          "title": "SSR при использование динамических компонентов"
+        }
+      },
+      {
+        "path": "server-add-path-handler/README.md",
+        "priority": 50,
+        "doc": {
+          "id": "server-add-path-handler",
+          "title": "Добавление своего обработчика урла для приложения"
+        }
+      }
+    ]
+  }
+]

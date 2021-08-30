@@ -1,0 +1,24 @@
+{
+  "name": "@tinkoff-monorepo/fix-ts-references",
+  "version": "0.0.0-stub",
+  "description": "",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "prepack": "npm run build"
+  },
+  "bin": "bin/fix-ts-references.js",
+  "files": [
+    "lib",
+    "bin"
+  ],
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@tinkoff-monorepo/pkgs-collector-workspaces": "0.0.0-stub",
+    "signale": "^1.4.0",
+    "tslib": "^2.0.3"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "module": "ESNext",
+    "allowJs": true,
+    "types": [
+      "node",
+      "jest"
+    ]
+  },
+  "exclude": [
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.bench.ts",
+    "**/__tests__/**",
+    "**/__integration__/**",
+    "**/__fixtures__/**"
+  ]
+}

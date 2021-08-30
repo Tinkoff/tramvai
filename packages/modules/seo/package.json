@@ -1,0 +1,39 @@
+{
+  "name": "@tramvai/module-seo",
+  "version": "0.0.0-stub",
+  "description": "",
+  "browser": "lib/browser.js",
+  "main": "lib/server.js",
+  "typings": "src/server.ts",
+  "files": [
+    "lib",
+    "__migrations__"
+  ],
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+  },
+  "scripts": {
+    "build": "tramvai-build",
+    "watch": "tsc -w",
+    "build-for-publish": "true"
+  },
+  "dependencies": {
+    "@tinkoff/meta-tags-generate": "0.0.0-stub"
+  },
+  "peerDependencies": {
+    "@tinkoff/utils": "^2.1.2",
+    "@tramvai/core": "0.0.0-stub",
+    "@tramvai/module-common": "0.0.0-stub",
+    "@tramvai/module-render": "0.0.0-stub",
+    "@tramvai/state": "0.0.0-stub",
+    "@tramvai/test-helpers": "0.0.0-stub",
+    "@tramvai/tokens-router": "0.0.0-stub",
+    "@tinkoff/dippy": "0.0.0-stub",
+    "tslib": "^2.0.3"
+  },
+  "module": "lib/server.es.js",
+  "es2017": "lib/browser.es2017.js",
+  "license": "Apache-2.0"
+}

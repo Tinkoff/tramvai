@@ -1,0 +1,35 @@
+[
+  {
+    "name": "references",
+    "label": "Справочник",
+    "items": [
+      {
+        "name": "cli",
+        "label": "CLI",
+        "items": [
+          {
+            "path": "./README.md",
+            "doc": {
+              "id": "base",
+              "title": "Основная дока"
+            }
+          },
+          {
+            "path": "./src/library/webpack/blocks/serverInline.md",
+            "doc": {
+              "id": "serverInline",
+              "title": "Вставка inline-кода для клиента на сервере"
+            }
+          },
+          {
+            "path": "./docs/browserslist.md",
+            "doc": {
+              "id": "browserslist",
+              "title": "Интеграция с browserslist"
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@tramvai/core": "^0.3.3",
+    "@tramvai/module-common": "0.6.8",
+    "@tramvai/module-router": "~0.4.0",
+    "@tramvai/state": "^0.8.0"
+  },
+  "license": "Apache-2.0"
+}

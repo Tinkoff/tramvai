@@ -1,0 +1,40 @@
+{
+  "name": "@tinkoff/logger",
+  "version": "0.0.0-stub",
+  "description": "",
+  "main": "lib/index.js",
+  "typings": "src/index.ts",
+  "browser": {
+    "./lib/adapters/debug.js": "./lib/adapters/debug.browser.js",
+    "./lib/index.es.js": "./lib/index.browser.js",
+    "./lib/reporters/index.js": "./lib/reporters/index.browser.js",
+    "./lib/server.js": "./lib/browser.js"
+  },
+  "files": [
+    "lib",
+    "plugins.js"
+  ],
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+  },
+  "scripts": {
+    "build": "tramvai-build",
+    "watch": "tsc -w",
+    "build-for-publish": "true"
+  },
+  "dependencies": {
+    "@tinkoff/utils": "^2.1.2",
+    "@tramvai/safe-strings": "0.0.0-stub",
+    "chalk": "^3.0.0",
+    "date-fns": "^2.11.0",
+    "figures": "^3.2.0",
+    "std-env": "^2.2.1",
+    "tslib": "^2.0.3"
+  },
+  "gitHead": "8e826a214c87b188fc4d254cdd8f2a2b2c55f3a8",
+  "module": "lib/index.es.js",
+  "es2017": "lib/index.es2017.js",
+  "license": "Apache-2.0"
+}

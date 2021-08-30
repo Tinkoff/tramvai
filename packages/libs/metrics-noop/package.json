@@ -1,0 +1,30 @@
+{
+  "name": "@tinkoff/metrics-noop",
+  "version": "0.0.0-stub",
+  "initialVersion": "1.0.0",
+  "description": "noop realisation for prom-client",
+  "keywords": [
+    "metrics"
+  ],
+  "main": "./lib/index.js",
+  "typings": "./lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+  },
+  "scripts": {
+    "build": "tramvai-build",
+    "watch": "tsc -w",
+    "build-for-publish": "true"
+  },
+  "module": "./lib/index.es.js",
+  "es2017": "./lib/index.es2017.js",
+  "dependencies": {
+    "tslib": "^2.0.3"
+  },
+  "license": "Apache-2.0"
+}

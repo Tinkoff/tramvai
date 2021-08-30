@@ -1,0 +1,27 @@
+{
+  "name": "@tinkoff/url",
+  "version": "0.0.0-stub",
+  "description": "",
+  "main": "lib/url.js",
+  "typings": "src/url.ts",
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+  },
+  "scripts": {
+    "build": "tramvai-build",
+    "watch": "tsc -w",
+    "build-for-publish": "true"
+  },
+  "dependencies": {
+    "@tinkoff/utils": "^2.1.2",
+    "tslib": "^2.0.3"
+  },
+  "sideEffects": false,
+  "module": "lib/url.es.js",
+  "es2017": "lib/url.es2017.js",
+  "license": "Apache-2.0"
+}

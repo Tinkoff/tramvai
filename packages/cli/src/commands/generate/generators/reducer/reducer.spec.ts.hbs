@@ -1,0 +1,14 @@
+import { testReducer } from '@tramvai/test';
+import { {{ camelCase name }}Reducer, change{{ properCase name }}Event } from './{{ name }}Reducer';
+
+describe('{{ camelCase name }}Reducer', () => {
+  it('chage{{ properCase name }}Event', () => {
+    const { getState, dispatch } = testReducer({{ camelCase name }}Reducer);
+
+    expect(getState()).toEqual({});
+
+    dispatch(change{{ properCase name }}Event({ a: 1 }));
+
+    expect(getState()).toEqual({ a: 1 });
+  });
+});

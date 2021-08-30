@@ -1,0 +1,26 @@
+{
+  "name": "@tinkoff/browser-cookies",
+  "version": "0.0.0-stub",
+  "description": "Tiny cookies library for the browser and server environments",
+  "main": "./lib/index.js",
+  "module": "./lib/index.es.js",
+  "es2017": "./lib/index.es2017.js",
+  "typings": "./lib/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+  },
+  "scripts": {
+    "build": "tramvai-build",
+    "watch": "tsc -w",
+    "build-for-publish": "true"
+  },
+  "dependencies": {
+    "tslib": "^2.0.3"
+  },
+  "license": "Apache-2.0"
+}

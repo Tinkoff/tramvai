@@ -1,0 +1,74 @@
+{
+  "name": "references",
+  "label": "Справочник",
+  "items": [
+    {
+      "name": "tools",
+      "label": "Инструменты",
+      "items": [
+        {
+          "name": "monorepo-tools",
+          "label": "Для монорепозитория",
+          "items": [
+            {
+              "path": "monorepo/fix-ts-references/README.md",
+              "doc": {
+                "id": "fix-ts-references",
+                "title": "'@tinkoff-monorepo/fix-ts-references'"
+              }
+            },
+            {
+              "path": "monorepo/depscheck/README.md",
+              "doc": {
+                "id": "depscheck",
+                "title": "'@tinkoff-monorepo/depscheck'"
+              }
+            },
+            {
+              "path": "monorepo/pkgs-collector-workspaces/README.md",
+              "doc": {
+                "id": "pkgs-collector-workspaces",
+                "title": "'@tinkoff-monorepo/pkgs-collector-workspaces'"
+              }
+            },
+            {
+              "path": "monorepo/pkgs-collector-pvm/README.md",
+              "doc": {
+                "id": "pkgs-collector-pvm",
+                "title": "'@tinkoff-monorepo/pkgs-collector-pvm'"
+              }
+            },
+            {
+              "path": "monorepo/pkgs-collector-dir/README.md",
+              "doc": {
+                "id": "pkgs-collector-dir",
+                "title": "'@tinkoff-monorepo/pkgs-collector-dir'"
+              }
+            }
+          ]
+        },
+        {
+          "path": "build/README.md",
+          "doc": {
+            "id": "build",
+            "title": "'@tramvai/build'"
+          }
+        },
+        {
+          "path": "migrate/README.md",
+          "doc": {
+            "id": "migrate",
+            "title": "'@tramvai/tools-migrate'"
+          }
+        },
+        {
+          "path": "check-versions/README.md",
+          "doc": {
+            "id": "check-versions",
+            "title": "'@tramvai/tools-check-versions'"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,128 @@
+[
+  {
+    "name": "features",
+    "label": "Возможности",
+    "items": [
+      {
+        "path": "react/README.md",
+        "doc": {
+          "id": "react",
+          "title": "Работа с React"
+        }
+      },
+      {
+        "name": "react-query",
+        "label": "React Query",
+        "items": [
+          {
+            "type": "doc",
+            "label": "Интеграция с tramvai",
+            "id": "references/modules/react-query"
+          },
+          {
+            "path": "react-query/README.md",
+            "doc": {
+              "id": "api",
+              "title": "API"
+            }
+          },
+          {
+            "type": "doc",
+            "label": "Рецепты",
+            "id": "how-to/react-query-usage"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "references",
+    "label": "Справочник",
+    "items": [
+      {
+        "name": "libs",
+        "label": "Библиотеки",
+        "items": [
+          {
+            "path": "papi/README.md",
+            "priority": 50,
+            "doc": {
+              "id": "papi",
+              "title": "papi"
+            }
+          },
+          {
+            "path": "mock/README.md",
+            "priority": 50,
+            "doc": {
+              "id": "mock",
+              "title": "mock"
+            }
+          }
+        ]
+      },
+      {
+        "name": "test",
+        "label": "Тестирование",
+        "items": [
+          {
+            "path": "test/unit/README.md",
+            "priority": 50,
+            "doc": {
+              "id": "test-unit",
+              "title": "Unit tests"
+            }
+          },
+          {
+            "path": "test/integration/README.md",
+            "priority": 50,
+            "doc": {
+              "id": "test-integration",
+              "title": "Integration tests"
+            }
+          },
+          {
+            "path": "test/react/README.md",
+            "priority": 50,
+            "doc": {
+              "id": "test-react",
+              "title": "React tests"
+            }
+          },
+          {
+            "path": "test/jsdom/README.md",
+            "priority": 50,
+            "doc": {
+              "id": "test-jsdom",
+              "title": "JSDom tests"
+            }
+          },
+          {
+            "path": "test/puppeteer/README.md",
+            "priority": 50,
+            "doc": {
+              "id": "test-puppeteer",
+              "title": "Puppeteer tests"
+            }
+          },
+          {
+            "path": "test/mocks/README.md",
+            "priority": 50,
+            "doc": {
+              "id": "test-mocks",
+              "title": "Mocks"
+            }
+          },
+          {
+            "path": "test/integration-jest/README.md",
+            "priority": 50,
+            "doc": {
+              "id": "test-integration-jest",
+              "title": "Интеграция с jest"
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

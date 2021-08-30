@@ -1,0 +1,9 @@
+{
+  "name": "pkg-nested-s",
+  "version": "2.3.3",
+  "dependencies": {
+    "pkg-gk": "^1.2.3",
+    "pkg-ggg": "^1.2.3"
+  },
+  "license": "Apache-2.0"
+}

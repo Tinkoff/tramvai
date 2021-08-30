@@ -1,0 +1,35 @@
+[
+  {
+    "name": "releases",
+    "label": "Релизы",
+    "items": [
+      {
+        "path": "CHANGELOG.md",
+        "doc": {
+          "id": "changelog",
+          "title": "Changelog"
+        }
+      },
+      {
+        "path": "migration.md",
+        "doc": {
+          "id": "migration",
+          "title": "Миграции"
+        }
+      }
+    ]
+  },
+  {
+    "name": "community",
+    "label": "Сообщество",
+    "items": [
+      {
+        "path": "CONTRIBUTING.md",
+        "doc": {
+          "id": "contribute",
+          "title": "Contribute"
+        }
+      }
+    ]
+  }
+]

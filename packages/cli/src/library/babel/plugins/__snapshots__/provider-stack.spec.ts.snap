@@ -1,0 +1,388 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`provider-stack add __stack property external providers: add __stack property external providers 1`] = `
+
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved
+import { Provider, Scope } from '@tramvai/core';
+
+export const providers: Provider[] = [
+  {
+    provide: 'a',
+    useValue: 1,
+  },
+  {
+    provide: 'b',
+    multi: true,
+    deps: {},
+    useFactory: () => {},
+  },
+  {
+    provide: 'c',
+    scope: Scope.SINGLETON,
+    // eslint-disable-next-line @typescript-eslint/no-extraneous-class
+    useClass: class {},
+  },
+];
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+var _ref, _ref2, _ref3;
+
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved
+import { Scope } from '@tramvai/core';
+export var providers = [
+  ((_ref =
+    /*__tramvai_stack_provider__*/
+    {
+      provide: 'a',
+      useValue: 1,
+    }),
+  Object.defineProperty(_ref, '__stack', {
+    enumerable: false,
+    value: new Error().stack,
+  }),
+  _ref),
+  ((_ref2 =
+    /*__tramvai_stack_provider__*/
+    {
+      provide: 'b',
+      multi: true,
+      deps: {},
+      useFactory: function useFactory() {},
+    }),
+  Object.defineProperty(_ref2, '__stack', {
+    enumerable: false,
+    value: new Error().stack,
+  }),
+  _ref2),
+  ((_ref3 =
+    /*__tramvai_stack_provider__*/
+    {
+      provide: 'c',
+      scope: Scope.SINGLETON,
+      // eslint-disable-next-line @typescript-eslint/no-extraneous-class
+      useClass: function useClass() {},
+    }),
+  Object.defineProperty(_ref3, '__stack', {
+    enumerable: false,
+    value: new Error().stack,
+  }),
+  _ref3),
+];
+
+
+`;
+
+exports[`provider-stack add __stack property if Error in scope: add __stack property if Error in scope 1`] = `
+
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved
+import { Provider, Scope, Error } from '@tramvai/core';
+
+export const providers: Provider[] = [
+  {
+    provide: 'a',
+    useValue: 1,
+  },
+  {
+    provide: 'b',
+    multi: true,
+    deps: {},
+    useFactory: () => {
+      console.log(Error);
+    },
+  },
+  {
+    provide: 'c',
+    scope: Scope.SINGLETON,
+    // eslint-disable-next-line @typescript-eslint/no-extraneous-class
+    useClass: class {},
+  },
+];
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+var _ref, _ref2, _ref3;
+
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved
+import { Scope, Error as _Error } from '@tramvai/core';
+export var providers = [
+  ((_ref =
+    /*__tramvai_stack_provider__*/
+    {
+      provide: 'a',
+      useValue: 1,
+    }),
+  Object.defineProperty(_ref, '__stack', {
+    enumerable: false,
+    value: new Error().stack,
+  }),
+  _ref),
+  ((_ref2 =
+    /*__tramvai_stack_provider__*/
+    {
+      provide: 'b',
+      multi: true,
+      deps: {},
+      useFactory: function useFactory() {
+        console.log(_Error);
+      },
+    }),
+  Object.defineProperty(_ref2, '__stack', {
+    enumerable: false,
+    value: new Error().stack,
+  }),
+  _ref2),
+  ((_ref3 =
+    /*__tramvai_stack_provider__*/
+    {
+      provide: 'c',
+      scope: Scope.SINGLETON,
+      // eslint-disable-next-line @typescript-eslint/no-extraneous-class
+      useClass: function useClass() {},
+    }),
+  Object.defineProperty(_ref3, '__stack', {
+    enumerable: false,
+    value: new Error().stack,
+  }),
+  _ref3),
+];
+
+
+`;
+
+exports[`provider-stack add __stack property to module decorator providers: add __stack property to module decorator providers 1`] = `
+
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved
+import { module, Scope } from '@tramvai/core';
+
+@module({
+  providers: [
+    {
+      provide: 'provide',
+      // eslint-disable-next-line @typescript-eslint/no-extraneous-class
+      useClass: class {},
+      multi: true,
+      deps: {},
+    },
+    {
+      provide: 'test',
+      useFactory: () => {},
+      multi: false,
+      scope: Scope.SINGLETON,
+    },
+    {
+      provide: 'abc',
+      useValue: 3,
+    },
+  ],
+})
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
+export class ClassModule {}
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+var _dec, _ref, _ref2, _ref3, _class;
+
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved
+import { module, Scope } from '@tramvai/core';
+export var ClassModule =
+  ((_dec = module({
+    providers: [
+      ((_ref =
+        /*__tramvai_stack_provider__*/
+        {
+          provide: 'provide',
+          // eslint-disable-next-line @typescript-eslint/no-extraneous-class
+          useClass: function useClass() {},
+          multi: true,
+          deps: {},
+        }),
+      Object.defineProperty(_ref, '__stack', {
+        enumerable: false,
+        value: new Error().stack,
+      }),
+      _ref),
+      ((_ref2 =
+        /*__tramvai_stack_provider__*/
+        {
+          provide: 'test',
+          useFactory: function useFactory() {},
+          multi: false,
+          scope: Scope.SINGLETON,
+        }),
+      Object.defineProperty(_ref2, '__stack', {
+        enumerable: false,
+        value: new Error().stack,
+      }),
+      _ref2),
+      ((_ref3 =
+        /*__tramvai_stack_provider__*/
+        {
+          provide: 'abc',
+          useValue: 3,
+        }),
+      Object.defineProperty(_ref3, '__stack', {
+        enumerable: false,
+        value: new Error().stack,
+      }),
+      _ref3),
+    ],
+  })),
+  _dec((_class = function ClassModule() {})) || _class);
+
+
+`;
+
+exports[`provider-stack check function naming: check function naming 1`] = `
+
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved
+import { Provider } from '@tramvai/core';
+
+export const providers: Provider[] = [
+  {
+    provide: 'a',
+    useFactory: () => {},
+  },
+];
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+var _ref;
+
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved
+export var providers = [
+  ((_ref =
+    /*__tramvai_stack_provider__*/
+    {
+      provide: 'a',
+      useFactory: function () {},
+    }),
+  Object.defineProperty(_ref, '__stack', {
+    enumerable: false,
+    value: new Error().stack,
+  }),
+  _ref),
+];
+
+
+`;
+
+exports[`provider-stack do nothing: do nothing 1`] = `
+
+export const providers = [
+  {
+    provide: 'test',
+  },
+  {
+    provide: 'a',
+    a: 'a',
+  },
+  {
+    useClass: 'test',
+    b: 'b',
+  },
+  {
+    useValue: 'c',
+  },
+];
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+export var providers = [
+  {
+    provide: 'test',
+  },
+  {
+    provide: 'a',
+    a: 'a',
+  },
+  {
+    useClass: 'test',
+    b: 'b',
+  },
+  {
+    useValue: 'c',
+  },
+];
+
+
+`;
+
+exports[`provider-stack inside await: inside await 1`] = `
+
+export const func = async () => {
+  await Promise.resolve([
+    {
+      provide: 'a',
+      useValue: 'a',
+    },
+    {
+      provide: 'b',
+      useValue: 'b',
+    },
+  ]);
+}
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import _asyncToGenerator from '@babel/runtime/helpers/esm/asyncToGenerator';
+import _regeneratorRuntime from '@babel/runtime/regenerator';
+export var func = /*#__PURE__*/ (function () {
+  var _ref = _asyncToGenerator(
+    /*#__PURE__*/ _regeneratorRuntime.mark(function _callee() {
+      var _ref2, _ref3;
+
+      return _regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch ((_context.prev = _context.next)) {
+            case 0:
+              _context.next = 2;
+              return Promise.resolve([
+                ((_ref2 =
+                  /*__tramvai_stack_provider__*/
+                  {
+                    provide: 'a',
+                    useValue: 'a',
+                  }),
+                Object.defineProperty(_ref2, '__stack', {
+                  enumerable: false,
+                  value: new Error().stack,
+                }),
+                _ref2),
+                ((_ref3 =
+                  /*__tramvai_stack_provider__*/
+                  {
+                    provide: 'b',
+                    useValue: 'b',
+                  }),
+                Object.defineProperty(_ref3, '__stack', {
+                  enumerable: false,
+                  value: new Error().stack,
+                }),
+                _ref3),
+              ]);
+
+            case 2:
+            case 'end':
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    })
+  );
+
+  return function func() {
+    return _ref.apply(this, arguments);
+  };
+})();
+
+
+`;

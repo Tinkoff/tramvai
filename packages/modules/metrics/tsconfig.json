@@ -1,0 +1,52 @@
+{
+    "extends": "../../../tsconfig.lib.json",
+    "include": [
+        "./src"
+    ],
+    "compilerOptions": {
+        "declarationDir": "./lib",
+        "outDir": "./lib",
+        "rootDir": "./src"
+    },
+    "references": [
+        {
+            "path": "../../tramvai/core"
+        },
+        {
+            "path": "../../libs/browser-timings"
+        },
+        {
+            "path": "../common"
+        },
+        {
+            "path": "../../tokens/metrics"
+        },
+        {
+            "path": "../../tokens/server"
+        },
+        {
+            "path": "../../libs/monkeypatch"
+        },
+        {
+            "path": "../../libs/url"
+        },
+        {
+            "path": "../../tramvai/papi"
+        },
+        {
+            "path": "../../libs/measure-express-requests"
+        },
+        {
+            "path": "../../tramvai/state"
+        },
+        {
+            "path": "../../libs/logger"
+        },
+        {
+            "path": "../../libs/metrics-noop"
+        },
+        {
+            "path": "../../tokens/http-client"
+        }
+    ]
+}

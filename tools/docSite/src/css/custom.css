@@ -1,0 +1,83 @@
+/* your custom css */
+:root {
+  --ifm-color-primary: #2E8555;
+  --ifm-color-secondary: #205C3B;
+  --ifm-section-background-color: #f1f2f3;
+}
+
+[data-theme='dark'] {
+  --ifm-section-background-color: #1e2125;
+}
+
+.main-wrapper {
+  margin-top: var(--ifm-navbar-height);
+}
+
+.docusaurus-highlight-code-line {
+  background-color: rgb(72, 77, 91);
+}
+
+.main-section:nth-child(even) {
+  background-color: var(--ifm-section-background-color);
+}
+
+/* Docs Rating Box */
+
+.docsRating {
+  display: inline-block;
+  padding: 16px 40px;
+  min-height: 66px;
+  margin-top: 5rem;
+  background-color: rgba(100, 215, 255, 0.3);
+  text-align: center;
+  color: #0780ab;
+  line-height: 32px;
+  font-weight: 500;
+  border-radius: var(--ifm-global-radius);
+}
+
+.docsRating svg {
+  height: 1.5em;
+  width: 1.5em;
+  margin: 0 0 0 6px;
+}
+
+.docsRating svg:hover,
+.docsRating svg:focus {
+  cursor: pointer;
+  fill: var(--ifm-color-primary);
+}
+
+.docsRating .i_thumbsup {
+  fill: #56a211;
+  transform: translateY(0.25em);
+  margin-left: 12px;
+}
+
+.docsRating .i_thumbsdown {
+  fill: #e9430f;
+  transform: scale(-1, -1) translateY(-0.25em);
+}
+
+html[data-theme="dark"] .docsRating {
+  color: #cee9f3;
+}
+
+@media only screen and (max-width: 996px) {
+  .docsRating {
+    width: 100%;
+    margin: 36px 0 0 !important;
+    border-radius: var(--ifm-global-radius);
+  }
+}
+
+.leaveReply {
+  display: flex;
+  flex-direction: column;
+}
+
+.leaveReply .textArea {
+  border-radius: 0.5rem;
+  margin: 16px 0;
+  padding: 8px;
+}

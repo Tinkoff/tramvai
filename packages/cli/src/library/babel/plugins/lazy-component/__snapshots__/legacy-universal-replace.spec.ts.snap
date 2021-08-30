@@ -1,0 +1,155 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`legacy-universal-replace not universal: not universal 1`] = `
+
+const lazy = (imp) => console.log(imp);
+const load = lazy(() => import('./cmp'));
+
+(async () => {
+  const {default: cmp} = await import('./cmp');
+
+  console.log((cmp as any).actions)
+})();
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+const lazy = (imp) => console.log(imp);
+
+const load = lazy(() => import('./cmp'));
+
+(async () => {
+  const { default: cmp } = await import('./cmp');
+  console.log(cmp.actions);
+})();
+
+
+`;
+
+exports[`legacy-universal-replace platform legacy: platform legacy 1`] = `
+
+import asyncUniversal, {asyncUniversalPack} from '@tinkoff/platform-legacy/utils/decorators/asyncUniversal';
+
+asyncUniversal(import('./cmp'))
+
+export const packed = asyncUniversalPack({});
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import asyncUniversal, {
+  asyncUniversalPack,
+} from '@tinkoff/platform-legacy/utils/decorators/asyncUniversal';
+import { lazy as _lazy } from '@tramvai/react';
+
+_lazy({
+  resolved: {},
+
+  chunkName() {
+    return 'cmp';
+  },
+
+  requireSync(props) {
+    return __webpack_require__(this.resolve(props));
+  },
+
+  isReady(props) {
+    const key = this.resolve(props);
+
+    if (this.resolved[key] !== true) {
+      return false;
+    }
+
+    return !!__webpack_modules__[key];
+  },
+
+  importAsync: () =>
+    import(
+      /* webpackChunkName: "cmp" */
+      './cmp'
+    ),
+
+  requireAsync(props) {
+    const key = this.resolve(props);
+    this.resolved[key] = false;
+    return this.importAsync(props).then((resolved) => {
+      this.resolved[key] = true;
+      return resolved;
+    });
+  },
+
+  resolve() {
+    return require.resolveWeak('./cmp');
+  },
+});
+
+export const packed = asyncUniversalPack({});
+
+
+`;
+
+exports[`legacy-universal-replace react-universal: react-universal 1`] = `
+
+import universal from 'react-universal-component';
+
+universal(import('./cmp'))
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import { lazy as _lazy } from '@tramvai/react';
+
+_lazy({
+  resolved: {},
+
+  chunkName() {
+    return 'cmp';
+  },
+
+  requireSync(props) {
+    return __webpack_require__(this.resolve(props));
+  },
+
+  isReady(props) {
+    const key = this.resolve(props);
+
+    if (this.resolved[key] !== true) {
+      return false;
+    }
+
+    return !!__webpack_modules__[key];
+  },
+
+  importAsync: () =>
+    import(
+      /* webpackChunkName: "cmp" */
+      './cmp'
+    ),
+
+  requireAsync(props) {
+    const key = this.resolve(props);
+    this.resolved[key] = false;
+    return this.importAsync(props).then((resolved) => {
+      this.resolved[key] = true;
+      return resolved;
+    });
+  },
+
+  resolve() {
+    return require.resolveWeak('./cmp');
+  },
+});
+
+
+`;
+
+exports[`legacy-universal-replace tramvai-react: tramvai-react 1`] = `
+
+import universal from 'react-universal-component';
+
+export const lazy = (loader) => universal(loader);
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import universal from '@loadable/component';
+export const lazy = (loader) => universal(loader);
+
+
+`;

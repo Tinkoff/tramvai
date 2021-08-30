@@ -1,0 +1,29 @@
+{
+  "name": "@tramvai/tools-check-versions",
+  "version": "0.0.0-stub",
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {
+    "postinstall": "node -e \"require('./bin/check-versions.js')\""
+  },
+  "bin": {
+    "tramvai-check-versions": "bin/check-versions.js"
+  },
+  "files": [
+    "lib"
+  ],
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@tinkoff/logger": "0.0.0-stub",
+    "@tinkoff/utils": "^2.1.2",
+    "fs-extra": "^9.0.0",
+    "p-map": "^4.0.0",
+    "semver": "^7.3.2",
+    "tslib": "^2.0.3"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^9.0.1",
+    "@types/semver": "^7.3.1"
+  }
+}

@@ -1,0 +1,41 @@
+{
+    "extends": "../../../../tsconfig.lib.json",
+    "include": [
+        "./src"
+    ],
+    "compilerOptions": {
+        "declarationDir": "./lib",
+        "outDir": "./lib",
+        "rootDir": "./src",
+        "strict": true
+    },
+    "references": [
+        {
+            "path": "../../../libs/url"
+        },
+        {
+            "path": "../../../tokens/common"
+        },
+        {
+            "path": "../../../libs/dippy"
+        },
+        {
+            "path": "../../../libs/pubsub"
+        },
+        {
+            "path": "../../../libs/router"
+        },
+        {
+            "path": "../../state"
+        },
+        {
+            "path": "../../../modules/common"
+        },
+        {
+            "path": "../../core"
+        },
+        {
+            "path": "../../../modules/cookie"
+        }
+    ]
+}

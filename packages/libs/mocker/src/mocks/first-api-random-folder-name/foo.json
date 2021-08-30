@@ -1,0 +1,19 @@
+{
+  "api": "first-api",
+  "mocks": {
+    "GET /foo": {
+      "status": 200,
+      "payload": {
+        "fake": "true"
+      },
+      "headers": {}
+    },
+    "POST /foo": {
+      "status": 200,
+      "payload": {
+        "fake": "true"
+      },
+      "headers": {}
+    }
+  }
+}

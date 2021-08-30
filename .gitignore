@@ -1,0 +1,56 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+**/cypress/videos/
+**/cypress/screenshots/
+allure-results
+
+# Dependency directories
+node_modules/
+_node_modules/
+!tools/monorepo/depscheck/src/__fixtures__/**/node_modules
+!tools/check-versions/__integration__/__fixtures__/**/node_modules
+.yarn-offline-cache
+
+# IDE
+.DS_Store
+.devcontainer
+.idea
+.history
+.blueprints
+.vscode/*
+# список настроек для vs code которые шарятся внутри команды, !не должен включать явно settings.json и launch.json т.к. это сугубо личные предпочтения и их не надо хранить
+# рекомендуемые расширения для репозитория
+!.vscode/extensions.json
+# рекомендуемые настройки
+!.vscode/*.recommended
+
+# Compiled sources
+lib
+__migrations__
+**/dist
+stats.json
+stats.modern.json
+webpackAssets.json
+.tmp
+test/tramvai.json
+examples/granular/src/bundles
+examples/granular/src/pages
+examples/granular/src/deps
+
+# package-lock
+examples/*/package-lock.json
+packages/**/package-lock.json
+tsconfig.tsbuildinfo
+
+smokeYarn
+smokeNpm
+smoke-simple-app-pwa
+
+debug-path
+
+.copybara
+copy.bara.sky

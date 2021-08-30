@@ -1,0 +1,46 @@
+{
+  "name": "@tramvai/module-router",
+  "version": "0.0.0-stub",
+  "description": "",
+  "main": "lib/index.js",
+  "browser": {
+    "./lib/modules/server.js": "./lib/modules/browser.js"
+  },
+  "typings": "src/index.ts",
+  "files": [
+    "lib"
+  ],
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+  },
+  "scripts": {
+    "build": "tramvai-build",
+    "watch": "tsc -w",
+    "build-for-publish": "true"
+  },
+  "dependencies": {
+    "@tinkoff/errors": "0.0.0-stub",
+    "@tinkoff/router": "0.0.0-stub",
+    "@tinkoff/url": "0.0.0-stub",
+    "@tramvai/tokens-render": "0.0.0-stub",
+    "@tramvai/tokens-router": "0.0.0-stub",
+    "@tramvai/tokens-server": "0.0.0-stub"
+  },
+  "peerDependencies": {
+    "@tinkoff/utils": "^2.1.2",
+    "@tramvai/core": "0.0.0-stub",
+    "@tramvai/module-log": "0.0.0-stub",
+    "@tramvai/module-server": "0.0.0-stub",
+    "@tramvai/papi": "0.0.0-stub",
+    "@tramvai/state": "0.0.0-stub",
+    "@tramvai/test-helpers": "0.0.0-stub",
+    "@tramvai/test-mocks": "0.0.0-stub",
+    "@tramvai/tokens-common": "0.0.0-stub",
+    "@tinkoff/dippy": "0.0.0-stub",
+    "react": "*",
+    "tslib": "^2.0.3"
+  },
+  "license": "Apache-2.0"
+}

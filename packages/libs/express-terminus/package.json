@@ -1,0 +1,35 @@
+{
+  "name": "@tinkoff/express-terminus",
+  "version": "0.0.0-stub",
+  "description": "",
+  "main": "lib/index.js",
+  "module": "lib/index.es.js",
+  "es2017": "lib/index.es2017.js",
+  "typings": "src/index.ts",
+  "sideEffects": false,
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+  },
+  "scripts": {
+    "build": "build-lib",
+    "watch": "tsc -w",
+    "build-for-publish": "true"
+  },
+  "dependencies": {
+    "es6-promisify": "^6.1.1",
+    "stoppable": "^1.1.0"
+  },
+  "devDependencies": {
+    "@types/es6-promisify": "^6.0.0",
+    "@types/express": "^4.17.9",
+    "@types/stoppable": "^1.1.0",
+    "express": "^4.17.1",
+    "get-port": "^5.1.1",
+    "node-fetch": "^2.6.1"
+  },
+  "license": "Apache-2.0"
+}

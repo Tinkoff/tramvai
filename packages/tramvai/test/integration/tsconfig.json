@@ -1,0 +1,24 @@
+{
+    "extends": "../../../../tsconfig.lib.json",
+    "include": [
+        "./src",
+        "../integration-jest/src/jest"
+    ],
+    "compilerOptions": {
+        "declarationDir": "./lib",
+        "outDir": "./lib",
+        "rootDir": "./src",
+        "strict": true
+    },
+    "references": [
+        {
+            "path": "../helpers"
+        },
+        {
+            "path": "../../../libs/mocker"
+        },
+        {
+            "path": "../../../cli"
+        }
+    ]
+}

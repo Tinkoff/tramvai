@@ -1,0 +1,15 @@
+const { startCli } = require('@tramvai/test-integration');
+
+describe('{{configEntry.name}}', () => {
+  beforeAll(async () => {
+    app = await startCli('{{configEntry.name}}');
+  }, 80000);
+
+  afterAll(() => {
+    return app.close();
+  });
+
+  it('request to main page return status 200', async () => {
+    return app.request('/').expect(200);
+  });
+});

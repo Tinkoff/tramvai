@@ -1,0 +1,34 @@
+{
+  "name": "@tramvai/tools-migrate",
+  "version": "0.0.0-stub",
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {
+    "postinstall": "node -e \"require('./bin/migrate.js')\""
+  },
+  "bin": {
+    "tramvai-migrate": "bin/migrate.js"
+  },
+  "files": [
+    "lib"
+  ],
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@tinkoff/logger": "0.0.0-stub",
+    "@tinkoff/utils": "^2.1.2",
+    "env-ci": "^5.0.2",
+    "fast-glob": "^3.2.2",
+    "fs-extra": "^9.0.0",
+    "jscodeshift": "^0.7.0",
+    "promise-queue": "^2.2.5",
+    "recast": "^0.17.2",
+    "tslib": "^2.0.3"
+  },
+  "devDependencies": {
+    "@tramvai/cli": "0.0.0-stub",
+    "@types/env-ci": "^3.1.0",
+    "@types/fs-extra": "^8.1.0",
+    "@types/jscodeshift": "^0.7.0"
+  }
+}

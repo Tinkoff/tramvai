@@ -1,0 +1,46 @@
+{
+    "extends": "../../../tsconfig.lib.json",
+    "include": [
+        "./src"
+    ],
+    "compilerOptions": {
+        "declarationDir": "./lib",
+        "outDir": "./lib",
+        "rootDir": "./src"
+    },
+    "references": [
+        {
+            "path": "../../../packages/tramvai/core"
+        },
+        {
+            "path": "../../../packages/modules/common"
+        },
+        {
+            "path": "../../../packages/tramvai/papi"
+        },
+        {
+            "path": "../../../packages/libs/dippy"
+        },
+        {
+            "path": "../../../packages/tokens/common"
+        },
+        {
+            "path": "../../../packages/libs/http-client"
+        },
+        {
+            "path": "../../../packages/libs/tinkoff-request-http-client-adapter"
+        },
+        {
+            "path": "../../../packages/tokens/server"
+        },
+        {
+            "path": "../../tokens/http-client"
+        },
+        {
+            "path": "../../tramvai/test/helpers"
+        },
+        {
+            "path": "../../tramvai/test/mocks"
+        }
+    ]
+}

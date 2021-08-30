@@ -1,0 +1,25 @@
+{
+  "name": "@tinkoff/browser-timings",
+  "version": "0.0.0-stub",
+  "initialVersion": "0.8.18",
+  "description": "Lightweighted browser timings metrics exporter",
+  "main": "./lib/browser-timings.js",
+  "typings": "./lib/browser-timings.d.ts",
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+  },
+  "scripts": {
+    "build": "tramvai-build",
+    "watch": "tsc -w",
+    "build-for-publish": "true"
+  },
+  "sideEffects": false,
+  "gitHead": "8e826a214c87b188fc4d254cdd8f2a2b2c55f3a8",
+  "module": "./lib/browser-timings.es.js",
+  "es2017": "./lib/browser-timings.es2017.js",
+  "license": "Apache-2.0"
+}

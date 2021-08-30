@@ -1,0 +1,38 @@
+{
+  "name": "@tramvai/tinkoff-request-http-client-adapter",
+  "version": "0.0.0-stub",
+  "description": "",
+  "main": "lib/index.js",
+  "browser": {
+    "./lib/agent/createAgent.js": "./lib/agent/createAgent.browser.js"
+  },
+  "typings": "src/index.ts",
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+  },
+  "scripts": {
+    "build": "tramvai-build",
+    "watch": "tsc -w",
+    "build-for-publish": "true"
+  },
+  "dependencies": {
+    "@tinkoff/request-core": "^0.8.9",
+    "@tinkoff/request-plugin-cache-deduplicate": "^0.8.9",
+    "@tinkoff/request-plugin-cache-memory": "^0.8.15",
+    "@tinkoff/request-plugin-circuit-breaker": "^0.2.9",
+    "@tinkoff/request-plugin-log": "^0.8.11",
+    "@tinkoff/request-plugin-protocol-http": "^0.10.18",
+    "@tinkoff/request-plugin-transform-url": "^0.8.8",
+    "@tinkoff/request-plugin-validate": "^0.8.8",
+    "@tinkoff/utils": "^2.1.2",
+    "@tramvai/http-client": "0.0.0-stub",
+    "@tramvai/tokens-common": "0.0.0-stub",
+    "tslib": "^2.0.3"
+  },
+  "sideEffects": false,
+  "license": "Apache-2.0"
+}

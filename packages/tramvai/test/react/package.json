@@ -1,0 +1,36 @@
+{
+  "name": "@tramvai/test-react",
+  "version": "0.0.0-stub",
+  "description": "",
+  "main": "lib/index.js",
+  "typings": "src/index.ts",
+  "files": [
+    "lib"
+  ],
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+  },
+  "scripts": {
+    "build": "tramvai-build",
+    "watch": "tsc -w",
+    "build-for-publish": "true"
+  },
+  "dependencies": {
+    "@testing-library/react": "^11.2.6",
+    "@testing-library/react-hooks": "^5.1.2",
+    "@tramvai/test-mocks": "0.0.0-stub",
+    "@tramvai/tokens-common": "0.0.0-stub",
+    "react-test-renderer": "^17.0.2"
+  },
+  "peerDependencies": {
+    "@tinkoff/router": "0.0.0-stub",
+    "@tramvai/react": "0.0.0-stub",
+    "@tramvai/state": "0.0.0-stub",
+    "react": "*",
+    "tslib": "^2.0.3"
+  },
+  "devDependencies": {},
+  "license": "Apache-2.0"
+}

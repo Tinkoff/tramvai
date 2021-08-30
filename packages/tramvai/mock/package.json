@@ -1,0 +1,30 @@
+{
+  "name": "@tramvai/mock",
+  "version": "0.0.0-stub",
+  "description": "",
+  "main": "lib/mocks.js",
+  "typings": "src/mocks.ts",
+  "files": [
+    "lib"
+  ],
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "build-for-publish": "true"
+  },
+  "peerDependencies": {
+    "@tinkoff/pubsub": "0.0.0-stub",
+    "@tinkoff/utils": "^2.1.2",
+    "@tramvai/core": "0.0.0-stub",
+    "@tramvai/module-common": "0.0.0-stub",
+    "@tramvai/state": "0.0.0-stub",
+    "@tinkoff/dippy": "0.0.0-stub",
+    "tslib": "^2.0.3"
+  },
+  "license": "Apache-2.0"
+}

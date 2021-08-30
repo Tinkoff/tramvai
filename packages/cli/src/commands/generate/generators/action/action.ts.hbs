@@ -1,0 +1,9 @@
+import { createAction } from '@tramvai/core';
+
+export const {{ camelCase name }}Action = createAction({
+  name: '{{ dashCase name }}-action',
+  fn: (context, payload) => {
+    return context.dispatch({ type: 'FAKE_ACTION', payload });
+  },
+  conditions: {},
+});

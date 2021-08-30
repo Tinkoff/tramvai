@@ -1,0 +1,21 @@
+import React from 'react';
+import { useActions } from '@tramvai/state';
+import { useUrl } from '@tramvai/module-router';
+import { Button } from '../../components/shared/Button/Button';
+import { navigateAction } from '../../actions/navigateAction';
+
+export const SecondPage = () => {
+  // Получаем текущий роут
+  const currentPath = useUrl().path;
+  // Привязываем экшен для навигации к стору
+  const navigate = useActions(navigateAction);
+
+  return (
+    <div>
+      Current route is <b>{currentPath}</b>{' '}
+      <Button onClick={() => navigate('/')}>to main page</Button>
+    </div>
+  );
+};
+
+export default SecondPage;

@@ -1,0 +1,13 @@
+export const HEAD_META = 'head:meta';
+export const HEAD_PERFORMANCE = 'head:performance';
+export const HEAD_CORE_STYLES = 'head:core-styles';
+export const HEAD_POLYFILLS = 'head:polyfills';
+export const HEAD_CORE_SCRIPTS = 'head:core-scripts';
+export const HEAD_DYNAMIC_SCRIPTS = 'head:dynamic-scripts';
+export const HEAD_ANALYTICS = 'head:analytics';
+export const HEAD_ICONS = 'head:icons';
+export const BODY_START = 'body:start';
+export const REACT_RENDER = 'react:render';
+export const BODY_END = 'body:end';
+export const BODY_TAIL_ANALYTICS = 'body:tail:analytics';
+export const BODY_TAIL = 'body:tail';

@@ -1,0 +1,29 @@
+{
+    "extends": "../../../tsconfig.lib.json",
+    "include": [
+        "./src"
+    ],
+    "compilerOptions": {
+        "declarationDir": "./lib",
+        "outDir": "./lib",
+        "rootDir": "./src",
+        "strict": true
+    },
+    "references": [
+        {
+            "path": "../../modules/common"
+        },
+        {
+            "path": "../state"
+        },
+        {
+            "path": "../core"
+        },
+        {
+            "path": "../../libs/dippy"
+        },
+        {
+            "path": "../../libs/pubsub"
+        }
+    ]
+}

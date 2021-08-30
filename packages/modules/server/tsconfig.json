@@ -1,0 +1,60 @@
+{
+    "extends": "../../../tsconfig.lib.json",
+    "include": [
+        "./src"
+    ],
+    "compilerOptions": {
+        "outDir": "./lib",
+        "declarationDir": "./lib",
+        "rootDir": "./src",
+        "types": [
+            "node",
+            "jest",
+            "webpack-env"
+        ]
+    },
+    "references": [
+        {
+            "path": "../../tramvai/core"
+        },
+        {
+            "path": "../metrics"
+        },
+        {
+            "path": "../../tramvai/papi"
+        },
+        {
+            "path": "../common"
+        },
+        {
+            "path": "../../tokens/server"
+        },
+        {
+            "path": "../../libs/url"
+        },
+        {
+            "path": "../../libs/monkeypatch"
+        },
+        {
+            "path": "../../tokens/common"
+        },
+        {
+            "path": "../env"
+        },
+        {
+            "path": "../cache-warmup"
+        },
+        {
+            "path": "../../libs/errors"
+        },
+        {
+            "path": "../../libs/dippy"
+        },
+        {
+            "path": "../../cli"
+        },
+        {
+            "path": "../../libs/express-terminus"
+        }
+    ]
+}

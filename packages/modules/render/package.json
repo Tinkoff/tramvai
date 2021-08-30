@@ -1,0 +1,55 @@
+{
+  "name": "@tramvai/module-render",
+  "version": "0.0.0-stub",
+  "description": "",
+  "browser": "lib/browser.js",
+  "main": "lib/server.js",
+  "typings": "src/server.ts",
+  "files": [
+    "lib",
+    "__migrations__"
+  ],
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+  },
+  "scripts": {
+    "build": "tramvai-build",
+    "watch": "tsc -w",
+    "build-for-publish": "true"
+  },
+  "dependencies": {
+    "@loadable/server": "^5.15.0",
+    "@tinkoff/htmlpagebuilder": "0.0.0-stub",
+    "@tinkoff/layout-factory": "0.0.0-stub",
+    "@tinkoff/url": "0.0.0-stub",
+    "@tinkoff/user-agent": "0.0.0-stub",
+    "@tramvai/module-client-hints": "0.0.0-stub",
+    "@tramvai/module-router": "0.0.0-stub",
+    "@tramvai/react": "0.0.0-stub",
+    "@tramvai/safe-strings": "0.0.0-stub",
+    "@tramvai/tokens-render": "0.0.0-stub",
+    "@types/loadable__server": "^5.12.6",
+    "node-fetch": "^2.6.1"
+  },
+  "peerDependencies": {
+    "@tinkoff/dippy": "0.0.0-stub",
+    "@tinkoff/utils": "^2.1.2",
+    "@tramvai/cli": "0.0.0-stub",
+    "@tramvai/core": "0.0.0-stub",
+    "@tramvai/module-common": "0.0.0-stub",
+    "@tramvai/state": "0.0.0-stub",
+    "@tramvai/test-helpers": "0.0.0-stub",
+    "@tramvai/tokens-common": "0.0.0-stub",
+    "@tramvai/tokens-router": "0.0.0-stub",
+    "prop-types": "^15.6.2",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0",
+    "tslib": "^2.0.3"
+  },
+  "gitHead": "8e826a214c87b188fc4d254cdd8f2a2b2c55f3a8",
+  "module": "lib/server.es.js",
+  "es2017": "lib/browser.es2017.js",
+  "license": "Apache-2.0"
+}

@@ -1,0 +1,35 @@
+{
+  "name": "@tramvai/module-mocker",
+  "version": "0.0.0-stub",
+  "description": "",
+  "main": "./lib/server.js",
+  "browser": "./lib/browser.js",
+  "typings": "./src/server.ts",
+  "module": "./lib/server.es.js",
+  "es2017": "./lib/browser.es2017.js",
+  "sideEffects": false,
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+  },
+  "scripts": {
+    "build": "tramvai-build",
+    "watch": "tsc -w",
+    "build-for-publish": "true"
+  },
+  "dependencies": {
+    "@tinkoff/mocker": "0.0.0-stub",
+    "tslib": "^2.0.3"
+  },
+  "peerDependencies": {
+    "@tramvai/core": "0.0.0-stub",
+    "@tramvai/module-common": "0.0.0-stub",
+    "@tramvai/papi": "0.0.0-stub",
+    "@tramvai/tokens-server": "0.0.0-stub",
+    "@tinkoff/dippy": "0.0.0-stub"
+  },
+  "license": "Apache-2.0"
+}

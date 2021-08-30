@@ -1,0 +1,13 @@
+{
+  "name": "@tramvai/tools-generate-schema",
+  "version": "0.0.0-stub",
+  "private": true,
+  "main": "index.js",
+  "bin": {
+    "generate-schema": "bin/generate-schema.js"
+  },
+  "dependencies": {
+    "typescript-json-schema": "^0.42.0"
+  },
+  "license": "Apache-2.0"
+}
