@@ -17,6 +17,9 @@
     "watch": "tsc -w",
     "build-for-publish": "true"
   },
+  "devDependencies": {
+    "@types/wait-on": "^5.2.0"
+  },
   "dependencies": {
     "@types/supertest": "^2.0.11",
     "@tramvai/test-helpers": "0.0.0-stub",
@@ -30,6 +33,5 @@
     "@tramvai/cli": "0.0.0-stub",
     "tslib": "^2.0.3"
   },
-  "devDependencies": {},
   "license": "Apache-2.0"
 }

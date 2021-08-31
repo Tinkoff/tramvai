@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "moduleResolution": "node",
+        "target": "ES5",
+        "module": "ES2015",
+        "lib": ["es2015", "es2016", "es2017", "es2018", "dom"],
+        "allowSyntheticDefaultImports": true,
+        "resolveJsonModule": true,
+        "experimentalDecorators": true,
+        "strict": false,
+        "declaration": true,
+        "composite": true,
+        "incremental": true,
+        "importHelpers": true,
+        "skipLibCheck": true,
+        "rootDir": "./src",
+        "outDir": "./lib",
+        "declarationDir": "./lib"
+    },
+    "include": [
+        "./src"
+    ]
+}

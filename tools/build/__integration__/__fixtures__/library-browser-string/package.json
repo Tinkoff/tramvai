@@ -1,0 +1,21 @@
+{
+  "name": "library-browser-string",
+  "version": "0.1.0",
+  "main": "lib/server.js",
+  "browser": "lib/browser.js",
+  "typings": "src/server.ts",
+  "scripts": {
+    "build": "tramvai-build",
+    "watch": "tramvai-build --watch"
+  },
+  "dependencies": {
+    "tslib": "^2.0.3"
+  },
+  "devDependencies": {
+    "@tramvai/build": "file:./../../../../build"
+  },
+  "module": "lib/server.es.js",
+  "es2017": "lib/browser.es2017.js",
+  "private": true,
+  "license": "Apache-2.0"
+}

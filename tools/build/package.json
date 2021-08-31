@@ -1,0 +1,45 @@
+{
+  "name": "@tramvai/build",
+  "version": "0.0.0-stub",
+  "description": "Rollup wrapper, build multiple bundles for different module systems",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc --build",
+    "watch": "tsc -w"
+  },
+  "bin": {
+    "tramvai-build": "bin/tramvai-build.js",
+    "tramvai-copy": "bin/tramvai-copy.js"
+  },
+  "files": [
+    "lib"
+  ],
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@rollup/plugin-json": "^4.0.3",
+    "@rollup/plugin-typescript": "^5.0.1",
+    "@tinkoff/utils": "^2.1.2",
+    "cpy": "^8.1.0",
+    "estree-walker": "^2.0.1",
+    "fast-glob": "^3.2.2",
+    "magic-string": "^0.25.7",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.8.0",
+    "rollup-external-modules": "^2.0.0",
+    "rollup-plugin-analyzer": "^3.2.2",
+    "rollup-plugin-ts": "^1.4.0",
+    "rollup-pluginutils": "^2.8.2",
+    "signale": "^1.4.0",
+    "tslib": "^2.0.3",
+    "yargs": "^15.3.1"
+  },
+  "devDependencies": {
+    "@types/rimraf": "^3.0.0",
+    "@types/signale": "^1.4.1",
+    "@types/yargs": "^15.0.5"
+  },
+  "peerDependencies": {
+    "typescript": "*"
+  }
+}

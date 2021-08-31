@@ -1,0 +1,20 @@
+{
+  "name": "library-assets",
+  "version": "0.1.0",
+  "main": "lib/index.js",
+  "typings": "src/index.ts",
+  "scripts": {
+    "build": "tramvai-build",
+    "watch": "tramvai-build --watch"
+  },
+  "dependencies": {
+    "tslib": "^2.0.3"
+  },
+  "devDependencies": {
+    "@tramvai/build": "file:./../../../../build"
+  },
+  "module": "lib/index.es.js",
+  "es2017": "lib/index.es2017.js",
+  "private": true,
+  "license": "Apache-2.0"
+}

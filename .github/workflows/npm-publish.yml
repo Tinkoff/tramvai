@@ -1,21 +1,15 @@
-name: GitHub Pages
+name: Packages
 
 on:
   push:
     branches:
       - main
-    paths:
-      - '.github/workflows/github-pages-deploy.yml'
-      - 'tools/docSite/**'
 
 jobs:
-  deploy:
+  publish:
     runs-on: ubuntu-20.04
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
-    defaults:
-      run:
-        working-directory: tools/docSite
     steps:
       - uses: actions/checkout@v2
 
@@ -23,6 +17,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '14'
+          registry-url: https://registry.npmjs.org/
 
       - name: Get yarn cache
         id: yarn-cache
@@ -32,18 +27,17 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ steps.yarn-cache.outputs.dir }}
-          key: ${{ runner.os }}-website-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-website-
+            ${{ runner.os }}-yarn-
 
       - run: yarn install --frozen-lockfile
-      - run: yarn setup
       - run: yarn build
+      - run: yarn build:publish
+      - run: yarn build:change-typings
+      - run: yarn build:change-versions
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        if: ${{ github.ref == 'refs/heads/main' }}
-        with:
-          # github_token: ${{ secrets.GITHUB_TOKEN }}
-          personal_token: ${{ secrets.PERSONAL_TOKEN }}
-          publish_dir: ./tools/docSite/build
+      - name: Publish
+        run: yarn wsrun -e --serial publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
