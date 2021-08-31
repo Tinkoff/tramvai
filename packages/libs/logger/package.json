@@ -20,7 +20,7 @@
     "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
   },
   "scripts": {
-    "build": "tramvai-build",
+    "build": "tramvai-build --for-publish",
     "watch": "tsc -w",
     "build-for-publish": "true"
   },

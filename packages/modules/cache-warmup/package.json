@@ -15,7 +15,7 @@
     "directory": "packages/modules/cache-warmup"
   },
   "scripts": {
-    "build": "tramvai-build",
+    "build": "tramvai-build --for-publish",
     "watch": "tsc -w",
     "build-for-publish": "true"
   },

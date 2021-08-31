@@ -4,7 +4,7 @@
   "main": "lib/index.js",
   "typings": "src/index.ts",
   "scripts": {
-    "build": "tramvai-build",
+    "build": "tramvai-build --for-publish",
     "watch": "tramvai-build --watch"
   },
   "dependencies": {
