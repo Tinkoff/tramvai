@@ -18,7 +18,7 @@
     "watch": "yarn references && tsc -b ./tsconfig.solution.json --watch",
     "prebuild": "npm run cli:generate-schema",
     "build": "yarn references && tsc -b ./tsconfig.solution.json",
-    "build:publish": "wsrun -e -m --serial build --for-publish",
+    "build:publish": "wsrun -e -m --serial build",
     "build:change-typings": "wsrun -c json -I -f package.json -e \"this.typings=this.typings && this.typings.replace(/^src\\/(.*)\\.ts/, 'lib/\\$1.d.ts')\"",
     "build:change-versions": "node tools/public-packages/update-public-packages-versions.js", 
     "cli:generate-schema": "yarn workspace @tramvai/cli generate-schema"
