@@ -21,7 +21,8 @@
     "build:publish": "wsrun -e -m --serial build",
     "build:change-typings": "wsrun -c json -I -f package.json -e \"this.typings=this.typings && this.typings.replace(/^src\\/(.*)\\.ts/, 'lib/\\$1.d.ts')\"",
     "build:change-versions": "node tools/public-packages/update-public-packages-versions.js", 
-    "cli:generate-schema": "yarn workspace @tramvai/cli generate-schema"
+    "cli:generate-schema": "yarn workspace @tramvai/cli generate-schema",
+    "publish:all": "node tools/public-packages/publish-public-packages.js"
   },
   "workspaces": [
     "packages/cli",
