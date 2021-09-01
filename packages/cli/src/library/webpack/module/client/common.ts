@@ -15,7 +15,7 @@ export default (configManager: ConfigManager<ModuleConfigEntry>) => (config: Con
 
   config.batch(common(configManager));
 
-  config.target('web');
+  config.target(['web', 'es5']);
 
   config.output
     .path(configManager.getBuildPath())
