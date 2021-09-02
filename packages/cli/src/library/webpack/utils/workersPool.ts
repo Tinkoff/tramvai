@@ -28,7 +28,7 @@ const getCustomConfig = (configManager: ConfigManager) => {
 const createBabelConfig = (configManager: ConfigManager) => {
   return {
     name: 'babel',
-    poolTimeout: configManager.env === 'development' ? 5 : undefined,
+    poolTimeout: configManager.env === 'development' ? Infinity : undefined,
     workers: calculateNumberOfWorkers(),
     ...getCustomConfig(configManager),
   };
