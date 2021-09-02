@@ -11,27 +11,22 @@ async function updatePublicPackagesVersions() {
       packageJson.version = packagesVersions[packageJson.name];
     }
 
-    for (const pkgName in packagesVersions) {
-      if (
-        packageJson.dependencies &&
-        packageJson.dependencies[pkgName] &&
-        packageJson.dependencies[pkgName] === '0.0.0-stub'
-      ) {
-        packageJson.dependencies[pkgName] = packagesVersions[pkgName];
+    for (const depsField of ['dependencies', 'devDependencies', 'peerDependecies']) {
+      if (!packageJson[depsField]) {
+        continue;
       }
-      if (
-        packageJson.devDependencies &&
-        packageJson.devDependencies[pkgName] &&
-        packageJson.devDependencies[pkgName] === '0.0.0-stub'
-      ) {
-        packageJson.devDependencies[pkgName] = packagesVersions[pkgName];
-      }
-      if (
-        packageJson.peerDependencies &&
-        packageJson.peerDependencies[pkgName] &&
-        packageJson.peerDependencies[pkgName] === '0.0.0-stub'
-      ) {
-        packageJson.peerDependencies[pkgName] = packagesVersions[pkgName];
+
+      for (const pkgName in packageJson[depsField]) {
+        const isStub = packageJson[depsField][pkgName] === '0.0.0-stub';
+        const hasRealVersion = pkgName in packagesVersions;
+
+        if (isStub) {
+          if (hasRealVersion) {
+            packageJson[depsField][pkgName] = packagesVersions[pkgName];
+          } else {
+            throw Error(`Version for ${pkgName} not found in packages-versions.json!`);
+          }
+        }
       }
     }
   });
