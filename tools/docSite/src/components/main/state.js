@@ -12,7 +12,7 @@ const code = `import {
 const incrementAction = createEvent('increment');
 
 const countReducer = createReducer('count', 0)
-  .on(increment, (state) => state + 1);
+  .on(incrementAction, (state) => state + 1);
 
 const Component = () => {
   const count = useSelector('count', (state) => state);

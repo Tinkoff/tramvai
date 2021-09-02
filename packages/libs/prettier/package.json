@@ -1,0 +1,31 @@
+{
+  "name": "prettier-config-tinkoff",
+  "version": "0.0.0-stub",
+  "initialVersion": "0.1.4",
+  "description": "Tinkoff prettier config",
+  "keywords": [
+    "prettier",
+    "prettier-config"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "main": "./lib/index",
+  "bugs": {
+    "url": "https://tinkoff.slack.com/archives/CHF0KE8TX"
+  },
+  "files": [
+    "lib"
+  ],
+  "homepage": "https://github.com/TinkoffCreditSystems/tramvai",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/prettier": "^1.18.2"
+  },
+  "license": "Apache-2.0"
+}

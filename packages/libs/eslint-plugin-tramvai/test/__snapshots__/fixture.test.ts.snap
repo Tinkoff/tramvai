@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`fixture eslint plugin test check: lint tramvai app files, configure tramvai plugin manually 1`] = `
+Object {
+  "error.js": Object {
+    "errors": Array [
+      "@tinkoff/tramvai/bundle-chunk-name",
+      "@tinkoff/tramvai/bundle-chunk-name",
+    ],
+  },
+  "ok.js": Object {},
+}
+`;
+
+exports[`fixture eslint plugin test check: lint tramvai ts app files, use recommended tramvai plugin config 1`] = `
+Object {
+  "bundle1.ts": Object {},
+  "bundle2.ts": Object {},
+  "error.ts": Object {
+    "errors": Array [
+      "@tinkoff/tramvai/bundle-chunk-name",
+      "@tinkoff/tramvai/bundle-chunk-name",
+    ],
+  },
+  "ok.ts": Object {},
+}
+`;

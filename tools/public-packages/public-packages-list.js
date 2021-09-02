@@ -82,6 +82,8 @@ const publicPackages = [
   '@tramvai/tinkoff-request-http-client-adapter',
   '@tinkoff/react-hooks',
   '@tinkoff/hook-runner',
+  '@tinkoff/eslint-plugin-tramvai',
+  'prettier-config-tinkoff',
 ];
 
 module.exports = publicPackages;
