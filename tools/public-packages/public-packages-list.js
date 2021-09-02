@@ -22,6 +22,7 @@ const publicPackages = [
   '@tramvai/tools-migrate',
   '@tramvai/tools-check-versions',
   '@tramvai/tools-generate-schema',
+  '@tramvai/build',
   '@tinkoff-monorepo/depscheck',
   '@tinkoff-monorepo/fix-ts-references',
   '@tinkoff-monorepo/pkgs-collector',
