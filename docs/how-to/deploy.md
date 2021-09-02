@@ -29,7 +29,7 @@ tramvai build APP_ID
 Рекомендуемый Dockerfile
 
 ```dockerfile
-FROM node:14-alpine
+FROM node:14-buster-slim
 WORKDIR /app
 COPY dist/server /app/
 COPY package.json /app/
@@ -72,7 +72,7 @@ CMD [ "node", "--max-http-header-size=80000", "/app/server.js" ]
 
 Пример готового Dockerfile
 ```dockerfile
-FROM node:14-alpine
+FROM node:14-buster-slim
 WORKDIR /app
 COPY dist/server /app/
 COPY package.json /app/
