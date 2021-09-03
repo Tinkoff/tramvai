@@ -11,7 +11,7 @@ export type Params = {
 class AnalyzeCommand extends CLICommand<Params> {
   name = 'analyze';
 
-  description = 'Команда для анализа приложений';
+  description = 'Command for analyzing application';
 
   command = 'analyze <target>';
 
@@ -19,13 +19,13 @@ class AnalyzeCommand extends CLICommand<Params> {
     {
       name: '-p, --plugin',
       value: '[plugin]',
-      description: 'Тип плагина для анализа <bundle|whybundled|statoscope>',
+      description: 'Analysis plugin type <bundle|whybundled|statoscope>',
       defaultValue: 'bundle',
     },
     {
       name: '--showConfig',
       value: '[showConfig]',
-      description: 'Показать конфиг с которым был запущен cli',
+      description: 'Show config with which cli was launched',
     },
   ];
 

@@ -11,7 +11,7 @@ export type Params = Parameters<BuildCommandType>[0] & {
 class BuildCommand extends CLICommand<Params> {
   name = 'build';
 
-  description = 'Команда сборки платформенных сущностей - приложений, модулей, библиотек';
+  description = 'Command to build platform entities - applications, modules, libraries';
 
   command = 'build <target>';
 
@@ -19,7 +19,7 @@ class BuildCommand extends CLICommand<Params> {
     {
       name: '-t, --buildType',
       value: '[type]',
-      description: 'Тип сборки <client|server|all>',
+      description: 'Build type <client|server|all>',
       defaultValue: 'all',
     },
     {
@@ -27,23 +27,22 @@ class BuildCommand extends CLICommand<Params> {
       value: '[resolveSymlinks]',
       transformer: (value) => value !== 'false',
       description:
-        'Передает значение в `resolve.symlinks` в webpack (https://webpack.js.org/configuration/resolve/#resolve-symlinks)`',
+        'Pass value to `resolve.symlinks` in webpack (https://webpack.js.org/configuration/resolve/#resolve-symlinks)`',
     },
     {
       name: '--disableProdOptimization',
       value: '[disableProdOptimization]',
-      description:
-        'Отключает выполнение оптимизаций размеров бандла для прода (минификация и т.п.)',
+      description: 'Disable optimization of bundle sizes for production (minification, etc.)',
     },
     {
       name: '--showConfig',
       value: '[showConfig]',
-      description: 'Показать конфиг с которым был запущен cli',
+      description: 'Show config with which cli was launched',
     },
     {
       name: '--watch',
       value: '[watch]',
-      description: 'Watch режим сборки для библиотек',
+      description: 'Watch build mode for libraries',
     },
   ];
 

@@ -22,12 +22,12 @@ createApp({
   modules: [
     CommonModule,
     SpaRouterModule.forRoot([
-      // задаем статичный роут для приложения, который будет доступен по https://localhost:3000/
+      // set a static route for the application, which will be available by https://localhost:3000/
       {
         name: 'main',
         path: '/',
       },
-      // задаем статичный роут для приложения, который будет доступен по https://localhost:3000/second/
+      // set a static route for the application, which will be available by https://localhost:3000/second/
       {
         name: 'second',
         path: '/second/',
@@ -42,17 +42,17 @@ createApp({
     ErrorInterceptorModule,
   ],
   providers: [
-    // регистрируем header, который будет использоваться для всех страниц по умолчанию
+    // register a header that will be used for all pages by default
     {
       provide: DEFAULT_HEADER_COMPONENT,
       useValue: Header,
     },
-    // регистрируем footer, который будет использоваться для всех страниц по умолчанию
+    // register a footer to be used for all pages by default
     {
       provide: DEFAULT_FOOTER_COMPONENT,
       useValue: Footer,
     },
-    // регистрируем meta viewport, который будет добавлятся на каждую страницу
+    // register a meta viewport that will be added to each page
     {
       provide: RENDER_SLOTS,
       multi: true,
@@ -64,10 +64,10 @@ createApp({
       },
     },
   ],
-  // регистрируем экшены, которые будут выполняться для всех страниц приложения
+  // register actions that will be executed for all pages of the application
   actions: [globalAction],
   bundles: {
-    // регистрируем бандл, который будет использоваться для всех страниц по умолчанию
+    // register a bundle that will be used for all pages by default
     mainDefault: () =>
       import(/* webpackChunkName: "mainDefault" */ './bundles/mainDefault'),
   },

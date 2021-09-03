@@ -4,7 +4,7 @@ import type { Params } from './typings';
 class NewCommand extends CLICommand<Params> {
   name = 'new';
 
-  description = 'Команда для генерации нового приложения';
+  description = 'Command for generating a new application';
 
   command = 'new <name>';
 
@@ -12,22 +12,17 @@ class NewCommand extends CLICommand<Params> {
     {
       name: '--template',
       value: '[template]',
-      description: 'Шаблон для проекта <monorepo|multirepo>',
-    },
-    {
-      name: '--ci',
-      value: '[ci]',
-      description: 'Настройки CI для проекта <none|pfp-gitlab|common-gitlab>',
+      description: 'Template for the project <monorepo|multirepo>',
     },
     {
       name: '--packageManager',
       value: '[packageManager]',
-      description: 'Менеджер пакетов для проекта <npm|yarn>',
+      description: 'Package manager for the project <npm|yarn>',
     },
     {
       name: '--testingFramework',
       value: '[testingFramework]',
-      description: 'Тестовый фреймворк для проекта <none|jest>',
+      description: 'Test framework for the project <none|jest>',
     },
   ];
 

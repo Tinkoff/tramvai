@@ -18,7 +18,7 @@ export interface Params {
 export class StartProdCommand extends CLICommand<Params> {
   name = 'start-prod';
 
-  description = 'Команда сборки и запуска в прод режиме';
+  description = 'Command to run in production mode';
 
   command = 'start-prod <target>';
 
@@ -26,7 +26,7 @@ export class StartProdCommand extends CLICommand<Params> {
     {
       name: '-t, --buildType',
       value: '[type]',
-      description: 'Тип сборки <client|server|all|none>',
+      description: 'Build type <client|server|all|none>',
       defaultValue: 'all',
     },
     {
@@ -34,7 +34,7 @@ export class StartProdCommand extends CLICommand<Params> {
       value: '[resolveSymlinks]',
       transformer: (value) => value !== 'false',
       description:
-        'Передает значение в `resolve.symlinks` в webpack (https://webpack.js.org/configuration/resolve/#resolve-symlinks)`',
+        'Pass value to `resolve.symlinks` in webpack (https://webpack.js.org/configuration/resolve/#resolve-symlinks)`',
     },
     {
       name: '-p, --port',
@@ -69,7 +69,7 @@ export class StartProdCommand extends CLICommand<Params> {
     {
       name: '--showConfig',
       value: '[showConfig]',
-      description: 'Показать конфиг с которым был запущен cli',
+      description: 'Show config with which cli was launched',
     },
   ];
 

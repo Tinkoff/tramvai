@@ -5,7 +5,7 @@ const choices = ['npm', 'yarn'];
 const packageManagerQuestion = (answer) => ({
   type: 'list' as const,
   name: 'packageManager' as const,
-  message: 'Выберите менеджер пакетов для проекта',
+  message: 'Choose a package manager for the project',
   choices,
   when: () => !choices.includes(answer),
   default: 'none' as const,

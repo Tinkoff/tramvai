@@ -5,7 +5,7 @@ const choices = ['none', 'jest'];
 const testingFrameworkQuestion = (answer) => ({
   type: 'list' as const,
   name: 'testingFramework' as const,
-  message: 'Выберите тестовый фреймворк для проекта',
+  message: 'Choose a test framework for your project',
   choices,
   when: () => !choices.includes(answer),
   default: 'jest' as const,

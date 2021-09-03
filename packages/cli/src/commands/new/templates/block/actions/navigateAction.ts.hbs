@@ -8,10 +8,10 @@ export const navigateAction = createAction({
     url: string,
     { pageService }: { pageService: typeof PAGE_SERVICE_TOKEN }
   ) => {
-    // Используем pageService для перехода между страницами
+    // Using pageService to navigate between pages
     return pageService.navigate({ url });
   },
-  // deps позволяет использовать любую зависимость из DI в экшенах
+  // deps allows you to use any DI dependency in actions
   deps: {
     pageService: PAGE_SERVICE_TOKEN,
   },

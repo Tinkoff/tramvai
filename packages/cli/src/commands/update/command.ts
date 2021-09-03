@@ -5,7 +5,7 @@ import { checkVersion } from '../../validators/commands/checkVersion';
 class UpdateCommand extends CLICommand {
   name = 'update';
 
-  description = 'Команда обновления пакетов tramvai';
+  description = 'Tramvai package update command';
 
   command = 'update';
 

@@ -8,15 +8,15 @@ import type { Context } from '../../models/context';
 const exec = util.promisify(childProcess.exec);
 
 export const deduplicate = async (context: Context) => {
-  const spinner = ora('Дедупликация зависимостей в lock-файле').start();
+  const spinner = ora('Deduplicate dependencies in a lock file').start();
 
   try {
     await context.packageManager.dedupe();
     spinner.stop();
-    console.log('Завершено');
+    console.log('Completed');
   } catch (e) {
     spinner.stop();
-    console.error('Ошибка дедупликации: ', e);
+    console.error('Deduplication error: ', e);
     throw e;
   }
 };

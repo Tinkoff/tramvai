@@ -69,7 +69,7 @@ export async function installDependencies(
   testingFramework: TestingFrameworks
 ) {
   const spinner = ora({
-    prefixText: `${chalk.blue('[START]')} Устанавливаем зависимости`,
+    prefixText: `${chalk.blue('[START]')} Install dependencies`,
   }).start();
 
   const installCommands = packagesInstallCommands[packageManager];

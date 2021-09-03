@@ -8,11 +8,11 @@ import {
 export default createBundle({
   name: 'mainDefault',
   components: {
-    // регистрируем компонент страницы, который будет использоваться для всех страниц, к которым привязан этот бандл, по умолчанию
+    // register a page component that will be used for all pages to which this bundle is attached, by default
     pageDefault: lazy(() => import('../layers/pages/MainPage')),
-    // регистрируем компонент страницы, который будет использован при соответствующих настройках роута
+    // register a page component that will be used with the appropriate route settings
     '{{configEntry.name}}/second': lazy(() => import('../layers/pages/SecondPage')),
   },
-  // регистрируем экшены, которые будут выполняться для всех страниц, к которым привязан этот бандл
+  // register actions that will be executed for all pages to which this bundle is attached
   actions: [bundleServerOnlyAction, bundleClientOnlyAction],
 });

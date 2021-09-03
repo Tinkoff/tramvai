@@ -4,11 +4,11 @@ type Templates = 'multirepo' | 'monorepo';
 
 const choices = [
   {
-    name: 'Одно приложение на репозиторий',
+    name: 'One application per repository',
     value: 'multirepo',
   },
   {
-    name: 'Поддержка множества приложений в одном репозитории',
+    name: 'Support for multiple applications in one repository',
     value: 'monorepo',
   },
 ];
@@ -16,7 +16,7 @@ const choices = [
 const templateQuestion = (answer) => ({
   type: 'list' as const,
   name: 'template' as const,
-  message: 'Выберите шаблон для проекта',
+  message: 'Choose a template for your project',
   choices,
   when: () => !any<{ name: string; value: string }>((choice) => choice.value === answer)(choices),
   default: 'multirepo' as const,

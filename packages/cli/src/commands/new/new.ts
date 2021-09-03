@@ -80,7 +80,7 @@ export default async function createNew(context: Context, params: Params): Promi
   await installDependencies(directoryName, packageManager, testingFramework);
 
   console.log(
-    `\n\n Проект ${name} успешно создан. Для запуска проекта введите в терминале`,
+    `\n\n Project ${name} has been successfully created. To run the project, enter in the terminal`,
     chalk.blue(`cd ${name} && npm start`)
   );
 

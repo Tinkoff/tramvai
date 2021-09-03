@@ -6,15 +6,15 @@ import type { Context } from '../../models/context';
 const exec = util.promisify(childProcess.exec);
 
 export const installDependencies = async (context: Context) => {
-  const spinner = ora('Устанавливаем зависимости...').start();
+  const spinner = ora('Install dependencies...').start();
 
   try {
     await context.packageManager.install();
     spinner.stop();
-    console.log('Зависимости установлены');
+    console.log('Dependencies installed');
   } catch (e) {
     spinner.stop();
-    console.error('Ошибка установки зависимостей: ', e);
+    console.error('Error installing dependencies: ', e);
     throw e;
   }
 };

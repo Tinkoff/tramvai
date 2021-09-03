@@ -8,17 +8,17 @@ Options:
   -h, --help                                    display help for command
 
 Commands:
-  build|b [options] <target>                    Команда сборки платформенных сущностей - приложений, модулей, библиотек
-  start-prod|sp [options] <target>              Команда сборки и запуска в прод режиме
-  start|s [options] <target>                    Команда для запуска в режиме разработки платформенных сущностей - приложений, модулей, библиотек
+  build|b [options] <target>                    Command to build platform entities - applications, modules, libraries
+  start-prod|sp [options] <target>              Command to run in production mode
+  start|s [options] <target>                    Command to run in development mode
   lint|l <target>                               Команда для запуска линтинга
   task|t <name> [options]                       Запуск команд
-  analyze|a [options] <target>                  Команда для анализа приложений
+  analyze|a [options] <target>                  Command for analyzing application
   generate|g [target] [generator]               Команда для кодогенерации
     [target] - название приложения
     [generator] - action|reducer|bundle|component|page|module
-  new|n [options] <name>                        Команда для генерации нового приложения
-  update|u [options]                            Команда обновления пакетов tramvai
+  new|n [options] <name>                        Command for generating a new application
+  update|u [options]                            Tramvai package update command
   static|st [options] <target>                  Команда для сборки приложения в статичную версию
   benchmark|bench [options] <command> <target>  Команда для запуска бенчмарка работы @tramvai/cli
 
@@ -64,17 +64,17 @@ Options:
   -h, --help                                    display help for command
 
 Commands:
-  build|b [options] <target>                    Команда сборки платформенных сущностей - приложений, модулей, библиотек
-  start-prod|sp [options] <target>              Команда сборки и запуска в прод режиме
-  start|s [options] <target>                    Команда для запуска в режиме разработки платформенных сущностей - приложений, модулей, библиотек
+  build|b [options] <target>                    Command to build platform entities - applications, modules, libraries
+  start-prod|sp [options] <target>              Command to run in production mode
+  start|s [options] <target>                    Command to run in development mode
   lint|l <target>                               Команда для запуска линтинга
   task|t <name> [options]                       Запуск команд
-  analyze|a [options] <target>                  Команда для анализа приложений
+  analyze|a [options] <target>                  Command for analyzing application
   generate|g [target] [generator]               Команда для кодогенерации
     [target] - название приложения
     [generator] - action|reducer|bundle|component|page|module
-  new|n [options] <name>                        Команда для генерации нового приложения
-  update|u [options]                            Команда обновления пакетов tramvai
+  new|n [options] <name>                        Command for generating a new application
+  update|u [options]                            Tramvai package update command
   static|st [options] <target>                  Команда для сборки приложения в статичную версию
   benchmark|bench [options] <command> <target>  Команда для запуска бенчмарка работы @tramvai/cli
 
@@ -120,17 +120,17 @@ Options:
   -h, --help                                    display help for command
 
 Commands:
-  build|b [options] <target>                    Команда сборки платформенных сущностей - приложений, модулей, библиотек
-  start-prod|sp [options] <target>              Команда сборки и запуска в прод режиме
-  start|s [options] <target>                    Команда для запуска в режиме разработки платформенных сущностей - приложений, модулей, библиотек
+  build|b [options] <target>                    Command to build platform entities - applications, modules, libraries
+  start-prod|sp [options] <target>              Command to run in production mode
+  start|s [options] <target>                    Command to run in development mode
   lint|l <target>                               Команда для запуска линтинга
   task|t <name> [options]                       Запуск команд
-  analyze|a [options] <target>                  Команда для анализа приложений
+  analyze|a [options] <target>                  Command for analyzing application
   generate|g [target] [generator]               Команда для кодогенерации
     [target] - название приложения
     [generator] - action|reducer|bundle|component|page|module
-  new|n [options] <name>                        Команда для генерации нового приложения
-  update|u [options]                            Команда обновления пакетов tramvai
+  new|n [options] <name>                        Command for generating a new application
+  update|u [options]                            Tramvai package update command
   static|st [options] <target>                  Команда для сборки приложения в статичную версию
   benchmark|bench [options] <command> <target>  Команда для запуска бенчмарка работы @tramvai/cli
 

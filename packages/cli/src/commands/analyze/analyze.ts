@@ -51,7 +51,7 @@ export default async function analyze(
       cliRootDir: context.cliRootDir,
       packageManager: context.cliPackageManager,
       dependencies: requireDeps,
-      description: 'Устанавливаем зависимости для команды analyze',
+      description: 'Install dependencies for the analyze command',
     });
   }
 

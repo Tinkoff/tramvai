@@ -43,7 +43,9 @@ export const updatePackageJson = async (version: string) => {
   const content = JSON.parse(file.toString());
   const currentVersion = getVersionFromDep(content.dependencies['@tramvai/core']);
   if (currentVersion === version) {
-    throw new Error('Устанавливаемая версия равна текущей, обновление не требуется.');
+    throw new Error(
+      'The installed version is equal to the current version, no update is required.'
+    );
   }
   for (const dep in content.dependencies) {
     if (Object.prototype.hasOwnProperty.call(content.dependencies, dep)) {
