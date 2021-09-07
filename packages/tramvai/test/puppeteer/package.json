@@ -18,12 +18,12 @@
     "build-for-publish": "true"
   },
   "dependencies": {
-    "@tramvai/tokens-router": "0.0.0-stub"
+    "@tinkoff/utils": "^2.1.2",
+    "@tramvai/tokens-router": "0.0.0-stub",
+    "tslib": "^2.0.3"
   },
   "peerDependencies": {
-    "@tinkoff/utils": "^2.1.2",
-    "puppeteer": "^10.0.0",
-    "tslib": "^2.0.3"
+    "puppeteer": "^10.0.0"
   },
   "devDependencies": {
     "puppeteer": "^10.0.0"

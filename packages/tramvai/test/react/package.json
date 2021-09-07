@@ -20,16 +20,16 @@
   "dependencies": {
     "@testing-library/react": "^11.2.6",
     "@testing-library/react-hooks": "^5.1.2",
-    "@tramvai/test-mocks": "0.0.0-stub",
-    "@tramvai/tokens-common": "0.0.0-stub",
-    "react-test-renderer": "^17.0.2"
-  },
-  "peerDependencies": {
     "@tinkoff/router": "0.0.0-stub",
     "@tramvai/react": "0.0.0-stub",
     "@tramvai/state": "0.0.0-stub",
-    "react": "*",
+    "@tramvai/test-mocks": "0.0.0-stub",
+    "@tramvai/tokens-common": "0.0.0-stub",
+    "react-test-renderer": "^17.0.2",
     "tslib": "^2.0.3"
+  },
+  "peerDependencies": {
+    "react": "*"
   },
   "devDependencies": {},
   "license": "Apache-2.0"

@@ -6,6 +6,8 @@
 
 Если у вас используется jest для тестирования, то рассмотрите опцию добавить библиотеку [@testing-library/jest-dom](https://github.com/testing-library/jest-dom)
 
+> Для работы должен быть установлен отдельно `react`
+
 ## Подключение
 
 ```bash

@@ -70,6 +70,8 @@ it('test', async () => {
 
 ### Тестирование приложения
 
+> Тестирование приложения работает только в node-environment. Смотри, примеры для [jest](https://jestjs.io/docs/27.0/configuration#testenvironment-string)
+
 ```ts
 import { testApp } from '@tramvai/test-unit';
 
@@ -103,10 +105,10 @@ it('test', async () => {
   });
 });
 ```
+
 #### Добавление провайдеров в DI
 
-Опции большинства утилит поддерживают свойство `providers`,
-которое позволяет перезаписать существующие провайдеры, или добавить новые.
+Опции большинства утилит поддерживают свойство `providers`, которое позволяет перезаписать существующие провайдеры, или добавить новые.
 
 Например, передав провайдер в `testAction`, к нему можно будет обратиться внутри самого экшена:
 
@@ -120,16 +122,18 @@ const action = createAction({
     console.log(test); // token value
   },
   deps: {
-    test: 'token name'
-  }
-})
+    test: 'token name',
+  },
+});
 
 it('test', async () => {
   const { run } = testAction(action, {
-    providers: [{
-      provide: 'token name',
-      useValue: 'token value'
-    }]
+    providers: [
+      {
+        provide: 'token name',
+        useValue: 'token value',
+      },
+    ],
   });
 });
 ```

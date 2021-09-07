@@ -4,7 +4,12 @@ import { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
 import { useSelector } from '@tramvai/state';
 import { useDi } from '@tramvai/react';
 import { store } from '../store';
-import { pageBrowserAction, pageServerAction, pageAlwaysAction } from '../actions/page';
+import {
+  pageBrowserAction,
+  pageServerAction,
+  pageAlwaysAction,
+  pageBrowserAlwaysAction,
+} from '../actions/page';
 import { customAction } from '../actions/custom';
 
 export function Page() {
@@ -31,4 +36,10 @@ export function Page() {
   );
 }
 
-Page.actions = [pageServerAction, pageBrowserAction, pageAlwaysAction, customAction];
+Page.actions = [
+  pageServerAction,
+  pageBrowserAction,
+  pageAlwaysAction,
+  pageBrowserAlwaysAction,
+  customAction,
+];

@@ -18,13 +18,6 @@
     "build-for-publish": "true"
   },
   "dependencies": {
-    "@tramvai/test-helpers": "0.0.0-stub",
-    "@tramvai/test-mocks": "0.0.0-stub",
-    "@tramvai/tokens-common": "0.0.0-stub",
-    "@tramvai/tokens-server": "0.0.0-stub"
-  },
-  "peerDependencies": {
-    "@tinkoff/utils": "^2.1.2",
     "@tramvai/core": "0.0.0-stub",
     "@tramvai/module-common": "0.0.0-stub",
     "@tramvai/module-log": "0.0.0-stub",
@@ -33,6 +26,13 @@
     "@tramvai/module-router": "0.0.0-stub",
     "@tramvai/module-server": "0.0.0-stub",
     "@tramvai/state": "0.0.0-stub",
+    "@tramvai/test-helpers": "0.0.0-stub",
+    "@tramvai/test-mocks": "0.0.0-stub",
+    "@tramvai/tokens-common": "0.0.0-stub",
+    "@tramvai/tokens-server": "0.0.0-stub"
+  },
+  "peerDependencies": {
+    "@tinkoff/utils": "^2.1.2",
     "tslib": "^2.0.3"
   },
   "devDependencies": {},

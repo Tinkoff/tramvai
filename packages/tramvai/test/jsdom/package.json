@@ -17,8 +17,7 @@
     "watch": "tsc -w",
     "build-for-publish": "true"
   },
-  "dependencies": {},
-  "peerDependencies": {
+  "dependencies": {
     "tslib": "^2.0.3"
   },
   "devDependencies": {},

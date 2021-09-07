@@ -41,3 +41,16 @@ export const pageAlwaysAction = createAction({
     always: true,
   },
 });
+
+// этот экшен выполняется только в браузере, при загрузке страницы и на каждый SPA переход
+export const pageBrowserAlwaysAction = createAction({
+  name: 'pageBrowserAlwaysAction',
+  fn: async (context) => {
+    console.log('execute pageBrowserAlwaysAction');
+    return context.dispatch(set('pageBrowserAlwaysAction'));
+  },
+  conditions: {
+    always: true,
+    onlyBrowser: true,
+  },
+});
