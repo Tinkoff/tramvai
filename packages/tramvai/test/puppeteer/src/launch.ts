@@ -1,6 +1,6 @@
 import isEmpty from '@tinkoff/utils/is/empty';
 import type { Browser } from 'puppeteer';
-import { launch, connect } from 'puppeteer';
+import puppeteer from 'puppeteer';
 import { PUPPETEER_DEFAULT_LAUNCH_OPTIONS } from './constants';
 import { wrapPuppeteerPage } from './wrapper';
 
@@ -35,7 +35,7 @@ const enableBrowserLogger = async ({
   await page.close();
 };
 
-type PuppeteerOptions = Parameters<typeof launch>[0];
+type PuppeteerOptions = Parameters<typeof puppeteer.launch>[0];
 
 type Options = PuppeteerOptions & {
   enableLogging?: boolean;
@@ -49,13 +49,13 @@ export const initPuppeteer = async (
   let browser: Browser;
 
   if (hasSharedBrowser) {
-    browser = await connect({
+    browser = await puppeteer.connect({
       browserWSEndpoint: process.env.PUPPETEER_WS_ENDPOINT,
     });
 
     browser.close = async () => {};
   } else {
-    browser = await launch({
+    browser = await puppeteer.launch({
       ...PUPPETEER_DEFAULT_LAUNCH_OPTIONS,
       ...options,
     });
