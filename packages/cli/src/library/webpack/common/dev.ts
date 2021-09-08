@@ -1,11 +1,9 @@
 import type Config from 'webpack-chain';
 import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
-import TimeFixPlugin from 'time-fix-plugin';
 import { ignoreWarnings } from '../utils/warningsFilter';
 
 export default () => (config: Config) => {
   config.plugin('case-sensitive-path').use(CaseSensitivePathsPlugin);
-  config.plugin('time-fix-plugin').use(TimeFixPlugin);
 
   config.stats('minimal');
 

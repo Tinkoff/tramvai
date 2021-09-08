@@ -12,6 +12,7 @@ import { commonApplicationDev } from '../common';
 import configResolve from '../../blocks/configResolve';
 import type { UI_SHOW_PROGRESS_TOKEN } from '../../../../di/tokens';
 import sourcemaps from '../../blocks/sourcemaps';
+import FancyReporter from '../../plugins/WebpackBar/reporters/fancy';
 
 export const webpackServerConfig = ({
   configManager,
@@ -58,6 +59,7 @@ export const webpackServerConfig = ({
       {
         name: 'server',
         color: 'orange',
+        reporters: [new FancyReporter()],
       },
     ]);
 

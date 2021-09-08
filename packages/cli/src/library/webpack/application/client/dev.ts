@@ -18,6 +18,7 @@ import commonDev from '../../common/dev';
 import { commonApplicationDev } from '../common';
 import type { UI_SHOW_PROGRESS_TOKEN } from '../../../../di/tokens';
 import sourcemaps from '../../blocks/sourcemaps';
+import FancyReporter from '../../plugins/WebpackBar/reporters/fancy';
 
 // eslint-disable-next-line max-statements
 export const webpackClientConfig = ({
@@ -79,6 +80,7 @@ export const webpackClientConfig = ({
     config.plugin('progress').use(WebpackBar, [
       {
         name: 'client',
+        reporters: [new FancyReporter()],
       },
     ]);
 

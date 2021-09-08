@@ -41,9 +41,9 @@ export const startApplication = async (di: Container): Result => {
   const staticServer = di.get(STATIC_SERVER_TOKEN);
   const server = di.get({ token: SERVER_TOKEN, optional: true });
 
-  await runHandlers(di.get({ token: PROCESS_HANDLER_TOKEN, optional: true }));
-
   showBanner(di);
+
+  await runHandlers(di.get({ token: PROCESS_HANDLER_TOKEN, optional: true }));
 
   const compiler = di.get(WEBPACK_COMPILER_TOKEN);
   const clientCompiler = di.get({ token: WEBPACK_CLIENT_COMPILER_TOKEN, optional: true });
