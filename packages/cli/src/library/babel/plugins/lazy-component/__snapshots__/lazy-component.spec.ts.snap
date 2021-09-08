@@ -10,8 +10,6 @@ lazy(() => import('./cmp'))
 
 import { lazy } from '@tramvai/react';
 lazy({
-  resolved: {},
-
   chunkName() {
     return 'cmp';
   },
@@ -22,11 +20,6 @@ lazy({
 
   isReady(props) {
     const key = this.resolve(props);
-
-    if (this.resolved[key] !== true) {
-      return false;
-    }
-
     return !!__webpack_modules__[key];
   },
 
@@ -38,9 +31,7 @@ lazy({
 
   requireAsync(props) {
     const key = this.resolve(props);
-    this.resolved[key] = false;
     return this.importAsync(props).then((resolved) => {
-      this.resolved[key] = true;
       return resolved;
     });
   },
@@ -67,8 +58,6 @@ lazy(() => import(/* webpackPrefetch: true, webpackChunkName: "component"  */'./
 
 import { lazy } from '@tramvai/react';
 lazy({
-  resolved: {},
-
   chunkName() {
     return 'main';
   },
@@ -79,11 +68,6 @@ lazy({
 
   isReady(props) {
     const key = this.resolve(props);
-
-    if (this.resolved[key] !== true) {
-      return false;
-    }
-
     return !!__webpack_modules__[key];
   },
 
@@ -95,9 +79,7 @@ lazy({
 
   requireAsync(props) {
     const key = this.resolve(props);
-    this.resolved[key] = false;
     return this.importAsync(props).then((resolved) => {
-      this.resolved[key] = true;
       return resolved;
     });
   },
@@ -107,8 +89,6 @@ lazy({
   },
 });
 lazy({
-  resolved: {},
-
   chunkName() {
     return 'inner-second';
   },
@@ -119,11 +99,6 @@ lazy({
 
   isReady(props) {
     const key = this.resolve(props);
-
-    if (this.resolved[key] !== true) {
-      return false;
-    }
-
     return !!__webpack_modules__[key];
   },
 
@@ -137,9 +112,7 @@ lazy({
 
   requireAsync(props) {
     const key = this.resolve(props);
-    this.resolved[key] = false;
     return this.importAsync(props).then((resolved) => {
-      this.resolved[key] = true;
       return resolved;
     });
   },
@@ -149,8 +122,6 @@ lazy({
   },
 });
 lazy({
-  resolved: {},
-
   chunkName() {
     return 'inner-third';
   },
@@ -161,11 +132,6 @@ lazy({
 
   isReady(props) {
     const key = this.resolve(props);
-
-    if (this.resolved[key] !== true) {
-      return false;
-    }
-
     return !!__webpack_modules__[key];
   },
 
@@ -179,9 +145,7 @@ lazy({
 
   requireAsync(props) {
     const key = this.resolve(props);
-    this.resolved[key] = false;
     return this.importAsync(props).then((resolved) => {
-      this.resolved[key] = true;
       return resolved;
     });
   },
@@ -191,8 +155,6 @@ lazy({
   },
 });
 lazy({
-  resolved: {},
-
   chunkName() {
     return 'component';
   },
@@ -203,11 +165,6 @@ lazy({
 
   isReady(props) {
     const key = this.resolve(props);
-
-    if (this.resolved[key] !== true) {
-      return false;
-    }
-
     return !!__webpack_modules__[key];
   },
 
@@ -219,9 +176,7 @@ lazy({
 
   requireAsync(props) {
     const key = this.resolve(props);
-    this.resolved[key] = false;
     return this.importAsync(props).then((resolved) => {
-      this.resolved[key] = true;
       return resolved;
     });
   },
@@ -244,8 +199,6 @@ lazy((props) => import(\`./inner/\${props.name}.js\`))
 
 import { lazy } from '@tramvai/react';
 lazy({
-  resolved: {},
-
   chunkName(props) {
     return \`inner-\${props.name}-js\`.replace(/[^a-zA-Z0-9_!§$()=\\-^°]+/g, '-');
   },
@@ -256,11 +209,6 @@ lazy({
 
   isReady(props) {
     const key = this.resolve(props);
-
-    if (this.resolved[key] !== true) {
-      return false;
-    }
-
     return !!__webpack_modules__[key];
   },
 
@@ -272,9 +220,7 @@ lazy({
 
   requireAsync(props) {
     const key = this.resolve(props);
-    this.resolved[key] = false;
     return this.importAsync(props).then((resolved) => {
-      this.resolved[key] = true;
       return resolved;
     });
   },
@@ -297,8 +243,6 @@ lazy(() => import('./inner/path/cmp'))
 
 import { lazy } from '@tramvai/react';
 lazy({
-  resolved: {},
-
   chunkName() {
     return 'inner-path-cmp';
   },
@@ -309,11 +253,6 @@ lazy({
 
   isReady(props) {
     const key = this.resolve(props);
-
-    if (this.resolved[key] !== true) {
-      return false;
-    }
-
     return !!__webpack_modules__[key];
   },
 
@@ -325,9 +264,7 @@ lazy({
 
   requireAsync(props) {
     const key = this.resolve(props);
-    this.resolved[key] = false;
     return this.importAsync(props).then((resolved) => {
-      this.resolved[key] = true;
       return resolved;
     });
   },

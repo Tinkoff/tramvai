@@ -1,12 +1,11 @@
-import { Statement } from '@babel/types';
-import { PropertyFactory } from './types';
+import type { Statement } from '@babel/types';
+import type { PropertyFactory } from './types';
 
 export const requireAsyncMethod: PropertyFactory = ({ types: t, template }) => {
   const tracking = template.ast(`
-    const key = this.resolve(props)
-    this.resolved[key] = false
+    const key = this.resolve(props);
+
     return this.importAsync(props).then(resolved => {
-     this.resolved[key] = true
      return resolved;
     });
   `);

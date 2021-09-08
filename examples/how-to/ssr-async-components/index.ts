@@ -8,7 +8,6 @@ const bundle = createBundle({
     // оборачиваем импорт в вызов lazy чтобы компонент нормально рендерился на сервере
     // и скрипты\стили для компонента предзагружались на клиенте
     pageDefault: lazy(() => import('./pages/page')),
-    secondPage: lazy(() => import('./pages/secondPage')),
   },
 });
 

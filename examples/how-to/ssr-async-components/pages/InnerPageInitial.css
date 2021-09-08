@@ -1,8 +1,8 @@
 .page {
-  font-size: xx-large;
   text-align: center;
+  color: blue;
 }
 
 .content {
-  text-align: left;
+  font-size: xx-large;
 }

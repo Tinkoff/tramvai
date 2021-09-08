@@ -24,16 +24,12 @@ export const bundleResource = async ({
   const bundles: string[] = has('common-chunk', assetsByChunkName)
     ? ['common-chunk', chunkNameFromBundle]
     : [chunkNameFromBundle];
+  const lazyChunks = extractor.getMainAssets().map((entry) => entry.chunk);
 
   const { scripts: baseScripts } = flushFiles(['vendor'], webpackStats, {
     ignoreDependencies: true,
   });
-  const { scripts, styles } = flushFiles([...bundles, 'platform'], webpackStats);
-
-  const { scripts: asyncComponentsScripts, styles: asyncComponentsStyles } = flushFiles(
-    extractor.getMainAssets().map((entry) => entry.chunk),
-    webpackStats
-  );
+  const { scripts, styles } = flushFiles([...bundles, ...lazyChunks, 'platform'], webpackStats);
 
   const genHref = (href) => `${publicPath}${href}`;
 
@@ -69,30 +65,11 @@ export const bundleResource = async ({
       },
     })
   );
+
   scripts.map((script) =>
     result.push({
       type: ResourceType.script,
       slot: ResourceSlot.HEAD_CORE_SCRIPTS,
-      payload: genHref(script),
-      attrs: {
-        'data-critical': 'true',
-      },
-    })
-  );
-
-  // блок с добавлением ассинхронных компонентов
-  asyncComponentsStyles.map((style) =>
-    result.push({
-      type: ResourceType.style,
-      slot: ResourceSlot.HEAD_CORE_STYLES,
-      payload: genHref(style),
-    })
-  );
-
-  asyncComponentsScripts.map((script) =>
-    result.push({
-      type: ResourceType.script,
-      slot: ResourceSlot.BODY_END,
       payload: genHref(script),
       attrs: {
         'data-critical': 'true',

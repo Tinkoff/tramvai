@@ -41,8 +41,6 @@ import asyncUniversal, {
 import { lazy as _lazy } from '@tramvai/react';
 
 _lazy({
-  resolved: {},
-
   chunkName() {
     return 'cmp';
   },
@@ -53,11 +51,6 @@ _lazy({
 
   isReady(props) {
     const key = this.resolve(props);
-
-    if (this.resolved[key] !== true) {
-      return false;
-    }
-
     return !!__webpack_modules__[key];
   },
 
@@ -69,9 +62,7 @@ _lazy({
 
   requireAsync(props) {
     const key = this.resolve(props);
-    this.resolved[key] = false;
     return this.importAsync(props).then((resolved) => {
-      this.resolved[key] = true;
       return resolved;
     });
   },
@@ -97,8 +88,6 @@ universal(import('./cmp'))
 import { lazy as _lazy } from '@tramvai/react';
 
 _lazy({
-  resolved: {},
-
   chunkName() {
     return 'cmp';
   },
@@ -109,11 +98,6 @@ _lazy({
 
   isReady(props) {
     const key = this.resolve(props);
-
-    if (this.resolved[key] !== true) {
-      return false;
-    }
-
     return !!__webpack_modules__[key];
   },
 
@@ -125,9 +109,7 @@ _lazy({
 
   requireAsync(props) {
     const key = this.resolve(props);
-    this.resolved[key] = false;
     return this.importAsync(props).then((resolved) => {
-      this.resolved[key] = true;
       return resolved;
     });
   },

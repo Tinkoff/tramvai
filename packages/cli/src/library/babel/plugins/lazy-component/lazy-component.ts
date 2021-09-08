@@ -1,7 +1,6 @@
 import type { NodePath } from '@babel/traverse';
 import type { CallExpression, Import } from '@babel/types';
 import type { Plugin } from '../types.h';
-import { resolvedProperty } from './properties/state';
 import { resolveMethod } from './properties/resolve';
 import { requireSyncMethod } from './properties/requireSync';
 import { isReadyMethod } from './properties/isReady';
@@ -66,7 +65,6 @@ export const lazyComponentPlugin: Plugin<InnerState> = (api) => {
           }
 
           const properties = [
-            resolvedProperty,
             chunkNameMethod,
             requireSyncMethod,
             isReadyMethod,
