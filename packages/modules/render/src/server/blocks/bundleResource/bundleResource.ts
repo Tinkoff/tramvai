@@ -35,8 +35,10 @@ export const bundleResource = async ({
 
   const result: PageResource[] = [];
 
-  // Необходимо для оптимизаций в проде
-  if (process.env.NODE_ENV === 'production') {
+  if (
+    process.env.NODE_ENV === 'production' ||
+    (process.env.ASSETS_PREFIX && process.env.ASSETS_PREFIX !== 'static')
+  ) {
     result.push({
       type: ResourceType.inlineScript,
       slot: ResourceSlot.HEAD_CORE_SCRIPTS,

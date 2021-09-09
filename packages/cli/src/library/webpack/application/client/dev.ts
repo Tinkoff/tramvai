@@ -11,6 +11,7 @@ import type { ForkTsCheckerWebpackPluginOptions } from 'fork-ts-checker-webpack-
 import isObject from '@tinkoff/utils/is/object';
 import isUndefined from '@tinkoff/utils/is/undefined';
 
+import RuntimePathPlugin from '../../plugins/RuntimePathPlugin';
 import type { ApplicationConfigEntry } from '../../../../typings/configEntry/application';
 import type { ConfigManager } from '../../../../config/configManager';
 import common from './common';
@@ -112,6 +113,17 @@ export const webpackClientConfig = ({
     }
 
     config.plugin('fork-ts-checker').use(require('fork-ts-checker-webpack-plugin'), [options]);
+  }
+
+  // window.ap выставляется в packages/modules/render/src/server/blocks/bundleResource/bundleResource.ts
+  // в development сборке, window.ap будет проставлен только если есть валидный ASSETS_PREFIX,
+  // поэтому меняем publicPath на window.ap только при таком же условии
+  if (process.env.ASSETS_PREFIX) {
+    config.plugin('runtime-path').use(RuntimePathPlugin, [
+      {
+        publicPath: 'window.ap',
+      },
+    ]);
   }
 
   config.plugin('define').tap((args) => [

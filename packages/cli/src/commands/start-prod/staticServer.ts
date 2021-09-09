@@ -23,7 +23,10 @@ export const startStaticServer = (configManager: ConfigManager): Promise<Server>
   });
 
   if (isApplication(configManager)) {
-    app.use('/', express.static(configManager.getBuildPath()));
+    app.use(
+      `/${configManager.build.options.outputClient.replace(/\/$/, '')}/`,
+      express.static(configManager.getBuildPath())
+    );
   } else if (isModule(configManager)) {
     app.use(`/${configManager.name}/:version`, express.static(configManager.getBuildPath()));
   }

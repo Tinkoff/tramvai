@@ -79,12 +79,13 @@ export const webpackServerConfig = ({
     },
   ]);
 
-  // RuntimePathPlugin необходим для правильной генерации ссылок на ассеты (картинки и т.п. которые грузятся через file-loader или url-loader)
   config.plugin('runtime-path').use(RuntimePathPlugin, [
     {
-      publicPath: `"http://${configManager.staticHost}:${
-        configManager.staticPort
-      }/${configManager.build.options.outputClient.replace(/\/$/, '')}/"`,
+      publicPath:
+        process.env.ASSETS_PREFIX ??
+        `"http://${configManager.staticHost}:${
+          configManager.staticPort
+        }/${configManager.build.options.outputClient.replace(/\/$/, '')}/"`,
     },
   ]);
 

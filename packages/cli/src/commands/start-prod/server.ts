@@ -5,7 +5,15 @@ import type { ConfigManager } from '../../config/configManager';
 import { DEBUG_ARGV } from '../../config/constants';
 
 export const startServer = async (configManager: ConfigManager) => {
-  const { debug, port, staticPort, staticHost } = configManager;
+  const {
+    debug,
+    port,
+    staticPort,
+    staticHost,
+    build: {
+      options: { outputClient },
+    },
+  } = configManager;
   const root = configManager.getBuildPath();
 
   return fork(path.resolve(root, 'server.js'), [], {
@@ -18,7 +26,9 @@ export const startServer = async (configManager: ConfigManager) => {
       NODE_ENV: 'production',
       PORT: `${port}`,
       PORT_SERVER: `${port}`,
-      ASSETS_PREFIX: `http://${staticHost}:${staticPort}/`,
+      ASSETS_PREFIX:
+        process.env.ASSETS_PREFIX ??
+        `http://${staticHost}:${staticPort}/${outputClient.replace(/\/$/, '')}/`,
     },
   });
 };

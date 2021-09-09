@@ -119,7 +119,16 @@ export const fetchWebpackStats = async ({
     const getUrl = (filename: string) =>
       `http://${staticHost}:${staticPort}/${outputClient}/${filename}`;
 
-    return request(getUrl(configModern ? 'stats.modern.json' : 'stats.json'));
+    const stats = await request(getUrl(configModern ? 'stats.modern.json' : 'stats.json'));
+    // static - популярная заглушка в env.development.js файлах, надо игнорировать, как было раньше
+    const hasAssetsPrefix = process.env.ASSETS_PREFIX && process.env.ASSETS_PREFIX !== 'static';
+
+    const publicPath = hasAssetsPrefix ? process.env.ASSETS_PREFIX : stats.publicPath;
+
+    return {
+      ...stats,
+      publicPath,
+    };
   }
 
   if (process.env.NODE_ENV === 'test') {

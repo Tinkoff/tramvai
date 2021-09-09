@@ -8,6 +8,9 @@ interface Options {
   publicPath: string;
 }
 
+/**
+ * RuntimePathPlugin необходим для правильной генерации ссылок на ассеты (картинки и т.п. которые грузятся через file-loader или url-loader)
+ */
 export default class RuntimePathPlugin implements webpack.WebpackPluginInstance {
   protected options: Options;
 
