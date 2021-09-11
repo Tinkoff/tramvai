@@ -11,6 +11,7 @@ pluginTester({
     generateDataQaTag: false,
     loader: false,
     modern: true,
+    hot: true,
   }),
   tests: {
     'not lazy': {
@@ -35,6 +36,10 @@ pluginTester({
     },
     comments: {
       fixture: 'comments.ts',
+      snapshot: true,
+    },
+    hmr: {
+      fixture: 'lazy+hmr.ts',
       snapshot: true,
     },
   },

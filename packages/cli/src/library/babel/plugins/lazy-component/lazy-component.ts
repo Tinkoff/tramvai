@@ -55,10 +55,16 @@ export const lazyComponentPlugin: Plugin<InnerState> = (api) => {
             },
           });
 
+          if (imports.length !== 1) {
+            return;
+          }
+
           // локальное имя для lazy из @tramvai/react
           const lazyCallPath = path;
+          // ссылка на вызов импорта - чтобы можно было получить аргументы импорта
+          const importPath = imports[0].parentPath as NodePath<CallExpression>;
           // ссылка на функцию, которая была передана в lazy
-          const funcPath = lazyCallPath.get('arguments')[0];
+          const funcPath = importPath.parentPath;
 
           if (!funcPath.isFunctionExpression() && !funcPath.isArrowFunctionExpression()) {
             return;
@@ -73,8 +79,6 @@ export const lazyComponentPlugin: Plugin<InnerState> = (api) => {
             resolveMethod,
           ].map((init) => init(api));
 
-          // ссылка на вызов импорта - чтобы можно было получить аргументы импорта
-          const importPath = imports[0].parentPath as NodePath<CallExpression>;
           const opts = { lazyCallPath, funcPath, importPath };
 
           funcPath.replaceWith(t.objectExpression(properties.map((factory) => factory(opts))));

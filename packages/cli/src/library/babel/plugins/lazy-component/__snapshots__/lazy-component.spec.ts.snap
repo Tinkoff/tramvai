@@ -233,6 +233,58 @@ lazy({
 
 `;
 
+exports[`lazy-component hmr: hmr 1`] = `
+
+import { lazy } from '@tramvai/react';
+
+const MainPage = lazy(() => import('./inner/first'));
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import { lazy } from '@tramvai/react';
+const MainPage = lazy(
+  (_c = {
+    chunkName() {
+      return 'inner-first';
+    },
+
+    requireSync(props) {
+      return __webpack_require__(this.resolve(props));
+    },
+
+    isReady(props) {
+      const key = this.resolve(props);
+      return !!__webpack_modules__[key];
+    },
+
+    importAsync: () =>
+      import(
+        /* webpackChunkName: "inner-first" */
+        './inner/first'
+      ),
+
+    requireAsync(props) {
+      const key = this.resolve(props);
+      return this.importAsync(props).then((resolved) => {
+        return resolved;
+      });
+    },
+
+    resolve() {
+      return require.resolveWeak('./inner/first');
+    },
+  })
+);
+_c2 = MainPage;
+
+var _c, _c2;
+
+$RefreshReg$(_c, 'MainPage$lazy');
+$RefreshReg$(_c2, 'MainPage');
+
+
+`;
+
 exports[`lazy-component long import: long import 1`] = `
 
 import { lazy } from '@tramvai/react';
