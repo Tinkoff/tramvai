@@ -27,6 +27,13 @@
               "id": "browserslist",
               "title": "Интеграция с browserslist"
             }
+          },
+          {
+            "path": "./docs/troubleshooting.md",
+            "doc": {
+              "id": "troubleshooting",
+              "title": "Проблемы и решения"
+            }
           }
         ]
       }

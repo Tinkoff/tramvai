@@ -50,6 +50,7 @@ export const serverRunner = ({
     let serverInvalidated = true;
     let workerPort: number;
     let resolveWorkerPort: () => void;
+    let workerPortPromise: Promise<void>;
 
     const proxy = createProxyServer({
       // указываем, что сами обработаем ответ
@@ -73,6 +74,22 @@ export const serverRunner = ({
       });
     }
 
+    const waitWorkerPort = async () => {
+      if (workerPort) {
+        return workerPort;
+      }
+
+      if (workerPortPromise) {
+        return workerPortPromise;
+      }
+
+      workerPortPromise = new Promise<void>((resolve) => {
+        resolveWorkerPort = resolve;
+      });
+
+      return workerPortPromise;
+    };
+
     // http-proxy всегда склеивает слеши в урле, что немного неожиданно при работе с сервером напрямую
     // https://github.com/http-party/node-http-proxy/issues/775
     // поэтому пытаемся вернуть все слеши на место
@@ -85,36 +102,35 @@ export const serverRunner = ({
     // делаем запросы к дочернему процессу и пытаемся полностью получить его ответ
     // если всё ок, то просто отправляем полученные данные клиенту
     proxy.on('proxyRes', (proxyRes, req, res) => {
-      let body = [];
-
-      proxyRes.on('data', function (chunk) {
-        body.push(chunk);
-      });
-
-      proxyRes.on('end', function () {
-        // если запрос на дочерний процесс завершился успешно дублируем всю логику прокси и отправляем ответ
+      if (!res.headersSent) {
+        // дублируем всю логику прокси и отправляем ответ
         // немного костыль по мотивам https://github.com/http-party/node-http-proxy/issues/1263#issuecomment-394758768
         eachObj((handler) => {
           handler(req, res, proxyRes, {});
         }, webOutgoing);
-
-        res.end(Buffer.concat(body));
-      });
-
-      proxyRes.on('error', () => {
-        body = null;
-      });
-    });
-
-    const waitWorkerPort = async () => {
-      if (workerPort) {
-        return workerPort;
       }
 
-      return new Promise<void>((resolve) => {
-        resolveWorkerPort = resolve;
+      //
+      // Обработка события aborted нужна только для кейса, когда запросы на localhost:4000
+      // проксируются через tramvai сервер, который каждый ребилд переоткрывается на другом порту
+      //
+      // Кейс нужен для __webpack_hmr, который отдает данные в стриме через server-sent events,
+      // и нам нужно всегда держать постоянное соединение к __webpack_hmr,
+      // а повторное открытие tramvai сервера на другом порту сбрасывает это соединение
+      //
+      // В proxy.on('error') уже содержится логика по повторному запросу на другой порт,
+      // поэтому нам просто нужно обработать обрыв соединения как ошибку
+      //
+      proxyRes.on('aborted', () => {
+        const contentType = res.getHeader('content-type');
+
+        if (typeof contentType === 'string' && contentType.includes('text/event-stream')) {
+          proxy.emit('error', Error('aborted'), req, res);
+        }
       });
-    };
+
+      proxyRes.pipe(res);
+    });
 
     // в случае ошибки ждём пока получим новый порт и делаем повторный запрос
     // рекурсивные ошибки будут опять попадать сюда и это будет продолжаться до тех пор пока не получим ответ
@@ -159,6 +175,7 @@ export const serverRunner = ({
     compiler.hooks.done.tap(HOOK_NAME, async (stats) => {
       if (serverInvalidated) {
         workerPort = null;
+        workerPortPromise = null;
 
         serverInvalidated = false;
 

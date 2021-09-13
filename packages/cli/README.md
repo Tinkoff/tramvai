@@ -500,13 +500,3 @@ tramvai start myapp --onlyBundles=account
 # если нужно несколько бандлов
 tramvai start myapp --onlyBundle=account,trading
 ```
-
-## Возможные проблемы
-
-### При запуске команды start один из процесов node грузится > 100% на Mac OS
-
-Возможно, причина в том, что зависает watch режим webpack. Для решения проблемы необходимо поставить локально в проекте и глобально `npm i fsevents`. После этого проблема должна решиться.
-
-### При минификации CSS кода происходят ошибки вида: error GLOBAL:ERROR Error: inspwa.cdc24eaba4573ba3a27d.css from Css Minimizer
-
-Сейчас происходит тестирование перехода на альтернативный способ сжатия CSS через [css-minimizer-webpack-plugin](https://github.com/webpack-contrib/css-minimizer-webpack-plugin) используя [cssnano](https://github.com/cssnano/cssnano), по этому могут возникать новые баги и проблемы. Если столкнулись с такой проблемой, есть возможность откатиться на старую реализацию с csso. Для это в configurations добавьте поле `"cssMinimize": "csso"`
