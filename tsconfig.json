@@ -11,7 +11,7 @@
       "es2018",
       "dom"
     ],
-    "strict": false,
+    "strict": true,
     "sourceMap": true,
     "declaration": true,
     "allowSyntheticDefaultImports": true,

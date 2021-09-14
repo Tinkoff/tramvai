@@ -4,14 +4,13 @@ import type { ActionContext } from '@tramvai/core';
 import { createAction } from '@tramvai/core';
 import { QUERY_CLIENT_TOKEN } from '@tramvai/module-react-query';
 import type { CreateQueryOptions, Query } from './types';
-import type { QueryKey } from '../baseQuery/types';
 import { QUERY_PARAMETERS } from '../baseQuery/types';
 import { defaultKey } from '../defaultKey';
 
-export const convertToRawQuery = <Options, Result, Deps, Key extends QueryKey<Options>>(
-  query: Query<Options, Result, Deps, Key>,
+export const convertToRawQuery = <Options, Result, Deps>(
+  query: Query<Options, Result, Deps>,
   context: ActionContext,
-  options?: Options
+  options: Options
 ): UseQueryOptions<Result, Error> => {
   const { key = defaultKey, fn, deps, conditions, queryOptions } = query[QUERY_PARAMETERS];
 
@@ -34,12 +33,12 @@ export const convertToRawQuery = <Options, Result, Deps, Key extends QueryKey<Op
     },
   };
 };
-export const createQuery = <Options, Result, Deps, Key extends QueryKey<Options>>(
-  queryParameters: CreateQueryOptions<Options, Result, Deps, Key>
-): Query<Options, Result, Deps, Key> => {
+export const createQuery = <Options = unknown, Result = unknown, Deps = unknown>(
+  queryParameters: CreateQueryOptions<Options, Result, Deps>
+): Query<Options, Result, Deps> => {
   const { queryOptions, conditions } = queryParameters;
 
-  const query: Query<Options, Result, Deps, Key> = {
+  const query: Query<Options, Result, Deps> = {
     [QUERY_PARAMETERS]: queryParameters,
     fork: (options: UseQueryOptions<Result, Error>) => {
       return createQuery({

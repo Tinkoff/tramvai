@@ -39,7 +39,7 @@ export default function Component() {
   return (
     <div>
       <div>
-        {data.pages.map((page) => {
+        {data!.pages.map((page) => {
           return page.list.map((entry) => {
             return <div key={entry}>{entry}</div>;
           });

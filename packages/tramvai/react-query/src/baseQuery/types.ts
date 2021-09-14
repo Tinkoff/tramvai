@@ -4,18 +4,14 @@ import type { QueryKey as ReactQueryKey, QueryOptions } from 'react-query';
 
 export const QUERY_PARAMETERS = '__query_parameters__';
 
-export type QueryKey<Options> = ((options?: Options) => ReactQueryKey) | ReactQueryKey;
+export type QueryKey<Options> = ((options: Options) => ReactQueryKey) | ReactQueryKey;
 
-export interface BaseCreateQueryOptions<
-  Options,
-  Deps,
-  Key extends QueryKey<Options> = (options?: Options) => ReactQueryKey
-> {
-  key: Key;
+export interface BaseCreateQueryOptions<Options, Deps> {
+  key: QueryKey<Options>;
 
   fn: Function;
 
-  deps: Deps;
+  deps?: Deps;
 
   conditions?: ActionConditionsParameters;
 }

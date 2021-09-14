@@ -4,14 +4,13 @@ import type { ActionContext } from '@tramvai/core';
 import { createAction } from '@tramvai/core';
 import { QUERY_CLIENT_TOKEN } from '@tramvai/module-react-query';
 import type { CreateInfiniteQueryOptions, InfiniteQuery } from './types';
-import type { QueryKey } from '../baseQuery/types';
 import { QUERY_PARAMETERS } from '../baseQuery/types';
 import { defaultKey } from '../defaultKey';
 
-export const convertToRawQuery = <Options, PageParam, Result, Deps, Key extends QueryKey<Options>>(
-  query: InfiniteQuery<Options, PageParam, Result, Deps, Key>,
+export const convertToRawQuery = <Options, PageParam, Result, Deps>(
+  query: InfiniteQuery<Options, PageParam, Result, Deps>,
   context: ActionContext,
-  options?: Options
+  options: Options
 ): UseInfiniteQueryOptions<Result, Error> => {
   const {
     key = defaultKey,
@@ -45,17 +44,16 @@ export const convertToRawQuery = <Options, PageParam, Result, Deps, Key extends 
   };
 };
 export const createInfiniteQuery = <
-  Options,
-  PageParam,
-  Result,
-  Deps,
-  Key extends QueryKey<Options>
+  Options = unknown,
+  PageParam = unknown,
+  Result = unknown,
+  Deps = unknown
 >(
-  queryParameters: CreateInfiniteQueryOptions<Options, PageParam, Result, Deps, Key>
-): InfiniteQuery<Options, PageParam, Result, Deps, Key> => {
+  queryParameters: CreateInfiniteQueryOptions<Options, PageParam, Result, Deps>
+): InfiniteQuery<Options, PageParam, Result, Deps> => {
   const { infiniteQueryOptions, conditions } = queryParameters;
 
-  const query: InfiniteQuery<Options, PageParam, Result, Deps, Key> = {
+  const query: InfiniteQuery<Options, PageParam, Result, Deps> = {
     [QUERY_PARAMETERS]: queryParameters,
     fork: (options: UseInfiniteQueryOptions<Result, Error>) => {
       return createInfiniteQuery({

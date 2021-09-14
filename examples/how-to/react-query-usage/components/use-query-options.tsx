@@ -5,7 +5,7 @@ import { TINKOFF_API_SERVICE } from '@tramvai/module-api-clients';
 const query = createQuery({
   key: 'time',
   fn: async (_, { apiClient }) => {
-    const { payload } = await apiClient.get('api/time');
+    const { payload } = await apiClient.get<string>('api/time');
 
     return payload;
   },

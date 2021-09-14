@@ -5,8 +5,7 @@ import { TINKOFF_API_SERVICE } from '@tramvai/module-api-clients';
 const query = createQuery({
   key: 'base',
   fn: async (_, { apiClient }) => {
-    console.log('request');
-    const { payload } = await apiClient.get('api/base');
+    const { payload } = await apiClient.get<string>('api/base');
 
     await new Promise((resolve) => setTimeout(resolve, 5000));
 

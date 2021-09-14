@@ -4,6 +4,7 @@
     "composite": true,
     "module": "ESNext",
     "allowJs": true,
+    "strict": false,
     "types": [
       "node",
       "jest"

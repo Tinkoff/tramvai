@@ -1,21 +1,17 @@
 import type { ProvideDepsIterator } from '@tinkoff/dippy';
-import type { QueryKey as ReactQueryKey, UseQueryOptions } from 'react-query';
-import type { BaseCreateQueryOptions, BaseQuery, QueryKey } from '../baseQuery/types';
+import type { UseQueryOptions } from 'react-query';
+import type { BaseCreateQueryOptions, BaseQuery } from '../baseQuery/types';
 
-export interface CreateQueryOptions<
-  Options,
-  Result,
-  Deps,
-  Key extends QueryKey<Options> = (options?: Options) => ReactQueryKey
-> extends BaseCreateQueryOptions<Options, Deps, Key> {
+export interface CreateQueryOptions<Options, Result, Deps>
+  extends BaseCreateQueryOptions<Options, Deps> {
   queryOptions?: UseQueryOptions<Result, Error>;
 
-  fn: (options: Options | undefined, deps: ProvideDepsIterator<Deps>) => Promise<Result>;
+  fn: (options: Options, deps: ProvideDepsIterator<Deps>) => Promise<Result>;
 }
 
-export type Query<Options, Result, Deps, Key extends QueryKey<Options>> = BaseQuery<
+export type Query<Options, Result, Deps> = BaseQuery<
   Options,
-  CreateQueryOptions<Options, Result, Deps, Key>,
-  Query<Options, Result, Deps, Key>,
+  CreateQueryOptions<Options, Result, Deps>,
+  Query<Options, Result, Deps>,
   UseQueryOptions<Result, Error>
 >;
