@@ -24,11 +24,6 @@ import { sharedProviders } from './shared';
         context: typeof CONTEXT_TOKEN;
       }) {
         if (!papiService) {
-          logger.error({
-            event: 'instantMetrics-error',
-            message: 'papiService не подключен',
-          });
-
           return () => {};
         }
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import Translate from '@docusaurus/Translate';
 import { Section } from './section';
 import { Code } from '../code';
 
@@ -32,8 +33,16 @@ export function DI() {
         <>
           <h3>Dependency Injection</h3>
           <ul>
-            <li>Гибкость и уменьшение связанности кода</li>
-            <li>Ленивая инициализация зависимостей</li>
+            <li>
+              <Translate id="MainPage.DI.featureFlexibility">
+                Гибкость и уменьшение связанности кода
+              </Translate>
+            </li>
+            <li>
+              <Translate id="MainPage.DI.featureLazy">
+                Ленивая инициализация зависимостей
+              </Translate>
+            </li>
           </ul>
         </>
       }

@@ -1,4 +1,5 @@
 import React from 'react';
+import Translate from '@docusaurus/Translate';
 import { Section } from './section';
 import { Code } from '../code';
 
@@ -23,10 +24,22 @@ export function Commands() {
     <Section
       left={
         <>
-          <h3>Цепочка команд</h3>
+          <h3>
+            <Translate id="MainPage.Commands.h3">
+              Цепочка команд
+            </Translate>
+          </h3>
           <ul>
-            <li>Возможность добавить действие на каждый этап работы приложения</li>
-            <li>Параллельное выполнение действий на каждом этапе для максимальной эффективности</li>
+            <li>
+              <Translate id="MainPage.Commands.featureChain">
+                Возможность добавить действие на каждый этап работы приложения
+              </Translate>
+            </li>
+            <li>
+              <Translate id="MainPage.Commands.featureParallel">
+                Параллельное выполнение действий на каждом этапе для максимальной эффективности
+              </Translate>
+            </li>
           </ul>
         </>
       }

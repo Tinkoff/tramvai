@@ -1,4 +1,5 @@
 import React from 'react';
+import Translate from '@docusaurus/Translate';
 import { Section } from './section';
 
 export function Universal() {
@@ -6,11 +7,27 @@ export function Universal() {
     <Section
       left={
         <>
-          <h3>Универсальный</h3>
+          <h3>
+            <Translate id="MainPage.Universal.h3">
+              Универсальный
+            </Translate>
+          </h3>
           <ul>
-            <li>Рендеринг приложения на сервере и гидрация на клиенте</li>
-            <li>Полный контроль над получением данных</li>
-            <li>Безопасное выполнение серверного и клиентского кода</li>
+            <li>
+              <Translate id="MainPage.Universal.featureSSR">
+                Рендеринг приложения на сервере и гидрация на клиенте
+              </Translate>
+            </li>
+            <li>
+              <Translate id="MainPage.Universal.featureDataFetching">
+                Полный контроль над получением данных
+              </Translate>
+            </li>
+            <li>
+              <Translate id="MainPage.Universal.featureUniversal">
+                Безопасное выполнение серверного и клиентского кода
+              </Translate>
+            </li>
           </ul>
         </>
       }

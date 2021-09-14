@@ -91,10 +91,10 @@ const docusaurusConfig = {
           label: 'Репозиторий',
           position: 'right',
         },
-        // {
-        //   type: 'localeDropdown',
-        //   position: 'right',
-        // },
+        {
+          type: 'localeDropdown',
+          position: 'right',
+        },
       ],
     },
     footer: {
@@ -113,6 +113,7 @@ const docusaurusConfig = {
         {
           title: 'Ресурсы',
           items: [
+            { label: 'Codesandbox', href: 'https://codesandbox.io/s/tramvai-new-qgk90' },
             
             
           ],

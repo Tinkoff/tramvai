@@ -1,6 +1,8 @@
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import ExecutionEnvironment from '@docusaurus/ExecutionEnvironment';
+// eslint-disable-next-line import/no-unresolved
+import Translate, { translate } from '@docusaurus/Translate';
 import React, { useState } from 'react';
 
 export const DocsRating = ({ label }) => {
@@ -45,15 +47,23 @@ export const DocsRating = ({ label }) => {
     return (
       <div className="docsRating">
         {!shouldLeaveReply ? (
-          'Спасибо за отзыв!'
+          translate({
+            id: 'components.DocsRating.replySuccess',
+            message: 'Спасибо за отзыв!',
+          })
         ) : (
           <div className="leaveReply">
-            Уделите нам ещё минуту вашего времени
+            <Translate id="components.DocsRating.replyTitle">
+              Уделите нам ещё минуту вашего времени
+            </Translate>
             <textarea
               className="textArea"
               name="reply"
               autoFocus
-              placeholder="Как можно улучшить эту страницу?"
+              placeholder={translate({
+                id: 'components.DocsRating.replyTextareaPlaceholder',
+                message: 'Как можно улучшить эту страницу?',
+              })}
               rows={5}
               maxLength={400}
             />
@@ -62,7 +72,7 @@ export const DocsRating = ({ label }) => {
               onClick={leaveReply}
               className="button button--m button--primary margin--xs"
             >
-              Отправить
+              <Translate id="components.DocsRating.replySendButton">Отправить</Translate>
             </button>
           </div>
         )}
@@ -72,7 +82,7 @@ export const DocsRating = ({ label }) => {
 
   return (
     <div className="docsRating">
-      Была ли эта страница полезной?
+      <Translate id="components.DocsRating.title">Была ли эта страница полезной?</Translate>
       <svg
         className="i_thumbsup"
         onClick={() => giveFeedback(1)}

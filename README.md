@@ -47,3 +47,7 @@ A modular framework for universal JS applications
     cd my-awesome-app && npm start
     ```
     application will be available at `http://localhost:3000/`
+
+## Sandboxes
+
+[Codesandbox template](https://codesandbox.io/s/tramvai-new-qgk90)

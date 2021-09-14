@@ -1,4 +1,5 @@
 import React from 'react';
+import Translate, { translate } from '@docusaurus/Translate';
 import { Section } from './section';
 
 export function View() {
@@ -9,7 +10,10 @@ export function View() {
           <h3>React</h3>
           <ul>
             <li>
-              Поддержка современных возможностей библиотеки (
+              {translate({
+                id: "MainPage.View.featureModernReact.description",
+                message: "Поддержка современных возможностей библиотеки"
+              })}{' '}(
               <a
                 href="https://reactjs.org/docs/concurrent-mode-intro.html"
                 target="_blank"
@@ -20,7 +24,10 @@ export function View() {
               )
             </li>
             <li>
-              Первоклассный developer experience вместе с{' '}
+              {translate({
+                id: "MainPage.View.featureFastRefresh.description",
+                message: "Первоклассный developer experience вместе с"
+              })}{' '}
               <a
                 href="https://reactnative.dev/docs/fast-refresh"
                 target="_blank"
@@ -29,7 +36,11 @@ export function View() {
                 Fast Refresh
               </a>
             </li>
-            <li>Гибкий механизм построения макета страницы</li>
+            <li>
+              <Translate id="MainPage.View.featureLayout">
+                Гибкий механизм построения макета страницы
+              </Translate>
+            </li>
           </ul>
         </>
       }

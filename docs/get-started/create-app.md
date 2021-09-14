@@ -7,6 +7,21 @@ title: Создаем приложение на tramvai
 
 Для быстрой разработки мы будем использовать консольную утилиту **`@tramvai/cli`**
 
+<p>
+<details>
+<summary>Demo приложение доступно на Codesandbox</summary>
+
+<iframe
+  src="https://codesandbox.io/embed/tramvai-new-qgk90?fontsize=14&hidenavigation=1&theme=dark"
+  style={{ "width": "100%", "height": "500px", "border": 0, "borderRadius": "4px", "overflow": "hidden" }}
+  title="tramvai-new"
+  allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+  sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+></iframe>
+
+</details>
+</p>
+
 ### Настройка системы
 
 Для работы tramvai и @tramvai/cli необходим [NodeJS версии 10+](https://nodejs.org/en/download)

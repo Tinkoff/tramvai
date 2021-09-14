@@ -10,7 +10,7 @@
     "build-for-publish": "true"
   },
   "peerDependencies": {
-    "@docusaurus": "*",
+    "@docusaurus/core": "*",
     "react": "*"
   },
   "devDependencies": {

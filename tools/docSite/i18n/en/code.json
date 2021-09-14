@@ -158,5 +158,106 @@
   "theme.TOCCollapsible.toggleButtonLabel": {
     "message": "On this page",
     "description": "The label used by the button on the collapsible TOC component"
+  },
+
+  "components.DocsRating.title": {
+    "message": "Was this page helpful?"
+  },
+  "components.DocsRating.replySuccess": {
+    "message": "Thank you for the review!"
+  },
+  "components.DocsRating.replyTitle": {
+    "message": "Give us another minute of your time"
+  },
+  "components.DocsRating.replyTextareaPlaceholder": {
+    "message": "How can this page be improved?"
+  },
+  "components.DocsRating.replySendButton": {
+    "message": "Send"
+  },
+
+  "MainPage.Title.h3": {
+    "message": "Modular framework for universal React applications"
+  },
+  "MainPage.QuickStart.h3": {
+    "message": "Quick start"
+  },
+  "MainPage.QuickStart.description": {
+    "message": "Powerful and functional CLI to create, develop and build applications"
+  },
+  "MainPage.QuickStart.getStartedLink": {
+    "message": "Get started"
+  },
+  "MainPage.Universal.h3": {
+    "message": "Universal"
+  },
+  "MainPage.Universal.featureSSR": {
+    "message": "Application rendering on the server and hydration on the client"
+  },
+  "MainPage.Universal.featureDataFetching": {
+    "message": "Full control over data fetching"
+  },
+  "MainPage.Universal.featureUniversal": {
+    "message": "Safe execution of server and client code"
+  },
+  "MainPage.Modular.h3": {
+    "message": "Modular"
+  },
+  "MainPage.Modular.featureModules": {
+    "message": "Wide possibilities of built-in modules"
+  },
+  "MainPage.Modular.featureExtendability": {
+    "message": "Easy extends by new functionality"
+  },
+  "MainPage.Performance.h3": {
+    "message": "Fast"
+  },
+  "MainPage.Performance.featureSize": {
+    "message": "Minimum framework size"
+  },
+  "MainPage.Performance.featureBestPractice": {
+    "message": "Best practices for loading client code"
+  },
+  "MainPage.Performance.featureMetrics": {
+    "message": "Modules for collecting metrics on the server and client"
+  },
+  "MainPage.DI.featureFlexibility": {
+    "message": "Flexibility and reduced code cohesion"
+  },
+  "MainPage.DI.featureLazy": {
+    "message": "Lazy initialization of dependencies"
+  },
+  "MainPage.View.featureModernReact.description": {
+    "message": "Support for modern library features"
+  },
+  "MainPage.View.featureFastRefresh.description": {
+    "message": "First-class developer experience with"
+  },
+  "MainPage.View.featureLayout": {
+    "message": "Flexible mechanism for building a page layout"
+  },
+  "MainPage.State.h3": {
+    "message": "Effective state management"
+  },
+  "MainPage.State.featureRedux": {
+    "message": "Redux-like library"
+  },
+  "MainPage.State.featureSubscribtions": {
+    "message": "Decentralized mechanism for subscriptions to changes"
+  },
+  "MainPage.State.featureBoilerplate": {
+    "message": "Lack of boilerplate code"
+  },
+  "MainPage.State.featureDevTools": {
+    "message": "Redux DevTools support"
+  },
+  "MainPage.Commands.h3": {
+    "message": "Chain of commands"
+  },
+  "MainPage.Commands.featureChain": {
+    "message": "The ability to add an action to each stage of the application"
+  },
+  "MainPage.Commands.featureParallel": {
+    "message": "Parallel execution of actions at each stage for maximum efficiency"
   }
 }
