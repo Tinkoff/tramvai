@@ -11,7 +11,7 @@ async function updatePublicPackagesVersions() {
       packageJson.version = packagesVersions[packageJson.name];
     }
 
-    for (const depsField of ['dependencies', 'devDependencies', 'peerDependecies']) {
+    for (const depsField of ['dependencies', 'devDependencies', 'peerDependencies']) {
       if (!packageJson[depsField]) {
         continue;
       }
