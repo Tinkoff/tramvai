@@ -88,6 +88,17 @@ export * from '@tramvai/tokens-server';
         { key: 'DEV_STATIC', optional: true, dehydrate: false },
         { key: 'PORT_STATIC', optional: true, dehydrate: false, value: 4000 },
         { key: 'PORT', optional: true, dehydrate: false, value: 3000 },
+        {
+          key: 'APP_VERSION',
+          dehydrate: true,
+          optional: true,
+          // обращаемся к process.env.APP_VERSION явно, чтобы вебпак заинлайнил его при сборке и версия вшилась в билд
+          value: process.env.APP_VERSION,
+        },
+        { key: 'DEPLOY_BRANCH', optional: true, dehydrate: false },
+        { key: 'DEPLOY_COMMIT', optional: true, dehydrate: false },
+        { key: 'DEPLOY_VERSION', optional: true, dehydrate: false },
+        { key: 'DEPLOY_REPOSITORY', optional: true, dehydrate: false },
       ],
     },
     {

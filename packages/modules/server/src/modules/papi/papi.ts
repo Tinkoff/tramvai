@@ -2,7 +2,7 @@ import flatten from '@tinkoff/utils/array/flatten';
 
 import { Module, DI_TOKEN, provide } from '@tramvai/core';
 import toArray from '@tinkoff/utils/array/toArray';
-import { ENV_MANAGER_TOKEN, ENV_USED_TOKEN, LOGGER_TOKEN } from '@tramvai/tokens-common';
+import { ENV_MANAGER_TOKEN, LOGGER_TOKEN } from '@tramvai/tokens-common';
 import {
   SERVER_MODULE_PAPI_PRIVATE_ROUTE,
   SERVER_MODULE_PAPI_PUBLIC_ROUTE,
@@ -115,19 +115,6 @@ import { sharedProviders } from './shared';
           };
         },
       }),
-    }),
-    provide({
-      provide: ENV_USED_TOKEN,
-      multi: true,
-      useValue: [
-        {
-          dehydrate: true,
-          optional: true,
-          key: 'APP_VERSION',
-          // обращаемся к process.env.APP_VERSION явно, чтобы вебпак заинлайнил его при сборке и версия вшилась в билд
-          value: process.env.APP_VERSION,
-        },
-      ],
     }),
   ],
 })
