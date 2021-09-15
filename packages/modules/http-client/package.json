@@ -6,7 +6,7 @@
   "main": "lib/index.js",
   "typings": "src/index.ts",
   "browser": {
-    "./lib/papi/papiService.js": "./lib/papi/papiService.browser.js",
+    "./lib/papiClientModule.ts": "./lib/papiClientModule.browser.js",
     "./lib/utils/fillHeaders.js": "./lib/utils/fillHeaders.browser.js"
   },
   "files": [

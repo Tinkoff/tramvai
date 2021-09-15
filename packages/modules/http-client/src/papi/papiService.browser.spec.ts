@@ -4,7 +4,7 @@
 
 /* eslint-disable import/first */
 jest.mock('node-fetch');
-jest.mock('./papiService');
+jest.mock('../papiClientModule', () => require('../papiClientModule.browser'));
 
 import fetch from 'node-fetch';
 import type { Provider } from '@tinkoff/dippy';
@@ -31,14 +31,8 @@ import {
 } from '../../../../../test/mocks/tramvai/envManager';
 import { createJsonResponse } from '../../../../../test/utils/fetch';
 import { HttpClientModule } from '../httpClientModule';
-import { PapiService } from './papiService';
-import { PapiService as PapiServiceBrowser } from './papiService.browser';
 
 global.setImmediate = ((fn, ...args) => fn(...args)) as any;
-
-(PapiService as any).mockImplementation((options) => {
-  return new PapiServiceBrowser(options);
-});
 
 const { loggerMock, loggerFactoryMock } = createLoggerMocks();
 const requestManagerMock = createRequestManagerMock();

@@ -1,10 +1,16 @@
 import find from '@tinkoff/utils/array/find';
 import flatten from '@tinkoff/utils/array/flatten';
+import type { DI_TOKEN } from '@tramvai/core';
 import type { HttpClientRequest, HttpClientResponse } from '@tramvai/http-client';
 import { createChildContainer } from '@tinkoff/dippy';
 import { getPapiParameters } from '@tramvai/papi';
 import { REQUEST, RESPONSE } from '@tramvai/module-common';
-import type { Deps } from './papiService.h';
+import type { SERVER_MODULE_PAPI_PUBLIC_ROUTE } from '@tramvai/tokens-server';
+
+export interface Deps {
+  di: typeof DI_TOKEN;
+  papi?: typeof SERVER_MODULE_PAPI_PUBLIC_ROUTE[];
+}
 
 export class PapiService {
   papi: Deps['papi'];
