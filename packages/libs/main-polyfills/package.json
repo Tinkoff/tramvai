@@ -1,0 +1,32 @@
+{
+  "name": "@tinkoff/pack-polyfills",
+  "version": "0.0.0-stub",
+  "description": "",
+  "main": "lib/index.js",
+  "typings": "src/index.ts",
+  "files": [
+    "lib"
+  ],
+  "sideEffects": true,
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+  },
+  "scripts": {
+    "build": "tramvai-build --for-publish",
+    "watch": "tsc -w",
+    "build-for-publish": "true"
+  },
+  "dependencies": {
+    "abort-controller": "^3.0.0",
+    "core-js": "^3.0.0",
+    "css-vars-ponyfill": "^2.3.2",
+    "intersection-observer": "^0.7.0",
+    "tslib": "^2.0.3",
+    "whatwg-fetch": "^3.0.0",
+    "element-closest-polyfill": "^1.0.4"
+  },
+  "module": "lib/index.es.js",
+  "es2017": "lib/index.es2017.js",
+  "license": "Apache-2.0"
+}

@@ -84,6 +84,7 @@ const publicPackages = [
   '@tinkoff/hook-runner',
   '@tinkoff/eslint-plugin-tramvai',
   'prettier-config-tinkoff',
+  '@tinkoff/pack-polyfills',
 ];
 
 module.exports = publicPackages;
