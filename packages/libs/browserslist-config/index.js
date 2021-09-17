@@ -26,7 +26,10 @@ const modern = [
   'Safari >= 12',
   'Firefox >= 60',
   'Opera >= 48',
-  'Edge >= 79',
+  // 16 version force babel to transpile spread in object literals to Object.assing
+  // this version is quite old, but if we update it to Chromium based version,
+  // we will have spread in modern bundles, and see many Syntax Errors in logs
+  'Edge >= 16',
   'Samsung >= 8.2',
   // mobile
   'ChromeAndroid >= 61',
