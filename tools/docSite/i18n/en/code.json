@@ -159,7 +159,6 @@
     "message": "On this page",
     "description": "The label used by the button on the collapsible TOC component"
   },
-
   "components.DocsRating.title": {
     "message": "Was this page helpful?"
   },
@@ -175,7 +174,6 @@
   "components.DocsRating.replySendButton": {
     "message": "Send"
   },
-
   "MainPage.Title.h3": {
     "message": "Modular framework for universal React applications"
   },

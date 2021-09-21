@@ -34,5 +34,14 @@
   "copyright": {
     "message": "Copyright © 2021 tinkoff.ru",
     "description": "The footer copyright"
+  },
+  "link.item.label.Codesandbox": {
+    "message": "Codesandbox"
+  },
+  "link.item.label.WebPageTest": {
+    "message": "WebPageTest"
+  },
+  "link.item.label.Репозиторий": {
+    "message": "Repository"
   }
 }

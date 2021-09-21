@@ -3,6 +3,7 @@ const toArray = require('@tinkoff/utils/array/toArray');
 const mapObj = require('@tinkoff/utils/object/map');
 const reduceObj = require('@tinkoff/utils/object/reduce');
 const fs = require('fs-extra');
+const glob = require('fast-glob');
 const { resolve, dirname } = require('path');
 const dirTree = require('directory-tree');
 const generateExample = require('./generateExample');
@@ -10,7 +11,10 @@ const readDocFile = require('./readDocFile');
 const isRemotePath = require('./isRemotePath');
 
 const root = resolve('..', '..');
+const locales = ['ru', 'en'];
 const tempDocsPath = resolve('tmp-docs');
+const resolveLocaleDocsPath = (locale) =>
+  resolve(`i18n/${locale}/docusaurus-plugin-content-docs/current`);
 
 const makeHeaders = (doc) => {
   return reduceObj(
@@ -23,8 +27,9 @@ const makeHeaders = (doc) => {
   ).join(' \n');
 };
 
-const copyFile = async (path, name, doc) => {
-  const newPath = resolve(tempDocsPath, `${name}.md`);
+const copyFile = async (path, name, doc, locale) => {
+  const docsPath = locale ? resolveLocaleDocsPath(locale) : tempDocsPath;
+  const newPath = resolve(docsPath, `${name}.md`);
 
   const file = await readDocFile(path);
 
@@ -78,7 +83,41 @@ const sortDocs = (doc) => {
 };
 
 async function copyRootDocs() {
-  return fs.copy(resolve(root, 'docs'), tempDocsPath);
+  const docsRoot = resolve(root, 'docs');
+
+  return Promise.all([
+    // находим все .md файлы в папке docs, исключая локали
+    glob(`**/*.md`, {
+      cwd: docsRoot,
+      ignore: [`**/*.{${locales.join(',')}}.md`],
+    }).then((files) => {
+      return Promise.all(
+        files.map((file) => {
+          // копируем их в папку tmp-docs
+          return fs.copy(resolve(docsRoot, file), resolve(tempDocsPath, file));
+        })
+      );
+    }),
+    ...locales.map((locale) => {
+      // находим конкретные локали в папке docs
+      return glob(`**/*.${locale}.md`, {
+        cwd: docsRoot,
+      }).then((files) => {
+        const localeDest = resolveLocaleDocsPath(locale);
+
+        return Promise.all(
+          files.map((file) => {
+            return fs.copy(
+              resolve(docsRoot, file),
+              // копируем их в папку i18n/${locale}/docusaurus-plugin-content-docs/current,
+              // заменяем расширения с .${locale}.md на .md
+              resolve(localeDest, file.replace(new RegExp(`\\.${locale}\\.md$`), '.md'))
+            );
+          })
+        );
+      });
+    }),
+  ]);
 }
 
 // Здесь потенциальный баг, нужно сделать ассинхронным
@@ -129,6 +168,23 @@ async function collectAllProjectDocs() {
                   });
 
                 promises.push(promise);
+
+                locales.forEach((locale) => {
+                  // предполагаем, что у каждого файла рядом может лежать локаль с расширением .${locale}.md
+                  const localeFilePath = filePath.replace(/\.md$/, `.${locale}.md`);
+
+                  // копируем локализацию в папку i18n/${locale}/docusaurus-plugin-content-docs/current
+                  const localeCopyPromise = copyFile(
+                    localeFilePath,
+                    docName,
+                    entry.doc,
+                    locale
+                  ).catch((e) => {
+                    // expected behaviour
+                  });
+
+                  promises.push(localeCopyPromise);
+                });
               }
             });
           };
@@ -156,7 +212,10 @@ async function collectAllProjectDocs() {
 }
 
 async function deleteTmpFolder() {
-  await fs.remove(tempDocsPath);
+  return Promise.all([
+    fs.remove(tempDocsPath),
+    ...locales.map((locale) => fs.remove(resolveLocaleDocsPath(locale))),
+  ]);
 }
 
 async function writeSidebar(docsResult) {
