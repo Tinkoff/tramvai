@@ -5,7 +5,7 @@
     "start": "tramvai start {{configEntry.name}}",
     "build": "tramvai build {{configEntry.name}}",
     "lint": "eslint --ext .ts,.tsx --ignore-path .gitignore ."{{#if isJest}},
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
     "test:integration": "jest -w=3 --config ./jest.integration.config.js",
     "test:integration:watch": "jest --runInBand --watch --config ./jest.integration.config.js"{{/if}}

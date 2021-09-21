@@ -4,4 +4,8 @@ module.exports = {
   moduleNameMapper: {
     '\\.(css|CSS)$': 'identity-obj-proxy',
   },
+  testPathIgnorePatterns: [
+    'node_modules/',
+    '__integration__',
+  ],
 };

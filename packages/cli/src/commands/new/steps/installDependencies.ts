@@ -50,6 +50,7 @@ const jestDevDependencies = [
   'jest-circus',
   'identity-obj-proxy',
   'react-test-renderer',
+  'ts-jest',
 ];
 
 const packagesInstallCommands = {
