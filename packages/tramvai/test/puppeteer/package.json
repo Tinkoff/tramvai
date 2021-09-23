@@ -20,12 +20,15 @@
   "dependencies": {
     "@tinkoff/utils": "^2.1.2",
     "@tramvai/tokens-router": "0.0.0-stub",
+    "console-with-style": "^1.1.0",
+    "supports-color": "8.1.1",
     "tslib": "^2.0.3"
   },
   "peerDependencies": {
     "puppeteer": "^10.0.0"
   },
   "devDependencies": {
+    "@types/supports-color": "^8.1.1",
     "puppeteer": "^10.0.0"
   },
   "license": "Apache-2.0"

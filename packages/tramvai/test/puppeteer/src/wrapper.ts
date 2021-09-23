@@ -1,4 +1,7 @@
 import type { Page } from 'puppeteer';
+import { stderr as stderrSupportsColor } from 'supports-color';
+// @ts-ignore
+import consoleWithStyle from 'console-with-style';
 import { wrapRouter } from './router';
 
 const checkSsrErrors = (text: string) => {
@@ -7,14 +10,43 @@ const checkSsrErrors = (text: string) => {
   }
 };
 
+const format = consoleWithStyle((stderrSupportsColor && stderrSupportsColor.level) || 0);
+
+// console.log нельзя использовать, см. https://github.com/facebook/jest/pull/11054#issuecomment-872682575
+// console.error тоже перехвачен жестом и спамит стек-трейсами
+// поэтому используем nativeConsole который определен в node-environment.ts
+declare global {
+  namespace NodeJS {
+    interface Global {
+      nativeConsole: typeof console;
+    }
+  }
+}
+
+const { nativeConsole } = global;
+
 export const wrapPuppeteerPage = (page: Page) => {
+  if (page.url() && page.url() !== 'about:blank') {
+    throw new Error(
+      `You should wrap blank page before navigation, but page already has url "${page.url()}"`
+    );
+  }
+
   page.on('requestfailed', (request) =>
-    console.log('[PAGE REQUEST FAILED]', {
+    nativeConsole.error('[PAGE REQUEST FAILED]', {
       error: request.failure(),
       url: request.url(),
       headers: request.headers(),
     })
   );
+
+  page.on('error', (error) => {
+    nativeConsole.error(`[PAGE CRASHED]`, error.message);
+  });
+
+  page.on('pageerror', (error) => {
+    nativeConsole.error(`[PAGE ERROR]`, error.message);
+  });
 
   page.on('console', async (consoleObj) => {
     const args = consoleObj.args();
@@ -31,7 +63,9 @@ export const wrapPuppeteerPage = (page: Page) => {
       messages.push(json);
     }
 
-    console.log(`[PAGE LOG]`, messages.length > 0 ? messages : text);
+    const logLevel = consoleObj.type() === 'error' ? 'error' : 'log';
+    const consoleArgs = messages.length ? messages : [text];
+    nativeConsole[logLevel](`[PAGE ${consoleObj.type().toUpperCase()}]`, format(...consoleArgs));
   });
 
   return {

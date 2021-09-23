@@ -28,7 +28,7 @@ npm i --save-dev @tramvai/cli
 - `tramvai build` - сборка приложений для сервера и клиента
 - `tramvai analyze` - анализ размер приложения
 - `tramvai generate` - кодогенерация различных компонентов. К примеру новых проектов, react компонентов, экшенов, сервис и так далее
-- `tramvai update` - обновление `@tramvai/cli` и всех `@tramvai` и `@tramvai/tinkoff` зависимостей в приложении
+- `tramvai update` - обновление `@tramvai/cli` и всех `@tramvai` и `@tramvai-tinkoff` зависимостей в приложении
 
 ## Конфигурация
 

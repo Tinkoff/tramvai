@@ -70,11 +70,13 @@ export const initPuppeteer = async (
     getPageWrapper: async (url?: string) => {
       const page = await browser.newPage();
 
+      const wrapper = wrapPuppeteerPage(page);
+
       if (url) {
         await page.goto(url);
       }
 
-      return wrapPuppeteerPage(page);
+      return wrapper;
     },
     close: () => {
       if (hasSharedBrowser) {

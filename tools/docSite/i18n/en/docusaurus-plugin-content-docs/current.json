@@ -107,10 +107,6 @@
     "message": "Migrations from platform-legacy",
     "description": "The label for category Миграции c platform-legacy in sidebar docs"
   },
-  "sidebar.docs.category.Сообщество": {
-    "message": "Community",
-    "description": "The label for category Сообщество in sidebar docs"
-  },
   "sidebar.docs.category.Известные ошибки": {
     "message": "Known errors",
     "description": "The label for category Известные ошибки in sidebar docs"

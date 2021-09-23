@@ -14,7 +14,7 @@ import { warmUpCache } from './warmup';
           const log = deps.logger('cache-warmup');
 
           if (!deps.papiService) {
-            log.info('Skip cache warmup when @travmai/module-api-clients is not enabled');
+            log.info('Skip cache warmup when @tramvai/module-http-client is not enabled');
             return;
           }
 

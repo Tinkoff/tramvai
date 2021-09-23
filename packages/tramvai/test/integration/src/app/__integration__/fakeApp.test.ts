@@ -30,9 +30,9 @@ describe('test/integration/app/runFakeApp', () => {
 
     const page = await browser.newPage();
 
-    await page.goto(app.serverUrl);
-
     const wrapper = wrapPuppeteerPage(page);
+
+    await page.goto(app.serverUrl);
 
     expect(
       await page.$eval('.application', (node) => (node as HTMLElement).innerText)

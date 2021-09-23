@@ -13,6 +13,7 @@ module.exports = {
     'concepts/command-line-runner',
     'concepts/action',
     'concepts/bundle',
+    'concepts/versioning',
   ],
   Возможности: [
     'features/react',
@@ -22,12 +23,12 @@ module.exports = {
       items: [
         'features/routing',
         {
-          type: 'doc',
+          type: 'ref',
           label: 'Интеграция с tramvai',
           id: 'references/modules/router',
         },
         {
-          type: 'doc',
+          type: 'ref',
           label: 'Библиотека @tinkoff/router',
           id: 'references/libs/router',
         },
@@ -43,32 +44,32 @@ module.exports = {
       label: 'Data fetching',
       items: [
         {
-          type: 'doc',
+          type: 'ref',
           label: 'HTTP запросы',
           id: 'references/modules/http-client',
         },
         {
-          type: 'doc',
+          type: 'ref',
           label: 'Введение в экшены',
           id: 'concepts/action',
         },
         {
-          type: 'doc',
+          type: 'ref',
           label: 'Создание экшена',
           id: 'how-to/how-create-action',
         },
         {
-          type: 'doc',
+          type: 'ref',
           label: 'Глобальные экшены',
           id: 'how-to/actions-execution',
         },
         {
-          type: 'doc',
+          type: 'ref',
           label: 'Условия выполнения экшенов',
           id: 'how-to/actions-conditions',
         },
         {
-          type: 'doc',
+          type: 'ref',
           label: 'Интерфейс createAction',
           id: 'references/tramvai/create-action',
         },
@@ -80,12 +81,12 @@ module.exports = {
       items: [
         'features/papi/introduction',
         {
-          type: 'doc',
+          type: 'ref',
           label: 'Рецепты',
           id: 'how-to/how-create-papi',
         },
         {
-          type: 'doc',
+          type: 'ref',
           label: 'Библиотека @tramvai/papi',
           id: 'references/libs/papi',
         },
@@ -98,6 +99,12 @@ module.exports = {
     },
     'features/migration',
   ],
+  Guides: [
+    'guides/tramvai-library',
+    'guides/bundle-optimization',
+    'guides/universal',
+    'guides/deploy',
+  ],
   Рецепты: [
     'how-to/how-create-module',
     'how-to/how-create-bundle',
@@ -106,9 +113,7 @@ module.exports = {
     'how-to/how-create-async-component',
     'how-to/how-enable-modern',
     'how-to/how-debug-modules',
-    'how-to/universal',
-    'how-to/bundle-optimization',
-    'how-to/deploy',
+    'how-to/tramvai-update',
   ],
   Справочник: [
     {
@@ -137,5 +142,6 @@ module.exports = {
       items: [],
     },
   ],
-  Сообщество: [],
+  Релизы: [],
+  Contribute: [],
 };
