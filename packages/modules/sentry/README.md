@@ -17,7 +17,7 @@
 - `SENTRY_SDK_URL` - URL для загрузки Sentry SDK в браузере, задан по умолчанию
 - `SENTRY_DSN_CLIENT` - [DSN](https://docs.sentry.io/product/sentry-basics/dsn-explainer/) приложения для использования только в браузере.
 
-### Подлкючение модуля
+### Подключение модуля
 
 `SentryModule` следует подключать в приложение одним из первых
 
