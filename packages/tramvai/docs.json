@@ -7,7 +7,7 @@
         "path": "react/README.md",
         "doc": {
           "id": "react",
-          "title": "Работа с React"
+          "title": "Working with React"
         }
       },
       {
@@ -16,7 +16,7 @@
         "items": [
           {
             "type": "doc",
-            "label": "Интеграция с tramvai",
+            "label": "Tramvai integration",
             "id": "references/modules/react-query"
           },
           {
@@ -28,7 +28,7 @@
           },
           {
             "type": "doc",
-            "label": "Рецепты",
+            "label": "Recipes",
             "id": "how-to/react-query-usage"
           }
         ]
@@ -118,7 +118,7 @@
             "priority": 50,
             "doc": {
               "id": "test-integration-jest",
-              "title": "Интеграция с jest"
+              "title": "Jest integration"
             }
           }
         ]

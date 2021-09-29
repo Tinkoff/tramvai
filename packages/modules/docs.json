@@ -197,7 +197,7 @@
             {
               "doc": {
                 "id": "introduction",
-                "title": "Введение в papi"
+                "title": "Papi introduction"
               },
               "path": "server/papi.md"
             }

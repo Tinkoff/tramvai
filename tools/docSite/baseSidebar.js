@@ -24,12 +24,12 @@ module.exports = {
         'features/routing',
         {
           type: 'ref',
-          label: 'Интеграция с tramvai',
+          label: 'Tramvai integration',
           id: 'references/modules/router',
         },
         {
           type: 'ref',
-          label: 'Библиотека @tinkoff/router',
+          label: 'Library @tinkoff/router',
           id: 'references/libs/router',
         },
       ],
@@ -45,32 +45,32 @@ module.exports = {
       items: [
         {
           type: 'ref',
-          label: 'HTTP запросы',
+          label: 'HTTP requests',
           id: 'references/modules/http-client',
         },
         {
           type: 'ref',
-          label: 'Введение в экшены',
+          label: 'Introduction to actions',
           id: 'concepts/action',
         },
         {
           type: 'ref',
-          label: 'Создание экшена',
+          label: 'Create action',
           id: 'how-to/how-create-action',
         },
         {
           type: 'ref',
-          label: 'Глобальные экшены',
+          label: 'Global actions',
           id: 'how-to/actions-execution',
         },
         {
           type: 'ref',
-          label: 'Условия выполнения экшенов',
+          label: 'Actions execution conditions',
           id: 'how-to/actions-conditions',
         },
         {
           type: 'ref',
-          label: 'Интерфейс createAction',
+          label: 'createAction interface',
           id: 'references/tramvai/create-action',
         },
       ],
@@ -82,12 +82,12 @@ module.exports = {
         'features/papi/introduction',
         {
           type: 'ref',
-          label: 'Рецепты',
+          label: 'Recipes',
           id: 'how-to/how-create-papi',
         },
         {
           type: 'ref',
-          label: 'Библиотека @tramvai/papi',
+          label: 'Library @tramvai/papi',
           id: 'references/libs/papi',
         },
       ],
