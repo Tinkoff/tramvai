@@ -1,5 +1,11 @@
-import { createApp } from '@tramvai/core';
-import { HTML_ATTRS } from '@tramvai/module-render';
+import { commandLineListTokens, createApp, provide } from '@tramvai/core';
+import {
+  HTML_ATTRS,
+  RENDER_SLOTS,
+  RESOURCES_REGISTRY,
+  ResourceSlot,
+  ResourceType,
+} from '@tramvai/module-render';
 import { modules, bundles } from '@tramvai/internal-test-utils/shared/common';
 import { StorageRecord } from '@tinkoff/htmlpagebuilder';
 import { RESOURCE_INLINE_OPTIONS } from '@tramvai/tokens-render';
@@ -41,6 +47,22 @@ createApp({
       },
       multi: true,
     },
+    provide({
+      provide: commandLineListTokens.resolvePageDeps,
+      multi: true,
+      useFactory: ({ resourcesRegistry }) => {
+        return () => {
+          resourcesRegistry.register({
+            slot: ResourceSlot.BODY_END,
+            type: ResourceType.style,
+            payload: 'https://test.acdn.tinkoff.ru/123.css',
+          });
+        };
+      },
+      deps: {
+        resourcesRegistry: RESOURCES_REGISTRY,
+      },
+    }),
     {
       provide: RESOURCE_INLINE_OPTIONS,
       useValue: {

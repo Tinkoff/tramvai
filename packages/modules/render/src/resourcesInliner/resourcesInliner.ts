@@ -40,13 +40,19 @@ export class ResourcesInliner implements ResourcesInlinerType {
   private scheduleFileLoad = (resource: PageResource, resourceInlineThreshold: number) => {
     const url = getResourceUrl(resource);
     const requestKey = `file${url}`;
-    if (!this.resourcesRegistryCache.requestsCache.get(requestKey)) {
+    const urlIsDisabled = this.resourcesRegistryCache.disabledUrlsCache.get(url);
+    const requestIsInProgress = this.resourcesRegistryCache.requestsCache.get(requestKey);
+    if (!requestIsInProgress && !urlIsDisabled) {
       const result = this.resourcesRegistryCache.filesCache.get(url);
       if (result) {
         return result;
       }
       const getFilePromise = getFile(url)
         .then((file) => {
+          if (file === undefined) {
+            this.resourcesRegistryCache.disabledUrlsCache.set(url, true);
+            return;
+          }
           const size = file.length;
           if (size < resourceInlineThreshold) {
             this.resourcesRegistryCache.filesCache.set(url, processFile(resource, file));

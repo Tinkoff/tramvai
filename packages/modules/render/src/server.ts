@@ -50,6 +50,7 @@ export const DEFAULT_POLYFILL_CONDITION =
           filesCache: createCache('memory', { max: 50, maxAge: thirtyMinutes }),
           sizeCache: createCache('memory', { max: 100, maxAge: thirtyMinutes }),
           requestsCache: createCache('memory', { max: 150, maxAge: 1000 * 60 * 5 }),
+          disabledUrlsCache: createCache('memory', { max: 150, maxAge: 1000 * 60 * 5 }),
         };
       },
       deps: {

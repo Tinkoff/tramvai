@@ -7,8 +7,13 @@ export const getFileContentLength = async (url: string): Promise<string> => {
   return info.headers.get('content-length');
 };
 
-export const getFile = async (url: string): Promise<string> => {
+export const getFile = async (url: string): Promise<string | undefined> => {
   const fileResponse = await fetch(url, { timeout: thirtySeconds });
-  const file = await fileResponse.text();
-  return file;
+
+  if (fileResponse.ok) {
+    const file = await fileResponse.text();
+    return file;
+  }
+
+  return undefined;
 };
