@@ -17,30 +17,39 @@ export type WebpackStats = {
 };
 
 const webpackStats = (paths: string[]) => {
+  let stats;
+
   try {
     const statsPath = path.resolve(...paths);
-    const stats = requireFunc(statsPath);
+    stats = requireFunc(statsPath);
+  } catch (e) {
+    // ignore errors as this function is used to load stats for several optional destinations
+    // and these destinations may not have stats file
+  }
 
-    if (!process.env.ASSETS_PREFIX) {
-      if (process.env.STATIC_PREFIX) {
-        throw new Error(
-          'Не задана обязательная переменная окружения "ASSETS_PREFIX", вместо "STATIC_PREFIX" задайте новую переменную "ASSETS_PREFIX: STATIC_PREFIX + /compiled"'
-        );
-      }
+  if (!stats) {
+    return;
+  }
 
-      throw new Error('Не задана обязательная переменная окружения "ASSETS_PREFIX"');
+  if (!process.env.ASSETS_PREFIX) {
+    if (process.env.STATIC_PREFIX) {
+      throw new Error(
+        'Required env variable "ASSETS_PREFIX" is not set. Instead of using "STATIC_PREFIX" env please define "ASSETS_PREFIX: STATIC_PREFIX + /compiled"'
+      );
     }
 
-    return {
-      ...stats,
-      publicPath: process.env.ASSETS_PREFIX,
-    };
-  } catch (e) {}
+    throw new Error('Required env variable "ASSETS_PREFIX" is not set');
+  }
+
+  return {
+    ...stats,
+    publicPath: process.env.ASSETS_PREFIX,
+  };
 };
 
 const statsLegacy =
   webpackStats(['stats.json']) ||
-  // Пытаемся найти файл рядом с файлом сервера
+  // try to find stats.json nearby server.js file
   webpackStats([__dirname, 'stats.json']);
 
 const statsModern = webpackStats(['stats.modern.json']) || statsLegacy;
@@ -139,7 +148,7 @@ export const fetchWebpackStats = async ({
   const stats = modern ? statsModern : statsLegacy;
 
   if (!stats) {
-    return Promise.reject(new Error('Не был найден stats.json'));
+    return Promise.reject(new Error('Cannot find stats.json'));
   }
 
   return Promise.resolve(stats);

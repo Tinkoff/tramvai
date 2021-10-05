@@ -14,6 +14,8 @@ import { ConfigManager } from '../../config/configManager';
 import { request } from './request';
 import { generateStatic } from './generate';
 import { toWebpackConfig } from '../../library/webpack/utils/toWebpackConfig';
+import { copyStatsJsonFileToServerDirectory } from '../../api/build/utils/copyStatsJsonFile';
+import safeRequire from '../../utils/safeRequire';
 
 export const staticApp = async (
   context: Context,
@@ -41,11 +43,36 @@ export const staticApp = async (
     ),
   ]);
 
-  const server = node(resolve(serverConfigManager.getBuildPath(), 'server.js'), {
+  await copyStatsJsonFileToServerDirectory(clientConfigManager);
+
+  const {
+    name,
+    host,
+    port,
+    staticPort,
+    staticHost,
+    build: {
+      options: { outputClient },
+    },
+  } = serverConfigManager;
+  const root = serverConfigManager.getBuildPath();
+
+  const server = node(resolve(root, 'server.js'), [], {
+    cwd: root,
     stdio: 'inherit',
+    env: {
+      ...safeRequire(resolve(process.cwd(), 'env.development'), true),
+      ...safeRequire(resolve(process.cwd(), 'env'), true),
+      ...process.env,
+      NODE_ENV: 'production',
+      PORT: `${port}`,
+      PORT_SERVER: `${port}`,
+      ASSETS_PREFIX:
+        process.env.ASSETS_PREFIX ??
+        `http://${staticHost}:${staticPort}/${outputClient.replace(/\/$/, '')}/`,
+    },
   });
 
-  const { name, host, port } = serverConfigManager;
   const bundleInfoPath = `http://${host}:${port}/${name}/papi/bundleInfo`;
 
   await Promise.race([

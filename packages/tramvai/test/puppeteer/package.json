@@ -25,11 +25,11 @@
     "tslib": "^2.0.3"
   },
   "peerDependencies": {
-    "puppeteer": "^10.0.0"
+    "puppeteer": "10.0.0"
   },
   "devDependencies": {
     "@types/supports-color": "^8.1.1",
-    "puppeteer": "^10.0.0"
+    "puppeteer": "10.0.0"
   },
   "license": "Apache-2.0"
 }
