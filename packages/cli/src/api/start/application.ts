@@ -49,7 +49,7 @@ export const startApplication = async (di: Container): Result => {
   const clientCompiler = di.get({ token: WEBPACK_CLIENT_COMPILER_TOKEN, optional: true });
   const serverCompiler = di.get({ token: WEBPACK_SERVER_COMPILER_TOKEN, optional: true });
   const getClientTime = clientCompiler && calculateBuildTime(clientCompiler);
-  const getServerTime = clientCompiler && calculateBuildTime(serverCompiler);
+  const getServerTime = serverCompiler && calculateBuildTime(serverCompiler);
 
   try {
     await resolveDone(compiler);

@@ -3,7 +3,6 @@ import { checkApplication } from '../../validators/commands/checkBuild';
 import { checkConfigExists } from '../../validators/commands/checkConfigExists';
 import { checkDependencies } from '../../validators/commands/checkDependencies';
 import type { Params as StartParams } from '../start/command';
-import { StartCommand } from '../start/command';
 
 export type Params = StartParams & {
   times?: number;

@@ -1,42 +1,24 @@
 import type Config from 'webpack-chain';
+import SparkMD5 from 'spark-md5';
 import type { ConfigManager } from '../../../config/configManager';
 
 export default (configManager: ConfigManager) => (config: Config) => {
   config.module
     .rule('woff')
-    .test(/\.woff$/)
-    .use('url')
-    .loader('url-loader')
-    .options({
-      limit: 1000,
-      mimetype: 'application/font-woff',
-    });
-
-  config.module
-    .rule('ttf')
-    .test(/\.ttf$/)
-    .use('url')
-    .loader('url-loader')
-    .options({
-      limit: 1000,
-      mimetype: 'application/octet-stream',
-    });
-
-  config.module
-    .rule('eot')
-    .test(/\.eot$/)
-    .use('file')
-    .loader('file-loader');
+    .test(/\.woff2?$/)
+    .set('type', 'asset');
 
   config.module
     .rule('svg')
     .test(/\.svg$/)
-    .use('file')
-    .loader('file-loader')
-    .options({
-      name: '[md5:hash:hex].[ext]',
+    .set('type', 'asset/resource')
+    .set('generator', {
+      filename: (pathInfo) => {
+        // hash computation exactly how it is working in react-ui-kit
+        // TODO: it leads to high coherence with ui-kit, better change it to some other method
+        return `${SparkMD5.hash(pathInfo.module.originalSource().source().toString())}.svg`;
+      },
     })
-    .end()
     .use('svg')
     .loader('svgo-loader')
     .options({
@@ -51,66 +33,14 @@ export default (configManager: ConfigManager) => (config: Config) => {
     });
 
   config.module
-    .rule('png')
-    .test(/\.png$/)
-    .use('url')
-    .loader('url-loader')
-    .options({
-      limit: 1000,
-      mimetype: 'image/png',
-    });
+    .rule('image')
+    .test(/\.(png|jpe?g|gif|webp)$/)
+    .set('type', 'asset');
 
   config.module
-    .rule('gif')
-    .test(/\.gif$/)
-    .use('url')
-    .loader('url-loader')
-    .options({
-      limit: 1000,
-      mimetype: 'image/gif',
-    });
-
-  config.module
-    .rule('jpg')
-    .test(/\.jpg$/)
-    .use('url')
-    .loader('url-loader')
-    .options({
-      limit: 1000,
-      mimetype: 'image/jpg',
-    });
-
-  config.module
-    .rule('mp4')
-    .test(/\.mp4$/)
-    .use('file')
-    .loader('file-loader');
-
-  config.module
-    .rule('webm')
-    .test(/\.webm$/)
-    .use('file')
-    .loader('file-loader');
-
-  config.module
-    .rule('webp')
-    .test(/\.webp$/)
-    .use('url')
-    .loader('url-loader')
-    .options({
-      limit: 1000,
-      mimetype: 'image/webp',
-    });
-
-  config.module
-    .rule('avif')
-    .test(/\.avif$/)
-    .use('url')
-    .loader('url-loader')
-    .options({
-      limit: 1000,
-      mimetype: 'image/avif',
-    });
+    .rule('video')
+    .test(/\.(mp4|webm|avif)$/)
+    .set('type', 'asset/resource');
 
   if (configManager.build?.configurations?.imageOptimization?.enabled) {
     config.module

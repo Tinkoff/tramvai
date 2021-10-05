@@ -1,3 +1,4 @@
+import type { Configuration } from 'webpack';
 import type { ProjectType } from '../projectType';
 import type { DeduplicateStrategy } from '../../library/webpack/plugins/DedupePlugin';
 
@@ -15,6 +16,21 @@ type ServeNotifications = {
    */
   activateTerminalOnError?: boolean;
 };
+
+export interface Experiments {
+  /**
+   * @title experiments configuration for [webpack](https://webpack.js.org/configuration/experiments/)
+   * @default {}
+   */
+  webpack?: Configuration['experiments'];
+  /**
+   * @title experimental settings for [mini-css-extract-plugin](https://github.com/webpack-contrib/mini-css-extract-plugin)
+   * @default {}
+   */
+  minicss?: {
+    useImportModule?: boolean;
+  };
+}
 
 type serveConfig = {
   /**
@@ -50,6 +66,11 @@ type serveConfig = {
       overlay?: boolean | Record<string, any>;
       [key: string]: any;
     };
+    /**
+     * @title Experimental settings
+     * @default {}
+     */
+    experiments?: Experiments;
   };
 };
 
@@ -194,6 +215,11 @@ export interface ConfigEntry {
          * @default true
          */
         transpileOnlyModernLibs?: boolean;
+        /**
+         * @title Experimental settings
+         * @default {}
+         */
+        experiments?: Experiments;
       };
     };
     /**

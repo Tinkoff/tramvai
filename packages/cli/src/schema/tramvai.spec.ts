@@ -128,6 +128,10 @@ describe('JSON schema для tramvai.json', () => {
                   config: 'postcss.config',
                 },
                 transpileOnlyModernLibs: true,
+                experiments: {
+                  webpack: {},
+                  minicss: {},
+                },
               },
             },
             serve: {
@@ -136,6 +140,10 @@ describe('JSON schema для tramvai.json', () => {
                 modern: false,
                 sourceMap: false,
                 externals: ['react$', 'react-dom', 'prop-types', 'express', 'core-js'],
+                experiments: {
+                  webpack: {},
+                  minicss: {},
+                },
               },
               notifications: {},
             },
@@ -165,6 +173,10 @@ describe('JSON schema для tramvai.json', () => {
                   cssLocalIdentName: '[hash:base64:5]',
                 },
                 transpileOnlyModernLibs: true,
+                experiments: {
+                  webpack: {},
+                  minicss: {},
+                },
               },
               options: {
                 output: 'dist/modules',
@@ -175,6 +187,10 @@ describe('JSON schema для tramvai.json', () => {
                 hotRefresh: false,
                 modern: false,
                 sourceMap: false,
+                experiments: {
+                  webpack: {},
+                  minicss: {},
+                },
               },
               notifications: {},
             },

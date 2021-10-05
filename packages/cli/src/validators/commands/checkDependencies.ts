@@ -1,14 +1,18 @@
+import any from '@tinkoff/utils/array/any';
 import eachObj from '@tinkoff/utils/object/each';
 import { sync as resolve } from 'resolve';
+import { diff } from 'semver';
 
 import type { Context } from '../../models/context';
 
 const depsToCheck = [/^webpack$/, /^@babel/, /^postcss/];
+const criticalDeps = [/^webpack$/, /^@babel\/core/, /^postcss$/];
 
 export const checkDependencies = async ({ logger }: Context) => {
   const rootDir = process.cwd();
   const packageJson = require('../../../package.json');
   let hasWrongDeps = false;
+  let hasCriticalMismatch = false;
 
   eachObj((_, packageName: string) => {
     for (const check of depsToCheck) {
@@ -19,15 +23,24 @@ export const checkDependencies = async ({ logger }: Context) => {
         // некоторые зависимости не всплывают в node_modules проекта вообще, поэтому try-catch
         try {
           const pathFromRoot = resolve(packagePath, { basedir: rootDir });
+          let versionDiff: ReturnType<typeof diff> = null;
 
           if (pathFromCli !== pathFromRoot) {
+            hasWrongDeps = true;
+
+            if (any((testRe) => testRe.test(packageName), criticalDeps)) {
+              versionDiff = diff(require(pathFromRoot).version, require(pathFromCli).version);
+
+              if (versionDiff === 'major') {
+                hasCriticalMismatch = true;
+              }
+            }
+
             logger.event({
-              type: 'warning',
+              type: versionDiff === 'major' ? 'error' : 'warning',
               event: 'COMMAND:VALIDATE:DEPENDENCIES',
               message: `Package ${packageName} has duplicates in @tramvai/cli (${pathFromCli}) and in the process.cwd (${pathFromRoot})`,
             });
-
-            hasWrongDeps = true;
           }
         } catch (err) {}
       }
@@ -37,7 +50,7 @@ export const checkDependencies = async ({ logger }: Context) => {
   if (hasWrongDeps) {
     return {
       name: 'checkDependencies',
-      status: 'warning',
+      status: hasCriticalMismatch ? 'error' : 'warning',
       message: `
 Некоторые важные пакеты необходимые для работы @tramvai/cli дублируются,
 что может привести к неочевидным багам и проблемам из-за особенностей commonjs по поиску импортируемых модулей.

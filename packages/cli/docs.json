@@ -29,6 +29,13 @@
             }
           },
           {
+            "path": "./docs/experiments.md",
+            "doc": {
+              "id": "experiments",
+              "title": "Experimental settings"
+            }
+          },
+          {
             "path": "./docs/troubleshooting.md",
             "doc": {
               "id": "troubleshooting",

@@ -55,6 +55,8 @@ export default (configManager: ConfigManager) => (config: Config) => {
     managedPaths: [],
   });
 
+  config.set('experiments', configManager.experiments.webpack ?? {});
+
   config
     .mode('development')
     .optimization.minimize(false)

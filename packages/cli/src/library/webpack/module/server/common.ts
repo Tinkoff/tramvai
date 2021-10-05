@@ -25,6 +25,7 @@ export default (configManager: ConfigManager<ModuleConfigEntry>) => (config: Con
     {
       filename: '[name]_server.css', // we don't need the css on server, but it's needed to generate proper classnames in js
       ignoreOrder: true,
+      experimentalUseImportModule: !!configManager.experiments.minicss?.useImportModule,
     },
   ]);
 

@@ -3,7 +3,7 @@ import prop from '@tinkoff/utils/object/prop';
 import { resolve } from 'path';
 import type { ProjectType, BuildType } from '../typings/projectType';
 import type { Env } from '../typings/Env';
-import type { ConfigEntry } from '../typings/configEntry/common';
+import type { ConfigEntry, Experiments } from '../typings/configEntry/common';
 import { validate } from './validate';
 import moduleVersion from '../utils/moduleVersion';
 import type { DeduplicateStrategy } from '../library/webpack/plugins/DedupePlugin';
@@ -107,6 +107,8 @@ export class ConfigManager<T extends ConfigEntry = ConfigEntry> implements Requi
 
   public target: Target;
 
+  public experiments: Experiments;
+
   public showConfig: boolean;
   // eslint-disable-next-line complexity,max-statements
   constructor(configEntry: T, settings: Settings) {
@@ -162,6 +164,10 @@ export class ConfigManager<T extends ConfigEntry = ConfigEntry> implements Requi
     this.disableProdOptimization = settings.disableProdOptimization ?? false;
     this.onlyBundles = settings.onlyBundles;
     this.target = this.resolveTarget();
+    this.experiments =
+      (this.env === 'development'
+        ? this.serve.configurations?.experiments
+        : this.build.configurations?.experiments) ?? {};
     this.showConfig = settings.showConfig ?? false;
 
     if (this.showConfig) {

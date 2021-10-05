@@ -90,6 +90,10 @@ export abstract class CLICommand<
           event: 'COMMAND:VALIDATE:MESSAGE',
           message: item.message,
         });
+
+        if (item.status === 'error') {
+          throw new Error('Validation failed, see errors above');
+        }
       }
     });
   }

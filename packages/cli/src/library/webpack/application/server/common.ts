@@ -63,6 +63,7 @@ export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config
     {
       filename: 'server.[contenthash].css',
       ignoreOrder: true,
+      experimentalUseImportModule: !!configManager.experiments.minicss?.useImportModule,
     },
   ]);
 

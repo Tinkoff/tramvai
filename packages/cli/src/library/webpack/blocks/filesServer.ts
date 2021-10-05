@@ -3,11 +3,17 @@ import type { ConfigManager } from '../../../config/configManager';
 
 export default (configManager: ConfigManager) => (config: Config) => {
   config.module
+    .rule('woff')
+    .test(/\.woff2?$/)
+    .set('type', 'asset')
+    .set('generator', {
+      emit: false,
+    });
+
+  config.module
     .rule('svg')
     .test(/\.svg$/)
-    .use('file')
-    .loader('raw-loader')
-    .end()
+    .set('type', 'asset/source')
     .use('svg')
     .loader('svgo-loader')
     .options({
@@ -22,69 +28,19 @@ export default (configManager: ConfigManager) => (config: Config) => {
     });
 
   config.module
-    .rule('png')
-    .test(/\.png$/)
-    .use('file')
-    .loader('url-loader')
-    .options({
-      limit: 1000,
-      mimetype: 'image/png',
-      fallback: 'file-loader',
-      emitFile: false, // применится к лоадеру указанному в fallback (https://github.com/webpack-contrib/url-loader/issues/118#issuecomment-372314898)
+    .rule('image')
+    .test(/\.(png|jpe?g|gif|webp)$/)
+    .set('type', 'asset')
+    .set('generator', {
+      emit: false,
     });
 
   config.module
-    .rule('gif')
-    .test(/\.gif$/)
-    .use('file')
-    .loader('file-loader')
-    .options({
-      emitFile: false,
-    });
-
-  config.module
-    .rule('jpg')
-    .test(/\.jpg$/)
-    .use('file')
-    .loader('file-loader')
-    .options({
-      emitFile: false,
-    });
-
-  config.module
-    .rule('mp4')
-    .test(/\.mp4$/)
-    .use('file')
-    .loader('file-loader')
-    .options({
-      emitFile: false,
-    });
-
-  config.module
-    .rule('webm')
-    .test(/\.webm$/)
-    .use('file')
-    .loader('file-loader')
-    .options({
-      emitFile: false,
-    });
-
-  config.module
-    .rule('webp')
-    .test(/\.webp$/)
-    .use('file')
-    .loader('file-loader')
-    .options({
-      emitFile: false,
-    });
-
-  config.module
-    .rule('avif')
-    .test(/\.avif$/)
-    .use('file')
-    .loader('file-loader')
-    .options({
-      emitFile: false,
+    .rule('video')
+    .test(/\.(mp4|webm|avif)$/)
+    .set('type', 'asset/resource')
+    .set('generator', {
+      emit: false,
     });
 
   if (configManager.build?.configurations?.imageOptimization?.enabled) {

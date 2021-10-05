@@ -74,6 +74,7 @@ export const webpackClientConfig = ({
       filename: '[name].css',
       chunkFilename: '[name].chunk.css',
       ignoreOrder: true,
+      experimentalUseImportModule: !!configManager.experiments.minicss?.useImportModule,
     },
   ]);
 
