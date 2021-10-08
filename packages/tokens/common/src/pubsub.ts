@@ -4,7 +4,7 @@ import { createToken } from '@tinkoff/dippy';
  * @description
  * Фабрика для создания инстанса pubsub
  */
-export const PUBSUB_FACTORY_TOKEN = createToken<PubSub>('pubsubFactory');
+export const PUBSUB_FACTORY_TOKEN = createToken<() => PubSub>('pubsubFactory');
 
 /**
  * @description
