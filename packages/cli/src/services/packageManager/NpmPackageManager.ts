@@ -14,7 +14,7 @@ export class NpmPackageManager extends PackageManager {
   }
 
   async install(options: InstallOptions = {}) {
-    const { name, version, noSave } = options;
+    const { name, version, noSave, devDependency } = options;
 
     const commandLineArgs = [
       'npm',
@@ -22,6 +22,7 @@ export class NpmPackageManager extends PackageManager {
       name && (version ? `${name}@${version}` : name),
       '--legacy-peer-deps',
       noSave && '--no-save',
+      devDependency && '--save-dev',
       this.registryFlag(options),
     ].filter(Boolean);
 
@@ -38,5 +39,9 @@ export class NpmPackageManager extends PackageManager {
 
   async dedupe(options: DedupeOptions = {}) {
     await this.run('npm dedupe', options);
+  }
+
+  getLockFileName() {
+    return 'package-lock.json';
   }
 }

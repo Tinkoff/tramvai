@@ -1,6 +1,7 @@
 import { CLICommand } from '../../models/command';
 import { checkConfigExists } from '../../validators/commands/checkConfigExists';
 import { checkApplication } from '../../validators/commands/checkBuild';
+import { runMigrationsAndCheckVersions } from '../../validators/commands/runMigrationsAndCheckVersions';
 
 export interface Params {
   target: string;
@@ -75,7 +76,7 @@ export class StartProdCommand extends CLICommand<Params> {
 
   alias = 'sp';
 
-  validators = [checkConfigExists, checkApplication];
+  validators = [checkConfigExists, checkApplication, runMigrationsAndCheckVersions];
 
   action(parameters: Params) {
     // сделано через require, что бы стартовать код только тогда, когда он нужен

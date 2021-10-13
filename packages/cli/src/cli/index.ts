@@ -16,6 +16,7 @@ import analyze from '../commands/analyze/command';
 import generate from '../commands/generate/command';
 import newCommand from '../commands/new/command';
 import updateCommand from '../commands/update/command';
+import addCommand from '../commands/add/command';
 import { StaticCommand } from '../commands/static/command';
 import { StartProdCommand } from '../commands/start-prod/command';
 import { BenchmarkCommand } from '../commands/benchmark/command';
@@ -41,6 +42,7 @@ async function loadCommands(): Promise<CommandMap> {
     generate,
     newCommand,
     updateCommand,
+    addCommand,
     StaticCommand,
     BenchmarkCommand,
   ];

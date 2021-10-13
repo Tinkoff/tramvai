@@ -1,6 +1,6 @@
 import { CLICommand } from '../../models/command';
+import { checkVersion } from './checkVersionValidator';
 import type { Params } from './update';
-import { checkVersion } from '../../validators/commands/checkVersion';
 
 class UpdateCommand extends CLICommand {
   name = 'update';

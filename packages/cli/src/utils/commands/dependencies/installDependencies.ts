@@ -1,9 +1,5 @@
 import ora from 'ora';
-import util from 'util';
-import childProcess from 'child_process';
-import type { Context } from '../../models/context';
-
-const exec = util.promisify(childProcess.exec);
+import type { Context } from '../../../models/context';
 
 export const installDependencies = async (context: Context) => {
   const spinner = ora('Install dependencies...').start();

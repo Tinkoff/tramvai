@@ -2,6 +2,7 @@ import { CLICommand } from '../../models/command';
 import { checkApplication } from '../../validators/commands/checkBuild';
 import { checkConfigExists } from '../../validators/commands/checkConfigExists';
 import { checkDependencies } from '../../validators/commands/checkDependencies';
+import { runMigrationsAndCheckVersions } from '../../validators/commands/runMigrationsAndCheckVersions';
 import type { Params as StartParams } from '../start/command';
 
 export type Params = StartParams & {
@@ -44,7 +45,12 @@ export class BenchmarkCommand extends CLICommand<Params> {
 
   alias = 'bench';
 
-  validators = [checkConfigExists, checkApplication, checkDependencies];
+  validators = [
+    checkConfigExists,
+    checkApplication,
+    runMigrationsAndCheckVersions,
+    checkDependencies,
+  ];
 
   action(parameters) {
     // сделано через require, что бы стартовать код только тогда, когда он нужен

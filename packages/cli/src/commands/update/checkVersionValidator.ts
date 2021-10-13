@@ -1,6 +1,6 @@
 import util from 'util';
 import childProcess from 'child_process';
-import type { Params } from '../../commands/update/update';
+import type { Params } from './update';
 
 const exec = util.promisify(childProcess.exec);
 
@@ -21,5 +21,5 @@ export const checkVersion = async (_, { to: version = 'latest' }: Params) => {
     };
   }
 
-  throw new Error(`Версии ${version} не существует!`);
+  throw new Error(`Version ${version} does not exists`);
 };

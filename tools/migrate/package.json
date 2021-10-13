@@ -3,9 +3,6 @@
   "version": "0.0.0-stub",
   "description": "",
   "main": "lib/index.js",
-  "scripts": {
-    "postinstall": "node -e \"require('./bin/migrate.js')\""
-  },
   "bin": {
     "tramvai-migrate": "bin/migrate.js"
   },
@@ -26,7 +23,6 @@
     "tslib": "^2.0.3"
   },
   "devDependencies": {
-    "@tramvai/cli": "0.0.0-stub",
     "@types/env-ci": "^3.1.0",
     "@types/fs-extra": "^8.1.0",
     "@types/jscodeshift": "^0.7.0"

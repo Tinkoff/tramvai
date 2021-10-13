@@ -1,8 +1,5 @@
 import type { Transform, FileInfo } from 'jscodeshift';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import type { Options as RecastOptions } from 'recast';
-// eslint-disable-next-line import/no-extraneous-dependencies, no-restricted-imports
-import type { Config } from '@tramvai/cli/lib/typings/projectType';
 
 declare module 'jscodeshift' {
   export interface Options {
@@ -14,7 +11,12 @@ export type Transformer = Transform;
 export type PathTransformer = (file: FileInfo) => string;
 
 export type PackageJSON = Record<string, any>;
-export type TramvaiJSON = Config;
+// @todo: как использовать тайпинги CLI без циклической зависимости?
+export type TramvaiJSON = {
+  projectsConfig?: any;
+  $schema?: string;
+  projects: { [name: string]: Record<string, any> };
+};
 
 export interface Api {
   packageJSON: {

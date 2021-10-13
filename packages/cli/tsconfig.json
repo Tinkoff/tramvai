@@ -1,32 +1,38 @@
 {
-  "extends": "../../tsconfig.lib.json",
-  "include": [
-    "./src",
-    "./src/**/*.json"
-  ],
-  "compilerOptions": {
-    "module": "CommonJS",
-    "declarationDir": "./lib",
-    "outDir": "./lib",
-    "rootDir": "./src",
-    "types": [
-      "node",
-      "jest",
-      "webpack"
+    "extends": "../../tsconfig.lib.json",
+    "include": [
+        "./src",
+        "./src/**/*.json"
+    ],
+    "compilerOptions": {
+        "module": "CommonJS",
+        "declarationDir": "./lib",
+        "outDir": "./lib",
+        "rootDir": "./src",
+        "types": [
+            "node",
+            "jest",
+            "webpack"
+        ]
+    },
+    "references": [
+        {
+            "path": "../libs/is-modern-lib"
+        },
+        {
+            "path": "../libs/logger"
+        },
+        {
+            "path": "../libs/minicss"
+        },
+        {
+            "path": "../libs/dippy"
+        },
+        {
+            "path": "../../tools/check-versions"
+        },
+        {
+            "path": "../../tools/migrate"
+        }
     ]
-  },
-  "references": [
-    {
-      "path": "../libs/is-modern-lib"
-    },
-    {
-      "path": "../libs/logger"
-    },
-    {
-      "path": "../libs/minicss"
-    },
-    {
-      "path": "../libs/dippy"
-    }
-  ]
 }

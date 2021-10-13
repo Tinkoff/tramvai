@@ -1,9 +1,11 @@
 import type { Context } from '../../models/context';
 import type { CommandResult } from '../../models/command';
-import { installDependencies } from './installDependencies';
+import { installDependencies } from '../../utils/commands/dependencies/installDependencies';
+import { getLatestPackageVersion } from '../../utils/commands/dependencies/getLatestPackageVersion';
+import { deduplicate } from '../../utils/commands/dependencies/deduplicate';
+import { migrate } from '../../utils/commands/dependencies/migrate';
 import { updatePackageJson } from './updatePackageJson';
-import { getLatestPackageVersion } from './getLatestPackageVersion';
-import { deduplicate } from './deduplicate';
+import { checkVersions } from '../../utils/commands/dependencies/checkVersions';
 
 export type Params = {
   to: string;
@@ -21,6 +23,10 @@ export default async (
   await installDependencies(context);
 
   await deduplicate(context);
+
+  await migrate(context);
+
+  await checkVersions(context);
 
   return Promise.resolve({
     status: 'ok',

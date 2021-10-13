@@ -1,6 +1,7 @@
 import { parse, minVersion } from 'semver';
 import fs from 'fs';
-import { getLatestPackageVersion } from '../../utils/commands/dependencies/getLatestPackageVersion';
+
+import { getLatestPackageVersion } from './getLatestPackageVersion';
 
 // Список пакетов, не начинающихся с @tramvai,
 // которые мы также хотим обновить

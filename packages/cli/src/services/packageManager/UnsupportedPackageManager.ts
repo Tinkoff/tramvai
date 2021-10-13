@@ -24,9 +24,13 @@ export class UnknownPackageManager extends PackageManager {
     return this.throwUnknownError();
   }
 
+  getLockFileName() {
+    return this.throwUnknownError();
+  }
+
   private throwUnknownError(): never {
     throw new Error(
-      'Используемый на проекте менеджер пакетов не поддерживается, либо lock-файл не найден'
+      'The package manager used on the project is not supported, or the lock-file was not found'
     );
   }
 }

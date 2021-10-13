@@ -1,5 +1,6 @@
 import { CLICommand } from '../../models/command';
 import { checkApplication } from '../../validators/commands/checkBuild';
+import { runMigrationsAndCheckVersions } from '../../validators/commands/runMigrationsAndCheckVersions';
 
 export type Params = {
   target: string;
@@ -23,7 +24,7 @@ export class StaticCommand extends CLICommand<Params> {
 
   alias = 'st';
 
-  validators = [checkApplication];
+  validators = [checkApplication, runMigrationsAndCheckVersions];
 
   action(parameters: Params) {
     // сделано через require, что бы стартовать код только тогда, когда он нужен

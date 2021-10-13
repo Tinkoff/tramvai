@@ -15,6 +15,7 @@ export interface InstallOptions {
   registry?: string;
   noSave?: boolean; // works only with npm
   cwd?: string;
+  devDependency?: boolean;
 }
 
 export interface RemoveOptions {
@@ -50,6 +51,7 @@ export abstract class PackageManager {
   abstract install(options?: InstallOptions): Promise<void>;
   abstract remove(options: RemoveOptions): Promise<void>;
   abstract dedupe(options?: DedupeOptions): Promise<void>;
+  abstract getLockFileName(): string;
 
   async exists(options: ExistsOptions): Promise<boolean> {
     const { name, cwd } = options;

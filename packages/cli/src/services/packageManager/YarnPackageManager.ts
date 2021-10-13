@@ -14,13 +14,14 @@ export class YarnPackageManager extends PackageManager {
   }
 
   async install(options: InstallOptions = {}) {
-    const { name, version, noSave } = options;
+    const { name, version, noSave, devDependency } = options;
 
     const commandLineArgs = [
       'yarn',
       name && 'add',
       name && (version ? `${name}@${version}` : name),
       noSave && '--frozen-lockfile',
+      devDependency && '--dev',
       this.registryFlag(options),
     ].filter(Boolean);
 
@@ -28,7 +29,7 @@ export class YarnPackageManager extends PackageManager {
   }
 
   async remove(options: RemoveOptions) {
-    const { name, registry, cwd } = options;
+    const { name } = options;
 
     const commandLineArgs = ['yarn', 'remove', name, this.registryFlag(options)].filter(Boolean);
 
@@ -36,22 +37,10 @@ export class YarnPackageManager extends PackageManager {
   }
 
   async dedupe(options: DedupeOptions = {}) {
-    const { cwd } = options;
-    const packageExists = await this.exists({ name: 'yarn-deduplicate', cwd });
+    await this.run('npx yarn-deduplicate', options);
+  }
 
-    if (!packageExists) {
-      await this.install({
-        name: 'yarn-deduplicate',
-        noSave: true,
-        cwd,
-      });
-    }
-
-    await this.run('yarn yarn-deduplicate', options);
-
-    await this.remove({
-      name: 'yarn-deduplicate',
-      cwd,
-    });
+  getLockFileName() {
+    return 'yarn.lock';
   }
 }

@@ -21,8 +21,6 @@
   "dependencies": {
     "@tinkoff/utils": "^2.1.2",
     "@tramvai/types-actions-state-context": "0.0.0-stub",
-    "@tramvai/tools-check-versions": "0.0.0-stub",
-    "@tramvai/tools-migrate": "0.0.0-stub",
     "@tinkoff/dippy": "0.0.0-stub",
     "tslib": "^2.0.3"
   },

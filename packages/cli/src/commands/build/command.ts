@@ -2,6 +2,7 @@ import { CLICommand } from '../../models/command';
 import { checkApplication } from '../../validators/commands/checkBuild';
 import { checkConfigExists } from '../../validators/commands/checkConfigExists';
 import { checkDependencies } from '../../validators/commands/checkDependencies';
+import { runMigrationsAndCheckVersions } from '../../validators/commands/runMigrationsAndCheckVersions';
 import type { BuildCommand as BuildCommandType } from '../../api/build';
 
 export type Params = Parameters<BuildCommandType>[0] & {
@@ -48,7 +49,12 @@ class BuildCommand extends CLICommand<Params> {
 
   alias = 'b';
 
-  validators = [checkConfigExists, checkApplication, checkDependencies];
+  validators = [
+    checkConfigExists,
+    checkApplication,
+    runMigrationsAndCheckVersions,
+    checkDependencies,
+  ];
 
   action(parameters: Params) {
     // сделано через require, что бы стартовать код только тогда, когда он нужен
