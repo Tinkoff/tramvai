@@ -1,6 +1,6 @@
 import path from 'path';
 import type { Worker } from 'cluster';
-import { fork, setupMaster } from 'cluster';
+import cluster from 'cluster';
 import { createPool } from 'lightning-pool';
 import type { Container } from '@tinkoff/dippy';
 import { DEBUG_ARGV, TRACE_ARGV } from '../../../config/constants';
@@ -24,7 +24,7 @@ export const createWorkerPool = (di: Container) => {
   const stdout = di.get(STDOUT_TOKEN);
   const stderr = di.get(STDERR_TOKEN);
 
-  setupMaster({
+  cluster.setupMaster({
     // указываем другой файл для работы cluster.fork
     exec: path.resolve(__dirname, './worker.js'),
     execArgv: [].concat(
@@ -41,7 +41,7 @@ export const createWorkerPool = (di: Container) => {
   const pool = createPool(
     {
       create: async () => {
-        const worker = fork({
+        const worker = cluster.fork({
           ...env,
           NODE_ENV: 'development',
           // port=0 позволяет запустить сервер на случайном доступном порту

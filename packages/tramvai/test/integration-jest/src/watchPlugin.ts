@@ -9,12 +9,10 @@ import * as cli from '@tramvai/cli';
 type CliApp = PromiseType<ReturnType<typeof cli['start']>>;
 
 declare global {
-  namespace NodeJS {
-    interface Global {
-      app?: CliApp;
-      __tramvai_cli_mock: typeof cli;
-    }
-  }
+  // eslint-disable-next-line no-var
+  var app: CliApp;
+  // eslint-disable-next-line no-var
+  var __tramvai_cli_mock: typeof cli;
 }
 
 module.exports = class TramvaiWatchPlugin extends BaseWatchPlugin {

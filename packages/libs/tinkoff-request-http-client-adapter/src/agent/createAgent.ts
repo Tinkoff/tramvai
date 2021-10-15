@@ -5,9 +5,7 @@ import https from 'https';
 export const createAgent = (
   options: AgentOptions = {
     keepAlive: true,
-    keepAliveMsecs: 5000,
-    maxSockets: 30,
-    maxFreeSockets: 10,
+    scheduling: 'lifo',
   }
 ) => {
   return {

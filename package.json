@@ -20,7 +20,7 @@
     "build": "yarn references && tsc -b ./tsconfig.solution.json",
     "build:publish": "wsrun -e -m --serial build",
     "build:change-typings": "wsrun -c json -I -f package.json -e \"this.typings=this.typings && this.typings.replace(/^src\\/(.*)\\.ts/, 'lib/\\$1.d.ts')\"",
-    "build:change-versions": "node tools/public-packages/update-public-packages-versions.js", 
+    "build:change-versions": "node tools/public-packages/update-public-packages-versions.js",
     "cli:generate-schema": "yarn workspace @tramvai/cli generate-schema",
     "publish:all": "node tools/public-packages/publish-public-packages.js"
   },
@@ -40,7 +40,7 @@
   ],
   "devDependencies": {
     "@types/jest": "^26.0.23",
-    "@types/node": "^13.13.2",
+    "@types/node": "^16.10.2",
     "@types/webpack-env": "^1.13.16",
     "typescript": "4.2.4",
     "json": "^9.0.6",

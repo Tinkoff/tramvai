@@ -12,17 +12,10 @@ const checkSsrErrors = (text: string) => {
 
 const format = consoleWithStyle((stderrSupportsColor && stderrSupportsColor.level) || 0);
 
-// console.log нельзя использовать, см. https://github.com/facebook/jest/pull/11054#issuecomment-872682575
-// console.error тоже перехвачен жестом и спамит стек-трейсами
-// поэтому используем nativeConsole который определен в node-environment.ts
 declare global {
-  namespace NodeJS {
-    interface Global {
-      nativeConsole: typeof console;
-    }
-  }
+  // eslint-disable-next-line no-var
+  var nativeConsole: typeof console;
 }
-
 const { nativeConsole } = global;
 
 export const wrapPuppeteerPage = (page: Page) => {
