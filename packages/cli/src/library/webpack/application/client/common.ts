@@ -14,6 +14,7 @@ import less from '../../blocks/less';
 import css from '../../blocks/css';
 import postcssAssets from '../../blocks/postcssAssets';
 import nodeClient from '../../blocks/nodeClient';
+import { DEFAULT_STATS_OPTIONS, DEFAULT_STATS_FIELDS } from '../../constants/stats';
 
 export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config: Config) => {
   const { options: { polyfill = '', vendor = '' } = {} } = configManager.build;
@@ -63,16 +64,8 @@ export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config
   config.plugin('stats-plugin').use(StatsWriterPlugin, [
     {
       filename: statsFileName,
-      stats: {
-        all: false, // отключаем большинство ненужной информации
-
-        publicPath: true,
-        assets: true,
-        outputPath: true, // выводит информацию о том в какой папке хранится билд на диске
-        chunkGroups: true, // позволяет получить в stats поле namedChunkGroups которое потом используется в webpack-flush-chunks для получения чанков-зависимостей
-        ids: true, // необходимо чтобы в chunksGroups были выставлены связи между модулями
-      },
-      fields: ['publicPath', 'outputPath', 'assetsByChunkName', 'namedChunkGroups'],
+      stats: DEFAULT_STATS_OPTIONS,
+      fields: DEFAULT_STATS_FIELDS,
     },
   ]);
 

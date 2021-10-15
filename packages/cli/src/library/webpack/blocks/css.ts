@@ -3,7 +3,7 @@ import path from 'path';
 import type Config from 'webpack-chain';
 import ExtractCssChunks from 'mini-css-extract-plugin';
 import { createGenerator } from '@tinkoff/minicss-class-generator';
-import safeRequire from '../../../utils/safeRequire';
+import { safeRequire } from '../../../utils/safeRequire';
 import type { ConfigManager } from '../../../config/configManager';
 
 const cssLocalIdentNameDevDefault = '[name]__[local]_[minicss]';

@@ -54,6 +54,12 @@ Array [
     "path": "dist/modules/module/prerelease/module.css",
     "type": "file",
   },
+  Object {
+    "extension": ".json",
+    "name": "stats.json",
+    "path": "dist/modules/module/prerelease/stats.json",
+    "type": "file",
+  },
 ]
 `;
 

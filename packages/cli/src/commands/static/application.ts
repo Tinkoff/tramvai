@@ -15,7 +15,7 @@ import { request } from './request';
 import { generateStatic } from './generate';
 import { toWebpackConfig } from '../../library/webpack/utils/toWebpackConfig';
 import { copyStatsJsonFileToServerDirectory } from '../../api/build/utils/copyStatsJsonFile';
-import safeRequire from '../../utils/safeRequire';
+import { safeRequire } from '../../utils/safeRequire';
 
 export const staticApp = async (
   context: Context,

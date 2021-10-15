@@ -1,6 +1,7 @@
 import type Config from 'webpack-chain';
 import ExtractCssPlugin from 'mini-css-extract-plugin';
 
+import { StatsWriterPlugin } from 'webpack-stats-plugin';
 import type { ConfigManager } from '../../../../config/configManager';
 import type { ModuleConfigEntry } from '../../../../typings/configEntry/module';
 
@@ -9,6 +10,7 @@ import files from '../../blocks/filesClient';
 import nodeClient from '../../blocks/nodeClient';
 import postcssAssets from '../../blocks/postcssAssets';
 import LazyModuleInitializationPlugin from '../../plugins/LazyModuleInitialization';
+import { DEFAULT_STATS_FIELDS, DEFAULT_STATS_OPTIONS } from '../../constants/stats';
 
 export default (configManager: ConfigManager<ModuleConfigEntry>) => (config: Config) => {
   config.name('client');
@@ -47,6 +49,14 @@ export default (configManager: ConfigManager<ModuleConfigEntry>) => (config: Con
       ...args[0],
       'process.env.BROWSER': true,
       'process.env.SERVER': false,
+    },
+  ]);
+
+  config.plugin('stats-plugin').use(StatsWriterPlugin, [
+    {
+      filename: 'stats.json',
+      stats: DEFAULT_STATS_OPTIONS,
+      fields: DEFAULT_STATS_FIELDS,
     },
   ]);
 

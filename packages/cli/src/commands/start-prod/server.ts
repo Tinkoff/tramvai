@@ -1,6 +1,6 @@
 import { fork } from 'child_process';
 import path from 'path';
-import safeRequire from '../../utils/safeRequire';
+import { safeRequire } from '../../utils/safeRequire';
 import type { ConfigManager } from '../../config/configManager';
 import { DEBUG_ARGV } from '../../config/constants';
 

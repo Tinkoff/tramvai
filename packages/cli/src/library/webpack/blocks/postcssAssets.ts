@@ -3,7 +3,7 @@ import type Config from 'webpack-chain';
 import PostcssAssetsPlugin from 'postcss-assets-webpack-plugin';
 import type { ConfigManager } from '../../../config/configManager';
 
-import safeRequire from '../../../utils/safeRequire';
+import { safeRequire } from '../../../utils/safeRequire';
 
 export default (configManager: ConfigManager) => (config: Config) => {
   const {

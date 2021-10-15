@@ -6,10 +6,18 @@ import findCacheDir from 'find-cache-dir';
 import resolve from '../blocks/resolve';
 import ignoreLocales from '../blocks/ignoreLocales';
 import type { ConfigManager } from '../../../config/configManager';
+import { safeRequireResolve } from '../../../utils/safeRequire';
+
+const filterNonExisted = (filePaths: string[]) => {
+  return filePaths.filter((filePath) => {
+    return filePath && existsSync(filePath);
+  });
+};
 
 // eslint-disable-next-line import/no-default-export
 export default (configManager: ConfigManager) => (config: Config) => {
   const env = configManager.env === 'development' ? 'dev' : 'prod';
+  const { postcss: { config: postcssConfig } = {} } = configManager.build.configurations;
 
   config.context(path.resolve(__dirname, '..', '..', '..', '..'));
   config.batch(resolve(configManager));
@@ -31,10 +39,6 @@ export default (configManager: ConfigManager) => (config: Config) => {
   // а каждый раз выкидывать ошибку при подключении такого модуля
   config.output.set('strictModuleExceptionHandling', true);
 
-  // нужно сначала убедиться, что файл существует, т.к. если его задать и его не будет то кеш не создастся
-  // такое может быть при использовании программного апи, когда конфиг передаётся напрямую
-  const tramvaiCfgPath = path.resolve(configManager.rootDir, 'tramvai.json');
-
   // TODO: отключать в CI
   config.cache({
     type: 'filesystem',
@@ -45,7 +49,12 @@ export default (configManager: ConfigManager) => (config: Config) => {
     buildDependencies: {
       cli: ['@tramvai/cli'],
       webpack: ['webpack/lib'],
-      config: existsSync(tramvaiCfgPath) ? [tramvaiCfgPath] : [],
+      // first check that config exists. If it is passed to webpack, but file is not exist the cache will not be created at all.
+      // It may be missing in cases when cli is running programmaticaly
+      config: filterNonExisted([path.resolve(configManager.rootDir, 'tramvai.json')]),
+      css: filterNonExisted([
+        postcssConfig && safeRequireResolve(path.resolve(configManager.rootDir, postcssConfig)),
+      ]),
     },
   });
 

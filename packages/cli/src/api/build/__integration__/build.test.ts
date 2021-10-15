@@ -109,13 +109,14 @@ Array [
       const files = await promises.readdir(resolve(FIXTURES_DIR, 'dist/modules/module/prerelease'));
 
       expect(normalizeFiles(files)).toMatchInlineSnapshot(`
-        Array [
-          "module.css",
-          "module_client.js",
-          "module_server.css",
-          "module_server.js",
-        ]
-      `);
+Array [
+  "module.css",
+  "module_client.js",
+  "module_server.css",
+  "module_server.js",
+  "stats.json",
+]
+`);
     });
 
     it('should build module by specific config', async () => {
@@ -131,13 +132,14 @@ Array [
       const files = await promises.readdir(resolve(FIXTURES_DIR, 'dist/modules/module/prerelease'));
 
       expect(normalizeFiles(files)).toMatchInlineSnapshot(`
-        Array [
-          "module.css",
-          "module_client.js",
-          "module_server.css",
-          "module_server.js",
-        ]
-      `);
+Array [
+  "module.css",
+  "module_client.js",
+  "module_server.css",
+  "module_server.js",
+  "stats.json",
+]
+`);
     });
   });
 
