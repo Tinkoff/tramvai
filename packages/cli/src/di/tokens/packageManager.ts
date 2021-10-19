@@ -1,5 +1,5 @@
 import { createToken } from '@tinkoff/dippy';
-import type { PackageManager } from '../../services/packageManager';
+import type { PackageManager } from '@tinkoff/package-manager-wrapper';
 
 /**
  * Сервис для работы с зависимостями внутри CLI

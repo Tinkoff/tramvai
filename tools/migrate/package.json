@@ -13,12 +13,13 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@tinkoff/logger": "0.0.0-stub",
+    "@tinkoff/package-manager-wrapper": "0.0.0-stub",
     "@tinkoff/utils": "^2.1.2",
     "env-ci": "^5.0.2",
     "fast-glob": "^3.2.2",
     "fs-extra": "^9.0.0",
     "jscodeshift": "^0.13.0",
-    "promise-queue": "^2.2.5",
+    "p-map": "^4.0.0",
     "recast": "^0.17.2",
     "tslib": "^2.0.3"
   },

@@ -1,5 +1,5 @@
 import { createJsCodeShiftApi } from './api';
-import type { Api, Transformer, PathTransformer } from './types';
+import type { Api, Transformer, PathTransformer, SourceFileInfo } from './types';
 import { PRINT_OPTIONS } from './constants';
 
 type TransformInterface = {
@@ -54,9 +54,11 @@ export const createApi = ({
         const { transformer, pathTransformer } = await waitForTransformers;
         const test = transformTests[testName];
 
-        const fileInfo = {
+        const fileInfo: SourceFileInfo = {
           source: test.input.source,
+          originSource: test.input.source,
           path: test.input.path,
+          originPath: test.input.path,
         };
 
         const output = {

@@ -1,7 +1,5 @@
-import fs from 'fs';
 import type { Provider } from '@tinkoff/dippy';
-import type { PackageManagerOptions } from '../../services/packageManager';
-import { NpmPackageManager, YarnPackageManager } from '../../services/packageManager';
+import { NpmPackageManager, resolvePackageManager } from '@tinkoff/package-manager-wrapper';
 import {
   CLI_PACKAGE_MANAGER,
   APPLICATION_PACKAGE_MANAGER,
@@ -22,20 +20,7 @@ export const packageManagerProviders: readonly Provider[] = [
   {
     provide: APPLICATION_PACKAGE_MANAGER,
     useFactory: ({ rootDir }) => {
-      const options: PackageManagerOptions = {
-        rootDir,
-      };
-
-      if (fs.existsSync('./yarn.lock')) {
-        return new YarnPackageManager(options);
-      }
-      if (fs.existsSync('./package-lock.json')) {
-        return new NpmPackageManager(options);
-      }
-
-      throw new Error(
-        'Используемый на проекте менеджер пакетов не поддерживается, либо lock-файл не найден'
-      );
+      return resolvePackageManager({ rootDir }, { throwUnknown: true });
     },
     deps: {
       rootDir: CONFIG_ROOT_DIR_TOKEN,

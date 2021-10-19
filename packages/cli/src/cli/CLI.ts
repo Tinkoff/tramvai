@@ -1,3 +1,4 @@
+import type { PackageManager } from '@tinkoff/package-manager-wrapper';
 import { commander } from '../ui/commander';
 import { Context } from '../models/context';
 import type { Command, CommandMap, CommandResult } from '../models/command';
@@ -5,7 +6,6 @@ import type { Logger } from '../models/logger';
 import type { Task, TaskMap } from '../models/task';
 import type { ConfigManager } from '../models/config';
 import type { Analytics } from '../models/analytics';
-import type { PackageManager } from '../services/packageManager';
 
 export class CLI {
   context: Context;

@@ -58,6 +58,7 @@
     "@tinkoff/is-modern-lib": "0.0.0-stub",
     "@tinkoff/logger": "0.0.0-stub",
     "@tinkoff/minicss-class-generator": "0.0.0-stub",
+    "@tinkoff/package-manager-wrapper": "0.0.0-stub",
     "@tinkoff/request-core": "^0.8.9",
     "@tinkoff/request-plugin-protocol-http": "^0.10.18",
     "@tinkoff/utils": "^2.1.3",

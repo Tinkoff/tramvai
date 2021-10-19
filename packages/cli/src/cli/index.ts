@@ -1,5 +1,5 @@
-import fs from 'fs';
 import path from 'path';
+import { resolvePackageManager, NpmPackageManager } from '@tinkoff/package-manager-wrapper';
 import { CLI } from './CLI';
 import { Analytics } from '../models/analytics';
 import { Logger } from '../models/logger';
@@ -27,9 +27,6 @@ import type { TaskMap } from '../models/task';
 import { getRootFile } from '../utils/getRootFile';
 import { getTramvaiConfig } from '../utils/getTramvaiConfig';
 import { syncJsonFile } from '../utils/syncJsonFile';
-import type { PackageManager, PackageManagerOptions } from '../services/packageManager';
-import { NpmPackageManager, YarnPackageManager } from '../services/packageManager';
-import { UnknownPackageManager } from '../services/packageManager/UnsupportedPackageManager';
 
 async function loadCommands(): Promise<CommandMap> {
   return [
@@ -79,19 +76,7 @@ export async function cliInitialized(cliArgs = process.argv) {
     });
 
     const configManager = new ConfigManager({ config, syncConfigFile: syncJsonFile });
-
-    const packageManagerOptions: PackageManagerOptions = {
-      rootDir: process.cwd(),
-    };
-    let packageManager: PackageManager;
-
-    if (fs.existsSync('./yarn.lock')) {
-      packageManager = new YarnPackageManager(packageManagerOptions);
-    } else if (fs.existsSync('./package-lock.json')) {
-      packageManager = new NpmPackageManager(packageManagerOptions);
-    } else {
-      packageManager = new UnknownPackageManager(packageManagerOptions);
-    }
+    const packageManager = resolvePackageManager({ rootDir: process.cwd() });
 
     const cliRootDir = path.resolve(__dirname, '../', '../');
     const cliPackageManager = new NpmPackageManager({

@@ -1,24 +1,31 @@
 import nothing from '@tinkoff/utils/function/nothing';
 import noop from '@tinkoff/utils/function/noop';
-import eachObj from '@tinkoff/utils/object/each';
+import isEqual from '@tinkoff/utils/is/equal';
+import clone from '@tinkoff/utils/clone';
 
 import { cpus } from 'os';
 import { resolve } from 'path';
 import { readJSON, writeJSON, readFile, writeFile, pathExists, remove } from 'fs-extra';
 import glob from 'fast-glob';
-import PQueue from 'promise-queue';
-import type { API as JsCodeShiftApi, FileInfo } from 'jscodeshift';
+import pMap from 'p-map';
+import type { API as JsCodeShiftApi } from 'jscodeshift';
 import { withParser } from 'jscodeshift';
 import { logger } from '@tinkoff/logger';
-import type { Api } from './types';
+import { resolvePackageManager } from '@tinkoff/package-manager-wrapper';
+import type {
+  Api,
+  FileInfo,
+  JsonFilesInfo,
+  PackageJSON,
+  SourceFilesInfo,
+  TramvaiJSON,
+} from './types';
 import { TRAMVAI_JSON_PATHS, PRINT_OPTIONS } from './constants';
 import { register } from './transform';
 
 register();
 
 const log = logger('tramvai-migrate');
-
-type ExtendedFileInfo = Record<string, FileInfo & { originSource?: string; originPath?: string }>;
 
 export const getTramvaiJSONPath = async (cwd: string) => {
   for (const path of TRAMVAI_JSON_PATHS) {
@@ -53,19 +60,43 @@ const createFileInfo = async (cwd: string, filepath: string) => {
   };
 };
 
+const saveFileChanges = async <T>(
+  fileInfo: FileInfo<T>,
+  write: (fileInfo: FileInfo<T>) => Promise<void>
+) => {
+  if (!isEqual(fileInfo.source, fileInfo.originSource)) {
+    await write(fileInfo);
+
+    if (fileInfo.path !== fileInfo.originPath) {
+      await remove(fileInfo.originPath);
+    }
+  }
+};
+
+const hasDepsChanges = (packageJson: FileInfo<PackageJSON>) => {
+  const { source, originSource } = packageJson;
+
+  return (
+    !isEqual(source.dependencies, originSource.dependencies) ||
+    !isEqual(source.devDependencies, originSource.devDependencies)
+  );
+};
+
 export const createApi = async (cwd: string) => {
   const packageJSONPath = resolve(cwd, 'package.json');
   const tramvaiJSONPath = await getTramvaiJSONPath(cwd);
   const packageJSONSource = await readJSON(packageJSONPath).catch(nothing);
   const tramvaiJSONSource = await readJSON(tramvaiJSONPath).catch(nothing);
 
-  const packageJSON = {
+  const packageJSON: FileInfo<PackageJSON> = {
     source: packageJSONSource,
+    originSource: clone(packageJSONSource),
     path: packageJSONPath,
     originPath: packageJSONPath,
   };
-  const tramvaiJSON = {
+  const tramvaiJSON: FileInfo<TramvaiJSON> = {
     source: tramvaiJSONSource,
+    originSource: clone(tramvaiJSONSource),
     path: tramvaiJSONPath,
     originPath: tramvaiJSONPath,
   };
@@ -89,8 +120,8 @@ export const createApi = async (cwd: string) => {
     cwd,
     ignore: ignorePattern,
   });
-  const filesInfo: ExtendedFileInfo = {};
-  const jsonFilesInfo: ExtendedFileInfo = {};
+  const filesInfo: SourceFilesInfo = {};
+  const jsonFilesInfo: JsonFilesInfo = {};
   const codeShiftApi = createJsCodeShiftApi();
 
   const api: Api = {
@@ -120,31 +151,27 @@ export const createApi = async (cwd: string) => {
   };
 
   const save = async () => {
-    const pq = new PQueue(cpus());
-    const promises = [];
-
     jsonFilesInfo['package.json'] = packageJSON;
     jsonFilesInfo['tramvai.json'] = tramvaiJSON;
 
-    eachObj((fileInfo) => {
-      promises.push(pq.add(() => writeJSON(fileInfo.path, fileInfo.source, { spaces: 2 })));
+    await Promise.all([
+      pMap(Object.values(jsonFilesInfo), (fileInfo) =>
+        saveFileChanges(fileInfo, ({ path, source }) => writeJSON(path, source, { spaces: 2 }))
+      ),
+      pMap(
+        Object.values(filesInfo),
+        (fileInfo) => saveFileChanges(fileInfo, ({ path, source }) => writeFile(path, source)),
+        { concurrency: cpus().length }
+      ),
+    ]);
 
-      if (fileInfo.path !== fileInfo.originPath) {
-        promises.push(pq.add(() => remove(fileInfo.originPath)));
-      }
-    }, jsonFilesInfo);
+    if (hasDepsChanges(packageJSON)) {
+      log.warn('Dependency has changed - run packages install');
 
-    eachObj((fileInfo) => {
-      if (fileInfo.source !== fileInfo.originSource) {
-        promises.push(pq.add(() => writeFile(fileInfo.path, fileInfo.source)));
+      const packageManager = resolvePackageManager({ rootDir: cwd });
 
-        if (fileInfo.path !== fileInfo.originPath) {
-          promises.push(pq.add(() => remove(fileInfo.originPath)));
-        }
-      }
-    }, filesInfo);
-
-    return Promise.all(promises);
+      await packageManager.install();
+    }
   };
 
   return { api, save };

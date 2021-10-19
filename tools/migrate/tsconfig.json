@@ -12,6 +12,9 @@
     "references": [
         {
             "path": "../../packages/libs/logger"
+        },
+        {
+            "path": "../../packages/libs/package-manager-wrapper"
         }
     ]
 }

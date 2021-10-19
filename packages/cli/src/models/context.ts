@@ -1,9 +1,9 @@
+import type { PackageManager } from '@tinkoff/package-manager-wrapper';
 import type { Logger } from './logger';
 import type { Command, CommandResult } from './command';
 import type { Task, TaskResult } from './task';
 import type { ConfigManager } from './config';
 import type { Analytics } from './analytics';
-import type { PackageManager } from '../services/packageManager';
 
 export class Context {
   constructor(

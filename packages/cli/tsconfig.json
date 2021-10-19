@@ -33,6 +33,9 @@
         },
         {
             "path": "../../tools/migrate"
+        },
+        {
+            "path": "../libs/package-manager-wrapper"
         }
     ]
 }
