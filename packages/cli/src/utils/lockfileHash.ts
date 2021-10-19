@@ -4,23 +4,35 @@ import crypto from 'crypto';
 import findCacheDir from 'find-cache-dir';
 import type { Context } from '../models/context';
 
-const folderPath = findCacheDir({ name: 'tramvai' });
-const filePath = path.resolve(folderPath, 'lockfilehash');
-let hash: string;
+const resolveCacheFolderPath = () => {
+  const folderPath = findCacheDir({ name: 'tramvai' }) ?? '';
 
-try {
-  fs.mkdirSync(folderPath, { recursive: true });
-} catch (e) {
-  // do nothing
-}
+  return folderPath;
+};
 
-try {
-  hash = fs.readFileSync(filePath, 'utf-8').toString();
-} catch (e) {
-  // do nothing
-}
+const resolveCacheFilePath = () => {
+  const folderPath = resolveCacheFolderPath();
+  const filePath = path.resolve(folderPath, 'lockfilehash');
 
-const getLockfileHash = ({ packageManager }: Context): string => {
+  return filePath;
+};
+
+const getCachedLockfileHash = (): string => {
+  try {
+    const folderPath = resolveCacheFolderPath();
+    const filePath = resolveCacheFilePath();
+
+    fs.mkdirSync(folderPath, { recursive: true });
+
+    const hash = fs.readFileSync(filePath, 'utf-8').toString();
+
+    return hash;
+  } catch (e) {
+    return 'default';
+  }
+};
+
+const getCurrentLockfileHash = ({ packageManager }: Context): string => {
   try {
     const lockfile = packageManager.getLockFileName();
     const fileBuffer = fs.readFileSync(lockfile);
@@ -40,17 +52,17 @@ const getLockfileHash = ({ packageManager }: Context): string => {
  * Return true at first run, and if lock-file changes since last run
  */
 export const isLockfileChanged = (context: Context): boolean => {
-  const currentHash = getLockfileHash(context);
+  const cachedHash = getCachedLockfileHash();
+  const currentHash = getCurrentLockfileHash(context);
 
-  if (!hash || currentHash !== hash) {
-    hash = currentHash;
-
+  if (!cachedHash || currentHash !== cachedHash) {
     try {
-      fs.writeFileSync(filePath, hash, 'utf-8');
+      const filePath = resolveCacheFilePath();
+
+      fs.writeFileSync(filePath, currentHash, 'utf-8');
     } catch (e) {
       // do nothing
     }
-
     return true;
   }
   return false;
