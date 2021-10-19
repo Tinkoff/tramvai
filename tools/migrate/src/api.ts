@@ -12,6 +12,9 @@ import { withParser } from 'jscodeshift';
 import { logger } from '@tinkoff/logger';
 import type { Api } from './types';
 import { TRAMVAI_JSON_PATHS, PRINT_OPTIONS } from './constants';
+import { register } from './transform';
+
+register();
 
 const log = logger('tramvai-migrate');
 

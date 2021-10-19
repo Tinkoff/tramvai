@@ -1,23 +1,4 @@
-import type { ASTPath, CallExpression, Collection } from 'jscodeshift';
-import { ImportDeclaration, Program } from 'jscodeshift';
-import type { PackageJSON } from './types';
-
-export const isRequireExpression = (path: ASTPath<CallExpression>) =>
-  path &&
-  path.value &&
-  path.value.callee &&
-  path.value.callee.type === 'Identifier' &&
-  path.value.callee.name === 'require';
-
-export const addImport = (parsedSource: Collection, importDeclaration: ImportDeclaration) => {
-  const firstImport = parsedSource.find(ImportDeclaration).at(0);
-
-  if (firstImport.length) {
-    firstImport.insertBefore(importDeclaration);
-  } else {
-    parsedSource.find(Program).get('body', 0).insertBefore(importDeclaration);
-  }
-};
+import type { PackageJSON } from '../types';
 
 export const replaceDependency = ({
   packageJSON,

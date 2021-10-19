@@ -1,6 +1,22 @@
 import type { Transform, FileInfo } from 'jscodeshift';
 import type { Options as RecastOptions } from 'recast';
 
+import type {
+  addImport,
+  renameImportSource,
+  renameRequireSource,
+  renameImportSpecifier,
+} from './transform/import';
+
+declare module 'jscodeshift/src/Collection' {
+  export interface Collection<N> {
+    addImport: typeof addImport;
+    renameImportSource: typeof renameImportSource;
+    renameImportSpecifier: typeof renameImportSpecifier;
+    renameRequireSource: typeof renameRequireSource;
+  }
+}
+
 declare module 'jscodeshift' {
   export interface Options {
     printOptions?: RecastOptions;

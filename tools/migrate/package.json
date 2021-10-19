@@ -17,7 +17,7 @@
     "env-ci": "^5.0.2",
     "fast-glob": "^3.2.2",
     "fs-extra": "^9.0.0",
-    "jscodeshift": "^0.7.0",
+    "jscodeshift": "^0.13.0",
     "promise-queue": "^2.2.5",
     "recast": "^0.17.2",
     "tslib": "^2.0.3"
@@ -25,6 +25,6 @@
   "devDependencies": {
     "@types/env-ci": "^3.1.0",
     "@types/fs-extra": "^8.1.0",
-    "@types/jscodeshift": "^0.7.0"
+    "@types/jscodeshift": "^0.11.2"
   }
 }

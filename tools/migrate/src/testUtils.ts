@@ -34,7 +34,7 @@ export const createApi = ({
         path?: string;
       };
       output?: {
-        source: string;
+        source?: string;
         path?: string;
       };
       snapshot?: boolean;

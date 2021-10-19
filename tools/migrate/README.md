@@ -38,3 +38,14 @@ export interface Api {
 ```
 
 Трансформация кода осуществляется с помощью [jscodeshift](https://github.com/facebook/jscodeshift)
+
+## How to
+
+### Write migration
+
+#### Transformation
+
+Rules:
+
+- Prefer to return `null | undefined` or original source from the transform function in cases when migration doesn't change source code. Otherwise it will lead to unnecessary fs writing.
+- Prefer to use embedded methods of collections returned by call `j(source)` to make searches and transforms

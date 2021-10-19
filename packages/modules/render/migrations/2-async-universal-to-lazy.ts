@@ -3,7 +3,7 @@ import type { ASTPath, ImportDeclaration, ObjectExpression } from 'jscodeshift';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import type { Api } from '@tramvai/tools-migrate';
 // eslint-disable-next-line import/no-extraneous-dependencies, no-restricted-imports
-import { addImport, replaceDependency } from '@tramvai/tools-migrate/lib/utils';
+import { replaceDependency } from '@tramvai/tools-migrate/lib/dependency';
 
 const selfPackageJSON = require('../package.json');
 
@@ -21,9 +21,9 @@ const REMOVE_OPTIONS = new Set(['ignoreBabelRename']);
 export default async ({ packageJSON, transform }: Api) => {
   await transform(({ source }, { j }, { printOptions }) => {
     const parsed = j(source);
-    let tramvaiReactImport: ASTPath<ImportDeclaration>;
-    let lazyImportName: string;
-    let legacyImportName: string;
+    let tramvaiReactImport: ASTPath<ImportDeclaration> | undefined;
+    let lazyImportName = '';
+    let legacyImportName = '';
     let hasLegacyImport = false;
 
     parsed.find(j.ImportDeclaration).forEach((imp) => {
@@ -33,7 +33,7 @@ export default async ({ packageJSON, transform }: Api) => {
           imp.node.specifiers.forEach((specifier) => {
             if (specifier.type === 'ImportSpecifier') {
               if (specifier.imported.name === 'lazy') {
-                lazyImportName = specifier.local.name;
+                lazyImportName = specifier.local!.name;
                 legacyImportName = lazyImportName;
               }
             }
@@ -45,7 +45,7 @@ export default async ({ packageJSON, transform }: Api) => {
           hasLegacyImport = true;
           imp.node.specifiers.forEach((specifier) => {
             if (specifier.type === 'ImportDefaultSpecifier') {
-              legacyImportName = specifier.local.name;
+              legacyImportName = specifier.local!.name;
             }
           });
 
@@ -55,6 +55,10 @@ export default async ({ packageJSON, transform }: Api) => {
       }
     });
 
+    if (!legacyImportName) {
+      return;
+    }
+
     if (hasLegacyImport) {
       if (tramvaiReactImport) {
         if (!lazyImportName) {
@@ -63,18 +67,13 @@ export default async ({ packageJSON, transform }: Api) => {
         }
       } else {
         lazyImportName = 'lazy';
-        addImport(
-          parsed,
+        parsed.addImport(
           j.importDeclaration(
             [j.importSpecifier(j.identifier('lazy'))],
             j.stringLiteral('@tramvai/react')
           )
         );
       }
-    }
-
-    if (!legacyImportName) {
-      return;
     }
 
     replaceDependency({
@@ -106,7 +105,9 @@ export default async ({ packageJSON, transform }: Api) => {
               }
 
               if (prop.key.name in COMPLEX_OPTIONS) {
-                prop.comments = [j.commentBlock(COMPLEX_OPTIONS[prop.key.name])];
+                prop.comments = [
+                  j.commentBlock(COMPLEX_OPTIONS[prop.key.name as keyof typeof COMPLEX_OPTIONS]),
+                ];
               }
             }
 
