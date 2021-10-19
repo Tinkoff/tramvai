@@ -18,6 +18,7 @@
     "build-for-publish": "true"
   },
   "dependencies": {
+    "@tramvai/cli": "0.0.0-stub",
     "@tramvai/core": "0.0.0-stub",
     "@tramvai/module-common": "0.0.0-stub",
     "@tramvai/module-log": "0.0.0-stub",
