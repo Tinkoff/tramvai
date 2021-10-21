@@ -29,7 +29,7 @@ import { LayoutModule } from './shared/LayoutModule';
 export * from '@tramvai/tokens-render';
 
 export const DEFAULT_POLYFILL_CONDITION =
-  '!window.Promise.prototype.finally || !window.URL || !window.URLSearchParams || !window.AbortController || !window.IntersectionObserver';
+  '!window.Promise.prototype.finally || !window.URL || !window.URLSearchParams || !window.AbortController || !window.IntersectionObserver || !Object.fromEntries';
 
 @Module({
   imports: [ClientHintsModule, LayoutModule],

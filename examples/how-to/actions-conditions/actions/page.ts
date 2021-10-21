@@ -25,7 +25,7 @@ export const pageBrowserAction = createAction({
     await context.executeAction(innerBrowserAction);
     return context.dispatch(set('pageBrowserAction'));
   },
-  // этот экшен может быть выполнен только на клиенте
+  // this action can only be executed on the browser
   conditions: {
     onlyBrowser: true,
   },
@@ -42,7 +42,7 @@ export const pageAlwaysAction = createAction({
   },
 });
 
-// этот экшен выполняется только в браузере, при загрузке страницы и на каждый SPA переход
+// this action is only executed in the browser, on page load and on every SPA transition
 export const pageBrowserAlwaysAction = createAction({
   name: 'pageBrowserAlwaysAction',
   fn: async (context) => {

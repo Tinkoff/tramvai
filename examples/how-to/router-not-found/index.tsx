@@ -36,7 +36,7 @@ function Page() {
   );
 }
 
-// Определяем отдельную страницу
+// Defining a separate page
 const NotFoundRoot = () => {
   return 'not found root';
 };

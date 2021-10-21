@@ -6,11 +6,11 @@ import { modules } from '../common';
 const Navigation = ['/1/', '/2/', '/3/'];
 
 function Page() {
-  // useUrl позволяет получить текущий url
+  // useUrl allows you to get the current url
   const { pathname, path } = useUrl();
-  // useNavigate позволяет получить функцию, с помощью которой можно вызвать навигацию
+  // useNavigate allows you to get a function with which you can call the navigation
   const navigate = useNavigate();
-  // useNavigate также позволяет задать свойства сразу, чтобы результат можно было передать сразу как калбек
+  // useNavigate also allows you to set properties immediately so that the result can be passed immediately as a callback
   const navigateToRoot = useNavigate({ url: '/', query: { a: '1', b: '2' } });
 
   return (
@@ -20,7 +20,7 @@ function Page() {
         <button type="button" onClick={navigateToRoot}>
           Navigate to Root
         </button>
-        {/* компонент Link позволяет создать ссылку с переходом */}
+        {/* the Link component allows you to create a link with a transition */}
         <Link url="/link/" replace>
           <button type="button">Navigate By Link</button>
         </Link>

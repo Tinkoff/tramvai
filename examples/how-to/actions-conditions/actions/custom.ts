@@ -7,7 +7,7 @@ export const customAction = createAction({
     console.log('execute customAction');
     return context.dispatch(set('customAction'));
   },
-  // можно задавать свои опции, которые потом используются в своих conditions проверках
+  // you can set your own options, which are then used in their conditions checks
   conditions: {
     custom: true,
   },

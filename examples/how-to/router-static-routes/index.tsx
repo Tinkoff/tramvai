@@ -9,12 +9,12 @@ import { modules } from '../common';
 const Navigation = ['/1/', '/2/', '/3/'];
 
 function Page() {
-  // useSelector чтобы получить текущий роут
-  // стор 'router' предоставляется RouterModule
+  // useSelector to get the current route
+  // store 'router' is provided by RouterModule
   const state = useSelector('router', (x) => x.router);
-  // pageService - обертка для работы с роутером, можно получить различные свойства и инициировать переход
-  // но через useDi нельзя подписаться на изменения данных внутри сервисов поэтому для подписки на изменения роута
-  // используется useSelector выше
+  // pageService - a wrapper for working with a router, you can get various properties and initiate a transition
+  // but through useDi you cannot subscribe to data changes inside services, so to subscribe to route changes
+  // used by useSelector above
   const pageService = useDi(PAGE_SERVICE_TOKEN);
   const { pathname, path } = state.currentUrl;
 
@@ -46,8 +46,8 @@ const bundle = createBundle({
 createApp({
   name: 'route-static-routes',
   modules: [
-    // статичный метод forRoot позволяет определить статичные роуты в приложении -
-    // эти роуты всегда доступны и конфиг для них не грузится из админки, а задаются тут же
+    // the static forRoot method allows you to define static routes in the application -
+    // these routes are always available and the config for them is not loaded from the admin panel, but are set right there
     SpaRouterModule.forRoot([
       {
         name: '1',
@@ -62,7 +62,7 @@ createApp({
   ],
   providers: [
     {
-      // также можно задать статичные роуты отдельным провайдером
+      // you can also set static routes by a separate provider
       provide: ROUTES_TOKEN,
       multi: true,
       useValue: [

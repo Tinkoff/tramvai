@@ -52,7 +52,7 @@ import '@tinkoff/pack-polyfills';
 
 На стороне `@tramvai/cli` настроена сборка полифилов в отдельный файл, что бы не смешивать с основным кодом. И при каждой сборке у нас будет появляться файл с полифилами.
 
-[module-render](references/modules/render.md) если находит в сборке полифилы, то для каждого клиента встраивает inline код, который проверяет доступность фич в браузере и если браузер не поддерживает какую либо из фич, то тогда мы считаем браузер устаревшим и грузим полифилы. Пример проверки: `!window.Promise.prototype.finally || !window.URL || !window.URLSearchParams || !window.AbortController`
+[module-render](references/modules/render.md) если находит в сборке полифилы, то для каждого клиента встраивает inline код, который проверяет доступность фич в браузере и если браузер не поддерживает какую либо из фич, то тогда мы считаем браузер устаревшим и грузим полифилы. Пример проверки: `!window.Promise.prototype.finally || !window.URL || !window.URLSearchParams || !window.AbortController || !window.IntersectionObserver || !Object.fromEntries'`
 
 ## Замена проверки загрузки полифилов
 

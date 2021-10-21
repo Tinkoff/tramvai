@@ -8,7 +8,7 @@
         "priority": 50,
         "doc": {
           "id": "actions-conditions",
-          "title": "Выполнение экшенов в зависимости от условий"
+          "title": "Execution of actions depending on conditions"
         }
       },
       {
@@ -32,7 +32,7 @@
         "priority": 50,
         "doc": {
           "id": "react-query-usage",
-          "title": "Использование библиотеки @tramvai/react-query"
+          "title": "Using @tramvai/react-query library"
         }
       },
       {

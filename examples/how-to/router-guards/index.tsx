@@ -90,7 +90,7 @@ createApp({
       multi: true,
       useValue: async ({ to }) => {
         if (to.path === '/redirect/') {
-          // можем сделать редирект из гуарда
+          // we can make a redirect from the guard
           return '/3/';
         }
       },
@@ -106,7 +106,7 @@ createApp({
             }
 
             if (state.getState().store) {
-              // можем блокировать навигацию
+              // we can block navigation
               return false;
             }
           }

@@ -7,13 +7,13 @@ export const innerAction = createAction({
     console.log('execute innerAction');
     return context.dispatch(set('innerAction'));
   },
-  // conditions не задан - экшен будет выполняться по умолчанию:
-  // если экшен задан как глобальный (в приложении, бандле или странице),
-  // то экшен сначала попытается выполниться на сервере - если успел выполниться, то на клиенте повторно выполняться не будет
-  // если же не экшен не успел выполниться в лимит, то он запуститься на клиенте,
-  // повторные запуски при переходе на страницу с этим экшеном выполнятся не будут, т.к. последнее успешное выполнение запоминается
-  // если же экшен вызывается явно через context то такой экшен будет всегда выполняться (лимит выполнения все равно влияет,
-  // и данные не всегда могут быть доступны при ssr, но экшен всегда попытается выполниться)
+  // conditions not set - the action will be executed by default:
+  // if the action is defined as global (in an application, bundle or page),
+  // then the action will first try to execute on the server - if it succeeds, then it will not be executed again on the client
+  // if the action did not manage to be executed within the limit, then it will be launched on the client,
+  // repeated launches when switching to the page with this action will not be executed, because the last successful execution is remembered
+  // if the action is called explicitly through the context, then such an action will always be executed (the execution limit still affects,
+  // and the data may not always be available with ssr, but the action will always try to execute)
 });
 
 export const innerServerAction = createAction({
@@ -22,7 +22,7 @@ export const innerServerAction = createAction({
     console.log('execute innerServerAction');
     return context.dispatch(set('innerServerAction'));
   },
-  // этот экшен может быть выполнен только на сервере
+  // this action can only be executed on the server
   conditions: {
     onlyServer: true,
   },
@@ -34,7 +34,7 @@ export const innerBrowserAction = createAction({
     console.log('execute innerBrowserAction');
     return context.dispatch(set('innerBrowserAction'));
   },
-  // этот экшен может быть выполнен только на клиенте
+  // this action can only be executed on the browser
   conditions: {
     onlyBrowser: true,
   },
