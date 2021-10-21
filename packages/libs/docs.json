@@ -216,6 +216,13 @@
                   "title": "user-agent"
               },
               "path": "user-agent/README.md"
+          },
+          {
+              "doc": {
+                  "id": "validators",
+                  "title": "validators"
+              },
+              "path": "validators/README.md"
           }
         ]
       }

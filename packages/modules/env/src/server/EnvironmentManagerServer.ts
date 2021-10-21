@@ -74,7 +74,8 @@ export class EnvironmentManagerServer extends EnvironmentManager {
         );
       }
 
-      const validation = validator(value);
+      // Not calling validation on empty values.
+      const validation = typeof value !== 'undefined' && validator(value);
       if (typeof validation === 'string') {
         throw new Error(
           `Env parameter ${key} with value ${value} not valid, message: ${validation}`
