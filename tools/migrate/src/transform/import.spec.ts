@@ -1,5 +1,5 @@
 import { withParser } from 'jscodeshift';
-import { addImport } from './import';
+import { addImport, removeImport, findImport } from './import';
 
 const j = withParser('tsx');
 
@@ -95,5 +95,33 @@ import { testComponent as tc, testAction, testComponent } from '@tramvai/test';
 console.log('aaa')
 "
 `);
+  });
+
+  it('should remove import', async () => {
+    const parsed = j(`import { foo } from "@tramvai/foo";
+import { bar } from "@tramvai/bar";`);
+
+    removeImport.call(parsed, '@tramvai/bar');
+
+    expect(parsed.toSource()).toMatchInlineSnapshot(`"import { foo } from \\"@tramvai/foo\\";"`);
+  });
+
+  it('should find import', async () => {
+    const parsed = j(`import { foo } from "@tramvai/foo";
+import { bar } from "@tramvai/bar";`);
+
+    expect(
+      findImport.call(
+        parsed,
+        j.importDeclaration([j.importSpecifier(j.identifier('foo'))], j.literal('@tramvai/foo'))
+      )
+    ).toBe(true);
+    expect(findImport.call(parsed, j.importDeclaration([], j.literal('@tramvai/foo')))).toBe(true);
+    expect(
+      findImport.call(
+        parsed,
+        j.importDeclaration([j.importSpecifier(j.identifier('bar'))], j.literal('@tramvai/foo'))
+      )
+    ).toBe(false);
   });
 });

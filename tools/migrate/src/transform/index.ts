@@ -2,6 +2,8 @@ import { registerMethods } from 'jscodeshift';
 
 import {
   addImport,
+  removeImport,
+  findImport,
   renameImportSource,
   renameRequireSource,
   renameImportSpecifier,
@@ -10,6 +12,8 @@ import {
 export const register = () => {
   registerMethods({
     addImport,
+    removeImport,
+    findImport,
     renameImportSource,
     renameImportSpecifier,
     renameRequireSource,

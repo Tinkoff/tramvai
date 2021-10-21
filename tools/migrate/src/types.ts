@@ -3,6 +3,8 @@ import type { Options as RecastOptions } from 'recast';
 
 import type {
   addImport,
+  removeImport,
+  findImport,
   renameImportSource,
   renameRequireSource,
   renameImportSpecifier,
@@ -11,6 +13,8 @@ import type {
 declare module 'jscodeshift/src/Collection' {
   export interface Collection<N> {
     addImport: typeof addImport;
+    removeImport: typeof removeImport;
+    findImport: typeof findImport;
     renameImportSource: typeof renameImportSource;
     renameImportSpecifier: typeof renameImportSpecifier;
     renameRequireSource: typeof renameRequireSource;

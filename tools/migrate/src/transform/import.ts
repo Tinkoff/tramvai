@@ -63,6 +63,57 @@ export function addImport<N>(this: Collection<N>, importDeclaration: ImportDecla
 
 /**
  * @description
+ *  Remove import declaration
+ * @returns true if any changes to ast were made, false - otherwise
+ */
+export function removeImport<N>(this: Collection<N>, importName: string) {
+  const imports = this.find(ImportDeclaration, {
+    source: {
+      value: importName,
+    },
+  });
+
+  if (imports.length) {
+    imports.at(0).remove();
+    return true;
+  }
+}
+
+/**
+ * @description
+ *  Find import declaration
+ * @param importDeclaration jscodeshift ast type
+ * @returns true if any import declaration exists
+ */
+export function findImport<N>(this: Collection<N>, importDeclaration: ImportDeclaration) {
+  let hasImport = false;
+
+  this.find(ImportDeclaration, {
+    source: {
+      value: importDeclaration.source.value,
+    },
+  })
+    .filter((p) => {
+      return p.node.specifiers.some((specifier) =>
+        importDeclaration.specifiers.length
+          ? importDeclaration.specifiers.some((targetSpecifier) => {
+              if ('imported' in targetSpecifier) {
+                return specifier.local.name === targetSpecifier.imported.name;
+              }
+              return false;
+            })
+          : true
+      );
+    })
+    .forEach((p) => {
+      hasImport = true;
+    });
+
+  return hasImport;
+}
+
+/**
+ * @description
  *  Replace source string for the imports
  */
 export function renameImportSource(this: Collection, from: string, to: string) {
