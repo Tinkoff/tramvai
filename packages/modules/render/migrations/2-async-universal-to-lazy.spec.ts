@@ -122,7 +122,7 @@ const asyncCmp = async(() => import('./cmp'));
         simple: {
           input: {
             source: `
-import asyncUniversal from '@tinkoff/platform-legacy/utils/decorators/async';
+import asyncUniversal from '@tinkoff/platform-legacy/utils/decorators/asyncUniversal';
 
 const asyncCmp = asyncUniversal(import('./cmp'));
 `,
@@ -138,7 +138,7 @@ const asyncCmp = lazy(() => import('./cmp'));
         'has import from @tramvai/react': {
           input: {
             source: `
-import asyncUniversal from '@tinkoff/platform-legacy/utils/decorators/async';
+import asyncUniversal from '@tinkoff/platform-legacy/utils/decorators/asyncUniversal';
 import { withDi } from '@tramvai/react';
 
 const asyncCmp = asyncUniversal(import('./cmp'));

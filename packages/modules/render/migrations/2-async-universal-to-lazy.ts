@@ -40,7 +40,7 @@ export default async ({ packageJSON, transform }: Api) => {
           });
 
           break;
-        case '@tinkoff/platform-legacy/utils/decorators/async':
+        case '@tinkoff/platform-legacy/utils/decorators/asyncUniversal':
         case 'react-universal-component':
           hasLegacyImport = true;
           imp.node.specifiers.forEach((specifier) => {
