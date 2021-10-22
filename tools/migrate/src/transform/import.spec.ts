@@ -1,5 +1,5 @@
 import { withParser } from 'jscodeshift';
-import { addImport, removeImport, findImport } from './import';
+import { addImport, removeImport, findImport, renameImportSource } from './import';
 
 const j = withParser('tsx');
 
@@ -18,11 +18,11 @@ console.log('aaa')
     );
 
     expect(parsed.toSource()).toMatchInlineSnapshot(`
-"
-import { testComponent } from \\"@tramvai/test\\";
-console.log('aaa')
-"
-`);
+      "
+      import { testComponent } from \\"@tramvai/test\\";
+      console.log('aaa')
+      "
+    `);
   });
 
   it('should extend already existing import source', async () => {
@@ -41,12 +41,12 @@ console.log('aaa')
     );
 
     expect(parsed.toSource()).toMatchInlineSnapshot(`
-"
-import { testAction, testComponent } from '@tramvai/test';
+      "
+      import { testAction, testComponent } from '@tramvai/test';
 
-console.log('aaa')
-"
-`);
+      console.log('aaa')
+      "
+    `);
   });
 
   it('should not add already existing import', async () => {
@@ -65,12 +65,12 @@ console.log('aaa')
     );
 
     expect(parsed.toSource()).toMatchInlineSnapshot(`
-"
-import { testComponent, testAction } from '@tramvai/test';
+      "
+      import { testComponent, testAction } from '@tramvai/test';
 
-console.log('aaa')
-"
-`);
+      console.log('aaa')
+      "
+    `);
   });
 
   it('should add additional import', async () => {
@@ -89,12 +89,12 @@ console.log('aaa')
     );
 
     expect(parsed.toSource()).toMatchInlineSnapshot(`
-"
-import { testComponent as tc, testAction, testComponent } from '@tramvai/test';
+      "
+      import { testComponent as tc, testAction, testComponent } from '@tramvai/test';
 
-console.log('aaa')
-"
-`);
+      console.log('aaa')
+      "
+    `);
   });
 
   it('should remove import', async () => {
@@ -123,5 +123,29 @@ import { bar } from "@tramvai/bar";`);
         j.importDeclaration([j.importSpecifier(j.identifier('bar'))], j.literal('@tramvai/foo'))
       )
     ).toBe(false);
+  });
+
+  it('should rename imports', async () => {
+    const parsed = j(`import { FOO } from '@tramvai/tokens-common';
+import { BAR } from '@tramvai/tokens';`);
+
+    renameImportSource.call(parsed, '@tramvai/tokens', '@tramvai/tokens-common');
+
+    expect(parsed.toSource()).toMatchInlineSnapshot(`
+      "import { FOO } from \\"@tramvai/tokens-common\\";
+      import { BAR } from \\"@tramvai/tokens-common\\";"
+    `);
+  });
+
+  it('should rename nested imports', async () => {
+    const parsed = j(`import { FOO } from '@tramvai/tokens-common/lib/foo';
+import { BAR } from '@tramvai/tokens/lib/bar';`);
+
+    renameImportSource.call(parsed, '@tramvai/tokens', '@tramvai/tokens-common');
+
+    expect(parsed.toSource()).toMatchInlineSnapshot(`
+      "import { FOO } from \\"@tramvai/tokens-common/lib/foo\\";
+      import { BAR } from \\"@tramvai/tokens-common/lib/bar\\";"
+    `);
   });
 });

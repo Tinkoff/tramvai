@@ -125,11 +125,11 @@ export function renameImportSource(this: Collection, from: string, to: string) {
     return false;
   }
 
-  const regexp = new RegExp(`^${from}`);
+  const regexp = new RegExp(`^${from}(/.+)?$`);
   imports.replaceWith((imp) => {
     const val = imp.node.source.value;
 
-    return importDeclaration(imp.value.specifiers, literal(`${val}`.replace(regexp, to)));
+    return importDeclaration(imp.value.specifiers, literal(`${val}`.replace(regexp, `${to}$1`)));
   });
 
   return true;
