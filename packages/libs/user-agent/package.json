@@ -23,7 +23,7 @@
     "@tinkoff/utils": "^2.1.2",
     "browserslist": "^4.16.7",
     "tslib": "^2.0.3",
-    "ua-parser-js": "^0.7.20"
+    "ua-parser-js": "0.7.28"
   },
   "devDependencies": {
     "@types/ua-parser-js": "^0.7.33"
