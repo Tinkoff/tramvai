@@ -44,13 +44,12 @@ const jestDevDependencies = [
   '@tramvai/test-unit',
   '@tramvai/test-react',
   '@tramvai/test-integration',
+  '@tramvai/test-unit-jest',
   '@tramvai/test-integration-jest',
   '@types/jest',
   'jest',
   'jest-circus',
-  'identity-obj-proxy',
   'react-test-renderer',
-  'ts-jest',
 ];
 
 const packagesInstallCommands = {

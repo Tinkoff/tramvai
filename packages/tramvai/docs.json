@@ -114,6 +114,14 @@
             }
           },
           {
+            "path": "test/unit-jest/README.md",
+            "priority": 50,
+            "doc": {
+              "id": "test-unit-jest",
+              "title": "Jest unit"
+            }
+          },
+          {
             "path": "test/integration-jest/README.md",
             "priority": 50,
             "doc": {
