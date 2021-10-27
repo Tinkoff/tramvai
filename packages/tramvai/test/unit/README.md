@@ -1,8 +1,10 @@
 # Tramvai test unit
 
-Библиотека хелперов для написания юнит-тестов для приложений на tramvai
+Helpers library for writing tramvai specific unit-tests
 
-## Подключение
+It might be even more useful when used with [`@tramvai/test-mocks`](./test-mocks.md)
+
+## Installation
 
 ```bash
 npm i --save-dev @tramvai/test-unit
@@ -10,7 +12,7 @@ npm i --save-dev @tramvai/test-unit
 
 ## How to
 
-### Тестирование reducers
+### Testing reducers
 
 ```ts
 import { testReducer } from '@tramvai/test-unit';
@@ -26,7 +28,16 @@ it('test', async () => {
 });
 ```
 
-### Тестирование экшенов
+<p>
+<details>
+<summary>More examples</summary>
+
+@inline src/state/testReducer.spec.ts
+
+</details>
+</p>
+
+### Testing actions
 
 ```ts
 import { testAction } from '@tramvai/test-unit';
@@ -39,9 +50,18 @@ it('test', async () => {
 });
 ```
 
-### Тестирование tramvai-модуля
+<p>
+<details>
+<summary>More examples</summary>
 
-#### Тестирование модуля в изоляции
+@inline src/state/testAction.spec.ts
+
+</details>
+</p>
+
+### Testing tramvai module
+
+#### Testing module in isolation
 
 ```ts
 import { testModule } from '@tramvai/test-unit';
@@ -52,11 +72,12 @@ it('test', async () => {
   expect(module).toBeInstanceOf(TestModule);
   expect(di.get('testToken')).toEqual({ a: 1 });
 
+  // Run only specific command line in order to execute handlers for this line inside module
   await runLine(commandLineListTokens.generatePage);
 });
 ```
 
-#### Тестирования модуля в связке с другими модулями
+#### Testing module in conjunction with other modules
 
 ```ts
 import { createTestApp } from '@tramvai/test-unit';
@@ -64,13 +85,23 @@ import { createTestApp } from '@tramvai/test-unit';
 it('test', async () => {
   const { app } = await createTestApp({ modules: [TestModule, DependentModule] });
 
+  // get tokens from di implemented by module
   expect(app.di.get('testToken')).toEqual({ a: 1 });
 });
 ```
 
-### Тестирование приложения
+<p>
+<details>
+<summary>More examples</summary>
 
-> Тестирование приложения работает только в node-environment. Смотри, примеры для [jest](https://jestjs.io/docs/27.0/configuration#testenvironment-string)
+@inline src/module/testModule.spec.ts
+
+</details>
+</p>
+
+### Testing app
+
+> Testing app works only in node-environment. See [jest docs](https://jestjs.io/docs/27.0/configuration#testenvironment-string)
 
 ```ts
 import { testApp } from '@tramvai/test-unit';
@@ -106,11 +137,20 @@ it('test', async () => {
 });
 ```
 
-#### Добавление провайдеров в DI
+<p>
+<details>
+<summary>More examples</summary>
 
-Опции большинства утилит поддерживают свойство `providers`, которое позволяет перезаписать существующие провайдеры, или добавить новые.
+@inline src/app/testApp.spec.ts
 
-Например, передав провайдер в `testAction`, к нему можно будет обратиться внутри самого экшена:
+</details>
+</p>
+
+### Adding providers to DI
+
+Most of the helpers accepts option `providers` which allows to redefine already existing providers or add new.
+
+For example, passing `providers` to helper `testAction` allows to access this provider inside action itself:
 
 ```tsx
 import { createAction } from '@tramvai/core';
@@ -137,3 +177,25 @@ it('test', async () => {
   });
 });
 ```
+
+### Create app only for testing
+
+```ts
+import { createTestApp } from '@tramvai/test-unit';
+
+it('test', async () => {
+  const { app } = await createTestApp({ modules: [TestModule, DependentModule] });
+
+  // get tokens from di implemented by module
+  expect(app.di.get('testToken')).toEqual({ a: 1 });
+});
+```
+
+<p>
+<details>
+<summary>More examples</summary>
+
+@inline src/app/createTestApp.spec.ts
+
+</details>
+</p>

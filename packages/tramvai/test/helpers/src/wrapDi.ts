@@ -27,6 +27,10 @@ export const getDiWrapper = ({
 
   return {
     di,
+    /**
+     * @description Run specific command line
+     * @param line one of the commandLineListTokens
+     */
     runLine: (line: typeof commandLineListTokens[keyof typeof commandLineListTokens]) => {
       const handlers = di.get({ token: line, multi: true });
 

@@ -2,7 +2,7 @@ import type { Reducer } from '@tramvai/state';
 import { createDispatcher } from '@tramvai/state';
 
 /**
- * Позволяет протестировать работу Reducer
+ * Helper for testing Reducer
  * @param reducer
  */
 export const testReducer = <T = any>(reducer: Reducer<T>) => {

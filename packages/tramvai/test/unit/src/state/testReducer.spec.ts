@@ -3,11 +3,11 @@ import { testReducer } from './testReducer';
 
 describe('test/unit/testReducer', () => {
   it('should handle state change', () => {
-    const handle = jest.fn((state, payload) => {
+    const handle = jest.fn((state: number[], payload: number) => {
       return [...state, payload];
     });
     const event = createEvent<number>('push');
-    const reducer = createReducer('test', []).on(event, handle);
+    const reducer = createReducer('test', [] as number[]).on(event, handle);
 
     const { dispatch, getState } = testReducer(reducer);
 
@@ -27,7 +27,7 @@ describe('test/unit/testReducer', () => {
 
   it('should handle several tests reducers at separate', () => {
     const event = createEvent<number>('push');
-    const reducer = createReducer('test', []).on(event, (state, payload) => {
+    const reducer = createReducer('test', [] as number[]).on(event, (state, payload) => {
       return [...state, payload];
     });
 

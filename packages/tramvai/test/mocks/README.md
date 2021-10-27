@@ -1,6 +1,6 @@
 # Tramvai test mocks
 
-Библиотека для создания моков для различных tramvai-сущностей
+Library for creating mocks for various tramvai entities
 
 ## Подключение
 
@@ -12,7 +12,9 @@ npm i --save-dev @tramvai/test-mocks
 
 ### STORE_TOKEN
 
-Позволяет создать мок для токена STORE_TOKEN который используется в приложениях как общее хранилище всех сторов
+Creates mock instance for token STORE_TOKEN which used in app as a common storage for store
+
+#### Empty State
 
 ```ts
 import { createMockStore } from '@tramvai/test-mocks';
@@ -23,9 +25,30 @@ const state = store.getState();
 store.dispatch('event');
 ```
 
+#### Initial State
+
+```ts
+import { createMockStore } from '@tramvai/test-mocks';
+
+const initialState = { a: 1, b: 2 };
+const reducerC = createReducer('c', 3);
+const store = createMockStore({ stores: [reducerC], initialState });
+
+const state = store.getState();
+```
+
+<p>
+<details>
+<summary>More examples</summary>
+
+@inline src/store.spec.ts
+
+</details>
+</p>
+
 ### DI
 
-Позволяет создать инстанс Di-Container
+Creates mock instance of DI-container
 
 ```ts
 import { createMockDi } from '@tramvai/test-mocks';
@@ -37,7 +60,7 @@ const dep = di.get(SOME_TOKEN);
 
 ### Context
 
-Позволяет создать инстанс CONTEXT_TOKEN
+Creates mock instance for CONTEXT_TOKEN
 
 ```ts
 import { createMockContext } from '@tramvai/test-mocks';
@@ -54,9 +77,18 @@ it('test', async () => {
 });
 ```
 
+<p>
+<details>
+<summary>More examples</summary>
+
+@inline src/context.spec.ts
+
+</details>
+</p>
+
 ### Router
 
-Предоставляет мок для инстанса `@tinkoff/router`
+Creates mock instance for `@tinkoff/router`
 
 ```ts
 import { createMockRouter } from '@tramvai/test-mocks';

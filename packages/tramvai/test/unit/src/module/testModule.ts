@@ -5,10 +5,10 @@ import { getDiWrapper } from '@tramvai/test-helpers';
 type Options = Parameters<typeof getDiWrapper>[0];
 
 /**
- * Функция для тестирования одного модуля в изоляции
- * @param Module модуль для тестирования
- * @param params параметры для функции createMockDi или сам di-контейнер
- * @param module список модулей необходимых для работы тестируемого
+ * Helper for testing tramvai module
+ * @param Module module itself
+ * @param params parameters for helper createMockDi or instance of DI-container
+ * @param modules additional modules required for test module
  */
 export const testModule = (
   Module: ModuleType | ExtendedModule,

@@ -14,16 +14,16 @@ type Options = Partial<Parameters<typeof createApp>[0]> & {
 };
 
 /**
- * Создаёт базовое тестовое приложение на основании заданных опций
- * По умолчанию в приложении добавляются все стандартные модули необходимые для работы tramvai-приложения:
+ * Creates basic tramvai app for testing based on passed options
+ * By default next modules are added to app as they necessary for working app:
  *    - @tramvai/module-common
  *    - @tramvai/module-log
  *    - @tramvai/module-server
  *    - @tramvai/module-render
  *    - @tramvai/module-router
- * @param. - опции, доступные для createApp
- * @param.env - доступные переменные окружения для приложения
- * @param.excludeDefaultModules - отключить добавление стандартных модулей в приложение
+ * @param. - options passed to createApp
+ * @param.env - environment variables
+ * @param.excludeDefaultModules - disable adding default modules
  */
 export const createTestApp = async ({
   name = 'testApp',

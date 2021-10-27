@@ -21,7 +21,7 @@ describe('test/unit/module/testModule`', () => {
       },
     })
     class TestModule {
-      constructor(deps) {
+      constructor(deps: any) {
         mockConstructor(deps);
       }
     }

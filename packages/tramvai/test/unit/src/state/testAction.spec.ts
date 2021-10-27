@@ -45,4 +45,17 @@ describe('test/unit/state/testAction', () => {
 
     expect(spyDispatch).toHaveBeenCalledWith({ payload: 'actionpong', type: 'test' });
   });
+
+  it('should not require payload', async () => {
+    const action = createAction({
+      name: 'no-payload',
+      fn: () => {
+        return 'empty';
+      },
+    });
+
+    const { run } = testAction(action);
+
+    await expect(run()).resolves.toBe('empty');
+  });
 });

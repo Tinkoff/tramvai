@@ -9,9 +9,9 @@ type Options = OptionsContext & {
 };
 
 /**
- * Позволяет протестировать экшен
- * @param action экшен для тестирования
- * @param params параметры для создания ConsumerContext или сам инстанс context
+ * Helper for testing actions
+ * @param action action itself
+ * @param params options for creation ConsumerContext or instance of context
  */
 export const testAction = <P>(
   action: Action<P>,
@@ -25,7 +25,13 @@ export const testAction = <P>(
   }: Options = {}
 ) => {
   return {
-    run: (payload: P) => {
+    /**
+     * @description
+     * Run action
+     * @param payload
+     * @returns
+     */
+    run: (payload?: P) => {
       return context.executeAction(action, payload);
     },
   };

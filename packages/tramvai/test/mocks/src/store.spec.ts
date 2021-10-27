@@ -34,4 +34,16 @@ describe('test/unit/mocks/store', () => {
 
     expect(store.getState()).toEqual(initialState);
   });
+
+  it('should create fake reducer stores for every key in initialState', () => {
+    const initialState = { a: 1, b: 2 };
+    const reducerC = createReducer('c', 3);
+    const store = createMockStore({ stores: [reducerC], initialState });
+
+    expect(store.getState()).toEqual({
+      a: 1,
+      b: 2,
+      c: 3,
+    });
+  });
 });

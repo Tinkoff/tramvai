@@ -41,8 +41,6 @@ export const testHook = <TProps, TResult>(
   const { result, rerender } = renderHook(hookCallback, {
     ...renderOptions,
     wrapper: ({ children }) => {
-      // eslint-disable-next-line no-shadow
-
       return (
         <StateProvider context={context}>
           <DIContext.Provider value={context.di}>
