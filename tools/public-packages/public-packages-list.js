@@ -85,6 +85,7 @@ const publicPackages = [
   '@tinkoff/eslint-plugin-tramvai',
   'prettier-config-tinkoff',
   '@tinkoff/pack-polyfills',
+  '@tinkoff/package-manager-wrapper',
 ];
 
 module.exports = publicPackages;
