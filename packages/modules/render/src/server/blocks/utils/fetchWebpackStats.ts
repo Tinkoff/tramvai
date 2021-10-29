@@ -1,4 +1,5 @@
 import * as path from 'path';
+import fetch from 'node-fetch';
 
 import { requireFunc } from './requireFunc';
 
@@ -16,106 +17,12 @@ export type WebpackStats = {
   [key: string]: any;
 };
 
-const webpackStats = (paths: string[]) => {
-  let stats;
-
-  try {
-    const statsPath = path.resolve(...paths);
-    stats = requireFunc(statsPath);
-  } catch (e) {
-    // ignore errors as this function is used to load stats for several optional destinations
-    // and these destinations may not have stats file
-  }
-
-  if (!stats) {
-    return;
-  }
-
-  if (!process.env.ASSETS_PREFIX) {
-    if (process.env.STATIC_PREFIX) {
-      throw new Error(
-        'Required env variable "ASSETS_PREFIX" is not set. Instead of using "STATIC_PREFIX" env please define "ASSETS_PREFIX: STATIC_PREFIX + /compiled"'
-      );
-    }
-
-    throw new Error('Required env variable "ASSETS_PREFIX" is not set');
-  }
-
-  return {
-    ...stats,
-    publicPath: process.env.ASSETS_PREFIX,
-  };
+let fetchStats: (modern: boolean) => Promise<WebpackStats> = async () => {
+  throw new Error(`Unknown environment`);
 };
 
-const statsLegacy =
-  webpackStats(['stats.json']) ||
-  // try to find stats.json nearby server.js file
-  webpackStats([__dirname, 'stats.json']);
-
-const statsModern = webpackStats(['stats.modern.json']) || statsLegacy;
-
-const request = (url: string): Promise<WebpackStats> => {
-  const http = require('http');
-
-  return new Promise((resolve, reject) => {
-    http
-      .get(url, (res) => {
-        let body = '';
-
-        res.on('data', (chunk) => {
-          body += chunk;
-        });
-
-        res.on('end', () => {
-          try {
-            resolve(JSON.parse(body));
-          } catch (e) {
-            reject(e);
-          }
-        });
-      })
-      .on('error', (e) => {
-        reject(e);
-      });
-  });
-};
-
-const fallbackDevStats = async () => {
-  const host = process.env.HOST_STATIC || 'localhost';
-  const port = process.env.PORT_STATIC || 4000;
-  const outputClient = process.env.PATH_STATIC || 'dist/client';
-
-  const getUrl = (filename: string) => `http://${host}:${port}/${outputClient}/${filename}`;
-
-  const stats =
-    (await request(getUrl('stats.modern.json'))) || (await request(getUrl('stats.json')));
-
-  if (!stats) {
-    throw new Error(
-      'stats.json файл не найден, если в platform.json переопределяется outputClient для приложения, ' +
-        'то необходимо задать переменную окружения PATH_STATIC=[значение из outputClient]'
-    );
-  }
-
-  return stats;
-};
-
-export const fetchWebpackStats = async ({
-  modern,
-}: {
-  modern?: boolean;
-} = {}): Promise<WebpackStats> => {
-  /*
-   * В дев режиме забираем удаленно со статики,
-   * в продакшне из локального файла
-   * */
-
-  if (process.env.NODE_ENV === 'development') {
-    // TODO: убрать fallbackDevStats после того как все обновятся до актуальной версии @tramvai/cli
-    if (!appConfig) {
-      return fallbackDevStats();
-    }
-
+if (process.env.NODE_ENV === 'development') {
+  fetchStats = async () => {
     const {
       modern: configModern,
       staticHost,
@@ -128,7 +35,8 @@ export const fetchWebpackStats = async ({
     const getUrl = (filename: string) =>
       `http://${staticHost}:${staticPort}/${outputClient}/${filename}`;
 
-    const stats = await request(getUrl(configModern ? 'stats.modern.json' : 'stats.json'));
+    const request = await fetch(getUrl(configModern ? 'stats.modern.json' : 'stats.json'));
+    const stats = await request.json();
     // static - популярная заглушка в env.development.js файлах, надо игнорировать, как было раньше
     const hasAssetsPrefix = process.env.ASSETS_PREFIX && process.env.ASSETS_PREFIX !== 'static';
 
@@ -138,18 +46,82 @@ export const fetchWebpackStats = async ({
       ...stats,
       publicPath,
     };
-  }
+  };
+}
 
-  if (process.env.NODE_ENV === 'test') {
-    // мок результата для юнит-тестов, т.к. никакой статики у нас на самом деле нет, указываем какую-то, чтобы сформировать урлы в ответе сервера
+if (process.env.NODE_ENV === 'test') {
+  fetchStats = () => {
+    // mock for unit-testing as there is no real static return something just to make server render work
     return Promise.resolve({ publicPath: 'http://localhost:4000/', assetsByChunkName: {} });
+  };
+}
+
+if (process.env.NODE_ENV === 'production') {
+  const SEARCH_PATHS = [process.cwd(), __dirname];
+
+  const webpackStats = (fileName: string) => {
+    let stats;
+
+    for (const dir of SEARCH_PATHS) {
+      try {
+        const statsPath = path.resolve(dir, fileName);
+        stats = requireFunc(statsPath);
+        break;
+      } catch (e) {
+        // ignore errors as this function is used to load stats for several optional destinations
+        // and these destinations may not have stats file
+      }
+    }
+
+    if (!stats) {
+      return;
+    }
+
+    if (!process.env.ASSETS_PREFIX) {
+      if (process.env.STATIC_PREFIX) {
+        throw new Error(
+          'Required env variable "ASSETS_PREFIX" is not set. Instead of using "STATIC_PREFIX" env please define "ASSETS_PREFIX: STATIC_PREFIX + /compiled"'
+        );
+      }
+
+      throw new Error('Required env variable "ASSETS_PREFIX" is not set');
+    }
+
+    return {
+      ...stats,
+      publicPath: process.env.ASSETS_PREFIX,
+    };
+  };
+
+  const statsLegacy = webpackStats('stats.json');
+
+  const statsModern = webpackStats('stats.modern.json') || statsLegacy;
+
+  if (!statsLegacy) {
+    throw new Error(`Cannot find stats.json.
+  It should be placed in one of the next places:
+    ${SEARCH_PATHS.join('\n\t')}
+  In case it happens on deployment:
+    - In case you are using two independent jobs for building app
+      - Either do not split build command by two independent jobs and use one common job with "tramvai build" command without --buildType
+      - Or copy stats.json (and stats.modern.json if present) file from client build output to server output by yourself in your CI
+    - Otherwise report issue to tramvai team
+  In case it happens locally:
+    - prefer to use command "tramvai start-prod" to test prod-build locally
+    - copy stats.json next to built server.js file
+`);
   }
+  fetchStats = (modern: boolean) => {
+    const stats = modern ? statsModern : statsLegacy;
 
-  const stats = modern ? statsModern : statsLegacy;
+    return Promise.resolve(stats);
+  };
+}
 
-  if (!stats) {
-    return Promise.reject(new Error('Cannot find stats.json'));
-  }
-
-  return Promise.resolve(stats);
+export const fetchWebpackStats = async ({
+  modern,
+}: {
+  modern?: boolean;
+} = {}): Promise<WebpackStats> => {
+  return fetchStats(modern);
 };
