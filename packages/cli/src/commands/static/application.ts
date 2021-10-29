@@ -1,6 +1,6 @@
 import propOr from '@tinkoff/utils/object/propOr';
 
-import { resolve } from 'path';
+import path from 'path';
 import { node } from 'execa';
 import waitOn from 'wait-on';
 import type { Context } from '../../models/context';
@@ -16,6 +16,8 @@ import { generateStatic } from './generate';
 import { toWebpackConfig } from '../../library/webpack/utils/toWebpackConfig';
 import { copyStatsJsonFileToServerDirectory } from '../../api/build/utils/copyStatsJsonFile';
 import { safeRequire } from '../../utils/safeRequire';
+import { startStaticServer } from './staticServer';
+import { startServer } from './server';
 
 export const staticApp = async (
   context: Context,
@@ -57,12 +59,12 @@ export const staticApp = async (
   } = serverConfigManager;
   const root = serverConfigManager.getBuildPath();
 
-  const server = node(resolve(root, 'server.js'), [], {
+  const server = node(path.resolve(root, 'server.js'), [], {
     cwd: root,
     stdio: 'inherit',
     env: {
-      ...safeRequire(resolve(process.cwd(), 'env.development'), true),
-      ...safeRequire(resolve(process.cwd(), 'env'), true),
+      ...safeRequire(path.resolve(process.cwd(), 'env.development'), true),
+      ...safeRequire(path.resolve(process.cwd(), 'env'), true),
       ...process.env,
       NODE_ENV: 'production',
       PORT: `${port}`,
@@ -87,6 +89,21 @@ export const staticApp = async (
   await generateStatic(context, serverConfigManager, paths);
 
   server.kill();
+
+  if (options.serve) {
+    await new Promise<void>((resolve) => {
+      server.on('exit', () => resolve());
+    });
+
+    const staticServer = await startStaticServer(clientConfigManager);
+    const htmlServer = await startServer(serverConfigManager);
+
+    await new Promise<void>((resolve) => {
+      htmlServer.on('exit', () => {
+        staticServer.close(() => resolve());
+      });
+    });
+  }
 
   return {
     status: 'ok',

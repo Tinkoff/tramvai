@@ -20,7 +20,7 @@ Commands:
   new|n [options] <name>                        Command for generating a new application
   update|u [options]                            Tramvai package update command
   add [options] <packageName>                   Tramvai package install command
-  static|st [options] <target>                  Команда для сборки приложения в статичную версию
+  static|st [options] <target>                  Command to export application routes to HTML pages
   benchmark|bench [options] <command> <target>  Команда для запуска бенчмарка работы @tramvai/cli
 
   Run tramvai <command> --help
@@ -83,7 +83,7 @@ Commands:
   new|n [options] <name>                        Command for generating a new application
   update|u [options]                            Tramvai package update command
   add [options] <packageName>                   Tramvai package install command
-  static|st [options] <target>                  Команда для сборки приложения в статичную версию
+  static|st [options] <target>                  Command to export application routes to HTML pages
   benchmark|bench [options] <command> <target>  Команда для запуска бенчмарка работы @tramvai/cli
 
   Run tramvai <command> --help
@@ -140,7 +140,7 @@ Commands:
   new|n [options] <name>                        Command for generating a new application
   update|u [options]                            Tramvai package update command
   add [options] <packageName>                   Tramvai package install command
-  static|st [options] <target>                  Команда для сборки приложения в статичную версию
+  static|st [options] <target>                  Command to export application routes to HTML pages
   benchmark|bench [options] <command> <target>  Команда для запуска бенчмарка работы @tramvai/cli
 
   Run tramvai <command> --help

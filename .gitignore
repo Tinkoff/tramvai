@@ -54,3 +54,12 @@ debug-path
 
 .copybara
 copy.bara.sky
+
+examples-standalone/*/package-lock.json
+examples-standalone/*/yarn.lock
+examples-standalone/*/node_modules
+examples-standalone/*/dist
+examples-standalone/*/.git
+examples-standalone/*/.tmp
+examples-standalone/*/.env
+examples-standalone/*/.tramvai-migrate-applied.json

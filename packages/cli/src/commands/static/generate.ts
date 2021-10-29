@@ -7,6 +7,7 @@ import type { ConfigManager } from '../../config/configManager';
 import type { ApplicationConfigEntry } from '../../typings/configEntry/application';
 
 const MAX_CONCURRENT = 10;
+const DYNAMIC_PAGE_REGEX = /\/:.+\//g;
 
 export const generateStatic = async (
   context: Context,
@@ -23,6 +24,16 @@ export const generateStatic = async (
   for (const path of paths) {
     promises.push(
       q.add(async () => {
+        // @todo need something similar to https://nextjs.org/docs/basic-features/data-fetching#getstaticpaths-static-generation
+        if (DYNAMIC_PAGE_REGEX.test(path)) {
+          context.logger.event({
+            type: 'warning',
+            event: 'COMMAND:STATIC:DYNAMIC_PAGE_UNSUPPORTED',
+            message: `path: ${path}, message: export dynamic pages to HTML is not supported`,
+          });
+          return;
+        }
+
         try {
           const html = await request({ url: `${serverPath}${path}` });
 
