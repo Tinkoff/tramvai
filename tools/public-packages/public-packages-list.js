@@ -10,6 +10,7 @@ const publicPackages = [
   '@tramvai/state',
   '@tramvai/types-actions-state-context',
   // TEST
+  '@tramvai/test-unit-jest',
   '@tramvai/test-unit',
   '@tramvai/test-react',
   '@tramvai/test-puppeteer',

@@ -98,6 +98,7 @@ module.exports = {
       items: [],
     },
     'features/migration',
+    'features/static-html-export',
   ],
   Guides: [
     'guides/tramvai-library',
