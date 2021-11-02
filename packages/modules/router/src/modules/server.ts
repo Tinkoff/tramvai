@@ -28,7 +28,7 @@ import { generateForRoot } from './utils/forRoot';
       useValue: Router,
     },
     {
-      provide: commandLineListTokens.resolvePage,
+      provide: commandLineListTokens.resolveUserDeps,
       multi: true,
       useFactory: ({ router, requestManager }) => {
         return function routerInit() {

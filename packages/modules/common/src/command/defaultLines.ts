@@ -6,7 +6,6 @@ const command = {
   customer: [
     commandLineListTokens.customerStart,
     commandLineListTokens.resolveUserDeps,
-    commandLineListTokens.resolvePage,
     commandLineListTokens.resolvePageDeps,
     commandLineListTokens.generatePage,
     commandLineListTokens.clear,

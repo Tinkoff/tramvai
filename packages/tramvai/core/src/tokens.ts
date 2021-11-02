@@ -45,7 +45,6 @@ export const commandLineListTokens = {
   // Блок: Обработка клиентов
   customerStart: createToken<Command>('customer_start', multiOptions), // Инициализация клиента
   resolveUserDeps: createToken<Command>('resolve_user_deps', multiOptions), // Получение данных о клиенте
-  resolvePage: createToken<Command>('resolve_page', multiOptions), // Получение данных роута
   resolvePageDeps: createToken<Command>('resolve_page_deps', multiOptions), // Получение данных необходимых для роута
   generatePage: createToken<Command>('generate_page', multiOptions), // Генерация html для страницы
   clear: createToken<Command>('clear', multiOptions), // Очистка данных

@@ -2,6 +2,7 @@ import isUndefined from '@tinkoff/utils/is/undefined';
 import isEmpty from '@tinkoff/utils/is/empty';
 import type { PageResource, RESOURCE_INLINE_OPTIONS } from '@tramvai/tokens-render';
 import { ResourceType } from '@tramvai/tokens-render';
+import { isAbsoluteUrl } from '@tinkoff/url';
 import { getFile, getFileContentLength } from './externalFilesHelper';
 import type { RESOURCES_REGISTRY_CACHE } from './tokens';
 import { processFile } from './fileProcessor';
@@ -18,7 +19,7 @@ const getInlineType = (type: PageResource['type']) => {
 };
 
 const getResourceUrl = (resource: PageResource) => {
-  if (isEmpty(resource.payload)) {
+  if (isEmpty(resource.payload) || !isAbsoluteUrl(resource.payload)) {
     return undefined;
   }
   return resource.payload.startsWith('//')

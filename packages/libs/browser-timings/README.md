@@ -1,60 +1,67 @@
 # Browser-timings
-Библиотека для получения перфоманс данных от клиентов. Автоматически собирает и собирает вомзожные данные.
 
-## Как подключить
-Устанавливаем npm модуль
+Lib for measure client browsers performance. Automatically collects performance data on page load.
+
+## Installation
+
+Install npm package
+
 ```bash
 npm i --save @tinkoff/browser-timings
 ```
 
-## Как использовать
-```tsx
+## How to
+
+```ts
 import { browserTimings } from '@tinkoff/browser-timings';
 
 window.addEventListener('load', () => {
-  setTimout(() => { // setTimout нужен, что бы отработали и появились все метрики. Иначе не будет доступен loadEventEnd
+  setTimeout(() => {
+    // setTimeout is necessary in order to get metrics about loadEventEnd
     const perfData = browserTimings();
-  }, 0)
+  }, 0);
 });
 ```
 
-После выполнения этого кода в perfData будет объект с данными о клиенте, которые можно переотправить в внешние системы
+After executing `perfData` will contain client performance metrics which may be send to any external system for further analysis.
 
-Необходимо выполнять библиотеку только после инициализации браузером страницы. Иначе библиотека не сможет получить данные и вернет пустой объект.
+> Call of the library should be executed only after page load in order to get actual data. Otherwise, it may return empty object without data.
 
-## Интерфейс библиотеки
+## Lib interface
+
 ```tsx
 export interface Timings {
-  /* Время на подключение клиента к серверу */
+  /* Connection timing from client to server */
   connection: number;
-  /* Сколько длился ответ на бэекенде */
+  /* How much time backend was preparing response */
   backend: number;
-  /* Скачивание страницы клиентов */
+  /* Page download to client */
   pageDownload: number;
-  /* Отобразилась первоя информация клиенту */
+  /* Timing of first paint for a page */
   'first-paint': number;
-  /* С страницей можно взаимодействовать */
+  /* Timing when DOM becomes interactive */
   domInteractive: number;
-  /* DOM полностью построен */
+  /* DOM building is complete */
   domComplete: number;
-  /* Страница и ресурсы полностью загружены */
+  /* Page and every resource were loaded */
   pageLoadTime: number;
-  /* Общая информация о том, сколько было ресурсов и времени загрузки */
+  /* Common information about resources and its loading time grouped by type */
   download: {
-      html: TimingResource;
-      js: TimingResource;
-      css: TimingResource;
-      img: TimingResource;
-      font: TimingResource;
-      other: TimingResource;
-    };
+    html: TimingResource;
+    js: TimingResource;
+    css: TimingResource;
+    img: TimingResource;
+    font: TimingResource;
+    other: TimingResource;
+  };
 }
+
 interface TimingResource {
-  /* Общее время загрузки ресурсов */
+  /* Timing of resource loading */
   duration: number;
-  /* Общий размер в байтах используемого на странице данных */
+  /* Byte-size measure of data used by resource */
   encodedDecodeSize: number;
-  /* Общий размер переданных данных по сети. На разнице между encodedDecodeSize - transferSize можно узнать, сколько данных не попало в кэш */
+  /* Byte-size measure of data transferred by network. Calculating difference between encodedDecodeSize - transferSize may reveal how much data where stored in browser cache */
   transferSize: number;
 }
 ```

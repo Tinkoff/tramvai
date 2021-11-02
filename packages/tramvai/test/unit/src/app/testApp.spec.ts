@@ -111,7 +111,7 @@ describe('test/unit/app/testApp', () => {
         modules: [CommonModule, LogModule, RenderModule, ServerModule],
         providers: [
           {
-            provide: commandLineListTokens.resolvePage,
+            provide: commandLineListTokens.resolveUserDeps,
             multi: true,
             useFactory: ({ wrong }) => {
               return wrong.test();
@@ -134,7 +134,7 @@ describe('test/unit/app/testApp', () => {
       const { render } = testEnv;
 
       await expect(render('/')).rejects.toThrowError(
-        'Error: Token not found _unknown_provider at resolve_page'
+        'Error: Token not found _unknown_provider at resolve_user_deps'
       );
     });
   });
