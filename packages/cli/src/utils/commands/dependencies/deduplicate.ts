@@ -10,7 +10,7 @@ export const deduplicate = async (context: Context) => {
     console.log('Deduplication completed');
   } catch (e) {
     spinner.stop();
-    console.error('Deduplication error: ', e);
+    console.error('Deduplication error:');
     throw e;
   }
 };

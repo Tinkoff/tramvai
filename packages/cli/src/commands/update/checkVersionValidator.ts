@@ -1,8 +1,5 @@
-import util from 'util';
-import childProcess from 'child_process';
+import { packageHasVersion } from '../../utils/commands/dependencies/packageHasVersion';
 import type { Params } from './update';
-
-const exec = util.promisify(childProcess.exec);
 
 export const checkVersion = async (_, { to: version = 'latest' }: Params) => {
   if (version === 'latest') {
@@ -12,9 +9,7 @@ export const checkVersion = async (_, { to: version = 'latest' }: Params) => {
     };
   }
 
-  const { stdout } = await exec(`npm view @tramvai/core@${version} version`);
-
-  if (stdout.indexOf(version) !== -1) {
+  if (await packageHasVersion('@tramvai/core', version)) {
     return {
       name: 'checkVersion',
       status: 'ok',

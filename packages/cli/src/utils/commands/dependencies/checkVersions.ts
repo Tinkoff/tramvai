@@ -14,7 +14,7 @@ export const checkVersions = async (context: Context) => {
     console.log('Versions check completed');
   } catch (e) {
     spinner.stop();
-    console.error('Versions check error: ', e);
+    console.error('Versions check error:');
     throw e;
   }
 };

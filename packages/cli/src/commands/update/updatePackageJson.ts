@@ -1,6 +1,8 @@
 import { parse, minVersion } from 'semver';
 import fs from 'fs';
+import pMap from 'p-map';
 import { getLatestPackageVersion } from '../../utils/commands/dependencies/getLatestPackageVersion';
+import { packageHasVersion } from '../../utils/commands/dependencies/packageHasVersion';
 
 // Список пакетов, не начинающихся с @tramvai,
 // которые мы также хотим обновить
@@ -24,16 +26,48 @@ const updateEntry = async (
   dep: string,
   { currentVersion, version }: { currentVersion: string; version: string }
 ) => {
+  let nextVersion: string;
+
   if (dep.startsWith('@tramvai') && getVersionFromDep(deps[dep]) === currentVersion) {
-    console.log(`- ${dep}@${version}`);
-    // eslint-disable-next-line no-param-reassign
-    deps[dep] = version;
+    nextVersion = version;
   } else if (shouldUpdateDependency(dep)) {
     const latestPackageVersion = await getLatestPackageVersion(dep);
-    console.log(`- ${dep}@${latestPackageVersion}`);
-    // eslint-disable-next-line no-param-reassign
-    deps[dep] = latestPackageVersion;
+    nextVersion = latestPackageVersion;
   }
+
+  if (nextVersion) {
+    const depHasVersion = await packageHasVersion(dep, nextVersion);
+
+    if (depHasVersion) {
+      console.log(`- ${dep}@${nextVersion}`);
+      // eslint-disable-next-line no-param-reassign
+      deps[dep] = nextVersion;
+    } else {
+      console.warn(
+        `⚠️ cannot update ${dep} to ${nextVersion} version, this version does not exist.
+Maybe this package was removed or renamed.
+Wait migrations, then manually update or remove dependency from package.json, if necessary.`
+      );
+    }
+  }
+};
+
+const updateDependencies = (
+  dependencies: Record<string, string> = {},
+  targetVersion: string,
+  currentVersion: string
+) => {
+  return pMap<string, void>(
+    Object.keys(dependencies),
+    async (dep) => {
+      if (Object.prototype.hasOwnProperty.call(dependencies, dep)) {
+        await updateEntry(dependencies, dep, { currentVersion, version: targetVersion });
+      }
+    },
+    {
+      concurrency: 10,
+    }
+  );
 };
 
 export const updatePackageJson = async (version: string) => {
@@ -48,15 +82,9 @@ export const updatePackageJson = async (version: string) => {
     process.exit(0);
   }
 
-  for (const dep in content.dependencies) {
-    if (Object.prototype.hasOwnProperty.call(content.dependencies, dep)) {
-      await updateEntry(content.dependencies, dep, { currentVersion, version });
-    }
-  }
-  for (const dep in content.devDependencies) {
-    if (Object.prototype.hasOwnProperty.call(content.devDependencies, dep)) {
-      await updateEntry(content.devDependencies, dep, { currentVersion, version });
-    }
-  }
+  await updateDependencies(content.dependencies, version, currentVersion);
+  await updateDependencies(content.devDependencies, version, currentVersion);
+  await updateDependencies(content.peerDependencies, version, currentVersion);
+
   fs.writeFileSync('package.json', JSON.stringify(content, null, 2));
 };

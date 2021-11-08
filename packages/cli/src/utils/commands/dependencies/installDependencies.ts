@@ -10,7 +10,7 @@ export const installDependencies = async (context: Context) => {
     console.log('Dependencies installed');
   } catch (e) {
     spinner.stop();
-    console.error('Error installing dependencies: ', e);
+    console.error('Error installing dependencies:');
     throw e;
   }
 };

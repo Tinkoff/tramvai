@@ -14,7 +14,7 @@ export const migrate = async (context: Context) => {
     console.log('Migrations completed');
   } catch (e) {
     spinner.stop();
-    console.error('Migrations error: ', e);
+    console.error('Migrations error:');
     throw e;
   }
 };
