@@ -8,33 +8,33 @@
 
 ```tsx
 type HttpClient = {
-  // универсальный метод для отправки HTTP запросов
+  // common method for sending HTTP requests
   request<P = any>(request: HttpClientRequest): Promise<HttpClientResponse<P>>;
-  // метод для отправки GET запросов
+  // method for sending GET requests
   get<R = any>(
     path: string,
     payload?: Pick<HttpClientRequest, 'query' | 'headers'>,
     config?: Omit<HttpClientRequest, 'url' | 'query' | 'body' | 'headers'>
   ): Promise<HttpClientResponse<R>>;
-  // метод для отправки POST запросов
+  // method for sending POST requests, uses `requestType: 'json'` by default
   post<R = any>(
     path: string,
     payload?: Pick<HttpClientRequest, 'query' | 'body' | 'headers'>,
     config?: Omit<HttpClientRequest, 'url' | 'query' | 'body' | 'headers'>
   ): Promise<HttpClientResponse<R>>;
-  // метод для отправки PUT запросов
+  // method for sending PUT requests, uses `requestType: 'json'` by default
   put<R = any>(
     path: string,
     payload?: Pick<HttpClientRequest, 'query' | 'body' | 'headers'>,
     config?: Omit<HttpClientRequest, 'url' | 'query' | 'body' | 'headers'>
   ): Promise<HttpClientResponse<R>>;
-  // метод для отправки DELETE запросов
+  // method for sending DELETE requests
   delete<R = any>(
     path: string,
     payload?: Pick<HttpClientRequest, 'query' | 'headers'>,
     config?: Omit<HttpClientRequest, 'url' | 'query' | 'body' | 'headers'>
   ): Promise<HttpClientResponse<R>>;
-  // метод для создания нового экземпляра HTTP клиента, на основе настроек текущего
+  // method for creating a new instance of the HTTP client, based on the settings of the current
   fork(options?: HttpClientRequest, mergeOptionsConfig?: { replace?: boolean }): HttpClient;
 }
 ```
@@ -43,37 +43,37 @@ type HttpClient = {
 
 ```tsx
 type HttpClientRequest = {
-  // абсолютный url запроса, не использовать одновременно с path
+  // absolute url of the request, do not use simultaneously with `path`
   url?: string;
-  // относительный url запроса, не использовать одновременно с url
+  // url of the request, not to be used simultaneously with `url`
   path?: string;
-  // базовый url, который добавляется ко всем запросам перед значением из `path`
+  // base url, which is added to all queries before the `path` value
   baseUrl?: string;
-  // поддерживаются базовые HTTP методы - GET, POST, PUT, DELETE
+  // basic HTTP methods are supported - GET, POST, PUT, DELETE
   method?: HttpMethod;
-  // тип данных, передаваемых с запросом, по умолчанию - json
+  // request data type, `form` by default
   requestType?: HttpContentType;
-  // тип данных, полученных в ответ, по умолчанию - json
+  // response data type, is calculated from the `content-type` header by default
   responseType?: HttpContentType;
-  // HTTP заголовки запроса
+  // HTTP request headers
   headers?: Record<string, any>;
-  // query параметры запроса
+  // request query parameters
   query?: Record<string, any>;
-  // тело запроса
+  // request body
   body?: Record<string, any>;
-  // ограничение на время выполнения запроса, в ms
+  // request execution time limit, in ms
   timeout?: number;
-  // отключение логирования внутри HTTP клиента. Рекомендуется использовать, если ошибка запроса логируется самостоятельно
+  // disabling logging inside the HTTP client. It is recommended to use if a request error is logged manually
   silent?: boolean;
-  // отключение использования кэша запросов
+  // disabling the request cache
   cache?: boolean;
-  // если `abortPromise` будет зарезолвлен, запрос будет отменен
+  // if `abortPromise` is resolved, the request will be canceled
   abortPromise?: Promise<void>;
-  // метод для изменения данных запроса
+  // method to modify request data
   modifyRequest?: (req: HttpClientRequest) => HttpClientRequest;
-  // метод для изменения данных ответа
+  // method to modify response data
   modifyResponse?: <P = any>(res: HttpClientResponse<P>) => HttpClientResponse<P>;
-  // метод для изменения объекта ошибки
+  // method to modify the error object
   modifyError?: (error: HttpClientError, req: HttpClientRequest) => HttpClientError;
   [key: string]: any;
 }
@@ -83,11 +83,11 @@ type HttpClientRequest = {
 
 ```tsx
 type HttpClientResponse<P = any> = {
-  // тело ответа
+  // response body
   payload: P;
-  // HTTP код ответа
+  // HTTP response code
   status: number;
-  // HTTP заголовки ответа
+  // HTTP response headers
   headers: Record<string, any>;
 }
 ```
@@ -102,10 +102,9 @@ type HttpClientError = Error & {
 
 ### ApiService
 
-`ApiService` - абстрактный класс для удобного создания сервисов для работы с API,
-позволяет переопределить кастомную логику в методе `request`, поверх которого работают остальные базовые методы.
+`ApiService` - abstract class for easy creation of services for working with API, allows you to override custom logic in the `request` method, on top of which the rest of the basic methods work.
 
-Например, сервис, который автоматически показывает всплывающее окно при ошибке запроса:
+For example, a service that automatically displays a pop-up window when a request error occurs:
 
 ```tsx
 class CustomApiService extends ApiService {
@@ -122,6 +121,6 @@ class CustomApiService extends ApiService {
 
 const service = new CustomApiService({ httpClient });
 
-service.request({ path: 'fake' }) // покажет alert
-service.get('fake') // также покажет alert
+service.request({ path: 'fake' }) // show alert
+service.get('fake') // also show alert
 ```

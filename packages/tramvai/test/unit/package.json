@@ -30,7 +30,8 @@
     "@tramvai/test-helpers": "0.0.0-stub",
     "@tramvai/test-mocks": "0.0.0-stub",
     "@tramvai/tokens-common": "0.0.0-stub",
-    "@tramvai/tokens-server": "0.0.0-stub"
+    "@tramvai/tokens-server": "0.0.0-stub",
+    "utility-types": "^3.10.0"
   },
   "peerDependencies": {
     "@tinkoff/utils": "^2.1.2",

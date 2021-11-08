@@ -1,12 +1,12 @@
 # @tinkoff/url
 
-Библиотека утилит для работы с url. В основе библиотеки стандартартная реализация [URL](https://url.spec.whatwg.org/#url-class) и [URLSearchParams](https://url.spec.whatwg.org/#interface-urlsearchparams), для работы в средах которые не поддерживают этот функционал требуется полифиллы: [например core-js](https://github.com/zloirock/core-js#url-and-urlsearchparams)
+Utilities to work with urls. Based on standard implementation of [URL](https://url.spec.whatwg.org/#url-class) and [URLSearchParams](https://url.spec.whatwg.org/#interface-urlsearchparams), in case environment does not support these object polyfills should be used, [e.g. core-js](https://github.com/zloirock/core-js#url-and-urlsearchparams).
 
 ## Api
 
 ### parse
 
-Парсит урл и возвращает объект класса URL c дополнительным свойством query - для представления searchParams в виде простого объекта.
+Parses url and returns object of class URL with additional property query which represents searchParams as a simple object.
 
 ```tsx
 import { parse } from '@tinkoff/url';
@@ -23,11 +23,11 @@ url.query; // => { a: '1', b: '2' }
 
 ### rawParse
 
-То же самое, что и `parse`, только вместо обёртки для URL возвращает сырой объект URL
+Same as [parse](#parse) but instead of returning wrapper for URL returns raw URL object
 
 ### resolve
 
-Вычисляет для относительного урла итоговый урл относительного базового значения
+Computes absolute url for relative url of base value
 
 ```tsx
 import { resolve } from '@tinkoff/url';
@@ -39,19 +39,19 @@ resolve('https://tinkoff.ru/a/b/c/?test=123#abc', '.././test/?me=123#123'); // =
 
 ### resolveUrl
 
-Вычисляет для относительного урла итоговый урл относительного базового значения (базовое значение может быть как строкой так и объектом URL)
+Computes absolute url for relative url of base value. Unlike [resolve](#resolve) can accept string or URL and return URL wrapper
 
 ### rawResolveUrl
 
-То же самое, что и `resolveUrl`, только вместо обёртки возвращает сырой объект URL
+Same as [resolveUrl](#resolveurl) but instead of returning wrapper for URL returns raw URL object
 
 ### isAbsoluteUrl
 
-Определяет является ли переданная строка абсолютным урлом
+Checks that passed string is absolute url
 
 ### isInvalidUrl
 
-Определяет является ли данный урл неправильным (это урлы вида `//`, `/////`)
+Checks that passed string represents invalid url
 
 ```tsx
 import { isAbsoluteUrl } from '@tinkoff/url';
@@ -63,8 +63,8 @@ isAbsoluteUrl('/myfolder/test.txt'); // false - relative URL
 
 ### convertRawUrl
 
-Возвращает удобную обёртку для URL в виде plain object с несколькими дополнительными полями
+Returns handy wrapper for URL in form of plain object with some additional fields
 
 ### rawAssignUrl
 
-Позволяет задать опции в переданный сырой объект URL (**Переданные объект будет изменён**)
+Allows to set parameters to passed raw URL object (**passed URL-object will be changed**)

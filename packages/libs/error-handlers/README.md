@@ -1,17 +1,19 @@
 # Error handlers
 
-Библиотека для логгирования глобальных ошибок и необработанных reject-ов промисов. Содерижит реализацию как для браузера так и для nodejs.
+Library for logging of global errors and unhandled promise rejections. May work in browsers and nodejs.
 
-### Api
+## Api
 
-- `globalErrorHandler = (logger: Logger = console)` - инициализация логгирования глобальных ошибок
-- `unhandledRejectionHandler = (logger: Logger = console)` - инициализация логгирования unhandled rejection promise
+- `globalErrorHandler = (logger: Logger = console)` - init logging of global errors
+- `unhandledRejectionHandler = (logger: Logger = console)` - init logging of unhandled rejection promise
 
-### Types
+### Parameters
 
-- `Logger`
-```tsx
-export interface Logger {
-  error: Function;
-}
-```
+- `Logger` - used for logging errors
+
+  ```tsx
+  export interface Logger {
+    warn: Function;
+    error: Function;
+  }
+  ```

@@ -1,12 +1,12 @@
 import { resolve } from 'path';
+import { initPuppeteer } from '@tramvai/test-puppeteer';
 import { runRealApp } from '../startCliRealApp';
-import type { ThenArg } from '../types';
-import { initPuppeteer } from '../../../../legacy/puppeteer';
+import type { StartCliResult } from '../startCli';
 
 describe('test/integration/app/runFakeApp', () => {
   jest.setTimeout(60000);
 
-  let app: ThenArg<ReturnType<typeof runRealApp>>;
+  let app: StartCliResult;
 
   beforeAll(async () => {
     app = await runRealApp(

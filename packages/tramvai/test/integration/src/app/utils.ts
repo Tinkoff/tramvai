@@ -1,5 +1,8 @@
 import type { AddressInfo } from 'net';
-import type { CliResult } from './types';
+import type { PromiseType } from 'utility-types';
+import type { start } from '@tramvai/cli';
+
+type CliResult = PromiseType<ReturnType<typeof start>>;
 
 export const getServerUrl = ({ server }: CliResult) => {
   const { port } = server?.address() as AddressInfo;

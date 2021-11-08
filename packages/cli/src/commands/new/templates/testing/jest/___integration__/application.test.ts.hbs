@@ -1,6 +1,9 @@
-const { startCli } = require('@tramvai/test-integration');
+import type { StartCliResult } from '@tramvai/test-integration';
+import { startCli } from '@tramvai/test-integration';
 
 describe('{{configEntry.name}}', () => {
+  let app: StartCliResult;
+
   beforeAll(async () => {
     app = await startCli('{{configEntry.name}}');
   }, 80000);

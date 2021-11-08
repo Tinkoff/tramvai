@@ -1,3 +1,4 @@
+import type { PromiseType } from 'utility-types';
 import type { App } from '@tramvai/core';
 import { getModuleParameters } from '@tramvai/core';
 import { WEB_APP_TOKEN, SERVER_TOKEN } from '@tramvai/tokens-server';
@@ -30,3 +31,5 @@ export const testApp = async (appOrAppPromise: App | Promise<App>) => {
     },
   };
 };
+
+export type TestAppResult = PromiseType<ReturnType<typeof testApp>>;

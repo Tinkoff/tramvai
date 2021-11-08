@@ -1,22 +1,14 @@
-import type { ComponentType } from 'react';
+import type { LoadableComponent, DefaultComponent } from '@loadable/component';
 import loadable from '@loadable/component';
-
-type Module<P> = {
-  default: P;
-};
 
 interface Options {
   loading?: JSX.Element;
 }
 
-export const lazy = <
-  P,
-  Component extends ComponentType<P> = ComponentType<P>,
-  Export extends Module<Component> = Module<Component>
->(
-  load: (props?: P) => Promise<Export>,
+export const lazy = <Props, Component>(
+  load: (props?: Props) => Promise<DefaultComponent<Props>>,
   options: Options = {}
-) =>
+): LoadableComponent<Props> =>
   loadable(load, {
     fallback: options.loading,
   });

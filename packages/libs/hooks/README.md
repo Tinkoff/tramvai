@@ -1,23 +1,25 @@
 # Hooks
 
-Хуки необходимы для расширения основного функционала и добавления каких либо действий на разных этапах приложения.
+Library used for subscription on specific events in different styles: sync, async, promise.
 
-## Как пользоваться
+## Explanation
 
-По сути можно разделить на 2 этапа:
+Working with lib consist of two phases:
 
-1. Мы вставляем в код раннеры хуков, к примеру runAsyncHooks, передавая в него ключ, которые нужно выполнить и параметры дополнительных параметров. У нас теперь есть слот, куда можно добавить хуки и они выполняться, при выполнении кода.
-2. Мы регистририум хуки для определенных ключей с помошью registerHooks. После этого, по этому ключу будут доступны хуки для раннеров из пункта 1.
+1. Adding in the target code hook runner call, e.g. `runAsyncHooks`, with unique event key and additional parameters. It creates a slot for this event that allow to subscribe on the event.
+2. Registering hook handler with `registerHooks` that will be executed when `run...` function will be called
 
-### Особенности
+### Caveats
 
-Существует несколько видов хуков и они между собой могут быть не совместимы, по этой причине когда мы регистрируем хуки для ключей, должны проверить как используются и где. Также нужно обязательно сохранять цепочку данных, иначе у нас будут различные баги с потерей данных и несоместимости хуков.
+There is different types hooks that are not interoperable. So carefully add new registrations with checking expected hook type.
+
+Also you should preserve data chain, e.g. return data with same interface from hook, as it otherwise may break other hooks.
 
 ## API
 
 #### Hooks
 
-Создает новый инстанс `hook-runner`.
+Create new instance of `@tinkoff/hook-runner`
 
 ```javascript
 import { Hooks } from '@tinkoff/hook-runner';
@@ -27,32 +29,32 @@ const hookRunner = new Hooks();
 
 #### registerHooks(key, hooks)
 
-Позволяет зарегистрировать хуки для определенного ключа.
+Register new hook for a specific key.
 
 #### runHooks(key, context, payload, options)
 
-Позволяет запустить выполнение обычных хуков, payload проходит через все хуки и вернется как результат.
+Execute sync hooks. `payload` is passed through every hook and will be returned as a result (it may be changed by hooks).
 
 #### runAsyncHooks(key, context, payload, options)
 
-Позволяет запустить выполнение хуков ассинхронно с помошью setImmediate. Аргумент payload попадет в каждый хук
+Executes async hooks using setTimeout. `payload` is passed to every hook with its initial value.
 
 #### runPromiseHooks(key, context, options) => (payload) => Promise
 
-Позволяет запускать хуки в цепочке промисов. Объект payload должен прокидываться по всей цепочки хуков
+Execute promise-based hooks. `payload` is passed through every hook and will be returned as a result (it may be changed by hooks)
 
-## Хуки
+## Hooks
 
-### Виды
+### Types
 
-#### Для промисов
+#### sync
 
-Получает (context, payload, options), мы должны прокидывать по цепочке payload. Нужны для запуска связанных цепочек промисов
+Accepts (context, payload, options). Hooks are running in order passing previous hook result as input for next hook.
 
-#### Для ассинхронных
+#### async
 
-Получает (context, payload, options), мы асснхронно запускаем хуки. Нужны для запуска несвязанных хуков.
+Accepts (context, payload, options). Hooks are running independently from each other.
 
-#### Для синхронных
+#### promise
 
-Получает (context, payload, options), мы синхронно запускаем хуки передавая в каждый следующий хук результат прошлого.
+Accepts (context, payload, options). Hooks are running in order passing previous hook result as input for next hook with wrapping call in promise.
