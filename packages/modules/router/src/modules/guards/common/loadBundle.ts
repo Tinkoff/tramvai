@@ -30,7 +30,7 @@ export const loadBundle = ({
 
     const { bundle, pageComponent } = to.config;
 
-    if (!bundleManager.has(bundle)) {
+    if (!bundleManager.has(bundle, pageComponent)) {
       // если бандл не найдён, то всё ок мы должны вернуть 404 на сервере, а на клиенте просто загрузить новую страницу
       responseManager.setStatus(404);
       return false;

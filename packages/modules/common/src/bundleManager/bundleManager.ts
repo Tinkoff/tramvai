@@ -1,14 +1,18 @@
 import eachObj from '@tinkoff/utils/object/each';
-import type { Bundle } from '@tramvai/core';
+import { createBundle } from '@tramvai/core';
 import type {
   BUNDLE_MANAGER_TOKEN,
   DISPATCHER_TOKEN,
   DISPATCHER_CONTEXT_TOKEN,
   ActionsRegistry,
 } from '@tramvai/tokens-common';
+import type { Bundle } from '@tramvai/core';
+import { isFileSystemPageComponent, getAllFileSystemPages } from '@tramvai/experiments';
 import type { ComponentRegistry } from '../componentRegistry/componentRegistry';
 
 type Interface = typeof BUNDLE_MANAGER_TOKEN;
+
+const FS_PAGES_DEFAULT_BUNDLE = '__default';
 
 export class BundleManager implements Interface {
   bundles: Record<string, () => Promise<{ default: Bundle }>>;
@@ -27,22 +31,42 @@ export class BundleManager implements Interface {
     this.actionRegistry = actionRegistry;
     this.dispatcher = dispatcher;
     this.dispatcherContext = dispatcherContext;
+
+    if (process.env.__TRAMVAI_EXPERIMENTAL_ENABLE_FILE_SYSTEM_PAGES) {
+      const componentsDefaultBundle = createBundle({
+        name: FS_PAGES_DEFAULT_BUNDLE,
+        components: getAllFileSystemPages(),
+      });
+
+      this.bundles[FS_PAGES_DEFAULT_BUNDLE] = () =>
+        Promise.resolve({
+          default: componentsDefaultBundle,
+        });
+    }
   }
 
   get(name: string, pageComponent: string) {
-    return this.loadBundle(name).then((bundle: { default: Bundle }) =>
+    // use fake bundle with file-system pages
+    if (isFileSystemPageComponent(pageComponent)) {
+      // eslint-disable-next-line no-param-reassign
+      name = FS_PAGES_DEFAULT_BUNDLE;
+    }
+    return this.loadBundle(name, pageComponent).then((bundle: { default: Bundle }) =>
       this.resolve(bundle.default, pageComponent)
     );
   }
 
-  has(name: string) {
+  has(name: string, pageComponent: string) {
+    // use fake bundle with file-system pages
+    if (isFileSystemPageComponent(pageComponent)) {
+      // eslint-disable-next-line no-param-reassign
+      name = FS_PAGES_DEFAULT_BUNDLE;
+    }
     return !!this.bundles[name];
   }
 
   private async resolve(bundle: Bundle, pageComponent: string) {
-    // если компонент обернут в `lazy`,
-    // необходимо предзагрузить его, тогда всплывут все статические свойства,
-    // и можно будет зарегистрировать страничные экшены
+    // preload `lazy` components then register actions and reducers
     if (pageComponent && bundle.components[pageComponent]) {
       const componentOrLoader = bundle.components[pageComponent];
 
@@ -53,6 +77,13 @@ export class BundleManager implements Interface {
 
       if (component.actions) {
         this.actionRegistry.add(pageComponent, component.actions);
+      }
+
+      if (component.reducers) {
+        component.reducers.forEach((reducer) => {
+          this.dispatcher.registerStore(reducer);
+          this.dispatcherContext.getStore(reducer);
+        });
       }
     }
 
@@ -74,8 +105,8 @@ export class BundleManager implements Interface {
     return bundle;
   }
 
-  private loadBundle(name: string) {
-    if (!this.has(name)) {
+  private loadBundle(name: string, pageComponent: string) {
+    if (!this.has(name, pageComponent)) {
       return Promise.reject(new Error(`Bundle "${name}" not found`));
     }
 

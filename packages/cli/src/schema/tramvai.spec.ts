@@ -131,6 +131,11 @@ describe('JSON schema для tramvai.json', () => {
                 experiments: {
                   webpack: {},
                   minicss: {},
+                  fileSystemPages: {
+                    enable: false,
+                    staticPagesDir: 'pages',
+                    externalPagesDir: 'external-pages',
+                  },
                 },
               },
             },
@@ -143,6 +148,11 @@ describe('JSON schema для tramvai.json', () => {
                 experiments: {
                   webpack: {},
                   minicss: {},
+                  fileSystemPages: {
+                    enable: false,
+                    staticPagesDir: 'pages',
+                    externalPagesDir: 'external-pages',
+                  },
                 },
               },
               notifications: {},
@@ -176,6 +186,11 @@ describe('JSON schema для tramvai.json', () => {
                 experiments: {
                   webpack: {},
                   minicss: {},
+                  fileSystemPages: {
+                    enable: false,
+                    staticPagesDir: 'pages',
+                    externalPagesDir: 'external-pages',
+                  },
                 },
               },
               options: {
@@ -190,6 +205,11 @@ describe('JSON schema для tramvai.json', () => {
                 experiments: {
                   webpack: {},
                   minicss: {},
+                  fileSystemPages: {
+                    enable: false,
+                    staticPagesDir: 'pages',
+                    externalPagesDir: 'external-pages',
+                  },
                 },
               },
               notifications: {},

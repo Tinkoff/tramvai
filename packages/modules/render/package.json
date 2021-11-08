@@ -30,6 +30,7 @@
     "@tramvai/react": "0.0.0-stub",
     "@tramvai/safe-strings": "0.0.0-stub",
     "@tramvai/tokens-render": "0.0.0-stub",
+    "@tramvai/experiments": "0.0.0-stub",
     "@types/loadable__server": "^5.12.6",
     "node-fetch": "^2.6.1"
   },

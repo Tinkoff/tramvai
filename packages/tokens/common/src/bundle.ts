@@ -21,5 +21,5 @@ export interface BundleManager {
 
   get(name: string, pageComponent: string): Promise<any>;
 
-  has(name: string): boolean;
+  has(name: string, pageComponent: string): boolean;
 }

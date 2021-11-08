@@ -19,10 +19,14 @@ export function showBanner(di: Container) {
 
   // Features
   if (config.type !== 'application') {
-    titleLines.push(`${label('Type')}          ${config.type}`);
+    titleLines.push(`${label('Type')}             ${config.type}`);
   }
-  titleLines.push(`${label('Modern')}        ${config.modern}`);
-  titleLines.push(`${label('ReactRefresh')}  ${config.hotRefresh}`);
+  titleLines.push(`${label('Modern')}           ${config.modern}`);
+  titleLines.push(`${label('ReactRefresh')}     ${config.hotRefresh}`);
+
+  if (config.build.configurations.experiments.fileSystemPages.enable) {
+    titleLines.push(`${label('FileSystemPages')}  true`);
+  }
 
   // Listeners
   messageLines.push(

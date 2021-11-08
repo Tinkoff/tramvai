@@ -9,6 +9,7 @@ const publicPackages = [
   '@tramvai/react-query',
   '@tramvai/state',
   '@tramvai/types-actions-state-context',
+  '@tramvai/experiments',
   // TEST
   '@tramvai/test-unit-jest',
   '@tramvai/test-unit',

@@ -12,18 +12,29 @@ import ts from '../../blocks/ts';
 import js from '../../blocks/js';
 import css from '../../blocks/css';
 import apiResolve from '../../blocks/apiResolve';
+import { pagesResolve } from '../../blocks/pagesResolve';
 import { serverInline } from '../../blocks/serverInline';
 import { browserslistConfigResolve } from '../../blocks/browserslistConfig';
+import { configToEnv } from '../../blocks/configToEnv';
 
 // eslint-disable-next-line import/no-default-export
 export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config: Config) => {
-  const { options: { server = '', outputServer = '' } = {} } = configManager.build;
+  const {
+    options: { server = '', outputServer = '' } = {},
+    configurations: {
+      experiments: { fileSystemPages },
+    },
+  } = configManager.build;
 
   config.name('server');
 
   config.batch(common(configManager));
   config.batch(files(configManager));
   config.batch(apiResolve(configManager));
+
+  if (fileSystemPages.enable) {
+    config.batch(pagesResolve(configManager));
+  }
 
   config.target('node');
   config.output.libraryTarget('commonjs2');
@@ -48,6 +59,8 @@ export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config
     .test(/\.less$/)
     .use('ignore')
     .loader('null-loader');
+
+  config.batch(configToEnv(configManager));
 
   config.plugin('define').tap((args) => [
     {

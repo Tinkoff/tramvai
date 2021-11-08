@@ -95,9 +95,11 @@ export class PageBuilder {
 
   async fetchChunksInfo(extractor: ChunkExtractor) {
     const { modern } = this;
-    const { bundle } = this.pageService.getConfig();
+    const { bundle, pageComponent } = this.pageService.getConfig();
 
-    this.resourcesRegistry.register(await bundleResource({ bundle, modern, extractor }));
+    this.resourcesRegistry.register(
+      await bundleResource({ bundle, modern, extractor, pageComponent })
+    );
     this.resourcesRegistry.register(
       await polyfillResources({
         condition: this.polyfillCondition,

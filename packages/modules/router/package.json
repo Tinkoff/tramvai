@@ -26,10 +26,12 @@
     "@tinkoff/url": "0.0.0-stub",
     "@tramvai/tokens-render": "0.0.0-stub",
     "@tramvai/tokens-router": "0.0.0-stub",
-    "@tramvai/tokens-server": "0.0.0-stub"
+    "@tramvai/tokens-server": "0.0.0-stub",
+    "@tramvai/experiments": "0.0.0-stub"
   },
   "peerDependencies": {
     "@tinkoff/utils": "^2.1.2",
+    "@tramvai/cli": "0.0.0-stub",
     "@tramvai/core": "0.0.0-stub",
     "@tramvai/module-log": "0.0.0-stub",
     "@tramvai/module-server": "0.0.0-stub",

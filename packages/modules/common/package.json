@@ -34,11 +34,13 @@
     "@tramvai/module-environment": "0.0.0-stub",
     "@tramvai/module-log": "0.0.0-stub",
     "@tramvai/tokens-common": "0.0.0-stub",
+    "@tramvai/experiments": "0.0.0-stub",
     "@tinkoff/hook-runner": "0.0.0-stub",
     "lru-cache": "^6.0.0"
   },
   "peerDependencies": {
     "@tinkoff/utils": "^2.1.2",
+    "@tramvai/cli": "0.0.0-stub",
     "@tramvai/core": "0.0.0-stub",
     "@tramvai/papi": "0.0.0-stub",
     "@tramvai/state": "0.0.0-stub",

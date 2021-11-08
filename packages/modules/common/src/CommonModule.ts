@@ -29,7 +29,7 @@ import { createConsumerContext } from './createConsumerContext/createConsumerCon
 import { CommandModule } from './command/CommandModule';
 import { PubSubModule } from './pubsub/PubSubModule';
 
-import { providers } from './providers/serverProviders';
+import { providers as serverProviders } from './providers/serverProviders';
 import { ActionModule } from './actions/ActionModule';
 import { StateModule } from './state/StateModule';
 import { CacheModule } from './cache/CacheModule';
@@ -102,7 +102,7 @@ import { CacheModule } from './cache/CacheModule';
         store: STORE_TOKEN,
       },
     }),
-    ...providers,
+    ...serverProviders,
   ],
 })
 export class CommonModule {}

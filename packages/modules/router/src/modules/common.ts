@@ -38,11 +38,13 @@ import { commonGuards } from './guards/common';
 import { commonHooks } from './hooks/common';
 import { commonTokens } from './tokens/common';
 import { PageService } from '../services/page';
+import { providers as fsPagesProviders } from './fileSystemPages';
 
 export const providers: Provider[] = [
   ...commonGuards,
   ...commonHooks,
   ...commonTokens,
+  ...fsPagesProviders,
   {
     provide: ROUTER_TOKEN,
     useFactory: ({

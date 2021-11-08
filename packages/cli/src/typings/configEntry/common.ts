@@ -30,6 +30,27 @@ export interface Experiments {
   minicss?: {
     useImportModule?: boolean;
   };
+  /**
+   * @title experimental settings for File-System Routing feature
+   * @default {}
+   */
+  fileSystemPages?: {
+    /**
+     * @title Read pages from file system
+     * @default false
+     */
+    enable?: boolean;
+    /**
+     * @title Folder with pages
+     * @default "pages"
+     */
+    staticPagesDir?: string;
+    /**
+     * @title Folder with pages
+     * @default "external-pages"
+     */
+    externalPagesDir?: string;
+  };
 }
 
 type serveConfig = {

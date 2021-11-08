@@ -6,3 +6,4 @@ export * from './types';
 export * from './logger';
 export * from './components/react';
 export * from './tree/tree';
+export * from './tree/utils';

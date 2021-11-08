@@ -50,6 +50,12 @@
         },
         {
             "path": "../../tramvai/papi"
+        },
+        {
+            "path": "../../cli"
+        },
+        {
+            "path": "../../tramvai/experiments"
         }
     ]
 }

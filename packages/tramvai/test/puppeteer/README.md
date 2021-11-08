@@ -33,7 +33,7 @@ afterAll(() => {
 });
 
 it('puppeteer', async () => {
-  const browser = await initPuppeteer(app.serverUrl);
+  const { browser } = await initPuppeteer(app.serverUrl);
 
   const page = await browser.newPage();
   const wrapper = wrapPuppeteerPage(page);

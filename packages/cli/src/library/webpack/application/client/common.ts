@@ -14,19 +14,32 @@ import less from '../../blocks/less';
 import css from '../../blocks/css';
 import postcssAssets from '../../blocks/postcssAssets';
 import nodeClient from '../../blocks/nodeClient';
+import { pagesResolve } from '../../blocks/pagesResolve';
 import { DEFAULT_STATS_OPTIONS, DEFAULT_STATS_FIELDS } from '../../constants/stats';
+import { configToEnv } from '../../blocks/configToEnv';
 
 export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config: Config) => {
-  const { options: { polyfill = '', vendor = '' } = {} } = configManager.build;
+  const {
+    options: { polyfill = '', vendor = '' } = {},
+    configurations: {
+      experiments: { fileSystemPages },
+    },
+  } = configManager.build;
 
   config.name('client');
 
   config.batch(common(configManager));
   config.batch(files(configManager));
 
+  if (fileSystemPages.enable) {
+    config.batch(pagesResolve(configManager));
+  }
+
   const portal = path.resolve(configManager.rootDir, `packages/${process.env.APP_ID}/portal.js`);
 
   config.target(configManager.modern ? 'web' : ['web', 'es5']);
+
+  config.batch(configToEnv(configManager));
 
   config
     .entry('platform')

@@ -53,6 +53,12 @@
         },
         {
             "path": "../../tramvai/test/mocks"
+        },
+        {
+            "path": "../../cli"
+        },
+        {
+            "path": "../../tramvai/experiments"
         }
     ]
 }
