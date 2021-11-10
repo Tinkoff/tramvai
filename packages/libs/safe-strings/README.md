@@ -1,19 +1,19 @@
 # @tramvai/safe-strings
 
-Библиотека с набором утилит для безопасной обработки строк
+Utility kit for a safe string encoding/decoding
 
 ## `safeParseJSON`
 
-Парсит json или возвращает значение по-умолчанию если парсинг неудачный
+Tries to parse json and if it successful returns it, otherwise returns second argument as default value.
 
 ## `safeStringify`
 
-Конвертирует json в строку с заменой небезопасных символов, чтобы можно было выполнить eval
+Converts object to json with a replacement of insecure symbols that allows to insert result string in the response html
 
 ## `safeStringiyfJSON`
 
-Конвертирует json в строку с обработкой циклических ссылок
+Converts object to json with a circular reference handling
 
 ## `removeXss`
 
-Удаляет из url xss код
+Removes possible xss strings
