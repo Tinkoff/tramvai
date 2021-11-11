@@ -1,4 +1,16 @@
-export type HttpMethod = 'get' | 'post' | 'put' | 'delete' | 'GET' | 'POST' | 'PUT' | 'DELETE';
+export type HttpMethod =
+  | 'get'
+  | 'post'
+  | 'put'
+  | 'delete'
+  | 'head'
+  | 'patch'
+  | 'GET'
+  | 'POST'
+  | 'PUT'
+  | 'DELETE'
+  | 'HEAD'
+  | 'PATCH';
 
 export type RequestContentType = 'form' | 'json' | 'xml' | 'urlencoded';
 
