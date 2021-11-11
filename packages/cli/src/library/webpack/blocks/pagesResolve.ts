@@ -15,7 +15,8 @@ const filesToPages = ({
 }) => {
   const pagesDir = path.resolve(configManager.rootDir, configManager.root, pagesRootDirectory);
 
-  const pagesFiles = readDir(pagesDir);
+  // skip files whose name starts with dot or underscore symbols
+  const pagesFiles = readDir(pagesDir, (name) => name[0] !== '.' && name[0] !== '_');
   const fsPages = [];
 
   for (const file of pagesFiles) {

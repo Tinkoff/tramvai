@@ -1,4 +1,4 @@
-import { Argv } from 'yargs';
+import type { Argv } from 'yargs';
 import yargs from 'yargs';
 import type { Options } from './options.h';
 import { TramvaiBuild } from './index';
@@ -29,10 +29,15 @@ const args = (yargs as Argv<Options>)
   .help('-h').argv;
 
 export const start = () => {
-  return new TramvaiBuild(args).start().then(() => {
-    // https://github.com/rollup/rollup/issues/4213
-    process.exit(0);
-  });
+  return new TramvaiBuild(args)
+    .start()
+    .then(() => {
+      // https://github.com/rollup/rollup/issues/4213
+      process.exit(0);
+    })
+    .catch(() => {
+      process.exit(1);
+    });
 };
 
 export const copy = () => {
