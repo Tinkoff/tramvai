@@ -1,4 +1,4 @@
-import { formatSageJson } from './formatSageJson';
+import { formatSageJsonFactory } from './formatSageJson';
 import type { LogArgs } from '../../logger.h';
 
 const restArgs = ['one', 2, 'three', 4, { foo: 'bar' }, { baz: 5 }, [1], ['2'], [{ '3': 4 }]];
@@ -13,7 +13,7 @@ describe('reporters/utils/formatSageJson', () => {
   argsCombs.forEach(([firstArgType, args]) => {
     describe(`first arg is ${firstArgType}`, () => {
       it('should add strings and numbers from args to message array', () => {
-        const { message } = formatSageJson({
+        const { message } = formatSageJsonFactory({})({
           name: 'name',
           date: new Date(),
           level: 0,
@@ -24,7 +24,7 @@ describe('reporters/utils/formatSageJson', () => {
       });
 
       it('should add objects to "objects" array', () => {
-        const { objects } = formatSageJson({
+        const { objects } = formatSageJsonFactory({})({
           name: 'name',
           date: new Date(),
           level: 0,
@@ -35,7 +35,7 @@ describe('reporters/utils/formatSageJson', () => {
       });
 
       it('should add arrays to "arrays" array', () => {
-        const { arrays } = formatSageJson({
+        const { arrays } = formatSageJsonFactory({})({
           name: 'name',
           date: new Date(),
           level: 0,

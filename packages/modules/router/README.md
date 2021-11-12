@@ -25,7 +25,7 @@ createApp({
 
 ## Explanation
 
-Модуль основан на библиотеке [@tinkoff/router](../libs/router)
+Модуль основан на библиотеке [@tinkoff/router](references/libs/router.md)
 
 ### Флоу работы навигации на сервере
 
