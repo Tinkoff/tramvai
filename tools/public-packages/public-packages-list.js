@@ -3,7 +3,6 @@ const publicPackages = [
   '@tramvai/cli',
   // CORE
   '@tramvai/core',
-  '@tramvai/mock',
   '@tramvai/papi',
   '@tramvai/react',
   '@tramvai/react-query',

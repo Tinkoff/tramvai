@@ -1,8 +1,9 @@
 # @tinkoff/express-terminus
 
-Форк библиотеки [@godaddy/terminus](https://github.com/godaddy/terminus).
+Fork of the library [@godaddy/terminus](https://github.com/godaddy/terminus).
 
-## Особенности
+## Features
 
-`healthChecks` обработчики создаются для `express` приложения, в отличие от исходной библиотеки, где перезаписываются обработчики события `request` у объекта сервера.
-Исходное поведение усложняло добавление общей логики для всех запросов в приложение, в том числе на `healthChecks`, например, было невозможно добавить заголовок `X-App-Id` в одном месте, для всех запросов.
+`healthChecks` handlers are creater for an `express` app, in contrast to original library which redefines `request` event handler of server object.
+
+Original behaviour is more complicated in case of a need to add common logic for every request in the app, including `healthChecks` itself. E.g. it was not possible to add http-header in single place to make it work for every request.

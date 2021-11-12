@@ -1,19 +1,24 @@
 # Minicss class name generator
 
-Библиотека для генерации коротких имён классов. Подробнее про концепцию в [статье](https://dev.to/denisx/reduce-bundle-size-via-one-letter-css-classname-hash-strategy-10g6).
+`css-loader` plugin which generates short css class names. Details in the [article](https://dev.to/denisx/reduce-bundle-size-via-one-letter-css-classname-hash-strategy-10g6)
 
-## Установка
-Устанавливаем через package manager
+## Installation
+
+Install using yarn
+
 ```bash
 yarn add --dev @tinkoff/minicss-class-generator
 ```
-или
+
+or npm
+
 ```bash
 npm i --save-dev @tinkoff/minicss-class-generator
 ```
 
-## Подключение
-В файле конфига для вебпака для лоадера `css-loader` определяем параметры `localIdentName` и `getLocalIdent`:
+## Setup
+
+Define options `localIdentName` и `getLocalIdent` for `css-loader` config inside your webpack config:
 
 ```js
 ({
@@ -21,19 +26,20 @@ npm i --save-dev @tinkoff/minicss-class-generator
   options: {
     modules: {
       getLocalIdent: createGenerator(),
-      localIdentName: '[minicss]'
+      localIdentName: '[minicss]',
     },
   },
-})
+});
 ```
 
-В localIdentName можно передать произвольный шаблон и использовать возможности из css-loader. Например: я хочу добавить название оригинального файла и className, для этого могу прописать `[name]__[local]_[minicss]`
+For `localIdentName` it is possible to pass any template which is accepted by css-loader. E.g. if you want to add the origin filename and the className pass `[name]__[local]_[minicss]` as `localIdentName`
 
-## Принцип работы
+## How does it work
 
-Плагин генерирует уникальный хэш ключ для className по формуле - ${порядок}${contentHash} при этом, `contentHash` - хэш от контента файла, `порядок` - инкрементальный ключ порядка внутри файла, каждая генерация ключа увеличивает параметр и тем самым соблюдается уникальность внутри файла. За счет того, что у нас `contentHash` общий для всего файла, мы меньше генерируем уникальных ключей и gzip/brotli лучше сжимает данные
+Plugin generate unique key for a className using formula `${order}${contentHash}` where `contentHash` is a hash of the source file content and `order` - ordered key of class definition inside source file. Using `contentHash` from source allows to generate less unique string and allows to reuse the same `contentHash` for every className that leads for better data compression with gzip/brotli. Using `order` helps sustain uniqueness for every className in single source file.
 
-Пример работы:
+Examples:
+
 ```
 [hash:base64:5]
 file: Button.css

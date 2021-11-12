@@ -1,21 +1,22 @@
 ---
 id: how-create-bundle
-title: Как создать бандл?
+title: How to create a bundle?
 ---
 
-Bundle — это сборник ресурсов для страниц: компоненты, экшены, сторы. Каждый роут связан с каким-то бандлом который нужен ему для отображения.
+Bundle — is a collection of resources for pages: components, actions, stocks.
+Each route is associated with some bundle it needs to display.
 
-Рассмотрим на основе кейса: у нас появился новый раздел на сайте, мы хотим создать новый бандл с отдельными страницами.
+Let's use a case study: we have a new section on our site, and we want to create a new bundle with separate pages.
 
-Создание и подключение бандла состоит из трех этапов:
+Creating and connecting the bundle consists of three steps:
 
-1. Создание бандла
-2. Наполнение компонентами
-3. Подключение в приложении
+1. Creating a bundle
+2. Adding components
+3. Connecting in the application
 
-### Создание бандла
+### Creating a bundle
 
-Используем метод `createBundle` и создаем пустой бандл, в который записываем поле `name`,  которое является уникальным идентификатором бандла:
+We use the `createBundle` method and create an empty bundle, in which we write the `name` field, which is the unique identifier of the bundle:
 
 ```tsx
 import { createBundle } from '@tramvai/core';
@@ -26,14 +27,17 @@ export default createBundle({
 });
 ```
 
-### Наполнение компонентами
+### Adding components
 
-Следующим этапом мы добавляем компоненты, которые будут доступны в этом бандле. Ключом являет идентификатор компонента, этот идентификатор можно будет привязать к роуту:
+The next step is to add the components that will be available in this bundle.
+We recommended to use `lazy` and dynamic import page components for effective code splitting.
+The key is the identifier of the component, this identifier can be bound to the router:
 
 ```tsx
 import { createBundle } from '@tramvai/core';
+import { lazy } from '@tramvai/react';
 
-import MainPage from '../pages/main';
+const MainPage = lazy(() => import('../pages/main'));
 import Layout from '../layouts';
 
 
@@ -46,13 +50,15 @@ export default createBundle({
 });
 ```
 
-При этом можно регистрировать любые компоненты и для разных целей. Например, мы можем зарегистрировать в бандле компоненты модальных окон, попапов и так далее. Вся эти компоненты будут доступны в `componentRegistry`.
+You can register any components for different purposes.
+For example, we can register components of modal windows, popups and so on in the bundle.
+All these components will be available in the `componentRegistry`.
 
-### Подключение в приложение
+### Connecting in the application
 
-Теперь нам осталось зарегистрировать бандл в приложении. Для этого добавляем в объект `bundles` у `createApp`:
-* `ключ`: идентификатор бандла. Последняя часть должна быть одинаковой с идентификатором бандла, переданого в `name`, там используется функция вида`last('platform/coin'.split('/'))`, иначе не будет подзагрузка бандла на стороне сервера.
-* `значение`: функция, которая должна вернуть промис, результатом которого будет передан объект. Обычно используют асинхронные чанки вебпака, но можно и написать кастомный лоадер обычных js файлов. Из особенностей, название чанка, должно быть синхронизировано с идентификатором `name`
+Now we have to register the bundle in the application. To do this we add to the `bundles` object of `createApp`:
+* `key`: the identifier of the bundle. The last part must be the same as the bundle ID passed to `name`, a function of the form `last('platform/coin'.split('/'))` is used there, otherwise, there will be no loading of the bundle on the server side.
+* `value`: the function that should return the promise wrapped bundle object. Usually, asynchronous webpack chunks are used, but you can also write a custom loader of regular js files. The important thing is that the name of the chunk, must be synchronized with the `name` identifier
 
 ```tsx
 import { createApp } from '@tramvai/core';
@@ -64,16 +70,17 @@ createApp({
 });
 ```
 
-После этого у нас будет доступен в приложении бандл и после его загрузки, станут доступны привязанные компоненты. Дальше мы можем использовать эти компоненты в роутинге
+After that, we will have a bundle available in the application and after downloading it, the linked components will be available. Then we can use these components in routing
 
-* [Подробная дока по createBundle](references/tramvai/create-bundle.md)
-* [Подробная дока по createApp](references/tramvai/create-app.md)
+* [Complete documentation about createBundle](references/tramvai/create-bundle.md)
+* [Complete documentation about createApp](references/tramvai/create-app.md)
 
-## Дефолтный бандл
+## Defaul bundle
 
-Дефолтный бандл позволяет обрабатывать все (созданные через RouterModule.forRoot) урлы, для которых бандл не задан специально. Делается это так:
+The default bundle allows you to handle all (created via `RouterModule.forRoot`) urls for which no bundle is specifically set.
+It is done like this:
 
-В index.ts
+Inside index.ts
 
 ```tsx
 import { createApp } from '@tramvai/core';
@@ -92,7 +99,7 @@ createApp({
 });
 ```
 
-В файле `bundles/mainDefault.ts`
+In file `bundles/mainDefault.ts`
 
 ```tsx
 import { createBundle } from '@tramvai/core'

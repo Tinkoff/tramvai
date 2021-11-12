@@ -1,28 +1,30 @@
 ---
 id: how-debug-modules
-title: Как дебажить модули?
+title: How to debug modules?
 ---
 
-Для удобной отладки модулей необходимо включить отображение логов для уникальных идентификаторов логгера, которые были созданы в отлаживаемых модулях. Документация библиотеки [@tinkoff/logger](references/libs/logger.md) содержит подробные примеры работы с логгером.
+For convenient debugging of modules, it is necessary to enable logger display for unique logger IDs that were created in the modules being debugged. Library documentation [@tinkoff/logger](references/libs/logger.md) contains detailed examples of logger operation.
 
-Рекомендуется указывать список идентификаторов логгеров в README к каждому модулю, в противном случае для поиска нужных идентификаторов можно посмотреть вхождения по строке `logger(`.
+It is recommended to specify a list of logger identifiers in the README for each module, otherwise you can look up occurrences on the line `logger(` to find the necessary identifiers.
 
-Уровени и идентификаторы отображаемых логов указываются отдельно для сервера и для клиента, по умолчанию отображаются все логи с уровнем `error` и выше.
+Levels and identifiers of displayed loggers are specified separately for server and for client, by default all loggers with level `error` and above are displayed.
 
-### Отображение логов на сервере
+### Displaying logs on the server
 
-Настройки серверных логов задаются в переменных окружения `LOG_LEVEL` и `LOG_ENABLE`, при необходимости можно поменять эти настройки в рантайме, через papi метод `/{appName}/private/papi/logger` с дополнительными query параметрами. Подробнее про доступные параметры можно прочитать в документации [@tramvai/module-log](references/modules/log.md)
+The server log settings are set in the `LOG_LEVEL` and `LOG_ENABLE` environment variables, if needed, you can change these settings in runtime, through the papi method `/{appName}/private/papi/logger` with additional query parameters.
+You can read more about the available parameters in the documentation [@tramvai/module-log](references/modules/log.md)
 
 ```bash
-LOG_ENABLE='router' // отображает все логи для логгера с идентификатором `router`
+LOG_ENABLE='router' // displays all logs for the logger with the ID `router`
 ```
 
-### Отображение логов на клиенте
+### Displaying logs on the browser
 
-Настройки клиентских логов регулируются через методы библиотеки logger. Эти настройки сохраняются в localStorage, поэтому для отображения всех клиентских логов с новыми настройками, надо дополнительно перезагрузить страницу, либо очистить localStorage.
+Client logs settings are controlled by methods of the `@tinkoff/logger` library.
+These settings are stored in the localStorage, so to display all client logs with new settings, you must additionally reload the page, or clear the localStorage.
 
 ```tsx
 import logger from '@tinkoff/logger';
 
-logger.enable('router'); // отображает все логи для логгера с идентификатором `router`
+logger.enable('router'); // displays all logs for the logger with the ID `router`
 ```

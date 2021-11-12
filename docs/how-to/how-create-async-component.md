@@ -1,13 +1,14 @@
 ---
 id: how-create-async-component
-title: Как вынести компонент в асинхронный чанк?
+title: How to split a component into an asynchronous chunk?
 ---
 
-tramvai поддерживает вынос компонентов в асинхронные чанки с рендерингом на сервере и гидрацией на клиенте, используя [`@tramvai/react`](features/react.md#lazy)
+tramvai supports splitting components into asynchronous chunks with rendering on the server and hydration on the client, using [`@tramvai/react`](features/react.md#lazy)
 
-## Пример компонента
+## Component example
 
-Допустим у нас есть тяжелый React компонент, который изредка используется и мы хотим его грузить только при необходимости. Сейчас у нас такой код:
+Let's say we have a heavy React component that we use occasionally and we want to load it only when needed.
+Right now we have the following code:
 
 ```tsx
 // file heavy.tsx
@@ -26,14 +27,14 @@ const Page = () => (
 );
 ```
 
-## Подключаем lazy
+## Connecting the lazy
 
-Есть несколько способов вынести компонент в асинхронные чанки
+There are several ways to split the component into asynchronous chunks
 
-- Добавить в `page.tsx` новый враппер для `heavy`.
-- Вынести код `heavy` в отдельный файл и в `heavy.tsx` оставить только async враппер
+- Add new wrapper for `heavy` into `page.tsx`.
+- Put `heavy` code into a separate file and leave only async wrapper in `heavy.tsx`.
 
-Мы пойдем по пути создания нового файла, так как это позволяет не менять импорты в файлах, которые уже использовали `Heavy` компонент. И в будущем будет сложнее забыть переиспользовать async компонент:
+We'll create a new file, as this allows us not to change imports in files that have already used the `Heavy` component. And it will be harder to forget to reuse the async component in the future:
 
 ```tsx
 // file heavy-component.tsx
@@ -59,17 +60,17 @@ const Page = () => (
 );
 ```
 
-Мы создали новый файл, вынесли туда весь код компонента `Heavy`, а в старом файле оставили только сам компонент, который обернули в `lazy` и заимпортили оригинальный компонент с помощью `import`. Теперь у нас вместо оригинального `Heavy` компонента будет асинхронная версия, которую мы загрузим только при отрисовки `Page` компонента.
+We created a new file, put all the code of the `Heavy` component there, and left only the component itself in the old file, which we wrapped in `lazy` and imported the original component with `import`. Now instead of the original `Heavy` component we will have an asynchronous version which we will load only when rendering the `Page` component.
 
-## Итог
+## Result
 
-Компонент `Heavy` будет загружен при необходимости
+The `Heavy` component will be loaded by demand
 
-Дальше компонент будет:
+Next, the component will be:
 
-- Автоматически вынесен в отдельный чанк вебпаком
-- При отрисовки SSR автоматически загрузит файл и сразу-же отрисует на сервере
-- JS и CSS чанка будут вставлены в HTML с максимальным приоритетом
-- Браузер бесшовно продолжит работу
+- Automatically put in a separate webpack chunk
+- When rendering, SSR will automatically download the file and immediately render it on the server
+- JS and CSS of the chunk will be inserted into the HTML with maximum priority
+- It will work seamlessly in the browser
 
-[Пример работы в тестовом приложении](how-to/ssr-async-components.md)
+[Example of work in a test application](how-to/ssr-async-components.md)

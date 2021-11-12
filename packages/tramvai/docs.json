@@ -50,14 +50,6 @@
               "id": "papi",
               "title": "papi"
             }
-          },
-          {
-            "path": "mock/README.md",
-            "priority": 50,
-            "doc": {
-              "id": "mock",
-              "title": "mock"
-            }
           }
         ]
       },

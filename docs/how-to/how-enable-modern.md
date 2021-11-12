@@ -1,30 +1,18 @@
 ---
 id: how-enable-modern
-title: Как включить modern режим для приложения?
+title: How to enable modern mode for an application?
 ---
 
-Инструкция как включить `modern` сборку кода в приложении. Это нужно для того, чтобы новые браузеры получали код без различных преобразований, которые нужны для устаревших браузеров. Таким образом мы уменьшаем количество кода и улучшаем производительность приложения.
+Instructions on how to enable `modern' code assembly in the application.
+This is to ensure that new browsers get the code without the various transformations that are needed for legacy browsers.
+This way we reduce the amount of code and improve the performance of the application.
 
-[Подробнее про modern сборку от smashingmagazine](https://www.smashingmagazine.com/2018/10/smart-bundling-legacy-code-browsers/)
+[Read more about the modern bundle from smashingmagazine](https://www.smashingmagazine.com/2018/10/smart-bundling-legacy-code-browsers/)
 
-Мы рассмотрим следующие этапы
+## Configuring tramvai.json
 
-1. Проверка версий зависимостей
-2. Конфигурация platform.json
-
-## Проверяем версии
-
-Для того, что бы modern режим работал, необходимо проверить, что в приложении используются:
-
-- @tramvai/module-render > 0.17.0 версии
-- @tramvai/cli > 0.7.32 версии
-
-либо обновить все зависимости разом (рекомендуемый способ)
-
-## Конфигурируем platform.json
-
-Теперь нам нужно включить сборку кода под современные версии браузеров.
-Для этого добавляем параметр `modern: true` в platform.json:
+We need to enable building code for modern versions of browsers.
+To do this, add the `modern: true` parameter to tramvai.json:
 
 ```json
 {
@@ -50,6 +38,6 @@ title: Как включить modern режим для приложения?
 }
 ```
 
-После этого, platform-cli будет собирать две версии каждого js файла, ES5 и ES2017
+After that, `@tramvai/cli` will build two versions of each js file: ES5 and ES2017
 
-После выполнения этих этапов, у нас будет собираться статика под 2 типа браузеров и `RenderModule` будет отдавать для современных браузеров код стандарта ES2017.
+After these steps, we will build statics for 2 packs of browsers and `RenderModule` will give the ES2017-compatible code for modern browsers.
