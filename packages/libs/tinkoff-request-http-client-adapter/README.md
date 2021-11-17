@@ -1,12 +1,12 @@
 # @tramvai/tinkoff-request-http-client-adapter
 
-Реализация интерфейса `HttpClient` из [@tramvai/http-client](references/libs/http-client.md) на основе библиотеки [@tinkoff/request](https://tinkoffcreditsystems.github.io/tinkoff-request/)
+Interface implementation `HttpClient` from [@tramvai/http-client](references/libs/http-client.md) based on the library [@tinkoff/request](https://tinkoffcreditsystems.github.io/tinkoff-request/)
 
 ## API
 
 ### createAdapter
 
-`createAdapter` - фабрика для создания HTTP клиента, конфигурирует экземпляр `@tinkoff/request` через `createTinkoffRequest`, и на его основе создает экземпляр `HttpClientAdapter`
+`createAdapter` - factory to create an HTTP client, configures an instance of `@tinkoff/request` via `createTinkoffRequest`, and based on it creates an instance of `HttpClientAdapter`
 
 ```tsx
 type createAdapter = (options: TinkoffRequestOptions) => HttpClient;
@@ -16,30 +16,30 @@ type createAdapter = (options: TinkoffRequestOptions) => HttpClient;
 
 ```tsx
 interface TinkoffRequestOptions extends HttpClientRequest {
-  // трамвай логгер
+  // tramvai logger
   logger?: typeof LOGGER_TOKEN;
-  // неймспейс для логгера, к нему будет добавлен префикс `request.`
+  // namespace for the logger, the prefix `request.` will be added to it
   name?: string;
-  // отключет кэширование по умолчанию через `@tinkoff/request-plugin-cache-memory`
+  // will disable the default caching via `@tinkoff/request-plugin-cache-memory`
   disableCache?: boolean;
-  // фабрика кэшей для `@tinkoff/request-plugin-cache-memory`
+  // cache factory for `@tinkoff/request-plugin-cache-memory`
   createCache?: (options: any) => any;
-  // время жизни кэша в `@tinkoff/request-plugin-cache-memory`
+  // cache ttl in `@tinkoff/request-plugin-cache-memory`
   cacheTime?: number;
-  // ограничение по умолчанию на время выполнения запроса, в ms
+  // the default request execution time limit, in ms
   defaultTimeout?: number;
-  // валидатор ответа для `@tinkoff/request-plugin-validate`
+  // response validator for `@tinkoff/request-plugin-validate`
   validator?: RequestValidator;
-  // валидатор ошибки для `@tinkoff/request-plugin-validate`
+  // error validator for `@tinkoff/request-plugin-validate`
   errorValidator?: RequestValidator;
-  // метод позволяет модифицировать объект ошибки перед отправкой логов из `@tinkoff/request-plugin-log`
+  // method allows you to modify the error object before sending logs from `@tinkoff/request-plugin-log`
   errorModificator?: RequestValidator;
 }
 ```
 
 ### createTinkoffRequest
 
-`createTinkoffRequest` - создает экземпляр `@tinkoff/request` со всеми необходимыми плагинами
+`createTinkoffRequest` - creates an instance of `@tinkoff/request` with all the necessary plugins
 
 ```tsx
 type createTinkoffRequest = (options: TinkoffRequestOptions) => MakeRequest;
@@ -47,13 +47,13 @@ type createTinkoffRequest = (options: TinkoffRequestOptions) => MakeRequest;
 
 ### HttpClientAdapter
 
-`HttpClientAdapter` - адаптирует `@tinkoff/request` к интерфейсу `HttpClient`.
+`HttpClientAdapter` - adapts `@tinkoff/request` to the interface `HttpClient`.
 
-Метод `request` оборачивает параметры запроса в опцию `modifyRequest`, и передает их в `@tinkoff/request`.
-Затем, полученный ответ модифицируется в `HttpClientRequest`, и оборачивается в опцию `modifyResponse`.
-Если произошла ошибка, то она оборачивается в опцию `modifyError`.
+The `request` method wraps the request parameters in the `modifyRequest` option, and passes them to `@tinkoff/request`.
+Then, the received response is modified in the `HttpClientRequest`, and wrapped in the `modifyResponse` option.
+If there is an error, it will wrapped into the `modifyError` option.
 
-Метод `fork` создает новый экземпляр `HttpClientAdapter`, но с тем же самым экземпляром `@tinkoff/request`.
+The `fork` method creates a new instance of `HttpClientAdapter`, but with the same `@tinkoff/request` instance.
 
 ```tsx
 type HttpClientAdapter = HttpClient;
@@ -61,8 +61,8 @@ type HttpClientAdapter = HttpClient;
 
 ### mergeOptions
 
-По умолчанию, `mergeOptions` производит композицию опций `modifyRequest`, `modifyResponse` и `modifyError`, причем сначала будут выполнены соответствующие опции из параметра `options`, затем из `nextOptions`.
-Если передать третий параметр `{ replace: true }`, все одноименные параметры из `options` просто будут перезаписаны параметрами из `nextOptions`
+By default, `mergeOptions` compose `modifyRequest`, `modifyResponse` and `modifyError` options, with the corresponding options from `options` being executed first, then from `nextOptions`.
+If you pass a third parameter `{ replace: true }`, all parameters of the same name from `options` will simply be overwritten by parameters from `nextOptions`
 
 ```tsx
 type mergeOptions = (

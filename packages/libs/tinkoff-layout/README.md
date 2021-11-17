@@ -1,14 +1,14 @@
 # @tinkoff/layout-factory
 
-## Подключение
+## Installation
 
-Необходимо установить `@tinkoff/layout-factory` с помощью npm
+Install `@tinkoff/layout-factory` using your package manager, e.g. for npm:
 
 ```bash
 npm i @tinkoff/layout-factory
 ```
 
-И подключить в проекте
+Create new layout object
 
 ```tsx
 import React from 'react';
@@ -25,13 +25,13 @@ const MyLayout = createLayout({
   wrappers: {
     layout: layoutWrapper,
     feedback: feedbackWrapper,
-  }
+  },
 });
 ```
 
-## Структура лейаута
+## Layout structure
 
-Концептуально лейаут имеет следующую структуру
+Layout has the following structure:
 
 ```tsx
 <LayoutWrapper>
@@ -48,36 +48,36 @@ const MyLayout = createLayout({
 </LayoutWrapper>
 ```
 
-Каждый враппер может быть кастомизирован. По умолчанию все врапперы просто отрисовывают переданные в них `children`. `HeaderWrapper` и `FooterWrapper` отрисовываются только если были переданы компоненты `Header` и `Footer` в props полученного лейаут компонента.
+Any of the wrappers could be customized. By default, every wrapper just renders passed `children` prop, but `HeaderWrapper` and `FooterWrapper` render only if components `Header` and `Footer` were passed as props to result layout.
 
-## Способы кастомизации
+## Customization ways
 
-Кастомизировать создаваемый лейаут можно через опции `components` и `wrappers`
+Customization is made through options `components` and `wrappers`
 
 ### Components
 
-React компоненты
+React components
 
-- `header`, `footer`, `layout`, `content`, `page` - это базовые компоненты для врапперов. Должны рендерить переданные в них children. По умолчанию `layout`, `content`, `page` - это "render children", а `header` и `footer` - "render prop"
-- все остальные компоненты - `globalComponents`. Отрисовываются как компоненты внутри `LayoutWrapper`
+- `header`, `footer`, `layout`, `content`, `page` are base components for wrappers. They should render passed prop `children`. By default, `layout`, `content`, `page` are "render children" while `header` and `footer` are "render prop"
+- any of the other components are, so called, `globalComponents`. They are just rendered as components inside `LayoutWrapper`
 
 ### Wrappers
 
-[HOC](https://ru.reactjs.org/docs/higher-order-components.html) для `components`
+[HOC](https://ru.reactjs.org/docs/higher-order-components.html) for `components`
 
-- `header`, `footer`, `layout`, `content`, `page` - HOC для базовых компонентов
-- все остальные wrappers - HOC для соответствующих `globalComponents`
+- `header`, `footer`, `layout`, `content`, `page` - HOC for the base components
+- all of the other components are HOCs for все остальные wrappers - HOC for corresponding `globalComponents`
 
-Можно указывать список из HOC, в таком случае очередность выполнения рендера обворачиваемого компонента от конца в начало
+It is possible to pass a list of HOCs. This way order of render wrapping for passed component will be from end to start of the list.
 
-Такие врапперы нужны чтобы:
+Such wrappers and used for:
 
-- скрывать/показывать элементы по необходимости
-- навешивать дополнительные css стиили для компонентов
-- встраивать дополнительную логику/обработчики
-- прокидывать дополнительные props
+- hide/show elements by condition
+- set additional css style for components
+- inject additional code/handler
+- pass additional props
 
-Пример такого враппера
+Example of such wrapper:
 
 ```tsx
 function layoutWrapper(WrappedComponent) {

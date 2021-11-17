@@ -15,6 +15,17 @@ import { createWorkerPool } from './workerPool';
 import type { SERVER_TOKEN } from '../tokens';
 import { CLOSE_HANDLER_TOKEN } from '../tokens';
 
+const EXITED_UNEXPECTEDLY = `
+
+!!!  Child process exited unexpectedly  !!!,
+
+
+See server logs with details and try to fix the issue,
+After code change rebuild will be done automatically
+
+
+`;
+
 declare module 'webpack' {
   export class MultiStats {
     // MultiStats не экспортируется явно из webpack
@@ -51,6 +62,7 @@ export const serverRunner = ({
     let workerPort: number;
     let resolveWorkerPort: () => void;
     let workerPortPromise: Promise<void>;
+    let hasExitedUnexpectedly = false;
 
     const proxy = createProxyServer({
       // указываем, что сами обработаем ответ
@@ -71,6 +83,7 @@ export const serverRunner = ({
     if (!configManager.noServerRebuild) {
       serverCompiler.hooks.invalid.tap(HOOK_NAME, () => {
         serverInvalidated = true;
+        hasExitedUnexpectedly = false;
       });
     }
 
@@ -142,6 +155,11 @@ export const serverRunner = ({
 
     // задаём свой http-сервер который будет проксировать запросы к дочернему процессу
     server.on('request', async (req, res) => {
+      if (hasExitedUnexpectedly) {
+        res.end(EXITED_UNEXPECTEDLY);
+        return;
+      }
+
       await waitWorkerPort();
 
       proxy.web(req, res, { target: `http://localhost:${workerPort}` });
@@ -191,9 +209,14 @@ export const serverRunner = ({
         worker = await pool.acquire();
 
         worker.on('exit', async () => {
-          worker = await pool.acquire();
+          hasExitedUnexpectedly = true;
+          workerPort = null;
+          workerPortPromise = null;
 
-          console.error('Child process exited unexpectedly');
+          worker = null;
+          pool.release(worker);
+
+          console.error(EXITED_UNEXPECTEDLY);
         });
 
         worker.once('message', ({ cmd, port }) => {

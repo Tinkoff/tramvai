@@ -357,14 +357,23 @@ describe('@tinkoff/request to HttpClient adapter', () => {
 
       const startedReqCount = 10;
       const sendedReqCount = 6;
+      let error;
 
       for (let i = 1; i <= startedReqCount; i++) {
         try {
           await httpClient.get('fake');
-        } catch (e) {}
+        } catch (e) {
+          error = e;
+        }
       }
 
       expect(errorHandlerMock).toBeCalledTimes(sendedReqCount);
+
+      expect(error.__meta).toMatchObject({
+        CIRCUIT_BREAKER: {
+          open: true,
+        },
+      });
 
       await terminate();
     });
@@ -706,6 +715,50 @@ describe('@tinkoff/request to HttpClient adapter', () => {
       }
 
       expect(error.meta).toBe('some meta info');
+
+      await terminate();
+    });
+
+    it('add __meta to error object', async () => {
+      const applyMockHandlers = (app: Express) => {
+        app.get('/fake', async (req, res) => {
+          res.status(500).json({
+            error: {
+              message: 'Internal Server Error',
+            },
+          });
+        });
+      };
+
+      const { port, terminate } = await startMockServer(applyMockHandlers);
+
+      const httpClient = createAdapter({
+        logger: loggerFactoryMock,
+        baseUrl: `http://localhost:${port}/`,
+      });
+
+      let error;
+      try {
+        await httpClient.get('fake');
+      } catch (e) {
+        error = e;
+      }
+
+      expect(error.__meta).toEqual({
+        cache: {
+          deduplicateEnabled: true,
+          deduplicateForce: false,
+          enabled: true,
+          forced: false,
+          memoryEnabled: true,
+          memoryForce: false,
+        },
+        log: {
+          duration: expect.any(Number),
+          end: expect.any(Number),
+          start: expect.any(Number),
+        },
+      });
 
       await terminate();
     });

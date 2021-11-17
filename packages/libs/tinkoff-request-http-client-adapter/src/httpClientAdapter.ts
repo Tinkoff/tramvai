@@ -3,6 +3,7 @@ import { getHeaders, getStatus } from '@tinkoff/request-plugin-protocol-http';
 import type {
   HttpClient,
   HttpClientBaseOptions,
+  HttpClientError,
   HttpClientRequest,
   HttpClientResponse,
 } from '@tramvai/http-client';
@@ -58,7 +59,11 @@ export class HttpClientAdapter implements HttpClient {
 
       return modifyResponse ? modifyResponse(resToModify) : resToModify;
     } catch (error) {
-      throw modifyError ? modifyError(error, adaptedReq) : error;
+      const meta = res.getExternalMeta();
+      // Useful for logging
+      const errorWithMeta = Object.assign(error as HttpClientError, { __meta: meta });
+
+      throw modifyError ? modifyError(errorWithMeta, adaptedReq) : errorWithMeta;
     }
   }
 

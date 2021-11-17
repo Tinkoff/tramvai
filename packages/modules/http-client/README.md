@@ -1,16 +1,16 @@
 # @tramvai/module-http-client
 
-Модуль предоставляет в приложение фабрику HTTP клиентов, базовый сервис для работы с различными API и сервис для работы с `papi`.
+The module provides the application with a factory of HTTP clients, a basic service for working with various APIs and a service for working with `papi`.
 
-## Подключение
+## Installation
 
-Необходимо установить `@tramvai/module-http-client`
+You need to install `@tramvai/module-http-client`
 
 ```bash
 yarn add @tramvai/module-http-client
 ```
 
-И подключить в проекте
+And connect in the project
 
 ```tsx
 import { createApp } from '@tramvai/core';
@@ -22,47 +22,47 @@ createApp({
 });
 ```
 
-## Возможности
+## Features
 
-Модуль `http-client` добавляет в приложение функциональность, связанную с запросами к API. Доступные провайдеры позволяют создавать новые сервисы для работы с любым API и создавать более специфичные сервисы с предустановленными настройками под конкретные API.
+The `http-client` module adds functionality to the application related to API requests. Available providers allow you to create new services to work with any API and create more specific services with preset settings for specific APIs.
 
-Модуль реализует интерфейсы из библиотеки [@tramvai/http-client](references/libs/http-client.md) с помощью специальной библиотеки - адаптера [@tramvai/tinkoff-request-http-client-adapter](references/libs/tinkoff-request-http-client-adapter.md), работающей поверх [@tinkoff/request](https://tinkoffcreditsystems.github.io/tinkoff-request/).
+The module implements interfaces from the library [@tramvai/http-client](references/libs/http-client.md) using a special library - adapter [@tramvai/tinkoff-request-http-client-adapter](references/libs/tinkoff-request-http-client-adapter.md), running on top of [@tinkoff/request](https://tinkoffcreditsystems.github.io/tinkoff-request/).
 
-## Концепции
+## Concepts
 
-### HTTP клиент
+### HTTP client
 
-HTTP клиент - реализация интерфейса `HttpClient`, создается через токен `HTTP_CLIENT_FACTORY`. HTTP клиент принимает общие настройки, часть из которых будет использована в качестве defult значения для всех запросов. HTTP клиент не дает возможности добавить дополнительные методы для запросов, и совершать побочные действия при успешном или ошибочном завершении запроса.
+HTTP client - implementation of the `HttpClient` interface, created via the `HTTP_CLIENT_FACTORY` token. HTTP client accepts general settings, some of which will be used as defult values ​​for all requests. The HTTP client does not provide an opportunity to add additional methods for requests, and to perform side actions when the request is completed or failed.
 
-### Сервис для работы с API
+### Services for working with API
 
-API сервис - наследник класса `ApiService`, который экспортируется из `@tramvai/http-client`. API сервис принимает HTTP клиент в конструкторе, и использует его для запросов. API сервис реализует все методы для запросов из интерфейса `HttpClient`, но позволяет модифицировать их. Например, можно заменить реализацию метода `request`, добавив на `catch` запроса через HTTP клиент показ сообщения об ошибке - эта логика автоматически будет срабатывать для всех остальных методов - `get`, `put`, `post`, `delete`. В API сервис можно добавить кастомные методы для запросов к определенным API эндпоинтам, и указывать в них только нужные параметры, и типизировать ответы.
+The API service inherits from the `ApiService` class, which is exported from `@tramvai/http-client`. The API service takes an HTTP client in its constructor and uses it for requests. The API service implements all methods for requests from the `HttpClient` interface, but allows you to modify them. For example, you can replace the implementation of the `request` method by adding an error message to the `catch` request via an HTTP client - this logic will automatically work for all other methods - `get`, `put`, `post`, `delete`. In the API service, you can add custom methods for requests to certain API endpoints, and specify only the necessary parameters in them, and type responses.
 
-Дополнительные причины создавать API сервисы - если для работы с конкретным API требуется использовать несколько разных HTTP клиентов, либо нужна возможность добавить удобную абстракцию поверх базовых методов для отправки запросов.
+Additional reasons to create API services - if you need to use several different HTTP clients to work with a specific API, or you need the ability to add a convenient abstraction on top of the basic methods for sending requests.
 
-## Использование
+## Usage
 
-### Создание нового HTTP клиента
+### Create a new HTTP client
 
-Каждый новый HTTP клиент должен быть прямым или косвенным наследником `HTTP_CLIENT_FACTORY`.
+Each new HTTP client must directly or indirectly inherit `HTTP_CLIENT_FACTORY`.
 
-Новые HTTP клиенты / API сервисы не должны создаваться со `scope: Scope.SINGLETON`, т.к. в каждый запрос добавляются параметры по умолчанию, спецфичные для каждого пользователя, например - передача заголовка `X-Real-Ip` из запроса в приложение во все запросы к API.
+New HTTP clients / API services should not be created with `scope: Scope.SINGLETON`, because each request is supplemented with default parameters specific to each user, for example - passing the `X-Real-Ip` header from the request to the application in all requests to the API.
 
-#### Базовый HTTP клиент
+#### Basic HTTP client
 
-Токен `HTTP_CLIENT_FACTORY` - предоставляет фабрику для создания новых HTTP клиентов. В опциях предустановленны логгер и фабрика кэшей.
+The `HTTP_CLIENT_FACTORY` token - provides a factory for creating new HTTP clients. The options are preinstalled with a logger and a cache factory.
 
-##### Особенности
+##### Peculiarities
 
-- Для всех запросов в API добавляются заголовки из списка, возвращаемого токеном `API_CLIENT_PASS_HEADERS`, и `X-Real-Ip` из текущего запроса в приложение
+- For all requests to the API, headers are added from the list returned by the `API_CLIENT_PASS_HEADERS` token, and `X-Real-Ip` from the current request to the application
 
-**Интерфейс токена:**
+**Token interface:**
 
 ```tsx
 type HTTP_CLIENT_FACTORY = (options: HttpClientFactoryOptions) => HttpClient;
 ```
 
-**Использование токена:**
+**Token use:**
 
 ```tsx
 import { Scope, provide } from '@tramvai/core';
@@ -90,15 +90,15 @@ const provider = provide({
 });
 ```
 
-### Использование существующих HTTP клиентов
+### Using existing HTTP clients
 
-Большинство HTTP клиентов реализует дополнительную логику для запросов, и наследуется от `ApiService`. Таким образом, у каждого сервиса есть методы `get`, `post`, `put`, `delete` и `request`, но могут быть и специфичные методы.
+Most HTTP clients implement additional logic for requests, and inherit from `ApiService`. Thus, each service has methods `get`, `post`, `put`, `delete` and `request`, but there may be specific methods.
 
-#### Универсальный HTTP клиент
+#### Common HTTP client
 
-Токен `HTTP_CLIENT` предоставляет базовый клиент для отправки запросов на любые урлы, кэширование запросов отключено.
+The `HTTP_CLIENT` token provides a basic client for sending requests to any URLs, request caching is disabled.
 
-**Использование токена:**
+**Token use:**
 
 ```tsx
 import { createAction } from '@tramvai/core';
@@ -118,9 +118,9 @@ export const fetchAction = createAction({
 });
 ```
 
-### Добавление пользовательских данных в запросы
+### Adding custom data to requests
 
-Рассмотрим кейс на примере абстрактного сервиса `WHATEVER_API_SERVICE`. Допустим, мы хотим добавить в каждый запрос заголовок `X-Real-Ip`:
+Let's consider a case using the abstract service `WHATEVER_API_SERVICE` as an example. Let's say we want to add an `X-Real-Ip` header to every request:
 
 ```tsx
 import { provide } from '@tramvai/core';
@@ -162,15 +162,15 @@ const provider = provide({
 
 ## How to
 
-### Как отключить кэширование HTTP запросов?
+### How to disable HTTP request caching?
 
-Для отключения кэширования у всех HTTP клиентов, в приложение необходимо передать env переменную `HTTP_CLIENT_CACHE_DISABLED: true`
+To disable caching for all HTTP clients, pass the env variable `HTTP_CLIENT_CACHE_DISABLED: true` to the application
 
-### Тестирование
+### Testing
 
-#### Тестирование работы своих api-клиентов
+#### Testing your api clients
 
-Если у вас имеется модуль или провайдеры которые определяют апи-клиенты, то удобно будет использовать специальные утилиты для того чтобы протестировать их отдельно
+If you have a module or providers that define api-clients, then it will be convenient to use special utilities in order to test them separately
 
 ```ts
 import { testApi } from '@tramvai/module-http-client/tests';
@@ -196,11 +196,28 @@ describe('testApi', () => {
 });
 ```
 
-## Экспортируемые токены
+### Logging
 
-[ссылка](references/tokens/http-client-tokens.md)
+By default, `@tinkoff/request` will log every failed requests with status `error`.
+You can disable logging by pass `{ silent: true }` parameter to request parameters.
+Useful meta information about request will be available in `error.__meta` property.
 
-## Переменные окружения
+Example:
 
-- `HTTP_CLIENT_CACHE_DISABLED` - отключение кэширования у всех HTTP-клиентов
-- `HTTP_CLIENT_CIRCUIT_BREAKER_DISABLED` - отключение плагина https://tinkoffcreditsystems.github.io/tinkoff-request/docs/plugins/circuit-breaker.html
+```ts
+const log = logger('request:test');
+
+httpClient.request({ path: 'test', silent: true })
+  .catch((error) => {
+    log.info(error);
+  });
+```
+
+## Exported tokens
+
+[link](references/tokens/http-client-tokens.md)
+
+## Environment Variables
+
+- `HTTP_CLIENT_CACHE_DISABLED` - disable caching for all HTTP clients
+- `HTTP_CLIENT_CIRCUIT_BREAKER_DISABLED` - disable plugin https://tinkoffcreditsystems.github.io/tinkoff-request/docs/plugins/circuit-breaker.html
