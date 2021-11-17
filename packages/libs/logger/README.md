@@ -303,13 +303,3 @@ const traceLog = logger({ name: 'log-trace', emitLevels: { trace: true } }); // 
 traceLog.trace('test'); // отправится на апи
 traceLog.error('test'); // не отправится
 ```
-
-### SageReporter
-
-Репортер для поддержки формата логов sage. Расширяет функционал JSONReporter:
-
-- добавляет поле `@timestamp`;
-- в поле `level` записывает строковое представление уровня логирования, числовое значение сохраняет в поле `levelNumber`;
-- делает `message` массивом содержащим исходный `message` и записывает в него все строковые и числовые значения из массива `args`;
-- все массивы и объекты из `args` выносит в поля лога `arrays` и `objects`; Это решает основную массу проблем при индексации логов в sage.
-- passes additional fields `env,system,inst` if it is supplied on reporter creation
