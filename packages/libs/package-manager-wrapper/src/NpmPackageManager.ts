@@ -20,6 +20,7 @@ export class NpmPackageManager extends PackageManager {
       'npm',
       'install',
       name && (version ? `${name}@${version}` : name),
+      version && '--save-exact',
       '--legacy-peer-deps',
       noSave && '--no-save',
       devDependency && '--save-dev',

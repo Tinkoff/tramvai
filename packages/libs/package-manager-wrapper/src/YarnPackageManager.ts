@@ -20,6 +20,7 @@ export class YarnPackageManager extends PackageManager {
       'yarn',
       name && 'add',
       name && (version ? `${name}@${version}` : name),
+      version && '--exact',
       noSave && '--frozen-lockfile',
       devDependency && '--dev',
       this.registryFlag(options),
