@@ -1,0 +1,38 @@
+{
+  "$schema": "../../node_modules/@tramvai/cli/schema.json",
+  "projects": {
+    "fs-external-pages" : {
+      "name": "fs-external-pages",
+      "root": "src",
+      "type": "application",
+      "commands": {
+        "build": {
+          "options": {
+            "server": "src/index.ts",
+            "vendor": "src/vendor.ts"
+          },
+          "configurations": {
+            "sourceMap": true,
+            "modern": true,
+            "granularChunks": true,
+            "postcss": {
+              "config": "src/postcss"
+            },
+            "experiments": {
+              "fileSystemPages": {
+                "enable": true,
+                "staticPagesDir": false
+              }
+            }
+          }
+        },
+        "serve": {
+          "configurations": {
+            "hotRefresh": true,
+            "modern": true
+          }
+        }
+      }
+    }
+  }
+}

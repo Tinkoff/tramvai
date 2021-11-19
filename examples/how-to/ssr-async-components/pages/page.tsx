@@ -5,7 +5,7 @@ import { lazy } from '@tramvai/react';
 import styles from './page.css';
 
 const InnerPageInitial = lazy(() => import('./InnerPageInitial'));
-// отдельный компонент который не рендерится на сервере, а загружается только при клике на кнопку
+// a separate component that is not rendered on the server, but is loaded only when you click on the button
 const InnerPageOnClick = lazy(() => import('./InnerPageOnClick'));
 
 export default function Page() {

@@ -19,6 +19,7 @@ import {
   STORE_TOKEN,
   DISPATCHER_CONTEXT_TOKEN,
   ADDITIONAL_BUNDLE_TOKEN,
+  LOGGER_TOKEN,
 } from '@tramvai/tokens-common';
 import { BundleManager } from './bundleManager/bundleManager';
 import { ComponentRegistry } from './componentRegistry/componentRegistry';
@@ -88,6 +89,7 @@ import { CacheModule } from './cache/CacheModule';
         actionRegistry: ACTION_REGISTRY_TOKEN,
         dispatcher: DISPATCHER_TOKEN,
         dispatcherContext: DISPATCHER_CONTEXT_TOKEN,
+        logger: LOGGER_TOKEN,
       },
     }),
     provide({

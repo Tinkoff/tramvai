@@ -5,8 +5,8 @@ import { modules } from '../common';
 const bundle = createBundle({
   name: 'mainDefault',
   components: {
-    // оборачиваем импорт в вызов lazy чтобы компонент нормально рендерился на сервере
-    // и скрипты\стили для компонента предзагружались на клиенте
+    // wrap the import in a lazy call so that the component is successfully rendered on the server
+    // and the scripts/styles for the component are preloaded on the client
     pageDefault: lazy(() => import('./pages/page')),
   },
 });

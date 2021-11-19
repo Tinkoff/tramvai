@@ -9,16 +9,16 @@ createApp({
   bundles: {},
   providers: [
     provide({
-      // Подписываемся на событие WEB_APP_BEFORE_INIT_TOKEN чтобы подписаться до всех дефолтных обработчиков
+      // Subscribe to WEB_APP_BEFORE_INIT_TOKEN event to subscribe to all default handlers
       provide: WEB_APP_BEFORE_INIT_TOKEN,
       multi: true,
       useFactory: ({ logger }) => {
         const log = logger('my-path');
 
-        // в di должна попасть функция от веб-приложения
+        // di should get the function from the web application
         return (app) => {
           app.use('/my-path', (req, res, next) => {
-            // кук в req не будет так как подписались раньше выставления cookieParser в @tramvai/module-server
+            // there will be no cookies in the req because you signed up before setting the cookieParser in @tramvai/module-server
             log.error('request start!', !!req.cookies);
             next();
           });
@@ -29,7 +29,7 @@ createApp({
       },
     }),
     provide({
-      // Подписываемся на событие WEB_APP_INIT_TOKEN чтобы подписаться до дефолтного обработчика роутов
+      // Subscribe to WEB_APP_INIT_TOKEN event to subscribe to the default root handler
       provide: WEB_APP_INIT_TOKEN,
       multi: true,
       useFactory: ({ logger }) => {
@@ -37,7 +37,7 @@ createApp({
 
         return (app) => {
           app.use('/my-path', (req, res) => {
-            // кук в req тут уже будут так как подписались после выставления cookieParser в @tramvai/module-server
+            // The cookies in the req here will already be there since they signed up after setting the cookieParser in @tramvai/module-server
             log.error('request start!', !!req.cookies);
             res.send({ hello: 'world', cookies: req.cookies });
           });

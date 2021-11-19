@@ -9,12 +9,12 @@ createApp({
   modules: [...modules],
   providers: [
     provide({
-      // в приложении можно указать лимит на выполнение экшенов на сервере (по умолчанию 500мс)
+      // in the application you can specify a limit on the execution of actions on the server (by default 500ms)
       provide: 'limitActionGlobalTimeRun',
       useValue: ACTION_EXECUTION_LIMIT,
     }),
   ],
-  // эта экшены будут выполняться для всех страниц приложения
+  // these actions will be executed for all pages of the application
   actions: [globalInLimit, globalOutLimit],
   bundles: {
     mainDefault: () => Promise.resolve({ default: mainDefault }),

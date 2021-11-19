@@ -1,12 +1,13 @@
 import each from '@tinkoff/utils/array/each';
 import type { EXTEND_RENDER, RenderMode, RENDERER_CALLBACK } from '@tramvai/tokens-render';
+import type { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
 import { renderReact } from '../react';
 import { legacyRenderer } from './legacy';
 import { strictRenderer } from './strict';
 import { blockingRenderer, concurrentRenderer } from './concurrent';
 
 export function rendering({
-  componentRegistry,
+  pageService,
   log,
   consumerContext,
   customRender,
@@ -15,7 +16,7 @@ export function rendering({
   mode,
   rendererCallback,
 }: {
-  componentRegistry: any;
+  pageService: typeof PAGE_SERVICE_TOKEN;
   log: any;
   consumerContext: any;
   extendRender?: typeof EXTEND_RENDER;
@@ -24,7 +25,7 @@ export function rendering({
   mode: RenderMode;
   rendererCallback?: typeof RENDERER_CALLBACK;
 }) {
-  let renderResult = renderReact({ componentRegistry, di }, consumerContext);
+  let renderResult = renderReact({ pageService, di }, consumerContext);
 
   if (extendRender) {
     each((render) => {

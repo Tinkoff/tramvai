@@ -6,15 +6,19 @@ import type {
   UpdateCurrentRouteOptions,
   HistoryOptions,
 } from '@tinkoff/router';
+import type { COMPONENT_REGISTRY_TOKEN } from '@tramvai/tokens-common';
 import type { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
+import { isFileSystemPageComponent } from '@tramvai/experiments';
 
 type PageServiceInterface = typeof PAGE_SERVICE_TOKEN;
 
 export class PageService implements PageServiceInterface {
   private router: Router;
+  private componentRegistry: typeof COMPONENT_REGISTRY_TOKEN;
 
-  constructor({ router }) {
+  constructor({ router, componentRegistry }) {
     this.router = router;
+    this.componentRegistry = componentRegistry;
   }
 
   getCurrentRoute(): NavigationRoute {
@@ -55,5 +59,22 @@ export class PageService implements PageServiceInterface {
 
   go(to: number, options?: HistoryOptions): Promise<void> {
     return this.router.go(to, options);
+  }
+
+  addComponent(name: string, component: any): void {
+    const group = this.getComponentsGroupName();
+    return this.componentRegistry.add(name, component, group);
+  }
+
+  getComponent(name: string): any {
+    const group = this.getComponentsGroupName();
+    return this.componentRegistry.get(name, group);
+  }
+
+  private getComponentsGroupName(): string {
+    const { bundle, pageComponent } = this.getConfig();
+    const group = isFileSystemPageComponent(pageComponent) ? pageComponent : bundle;
+
+    return group;
   }
 }

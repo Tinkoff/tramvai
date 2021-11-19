@@ -11,13 +11,11 @@ export const loadBundle = ({
   bundleManager,
   logger,
   actionRegistry,
-  componentRegistry,
   responseManager,
 }: {
   bundleManager: typeof BUNDLE_MANAGER_TOKEN;
   logger: typeof LOGGER_TOKEN;
   actionRegistry: typeof ACTION_REGISTRY_TOKEN;
-  componentRegistry: typeof COMPONENT_REGISTRY_TOKEN;
   responseManager: typeof RESPONSE_MANAGER_TOKEN;
 }): NavigationGuard => {
   const log = logger('route:load-bundles');
@@ -31,6 +29,11 @@ export const loadBundle = ({
     const { bundle, pageComponent } = to.config;
 
     if (!bundleManager.has(bundle, pageComponent)) {
+      log.info({
+        event: 'load-bundle-not-found',
+        bundle,
+        pageComponent,
+      });
       // если бандл не найдён, то всё ок мы должны вернуть 404 на сервере, а на клиенте просто загрузить новую страницу
       responseManager.setStatus(404);
       return false;

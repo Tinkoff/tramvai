@@ -23,7 +23,7 @@ export const httpMethod = ({
       const currentMethod = requestManager.getMethod().toLowerCase();
 
       if (!httpMethods.split(',').includes(currentMethod)) {
-        log.debug({
+        log.info({
           event: 'check-failed',
           currentMethod,
           route: to,

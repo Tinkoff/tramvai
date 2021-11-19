@@ -1,7 +1,7 @@
 import flatten from '@tinkoff/utils/array/flatten';
 
 import type { Provider } from '@tinkoff/dippy';
-import { commandLineListTokens } from '@tramvai/core';
+import { commandLineListTokens, provide } from '@tramvai/core';
 import type {
   AbstractRouter,
   Route,
@@ -12,7 +12,7 @@ import type {
 } from '@tinkoff/router';
 import { History, setLogger } from '@tinkoff/router';
 
-import { COMBINE_REDUCERS, LOGGER_TOKEN } from '@tramvai/tokens-common';
+import { COMBINE_REDUCERS, LOGGER_TOKEN, COMPONENT_REGISTRY_TOKEN } from '@tramvai/tokens-common';
 import {
   ROUTER_TOKEN,
   ROUTES_TOKEN,
@@ -193,13 +193,14 @@ export const providers: Provider[] = [
     // рассмотреть возможность замены после доработок экшенов
     useValue: 'after',
   },
-  {
+  provide({
     provide: PAGE_SERVICE_TOKEN,
     useClass: PageService,
     deps: {
       router: ROUTER_TOKEN,
+      componentRegistry: COMPONENT_REGISTRY_TOKEN,
     },
-  },
+  }),
   {
     provide: COMBINE_REDUCERS,
     multi: true,

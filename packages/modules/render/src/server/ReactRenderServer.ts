@@ -1,7 +1,8 @@
 import { renderToString } from 'react-dom/server';
 import type { DI_TOKEN } from '@tramvai/core';
-import type { COMPONENT_REGISTRY_TOKEN, CONTEXT_TOKEN } from '@tramvai/module-common';
+import type { CONTEXT_TOKEN } from '@tramvai/module-common';
 import type { EXTEND_RENDER, CUSTOM_RENDER } from '@tramvai/tokens-render';
+import type { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
 import each from '@tinkoff/utils/array/each';
 import type { ChunkExtractor } from '@loadable/server';
 import { renderReact } from '../react';
@@ -13,12 +14,12 @@ export class ReactRenderServer {
 
   context: typeof CONTEXT_TOKEN;
 
-  componentRegistry: typeof COMPONENT_REGISTRY_TOKEN;
+  pageService: typeof PAGE_SERVICE_TOKEN;
 
   di: typeof DI_TOKEN;
 
-  constructor({ componentRegistry, context, customRender, extendRender, di }) {
-    this.componentRegistry = componentRegistry;
+  constructor({ pageService, context, customRender, extendRender, di }) {
+    this.pageService = pageService;
     this.context = context;
     this.customRender = customRender;
     this.extendRender = extendRender;
@@ -26,10 +27,7 @@ export class ReactRenderServer {
   }
 
   render(extractor: ChunkExtractor): Promise<string> {
-    let renderResult = renderReact(
-      { componentRegistry: this.componentRegistry, di: this.di },
-      this.context
-    );
+    let renderResult = renderReact({ pageService: this.pageService, di: this.di }, this.context);
 
     each((render) => {
       renderResult = render(renderResult);

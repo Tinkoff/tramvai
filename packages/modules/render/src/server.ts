@@ -1,10 +1,5 @@
 import { Module, commandLineListTokens, DI_TOKEN, provide } from '@tramvai/core';
-import {
-  COMPONENT_REGISTRY_TOKEN,
-  RESPONSE_MANAGER_TOKEN,
-  CONTEXT_TOKEN,
-  CREATE_CACHE_TOKEN,
-} from '@tramvai/module-common';
+import { RESPONSE_MANAGER_TOKEN, CONTEXT_TOKEN, CREATE_CACHE_TOKEN } from '@tramvai/module-common';
 import { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
 import { ClientHintsModule, USER_AGENT_TOKEN } from '@tramvai/module-client-hints';
 import {
@@ -112,7 +107,7 @@ export const DEFAULT_POLYFILL_CONDITION =
       useClass: ReactRenderServer,
       deps: {
         context: CONTEXT_TOKEN,
-        componentRegistry: COMPONENT_REGISTRY_TOKEN,
+        pageService: PAGE_SERVICE_TOKEN,
         customRender: { token: CUSTOM_RENDER, optional: true },
         extendRender: { token: EXTEND_RENDER, optional: true },
         di: DI_TOKEN,

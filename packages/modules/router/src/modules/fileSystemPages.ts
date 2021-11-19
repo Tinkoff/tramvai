@@ -13,11 +13,11 @@ export const providers = [
       provide: ROUTES_TOKEN,
       multi: true,
       useFactory: ({ logger }) => {
-        const log = logger('route:file-system-pages');
+        const log = logger('file-system-pages:route');
         const pagesNames = Object.keys(getStaticFileSystemPages());
         const routes = pagesNames.map(fileSystemPageToRoute);
 
-        log.debug({
+        log.info({
           event: 'create static routes from file-system pages',
           routes,
         });

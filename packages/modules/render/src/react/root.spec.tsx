@@ -7,21 +7,28 @@ import { waitRaf } from '@tramvai/test-jsdom';
 import { LOGGER_TOKEN } from '@tramvai/module-common';
 import { useRoute } from '@tramvai/module-router';
 import { ComponentRegistry } from '../../../common/src/componentRegistry/componentRegistry';
+import { PageService } from '../../../router/src/services/page';
 import { Root } from './root';
 
 jest.mock('@tramvai/module-router', () => ({
   useRoute: jest.fn(),
 }));
 
+const routeMock = {
+  config: {
+    layoutComponent: 'layout',
+    pageComponent: 'page',
+  },
+};
+
+const routerMock = {
+  getCurrentRoute: () => routeMock,
+};
+
 let updateState;
 
 (useRoute as any).mockImplementation(() => {
-  const [route, setState] = React.useState({
-    config: {
-      layoutComponent: 'layout',
-      pageComponent: 'page',
-    },
-  });
+  const [route, setState] = React.useState(routeMock);
 
   updateState = setState;
 
@@ -51,7 +58,9 @@ describe('react/root', () => {
     componentRegistry.add('layout2', Layout2);
     componentRegistry.add('page', Page);
 
-    testComponent(<Root componentRegistry={componentRegistry} />, {
+    const pageService = new PageService({ componentRegistry, router: routerMock });
+
+    testComponent(<Root pageService={pageService} />, {
       providers: [
         {
           provide: LOGGER_TOKEN,

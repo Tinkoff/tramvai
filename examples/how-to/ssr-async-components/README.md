@@ -1,10 +1,11 @@
-# SSR при использование асинхронных компонентов
+# SSR with async components
 
-При использовании динамического `import` для загрузки React компонентов, мы теряем возможность отрендерить его не сервере. Эту проблему решает библиотека [@tramvai/react lazy](features/react.md#lazy)
+When using dynamic `import` to load React components, we lose the ability to render them on the server.
+This problem is solved by the library [@tramvai/react lazy](features/react.md#lazy)
 
 <p>
 <details>
-<summary>Пример подключения lazy компонента в бандл</summary>
+<summary>Example of connecting a lazy component in a bundle</summary>
 
 @inline index.ts
 

@@ -16,7 +16,7 @@
         "priority": 50,
         "doc": {
           "id": "actions-execution",
-          "title": "Выполнение экшенов на отдельных страницах"
+          "title": "Executing actions on different pages"
         }
       },
       {
@@ -40,7 +40,7 @@
         "priority": 50,
         "doc": {
           "id": "ssr-async-components",
-          "title": "SSR при использование асинхронных компонентов"
+          "title": "SSR with async components"
         }
       },
       {
@@ -56,7 +56,7 @@
         "priority": 50,
         "doc": {
           "id": "server-add-path-handler",
-          "title": "Добавление своего обработчика урла для приложения"
+          "title": "Adding endpoint handler for an application"
         }
       }
     ]

@@ -1,16 +1,17 @@
 # @tramvai/module-router
 
-Модуль для роутинга в приложении. Экспортирует два варианта модуля: с клиентскими спа-переходами и без.
+Module for routing in the application.
+Exports two sub-modules: with client SPA transitions, and no-SPA.
 
-## Подключение
+## Installation
 
-Необходимо установить `@tramvai/module-router`
+You need to install `@tramvai/module-router`:
 
 ```bash
 yarn add @tramvai/module-router
 ```
 
-И подключить в проекте
+And connect in the project:
 
 ```tsx
 import { createApp } from '@tramvai/core';
@@ -19,55 +20,55 @@ import { NoSpaRouterModule, SpaRouterModule } from '@tramvai/module-router';
 createApp({
   name: 'tincoin',
   modules: [SpaRouterModule],
-  //modules: [ NoSpaRouterModule ], если нужно отключить клиентские спа-переходы
+  // modules: [ NoSpaRouterModule ], if you want to disable client SPA transitions
 });
 ```
 
 ## Explanation
 
-Модуль основан на библиотеке [@tinkoff/router](references/libs/router.md)
+The module is based on the library [@tinkoff/router](references/libs/router.md)
 
-### Флоу работы навигации на сервере
+### Navigation flow on the server
 
-![Диаграмма](/img/router/navigate-flow-server.drawio.svg)
+![Diagramm](/img/router/navigate-flow-server.drawio.svg)
 
-### Флоу работы первой навигации на клиенте
+### Flow of the first navigation on the client
 
-![Диаграмма](/img/router/rehydrate-client.drawio.svg)
+![Diagramm](/img/router/rehydrate-client.drawio.svg)
 
-### Флоу работы навигации на клиенте без спа
+### Flow of navigation on the client without SPA transitions
 
-![Диаграмма](/img/router/navigate-flow-client-no-spa.drawio.svg)
+![Diagramm](/img/router/navigate-flow-client-no-spa.drawio.svg)
 
-### Флоу работы навигации на клиенте со спа
+### Flow of navigation on the client with SPA transitions
 
-![Диаграмма](/img/router/navigate-flow-client-spa.drawio.svg)
+![Diagramm](/img/router/navigate-flow-client-spa.drawio.svg)
 
 ## API
 
-### Задание статичных роутов в приложении
+### Static routes in the application
 
-Формат описания роута:
+Route description format:
 
 ```ts
 const routes = [
   {
-    // обязательно имя роута
+    // the name of the route is required
     name: 'route1',
-    // обязательно соответствующий path для роута
+    // the path of the route is required
     path: '/route/a/',
-    // дополнительные конфиги для роута
+    // additional configs for the route
     config: {
-      // имя компонента для layout
+      // layout component name
       layoutComponent: 'layout',
-      // имя страничного компонента
+      // page component name
       pageComponent: 'page',
     },
   },
 ];
 ```
 
-Передать в роутинг список роутов можно явно при добавлении модуля роутинга:
+You can explicitly transfer a list of routes to routing when adding a router module:
 
 ```ts
 import { createApp } from '@tramvai/core';
@@ -85,7 +86,7 @@ createApp({
 });
 ```
 
-Или отдельно токеном `ROUTES_TOKEN` (можно задавать несколько раз):
+Or separately with the `ROUTES_TOKEN` token (you can set it several times):
 
 ```ts
 import { ROUTES_TOKEN } from '@tramvai/module-router';
@@ -115,39 +116,41 @@ const providers = [
 
 ### PAGE_SERVICE_TOKEN
 
-Сервис-обёртка для работы с роутингом. Служит для скрытия работы с роутингом и является предпочтительным способом работы с роутингом.
+Service wrapper for working with routing. Serves to hide routing work and is the preferred way of routing work.
 
-Методы:
+Methods:
 
-- `getCurrentRoute()` - получить текущий роут,
-- `getCurrentUrl()` - объект-результат парсинга текущего урла
-- `getConfig()` - получить конфиг текущей страницы
-- `getContent()` - получить контент для текущей страницы
-- `getMeta()` - получить мету для текущей страницы
-- `navigate(options)` - навигация на новую страницу [подробнее](references/libs/router.md)
-- `updateCurrentRoute(options)` - обновить текущий роут новыми параметрами [подробнее](references/libs/router.md)
-- `back()` - переход по истории назад
-- `forward()` - переход по истории вперёд
-- `go(to)` - переход на указанную дельту по истории
+- `getCurrentRoute()` - get the current route
+- `getCurrentUrl()` - object-result of parsing the current url
+- `getConfig()` - get the config of the current page
+- `getContent()` - get content for the current page
+- `getMeta()` - get the meta for the current page
+- `navigate(options)` - navigation to a new page [more](references/libs/router.md)
+- `updateCurrentRoute(options)` - update the current route with new parameters [more](references/libs/router.md)
+- `back()` - go back through history
+- `forward()` - go forward through history
+- `go(to)` - go to the specified delta by history
+- `addComponent(name, component)` - add new component to current page into ComponentRegistry
+- `getComponent(name)` - get component from current page components from ComponentRegistry
 
 ### RouterStore
 
-Стор, хранящий информацию о текущем и предыдущем роуте.
+Store that stores information about the current and previous routes.
 
-Свойства:
+Properties:
 
-- `currentRoute` - текущий роут
-- `currentUrl` - теущий урл
-- `previousRoute` - предыдущий роут
-- `previousUrl` - предыдущий урл
+- `currentRoute` - current route
+- `currentUrl` - current url
+- `previousRoute` - previous route
+- `previousUrl` - previous url
 
 ### ROUTER_GUARD_TOKEN
 
-Позволяет блокировать или перенаправлять переход на страницу при определённых условиях. Подробнее смотри доку [@tinkoff/router](/references/libs/router.md)
+Allows you to block or redirect the transition to the page under certain conditions. See [@tinkoff/router](/references/libs/router.md)
 
-### Задание редиректов
+### Redirects
 
-Редиректы могут выполняться через [guards](#ROUTER_GUARD_TOKEN) или явно через свойство `redirect` в роуте.
+Redirects can be done via [guards](#ROUTER_GUARD_TOKEN) or explicitly via the `redirect` property in the route.
 
 ```ts
 const routes = [
@@ -160,9 +163,9 @@ const routes = [
 ];
 ```
 
-### Not Found роут
+### Not Found route
 
-Роут, используемый, если не было найдено соответствий для текущей страницы можно задать специальным способом в списке роутов.
+The route used if no matches were found for the current page, can be specified in a special way in the list of routes.
 
 ```ts
 const route = [
@@ -179,19 +182,19 @@ const route = [
 
 ### ROUTE_RESOLVE_TOKEN
 
-Позволяет задать асинхронную функцию, возвращающую объект роута, которая будет вызвана если не было найдено подходящего статичного роута в приложении.
+Allows you to define an asynchronous function that returns a route object that will be called if no suitable static route was found in the application.
 
 ### ROUTE_TRANSFORM_TOKEN
 
-Функция-трансформер для роутов приложения (заданных статично и тех, что будут загружены через ROUTE_RESOLVE_TOKEN)
+Transformer function for application routes (set statically and those that will be loaded via ROUTE_RESOLVE_TOKEN)
 
-### Способ задания когда должны выполняться экшены при спа-переходах
+### Method of setting when actions should be performed during SPA transitions
 
-По умолчанию при спа-переходах после определения следующего роута, но перед фактом самого перехода выполняются экшены, что позволяет отобразить страницу сразу с новыми данными, но может вызывать заметную визуальную задержку, если экшены выполняются достаточно долго.
+By default, SPA transitions execute actions after defining the next route, but before the actual transition, which allows the page to be displayed immediately with new data, but can cause a noticeable visual lag if the actions are taken long enough.
 
-Есть возможность поменять поведение и сделать выполнение экшенов уже после самого перехода. Тогда при разработке компонентов потребуется учитывать, что данные будут подгружаться по мере поступления.
+It is possible to change the behavior and make the execution of actions after the transition itself. Then, when developing components, you will need to take into account that data will be loaded as it becomes available.
 
-Конфигурируется явно при использовании модуля роутинга:
+Configurable explicitly when using the routing module:
 
 ```ts
 import { createApp } from '@tramvai/core';
@@ -201,13 +204,13 @@ createApp({
   modules: [
     // ...,
     SpaRouterModule.forRoot([], {
-      spaActionsMode: 'after', // по умолчанию 'before'
+      spaActionsMode: 'after', // default is 'before'
     }),
   ],
 });
 ```
 
-или токеном `ROUTER_SPA_ACTIONS_RUN_MODE_TOKEN`:
+or through token `ROUTER_SPA_ACTIONS_RUN_MODE_TOKEN`:
 
 ```ts
 import { ROUTER_SPA_ACTIONS_RUN_MODE_TOKEN } from '@tramvai/module-router';
@@ -224,9 +227,9 @@ const providers = [
 
 ## How to
 
-### Работа с навигацией в провайдерах и экшенах
+### Working with navigation in providers and actions
 
-В этом случае лучше всего использовать токен [PAGE_SERVICE_TOKEN](#page_service_token)
+In this case, it is best to use the [PAGE_SERVICE_TOKEN](#page_service_token)
 
 ```ts
 import { provide, createAction } from '@tramvai/core';
@@ -257,65 +260,66 @@ const action = createAction({
 });
 ```
 
-### Работа с навигацией в React-компонентах
+### Working with navigation in React components
 
-Работать с роутингом внутри React компонентов можно с помощью хуков и компонентов - useNavigate, useRoute, Link из пакета [@tinkoff/router](references/libs/router.md#интеграция-с-react)
+You can work with routing inside React components using hooks and components - `useNavigate`, `useRoute`, `Link` from the [@tinkoff/router](references/libs/router.md#интеграция-с-react)
 
 <p>
 <details>
-<summary>Пример работы с навигацией в приложение</summary>
+<summary>An example of working with navigation in the application</summary>
 
 @inline ../../../examples/how-to/router-navigate/index.tsx
 
 </details>
 </p>
 
-### Как задать статичные роуты
+### How to set static routes
 
-[RouterModule](references/modules/router.md) позволяет добавить новые роуты при конфигурации приложения. Второй способ, передавать статичные роуты в DI через токен `ROUTES_TOKEN`.
+[RouterModule](references/modules/router.md) allows you to add new routes when configuring your application.
+The second way is to pass static routes to DI via the `ROUTES_TOKEN` token.
 
 <p>
 <details>
-<summary>Пример добавления статичных роутов в приложение</summary>
+<summary>An example of adding static routes to an application</summary>
 
 @inline ../../../examples/how-to/router-static-routes/index.tsx
 
 </details>
 </p>
 
-### Как задать Route Guard
+### How to set Route Guard
 
-[ROUTER_GUARD_TOKEN](references/modules/router.md#router_guard_token) задаются как асинхронная функция, что позволяет выполнять различные действия и влиять на поведение роутинга.
+[ROUTER_GUARD_TOKEN](references/modules/router.md#router_guard_token) is set as an asynchronous function, which allows you to perform various actions and influence the routing behavior.
 
 <p>
 <details>
-<summary>Пример задания router guards в приложении</summary>
+<summary>Example router guards job in application</summary>
 
 @inline ../../../examples/how-to/router-guards/index.tsx
 
 </details>
 </p>
 
-### Как задать Not found роут
+### How to set the Not found route
 
-Not-found роут используется в том случае, если для урла не найден соответствующий роут.
+The Not found route is used if the corresponding route is not found for the url.
 
-Такой роут задаётся в списке роутов со специальным символом `*` в свойстве `path`.
+Such a route is specified in the list of routes with the special `*` character in the `path` property.
 
 <p>
 <details>
-<summary>Пример задания Not-found роута в приложении</summary>
+<summary>An example of setting a Not Found route in an application</summary>
 
 @inline ../../../examples/how-to/router-not-found/index.tsx
 
 </details>
 </p>
 
-### Тестирование
+### Testing
 
-#### Тестирование расширений ROUTER_GUARD_TOKEN
+#### Testing ROUTER_GUARD_TOKEN extensions
 
-Если у вас имеется модуль или провайдеры которые определяют ROUTER_GUARD_TOKEN, то удобно будет использовать специальные утилиты для того чтобы протестировать их отдельно
+If you have a module or providers that define `ROUTER_GUARD_TOKEN`, then it will be convenient to use special utilities to test them separately
 
 ```ts
 import { ROUTER_GUARD_TOKEN } from '@tramvai/tokens-router';
@@ -352,6 +356,6 @@ describe('router guards', () => {
 });
 ```
 
-## Экспортируемые токены
+## Exported tokens
 
-[ссылка](references/tokens/router-tokens.md)
+[link](references/tokens/router-tokens.md)

@@ -7,7 +7,7 @@ export const globalInLimit = createAction({
   fn: async (context) => {
     console.log('execute globalInLimit');
     await context.dispatch(set({ name: 'globalInLimit', value: false }));
-    // ставим задержку выполнения меньше, чем лимит выполнения на сервере, чтобы этот экшен точно успел выполниться при ssr
+    // set the execution delay less than the server's execution limit, so that this action will be executed in time to ssr
     await new Promise((res) => setTimeout(res, ACTION_EXECUTION_LIMIT / 2));
     await context.dispatch(set({ name: 'globalInLimit', value: true }));
   },
@@ -18,7 +18,7 @@ export const globalOutLimit = createAction({
   fn: async (context) => {
     console.log('execute globalOutLimit');
     await context.dispatch(set({ name: 'globalOutLimit', value: false }));
-    // ставим задержку выполнения больше, чем лимит выполнения на сервере, чтобы этот экшен точно не успел выполниться при ssr
+    // set an execution delay higher than the server's execution limit, so that this action will not be executed in time with ssr
     await new Promise((res) => setTimeout(res, ACTION_EXECUTION_LIMIT * 2));
     await context.dispatch(set({ name: 'globalOutLimit', value: true }));
   },

@@ -45,7 +45,7 @@ export const staticFileSystemPageToPath = (pageComponent: string): string => {
 /**
  * @example
  * / to @/pages/index
- * /sub/route/:id to @/pages/sub/route/[id]
+ * /sub/route/:id/ to @/pages/sub/route/[id]/index
  */
 export const pathToExternalFileSystemPage = (path: string): string => {
   const urlParts = getParts(path);

@@ -446,14 +446,34 @@
                                     "type": "boolean"
                                   },
                                   "staticPagesDir": {
-                                    "title": "Folder with pages",
+                                    "title": "Folder with pages from which static routers are generated",
                                     "default": "pages",
-                                    "type": "string"
+                                    "anyOf": [
+                                      {
+                                        "enum": [
+                                          false
+                                        ],
+                                        "type": "boolean"
+                                      },
+                                      {
+                                        "type": "string"
+                                      }
+                                    ]
                                   },
                                   "externalPagesDir": {
-                                    "title": "Folder with pages",
+                                    "title": "Folder with components which can be manually added to static routers",
                                     "default": "external-pages",
-                                    "type": "string"
+                                    "anyOf": [
+                                      {
+                                        "enum": [
+                                          false
+                                        ],
+                                        "type": "boolean"
+                                      },
+                                      {
+                                        "type": "string"
+                                      }
+                                    ]
                                   }
                                 },
                                 "additionalProperties": false
@@ -1307,14 +1327,34 @@
                                     "type": "boolean"
                                   },
                                   "staticPagesDir": {
-                                    "title": "Folder with pages",
+                                    "title": "Folder with pages from which static routers are generated",
                                     "default": "pages",
-                                    "type": "string"
+                                    "anyOf": [
+                                      {
+                                        "enum": [
+                                          false
+                                        ],
+                                        "type": "boolean"
+                                      },
+                                      {
+                                        "type": "string"
+                                      }
+                                    ]
                                   },
                                   "externalPagesDir": {
-                                    "title": "Folder with pages",
+                                    "title": "Folder with components which can be manually added to static routers",
                                     "default": "external-pages",
-                                    "type": "string"
+                                    "anyOf": [
+                                      {
+                                        "enum": [
+                                          false
+                                        ],
+                                        "type": "boolean"
+                                      },
+                                      {
+                                        "type": "string"
+                                      }
+                                    ]
                                   }
                                 },
                                 "additionalProperties": false
@@ -1762,14 +1802,34 @@
                                       "type": "boolean"
                                     },
                                     "staticPagesDir": {
-                                      "title": "Folder with pages",
+                                      "title": "Folder with pages from which static routers are generated",
                                       "default": "pages",
-                                      "type": "string"
+                                      "anyOf": [
+                                        {
+                                          "enum": [
+                                            false
+                                          ],
+                                          "type": "boolean"
+                                        },
+                                        {
+                                          "type": "string"
+                                        }
+                                      ]
                                     },
                                     "externalPagesDir": {
-                                      "title": "Folder with pages",
+                                      "title": "Folder with components which can be manually added to static routers",
                                       "default": "external-pages",
-                                      "type": "string"
+                                      "anyOf": [
+                                        {
+                                          "enum": [
+                                            false
+                                          ],
+                                          "type": "boolean"
+                                        },
+                                        {
+                                          "type": "string"
+                                        }
+                                      ]
                                     }
                                   },
                                   "additionalProperties": false
@@ -2101,14 +2161,34 @@
                                       "type": "boolean"
                                     },
                                     "staticPagesDir": {
-                                      "title": "Folder with pages",
+                                      "title": "Folder with pages from which static routers are generated",
                                       "default": "pages",
-                                      "type": "string"
+                                      "anyOf": [
+                                        {
+                                          "enum": [
+                                            false
+                                          ],
+                                          "type": "boolean"
+                                        },
+                                        {
+                                          "type": "string"
+                                        }
+                                      ]
                                     },
                                     "externalPagesDir": {
-                                      "title": "Folder with pages",
+                                      "title": "Folder with components which can be manually added to static routers",
                                       "default": "external-pages",
-                                      "type": "string"
+                                      "anyOf": [
+                                        {
+                                          "enum": [
+                                            false
+                                          ],
+                                          "type": "boolean"
+                                        },
+                                        {
+                                          "type": "string"
+                                        }
+                                      ]
                                     }
                                   },
                                   "additionalProperties": false

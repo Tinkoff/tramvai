@@ -1,14 +1,14 @@
-# Выполнение экшенов на отдельных страницах
+# Executing actions on different pages
 
-Каждый экшен можно сделать глобальным, привязав к конкретным страницам, бандлам, или самому приложению, этот механизм подробно описан на странице [Экшен](concepts/action.md). Такие экшены будут выполнены автоматически.
+Each action can be made global by linking to specific pages, bundles, or the application itself; this mechanism is described in detail on the [Action](concepts/action.md) page. Such actions will be executed automatically.
 
-### Привязка экшенов к конкретной странице
+### Binding actions to a specific page
 
-Для этого можно использовать статичесикое свойство `actions` у компонентов - страниц:
+To do this, you can use the static property `actions` of page components:
 
 <p>
 <details>
-<summary>Создаем экшены</summary>
+<summary>Creating actions</summary>
 
 @inline actions/page.ts
 
@@ -17,20 +17,20 @@
 
 <p>
 <details>
-<summary>Подключаем их на страницу</summary>
+<summary>Connecting actions to the page</summary>
 
 @inline components/Page.tsx
 
 </details>
 </p>
 
-### Привязка экшенов к бандлу
+### Binding actions to a bundle
 
-[Бандлы](concepts/bundle.md) позволяют группировать страницы, к ним можно привязать экшены, которые будут выполняться для каждой страницы бандла:
+[Bundles](concepts/bundle.md) allow you to group pages, you can bind actions to them, which will be executed for each page of the bundle:
 
 <p>
 <details>
-<summary>Создаем экшены</summary>
+<summary>Creating actions</summary>
 
 @inline actions/bundle.ts
 
@@ -39,20 +39,20 @@
 
 <p>
 <details>
-<summary>Подключаем их к бандлу</summary>
+<summary>Connecting actions to the bundle</summary>
 
 @inline bundles/mainDefault.ts
 
 </details>
 </p>
 
-## Общие экшены для приложения
+## Common actions for the application
 
-Экшены, подключенные к [приложению](references/tramvai/create-app.md), выполняются на всех страницах:
+Actions connected to [application](references/tramvai/create-app.md) are executed on all pages:
 
 <p>
 <details>
-<summary>Создаем экшены</summary>
+<summary>Creating actions</summary>
 
 @inline actions/global.ts
 
@@ -61,7 +61,7 @@
 
 <p>
 <details>
-<summary>Подключаем их к приложению</summary>
+<summary>Connecting actions into the application</summary>
 
 @inline index.ts
 

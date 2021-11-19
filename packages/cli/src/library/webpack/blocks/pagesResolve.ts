@@ -43,16 +43,20 @@ export const pagesResolve = (configManager: ConfigManager<ApplicationConfigEntry
 ) => {
   const { fileSystemPages } = configManager.build.configurations.experiments;
 
-  const staticFsPages = filesToPages({
-    config,
-    configManager,
-    pagesRootDirectory: fileSystemPages.staticPagesDir,
-  });
-  const externalFsPages = filesToPages({
-    config,
-    configManager,
-    pagesRootDirectory: fileSystemPages.externalPagesDir,
-  });
+  const staticFsPages = fileSystemPages.staticPagesDir
+    ? filesToPages({
+        config,
+        configManager,
+        pagesRootDirectory: fileSystemPages.staticPagesDir,
+      })
+    : [];
+  const externalFsPages = fileSystemPages.externalPagesDir
+    ? filesToPages({
+        config,
+        configManager,
+        pagesRootDirectory: fileSystemPages.externalPagesDir,
+      })
+    : [];
 
   config.module
     .rule('external-pages')

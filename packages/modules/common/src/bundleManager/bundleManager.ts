@@ -7,7 +7,11 @@ import type {
   ActionsRegistry,
 } from '@tramvai/tokens-common';
 import type { Bundle } from '@tramvai/core';
-import { isFileSystemPageComponent, getAllFileSystemPages } from '@tramvai/experiments';
+import {
+  fileSystemPagesEnabled,
+  isFileSystemPageComponent,
+  getAllFileSystemPages,
+} from '@tramvai/experiments';
 import type { ComponentRegistry } from '../componentRegistry/componentRegistry';
 
 type Interface = typeof BUNDLE_MANAGER_TOKEN;
@@ -25,23 +29,38 @@ export class BundleManager implements Interface {
 
   dispatcherContext: typeof DISPATCHER_CONTEXT_TOKEN;
 
-  constructor({ bundleList, componentRegistry, actionRegistry, dispatcher, dispatcherContext }) {
+  constructor({
+    bundleList,
+    componentRegistry,
+    actionRegistry,
+    dispatcher,
+    dispatcherContext,
+    logger,
+  }) {
     this.bundles = bundleList;
     this.componentRegistry = componentRegistry;
     this.actionRegistry = actionRegistry;
     this.dispatcher = dispatcher;
     this.dispatcherContext = dispatcherContext;
 
-    if (process.env.__TRAMVAI_EXPERIMENTAL_ENABLE_FILE_SYSTEM_PAGES) {
+    if (fileSystemPagesEnabled()) {
+      const log = logger('file-system-pages:bundle-manager');
+      const components = getAllFileSystemPages();
+
       const componentsDefaultBundle = createBundle({
         name: FS_PAGES_DEFAULT_BUNDLE,
-        components: getAllFileSystemPages(),
+        components,
       });
 
       this.bundles[FS_PAGES_DEFAULT_BUNDLE] = () =>
         Promise.resolve({
           default: componentsDefaultBundle,
         });
+
+      log.info({
+        event: 'create default bundle with file-system pages',
+        components: Object.keys(components),
+      });
     }
   }
 
@@ -74,6 +93,13 @@ export class BundleManager implements Interface {
         typeof componentOrLoader.load === 'function'
           ? (await componentOrLoader.load()).default
           : componentOrLoader;
+
+      // allow page components to register any other components
+      if (component.components) {
+        eachObj((cmp, name: string) => {
+          this.componentRegistry.add(name, cmp, pageComponent);
+        }, component.components);
+      }
 
       if (component.actions) {
         this.actionRegistry.add(pageComponent, component.actions);

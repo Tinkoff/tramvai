@@ -1,5 +1,5 @@
 import { Module, commandLineListTokens, DI_TOKEN } from '@tramvai/core';
-import { COMPONENT_REGISTRY_TOKEN, LOGGER_TOKEN, CONTEXT_TOKEN } from '@tramvai/module-common';
+import { LOGGER_TOKEN, CONTEXT_TOKEN } from '@tramvai/module-common';
 import {
   EXTEND_RENDER,
   CUSTOM_RENDER,
@@ -7,6 +7,7 @@ import {
   RENDER_MODE,
   RENDERER_CALLBACK,
 } from '@tramvai/tokens-render';
+import { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
 import { rendering as renderInBrowser } from './client';
 import type { RenderModuleConfig } from './shared/types';
 import { LayoutModule } from './shared/LayoutModule';
@@ -47,7 +48,7 @@ const throwErrorInDev = (logger: typeof LOGGER_TOKEN) => {
         };
       },
       deps: {
-        componentRegistry: COMPONENT_REGISTRY_TOKEN,
+        pageService: PAGE_SERVICE_TOKEN,
         log: LOGGER_TOKEN,
         customRender: { token: CUSTOM_RENDER, optional: true },
         extendRender: { token: EXTEND_RENDER, optional: true },

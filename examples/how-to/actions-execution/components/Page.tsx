@@ -24,6 +24,6 @@ export function Page() {
   );
 }
 
-// экшены можно задавать как статичное свойство page-компонента - тогда экшены будут выпоолняться только при переходе на
-// страницы где указан этот конкретный pageComponent
+// actions can be specified as a static property of a page component
+// in this case actions will be executed only on pages with this particular pageComponent
 Page.actions = [pageInLimit, pageOutLimit];

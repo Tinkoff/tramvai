@@ -236,7 +236,7 @@
         "path": "main-polyfills/README.md",
         "doc": {
           "id": "how-to-enable-polyfills",
-          "title": "Как подключить полифиллы?"
+          "title": "How to enable polyfills?"
         }
       }
     ]

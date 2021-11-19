@@ -12,36 +12,36 @@ import type {
 
 /**
  * @description
- * Токен для доступа к объекту роутера
+ * Token to access the router instance
  */
 export const ROUTER_TOKEN = createToken<AbstractRouter>('router router');
 
 /**
  * @description
- * Токен для определения статичных роутов
+ * Token for defining static routes
  */
 export const ROUTES_TOKEN = createToken<Route>('router routes', { multi: true });
 /**
  * @description
- * Токен для передачи guard-обработчиков для роутов при переходах
+ * Token for providing guard handlers for page transitions
  */
 export const ROUTER_GUARD_TOKEN = createToken<NavigationGuard>('router guard', { multi: true });
 
 /**
  * @description
- * Инкапсулирует логику работы с роутером - содержит методы для получения конфига роута и выполнения навигации
+ * Encapsulates the logic of working with the router - contains methods for getting the configuration of the route and performing navigation
  */
 export const PAGE_SERVICE_TOKEN = createToken<PageService>('router pageService');
 
 /**
  * @description
- * Хук для разрешения роута динамически
+ * Hook to resolve route dynamically
  */
 export const ROUTE_RESOLVE_TOKEN = createToken<RouteResolve>('router routeResolve');
 
 /**
  * @description
- * Токен для трансформации конфига роута
+ * Hook to transform route config
  */
 export const ROUTE_TRANSFORM_TOKEN = createToken<RouteTransform>('router routeTransform', {
   multi: true,
@@ -49,7 +49,7 @@ export const ROUTE_TRANSFORM_TOKEN = createToken<RouteTransform>('router routeTr
 
 /**
  * @description
- * Флаг для спа-переходов, указывающий что экшены должны выполняться до или после обновления роута в сторе
+ * Flag for SPA-transitions, indicating that actions must be executed before or after a route update in the stor
  */
 export const ROUTER_SPA_ACTIONS_RUN_MODE_TOKEN = createToken<'before' | 'after'>(
   'router spaRunMode'
@@ -67,6 +67,9 @@ export interface PageService {
   back(options?: HistoryOptions): Promise<void>;
   forward(): Promise<void>;
   go(to: number, options?: HistoryOptions): Promise<void>;
+
+  addComponent(name: string, component: any): void;
+  getComponent(name: string): any;
 }
 
 export type RouteResolve = (navigation: Navigation) => Promise<Route | void>;

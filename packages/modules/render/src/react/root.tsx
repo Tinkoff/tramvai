@@ -2,7 +2,7 @@ import memoOne from '@tinkoff/utils/function/memoize/one';
 import strictEqual from '@tinkoff/utils/is/strictEqual';
 import React, { PureComponent } from 'react';
 import { withError } from '@tramvai/react';
-import type { COMPONENT_REGISTRY_TOKEN } from '@tramvai/tokens-common';
+import type { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
 import { useRoute } from '@tramvai/module-router';
 
 interface Props {
@@ -31,30 +31,24 @@ const layoutWrapper = memoOne(withError(), strictEqual);
 const pageWrapper = memoOne(withError(), strictEqual);
 
 export const Root = withError()(
-  ({
-    componentRegistry,
-  }: {
-    componentRegistry: typeof COMPONENT_REGISTRY_TOKEN;
-    children?: React.ReactNode;
-  }) => {
+  ({ pageService }: { pageService: typeof PAGE_SERVICE_TOKEN; children?: React.ReactNode }) => {
     const { config } = useRoute();
 
     const {
-      bundle,
       pageComponent,
       layoutComponent = 'layoutDefault',
       headerComponent = 'headerDefault',
       footerComponent = 'footerDefault',
     } = config;
 
-    const PageComponent = componentRegistry.get(pageComponent, bundle);
-    // Достаем компоненты из бандла, либо берем default реализации
+    const PageComponent = pageService.getComponent(pageComponent);
+    // Достаем компоненты для текущей страницы, либо берем default реализации
     const LayoutComponent =
-      componentRegistry.get(layoutComponent, bundle) || componentRegistry.get('layoutDefault');
+      pageService.getComponent(layoutComponent) || pageService.getComponent('layoutDefault');
     const HeaderComponent =
-      componentRegistry.get(headerComponent, bundle) || componentRegistry.get('headerDefault');
+      pageService.getComponent(headerComponent) || pageService.getComponent('headerDefault');
     const FooterComponent =
-      componentRegistry.get(footerComponent, bundle) || componentRegistry.get('footerDefault');
+      pageService.getComponent(footerComponent) || pageService.getComponent('footerDefault');
 
     if (!PageComponent) {
       throw new Error(`Page component '${pageComponent}' not found`);

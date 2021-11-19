@@ -41,15 +41,15 @@ export interface Experiments {
      */
     enable?: boolean;
     /**
-     * @title Folder with pages
+     * @title Folder with pages from which static routers are generated
      * @default "pages"
      */
-    staticPagesDir?: string;
+    staticPagesDir?: string | false;
     /**
-     * @title Folder with pages
+     * @title Folder with components which can be manually added to static routers
      * @default "external-pages"
      */
-    externalPagesDir?: string;
+    externalPagesDir?: string | false;
   };
 }
 

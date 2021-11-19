@@ -99,6 +99,7 @@ module.exports = {
     },
     'features/migration',
     'features/static-html-export',
+    'features/file-system-pages',
   ],
   Guides: [
     'guides/tramvai-library',

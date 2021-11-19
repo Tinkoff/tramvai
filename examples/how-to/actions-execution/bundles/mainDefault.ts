@@ -8,8 +8,8 @@ export const mainDefault = createBundle({
   components: {
     pageDefault: Page,
   },
-  // укажем наш стор, чтобы он сразу проинициализировался и был подписан на свои события диспатча
+  // let's specify our store, so that it will immediately initialize and subscribe to its dispatch events
   reducers: [store],
-  // экшены можно указать как часть бандла - тогда эти экшены будут выполняться для всех страниц этого бандла
+  // the actions can be specified as part of the bundle - then these actions will be executed for all pages of the bundle
   actions: [bundleInLimit, bundleOutLimit],
 });
