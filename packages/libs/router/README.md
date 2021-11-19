@@ -1,16 +1,16 @@
 # @tinkoff/router
 
-Библиотека роутинга. Может работать как на сервере, так и на клиенте. Предназначена прежде всего для построения изморфных приложений.
+Routing library. It can work both on the server and on the client. Designed primarily for building isomorphic applications.
 
-## Подключение
+## Installation
 
-Необходимо установить `@tinkoff/router`
+You need to install `@tinkoff/router`:
 
 ```bash
 yarn add @tinkoff/router
 ```
 
-И подключить в проекте
+And connect it to the project:
 
 ```tsx
 import { Router } from '@tinkoff/router';
@@ -20,25 +20,25 @@ const router = new Router();
 
 ## Explanation
 
-Основные функции:
+Features:
 
-- Библиотека поддерживает варианты работы как на сервере, так и на клиенте.
-- Есть возможность использовать ралзичные варианты клиентского перехода: со спа-переходами или без.
-- Для проверки доступности роута при конкретных условиях есть Guards.
-- Можно подписываться на разные этапы перехода через хуки
-- Компоненты и хуки для простой работы с роутингом из реакт
+- The library supports options for working both on the server and on the client.
+- It is possible to use different client transition options: with or without SPA transitions.
+- There are Guards to check the availability of a route under specific conditions.
+- You can subscribe to different stages of the transition through hooks
+- Components and hooks for easy routing from react
 
-### Версия для сервера и клиента
+### Server and client version
 
-Достачно просто импортировать роутинг из самой библиотеки и уже на основании настроек в package.json вернётся необходимая версия для сервера или клиента
+It is enough just to import routing from the library itself and, based on the settings in package.json, the required version for the server or client will be returned
 
 ```ts
 import { Router } from '@tinkoff/router';
 ```
 
-### Клиентский роутинг с\без спа-переходов
+### Client routing with/without SPA transitions
 
-По умолчанию на клиенте эскпортируется роутинг с включенными спа-переходами. Если необходимо спа-переходы отключить, то нужно импортировать специальную версию роутинга
+By default, routing with SPA transitions is enabled on the client. If you need to disable SPA transitions, you need to import a special version of the routing
 
 ```ts
 import { Router, SpaHistory } from '@tinkoff/router';
@@ -50,27 +50,27 @@ const noSpaRouter = new NoSpaRouter();
 
 ### Router Guards
 
-Гуарды позволяют контроллировать доступность того или иного роута для конретного перехода. Из гуарда можно заблокировать переход или иницировать редирект.
+Guards allow you to control the availability of a particular route for a specific transition. From the guard, you can block the transition or initiate a redirect.
 
 ```ts
 import { NavigationGuard } from '@tinkoff/router';
 
 export const myGuard: NavigationGuard = async ({ to }) => {
   if (to.config.blocked) {
-    return false; // заблокировать данный переход
+    return false; // block this transition
   }
 
   if (to.config.redirect) {
-    return '/login/'; // вызвать редирект на указанную страницу
+    return '/login/'; // call a redirect to the specified page
   }
 
-  // если ничего не вернуть переход будет совершен как обычно
+  // if nothing is returned, the transition will be performed as usual
 };
 ```
 
-### Хуки переходов
+### Transitions hooks
 
-Хуки перехода позволяют выполнить свои асинхронные действия на разные этапы перехода.
+Transition hooks allow you to perform your asynchronous actions at different stages of the transition.
 
 ```ts
 import { NavigationHook } from '@tinkoff/router';
@@ -82,27 +82,27 @@ export const myHook: NavigationHook = async ({ from, to, url, fromUrl }) => {
 
 ## API
 
-### Получение данных о текущем роуте или урле
+### Getting data about the current route or url
 
 ```ts
-router.getCurrentRoute(); // вернет текущий роут
-router.getCurrentUrl(); // вернёт распаршенную версию урла текущей страницы
+router.getCurrentRoute(); // will return the current route
+router.getCurrentUrl(); // will return the parsed version of the url of the current page
 ```
 
-### Иницилизация перехода
+### Transition initiation
 
-Есть два метода для иницилизации перехода и обновления адресной строки в браузере. Главное отличие этих двух методов, что один из них должен запускать полноценный переход с обновлением данных и запуском тяжеловесных действий по загрузке данных. Второй же метод служит в основном для обновления состояния для текущего роута: чтобы обновить query-параметры на странице или изменить динамические параметры самого роута.
+There are two methods for initializing the navigation and updating the address bar in the browser. The main difference between these two methods is that one of them will launch a full-fledged transition with data updating and starting heavy data loading actions. The second method is mainly used to update the state for the current route: to update the query parameters on the page or change the dynamic parameters of the route itself.
 
 #### navigate
 
-Инициирует полноценный переход, с определением следующего роута и обновлением состояния в браузере.
+Initiates a full transition, defining the next route and updating the state in the browser.
 
 ```ts
 router.navigate('/test');
 router.navigate({ url: './test', query: { a: '1' } });
 ```
 
-Хуки перехода:
+Transition hooks:
 
 - beforeResolve
 - beforeNavigate
@@ -110,23 +110,23 @@ router.navigate({ url: './test', query: { a: '1' } });
 
 #### updateCurrentRoute
 
-Переход основывается на текущем роуте (поэтому этот метод нельзя вызывать на сервере) и позволяет просто обновить некоторые данные для текущей страницы
+The transition is based on the current route (therefore this method cannot be called on the server) and allows you to simply update some data for the current page
 
 ```ts
 router.updateCurrentRoute({ params: { id: 'abc' } });
 router.updateCurrentRoute({ query: { a: '1' } });
 ```
 
-Хуки:
+Hooks:
 
 - beforeUpdateCurrent
 - afterUpdateCurrent
 
-### Работа с query
+### Working with query
 
-#### Опция query
+#### query option
 
-Позволяет задать search-строку для урла в виде объекта через опцию `query` при переходе. Предыдущее значение query при этом будет очищено
+Allows you to set a search string for an url as an object via the `query` option when navigating. The previous query value will be cleared
 
 ```ts
 router.getCurrentUrl().query; // { с: 'c' }
@@ -139,7 +139,7 @@ router.getCurrentUrl().query; // { a: 'a', b: 'b' }
 
 #### preserveQuery
 
-Позволяет сохранить значение query от текущей навигации и использовать их в новом переходе
+Allows you to keep the query value from the current navigation and use them in a new transition
 
 ```ts
 router.getCurrentUrl().query; // { с: 'c' }
@@ -150,7 +150,7 @@ router.updateCurrentRoute({ query: { a: 'a' }, preserveQuery: true });
 router.getCurrentUrl().query; // { a: 'a', c: 'c' }
 ```
 
-Если в качестве значения для конкретного ключа query передать undefined, то это значение очистится в новом query:
+If you pass undefined as the value for a specific query key, then this value will be cleared in a new query:
 
 ```ts
 router.getCurrentUrl().query; // { a: 'a', b: 'b' }
@@ -161,13 +161,13 @@ router.updateCurrentRoute({ query: { a: undefined, c: 'c' }, preserveQuery: true
 router.getCurrentUrl().query; // { b: 'b', c: 'c' }
 ```
 
-### Интеграция с React
+### Integration with React
 
-Если несколько полезных React-хуков и компонентов для работы с роутингом
+Library has some useful React hooks and components for working with routing
 
 #### useRoute
 
-Позволяет получить текущий активный роут приложения
+Returns current active route of the application
 
 ```ts
 import React from 'react';
@@ -182,7 +182,7 @@ export const Component = () => {
 
 #### useUrl
 
-Позволяет получить текущий активный URL приложения
+Returns current active URL of the application
 
 ```ts
 import React from 'react';
@@ -197,7 +197,7 @@ export const Component = () => {
 
 #### useNavigate
 
-Создаёт колбек с вызовом навигации, который можно передать в дочерние компоненты или повесить как обработчик событий
+Creates a callback with a navigation call that can be passed to child components or used as an event handler
 
 ```ts
 export const Cmp = () => {
@@ -209,9 +209,9 @@ export const Cmp = () => {
 
 #### Link
 
-Обёртка для реакт-компонента, которая делает его кликабельным
+A wrapper for a react component that makes it clickable
 
-> Если в качестве children передать в Link реакт-компонент, то будет отрендерен этот переданный компонент и в него будут переданы пропсы `href`, `onClick` которые нужно использовать для вызова навигации. В других случаях будет отрендерен `<a>` тег с children в качестве дочернего элемента
+> If the react component is passed to the Link as children, then this passed component will be rendered and the `href`, `onClick` props will be passed as props to that component and they should be used to make the navigation. Otherwise, the `<a>` tag will be rendered with children as a child.
 
 ```ts
 import { Link } from '@tinkoff/router';
