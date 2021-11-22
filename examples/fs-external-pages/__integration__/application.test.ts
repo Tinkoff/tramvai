@@ -3,6 +3,8 @@ import { startCli } from '@tramvai/test-integration';
 import { initPuppeteer, wrapPuppeteerPage } from '@tramvai/test-puppeteer';
 import path from 'path';
 
+jest.setTimeout(30000);
+
 describe('fs-external-pages', () => {
   let app: StartCliResult;
 
