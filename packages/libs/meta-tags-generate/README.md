@@ -1,38 +1,42 @@
 # Meta tags generate
 
-Библиотека для генерации и обновления мета-тегов на странице.
+Library for generating and updating meta-tags in browser.
 
 ## Api
 
-- `Meta({ list: [] }): Meta` - объект используемый для конструирования объекта мета-тегов на основании заданных источников.
-- `Render(meta: Meta): { render(): string }` - рендер конкретного объекта _Meta_ в виде строки (используется для SSR)
-- `Update(meta: Meta): { update(): void }` - обновляет верстку мета-тегов в браузере (используется в браузере при SPA-переходах)
+- `Meta({ list: [] }): Meta` - object used for constructing an instance of meta-tags based on passed sources
+- `Render(meta: Meta): { render(): string }` - render of specific _Meta_ instance as a string. Used in SSR
+- `Update(meta: Meta): { update(): void }` - updates meta-tags layout in browser. Used in browser while SPA-navigations
 
-## Пример использования
+### Format
 
-```tsx
-import { Meta, Render, Update } from '@tinkoff/meta-tags-generate';
+Library accepts special parameters which are used to generate result html tags. These parameters have next format:
 
-const list = [
-  (walker) =>
-    walker.updateMeta(10, {
-      title: 'test',
-      tag: { tag: 'meta', attributes: { link: 'link' } },
-    }),
-];
-const meta = new Meta({ list, converters });
-
-const metaContent = new Render(meta).render();
-console.log(metaContent); // > <title>test</title><meta link=link/>
-
-new Update(meta).update(); // Удалит все старые мета теги и заменит новыми
+```js
+{
+  customTag: { tag: 'meta', attributes: { name: 'k', content: 'i' }, innerHtml: '1' }
+}
 ```
 
-## Источники
+thar renders in the next tag:
 
-В мета теги можно передать источник данных в параметр `list` которые будут вызваны в рантайме для сбора итогового результата.
+```html
+<meta name="k" content="i">1</meta>
+```
 
-Например:
+### Converters
+
+Converters are used to convert meta-tags with specific keys in [format view](#format)
+
+```tsx
+new Meta({ list, converters: { title: (value) => ({ tag: 'meta', innerHtml: value }) } });
+```
+
+After that you now can pass meta as `{ title: 'Тинькофф' }` in order to render it through converter above.
+
+### Sources
+
+Through options `list` can be passed sources for meta-tags generating. These sources have the form of function that are called in runtime for generating result render. E.g.:
 
 ```tsx
 const list = [
@@ -50,29 +54,35 @@ const list = [
 const meta = new Meta({ list, converters });
 ```
 
-При генерации мета тегов будет вызваны по порядку функции из `list` в который будет прокинут класс `walker`. Внутри функции можно смодифицировать данные вызывая метод `updateMeta` в который передается приоритет правок и параметры. Элементы с более высоким приоритетом, перезаписывают значения более низких
+When generating meta tags all functions passed in `list` will be called with argument of class `Walker`. Inside such function it is possible to modify data using method `updateMeta`, which accepts the priority of the change and value. Elements with higher priority overrides values with lower priorities.
 
-## Параметры
+## How to
 
-Библиотека принимает параметры с определенным типом, которые позволяют сгенерировать html теги. Для этого нужно передать в значение следующий формат данных
+### Set Meta
 
-```js
-{
-  customTag: { tag: 'meta', attributes: { name: 'k', content: 'i' }, innerHtml: '1' }
-}
+```tsx
+import { Meta, Render, Update } from '@tinkoff/meta-tags-generate';
+
+const list = [
+  (walker) =>
+    walker.updateMeta(10, {
+      title: 'test',
+      tag: { tag: 'meta', attributes: { link: 'link' } },
+    }),
+];
+const meta = new Meta({ list, converters });
+
+const metaContent = new Render(meta).render();
+console.log(metaContent); // > <title>test</title><meta link=link/>
+
+new Update(meta).update(); // Removes all previous meta and adds new one
 ```
 
-в итоге после преобразований, получится следующий тег:
+### Remove meta parameters
 
-```html
-<meta name="k" content="i">1</meta>
-```
+In order to remove data just pass `null` as a value.
 
-### Удаление meta параметров
-
-Для удаление данных, нам нужно в поле `value` вставить `null` значение
-
-Например мы хотим удалить `keywords` свойство:
+E.g. if you want to remove `keywords` meta:
 
 ```javascript
 (walker) =>
@@ -81,14 +91,4 @@ const meta = new Meta({ list, converters });
   });
 ```
 
-После выполнения этого источника, мета тег удалится
-
-## Конвертеры
-
-Для упрощения использования библиотеки, мы можем передать в `Meta` список конвертеров в параметров `converters`
-
-```tsx
-new Meta({ list, converters: { title: (value) => ({ tag: 'meta', innerHtml: value }) } });
-```
-
-При построения мета тегов, мы будем пытаться получить по ключу в блоке converters функцию для преобразования. И это нам позволяет передавать мета параметры вида `{ title: 'Тинькофф' }`
+After that specified meta tag will be remove
