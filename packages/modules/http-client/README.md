@@ -198,19 +198,16 @@ describe('testApi', () => {
 
 ### Logging
 
-By default, `@tinkoff/request` will log every failed requests with status `error`.
-You can disable logging by pass `{ silent: true }` parameter to request parameters.
-Useful meta information about request will be available in `error.__meta` property.
+By default, `@tinkoff/request` will log every failed requests with status `error`. You can disable logging by pass `{ silent: true }` parameter to request parameters. Useful meta information about request will be available in `error.__meta` property.
 
 Example:
 
 ```ts
 const log = logger('request:test');
 
-httpClient.request({ path: 'test', silent: true })
-  .catch((error) => {
-    log.info(error);
-  });
+httpClient.request({ path: 'test', silent: true }).catch((error) => {
+  log.info(error);
+});
 ```
 
 ## Exported tokens
