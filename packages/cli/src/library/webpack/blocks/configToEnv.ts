@@ -13,11 +13,11 @@ export const configToEnv = (configManager: ConfigManager<ApplicationConfigEntry>
       'process.env.__TRAMVAI_EXPERIMENTAL_ENABLE_FILE_SYSTEM_PAGES': JSON.stringify(
         fileSystemPages.enable
       ),
-      'process.env.__TRAMVAI_EXPERIMENTAL_STATIC_PAGES_DIR': JSON.stringify(
-        fileSystemPages.staticPagesDir
+      'process.env.__TRAMVAI_EXPERIMENTAL_FILE_SYSTEM_ROUTES_DIR': JSON.stringify(
+        fileSystemPages.routesDir
       ),
-      'process.env.__TRAMVAI_EXPERIMENTAL_EXTERNAL_PAGES_DIR': JSON.stringify(
-        fileSystemPages.externalPagesDir
+      'process.env.__TRAMVAI_EXPERIMENTAL_FILE_SYSTEM_PAGES_DIR': JSON.stringify(
+        fileSystemPages.pagesDir
       ),
     },
   ]);

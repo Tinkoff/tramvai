@@ -21,7 +21,7 @@
             "experiments": {
               "fileSystemPages": {
                 "enable": true,
-                "externalPagesDir": false
+                "pagesDir": false
               }
             }
           }

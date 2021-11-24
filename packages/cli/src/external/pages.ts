@@ -4,9 +4,9 @@ export interface Page {
 
 // eslint-disable-next-line import/no-default-export
 export default {
-  staticPages: {},
-  externalPages: {},
+  routes: {},
+  pages: {},
 } as {
-  staticPages: Record<string, Page>;
-  externalPages: Record<string, Page>;
+  routes: Record<string, Page>;
+  pages: Record<string, Page>;
 };

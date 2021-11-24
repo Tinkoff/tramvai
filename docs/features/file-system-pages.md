@@ -134,8 +134,8 @@ Experimental feature File-System Pages hidden behind the flag `commands.build.co
             "experiments": {
               "fileSystemPages": {
                 "enable": true,
-                "externalPagesDir": "external-pages",
-                "staticPagesDir": "pages"
+                "pagesDir": "pages",
+                "routesDir": "routes"
               }
             }
           }
@@ -148,9 +148,9 @@ Experimental feature File-System Pages hidden behind the flag `commands.build.co
 
 - `"enable": true` - activates the feature
 
-- `"externalPagesDir": "external-pages"` - default directory for [File-System Pages](#file-system-pages)
+- `"pagesDir": "pages"` - default directory for [File-System Pages](#file-system-pages)
 
-- `"staticPagesDir": "pages"` - default directory for [File-System Routing](#file-system-routing)
+- `"routesDir": "routes"` - default directory for [File-System Routing](#file-system-routing)
 
 ### Pages
 
@@ -320,8 +320,8 @@ If you want to migrate from bundles to file-system pages, there is few steps:
     {
       "fileSystemPages": {
         "enable": true,
-        "externalPagesDir": "new-fs-pages", // file-system pages directory
-        "staticPagesDir": false // force disable file-system routing
+        "pagesDir": "new-fs-pages", // file-system pages directory
+        "routesDir": false // force disable file-system routing
       }
     }
     ```

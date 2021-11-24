@@ -1,6 +1,6 @@
 import type { Route } from '@tinkoff/router';
 import { getParts } from '@tinkoff/router';
-import fsPagesAndComponents from '@tramvai/cli/lib/external/pages';
+import fsPagesAndRoutes from '@tramvai/cli/lib/external/pages';
 
 export const FILE_SYSTEM_PAGES_PREFIX = '@/';
 
@@ -8,15 +8,15 @@ export const fileSystemPagesEnabled = (): boolean =>
   !!process.env.__TRAMVAI_EXPERIMENTAL_ENABLE_FILE_SYSTEM_PAGES;
 
 export const getStaticFileSystemPages = () => {
-  return fsPagesAndComponents.staticPages;
+  return fsPagesAndRoutes.routes;
 };
 
 export const getExternalFileSystemPages = () => {
-  return fsPagesAndComponents.externalPages;
+  return fsPagesAndRoutes.pages;
 };
 
 export const getAllFileSystemPages = () => {
-  return { ...fsPagesAndComponents.staticPages, ...fsPagesAndComponents.externalPages };
+  return { ...fsPagesAndRoutes.routes, ...fsPagesAndRoutes.pages };
 };
 
 export const isFileSystemPageComponent = (pageComponent: string): boolean => {
@@ -35,7 +35,7 @@ export const isFileSystemPageComponent = (pageComponent: string): boolean => {
 export const staticFileSystemPageToPath = (pageComponent: string): string => {
   return `/${pageComponent
     .replace(
-      `${FILE_SYSTEM_PAGES_PREFIX}${process.env.__TRAMVAI_EXPERIMENTAL_STATIC_PAGES_DIR}/`,
+      `${FILE_SYSTEM_PAGES_PREFIX}${process.env.__TRAMVAI_EXPERIMENTAL_FILE_SYSTEM_ROUTES_DIR}/`,
       ''
     )
     .replace(/\[(.+)\]/g, ':$1')
@@ -59,7 +59,7 @@ export const pathToExternalFileSystemPage = (path: string): string => {
   });
 
   return [
-    `${FILE_SYSTEM_PAGES_PREFIX}${process.env.__TRAMVAI_EXPERIMENTAL_EXTERNAL_PAGES_DIR}`,
+    `${FILE_SYSTEM_PAGES_PREFIX}${process.env.__TRAMVAI_EXPERIMENTAL_FILE_SYSTEM_PAGES_DIR}`,
     ...pageComponentParts,
     'index',
   ]

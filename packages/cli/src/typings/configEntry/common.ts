@@ -42,14 +42,14 @@ export interface Experiments {
     enable?: boolean;
     /**
      * @title Folder with pages from which static routers are generated
-     * @default "pages"
+     * @default "routes"
      */
-    staticPagesDir?: string | false;
+    routesDir?: string | false;
     /**
      * @title Folder with components which can be manually added to static routers
-     * @default "external-pages"
+     * @default "pages"
      */
-    externalPagesDir?: string | false;
+    pagesDir?: string | false;
   };
 }
 

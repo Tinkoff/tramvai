@@ -43,23 +43,23 @@ export const pagesResolve = (configManager: ConfigManager<ApplicationConfigEntry
 ) => {
   const { fileSystemPages } = configManager.build.configurations.experiments;
 
-  const staticFsPages = fileSystemPages.staticPagesDir
+  const fsRoutes = fileSystemPages.routesDir
     ? filesToPages({
         config,
         configManager,
-        pagesRootDirectory: fileSystemPages.staticPagesDir,
+        pagesRootDirectory: fileSystemPages.routesDir,
       })
     : [];
-  const externalFsPages = fileSystemPages.externalPagesDir
+  const fsPages = fileSystemPages.pagesDir
     ? filesToPages({
         config,
         configManager,
-        pagesRootDirectory: fileSystemPages.externalPagesDir,
+        pagesRootDirectory: fileSystemPages.pagesDir,
       })
     : [];
 
   config.module
-    .rule('external-pages')
+    .rule('file-system-pages')
     // [\\/]cli вместо @tramvai[\\/]cli, т.к. после слияния репозиториев tramvai и tramvai-cli,
     // webpack резолвит симлинк с фактическим путем до packages/cli
     // @todo: найти более надежный вариант, т.к. есть шанс, что будет импортироваться одноименный модуль
@@ -70,11 +70,11 @@ export const pagesResolve = (configManager: ConfigManager<ApplicationConfigEntry
       code: `import { lazy } from '@tramvai/react';
 
 export default {
-  staticPages: {
-    ${staticFsPages.join(',\n')}
+  routes: {
+    ${fsRoutes.join(',\n')}
   },
-  externalPages: {
-    ${externalFsPages.join(',\n')}
+  pages: {
+    ${fsPages.join(',\n')}
   },
 }`,
     })

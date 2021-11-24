@@ -445,9 +445,9 @@
                                     "default": false,
                                     "type": "boolean"
                                   },
-                                  "staticPagesDir": {
+                                  "routesDir": {
                                     "title": "Folder with pages from which static routers are generated",
-                                    "default": "pages",
+                                    "default": "routes",
                                     "anyOf": [
                                       {
                                         "enum": [
@@ -460,9 +460,9 @@
                                       }
                                     ]
                                   },
-                                  "externalPagesDir": {
+                                  "pagesDir": {
                                     "title": "Folder with components which can be manually added to static routers",
-                                    "default": "external-pages",
+                                    "default": "pages",
                                     "anyOf": [
                                       {
                                         "enum": [
@@ -1326,9 +1326,9 @@
                                     "default": false,
                                     "type": "boolean"
                                   },
-                                  "staticPagesDir": {
+                                  "routesDir": {
                                     "title": "Folder with pages from which static routers are generated",
-                                    "default": "pages",
+                                    "default": "routes",
                                     "anyOf": [
                                       {
                                         "enum": [
@@ -1341,9 +1341,9 @@
                                       }
                                     ]
                                   },
-                                  "externalPagesDir": {
+                                  "pagesDir": {
                                     "title": "Folder with components which can be manually added to static routers",
-                                    "default": "external-pages",
+                                    "default": "pages",
                                     "anyOf": [
                                       {
                                         "enum": [
@@ -1801,9 +1801,9 @@
                                       "default": false,
                                       "type": "boolean"
                                     },
-                                    "staticPagesDir": {
+                                    "routesDir": {
                                       "title": "Folder with pages from which static routers are generated",
-                                      "default": "pages",
+                                      "default": "routes",
                                       "anyOf": [
                                         {
                                           "enum": [
@@ -1816,9 +1816,9 @@
                                         }
                                       ]
                                     },
-                                    "externalPagesDir": {
+                                    "pagesDir": {
                                       "title": "Folder with components which can be manually added to static routers",
-                                      "default": "external-pages",
+                                      "default": "pages",
                                       "anyOf": [
                                         {
                                           "enum": [
@@ -2160,9 +2160,9 @@
                                       "default": false,
                                       "type": "boolean"
                                     },
-                                    "staticPagesDir": {
+                                    "routesDir": {
                                       "title": "Folder with pages from which static routers are generated",
-                                      "default": "pages",
+                                      "default": "routes",
                                       "anyOf": [
                                         {
                                           "enum": [
@@ -2175,9 +2175,9 @@
                                         }
                                       ]
                                     },
-                                    "externalPagesDir": {
+                                    "pagesDir": {
                                       "title": "Folder with components which can be manually added to static routers",
-                                      "default": "external-pages",
+                                      "default": "pages",
                                       "anyOf": [
                                         {
                                           "enum": [
