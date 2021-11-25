@@ -2,6 +2,7 @@
  * @jest-environment jsdom
  */
 import { parse } from '@tinkoff/url';
+import type { NavigationRoute } from '../types';
 import { Router } from './browser';
 
 const mockPush = jest.spyOn(window.history, 'pushState');
@@ -37,6 +38,7 @@ const routes = [
 const mockHref = jest.fn();
 
 const { location } = window;
+// @ts-ignore
 delete global.window.location;
 global.window.location = { ...location };
 
@@ -50,14 +52,14 @@ Object.defineProperty(window.location, 'href', {
 });
 Object.defineProperty(window.location, 'assign', {
   get: () => {
-    return (href) => {
+    return (href: string) => {
       window.location.href = href;
     };
   },
 });
 Object.defineProperty(window.location, 'replace', {
   get: () => {
-    return (href) => {
+    return (href: string) => {
       window.location.href = href;
     };
   },
@@ -228,18 +230,18 @@ describe('router/browser-spa', () => {
 
       it('should remove query parameters', async () => {
         await router.updateCurrentRoute({ query: { a: 'a' } });
-        expect(router.getCurrentUrl().query).toEqual({ a: 'a' });
+        expect(router.getCurrentUrl()?.query).toEqual({ a: 'a' });
 
         await router.updateCurrentRoute({ query: {} });
-        expect(router.getCurrentUrl().query).toEqual({});
+        expect(router.getCurrentUrl()?.query).toEqual({});
       });
 
       it('should remove query parameter with undefined', async () => {
         await router.updateCurrentRoute({ query: { a: 'a', b: 'b' } });
-        expect(router.getCurrentUrl().query).toEqual({ a: 'a', b: 'b' });
+        expect(router.getCurrentUrl()?.query).toEqual({ a: 'a', b: 'b' });
 
         await router.updateCurrentRoute({ query: { a: undefined }, preserveQuery: true });
-        expect(router.getCurrentUrl().query).toEqual({ b: 'b' });
+        expect(router.getCurrentUrl()?.query).toEqual({ b: 'b' });
       });
     });
 
@@ -544,9 +546,10 @@ describe('router/browser-spa', () => {
     });
 
     describe('mix', () => {
-      it('navigation while navigation while navigation', async () => {
+      beforeEach(async () => {
         window.location.href = 'http://localhost/';
-
+      });
+      it('navigation while navigation while navigation', async () => {
         const hook = jest.fn(async ({ to }) => {
           if (to.path === '/child1/') {
             await router.navigate('/child2/');
@@ -581,8 +584,6 @@ describe('router/browser-spa', () => {
       });
 
       it('updateQuery while navigation while rehydration', async () => {
-        window.location.href = 'http://localhost/';
-
         const guard = jest.fn().mockImplementationOnce(async () => {
           await router.navigate('/test/');
         });
@@ -608,8 +609,6 @@ describe('router/browser-spa', () => {
       });
 
       it('updateCurrentRoute while navigation', async () => {
-        window.location.href = 'http://localhost/';
-
         const hook = jest.fn();
 
         router.registerHook('beforeNavigate', async () => {
@@ -639,8 +638,6 @@ describe('router/browser-spa', () => {
       });
 
       it('updateCurrentRoute while updateCurrentRoute', async () => {
-        window.location.href = 'http://localhost/';
-
         const hook = jest.fn().mockImplementationOnce(() => {
           return router.updateCurrentRoute({ query: { b: '2' } });
         });
@@ -662,6 +659,36 @@ describe('router/browser-spa', () => {
 
         expect(hook).toHaveBeenCalled();
         expect(mockPush).toHaveBeenCalledWith(expect.anything(), '', '/?b=2');
+      });
+
+      it('sync-hooks works as expected while navigation', async () => {
+        await router.rehydrate({
+          type: 'navigate',
+          to: { name: 'root', path: '/', actualPath: '/', params: {} },
+          url: parse('http://localhost/'),
+        });
+
+        await router.start();
+
+        router.registerHook('beforeNavigate', async () => {
+          await new Promise((resolve) => setTimeout(resolve, 100));
+        });
+
+        let fromHook: NavigationRoute | undefined;
+        let fromRouter: NavigationRoute | undefined;
+
+        router.registerSyncHook('change', ({ to }) => {
+          fromHook = to;
+          fromRouter = router.getCurrentRoute();
+        });
+
+        router.navigate('/child1/');
+
+        await router.navigate('/test/');
+
+        expect(fromHook).toBe(fromRouter);
+        expect(router.getCurrentRoute()).toMatchObject({ name: 'test' });
+        expect(mockPush).toHaveBeenCalledWith(expect.anything(), '', '/test/');
       });
     });
   });

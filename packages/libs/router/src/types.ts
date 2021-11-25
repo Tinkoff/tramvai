@@ -1,6 +1,6 @@
 import type { Url, Query } from '@tinkoff/url';
 
-export type Params = Record<string, string>;
+export type Params = Record<string, string | null>;
 
 export interface Route {
   name: string;

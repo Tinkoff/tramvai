@@ -143,6 +143,7 @@ export abstract class AbstractRouter {
     this.runSyncHooks('change', navigation);
 
     this.lastNavigation = navigation;
+    this.currentNavigation = null;
   }
 
   async updateCurrentRoute(updateRouteOptions: UpdateCurrentRouteOptions) {
@@ -272,8 +273,6 @@ export abstract class AbstractRouter {
     if (navigation.type === 'updateCurrentRoute') {
       await this.runUpdateCurrentRoute(navigation);
     }
-
-    this.currentNavigation = null;
   }
 
   resolve(
