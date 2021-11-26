@@ -1,16 +1,16 @@
 # @tinkoff/mocker
 
-Сервер и middleware для мокирования API.
+A server and a middleware for API mocking.
 
-## Подключение
+## Installation
 
-Необходимо установить `@tinkoff/mocker`:
+Install `@tinkoff/mocker`:
 
 ```bash
 yarn add @tinkoff/mocker
 ```
 
-Создать первый мок, в файле `mocks/first-api.js`:
+Add your first mock to file `mocks/first-api.js`:
 
 ```tsx
 module.exports = {
@@ -25,71 +25,74 @@ module.exports = {
 };
 ```
 
-Затем подключить мокер в проекте:
+Set up mocker in your project:
 
 ```tsx
 import { Mocker, FileSystemMockRepository } from '@tinkoff/mocker';
 
-// репозиторий будет читать моки из файлов в текущей директории, из папки `mocks`
+// Repository will read mocks from directory `mocks` relative from current dir
 const repository = new FileSystemMockRepository({ cwd: process.cwd(), root: 'mocks' });
-// все запросы к мокеру на `/first-api/...` либо получают подходящий мок, либо проксируются на оригинальное API
+// Mocker to all of the request on `/first-api/...` will response with mock found in fs or with proxying request to the source API
 const options = {
   apis: {
     'first-api': {
       target: 'https://real-first-api.com/',
     },
   },
-  passUnhandledRequests: true
+  passUnhandledRequests: true,
 };
 
 const mocker = new Mocker({ options, repository, logger: console });
 
 (async () => {
-  // на этом этапе мокер загружает моки через репозиторий, и создает соответствующие роуты
+  // with this call mocker reads mocks from repository and creates according routes
   await mocker.init();
 
   mocker.start(4000, () => {
-    console.log('Mocker running at 4000 port');
+    console.log('Mocker is running at 4000 port');
   });
 })();
 ```
 
-И можем отправить `GET` запрос к мокеру:
+Now we can make a `GET` request to mocker
 
 ```tsx
 (async () => {
-const response = await fetch('http://localhost:4000/first-api/endpoint');
-const data = await response.json();
+  const response = await fetch('http://localhost:4000/first-api/endpoint');
+  const data = await response.json();
 
-console.log(data); // "mocked response"
+  console.log(data); // "mocked response"
 })();
 ```
 
 ## Explanation
 
-Библиотека работает на основе [express](https://expressjs.com/), `mocker` можно использовать как в качестве самостоятельного сервера,
-так и на существующем сервере через middleware `mocker.use(req, res)`.
+Library is based on [express](https://expressjs.com/).
 
-`FileSystemMockRepository` поддерживает моки в форматах `js` и `json`, `js` моки позволяют задавать кастомные `express` обработчики (методы) в качестве мока.
+`mocker` can be used as standalone server or as a middleware for existing server through call `mocker.use(req, res)`.
 
-При выбора мока для текущего запроса, учитывается `method` запроса, `url` и `query` параметры.
+`FileSystemMockRepository` supports mock in `js` и `json` formats. `js` mocks are able to define custom `express` handler as a mock handler.
 
-Мокер поддерживает проксирование запросов в API, что позволяет мокировать только некоторые эндпоинты, а не весь бэкенд.
+For choosing right mock for request next parameters of the request are considered: `method`, `url` and `query`.
 
-### Маршрутизация
+Mocker supports proxying requests to API that allows to mock only part of the API and not a whole backend
 
-Если мокер был запущен как отдельный сервер, например на 4000 порту, он будет доступен на `http://localhost:4000/`.
+### Routing
 
-Для каждого `api` из настроек `options.apis` будет создан вложенный роутер, для `first-api` это будет `http://localhost:4000/first-api/`.
+If mocker is running as a standalone server, for example on 4000 port, then it will be accessible at url `http://localhost:4000/`.
 
-Роуты для `api` создаются на основе моков, у которых ключем является метод + урл запроса, например мок `GET /endpoint` будет доступен по адресу `http://localhost:4000/first-api/endpoint`, для `GET` запросов.
+For every api from settings `options.apis` will be created a nester router, e.g. for `first-api` it will be `http://localhost:4000/first-api/`.
 
-### Моки из файловой системы
+Routes for `api` are getting created based on mocks, in which key is a method + url of the request, e.g. mock `GET /endpoint` will be accessible at `http://localhost:4000/first-api/endpoint` for `GET` requests.
 
-Мокер получает моки через репозиторий, что позволяет хранить моки в файловой системе, памяти, или на другом сервере.
-`FileSystemMockRepository` работает с файловой системой, и поддерживает следующие виды моков:
+### FileSystem mocks
+
+Mocker reads mocks using Repository, that allows to store mocks in FileSystem or on the another server.
+
+`FileSystemMockRepository` works with FileSystem and supports next kinds of mocks:
 
 **mock.json**
+
 ```json
 {
   "api": "first-api",
@@ -106,6 +109,7 @@ console.log(data); // "mocked response"
 ```
 
 **mock.js**
+
 ```tsx
 module.exports = {
   api: 'first-api',
@@ -132,11 +136,7 @@ module.exports = {
 
 ```tsx
 interface Mocker {
-  new (params: {
-    options: MockerOptions;
-    repository: MockRepository;
-    logger: Logger;
-  }): Mocker;
+  new (params: { options: MockerOptions; repository: MockRepository; logger: Logger }): Mocker;
 
   init(): Promise<void>;
 
@@ -148,13 +148,13 @@ interface Mocker {
 }
 ```
 
-`Mocker.init` - получение моков через `MockRepository`, инициализация роутинга. Необходимо вызывать до запуска сервера или middleware.
+`Mocker.init` - resolve mocks using `MockRepository`, routing initialization. Must be called before using server with mocks.
 
-`Mocker.update` - получение моков через `MockRepository`, обновление роутинга. Можно вызывать в рантайме.
+`Mocker.update` - updating mocks using `MockRepository`, routing update. Might be called in runtime.
 
-`Mocker.use` - `express` middleware, подходит для запуска на существующем сервере.
+`Mocker.use` - `express` middleware. Might be used for adding mocker on the existing server.
 
-`Mocker.start` - запуск мокера на стандартном http сервере.
+`Mocker.start` - run mocker as a standalone http-server.
 
 ### MockerOptions
 
@@ -166,13 +166,11 @@ interface MockerOptions {
 }
 ```
 
-`MockerOptions.apis` - список API для мокирования, в `target` указывается оригинальный урл API.
+`MockerOptions.apis` - list of APIs for mocking, key `target` points to the source API.
 
-`MockerOptions.passUnhandledRequests` - при включенной опции, все запросы, для которых не нашлось моков, проксируются на `target` url,
-иначе отдается ошибка.
+`MockerOptions.passUnhandledRequests` - when enabled, all of the request without according mock will be proxied to the `target`, otherwise fail the request.
 
-`MockerOptions.apiRoutePrefix` - если мокер запускается в существующем приложении на вложенном роуте, например `/mocker`,
-может понадобиться пробросить этот урл в `apiRoutePrefix` для корректной работы роутера мокера.
+`MockerOptions.apiRoutePrefix` - if mocker is used in existing server on nested route, e.g. `/mocker`, this option might be used to pass this route as `apiRoutePrefix` for proper routing.
 
 ### MockRepository
 
@@ -188,21 +186,21 @@ interface MockRepository {
 }
 ```
 
-`MockRepository.getAll` - получить все моки для указанного api.
+`MockRepository.getAll` - get all mocks for specified API.
 
-`MockRepository.get` - получить конкретный мок для указанного api.
+`MockRepository.get` - get specific mock for specific API.
 
-`MockRepository.add` - добавить мок для указанного api.
+`MockRepository.add` - add new mock for specific API.
 
-`MockRepository.delete` - удалить конкретный мок для указанного api.
+`MockRepository.delete` - remove specific mock for specific API.
 
 ## How to
 
-### Как мокать запрос только с определенными query параметрами?
+### How to mock request with specific query parameters?
 
-В моках реализованна поддержка сверки query параметров запроса и мока,
-в примере ниже запрос на `/endpoint?foo=bar` попадет в первый мок, `/endpoint?foo=baz` во второй,
-а все остальные запросы с другими query, или без них, проксируются в оригинальное API (при включенной опции `passUnhandledRequests`).
+Mocker allows to specify query parameters for mocks.
+
+In the example below request to `/endpoint?foo=bar` will be mocked with first mock, and request to `/endpoint?foo=baz` will be mocked with second. All of the other requests with\without query will be proxied to source API (if `passUnhandledRequests` is enabled).
 
 ```tsx
 module.exports = {
@@ -222,9 +220,9 @@ module.exports = {
 };
 ```
 
-### Как проксировать в оригинальное API определенный запрос?
+### How to proxy specific request to source API?
 
-Это имеет смысл, если отключена опция `passUnhandledRequests`, достаточно передать свойство `pass: true` в нужный мок:
+It might be useful if option `passUnhandledRequests` is disabled. In that case you may pass option `pass: true` to mock:
 
 ```tsx
 module.exports = {
