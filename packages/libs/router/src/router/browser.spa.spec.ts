@@ -155,7 +155,7 @@ describe('router/browser-spa', () => {
         });
         expect(mockPush).toHaveBeenCalledWith(expect.anything(), '', '/dynamic/3/other/');
 
-        await router.updateCurrentRoute({ params: { id: '4', test: null } });
+        await router.updateCurrentRoute({ params: { id: '4', test: undefined } });
         expect(router.getCurrentRoute()).toMatchObject({ name: 'dynamic', params: { id: '4' } });
         expect(mockPush).toHaveBeenCalledWith(expect.anything(), '', '/dynamic/4/');
       });
@@ -736,7 +736,7 @@ describe('router/browser-spa', () => {
         });
         expect(mockPush).toHaveBeenCalledWith(expect.anything(), '', '/dynamic/3/other/');
 
-        await router.updateCurrentRoute({ params: { id: '4', test: null } });
+        await router.updateCurrentRoute({ params: { id: '4', test: undefined } });
         expect(router.getCurrentRoute()).toMatchObject({ name: 'dynamic', params: { id: '4' } });
         expect(mockPush).toHaveBeenCalledWith(expect.anything(), '', '/dynamic/4/');
       });
@@ -1066,7 +1066,7 @@ describe('router/browser-spa', () => {
         });
         expect(mockPush).toHaveBeenCalledWith(expect.anything(), '', '/dynamic/3/other');
 
-        await router.updateCurrentRoute({ params: { id: '4', test: null } });
+        await router.updateCurrentRoute({ params: { id: '4', test: undefined } });
         expect(router.getCurrentRoute()).toMatchObject({ name: 'dynamic', params: { id: '4' } });
         expect(mockPush).toHaveBeenCalledWith(expect.anything(), '', '/dynamic/4');
       });

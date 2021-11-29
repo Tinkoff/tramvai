@@ -3,16 +3,16 @@ id: create-app
 title: createApp
 ---
 
-`createApp` - конфигурация, создание и запуск приложения
+`createApp` - configuring, creating and running the application
 
 ## createApp({ modules, bundles, providers })
 
-- `modules` - массив с используемыми [модулями](concepts/module.md) в приложении
-- `bundles` - объект с подключаемыми бандлами с данными в приложении. Ключ - индетификатор бандла, значение - `Promise`, который возвращает bundle
-- `providers` - массив с провайдерами приложения, которые будут добавлены в последнюю очередь в DI (после провайдеров модулей) и тем самым можно будет перезаписать реализацию токенов
-- `actions` - массив с глобальными [экшенами](concepts/action.md), которые будут зарегистрированы для всех бандлов и страниц
+- `modules` - array with used [modules](concepts/module.md) in the application
+- `bundles` - object with used bundles with data in the application. The key is the bundle identifier, the value is `Promise` which returns the bundle
+- `providers` - an array with application providers, which will be added last in the DI (after module providers) and thus it will be possible to overwrite the implementation of the tokens
+- `actions` - array with global [actions](concepts/action.md), which will be registered for all bundles and pages
 
-## Пример использования
+## Usage
 
 ```tsx
 import { createApp, provide } from '@tramvai/core';
@@ -36,4 +36,4 @@ createApp({
 });
 ```
 
-После создания createApp запускается [СommandLineRunner](concepts/command-line-runner.md) который выполняет цепочку действий, необходимых для инициализации приложения.
+After calling createApp, [СommandLineRunner](concepts/command-line-runner.md) is started which performs the chain of actions necessary to initialize the application.

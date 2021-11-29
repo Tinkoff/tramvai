@@ -1,6 +1,6 @@
 import type { Url, Query } from '@tinkoff/url';
 
-export type Params = Record<string, string | null>;
+export type Params = Record<string, string>;
 
 export interface Route {
   name: string;
@@ -17,8 +17,8 @@ export interface NavigationRoute extends Route {
 }
 
 export interface BaseNavigateOptions {
-  params?: Params;
-  query?: Query;
+  params?: Partial<Params>;
+  query?: Partial<Query>;
   preserveQuery?: boolean;
   replace?: boolean;
   hash?: string;

@@ -3,21 +3,21 @@ id: create-action
 title: createAction
 ---
 
-`createAction` - Метод для создания асинхронных действий. Используется как для построения цепочек саг, так и для выполнения глобальных действий, при построении ответа клиенту
+`createAction` - Method for creating asynchronous actions. It is used both for building chains of sagas and for performing global actions when building a response to a client
 
-[Подробнее про экшены](concepts/action.md)
+[More about actions](concepts/action.md)
 
 ## createAction({ name, fn, deps, conditions })
 
-- `name` - Название экшена, ожидается уникальный индетификатор
-- `fn(context, payload, deps)` - Реализация экшена, эта функция будет вызвана при использовании экшена, может быть `async`
-  - `context` - [ConsumerContext](references/tokens/common-tokens.md#список-context-токенов)
-  - `payload` - данные, передаваемые в action
-  - `deps` - инстансы провайдеров из `deps`
-- `deps` - Список провайдеров, которые необходимы для работы экшена
-- `conditions` - Список ограничений для исполнения экшена
+- `name` - The name of the action, a unique identifier is expected
+- `fn(context, payload, deps)` - Implementation of the action, this function will be called when the action is used, maybe `async`
+  - `context` - [ConsumerContext](references/tokens/common-tokens.md#context-tokens-list)
+  - `payload` - data passed to action
+  - `deps` - provider instances from `deps`
+- `deps` - List of providers that are needed for the action to work
+- `conditions` - List of restrictions for the execution of the action
 
-## Пример использования
+## Usage example
 
 ```tsx
 import { createAction } from '@tramvai/core';

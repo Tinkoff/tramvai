@@ -32,13 +32,14 @@ const mockReplace = jest.spyOn(window.history, 'replaceState');
 const mockHref = jest.fn();
 
 const { location } = window;
+// @ts-ignore
 delete global.window.location;
 global.window.location = { ...location };
 
 jest.useRealTimers();
 
 const backupTimeout = global.setTimeout;
-global.setTimeout = ((fn) => fn()) as any;
+global.setTimeout = ((fn: Function) => fn()) as any;
 
 let currentLocation = 'http://localhost:3000/';
 Object.defineProperty(window.location, 'href', {
@@ -50,14 +51,14 @@ Object.defineProperty(window.location, 'href', {
 });
 Object.defineProperty(window.location, 'assign', {
   get: () => {
-    return (href) => {
+    return (href: string) => {
       window.location.href = href;
     };
   },
 });
 Object.defineProperty(window.location, 'replace', {
   get: () => {
-    return (href) => {
+    return (href: string) => {
       window.location.href = href;
     };
   },
@@ -121,18 +122,18 @@ describe('router/noSpa', () => {
       });
       it('should remove query parameters', async () => {
         await router.updateCurrentRoute({ query: { a: 'a' } });
-        expect(router.getCurrentUrl().query).toEqual({ a: 'a' });
+        expect(router.getCurrentUrl()?.query).toEqual({ a: 'a' });
 
         await router.updateCurrentRoute({ query: {} });
-        expect(router.getCurrentUrl().query).toEqual({});
+        expect(router.getCurrentUrl()?.query).toEqual({});
       });
 
       it('should remove query parameter with undefined', async () => {
         await router.updateCurrentRoute({ query: { a: 'a', b: 'b' } });
-        expect(router.getCurrentUrl().query).toEqual({ a: 'a', b: 'b' });
+        expect(router.getCurrentUrl()?.query).toEqual({ a: 'a', b: 'b' });
 
         await router.updateCurrentRoute({ query: { a: undefined }, preserveQuery: true });
-        expect(router.getCurrentUrl().query).toEqual({ b: 'b' });
+        expect(router.getCurrentUrl()?.query).toEqual({ b: 'b' });
       });
     });
 

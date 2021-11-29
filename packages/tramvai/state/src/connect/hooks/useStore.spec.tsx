@@ -3,7 +3,7 @@
  */
 import React from 'react';
 
-import { testHook, testComponent, act } from '@tramvai/test-react';
+import { testHook, testComponent, act as globalAct } from '@tramvai/test-react';
 import { useStore, createReducer, createEvent } from '@tramvai/state';
 
 function createMockStore() {
@@ -28,7 +28,7 @@ describe('useStore', () => {
 
   it('subscribe to reducer changes', () => {
     const { reducer, event } = createMockStore();
-    const { context, result } = testHook(() => useStore(reducer), { stores: [reducer] });
+    const { context, result, act } = testHook(() => useStore(reducer), { stores: [reducer] });
 
     act(() => {
       context.dispatch(event(2));
@@ -49,7 +49,7 @@ describe('useStore', () => {
 
     const { context } = testComponent(<Component />);
 
-    act(() => {
+    globalAct(() => {
       context.dispatch(event(2));
       context.dispatch(event(3));
       context.dispatch(event(4));
@@ -120,7 +120,7 @@ describe('useStore', () => {
 
     const { context } = testComponent(<ParentComponent />, { stores: [reducer] });
 
-    act(() => {
+    globalAct(() => {
       context.dispatch(removeEvent());
     });
 
