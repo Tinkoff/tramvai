@@ -67,8 +67,7 @@ export const webpackClientConfig = ({
                   return acc + chunk.name;
                 }, '')
               )
-              .digest('base64')
-              .replace(/\//g, '');
+              .digest('hex');
           },
         },
       },

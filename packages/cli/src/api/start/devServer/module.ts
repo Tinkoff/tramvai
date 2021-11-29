@@ -21,7 +21,7 @@ export const moduleDevServer = ({
 }) => {
   return async function devServer() {
     const app = express();
-    const devMiddleware = webpackDevMiddleware(compiler as any, {
+    const devMiddleware = webpackDevMiddleware(compiler, {
       headers: { 'Access-Control-Allow-Origin': '*' },
       publicPath: '',
     });
@@ -30,13 +30,12 @@ export const moduleDevServer = ({
       provide: WEBPACK_WATCHING_TOKEN,
       useValue: devMiddleware.context.watching,
     });
-    // нужно закрыть watch режим вебпака, но т.к. он стартует только в рамках devMiddleware, то
-    // и остановить его можно пока только через devMiddleware, в webpack5 обещают исправить
+
     di.register({
       provide: CLOSE_HANDLER_TOKEN,
       multi: true,
       useValue: () => {
-        return close(devMiddleware);
+        return close(compiler);
       },
     });
 

@@ -307,3 +307,13 @@ logger.debug(
 ```
 
 These formatting rules are handful to connect logging to external tools like kibana, splunk. So it is desirable to follow these rules, otherwise it may lead to troubles with searching and analyzing your logs.
+
+## Troubleshooting
+### I use logger in my Nest.js application, and it does not work
+Be sure that you set all required environment variable (`LOG_LEVEL` and `LOG_ENABLE`) before app initialization.
+If you set all variable in `.env` and parse them via Nest.js's [ConfigModule](https://docs.nestjs.com/techniques/configuration),
+they will not be available in the [logger initialization phase](https://github.com/TinkoffCreditSystems/tramvai/blob/main/packages/libs/logger/src/server.ts#L13-L14).
+`ConfigModule` parses `.env`-file later.
+
+Also, check [here](https://github.com/TinkoffCreditSystems/tramvai/blob/main/packages/libs/logger/src/server.ts#L34)
+that `DEBUG_PLAIN` or `NODE_ENV` variables are available.

@@ -35,7 +35,7 @@ export const applicationDevServer = ({
       next();
     });
 
-    const devMiddleware = webpackDevMiddleware(compiler as any);
+    const devMiddleware = webpackDevMiddleware(compiler);
 
     app.use(devMiddleware);
 
@@ -44,13 +44,11 @@ export const applicationDevServer = ({
       useValue: devMiddleware.context.watching,
     });
 
-    // нужно закрыть watch режим вебпака, но т.к. он стартует только в рамках devMiddleware, то
-    // и остановить его можно пока только через devMiddleware, в webpack5 обещают исправить
     di.register({
       provide: CLOSE_HANDLER_TOKEN,
       multi: true,
       useValue: () => {
-        return close(devMiddleware);
+        return close(compiler);
       },
     });
 

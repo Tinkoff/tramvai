@@ -136,13 +136,11 @@
                             }
                           },
                           "threadLoader": {
-                            "description": "Construct a type with a set of properties K of type T",
                             "title": "thread-loader config",
                             "additionalProperties": true,
                             "type": "object"
                           },
                           "definePlugin": {
-                            "description": "Construct a type with a set of properties K of type T",
                             "title": "Define plugin config",
                             "default": {
                               "prod": {},
@@ -196,7 +194,6 @@
                             "additionalProperties": false
                           },
                           "alias": {
-                            "description": "Construct a type with a set of properties K of type T",
                             "title": "Aliases for project imports",
                             "additionalProperties": true,
                             "type": "object"
@@ -225,7 +222,6 @@
                                 "type": "boolean"
                               },
                               "options": {
-                                "description": "Construct a type with a set of properties K of type T",
                                 "title": "Pass options to image-webpack-loader",
                                 "additionalProperties": true,
                                 "type": "object"
@@ -244,170 +240,29 @@
                             "type": "object",
                             "properties": {
                               "webpack": {
-                                "description": "Enables/Disables experiments (experimental features with relax SemVer compatibility).",
                                 "title": "experiments configuration for [webpack](https://webpack.js.org/configuration/experiments/)",
                                 "default": {},
                                 "type": "object",
                                 "properties": {
-                                  "asset": {
-                                    "description": "Allow module type 'asset' to generate assets.",
-                                    "type": "boolean"
-                                  },
                                   "asyncWebAssembly": {
                                     "description": "Support WebAssembly as asynchronous EcmaScript Module.",
                                     "type": "boolean"
                                   },
-                                  "buildHttp": {
-                                    "description": "Build http(s): urls using a lockfile and resource content cache.",
-                                    "anyOf": [
-                                      {
-                                        "description": "Options for building http resources.",
-                                        "type": "object",
-                                        "properties": {
-                                          "cacheLocation": {
-                                            "description": "Location where resource content is stored for lockfile entries. It's also possible to disable storing by passing false.",
-                                            "anyOf": [
-                                              {
-                                                "enum": [
-                                                  false
-                                                ],
-                                                "type": "boolean"
-                                              },
-                                              {
-                                                "type": "string"
-                                              }
-                                            ]
-                                          },
-                                          "frozen": {
-                                            "description": "When set, anything that would lead to a modification of the lockfile or any resource content, will result in an error.",
-                                            "type": "boolean"
-                                          },
-                                          "lockfileLocation": {
-                                            "description": "Location of the lockfile.",
-                                            "type": "string"
-                                          },
-                                          "upgrade": {
-                                            "description": "When set, resources of existing lockfile entries will be fetched and entries will be upgraded when resource content has changed.",
-                                            "type": "boolean"
-                                          }
-                                        },
-                                        "additionalProperties": false
-                                      },
-                                      {
-                                        "type": "boolean"
-                                      }
-                                    ]
+                                  "backCompat": {
+                                    "description": "Enable backward-compat layer with deprecation warnings for many webpack 4 APIs.",
+                                    "type": "boolean"
                                   },
-                                  "executeModule": {
-                                    "description": "Enable build-time execution of modules from the module graph for plugins and loaders.",
+                                  "cacheUnaffected": {
+                                    "description": "Enable additional in memory caching of modules that are unchanged and reference only unchanged modules.",
+                                    "type": "boolean"
+                                  },
+                                  "futureDefaults": {
+                                    "description": "Apply defaults of next major version.",
                                     "type": "boolean"
                                   },
                                   "layers": {
-                                    "description": "Enable module and chunk layers.",
+                                    "description": "Enable module layers.",
                                     "type": "boolean"
-                                  },
-                                  "lazyCompilation": {
-                                    "description": "Compile entrypoints and import()s only when they are accessed.",
-                                    "anyOf": [
-                                      {
-                                        "type": "object",
-                                        "properties": {
-                                          "backend": {
-                                            "description": "A custom backend.",
-                                            "anyOf": [
-                                              {
-                                                "type": "object",
-                                                "additionalProperties": false
-                                              },
-                                              {
-                                                "type": "object",
-                                                "additionalProperties": false
-                                              }
-                                            ]
-                                          },
-                                          "client": {
-                                            "description": "A custom client.",
-                                            "type": "string"
-                                          },
-                                          "entries": {
-                                            "description": "Enable/disable lazy compilation for entries.",
-                                            "type": "boolean"
-                                          },
-                                          "imports": {
-                                            "description": "Enable/disable lazy compilation for import() modules.",
-                                            "type": "boolean"
-                                          },
-                                          "test": {
-                                            "description": "Specify which entrypoints or import()ed modules should be lazily compiled. This is matched with the imported module and not the entrypoint name.",
-                                            "anyOf": [
-                                              {
-                                                "type": "object",
-                                                "properties": {
-                                                  "source": {
-                                                    "description": "Returns a copy of the text of the regular expression pattern. Read-only. The regExp argument is a Regular expression object. It can be a variable name or a literal.",
-                                                    "type": "string"
-                                                  },
-                                                  "global": {
-                                                    "description": "Returns a Boolean value indicating the state of the global flag (g) used with a regular expression. Default is false. Read-only.",
-                                                    "type": "boolean"
-                                                  },
-                                                  "ignoreCase": {
-                                                    "description": "Returns a Boolean value indicating the state of the ignoreCase flag (i) used with a regular expression. Default is false. Read-only.",
-                                                    "type": "boolean"
-                                                  },
-                                                  "multiline": {
-                                                    "description": "Returns a Boolean value indicating the state of the multiline flag (m) used with a regular expression. Default is false. Read-only.",
-                                                    "type": "boolean"
-                                                  },
-                                                  "lastIndex": {
-                                                    "type": "number"
-                                                  },
-                                                  "flags": {
-                                                    "description": "Returns a string indicating the flags of the regular expression in question. This field is read-only.\nThe characters in this string are sequenced and concatenated in the following order:\n\n    - \"g\" for global\n    - \"i\" for ignoreCase\n    - \"m\" for multiline\n    - \"u\" for unicode\n    - \"y\" for sticky\n\nIf no flags are set, the value is the empty string.",
-                                                    "type": "string"
-                                                  },
-                                                  "sticky": {
-                                                    "description": "Returns a Boolean value indicating the state of the sticky flag (y) used with a regular\nexpression. Default is false. Read-only.",
-                                                    "type": "boolean"
-                                                  },
-                                                  "unicode": {
-                                                    "description": "Returns a Boolean value indicating the state of the Unicode flag (u) used with a regular\nexpression. Default is false. Read-only.",
-                                                    "type": "boolean"
-                                                  },
-                                                  "dotAll": {
-                                                    "description": "Returns a Boolean value indicating the state of the dotAll flag (s) used with a regular expression.\nDefault is false. Read-only.",
-                                                    "type": "boolean"
-                                                  }
-                                                },
-                                                "additionalProperties": false,
-                                                "required": [
-                                                  "dotAll",
-                                                  "flags",
-                                                  "global",
-                                                  "ignoreCase",
-                                                  "lastIndex",
-                                                  "multiline",
-                                                  "source",
-                                                  "sticky",
-                                                  "unicode"
-                                                ]
-                                              },
-                                              {
-                                                "type": "object",
-                                                "additionalProperties": false
-                                              },
-                                              {
-                                                "type": "string"
-                                              }
-                                            ]
-                                          }
-                                        },
-                                        "additionalProperties": false
-                                      },
-                                      {
-                                        "type": "boolean"
-                                      }
-                                    ]
                                   },
                                   "outputModule": {
                                     "description": "Allow output javascript files as module source type.",
@@ -603,7 +458,6 @@
                                                 "type": "string"
                                               },
                                               "diagnosticOptions": {
-                                                "description": "Make all properties in T optional",
                                                 "type": "object",
                                                 "properties": {
                                                   "syntactic": {
@@ -786,6 +640,9 @@
                                                   "code": {
                                                     "type": "string"
                                                   },
+                                                  "file": {
+                                                    "type": "string"
+                                                  },
                                                   "origin": {
                                                     "type": "string"
                                                   },
@@ -794,9 +651,6 @@
                                                       "error",
                                                       "warning"
                                                     ],
-                                                    "type": "string"
-                                                  },
-                                                  "file": {
                                                     "type": "string"
                                                   }
                                                 },
@@ -816,6 +670,9 @@
                                                         "code": {
                                                           "type": "string"
                                                         },
+                                                        "file": {
+                                                          "type": "string"
+                                                        },
                                                         "origin": {
                                                           "type": "string"
                                                         },
@@ -824,9 +681,6 @@
                                                             "error",
                                                             "warning"
                                                           ],
-                                                          "type": "string"
-                                                        },
-                                                        "file": {
                                                           "type": "string"
                                                         }
                                                       },
@@ -849,6 +703,9 @@
                                                   "code": {
                                                     "type": "string"
                                                   },
+                                                  "file": {
+                                                    "type": "string"
+                                                  },
                                                   "origin": {
                                                     "type": "string"
                                                   },
@@ -857,9 +714,6 @@
                                                       "error",
                                                       "warning"
                                                     ],
-                                                    "type": "string"
-                                                  },
-                                                  "file": {
                                                     "type": "string"
                                                   }
                                                 },
@@ -879,6 +733,9 @@
                                                         "code": {
                                                           "type": "string"
                                                         },
+                                                        "file": {
+                                                          "type": "string"
+                                                        },
                                                         "origin": {
                                                           "type": "string"
                                                         },
@@ -887,9 +744,6 @@
                                                             "error",
                                                             "warning"
                                                           ],
-                                                          "type": "string"
-                                                        },
-                                                        "file": {
                                                           "type": "string"
                                                         }
                                                       },
@@ -1125,170 +979,29 @@
                             "type": "object",
                             "properties": {
                               "webpack": {
-                                "description": "Enables/Disables experiments (experimental features with relax SemVer compatibility).",
                                 "title": "experiments configuration for [webpack](https://webpack.js.org/configuration/experiments/)",
                                 "default": {},
                                 "type": "object",
                                 "properties": {
-                                  "asset": {
-                                    "description": "Allow module type 'asset' to generate assets.",
-                                    "type": "boolean"
-                                  },
                                   "asyncWebAssembly": {
                                     "description": "Support WebAssembly as asynchronous EcmaScript Module.",
                                     "type": "boolean"
                                   },
-                                  "buildHttp": {
-                                    "description": "Build http(s): urls using a lockfile and resource content cache.",
-                                    "anyOf": [
-                                      {
-                                        "description": "Options for building http resources.",
-                                        "type": "object",
-                                        "properties": {
-                                          "cacheLocation": {
-                                            "description": "Location where resource content is stored for lockfile entries. It's also possible to disable storing by passing false.",
-                                            "anyOf": [
-                                              {
-                                                "enum": [
-                                                  false
-                                                ],
-                                                "type": "boolean"
-                                              },
-                                              {
-                                                "type": "string"
-                                              }
-                                            ]
-                                          },
-                                          "frozen": {
-                                            "description": "When set, anything that would lead to a modification of the lockfile or any resource content, will result in an error.",
-                                            "type": "boolean"
-                                          },
-                                          "lockfileLocation": {
-                                            "description": "Location of the lockfile.",
-                                            "type": "string"
-                                          },
-                                          "upgrade": {
-                                            "description": "When set, resources of existing lockfile entries will be fetched and entries will be upgraded when resource content has changed.",
-                                            "type": "boolean"
-                                          }
-                                        },
-                                        "additionalProperties": false
-                                      },
-                                      {
-                                        "type": "boolean"
-                                      }
-                                    ]
+                                  "backCompat": {
+                                    "description": "Enable backward-compat layer with deprecation warnings for many webpack 4 APIs.",
+                                    "type": "boolean"
                                   },
-                                  "executeModule": {
-                                    "description": "Enable build-time execution of modules from the module graph for plugins and loaders.",
+                                  "cacheUnaffected": {
+                                    "description": "Enable additional in memory caching of modules that are unchanged and reference only unchanged modules.",
+                                    "type": "boolean"
+                                  },
+                                  "futureDefaults": {
+                                    "description": "Apply defaults of next major version.",
                                     "type": "boolean"
                                   },
                                   "layers": {
-                                    "description": "Enable module and chunk layers.",
+                                    "description": "Enable module layers.",
                                     "type": "boolean"
-                                  },
-                                  "lazyCompilation": {
-                                    "description": "Compile entrypoints and import()s only when they are accessed.",
-                                    "anyOf": [
-                                      {
-                                        "type": "object",
-                                        "properties": {
-                                          "backend": {
-                                            "description": "A custom backend.",
-                                            "anyOf": [
-                                              {
-                                                "type": "object",
-                                                "additionalProperties": false
-                                              },
-                                              {
-                                                "type": "object",
-                                                "additionalProperties": false
-                                              }
-                                            ]
-                                          },
-                                          "client": {
-                                            "description": "A custom client.",
-                                            "type": "string"
-                                          },
-                                          "entries": {
-                                            "description": "Enable/disable lazy compilation for entries.",
-                                            "type": "boolean"
-                                          },
-                                          "imports": {
-                                            "description": "Enable/disable lazy compilation for import() modules.",
-                                            "type": "boolean"
-                                          },
-                                          "test": {
-                                            "description": "Specify which entrypoints or import()ed modules should be lazily compiled. This is matched with the imported module and not the entrypoint name.",
-                                            "anyOf": [
-                                              {
-                                                "type": "object",
-                                                "properties": {
-                                                  "source": {
-                                                    "description": "Returns a copy of the text of the regular expression pattern. Read-only. The regExp argument is a Regular expression object. It can be a variable name or a literal.",
-                                                    "type": "string"
-                                                  },
-                                                  "global": {
-                                                    "description": "Returns a Boolean value indicating the state of the global flag (g) used with a regular expression. Default is false. Read-only.",
-                                                    "type": "boolean"
-                                                  },
-                                                  "ignoreCase": {
-                                                    "description": "Returns a Boolean value indicating the state of the ignoreCase flag (i) used with a regular expression. Default is false. Read-only.",
-                                                    "type": "boolean"
-                                                  },
-                                                  "multiline": {
-                                                    "description": "Returns a Boolean value indicating the state of the multiline flag (m) used with a regular expression. Default is false. Read-only.",
-                                                    "type": "boolean"
-                                                  },
-                                                  "lastIndex": {
-                                                    "type": "number"
-                                                  },
-                                                  "flags": {
-                                                    "description": "Returns a string indicating the flags of the regular expression in question. This field is read-only.\nThe characters in this string are sequenced and concatenated in the following order:\n\n    - \"g\" for global\n    - \"i\" for ignoreCase\n    - \"m\" for multiline\n    - \"u\" for unicode\n    - \"y\" for sticky\n\nIf no flags are set, the value is the empty string.",
-                                                    "type": "string"
-                                                  },
-                                                  "sticky": {
-                                                    "description": "Returns a Boolean value indicating the state of the sticky flag (y) used with a regular\nexpression. Default is false. Read-only.",
-                                                    "type": "boolean"
-                                                  },
-                                                  "unicode": {
-                                                    "description": "Returns a Boolean value indicating the state of the Unicode flag (u) used with a regular\nexpression. Default is false. Read-only.",
-                                                    "type": "boolean"
-                                                  },
-                                                  "dotAll": {
-                                                    "description": "Returns a Boolean value indicating the state of the dotAll flag (s) used with a regular expression.\nDefault is false. Read-only.",
-                                                    "type": "boolean"
-                                                  }
-                                                },
-                                                "additionalProperties": false,
-                                                "required": [
-                                                  "dotAll",
-                                                  "flags",
-                                                  "global",
-                                                  "ignoreCase",
-                                                  "lastIndex",
-                                                  "multiline",
-                                                  "source",
-                                                  "sticky",
-                                                  "unicode"
-                                                ]
-                                              },
-                                              {
-                                                "type": "object",
-                                                "additionalProperties": false
-                                              },
-                                              {
-                                                "type": "string"
-                                              }
-                                            ]
-                                          }
-                                        },
-                                        "additionalProperties": false
-                                      },
-                                      {
-                                        "type": "boolean"
-                                      }
-                                    ]
                                   },
                                   "outputModule": {
                                     "description": "Allow output javascript files as module source type.",
@@ -1491,13 +1204,11 @@
                               }
                             },
                             "threadLoader": {
-                              "description": "Construct a type with a set of properties K of type T",
                               "title": "thread-loader config",
                               "additionalProperties": true,
                               "type": "object"
                             },
                             "definePlugin": {
-                              "description": "Construct a type with a set of properties K of type T",
                               "title": "Define plugin config",
                               "default": {
                                 "prod": {},
@@ -1552,7 +1263,6 @@
                               "additionalProperties": false
                             },
                             "alias": {
-                              "description": "Construct a type with a set of properties K of type T",
                               "title": "Aliases for project imports",
                               "additionalProperties": true,
                               "type": "object"
@@ -1581,7 +1291,6 @@
                                   "type": "boolean"
                                 },
                                 "options": {
-                                  "description": "Construct a type with a set of properties K of type T",
                                   "title": "Pass options to image-webpack-loader",
                                   "additionalProperties": true,
                                   "type": "object"
@@ -1600,170 +1309,29 @@
                               "type": "object",
                               "properties": {
                                 "webpack": {
-                                  "description": "Enables/Disables experiments (experimental features with relax SemVer compatibility).",
                                   "title": "experiments configuration for [webpack](https://webpack.js.org/configuration/experiments/)",
                                   "default": {},
                                   "type": "object",
                                   "properties": {
-                                    "asset": {
-                                      "description": "Allow module type 'asset' to generate assets.",
-                                      "type": "boolean"
-                                    },
                                     "asyncWebAssembly": {
                                       "description": "Support WebAssembly as asynchronous EcmaScript Module.",
                                       "type": "boolean"
                                     },
-                                    "buildHttp": {
-                                      "description": "Build http(s): urls using a lockfile and resource content cache.",
-                                      "anyOf": [
-                                        {
-                                          "description": "Options for building http resources.",
-                                          "type": "object",
-                                          "properties": {
-                                            "cacheLocation": {
-                                              "description": "Location where resource content is stored for lockfile entries. It's also possible to disable storing by passing false.",
-                                              "anyOf": [
-                                                {
-                                                  "enum": [
-                                                    false
-                                                  ],
-                                                  "type": "boolean"
-                                                },
-                                                {
-                                                  "type": "string"
-                                                }
-                                              ]
-                                            },
-                                            "frozen": {
-                                              "description": "When set, anything that would lead to a modification of the lockfile or any resource content, will result in an error.",
-                                              "type": "boolean"
-                                            },
-                                            "lockfileLocation": {
-                                              "description": "Location of the lockfile.",
-                                              "type": "string"
-                                            },
-                                            "upgrade": {
-                                              "description": "When set, resources of existing lockfile entries will be fetched and entries will be upgraded when resource content has changed.",
-                                              "type": "boolean"
-                                            }
-                                          },
-                                          "additionalProperties": false
-                                        },
-                                        {
-                                          "type": "boolean"
-                                        }
-                                      ]
+                                    "backCompat": {
+                                      "description": "Enable backward-compat layer with deprecation warnings for many webpack 4 APIs.",
+                                      "type": "boolean"
                                     },
-                                    "executeModule": {
-                                      "description": "Enable build-time execution of modules from the module graph for plugins and loaders.",
+                                    "cacheUnaffected": {
+                                      "description": "Enable additional in memory caching of modules that are unchanged and reference only unchanged modules.",
+                                      "type": "boolean"
+                                    },
+                                    "futureDefaults": {
+                                      "description": "Apply defaults of next major version.",
                                       "type": "boolean"
                                     },
                                     "layers": {
-                                      "description": "Enable module and chunk layers.",
+                                      "description": "Enable module layers.",
                                       "type": "boolean"
-                                    },
-                                    "lazyCompilation": {
-                                      "description": "Compile entrypoints and import()s only when they are accessed.",
-                                      "anyOf": [
-                                        {
-                                          "type": "object",
-                                          "properties": {
-                                            "backend": {
-                                              "description": "A custom backend.",
-                                              "anyOf": [
-                                                {
-                                                  "type": "object",
-                                                  "additionalProperties": false
-                                                },
-                                                {
-                                                  "type": "object",
-                                                  "additionalProperties": false
-                                                }
-                                              ]
-                                            },
-                                            "client": {
-                                              "description": "A custom client.",
-                                              "type": "string"
-                                            },
-                                            "entries": {
-                                              "description": "Enable/disable lazy compilation for entries.",
-                                              "type": "boolean"
-                                            },
-                                            "imports": {
-                                              "description": "Enable/disable lazy compilation for import() modules.",
-                                              "type": "boolean"
-                                            },
-                                            "test": {
-                                              "description": "Specify which entrypoints or import()ed modules should be lazily compiled. This is matched with the imported module and not the entrypoint name.",
-                                              "anyOf": [
-                                                {
-                                                  "type": "object",
-                                                  "properties": {
-                                                    "source": {
-                                                      "description": "Returns a copy of the text of the regular expression pattern. Read-only. The regExp argument is a Regular expression object. It can be a variable name or a literal.",
-                                                      "type": "string"
-                                                    },
-                                                    "global": {
-                                                      "description": "Returns a Boolean value indicating the state of the global flag (g) used with a regular expression. Default is false. Read-only.",
-                                                      "type": "boolean"
-                                                    },
-                                                    "ignoreCase": {
-                                                      "description": "Returns a Boolean value indicating the state of the ignoreCase flag (i) used with a regular expression. Default is false. Read-only.",
-                                                      "type": "boolean"
-                                                    },
-                                                    "multiline": {
-                                                      "description": "Returns a Boolean value indicating the state of the multiline flag (m) used with a regular expression. Default is false. Read-only.",
-                                                      "type": "boolean"
-                                                    },
-                                                    "lastIndex": {
-                                                      "type": "number"
-                                                    },
-                                                    "flags": {
-                                                      "description": "Returns a string indicating the flags of the regular expression in question. This field is read-only.\nThe characters in this string are sequenced and concatenated in the following order:\n\n    - \"g\" for global\n    - \"i\" for ignoreCase\n    - \"m\" for multiline\n    - \"u\" for unicode\n    - \"y\" for sticky\n\nIf no flags are set, the value is the empty string.",
-                                                      "type": "string"
-                                                    },
-                                                    "sticky": {
-                                                      "description": "Returns a Boolean value indicating the state of the sticky flag (y) used with a regular\nexpression. Default is false. Read-only.",
-                                                      "type": "boolean"
-                                                    },
-                                                    "unicode": {
-                                                      "description": "Returns a Boolean value indicating the state of the Unicode flag (u) used with a regular\nexpression. Default is false. Read-only.",
-                                                      "type": "boolean"
-                                                    },
-                                                    "dotAll": {
-                                                      "description": "Returns a Boolean value indicating the state of the dotAll flag (s) used with a regular expression.\nDefault is false. Read-only.",
-                                                      "type": "boolean"
-                                                    }
-                                                  },
-                                                  "additionalProperties": false,
-                                                  "required": [
-                                                    "dotAll",
-                                                    "flags",
-                                                    "global",
-                                                    "ignoreCase",
-                                                    "lastIndex",
-                                                    "multiline",
-                                                    "source",
-                                                    "sticky",
-                                                    "unicode"
-                                                  ]
-                                                },
-                                                {
-                                                  "type": "object",
-                                                  "additionalProperties": false
-                                                },
-                                                {
-                                                  "type": "string"
-                                                }
-                                              ]
-                                            }
-                                          },
-                                          "additionalProperties": false
-                                        },
-                                        {
-                                          "type": "boolean"
-                                        }
-                                      ]
                                     },
                                     "outputModule": {
                                       "description": "Allow output javascript files as module source type.",
@@ -1959,170 +1527,29 @@
                               "type": "object",
                               "properties": {
                                 "webpack": {
-                                  "description": "Enables/Disables experiments (experimental features with relax SemVer compatibility).",
                                   "title": "experiments configuration for [webpack](https://webpack.js.org/configuration/experiments/)",
                                   "default": {},
                                   "type": "object",
                                   "properties": {
-                                    "asset": {
-                                      "description": "Allow module type 'asset' to generate assets.",
-                                      "type": "boolean"
-                                    },
                                     "asyncWebAssembly": {
                                       "description": "Support WebAssembly as asynchronous EcmaScript Module.",
                                       "type": "boolean"
                                     },
-                                    "buildHttp": {
-                                      "description": "Build http(s): urls using a lockfile and resource content cache.",
-                                      "anyOf": [
-                                        {
-                                          "description": "Options for building http resources.",
-                                          "type": "object",
-                                          "properties": {
-                                            "cacheLocation": {
-                                              "description": "Location where resource content is stored for lockfile entries. It's also possible to disable storing by passing false.",
-                                              "anyOf": [
-                                                {
-                                                  "enum": [
-                                                    false
-                                                  ],
-                                                  "type": "boolean"
-                                                },
-                                                {
-                                                  "type": "string"
-                                                }
-                                              ]
-                                            },
-                                            "frozen": {
-                                              "description": "When set, anything that would lead to a modification of the lockfile or any resource content, will result in an error.",
-                                              "type": "boolean"
-                                            },
-                                            "lockfileLocation": {
-                                              "description": "Location of the lockfile.",
-                                              "type": "string"
-                                            },
-                                            "upgrade": {
-                                              "description": "When set, resources of existing lockfile entries will be fetched and entries will be upgraded when resource content has changed.",
-                                              "type": "boolean"
-                                            }
-                                          },
-                                          "additionalProperties": false
-                                        },
-                                        {
-                                          "type": "boolean"
-                                        }
-                                      ]
+                                    "backCompat": {
+                                      "description": "Enable backward-compat layer with deprecation warnings for many webpack 4 APIs.",
+                                      "type": "boolean"
                                     },
-                                    "executeModule": {
-                                      "description": "Enable build-time execution of modules from the module graph for plugins and loaders.",
+                                    "cacheUnaffected": {
+                                      "description": "Enable additional in memory caching of modules that are unchanged and reference only unchanged modules.",
+                                      "type": "boolean"
+                                    },
+                                    "futureDefaults": {
+                                      "description": "Apply defaults of next major version.",
                                       "type": "boolean"
                                     },
                                     "layers": {
-                                      "description": "Enable module and chunk layers.",
+                                      "description": "Enable module layers.",
                                       "type": "boolean"
-                                    },
-                                    "lazyCompilation": {
-                                      "description": "Compile entrypoints and import()s only when they are accessed.",
-                                      "anyOf": [
-                                        {
-                                          "type": "object",
-                                          "properties": {
-                                            "backend": {
-                                              "description": "A custom backend.",
-                                              "anyOf": [
-                                                {
-                                                  "type": "object",
-                                                  "additionalProperties": false
-                                                },
-                                                {
-                                                  "type": "object",
-                                                  "additionalProperties": false
-                                                }
-                                              ]
-                                            },
-                                            "client": {
-                                              "description": "A custom client.",
-                                              "type": "string"
-                                            },
-                                            "entries": {
-                                              "description": "Enable/disable lazy compilation for entries.",
-                                              "type": "boolean"
-                                            },
-                                            "imports": {
-                                              "description": "Enable/disable lazy compilation for import() modules.",
-                                              "type": "boolean"
-                                            },
-                                            "test": {
-                                              "description": "Specify which entrypoints or import()ed modules should be lazily compiled. This is matched with the imported module and not the entrypoint name.",
-                                              "anyOf": [
-                                                {
-                                                  "type": "object",
-                                                  "properties": {
-                                                    "source": {
-                                                      "description": "Returns a copy of the text of the regular expression pattern. Read-only. The regExp argument is a Regular expression object. It can be a variable name or a literal.",
-                                                      "type": "string"
-                                                    },
-                                                    "global": {
-                                                      "description": "Returns a Boolean value indicating the state of the global flag (g) used with a regular expression. Default is false. Read-only.",
-                                                      "type": "boolean"
-                                                    },
-                                                    "ignoreCase": {
-                                                      "description": "Returns a Boolean value indicating the state of the ignoreCase flag (i) used with a regular expression. Default is false. Read-only.",
-                                                      "type": "boolean"
-                                                    },
-                                                    "multiline": {
-                                                      "description": "Returns a Boolean value indicating the state of the multiline flag (m) used with a regular expression. Default is false. Read-only.",
-                                                      "type": "boolean"
-                                                    },
-                                                    "lastIndex": {
-                                                      "type": "number"
-                                                    },
-                                                    "flags": {
-                                                      "description": "Returns a string indicating the flags of the regular expression in question. This field is read-only.\nThe characters in this string are sequenced and concatenated in the following order:\n\n    - \"g\" for global\n    - \"i\" for ignoreCase\n    - \"m\" for multiline\n    - \"u\" for unicode\n    - \"y\" for sticky\n\nIf no flags are set, the value is the empty string.",
-                                                      "type": "string"
-                                                    },
-                                                    "sticky": {
-                                                      "description": "Returns a Boolean value indicating the state of the sticky flag (y) used with a regular\nexpression. Default is false. Read-only.",
-                                                      "type": "boolean"
-                                                    },
-                                                    "unicode": {
-                                                      "description": "Returns a Boolean value indicating the state of the Unicode flag (u) used with a regular\nexpression. Default is false. Read-only.",
-                                                      "type": "boolean"
-                                                    },
-                                                    "dotAll": {
-                                                      "description": "Returns a Boolean value indicating the state of the dotAll flag (s) used with a regular expression.\nDefault is false. Read-only.",
-                                                      "type": "boolean"
-                                                    }
-                                                  },
-                                                  "additionalProperties": false,
-                                                  "required": [
-                                                    "dotAll",
-                                                    "flags",
-                                                    "global",
-                                                    "ignoreCase",
-                                                    "lastIndex",
-                                                    "multiline",
-                                                    "source",
-                                                    "sticky",
-                                                    "unicode"
-                                                  ]
-                                                },
-                                                {
-                                                  "type": "object",
-                                                  "additionalProperties": false
-                                                },
-                                                {
-                                                  "type": "string"
-                                                }
-                                              ]
-                                            }
-                                          },
-                                          "additionalProperties": false
-                                        },
-                                        {
-                                          "type": "boolean"
-                                        }
-                                      ]
                                     },
                                     "outputModule": {
                                       "description": "Allow output javascript files as module source type.",

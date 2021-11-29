@@ -22,7 +22,7 @@ export interface Experiments {
    * @title experiments configuration for [webpack](https://webpack.js.org/configuration/experiments/)
    * @default {}
    */
-  webpack?: Configuration['experiments'];
+  webpack?: Omit<Configuration['experiments'], 'buildHttp' | 'lazyCompilation'>;
   /**
    * @title experimental settings for [mini-css-extract-plugin](https://github.com/webpack-contrib/mini-css-extract-plugin)
    * @default {}

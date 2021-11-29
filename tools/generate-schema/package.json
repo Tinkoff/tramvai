@@ -6,7 +6,7 @@
     "generate-schema": "bin/generate-schema.js"
   },
   "dependencies": {
-    "typescript-json-schema": "^0.42.0"
+    "typescript-json-schema": "^0.52.0"
   },
   "license": "Apache-2.0"
 }
