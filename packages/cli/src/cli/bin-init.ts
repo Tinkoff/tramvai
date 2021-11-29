@@ -1,7 +1,9 @@
 import resolve from 'resolve';
+import { clearExecArgv } from '../utils/clearExecArgv';
 import { handleErrors } from '../utils/handleErrors';
 import { initSentry } from '../utils/sentry';
 
+clearExecArgv();
 initSentry();
 handleErrors();
 

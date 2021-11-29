@@ -198,7 +198,9 @@ describe('testApi', () => {
 
 ### Logging
 
-By default, `@tinkoff/request` will log every failed requests with status `error`. You can disable logging by pass `{ silent: true }` parameter to request parameters. Useful meta information about request will be available in `error.__meta` property.
+By default, `@tinkoff/request` will log every failed requests with level `error`.
+You can disable logging by pass `{ silent: true }` parameter to request parameters.
+Useful meta information about request will be available in `error.__meta` property.
 
 Example:
 
@@ -208,6 +210,21 @@ const log = logger('request:test');
 httpClient.request({ path: 'test', silent: true }).catch((error) => {
   log.info(error);
 });
+```
+
+### Debug
+
+You can show all the default logs of http clients by providing these env variables:
+
+```bash
+LOG_ENABLE=request*
+LOG_LEVEL=trace
+```
+
+If the built-in http clients logs are not enough, you can enable NodeJS debugging of the `request` module this way:
+
+```bash
+NODE_DEBUG=request tramvai start<appName>
 ```
 
 ## Exported tokens

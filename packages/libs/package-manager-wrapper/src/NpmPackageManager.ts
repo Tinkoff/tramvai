@@ -39,7 +39,7 @@ export class NpmPackageManager extends PackageManager {
   }
 
   async dedupe(options: DedupeOptions = {}) {
-    await this.run('npm dedupe', options);
+    await this.run('npm dedupe --legacy-peer-deps', options);
   }
 
   getLockFileName() {
