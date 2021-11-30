@@ -5,10 +5,10 @@ import * as ResourceSlot from './slots';
 
 /**
  * @description
- * Позволяет добавлять ресурсы в определенные слоты при рендере приложения.
- * Используется только на сервере, эквивалентно использованию RESOURCES_REGISTRY.
+ * Token adding resources to specific render slots.
+ * Used only on server and it is equivalent to usage of RESOURCES_REGISTRY.
  *
- * [Пример использования](https://tramvai.dev/docs/how-to/render-add-resources)
+ * [Usage example](https://tramvai.dev/docs/how-to/render-add-resources)
  */
 export const RENDER_SLOTS = createToken<PageResource | PageResource[]>('RENDER_SLOTS', {
   multi: true,
@@ -16,10 +16,10 @@ export const RENDER_SLOTS = createToken<PageResource | PageResource[]>('RENDER_S
 
 /**
  * @description
- * Позволяет переопределять атрибуты для html, body и контейнера приложения. Имейте в виду, что:
-    - это именно html атрибуты, а не реакт (т.е. должен быть не className, а class).
-    - новые атрибуты затирают старые
-    - поддерживаются только текстовые значения
+ * Token for defining additional attributes for html, body and app container. Keep in mind that:
+ *  - only raw html attributes are allowed (not react or anything else, e.g. do not use className use class)
+ *  - new attributes overrides old one
+ *  - only text values are supported
  *
  * @example
   ```tsx
@@ -39,8 +39,8 @@ export const HTML_ATTRS = createToken<HtmlAttrs>('HTML_ATTRS', { multi: true });
 
 /**
  * @description
- * Позволяет повесить Node-style колбэк на событие рендеринга в браузере.
- * Первым аргументом отправляет ошибку, если таковая имелась
+ * Add node-style callback on render event in browser.
+ * Passes error instance as first argument if there was an error
  */
 export const RENDERER_CALLBACK = createToken<((e?: Error) => void)[]>('RENDERER_CALLBACK', {
   multi: true,
@@ -48,38 +48,39 @@ export const RENDERER_CALLBACK = createToken<((e?: Error) => void)[]>('RENDERER_
 
 /**
  * @description
- * Позволяет задать функцию-обертку для рендера и переопределить параметры или результат рендера
+ * Used as async function which overrides app render. This function may define render parameters or override render result.
  */
 export const CUSTOM_RENDER = createToken('CUSTOM_RENDER');
 
 /**
  * @description
- * Регистр ресурсов - используется на сервере для регистрации дополнительных ресурсов (скриптов, стилей, верстки) которые должны быть вставлены в итоговую html-страницу
+ * Resources registry is used only on server for registering any additional assets for browser (scripts, styles, html) which should be added to response html page
  */
 export const RESOURCES_REGISTRY = createToken<ResourcesRegistry>('resourcesRegistry');
 
 /**
  * @description
- * Строка отвечающая за проверку требуется ли загрузить файл полифиллов в конкретном браузере.
- * Полифиллы грузятся всегда для браузеров без поддержки модулей, а в браузерах с поддержкой будет выполняться данная проверка
- * (по умолчанию проверяет на Promise.prototype.finally и реализацию URL, URLSearchParams)
+ * A string used for check of need to loading polyfills in the client browser.
+ * Polyfills are always loading for browsers without module support and if browser do support modules
+ * this check will called in order to find out the need of loading polyfills
+ * (by default checks for Promise.prototype.finally and implementations for URL and URLSearchParams)
  *
- * [Документация по полифилам](https://tramvai.dev/docs/how-to/how-to-enable-polyfills)
+ * [Polyfill documentation](https://tramvai.dev/docs/how-to/how-to-enable-polyfills)
  */
 export const POLYFILL_CONDITION = createToken<string>('POLYFILL_CONDITION');
 
 /**
  * @description
- * Позволяет включить разные режимы работы React приложения - `strict`, `blocking`, `concurrent`, по умолчанию используется `legacy` - обычный режим работы
+ * Allows to specify different modes for React Render - `strict`, `blocking`, `concurrent`, by default value `legacy` is used
  *
- * [Подробнее в документации к module-render](https://tramvai.dev/docs/references/modules/render)
+ * [More details in doc for module-render](https://tramvai.dev/docs/references/modules/render)
  */
 export const RENDER_MODE = createToken<RenderMode>('RENDER_MODE');
 
 /**
  * @description
- * Позволяет сделать обертку для текущего провайдера.
- * Позволяет добавлять, например, свои React.Context.Provider для разного функционала
+ * A wrapper for app render.
+ * Through that token is possible to specify for example React.Context.Provider for the app
  */
 export const EXTEND_RENDER = createToken<Array<(current: ReactElement) => ReactElement>>(
   'EXTEND_RENDER',
@@ -90,25 +91,25 @@ export const EXTEND_RENDER = createToken<Array<(current: ReactElement) => ReactE
 
 /**
  * @description
- * Токен инициализации лайаута по умолчанию для страниц
+ * Token for default layout for page
  */
 export const DEFAULT_LAYOUT_COMPONENT = createToken('defaultLayoutComponent');
 
 /**
  * @description
- * Токен инициализации шапки по умолчанию для страниц
+ * Token for default header for page
  */
 export const DEFAULT_HEADER_COMPONENT = createToken('defaultHeaderComponent');
 
 /**
  * @description
- * Токен инициализации футера по умолчанию для страниц
+ * Token for default footer for page
  */
 export const DEFAULT_FOOTER_COMPONENT = createToken('defaultFooterComponent');
 
 /**
  * @description
- * Токен для кастомизации дефолтного лейаута страниц
+ * Token for passing parameters for page layout
  */
 export const LAYOUT_OPTIONS = createToken<LayoutOptions[]>('layoutOptions', { multi: true });
 
@@ -147,9 +148,9 @@ type ResourceInlineOptions = {
 
 /**
  * @description
- * Настройки инлайнинга ресурсов в HTML-страницу
- * * threshold Максимальное значение (в байтах) размера файла, до которого он инлайнится в HTML-страницу
- * * types Типы ресурсов, которые нужно инлайнить
+ * Settings for HTML resources inlining
+ * * threshold Maximum value (in bytes) of the file which are getting inlined in HTML page
+ * * types Types of resources which should be inlined
  */
 export const RESOURCE_INLINE_OPTIONS = createToken<ResourceInlineOptions>(
   'resourceInlineThreshold'

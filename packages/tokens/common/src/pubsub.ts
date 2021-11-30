@@ -2,19 +2,19 @@ import { createToken } from '@tinkoff/dippy';
 
 /**
  * @description
- * Фабрика для создания инстанса pubsub
+ * Factory for creating pubsub instances
  */
 export const PUBSUB_FACTORY_TOKEN = createToken<() => PubSub>('pubsubFactory');
 
 /**
  * @description
- * Глобальный инстанс pubsub который живет все время
+ * Singleton pubsub instance
  */
 export const PUBSUB_TOKEN = createToken<PubSub>('pubsub');
 
 /**
  * @description
- * Инстанс pubsub который создается для каждого клиента
+ * Request pubsub instance that is created for every client
  */
 export const ROOT_PUBSUB_TOKEN = createToken<PubSub>('rootPubsub');
 

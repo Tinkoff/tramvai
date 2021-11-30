@@ -2,7 +2,7 @@ import { createToken } from '@tinkoff/dippy';
 
 /**
  * @description
- * В некоторых случаях нам нужно встроиться в функционал и это позволяют сделать хуки, [документация](https://tramvai.dev/docs/references/libs/hooks)
+ * [Hooks documentation](https://tramvai.dev/docs/references/libs/hooks)
  */
 export const HOOK_TOKEN = createToken<Hooks>('hooks');
 
@@ -10,22 +10,22 @@ type Hook<TPayload> = (context: any, payload?: TPayload, options?: any) => TPayl
 
 export interface Hooks {
   /**
-   * Регистрация хуков
+   * Register hooks
    */
   registerHooks<TPayload>(name: string, list: Hook<TPayload>[] | Hook<TPayload>): void;
 
   /**
-   * Запуск синхронных хуков, payload проходит через все хуки и будет результатом выполнения
+   * Run sync hook
    */
   runHooks<TPayload>(name: string, context: any, payload?: TPayload, options?: any): TPayload;
 
   /**
-   * Запуск ассихронных хуков
+   * Run async hooksЗапуск ассихронных хуков
    */
   runAsyncHooks<TPayload>(name: string, context: any, payload: TPayload, options?: any): TPayload;
 
   /**
-   * Запуск проммис хуков
+   * Run promise hooks
    */
   runPromiseHooks(
     name: string,

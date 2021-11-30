@@ -2,13 +2,13 @@ import { createToken } from '@tinkoff/dippy';
 
 /**
  * @description
- * Функция для создания кеша
+ * Function for creating a new cache
  */
 export const CREATE_CACHE_TOKEN = createToken<CacheFactory>('createCache');
 
 /**
  * @description
- * Функция для вызова очистки кешей
+ * Function that us called on force cache clean up in the app
  */
 export const REGISTER_CLEAR_CACHE_TOKEN = createToken<(type: string) => void | Promise<void>>(
   'registerClearCache',
@@ -17,7 +17,7 @@ export const REGISTER_CLEAR_CACHE_TOKEN = createToken<(type: string) => void | P
 
 /**
  * @description
- * Можно задать в своем модуле, как функцию которая должна вызываться при вызове `CLEAR_CACHE_TOKEN`
+ * Force cleaning up all caches in the app
  */
 export const CLEAR_CACHE_TOKEN = createToken<(type?: string) => Promise<void>>('clearCache');
 

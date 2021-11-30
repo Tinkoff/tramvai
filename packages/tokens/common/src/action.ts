@@ -3,25 +3,25 @@ import type { Action } from '@tramvai/core';
 
 /**
  * @description
- * Регистр для хранения экшенов по типам
+ * Registry for storing actions based on their type
  */
 export const ACTION_REGISTRY_TOKEN = createToken<ActionsRegistry>('actionRegistry');
 
 /**
  * @description
- * Сущность для исполнения экшенов
+ * Instance that executes actions
  */
 export const ACTION_EXECUTION_TOKEN = createToken<ActionExecution>('actionExecution');
 
 /**
  * @description
- * Сушность для выполнения экшенов при переходах
+ * Instance that executes actions on navigations
  */
 export const ACTION_PAGE_RUNNER_TOKEN = createToken<ActionPageRunner>('actionPageRunner');
 
 /**
  * @description
- * Позволяет добавлять условия на возможность исполнения экшенов
+ * Conditions that specify should action be executing or not
  */
 export const ACTION_CONDITIONALS = createToken<ActionCondition[]>('actionConditionals', {
   multi: true,

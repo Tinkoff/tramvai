@@ -11,20 +11,20 @@ export interface EnvironmentManager {
 
 /**
  * @description
- * Сущность `environmentManager` c помощью которого можно получить данные env переменных на сервере и клиенте
+ * Instance that used for managing env data on the server and on the client
  */
 export const ENV_MANAGER_TOKEN = createToken<EnvironmentManager>('environmentManager');
 
 /**
  * @description
- * Список токенов которые необходимы модулю или приложению.
- * Позднее все токены из этого списка будут доступны через `environmentManager`
- * Формат токена ENV_USED_TOKEN:
-    - `key` - идентификатор env переменной. Под этим ключем будет доступно в `environmentManager` и будет получено из внешних источников
-    - `value` - предустановленное значение для токена `key` с низким приоритетом
-    - `optional` - является ли параметр опциональным для работы приложения. Если `true`, то приложение не будет падать, если не было передано значение
-    - `validator` - функция валидации переданного значения. Если функция вернет текст, то выкинется ошибка
-    - `dehydrate` - если передано `false`, то env параметр не передастся клиенту и можно будет получить значение только на серверной стороне
+ * List of envs that are used by the module or the app.
+ * All of the envs specified by that token will be accessible in the code through `environmentManager`
+ * ENV_USED_TOKEN format:
+    - `key` - id of the env. At that id the value of the env will be accessible through `environmentManager` and will be loaded from the external sources.
+    - `value` - default low-priority value for env `key`
+    - `optional` - is current env is optional. If `true` the app can work as usual event if the env value were not provided, if `false` - the app will fail to run without env value
+    - `validator` - validation function for passed env value. In case this function returns string it will be used as error message and validation will fail
+    - `dehydrate` - if `false` then env value will not be passed to client and this env can be used only on server
  *
  * @example
   ```tsx

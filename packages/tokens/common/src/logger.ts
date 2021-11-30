@@ -3,13 +3,13 @@ import { createToken } from '@tinkoff/dippy';
 
 /**
  * @description
- * Реализация логгера
+ * Logger implementation
  */
 export const LOGGER_TOKEN = createToken<LoggerFactory>('logger');
 
 /**
  * @description
- * Дает возможность модифицировать логгер на этапе реализации
+ * Hook to be able to modify logger on initialization
  */
 export const LOGGER_INIT_HOOK = createToken<LoggerInitHook>('loggerHook');
 

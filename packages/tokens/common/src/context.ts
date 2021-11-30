@@ -7,7 +7,7 @@ export { PlatformAction } from '@tramvai/types-actions-state-context';
 
 /**
  * @description
- * Реализация контекста
+ * Context implementation
  */
 export const CONTEXT_TOKEN = createToken<ConsumerContext>('context');
 

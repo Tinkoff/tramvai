@@ -3,31 +3,32 @@ import type { DispatcherContext, Event, Middleware, Reducer } from '@tramvai/sta
 
 /**
  * @description
+ * dispatcher implementation
  * Реализация dispatcher
  */
 export const DISPATCHER_TOKEN = createToken('dispatcher');
 
 /**
  * @description
- * Реализция dispatcher context
+ * dispatcher context implementation
  */
 export const DISPATCHER_CONTEXT_TOKEN = createToken<DispatcherContext<any>>('dispatcherContext');
 
 /**
  * @description
- * Позволяет добавлять свои сторы созданные через createReducer
+ * Token for adding stores that were created with createReducer
  */
 export const COMBINE_REDUCERS = createToken('combineReducers', { multi: true });
 
 /**
  * @description
- * Общий стор приложения
+ * Common app store
  */
 export const STORE_TOKEN = createToken<Store>('store');
 
 /**
  * @description
- * Позволяет задавать свои middlewares для работы со стейтом
+ * Custom middlewares for working with store state
  */
 export const STORE_MIDDLEWARE = createToken<Middleware>('storeMiddleware', { multi: true });
 

@@ -1,47 +1,47 @@
 # Common tokens
 
-Модуль содержащий токены трамвая для интеграция и расширения модуля роутинга.
+Tramvai tokens for integration and extension `@tramvai/module-common`.
 
-## Список action токенов
+## Action tokens
 
 @inline src/action.ts
 
-## Список bundle токенов
+## Bundle tokens
 
 @inline src/bundle.ts
 
-## Список componentRegistry токенов
+## ComponentRegistry tokens
 
 @inline src/componentRegistry.ts
 
-## Список env токенов
+## Env tokens
 
 @inline src/env.ts
 
-## Список context токенов
+## Context tokens
 
 @inline src/context.ts
 
-## Список hook токенов
+## Hook tokens
 
 @inline src/hook.ts
 
-## Список logger токенов
+## Logger tokens
 
 @inline src/logger.ts
 
-## Список pubsub токенов
+## Pubsub tokens
 
 @inline src/pubsub.ts
 
-## Список requestManager токенов
+## RequestManager tokens
 
 @inline src/requestManager.ts
 
-## Список responseManager токенов
+## ResponseManager tokens
 
 @inline src/responseManager.ts
 
-## Список state токенов
+## State tokens
 
 @inline src/state.ts

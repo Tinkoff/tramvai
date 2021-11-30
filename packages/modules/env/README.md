@@ -1,18 +1,19 @@
 # Env
 
-Модуль env используется для получения глобальных параметров исполнения приложений в рантайме и передачи этих параметров клиенту. С заранее составленными списком используемых переменных приложением, динамически расширением и валидацией при старте приложения
+The env module is used to retrieve global application environment variables in runtime and pass these parameters to the client.
+With a pre-defined list of variables used by the application, dynamically extended and validated at application startup
 
-## Подключение
+## Installation
 
-Уже поставляется внутри @tramvai/module-common и не нужно устанавливать, если подключен module-common.
+Already supplied inside `@tramvai/module-common` and does not need to be installed if module-common is connected.
 
-Иначе, нужно установить `@tramvai/module-environment`
+Otherwise, you need to install `@tramvai/module-environment`
 
 ## Explanation
 
-### Динамически генерируемый список используемых ENV переменных
+### Dynamically generated list of used env variables
 
-Все используемые параметры в приложения регистрируются с помощью реализации в DI токена `ENV_USED_TOKEN` и предполагается, что каждый модуль по отдельности регистрирует только те ENV параметры, которые ему необходимы. В таком случае при подключении модуля, будет автоматическая валидация всех переданных параметров, которые необходимы для работы приложения
+All the parameters used in the application are registered by implementing the `ENV_USED_TOKEN` token in the DI and it is assumed that each module individually registers only the env parameters it needs. In this case, when a module is connected, there will be automatic validation of all passed parameters that are necessary for the application to work
 
 ```tsx
 import { provide } from '@tramvai/core';
@@ -32,13 +33,13 @@ import { provide } from '@tramvai/core';
 export class MyModule {}
 ```
 
-В выше примере, модуль регистрирует несколько env токенов, которые будут проинициализированы и будут доступны в `environmentManager.get('DEBUG_MODULE')`. При этом, был передан параметр `optional` который указывает, что переменные не обязательные для работы приложения.
+In the above example, the module registers several env tokens, which will be initialized and will be available in `environmentManager.get('DEBUG_MODULE')`. In doing so, the `optional` parameter has been passed, which indicates that the variables are not required for the application to work.
 
-### Валидация переданных параметров
+### Validation of environment variables values
 
-При старте приложения происходит проверка тех токенов, которые были зарегистрированы в DI и были переданы в ENV при запуске. Если в приложение не были переданы все требуемые ENV переменные, то приложение упадет.
+When the application starts, it checks the tokens that were registered in the DI and passed to env at startup. If all required env variables have not been passed to the application, the application will crash.
 
-Так-же есть возможность написать валидаторы для ENV значений, которые запустятся при инициализации приложения.
+It is also possible to write validators for env values, which will run when the application is initialized.
 
 ```tsx
 import { provide } from '@tramvai/core';
@@ -52,7 +53,7 @@ import { provide } from '@tramvai/core';
           key: 'MY_ENV',
           validator: (env) => {
             if (!env.includes('https')) {
-              return 'Не правильный формат ссылки. Ссылка должна содержать https';
+              return 'Incorrect link format. The link should contain https';
             }
           },
         },
@@ -64,25 +65,25 @@ import { provide } from '@tramvai/core';
 export class MyModule {}
 ```
 
-### Функциональность работает на сервере и в браузере
+### Functionality works on the server and in the browser
 
-Все ENV переменные будут доступны как на сервере, так и браузере без каких либо дополнительных действий и настроек. В браузер автоматически передаются env переменные, которые имеют `dehydrate: true`
+All env variables will be available both on the server and in the browser without any additional actions or settings. Env variables that have `dehydrate: true` are automatically passed to the browser
 
-### Приоритет получения значений для env переменных
+### Priority of obtaining values for env variables
 
-Так-как есть возможность перезаписывать значения переменных, то переменные заменятся по определенным правилам
+Since it is possible to overwrite the values of the variables, the variables are replaced according to certain rules
 
-Правила замены, расположены в порядке приоритета, от меньшего к высокому:
+The replacement rules are arranged in order of priority, from lower to higher:
 
-- Параметры заданные в токенах `{ key: 'ENV_PARAM', value: 'env value' }`
-- Параметры записанные в файле `env.development.js`
-- Передача параметров запуска приложения `MY_ENV=j node server.js`
+- Parameters set in tokens `{ key: 'ENV_PARAM', value: 'env value' }`
+- Parameters written in `env.development.js` file
+- Passing application launch parameters `MY_ENV=j node server.js`
 
 ## API
 
 <p>
 <details>
-<summary>Экспортируемые токены и TS интерфейс</summary>
+<summary>Exported tokens and TS interface</summary>
 
 @inline ../../tokens/common/src/env.ts
 
@@ -91,9 +92,9 @@ export class MyModule {}
 
 ## How to
 
-### Как прочитать данные в приложении
+### How to read data in an application
 
-Допустим мы зарегистрировали используемый ENV параметр `CONFIG_API` с помощью токена `ENV_USED_TOKEN`, теперь в приложении нужно подключить environmentManager и прочитать данные
+Suppose we registered the parameter `CONFIG_API` used by env with the `ENV_USED_TOKEN` token, now we need to connect environmentManager in the application and read the data:
 
 ```tsx
 import { provide } from '@tramvai/core';
@@ -116,18 +117,26 @@ import { provide } from '@tramvai/core';
 export class MyModule {}
 ```
 
-Этот код будет работать как на сервере, так и в браузере
+This code will work both on the server and in the browser
 
-### Как можно просто передать параметры при локальной разработке
+### How you can simply pass parameters in local development
 
-Для этого создайте файл `env.development.js` в корне проекта и пропишите все ENV переменные для приложения. При инициализации приложения, будет прочитан этот файл.
+To do this, create a file `env.development.js` in the root of the project and write all env variables for the application. When the application is initialized, this file will be read.
 
-#### Особенности использования env.developmen.js в production сборке
+#### Peculiarities of using env.developmen.js in production builds
 
-Приложение [двенадцати факторов](https://12factor.net/ru/config) хранит конфигурацию в переменных окружения, поэтому по умолчанию при `process.env.NODE_ENV === 'production'` EnvironmentManger не будет считывать файл `env.development.js`.
+The [twelve factors](https://12factor.net/ru/config) application stores the configuration in environment variables, so by default when `process.env.NODE_ENV === 'production'` EnvironmentManger will not read the `env.development.js` file.
 
-Если же необходимо локально протестировать приложение с `NODE_ENV=production`, можно передать флаг `DANGEROUS_UNSAFE_ENV_FILES='true'` чтобы EnvironmentManger прочитал файл `env.development.js` и не пришлось вводить все переменные руками.
+If you want to test the application locally with `NODE_ENV=production`, you can pass the flag `DANGEROUS_UNSAFE_ENV_FILES='true'` so that EnvironmentManger will read the `env.development.js` file and not have to enter all variables by hand.
 
-### Как при деплоях передать ENV параметры приложению
+### How to pass env parameters to the application during the deploys
 
-Для этого при запуске приложения передайте ENV параметры. Например в Docker можно это сделать через параметр -e `docker run -e MY_ENV_VAR=/ my-image`
+To do this, pass env parameters when starting the application. For example in Docker you can do this with the parameter -e `docker run -e MY_ENV_VAR=/ my-image`.
+
+### How to view all env variables of an application
+
+> This method allows you to see only client variables
+
+To get a list of variables, there is a `/papi/apiList` method
+
+Request example: `http://localhost:3000/${appName}/papi/apiList`

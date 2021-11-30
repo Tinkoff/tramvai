@@ -3,14 +3,14 @@ import type { Bundle } from '@tramvai/core';
 
 /**
  * @description
- * Хранилище бандлов. При получении бандла дополнительно добавляем экшены и компоненты из бандла в соответсвующие хранилища
+ * Bundle Storage. When getting bundle additionally adds actions and components from bundle to according storages
  */
 export const BUNDLE_MANAGER_TOKEN = createToken<BundleManager>('bundleManager');
 
 /**
  * @description
- * Токен для предоставления дополнительных бандлов в приложение.
- * Важно! Не перезаписывает существующие бандлы.
+ * Provides additional bundles to the app.
+ * Important! This token doesn't overrides already existing bundles.
  */
 export const ADDITIONAL_BUNDLE_TOKEN = createToken<{ [key: string]: Bundle }>('additional bundle', {
   multi: true,

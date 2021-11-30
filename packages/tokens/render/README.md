@@ -1,11 +1,11 @@
 # Render tokens
 
-Модуль содержащий токены трамвая для интеграция и расширения модуля рендера
+Tramvai tokens for integration and extending render module.
 
 ## Список токенов
 
 @inline src/index.ts
 
-## Список доступных слотов для ассетов
+## Render slots
 
 @inline src/slots.ts

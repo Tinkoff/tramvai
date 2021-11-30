@@ -3,14 +3,14 @@ import type { Response } from 'express';
 
 /**
  * @description
- * Прямая ссылка на объект ответа
+ * Direct reference to Response instance
  */
 export const RESPONSE = createToken<Response>('response');
 
 /**
  * @description
- * Сущность для работы с инстансами ответа (заголовки ответа, куки, тело ответа).
- * В основном используется только на сервере, но на клиенте есть обрезанный функционал, для упрощения реализации изоморфного приложения
+ * Instance for managing client response (response headers, cookies, response body).
+ * Mostly used on server, but has partial functional for browser for simplification build isomorphic app
  */
 export const RESPONSE_MANAGER_TOKEN = createToken<ResponseManager>('responseManager');
 

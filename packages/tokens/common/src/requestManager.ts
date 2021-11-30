@@ -1,18 +1,18 @@
 import { createToken } from '@tinkoff/dippy';
 import type { Request } from 'express';
 
-// Это костыль чтобы обойти инлайнинг Request'а и выставление наружу внутренних зависимостей express'а
+// HACK: to prevent inlining of Request and providing internal express dependencies to outside
 type RequestExt = Request;
 /**
  * @description
- * Прямая ссылка на объект запроса
+ * Direct reference to request object
  */
 export const REQUEST = createToken<RequestExt>('request');
 
 /**
  * @description
- * Сущность для работы с инстансами запроса (заголовки запросов, query-параметры, куки).
- * В основном используется только на сервере, но на клиенте есть обрезанный функционал, для упрощения реализации изоморфного приложения
+ * Instance for managing client requests (request headers, query-parameters, cookies etc).
+ * Mostly used on server, but has partial functional for browser for simplification build isomorphic app
  */
 export const REQUEST_MANAGER_TOKEN = createToken<RequestManager>('requestManager');
 

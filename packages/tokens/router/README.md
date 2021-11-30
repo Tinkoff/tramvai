@@ -1,7 +1,7 @@
 # Router tokens
 
-Модуль содержащий токены трамвая для интеграция и расширения модуля роутинга.
+Tramvai tokens used for integration and extending routing module.
 
-## Список токенов
+## Tokens
 
 @inline src/index.ts
