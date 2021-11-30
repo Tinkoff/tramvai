@@ -24,5 +24,11 @@
     "noEmitOnError": true,
     "importHelpers": true,
     "resolveJsonModule": true
+  },
+  "ts-node": {
+     "transpileOnly": true,
+    "compilerOptions": {
+      "allowJs": true,
+    }
   }
 }
