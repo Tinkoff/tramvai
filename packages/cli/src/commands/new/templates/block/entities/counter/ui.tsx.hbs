@@ -1,0 +1,9 @@
+import React from 'react';
+import { useStore } from '@tramvai/state';
+import { CounterStore } from './model';
+
+export const Counter = () => {
+  const count = useStore(CounterStore);
+
+  return <span>Current count is: {count}</span>;
+};

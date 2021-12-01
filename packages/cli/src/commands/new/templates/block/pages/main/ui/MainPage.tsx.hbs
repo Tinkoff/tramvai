@@ -1,7 +1,9 @@
 import React from 'react';
 import { useActions } from '@tramvai/state';
-import { Button } from '../../components/shared/Button/Button';
-import { navigateAction } from '../../actions/navigateAction';
+import { Button } from 'shared/ui';
+import { Counter } from 'entities/counter';
+import { IncrementCounterButton } from 'features/increment-counter';
+import { navigateAction } from 'features/navigation';
 
 export const MainPage = () => {
   // Binding the navigation action to the store
@@ -11,6 +13,9 @@ export const MainPage = () => {
     <div>
       Main Page{' '}
       <Button onClick={() => navigate('/second/')}>to second page</Button>
+      <p>
+        <Counter /> <IncrementCounterButton />
+      </p>
     </div>
   );
 };

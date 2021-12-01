@@ -1,8 +1,8 @@
 {
-  "$schema": "./node_modules/@tramvai/cli/schema.json",
+  "$schema": "../../node_modules/@tramvai/cli/schema.json",
   "projects": {
-    "{{configEntry.name}}" : {
-      "name": "{{configEntry.name}}",
+    "fs-pages" : {
+      "name": "fs-pages",
       "root": "src",
       "type": "application",
       "commands": {
@@ -18,14 +18,11 @@
             "postcss": {
               "config": "src/postcss"
             },
-            "alias": {
-              "shared": "./src/shared",
-              "entities": "./src/entities",
-              "features": "./src/features",
-              "widgets": "./src/widgets",
-              "pages": "./src/pages",
-              "processes": "./src/processes",
-              "app": "./src/app"
+            "experiments": {
+              "fileSystemPages": {
+                "enable": true,
+                "routesDir": false
+              }
             }
           }
         },

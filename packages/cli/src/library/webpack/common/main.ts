@@ -39,6 +39,9 @@ export default (configManager: ConfigManager) => (config: Config) => {
   // а каждый раз выкидывать ошибку при подключении такого модуля
   config.output.set('strictModuleExceptionHandling', true);
 
+  // https://webpack.js.org/configuration/output/#outputhashfunction . When release webpack 6 would need to remove
+  config.output.set('hashFunction', 'xxhash64');
+
   // TODO: отключать в CI
   config.cache({
     type: 'filesystem',

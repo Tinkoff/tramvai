@@ -12,14 +12,14 @@
     "SSR"
   ],
   "scripts": {
-    "postinstall": "tsc -b tools/monorepo/fix-ts-references tools/monorepo/depscheck tools/build && wsrun -m copy-external-files",
+    "postinstall": "tsc -b tools/monorepo/fix-ts-references tools/monorepo/depscheck tools/build && wsrun -p '@{tinkoff,tramvai,tramvai-tinkoff}/*' -m copy-external-files",
     "references": "fix-ts-references --fix",
     "prewatch": "npm run cli:generate-schema",
     "watch": "yarn references && tsc -b ./tsconfig.solution.json --watch",
     "prebuild": "npm run cli:generate-schema",
     "build": "yarn references && tsc -b ./tsconfig.solution.json",
-    "build:publish": "wsrun -e -m --serial build",
-    "build:change-typings": "wsrun -c json -I -f package.json -e \"this.typings=this.typings && this.typings.replace(/^src\\/(.*)\\.ts/, 'lib/\\$1.d.ts')\"",
+    "build:publish": "wsrun -p '@{tinkoff,tramvai,tramvai-tinkoff}/*' -e -m --serial build",
+    "build:change-typings": "wsrun -p '@{tinkoff,tramvai,tramvai-tinkoff}/*' -c json -I -f package.json -e \"this.typings=this.typings && this.typings.replace(/^src\\/(.*)\\.ts/, 'lib/\\$1.d.ts')\"",
     "build:change-versions": "node tools/public-packages/update-public-packages-versions.js",
     "cli:generate-schema": "yarn workspace @tramvai/cli generate-schema",
     "publish:all": "node tools/public-packages/publish-public-packages.js"

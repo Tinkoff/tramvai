@@ -17,6 +17,15 @@
             "granularChunks": true,
             "postcss": {
               "config": "apps/{{configEntry.name}}/postcss"
+            },
+            "alias": {
+              "shared": "./apps/{{configEntry.name}}/shared",
+              "entities": "./apps/{{configEntry.name}}/entities",
+              "features": "./apps/{{configEntry.name}}/features",
+              "widgets": "./apps/{{configEntry.name}}/widgets",
+              "pages": "./apps/{{configEntry.name}}/pages",
+              "processes": "./apps/{{configEntry.name}}/processes",
+              "app": "./apps/{{configEntry.name}}/app"
             }
           }
         },

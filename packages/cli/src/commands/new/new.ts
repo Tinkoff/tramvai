@@ -20,6 +20,8 @@ const getPathToTemplate = (template: Templates) =>
   path.resolve(__dirname, '../../../src/commands/new/templates', template);
 const getPathToShared = () => path.resolve(__dirname, '../../../src/commands/new/templates/shared');
 const getPathToBlock = () => path.resolve(__dirname, '../../../src/commands/new/templates/block');
+const getPathToMonorepoBlock = () =>
+  path.resolve(__dirname, '../../../src/commands/new/templates/monorepo-block');
 const getPathToTestingFramework = (testingFramework: TestingFrameworks) =>
   path.resolve(__dirname, '../../../src/commands/new/templates/testing', testingFramework);
 
@@ -55,6 +57,7 @@ export default async function createNew(context: Context, params: Params): Promi
   const templateDir = getPathToTemplate(template);
   const sharedDir = getPathToShared();
   const blockDir = getPathToBlock();
+  const isNpm = packageManager === 'npm';
   const isJest = testingFramework === 'jest';
 
   const blockDirectoryName = {
@@ -62,12 +65,21 @@ export default async function createNew(context: Context, params: Params): Promi
     multirepo: 'src',
   }[template];
 
-  await renderTemplate(templateDir, directoryName, { configEntry, isJest });
-  await renderTemplate(sharedDir, directoryName, { configEntry, isJest });
+  await renderTemplate(templateDir, directoryName, { configEntry, isJest, isNpm });
+  await renderTemplate(sharedDir, directoryName, { configEntry, isJest, isNpm });
   await renderTemplate(blockDir, path.join(directoryName, blockDirectoryName), {
     configEntry,
     isJest,
+    isNpm,
   });
+  if (template === 'monorepo') {
+    const monorepoBlockDir = getPathToMonorepoBlock();
+
+    await renderTemplate(monorepoBlockDir, path.join(directoryName, blockDirectoryName), {
+      configEntry,
+      isJest,
+    });
+  }
 
   if (testingFramework !== 'none') {
     await renderTemplate(getPathToTestingFramework(testingFramework), directoryName, {

@@ -1,0 +1,18 @@
+import { Module } from '@tramvai/core';
+import { COMBINE_REDUCERS } from '@tramvai/tokens-common';
+import { CounterStore } from './model';
+
+export * from './model';
+export * from './ui';
+
+@Module({
+  providers: [
+    // registering a store in the app
+    {
+      provide: COMBINE_REDUCERS,
+      multi: true,
+      useValue: CounterStore,
+    },
+  ],
+})
+export class CounterModule {}

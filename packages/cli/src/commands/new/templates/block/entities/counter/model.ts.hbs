@@ -1,0 +1,8 @@
+import { createReducer, createEvent } from '@tramvai/state';
+
+export const incrementEvent = createEvent('increment');
+export const decrementEvent = createEvent('decrement');
+
+export const CounterStore = createReducer('counter', 0)
+  .on(incrementEvent, (state) => state + 1)
+  .on(decrementEvent, (state) => state - 1);

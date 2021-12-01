@@ -1,4 +1,4 @@
-import { createApp } from '@tramvai/core';
+import { createApp, createAction } from '@tramvai/core';
 import { CommonModule } from '@tramvai/module-common';
 import { SpaRouterModule } from '@tramvai/module-router';
 import { RenderModule } from '@tramvai/module-render';
@@ -6,16 +6,26 @@ import { ServerModule } from '@tramvai/module-server';
 import { ErrorInterceptorModule } from '@tramvai/module-error-interceptor';
 import { SeoModule } from '@tramvai/module-seo';
 import {
-  DEFAULT_HEADER_COMPONENT,
-  DEFAULT_FOOTER_COMPONENT,
   RENDER_SLOTS,
   ResourceType,
   ResourceSlot,
 } from '@tramvai/tokens-render';
 
-import { Header } from './components/features/Header/Header';
-import { Footer } from './components/features/Footer/Footer';
-import { globalAction } from './actions/globalAction';
+import { CounterModule } from 'entities/counter';
+import { HeaderModule } from 'shared/header';
+import { FooterModule } from 'shared/footer';
+
+export const globalAction = createAction({
+  name: 'global-action',
+  fn: (context, payload) => {
+    console.log(
+      'Performed for each transition on the server and on the client'
+    );
+  },
+  conditions: {
+    always: true,
+  },
+});
 
 createApp({
   name: '{{configEntry.name}}',
@@ -40,18 +50,11 @@ createApp({
     SeoModule,
     ServerModule,
     ErrorInterceptorModule,
+    CounterModule,
+    HeaderModule,
+    FooterModule,
   ],
   providers: [
-    // register a header that will be used for all pages by default
-    {
-      provide: DEFAULT_HEADER_COMPONENT,
-      useValue: Header,
-    },
-    // register a footer to be used for all pages by default
-    {
-      provide: DEFAULT_FOOTER_COMPONENT,
-      useValue: Footer,
-    },
     // register a meta viewport that will be added to each page
     {
       provide: RENDER_SLOTS,
@@ -69,6 +72,6 @@ createApp({
   bundles: {
     // register a bundle that will be used for all pages by default
     mainDefault: () =>
-      import(/* webpackChunkName: "mainDefault" */ './bundles/mainDefault'),
+      import(/* webpackChunkName: "mainDefault" */ 'pages/index'),
   },
 });

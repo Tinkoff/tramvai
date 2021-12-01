@@ -1,0 +1,14 @@
+import { Module } from '@tramvai/core';
+import { DEFAULT_FOOTER_COMPONENT } from '@tramvai/tokens-render';
+import { Footer } from './ui/Footer';
+
+@Module({
+  providers: [
+    // register a footer to be used for all pages by default
+    {
+      provide: DEFAULT_FOOTER_COMPONENT,
+      useValue: Footer,
+    },
+  ],
+})
+export class FooterModule {}

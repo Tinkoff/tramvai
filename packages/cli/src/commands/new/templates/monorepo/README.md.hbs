@@ -1,28 +1,36 @@
 # {{configEntry.name}}
 
-Репозиторий с кодом приложения {{configEntry.name}} на tramvai
+{{configEntry.name}} tramvai application
 
-## Установка зависимостей
+## Install dependencies
 
-Необходимо выполнить команду `npm i`
+Run installation with selected package manager {{#if isNpm}}`npm install`{{else}}`yarn`{{/if}}
 
-## Запуск
-- `npm start` - запуск сервера в режиме разработки
-- `npm build` - сборка проекта в продакшен режиме
+## Usage
 
-## Структура проекта
-* `apps/{{configEntry.name}}` - основная директория с кодом проекта
-  * `index.ts` - стартовая точка приложения в котором необходимо подключать новые модули tramvai
-  * `vendor.ts` - файл с внешними зависимостями приложения, будут выделены в отдельный js файла
-  * `bundles` - директория со всем бандлами
-  * `сomponents` - директория с компонентами для приложениями
-  * `layers` - различные лайаут компоненты, сам лайаут и page компоненты
+- `npm start` - run development server
+- `npm build` - production build
 
-## Основные модули
-* `@tramvai/module-server` - обработка запросов клиентов и различные апи сервисы. [Дока](https://tramvai.dev/docs/references/modules/server)
-* `@tramvai/module-render` - рендеринг html на стороне сервера включая React приложения. [Дока](https://tramvai.dev/docs/references/modules/render)
-* `@tramvai/module-router` - реализация роутинга на проекте, поддерживает статичные роуты и получение данных из админке. [Дока](https://tramvai.dev/docs/references/modules/router)
+## Project structure
 
-## Что дальше
-Этот темплейт работает на основе tramvai и стоит прочитать [документацию по tramvai](https://tramvai.dev/docs/get-started/overview)
-Сборка работает на основе tramvai-cli, документация [расположенна тут](https://tramvai.dev/docs/references/cli)
+This project structure follow [feature-sliced methodology](https://feature-sliced.design/) guidlines
+
+* `apps/{{configEntry.name}}` - application source code
+  * `index.ts` - application entry point, where all tramvai modules are connected
+  * `vendor.ts` - file with vendor dependencies, will be separated into a separate js chunk
+  * `postcss.js` - postcss configuration object
+  * `shared` - reused modules of the application
+  * `entities` - application domain logic and ui
+  * `features` - key functionality of the application
+  * `pages` - application pages
+
+## Important modules
+
+* `@tramvai/module-server` - processing client requests, working with papi. [Documentation](https://tramvai.dev/docs/references/modules/server)
+* `@tramvai/module-render` - server-side html rendering and client-side hydration. [Documentation](https://tramvai.dev/docs/references/modules/render)
+* `@tramvai/module-router` - router integration in the application. [Documentation](https://tramvai.dev/docs/references/modules/router)
+
+## Next steps
+
+- [tramvai documentation](https://tramvai.dev/docs/get-started/overview)
+- [tramvai cli documentation](https://tramvai.dev/docs/references/cli)

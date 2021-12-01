@@ -1,0 +1,14 @@
+import { Module } from '@tramvai/core';
+import { DEFAULT_HEADER_COMPONENT } from '@tramvai/tokens-render';
+import { Header } from './ui/Header';
+
+@Module({
+  providers: [
+    // register a header that will be used for all pages by default
+    {
+      provide: DEFAULT_HEADER_COMPONENT,
+      useValue: Header,
+    },
+  ],
+})
+export class HeaderModule {}

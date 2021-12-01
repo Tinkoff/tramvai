@@ -1,0 +1,44 @@
+{
+  "name": "fs-pages",
+  "version": "0.0.0-stub",
+  "private": true,
+  "scripts": {
+    "start": "tramvai start fs-pages",
+    "start:prod": "tramvai start-prod fs-pages",
+    "build": "tramvai build fs-pages",
+    "lint": "eslint --ext .ts,.tsx --ignore-path .gitignore .",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:integration": "jest -w=3 --config ./jest.integration.config.js",
+    "test:integration:watch": "jest --runInBand --watch --config ./jest.integration.config.js"
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.0",
+    "@types/jest": "^26.0.23",
+    "@tramvai/cli": "0.0.0-stub",
+    "@tramvai/test-integration": "0.0.0-stub",
+    "@tramvai/test-integration-jest": "0.0.0-stub",
+    "postcss-custom-media": "^8.0.0",
+    "postcss-modules-values-replace": "^3.3.0",
+    "postcss-custom-properties": "^11.0.0",
+    "postcss-nested": "^5.0.5",
+    "jest": "^27.0.4",
+    "jest-circus": "^27.0.4"
+  },
+  "dependencies": {
+    "@tramvai/core": "0.0.0-stub",
+    "@tramvai/react": "0.0.0-stub",
+    "@tramvai/state": "0.0.0-stub",
+    "@tramvai/module-common": "0.0.0-stub",
+    "@tramvai/module-error-interceptor": "0.0.0-stub",
+    "@tramvai/module-render": "0.0.0-stub",
+    "@tramvai/module-router": "0.0.0-stub",
+    "@tramvai/module-seo": "0.0.0-stub",
+    "@tramvai/module-server": "0.0.0-stub",
+    "@tramvai/tokens-render": "0.0.0-stub",
+    "@tramvai/tokens-router": "0.0.0-stub",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "tslib": "^2.0.3"
+  }
+}
