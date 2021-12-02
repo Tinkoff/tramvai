@@ -19,9 +19,9 @@ export function factory({ environmentManager, loggerInitHooks }) {
 
   if (enable) {
     each((val) => {
-      const [lvl, name] = val.split(':');
+      const [lvl, ...name] = val.split(':');
 
-      logger.enable(lvl, name);
+      logger.enable(lvl, name.join(':'));
     }, split(',', enable));
   }
 
