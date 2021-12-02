@@ -22,12 +22,22 @@ export interface Experiments {
    * @title experiments configuration for [webpack](https://webpack.js.org/configuration/experiments/)
    * @default {}
    */
-  webpack?: Omit<Configuration['experiments'], 'buildHttp' | 'lazyCompilation'>;
+  webpack?: Omit<Configuration['experiments'], 'buildHttp' | 'lazyCompilation'> & {
+    /**
+     * @title Enable additional in-memory caching of modules which are unchanged and reference only unchanged modules.
+     * @default true
+     */
+    cacheUnaffected?: boolean;
+  };
   /**
    * @title experimental settings for [mini-css-extract-plugin](https://github.com/webpack-contrib/mini-css-extract-plugin)
    * @default {}
    */
   minicss?: {
+    /**
+     * @title Use a new webpack API to execute modules instead of child compilers. This improves performance and memory usage a lot.
+     * @default true
+     */
     useImportModule?: boolean;
   };
   /**

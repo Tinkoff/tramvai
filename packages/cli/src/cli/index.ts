@@ -99,7 +99,7 @@ export async function cliInitialized(cliArgs = process.argv) {
     logger.event({
       type: 'error',
       event: 'GLOBAL:ERROR',
-      message: e,
+      message: e.message || e,
     });
     sentry.captureException(e);
 

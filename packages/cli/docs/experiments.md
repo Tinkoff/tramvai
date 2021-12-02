@@ -1,8 +1,8 @@
-# Экспериментальные настройки @tramvai/cli
+# Experimental settings for @tramvai/cli
 
-Экспериментальные настройки позволяют попробовать фичи и опции, которые ещё не являются стабильными, однако могут существенно сказываться на опыте работы с cli в лучшую сторону.
+With experimental settings you can try some of the new features and options that are not stable for now, but capable to improve usage of cli in some way.
 
-Экспериментальные флаги задаются в `tramvai.json` и могут задаваться отдельно для `serve` или `build` конфигураций.
+Experimental flags are provided in `tramvai.json` and should be passed separately for `server` and `build` configurations.
 
 `tramvai.json`:
 
@@ -48,14 +48,23 @@
 }
 ```
 
-## Настройки Webpack
+## Webpack settings
 
-Сам webpack предоставляет [список экспериментальных опций](https://webpack.js.org/configuration/experiments/#experimentsoutputmodule), которые можно задать как и описано в доке через `experiments.webpack`.
+Webpack by itself has [a list of experimental flags](https://webpack.js.org/configuration/experiments/#experimentsoutputmodule) which might be passed directly to webpack through `experiments.webpack`.
 
-> Обратите особенно внимание на флаг [`futureDefaults`](https://webpack.js.org/configuration/experiments/#experimentsfuturedefaults) который позволяет включить все экспериментальные опции, которые планируются включить в следующий мажорный релиз по умолчанию
+<!-- TODO: futureDefaults do not work right now because of errors of non-default imports from json -->
+<!-- > Take a close look at webpack experimental flag [`futureDefaults`](https://webpack.js.org/configuration/experiments/#experimentsfuturedefaults) which let you to enable all of the experimental webpack features that will be included in the next major release. -->
+
+### Defaults
+
+- `cacheUnaffected=true` - should improve build performance in `serve` mode
 
 ### minicss
 
-Задаются через `experiments.minicss` и позволяют включать экспериментальные настройки для [`mini-css-extract-plugin`](https://github.com/webpack-contrib/mini-css-extract-plugin)
+Flags are specified through `experiments.minicss` and allows to enable experimental settings for [`mini-css-extract-plugin`](https://github.com/webpack-contrib/mini-css-extract-plugin)
 
-- `useImportModule` - включает особый способ компиляции модулей css, который должен ускорить время сборки и уменьшить потребление памяти. Подробнее в [оф. доке](https://github.com/webpack-contrib/mini-css-extract-plugin#experimentalUseImportModule)
+- `useImportModule` - enables a special way to compile css modules that should improve build time and decrease memory usage. More details [in the official docs](https://github.com/webpack-contrib/mini-css-extract-plugin#experimentalUseImportModule)
+
+### Defaults
+
+- `useImportModule=true` - enabled by default as this improves build time and provides better css related error descriptions

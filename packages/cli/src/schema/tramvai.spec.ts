@@ -129,8 +129,12 @@ describe('JSON schema для tramvai.json', () => {
                 },
                 transpileOnlyModernLibs: true,
                 experiments: {
-                  webpack: {},
-                  minicss: {},
+                  webpack: {
+                    cacheUnaffected: true,
+                  },
+                  minicss: {
+                    useImportModule: true,
+                  },
                   fileSystemPages: {
                     enable: false,
                     routesDir: 'routes',
@@ -146,8 +150,12 @@ describe('JSON schema для tramvai.json', () => {
                 sourceMap: false,
                 externals: ['react$', 'react-dom', 'prop-types', 'express', 'core-js'],
                 experiments: {
-                  webpack: {},
-                  minicss: {},
+                  webpack: {
+                    cacheUnaffected: true,
+                  },
+                  minicss: {
+                    useImportModule: true,
+                  },
                   fileSystemPages: {
                     enable: false,
                     routesDir: 'routes',
@@ -184,8 +192,12 @@ describe('JSON schema для tramvai.json', () => {
                 },
                 transpileOnlyModernLibs: true,
                 experiments: {
-                  webpack: {},
-                  minicss: {},
+                  webpack: {
+                    cacheUnaffected: true,
+                  },
+                  minicss: {
+                    useImportModule: true,
+                  },
                   fileSystemPages: {
                     enable: false,
                     routesDir: 'routes',
@@ -203,8 +215,12 @@ describe('JSON schema для tramvai.json', () => {
                 modern: false,
                 sourceMap: false,
                 experiments: {
-                  webpack: {},
-                  minicss: {},
+                  webpack: {
+                    cacheUnaffected: true,
+                  },
+                  minicss: {
+                    useImportModule: true,
+                  },
                   fileSystemPages: {
                     enable: false,
                     routesDir: 'routes',

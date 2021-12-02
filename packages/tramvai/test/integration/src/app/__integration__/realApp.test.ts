@@ -30,7 +30,7 @@ describe('test/integration/app/runFakeApp', () => {
   it('should run app', async () => {
     const { application } = await app.render('/');
     expect(application).toMatchInlineSnapshot(
-      `"<div class=\\"layout__layout_S5uMa\\"><div><h1>Tramvai<span role=\\"img\\" aria-label=\\"dummy icon\\">🥳</span></h1></div><div>Main Page <button>click link</button></div><div class=\\"Footer__footer_lpyz1\\"><div>this Footer in bootstrap</div></div></div>"`
+      `"<div class=\\"layout__layout_fZcJz\\"><div><h1>Tramvai<span role=\\"img\\" aria-label=\\"dummy icon\\">🥳</span></h1></div><div>Main Page <button>click link</button></div><div class=\\"Footer__footer_AOPKq\\"><div>this Footer in bootstrap</div></div></div>"`
     );
   });
 

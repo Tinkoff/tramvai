@@ -2,7 +2,8 @@ import { join, resolve } from 'path';
 import { readdirSync, existsSync } from 'fs';
 
 import { command } from 'execa';
-import dirTree, { DirectoryTree } from 'directory-tree';
+import type { DirectoryTree } from 'directory-tree';
+import dirTree from 'directory-tree';
 import rimraf from 'rimraf';
 
 const bin = join(__dirname, '../bin/platform.js');
@@ -15,7 +16,7 @@ const sortByPath = (items: DirectoryTree[]) => {
   return items.sort((a, b) => a.path.localeCompare(b.path));
 };
 
-const getTrees = (dir) => {
+const getTrees = (dir: string) => {
   const trees: { original: DirectoryTree[]; less: DirectoryTree[] } = {
     original: [],
     less: [],
@@ -44,6 +45,7 @@ const getTrees = (dir) => {
     };
 
     // Might differ on different systems or runs for some reason
+    // @ts-ignore
     delete newOne.size;
 
     trees.less.push(newOne);

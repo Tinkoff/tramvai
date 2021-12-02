@@ -242,6 +242,7 @@
                               "webpack": {
                                 "title": "experiments configuration for [webpack](https://webpack.js.org/configuration/experiments/)",
                                 "default": {},
+                                "additionalProperties": false,
                                 "type": "object",
                                 "properties": {
                                   "asyncWebAssembly": {
@@ -253,7 +254,8 @@
                                     "type": "boolean"
                                   },
                                   "cacheUnaffected": {
-                                    "description": "Enable additional in memory caching of modules that are unchanged and reference only unchanged modules.",
+                                    "title": "Enable additional in-memory caching of modules which are unchanged and reference only unchanged modules.",
+                                    "default": true,
                                     "type": "boolean"
                                   },
                                   "futureDefaults": {
@@ -276,8 +278,7 @@
                                     "description": "Allow using top-level-await in EcmaScript Modules.",
                                     "type": "boolean"
                                   }
-                                },
-                                "additionalProperties": false
+                                }
                               },
                               "minicss": {
                                 "title": "experimental settings for [mini-css-extract-plugin](https://github.com/webpack-contrib/mini-css-extract-plugin)",
@@ -285,6 +286,8 @@
                                 "type": "object",
                                 "properties": {
                                   "useImportModule": {
+                                    "title": "Use a new webpack API to execute modules instead of child compilers. This improves performance and memory usage a lot.",
+                                    "default": true,
                                     "type": "boolean"
                                   }
                                 },
@@ -452,6 +455,7 @@
                                               "mode": {
                                                 "enum": [
                                                   "readonly",
+                                                  "write-dts",
                                                   "write-references",
                                                   "write-tsbuildinfo"
                                                 ],
@@ -981,6 +985,7 @@
                               "webpack": {
                                 "title": "experiments configuration for [webpack](https://webpack.js.org/configuration/experiments/)",
                                 "default": {},
+                                "additionalProperties": false,
                                 "type": "object",
                                 "properties": {
                                   "asyncWebAssembly": {
@@ -992,7 +997,8 @@
                                     "type": "boolean"
                                   },
                                   "cacheUnaffected": {
-                                    "description": "Enable additional in memory caching of modules that are unchanged and reference only unchanged modules.",
+                                    "title": "Enable additional in-memory caching of modules which are unchanged and reference only unchanged modules.",
+                                    "default": true,
                                     "type": "boolean"
                                   },
                                   "futureDefaults": {
@@ -1015,8 +1021,7 @@
                                     "description": "Allow using top-level-await in EcmaScript Modules.",
                                     "type": "boolean"
                                   }
-                                },
-                                "additionalProperties": false
+                                }
                               },
                               "minicss": {
                                 "title": "experimental settings for [mini-css-extract-plugin](https://github.com/webpack-contrib/mini-css-extract-plugin)",
@@ -1024,6 +1029,8 @@
                                 "type": "object",
                                 "properties": {
                                   "useImportModule": {
+                                    "title": "Use a new webpack API to execute modules instead of child compilers. This improves performance and memory usage a lot.",
+                                    "default": true,
                                     "type": "boolean"
                                   }
                                 },
@@ -1311,6 +1318,7 @@
                                 "webpack": {
                                   "title": "experiments configuration for [webpack](https://webpack.js.org/configuration/experiments/)",
                                   "default": {},
+                                  "additionalProperties": false,
                                   "type": "object",
                                   "properties": {
                                     "asyncWebAssembly": {
@@ -1322,7 +1330,8 @@
                                       "type": "boolean"
                                     },
                                     "cacheUnaffected": {
-                                      "description": "Enable additional in memory caching of modules that are unchanged and reference only unchanged modules.",
+                                      "title": "Enable additional in-memory caching of modules which are unchanged and reference only unchanged modules.",
+                                      "default": true,
                                       "type": "boolean"
                                     },
                                     "futureDefaults": {
@@ -1345,8 +1354,7 @@
                                       "description": "Allow using top-level-await in EcmaScript Modules.",
                                       "type": "boolean"
                                     }
-                                  },
-                                  "additionalProperties": false
+                                  }
                                 },
                                 "minicss": {
                                   "title": "experimental settings for [mini-css-extract-plugin](https://github.com/webpack-contrib/mini-css-extract-plugin)",
@@ -1354,6 +1362,8 @@
                                   "type": "object",
                                   "properties": {
                                     "useImportModule": {
+                                      "title": "Use a new webpack API to execute modules instead of child compilers. This improves performance and memory usage a lot.",
+                                      "default": true,
                                       "type": "boolean"
                                     }
                                   },
@@ -1529,6 +1539,7 @@
                                 "webpack": {
                                   "title": "experiments configuration for [webpack](https://webpack.js.org/configuration/experiments/)",
                                   "default": {},
+                                  "additionalProperties": false,
                                   "type": "object",
                                   "properties": {
                                     "asyncWebAssembly": {
@@ -1540,7 +1551,8 @@
                                       "type": "boolean"
                                     },
                                     "cacheUnaffected": {
-                                      "description": "Enable additional in memory caching of modules that are unchanged and reference only unchanged modules.",
+                                      "title": "Enable additional in-memory caching of modules which are unchanged and reference only unchanged modules.",
+                                      "default": true,
                                       "type": "boolean"
                                     },
                                     "futureDefaults": {
@@ -1563,8 +1575,7 @@
                                       "description": "Allow using top-level-await in EcmaScript Modules.",
                                       "type": "boolean"
                                     }
-                                  },
-                                  "additionalProperties": false
+                                  }
                                 },
                                 "minicss": {
                                   "title": "experimental settings for [mini-css-extract-plugin](https://github.com/webpack-contrib/mini-css-extract-plugin)",
@@ -1572,6 +1583,8 @@
                                   "type": "object",
                                   "properties": {
                                     "useImportModule": {
+                                      "title": "Use a new webpack API to execute modules instead of child compilers. This improves performance and memory usage a lot.",
+                                      "default": true,
                                       "type": "boolean"
                                     }
                                   },
