@@ -50,7 +50,7 @@ export const webAppInitCommand = ({
 
     app.use(
       bodyParser.urlencoded({
-        limit: '500kb',
+        limit: '2mb',
         extended: false,
       }),
       cookieParser()

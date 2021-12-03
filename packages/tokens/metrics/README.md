@@ -1,7 +1,7 @@
 # Metrics tokens
 
-Модуль содержащий токены трамвая для интеграция и расширения модуля [метрик](references/modules/metrics.md).
+Tramvai tokens for integration and extension [metric module](references/modules/metrics.md).
 
-## Список токенов
+## Tokens list
 
 @inline src/index.ts

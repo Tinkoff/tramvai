@@ -21,7 +21,7 @@ export { Counter, Gauge, Histogram, Summary, Metrics };
 
 /**
  * @description
- * Реализация модуля метрик
+ * Metric module implementation
  */
 export const METRICS_MODULE_TOKEN = createToken<Metrics>('metricsModule');
 
@@ -33,7 +33,7 @@ export interface MetricsServicesRegistryInterface {
 
 /**
  * @description
- * Утилита для того чтобы указать модулю метрик какое имя сервиса подставлять для разных запросов
+ * Utility for pointing out to metric module which service name to set for different requests
  */
 export const METRICS_SERVICES_REGISTRY_TOKEN = createToken<MetricsServicesRegistryInterface>(
   'metricsServicesRegistry'
@@ -41,8 +41,7 @@ export const METRICS_SERVICES_REGISTRY_TOKEN = createToken<MetricsServicesRegist
 
 /**
  * @description
- * Токен для регистрации counter-метрик которые затем можно будет инктерементировать через POST
- * запрос papi роута
+ * Token for registering counter metric which can be incremented with POST papi request
  */
 export const REGISTER_INSTANT_METRIC_TOKEN = createToken<[string, Counter<string>]>(
   'registerInstantMetric'

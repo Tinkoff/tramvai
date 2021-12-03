@@ -13,7 +13,7 @@ declare module '../types' {
 
 export const body = (options?: Options): MiddlewareCreator => {
   // PF-12590
-  const limit = options?.limit ?? '500kb';
+  const limit = options?.limit ?? '2mb';
 
   return (papi) => {
     if (papi.options.disableBodyCookie) {

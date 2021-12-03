@@ -26,7 +26,7 @@ describe('body', () => {
     const create = body() as any;
     const middleware = create({ options: {} });
 
-    expect(middleware).toEqual(['text 500kb', 'urlencoded 500kb', 'json 500kb']);
+    expect(middleware).toEqual(['text 2mb', 'urlencoded 2mb', 'json 2mb']);
   });
 
   it('parse body with custom options', () => {
