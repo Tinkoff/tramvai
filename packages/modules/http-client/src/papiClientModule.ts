@@ -3,6 +3,8 @@ import { SERVER_MODULE_PAPI_PUBLIC_ROUTE } from '@tramvai/tokens-server';
 import { PAPI_SERVICE } from '@tramvai/tokens-http-client';
 import { PapiService } from './papi/papiService';
 
+export { PapiService };
+
 @Module({
   providers: [
     provide({
