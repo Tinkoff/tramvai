@@ -1,6 +1,6 @@
 import { createToken } from '@tinkoff/dippy';
 import type { ApiService, HttpClient } from '@tramvai/http-client';
-import type { TinkoffRequestOptions } from '@tramvai/tinkoff-request-http-client-adapter';
+import type { TinkoffRequestOptions, Agent } from '@tramvai/tinkoff-request-http-client-adapter';
 
 export type HttpClientFactoryOptions = TinkoffRequestOptions & { name: string };
 
@@ -17,6 +17,16 @@ export const HTTP_CLIENT_FACTORY = createToken<(options: HttpClientFactoryOption
  * Универсальный HTTP клиент для произвольных запросов
  */
 export const HTTP_CLIENT = createToken<HttpClient>('HTTP_CLIENT');
+
+/**
+ * @description
+ * Global HTTP and HTTPS agents for all clients
+ * https://nodejs.org/dist/latest-v16.x/docs/api/http.html#class-httpagent
+ */
+export const HTTP_CLIENT_AGENT = createToken<{
+  http: Agent;
+  https: Agent;
+}>('HTTP_CLIENT_AGENT');
 
 /**
  * @description

@@ -18,6 +18,7 @@ import type { APP_INFO_TOKEN } from '@tramvai/core';
 import type {
   API_CLIENT_PASS_HEADERS,
   HttpClientFactoryOptions,
+  HTTP_CLIENT_AGENT,
   HTTP_CLIENT_FACTORY,
 } from '@tramvai/tokens-http-client';
 import type {
@@ -47,6 +48,7 @@ export const httpClientFactory = ({
   headersList,
   createCache,
   tinkoffRequestRegistry,
+  agent,
 }: {
   logger: typeof LOGGER_TOKEN;
   envManager: typeof ENV_MANAGER_TOKEN;
@@ -55,6 +57,7 @@ export const httpClientFactory = ({
   headersList?: typeof API_CLIENT_PASS_HEADERS;
   createCache?: typeof CREATE_CACHE_TOKEN;
   tinkoffRequestRegistry: Map<string, MakeRequest>;
+  agent?: typeof HTTP_CLIENT_AGENT;
 }): typeof HTTP_CLIENT_FACTORY => {
   return (options: HttpClientFactoryOptions): HttpClient => {
     if (!options.name) {
@@ -67,6 +70,7 @@ export const httpClientFactory = ({
     const adapterOptions: TinkoffRequestOptions = mergeOptions(
       {
         logger,
+        agent,
         method: 'GET',
         createCache: createCache
           ? (cacheOptions: any): Cache => createCache('memory', cacheOptions)

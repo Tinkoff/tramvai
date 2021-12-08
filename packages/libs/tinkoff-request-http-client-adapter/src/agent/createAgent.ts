@@ -1,6 +1,8 @@
 import http from 'http';
-import type { AgentOptions } from 'https';
+import type { Agent, AgentOptions } from 'https';
 import https from 'https';
+
+export type { Agent, AgentOptions };
 
 export const createAgent = (
   options: AgentOptions = {
@@ -9,7 +11,7 @@ export const createAgent = (
   }
 ) => {
   return {
-    http: new http.Agent(options) as https.Agent,
+    http: new http.Agent(options) as Agent,
     https: new https.Agent(options),
   };
 };

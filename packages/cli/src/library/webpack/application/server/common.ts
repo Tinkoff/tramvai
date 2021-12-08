@@ -43,7 +43,7 @@ export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config
 
   config
     .entry('server')
-    .add([path.resolve(__dirname, './global-agent'), path.resolve(configManager.rootDir, server)])
+    .add(path.resolve(configManager.rootDir, server))
     .end()
     .resolve.extensions.merge(['.node']);
 

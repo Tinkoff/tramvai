@@ -13,8 +13,11 @@ import circuitBreaker from '@tinkoff/request-plugin-circuit-breaker';
 import type { HttpClientBaseOptions } from '@tramvai/http-client';
 import type { LOGGER_TOKEN } from '@tramvai/tokens-common';
 import { createAgent } from './agent/createAgent';
+import type { Agent } from './agent/createAgent';
 
-const agent = createAgent();
+export type { Agent };
+
+const defaultAgent = createAgent();
 
 export type RequestValidator = {
   (state: ContextState): any;
@@ -32,6 +35,10 @@ export interface TinkoffRequestOptions extends HttpClientBaseOptions {
   errorValidator?: RequestValidator;
   errorModificator?: RequestValidator;
   circuitBreakerOptions?: CircuitBreakerOptions;
+  agent?: {
+    http: Agent;
+    https: Agent;
+  };
 }
 
 export function createTinkoffRequest(options: TinkoffRequestOptions): MakeRequest {
@@ -47,6 +54,7 @@ export function createTinkoffRequest(options: TinkoffRequestOptions): MakeReques
     errorValidator,
     errorModificator,
     circuitBreakerOptions = {},
+    agent,
     ...defaults
   } = options;
 
@@ -155,7 +163,7 @@ export function createTinkoffRequest(options: TinkoffRequestOptions): MakeReques
     );
   }
 
-  plugins.push(http({ agent }));
+  plugins.push(http({ agent: agent || defaultAgent }));
 
   const makeRequest = request(plugins);
 

@@ -5,6 +5,7 @@ import {
   HTTP_CLIENT_FACTORY,
   HTTP_CLIENT,
   API_CLIENT_PASS_HEADERS,
+  HTTP_CLIENT_AGENT,
 } from '@tramvai/tokens-http-client';
 import {
   LOGGER_TOKEN,
@@ -36,6 +37,10 @@ const createCacheToken = createToken<typeof CREATE_CACHE_TOKEN>('httpClient crea
         },
         headersList: {
           token: API_CLIENT_PASS_HEADERS,
+          optional: true,
+        },
+        agent: {
+          token: HTTP_CLIENT_AGENT,
           optional: true,
         },
       },

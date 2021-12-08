@@ -19,6 +19,7 @@ export function createAdapter(options: TinkoffRequestOptions): HttpClient {
     validator,
     errorValidator,
     errorModificator,
+    agent,
     modifyRequest = (req: HttpClientRequest): HttpClientRequest => req,
     modifyResponse = (res: HttpClientResponse<any>): HttpClientResponse<any> => res,
     modifyError = (err: HttpClientError): HttpClientError => err,
