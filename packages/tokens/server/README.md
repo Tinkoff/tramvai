@@ -1,7 +1,7 @@
 # Server tokens
 
-Модуль содержащий токены трамвая для интеграция и расширения модуля [сервера](references/modules/server.md).
+Tramvai tokens for integration and extending [server module](references/modules/server.md).
 
-## Список токенов
+## Tokens
 
 @inline src/index.ts

@@ -5,19 +5,19 @@ import type { Papi } from '@tramvai/papi';
 
 /**
  * @description
- * Позволяет задавать базовый урл для публичных папи обработчиков. По умолчанию это `/[appName]/papi`
+ * Specifies base url for public papi handlers. By default equals to `/[appName]/papi`
  */
 export const SERVER_MODULE_PAPI_PUBLIC_URL = createToken<string>('serverModulePapiPublicUrl');
 
 /**
  * @description
- * Позволяет задавать базовый урл для приватных папи обработчиков. По умолчанию это `/[appName]/private/papi`
+ * Specifies base url for private papi handlers. By default equals `/[appName]/private/papi`
  */
 export const SERVER_MODULE_PAPI_PRIVATE_URL = createToken<string>('serverModulePapiPrivateUrl');
 
 /**
  * @description
- * Позволяет задавать приватные роуты для papi
+ * Add private papi route
  */
 export const SERVER_MODULE_PAPI_PRIVATE_ROUTE = createToken<Papi>('serverModulePapiPrivateRoute', {
   multi: true,
@@ -25,7 +25,7 @@ export const SERVER_MODULE_PAPI_PRIVATE_ROUTE = createToken<Papi>('serverModuleP
 
 /**
  * @description
- * Позволяет задавать публичные роуты для papi
+ * Add public papi route
  */
 export const SERVER_MODULE_PAPI_PUBLIC_ROUTE = createToken<Papi>('serverModulePapiPublicRoute', {
   multi: true,
@@ -33,7 +33,7 @@ export const SERVER_MODULE_PAPI_PUBLIC_ROUTE = createToken<Papi>('serverModulePa
 
 /**
  * @description
- * Настройки для работы статики
+ * Settings for the static server
  */
 export const SERVER_MODULE_STATICS_OPTIONS = createToken<ServerModuleStaticsOptions>(
   'serverModuleStaticsOptions'
@@ -41,8 +41,8 @@ export const SERVER_MODULE_STATICS_OPTIONS = createToken<ServerModuleStaticsOpti
 
 /**
  * @description
- * Инстанс node-сервера `http.Server`.
- * Позволяет добавлять логику для расширения работы сервера (обработка ошибок, настройки соединений)
+ * Instance of nodejs `http.Server`.
+ * Can be used for adding custom logic on server, like error handling, connection settings
  *
  * @example
   ```tsx
@@ -64,8 +64,8 @@ export const SERVER_TOKEN = createToken<Server>('server');
 
 /**
  * @description
- * Инстанс текущего приложения. По умолчанию предполагается что это `express` приложения.
- * Позволяет настраивать обработку запросов и добавлять свои роуты
+ * Instance of the current server app. By default it is an `express` app.
+ * Can be used to setup custom request handler and add custom routes
  *
  * @example
   ```tsx
@@ -87,7 +87,7 @@ export const WEB_APP_TOKEN = createToken<Application>('webApp');
 
 /**
  * @description
- * Подписка на инициализацию веб-приложения. Вызывается перед заданием любых стандартных обработчиков
+ * Subscription to before web-app initialization. It is called before any standard handlers.
  *
  * @example
   ```tsx
@@ -106,8 +106,8 @@ export const WEB_APP_BEFORE_INIT_TOKEN = createToken<APP_INIT_HANDLER>('webAppBe
 
 /**
  * @description
- * Подписка на инициализацию веб-приложения.
- * Вызывается после глобальных обработчиков запросов, но до обработчика для рендера страниц приложения
+ * Subscription to web-app initialization.
+ * It is called after global request handlers but before handlers for page rendering
  *
  * @example
   ```tsx
@@ -125,7 +125,8 @@ export const WEB_APP_INIT_TOKEN = createToken<APP_INIT_HANDLER>('webAppInit', { 
 
 /**
  * @description
- * Подписка на инициализацию веб-приложения. Вызывается после задания всех других обработчиков
+ * Subscription to after web-app initialization.
+ * It is called after any other handlers
  *
  * @example
   ```tsx
@@ -144,7 +145,7 @@ export const WEB_APP_AFTER_INIT_TOKEN = createToken<APP_INIT_HANDLER>('webAppAft
 
 /**
  * @description
- * Добавляет ресурсы для проксирования запросов в приложение через `http-proxy-middleware`
+ * Add resources for request proxying  to the app through `http-proxy-middleware`
  */
 export const PROXY_CONFIG_TOKEN = createToken<ProxyConfig[]>('proxyConfigToken', {
   multi: true,
@@ -152,7 +153,7 @@ export const PROXY_CONFIG_TOKEN = createToken<ProxyConfig[]>('proxyConfigToken',
 
 /**
  * @description
- * Позволяет переопределить функцию фильтрации при обращении к papi-методу `/dependenciesVersion`
+ * Override filter function when accessing papi route `/dependenciesVersion`
  */
 export const DEPENDENCIES_VERSION_FILTER_TOKEN = createToken<DepsFilter>(
   'dependenciesVersionFilter'
@@ -160,8 +161,8 @@ export const DEPENDENCIES_VERSION_FILTER_TOKEN = createToken<DepsFilter>(
 
 /**
  * @description
- * Позволяет задавать список специальных URL'ов на сервере (например, healthz и readyz)
- * Матчинг осущствляется при помощи библиотеки `path-to-regexp`.
+ * List of the special URLs on server (e.g. healthz and readyz)
+ * Url matching is happens with a library `path-to-regexp`.
  */
 export const SPECIAL_SERVER_PATHS = createToken<string>('specialServerPaths', { multi: true });
 
