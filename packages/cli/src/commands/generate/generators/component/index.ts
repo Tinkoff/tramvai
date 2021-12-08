@@ -4,16 +4,16 @@ import { chooseDirectory } from '../helpers';
 import { validateNotEmpty } from '../../utils/validate';
 
 export default ({ configEntry: { root } }: GeneratorFactoryArgs) => {
-  const rootPath = path.normalize(`${root}/components/`);
+  const rootPath = path.normalize(`${root}/`);
 
   return {
-    description: 'Создать компонент',
+    description: 'Generate component',
     prompts: [
       chooseDirectory(rootPath),
       {
         type: 'input',
         name: 'name',
-        message: 'Название компонента',
+        message: 'Component name',
         validate: validateNotEmpty,
       },
     ],

@@ -11,8 +11,8 @@ class GenerateCommand extends CLICommand<Params> {
   name = 'generate';
 
   description =
-    'Команда для кодогенерации\n' +
-    '  [target] - название приложения\n' +
+    'Command for code generation\n' +
+    '  [target] - application name\n' +
     '  [generator] - action|reducer|bundle|component|page|module';
 
   command = 'generate [target] [generator]';

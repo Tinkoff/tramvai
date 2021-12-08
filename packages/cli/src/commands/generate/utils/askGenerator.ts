@@ -5,7 +5,7 @@ import generators from '../generators/index';
 import type { GeneratorFactoryArgs } from '../generators/typings';
 
 const genNames = Object.keys(generators);
-const welcomeMessage = 'Выберите генератор';
+const welcomeMessage = 'Select generator';
 
 async function promptGenerator() {
   const { generatorName } = await inquirer.prompt<{ generatorName: string }>([

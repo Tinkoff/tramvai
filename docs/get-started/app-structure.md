@@ -1,77 +1,70 @@
 ---
 id: app-structure
-title: Структура проекта
+title: Project structure
 ---
 
-Краткий обзор структуры приложения, которую генерирует `tramvai new`. При этом мы поддерживаем как монорепозитории, так и репозитории с одним приложением. Тип репозитория, пакетный менеджер и настройки CI выбираются при вызове команды `new`.
+A quick overview of the structure of the application that generates by tramvai `new` command.
+At the same time, we support both monorepositories and repositories with one application.
+Repository type, package manager and testing framework settings are selected when the command `new` executed.
 
-### Тип репозитория
+Application structure follow [feature-sliced methodology](https://feature-sliced.design/) guidlines.
+
+### Repository type
 
 #### Multirepo
 
-Структура репозитория рассчитана на одно приложение
+The repository structure is designed for one application
 
 ```bash
 root-directory
-├── package.json - описание зависимостей проекта
-├── tramvai.json - конфигурация проекта для `@tramvai/cli`
-├── env.development.js - переменные окружения, использующиеся при локальных сборках проекта
-├── renovate.json - настройки для renovatebot, который автоматически создает MR в проекты, при наличии свежих мажорных обновлений зависимостей
-├── README.md - документация по проекту
-└── src - директория с кодом приложения
-    └── ...App block
+├── tramvai.json - project configuration for `@tramvai/cli`
+├── env.development.js - environment variables used for local builds of the project
+└── src - application code directory
+    └── App block
 ```
 
 #### Monorepo
 
-Структура репозитория рассчитана на наличие нескольких приложений, и отдельных общих библиотек
+The repository structure is designed for the presence of several applications, and separate shared libraries
 
 ```bash
 root-directory
-├── package.json - описание зависимостей проекта
-├── tramvai.json - конфигурация проекта для `@tramvai/cli`
-├── env.development.js - переменные окружения, использующиеся при локальных сборках проекта
-├── renovate.json - настройки для renovatebot, который автоматически создает MR в проекты, при наличии свежих мажорных обновлений зависимостей
-├── README.md - документация по проекту
-├── apps - директория с приложениями
+├── tramvai.json - project configuration for `@tramvai/cli`
+├── env.development.js - environment variables used for local builds of the project
+├── apps - directory with applications
 │   ├── App block
 │   ├── App block
-└── packages - директория с различными библиотеками/модулями, которые будут общими между приложениями
+└── packages - a directory with various libraries / modules that will be shared between applications
     ├── Lib block
     └── Lib block
 ```
 
-### Блоки
+### Blocks
 
-#### Приложение
+#### Application
 
 ```bash
 app-directory
-├── index.ts - стартовая точка для приложения
-├── vendor.ts - описание vendor зависимостей приложения (по умолчанию react и react-dom)
-├── polyfill.ts - используемые полифилы приложением (отсутствует по умолчанию)
-├── postcss.js - базовый набор настроек для postcss
-├── bundles - список подключенных бандлов в приложении
-├── components - директория с используемыми компонентами приложением
-│   ├── features - фича-компоненты
-│   └── shared - общие компоненты
-├── layers
-│   ├── layout - глобальные врапперы которые используются в роутинге
-│   ├── pages - компоненты страницы которые используются в роутинге
-├── modules - кастомные модули написанные для приложения (отсутствует по умолчанию)
-└── reducers - глобальные редьюсеры, эвенты и селекторы (отсутствует по умолчанию)
+├── index.ts - application entry point, where all tramvai modules are connected
+├── vendor.ts - file with vendor dependencies, will be extracted into a separate js chunk
+├── polyfill.ts - polyfills used by the application (absent by default)
+├── postcss.js - postcss configuration object 
+├── shared - reused modules of the application
+├── entities - application domain logic and ui
+├── features - key functionality of the application
+└── pages - application pages
 ```
 
-<!-- #### Библиотека
+<!-- #### Library
 
 ```bash
 @todo
 ``` -->
 
-### Дополнительные ссылки
+### Additional links
 
-Следующие ссылки содержат подробные определения терминов `бандл`, `модуль` и описание настроек `tramvai.json`
+The following links provide detailed definitions of terms `bundle`, `module` and a description of the settings `tramvai.json`
 
-- [Модуль](concepts/module.md)
-- [Бандл](concepts/bundle.md)
-- [Настройки Tramvai CLI](references/cli/base.md)
+- [Module](concepts/module.md)
+- [Bundle](concepts/bundle.md)
+- [Tramvai CLI settings](references/cli/base.md)

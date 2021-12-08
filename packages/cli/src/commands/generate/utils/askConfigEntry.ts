@@ -11,7 +11,7 @@ async function promptTarget(targets: string[]) {
     {
       type: 'list' as const,
       name: 'projectName' as const,
-      message: 'Выберите приложение',
+      message: 'Select application',
       choices: targets,
       default: targets[0],
     },

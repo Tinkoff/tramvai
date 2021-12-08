@@ -1,11 +1,11 @@
 import React from 'react';
-import { render } from '@testing-library/react';
-import { {{ name }} } from './{{ properCase name }}';
+import { testComponent } from '@tramvai/test-react';
+import { {{ properCase name }} } from './{{ name }}';
 
 describe('{{ properCase name }}', () => {
   it('snapshot', () => {
-    const { container } = render(<{{ properCase name }}>content</{{ properCase name }}>);
+    const { render } = testComponent(<{{ properCase name }}>content</{{ properCase name }}>);
 
-    expect(container.firstChild).toMatchInlineSnapshot();
+    expect(render.container.firstChild).toMatchInlineSnapshot();
   });
 });

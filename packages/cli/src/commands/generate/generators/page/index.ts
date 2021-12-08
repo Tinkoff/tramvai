@@ -1,38 +1,40 @@
 import path from 'path';
-import type { GeneratorFactoryArgs } from '../typings';
 import { validateNotEmpty } from '../../utils/validate';
+import type { GeneratorFactoryArgs } from '../typings';
+import { chooseDirectory } from '../helpers';
 
 export default ({ configEntry: { root } }: GeneratorFactoryArgs) => {
-  const rootPath = path.normalize(`${root}/layers/pages/`);
+  const rootPath = path.normalize(`${root}/`);
 
   return {
-    description: 'Создать страницу',
+    description: 'Generate page',
     prompts: [
+      chooseDirectory(rootPath),
       {
         type: 'input',
         name: 'name',
-        message: 'Название страницы',
+        message: 'Page name',
         validate: validateNotEmpty,
       },
     ],
-    actions: ({ name }) => {
+    actions: ({ name, directory }) => {
       const actions = [
         {
           type: 'add',
-          path: `${rootPath}/${name}/${name}Page.tsx`,
+          path: `${directory}/${name}/${name}Page.tsx`,
           templateFile: path.resolve(__dirname, 'page.tsx.hbs').replace('/lib/', '/src/'),
           abortOnFail: true,
           skipIfExists: true,
         },
         {
           type: 'add',
-          path: `${rootPath}/${name}/${name}Page.spec.tsx`,
+          path: `${directory}/${name}/${name}Page.spec.tsx`,
           templateFile: path.resolve(__dirname, 'page.spec.tsx.hbs').replace('/lib/', '/src/'),
           abortOnFail: true,
         },
         {
           type: 'add',
-          path: `${rootPath}/${name}/${name}Page.module.css`,
+          path: `${directory}/${name}/${name}Page.module.css`,
           templateFile: path.resolve(__dirname, 'page.module.css.hbs').replace('/lib/', '/src/'),
           abortOnFail: true,
         },

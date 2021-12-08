@@ -138,7 +138,9 @@ describe('httpClientFactory', () => {
     expect(fetch).toBeCalledTimes(2);
   });
 
-  it('add User-Agent header', async () => {
+  it('add User-Agent and X-real-ip headers by default', async () => {
+    requestManagerMock.getClientIp.mockImplementationOnce(() => '127.0.0.1');
+
     (fetch as any).mockImplementation(() =>
       createJsonResponse({
         resultCode: 'OK',
@@ -152,10 +154,41 @@ describe('httpClientFactory', () => {
 
     const fetchOptions = (fetch as any).mock.calls[0][1];
 
-    expect(fetchOptions.headers).toMatchObject({
-      'User-Agent': 'tramvai example',
-    });
+    expect(fetchOptions.headers).toMatchInlineSnapshot(`
+Object {
+  "Content-type": "application/x-www-form-urlencoded",
+  "User-Agent": "tramvai example",
+  "X-real-ip": "127.0.0.1",
+}
+`);
   });
+
+  it('merge request and default headers', async () => {
+    requestManagerMock.getClientIp.mockImplementationOnce(() => '127.0.0.1');
+
+    (fetch as any).mockImplementation(() =>
+      createJsonResponse({
+        resultCode: 'OK',
+        payload: 'payload',
+      })
+    );
+
+    const httpClient = factory({ name: 'test-api' });
+
+    await httpClient.request({ path: 'fake', headers: { foo: 'bar' } });
+
+    const fetchOptions = (fetch as any).mock.calls[0][1];
+
+    expect(fetchOptions.headers).toMatchInlineSnapshot(`
+Object {
+  "Content-type": "application/x-www-form-urlencoded",
+  "User-Agent": "tramvai example",
+  "X-real-ip": "127.0.0.1",
+  "foo": "bar",
+}
+`);
+  });
+
   it('circuit breaker works', async () => {
     (fetch as any).mockImplementation(() =>
       createJsonResponse(
