@@ -26,10 +26,10 @@ logger.enable('tramvai-migrate');
   const { name: cwdPackageName } = await readJSON(resolve(cwd, 'package.json')).catch(() => ({}));
   const tramvaiJSONPath = await getTramvaiJSONPath(cwd);
 
-  // игнорируем проверку миграций в самой репе трамвая,
-  // или отсутствует `tramvai.json`,
-  // или если выставлена переменная окружения,
-  // или мы выполняем установку внутри CI,
+  // ignore the migration check in the tramvai repository,
+  // or is absent `tramvai.json`,
+  // or if the environment variable is set,
+  // or we do the installation inside the CI,
   if (
     cwdPackageName === 'tramvai' ||
     !tramvaiJSONPath ||
@@ -39,7 +39,7 @@ logger.enable('tramvai-migrate');
     return;
   }
 
-  log.info('Проверка миграций');
+  log.info('Checking migrations');
   const files = await glob(
     [
       `${TRAMVAI_BASE_PATH}*/__migrations__/*.js`,
@@ -53,11 +53,11 @@ logger.enable('tramvai-migrate');
   );
 
   if (!files.length) {
-    log.info('Миграции не найдены, завершаем');
+    log.info('Migrations are not found. The migration process is completed');
     return;
   }
 
-  log.debug('Найдены миграции');
+  log.debug('Migrations found');
   log.debug(files);
 
   const appliedFilename = resolve(cwd, APPLIED_FILENAME);
@@ -67,7 +67,7 @@ logger.enable('tramvai-migrate');
   let api: Api;
   let save: () => {};
 
-  log.info('Начинаем выполнять миграции');
+  log.info('Starting to perform migrations');
 
   for (const fileInfo of files) {
     const packageName = getPackageName(fileInfo.path);
@@ -79,7 +79,7 @@ logger.enable('tramvai-migrate');
     const appliedMigrations: string[] = pathOr(migrationPath, [], appliedInfo);
 
     if (!appliedMigrations.includes(fileInfo.name)) {
-      log.info(`Выполняем миграцию '${fileInfo.name}' из модуля '${packageName}'`);
+      log.info(`Running migration '${fileInfo.name}' from module '${packageName}'`);
       if (!api) {
         // eslint-disable-next-line no-await-in-loop
         ({ api, save } = await createApi(cwd));
@@ -94,20 +94,17 @@ logger.enable('tramvai-migrate');
         appliedMigrations.push(fileInfo.name);
         appliedInfo = pathSet(migrationPath, appliedMigrations, appliedInfo);
       } catch (error) {
-        log.error(
-          error,
-          `Ошибка при выполнении миграции '${fileInfo.name}' из модуля '${packageName}'`
-        );
+        log.error(error, `Migration error '${fileInfo.name}' from module '${packageName}'`);
       }
     }
   }
 
-  log.info('Все миграции выполнены, сохраняем информацию о выполненных миграциях');
+  log.info('All migrations are completed, save the information about the completed migrations');
 
   await save?.();
   await writeJSON(appliedFilename, appliedInfo);
 
-  log.info('Миграции успешно выполнены');
+  log.info('Migrations successfully completed');
 })();
 
 export * from './types';

@@ -144,7 +144,7 @@ export const createApi = async (cwd: string) => {
             source: transformedSource || fileInfo.source,
           };
         } catch (error) {
-          log.error(error, `Ошибка при выполнении миграции для файла ${fileInfo.path}`);
+          log.error(error, `Migration error for file ${fileInfo.path}`);
         }
       }
     },

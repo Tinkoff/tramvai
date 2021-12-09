@@ -1,22 +1,22 @@
-# Вставка inline-кода для клиента на сервере
+# Putting inline code for the client on server
 
-Иногда есть необходимость собрать js-код на сервере, чтобы вставить его в начальный рендер html. Проблема возникает если версия EcmaScript, используемая для генерации кода не поддерживается браузером клиента (такое обычно случается потому, что на мы пишем es2015+ код и не учитываем, что некоторые клиенты используют устаревшие браузеры с es5). А даже если код и транспилируется на сервере, то он транспилируется под определённую версию nodejs, что не подходит для браузеров.
+Sometimes there is a need to construct js-code on server to then put it to the initial html render. The issue raises if EcmaScript version used on server for generating client code is not supported by client browser (this usually happens because we use es2015+ while writing code but of the clients still use outdated browsers that support only es5). Even more, if server code is get transpiled on server it still transpiles to a specific nodejs version that is not suitable for browsers.
 
-## Решение
+## Solution
 
-Для клиента с помощью webpack + babel уже и так происходит транспиляция кода для работы в нужных браузерах. Поэтому нам по сути остаётся специальным образом указать, что некий код предназначен для клиента и потому его нужно собрать особым образом.
+For clients transpilation is already happens using wepback and babel that targets specific browsers. That way we can reuse that transpilation for client code in order to build specific code on the server which is intended to use on client-side.
 
-Правила для сборки определённого кода для клиента:
+Rules for transpiling specific code for clients on the server:
 
-- код для вставки должен быть вынесен в отдельный файл
-- в самом файле не должно быть импортов других модулей - на клиенте импорты требуют runtime вебпака, который не знает о тех файлах, которые используются на сервере
-- сам код должен быть оформлен в виде экспортируемых функций и эти функции могут использовать только переданные ей аргументы, использование внешних переменных вне тела функции запрещены
-- имя файла должно оканчиваться на `.inline(.es)?.[tj]s` - это работает как флаг, указывающий что файл надо собрать клиентским конфигом
-- вместо инлайн кода вставляется как строка вызова экспортируемой функции с передачей ей аргументов - благодаря тому, что для функции преобразование в строку вернёт тело этой функции в виде строки, такая вставка будет работать
+- code for insertion must be placed in separate file
+- inside that file no imports should be used as it requires webpack runtime which won't know about server modules on the client
+- code itself should be defined as exported function and these functions can use only passed arguments. Using external variables is not possible
+- the name of the file should end on `.inline(.es)?.[tj]s`. It works as a marker to transpile this file with a client config
+- instead on inline code put to the insertion place the string with call of the exported function with passing arguments to it. Thanks to the fact that conversion function to string returns the body of the function itself it should work on the client
 
-### Пример
+### Example
 
-1. Создадим файл с инлайн кодом `test.inline.ts`
+1. Create new file `test.inline.ts` with the inline code
 
    ```ts
    export const test = (arg: string) => {
@@ -35,7 +35,7 @@
    };
    ```
 
-2. Теперь импортируем функцию и вставляем её в начальный html
+2. Import the exported function and put it to the initial html
 
    ```ts
    import { Module } from '@tramvai/core';
@@ -53,8 +53,8 @@
            return {
              slot: ResourceSlot.HEAD_SCRIPTS,
              type: ResourceType.inlineScript,
-             // обратите внимание, что добавляем используем функцию как будто пишем iife функцию, только вместо тела функции используем код импорт из модуля
-             // при этом передаваемые строки надо дополнительно заключать в кавычки
+             // Please, note that we are using function like we are adding new iife function, but instead of adding the body of function manually we are using import from the module
+             // And when passing string as arguments we should additionally wrap it with quotes
              payload: `(${test})('${arg}')`,
            };
          },
@@ -64,7 +64,7 @@
    export class CustomModule {}
    ```
 
-3. После сборки проекта и запуска страницы в браузере должен получить такой код, вместо изначального
+3. After building the project and requesting the page, the browser should get the code looking like that instead of source code
 
    ```html
    <script>

@@ -1,7 +1,7 @@
 # @tramvai/tokens-http-client
 
-Библиотека содержит токены для интеграция и расширения модуля `@tramvai/module-http-client`
+Tramvai tokens used for integration and extending `@tramvai/module-http-client`
 
-## Список токенов
+## Tokens
 
 @inline src/index.ts

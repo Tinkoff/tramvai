@@ -6,7 +6,7 @@ export type HttpClientFactoryOptions = TinkoffRequestOptions & { name: string };
 
 /**
  * @description
- * Фабрика HTTP клиентов с минимальными базовыми настройками
+ * Factory of HTTP clients with minimal base settings
  */
 export const HTTP_CLIENT_FACTORY = createToken<(options: HttpClientFactoryOptions) => HttpClient>(
   'HTTP_CLIENT_FACTORY'
@@ -14,7 +14,7 @@ export const HTTP_CLIENT_FACTORY = createToken<(options: HttpClientFactoryOption
 
 /**
  * @description
- * Универсальный HTTP клиент для произвольных запросов
+ * Universal HTTP client for arbitrary requests
  */
 export const HTTP_CLIENT = createToken<HttpClient>('HTTP_CLIENT');
 
@@ -30,7 +30,7 @@ export const HTTP_CLIENT_AGENT = createToken<{
 
 /**
  * @description
- * Список headers, которые проксируются из запроса в приложение во все запросы в API
+ * List of HTTP headers that are proxied from app request to all of the backend API
  */
 export const API_CLIENT_PASS_HEADERS = createToken<string[]>('apiClientPassHeaders', {
   multi: true,
@@ -38,7 +38,7 @@ export const API_CLIENT_PASS_HEADERS = createToken<string[]>('apiClientPassHeade
 
 /**
  * @description
- * Работа с внутренним апи текущего сервера.
- * Использует значение `APP_INFO_TOKEN` из di для определения адреса для запросов
+ * Internal api for app server.
+ * Uses the value of `APP_INFO_TOKEN` from di for constructing the request address
  */
 export const PAPI_SERVICE = createToken<ApiService>('papi service');

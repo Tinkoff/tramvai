@@ -225,7 +225,7 @@ describe('@tramvai/tools-migrate', () => {
 
     expect(logger('test').error).toHaveBeenCalledWith(
       new SyntaxError('Unexpected token (1:23)'),
-      'Ошибка при выполнении миграции для файла ./a.ts'
+      'Migration error for file ./a.ts'
     );
     expect(writeFile as jest.Mock).toHaveBeenNthCalledWith(1, './b.ts', 'const bar = { test: 2 };');
     expect(writeFile as jest.Mock).toHaveBeenCalledTimes(1);
