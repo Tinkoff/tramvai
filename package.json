@@ -46,5 +46,9 @@
     "json": "^9.0.6",
     "wsrun": "^5.2.0"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "resolutions": {
+    "webpack": "^5",
+    "@types/webpack": "^5"
+  }
 }

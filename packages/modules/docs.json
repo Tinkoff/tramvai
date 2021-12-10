@@ -85,6 +85,13 @@
               }
             },
             {
+              "path": "http-proxy-agent/README.md",
+              "doc": {
+                "id": "http-proxy-agent",
+                "title": "http-proxy-agent"
+              }
+            },
+            {
               "doc": {
                 "id": "log",
                 "title": "log"
