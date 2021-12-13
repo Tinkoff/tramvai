@@ -1,50 +1,59 @@
 ---
 id: action
-title: Экшен
+title: Action
 ---
 
-Экшены необходимы в приложении для локализации выполнения асинхронных действий, например сделать запрос, обновить данные в сторе и прочие действия, которые затрагивают IO или управление состоянием.
+Actions are needed in the application to localize the execution of asynchronous actions, for example, make a request, update data in the store, and other actions that affect IO or state management.
 
-Подробное описание интерфейса [createAction](references/tramvai/create-action.md)
+Detailed description of the interface [createAction](references/tramvai/create-action.md)
 
-## Пример экшена
+## Example action
 
 ```tsx
 import { createAction } from '@tramvai/core';
 
-// создаем экшен
+// create an action
 const actionFetchData = createAction({
   name: 'fetch-data',
   fn: (context, payload) => fetch(payload.url),
 });
 
-// вызываем экшен
+// execute the action
 context
   .executeAction(actionFetchData, { url: 'https://tinkoff.ru' })
   .then((data) => context.dispatch(loadData(data)));
 ```
 
-## Глобальные экшены
+## Global Actions
 
-Приложения могут добавить глобальные экшены в приложении, которые необходимы выполнить перед отрисовки страницы, в этих действиях обычно загружают информацию необходимую для отображении страницы, например информацию о депозитах. Перед рендерингом страницы различные типы экшенов собираются в единый список и выполняются параллельно.
+Applications can add global actions in the application that need to be executed before rendering the page, in these actions they usually load the information necessary to display the page, for example, information about deposits. Before rendering the page, the different types of actions are collected into a single list and executed in parallel.
 
-Вкратце, экшен глобальный, если он добавлен через `createApp`, `createBundle`, или статическое свойство компонента - страницы, например `PageComponent.actions`. По умолчанию, глобальные экшены выполняются один раз, на сервере, и передают статус и результат выполнения экшена на клиент.
+In short, an action is global if added via `createApp`, `createBundle`, or a static property of a page component, such as `PageComponent.actions`. By default, global actions are executed once, on the server, and pass the status and result of the action to the client.
 
-### Дедлайн выполнения
+### Execution Deadline
 
-Серверы должны отвечать быстро, поэтому мы должны уменьшить количество кейсов, когда глобальные экшены вызывают задержку загрузки страницы, допустим если выйдет из строя какое либо API. Для этого на сервере присутствует ограничение по времени на выполнение глобальных экшенов и если это время проходит, то ожидание экшенов заканчивается и эти экшены должны будут выполниться на стороне клиента.
+Servers must respond quickly, so we must reduce the number of cases when global actions cause a delay in page loading, for example, if an API fails. To do this, there is a time limit on the server for executing global actions, and if this time passes, then waiting for actions ends and these actions must be executed on the client side.
 
-### Синхронизация экшенов между сервером и клиентом
+### Synchronizing actions between server and client
 
-Информация о всех успешно выполненных экшенах будут переданы клиенту, который на основе этой информации запустит выполнение глобальных экшенов. При этом, если экшен к примеру выпал за дедлайн или упал по ошибке, то произойдет повторное выполнение на стороне клиента
+Information about all successfully executed actions will be transferred to the client, which will start the execution of global actions based on this information. At the same time, if an action, for example, fell out of the deadline or fell by mistake, then it will be re-executed on the client side.
 
-### Виды глобальных экшенов
+### Errors in actions
 
-#### Глобальные экшены для всего приложения
+By default, errors in actions only logged with event `action-execution-error`, but they do not stop the page rendering pipeline.
+The only exceptions are actions that throw `NotFoundError` or `RedirectFoundError` errors from `@tinkoff/errors` library.
 
-Для регистрации внутри приложения, мы должны передать массив экшенов в [createApp](references/tramvai/create-app.md), после этого все эти экшены будут выполняться для каждой страницы и любых бандлов:
+When `new RedirectFoundError({ nextUrl })` is thrown, the page request will be redirected to `nextUrl` with `308` status (default).
 
-##### Подключение
+When `new NotFoundError()` is thrown, the page request will have a status of `404` (default), and if your application has `not-found` route, that route **will not be render**.
+
+### Types of global actions
+
+#### Application-wide global actions
+
+To register within the application, we must pass an array of actions to [createApp](references/tramvai/create-app.md), after that all these actions will be executed for each page and any bundles:
+
+##### Connection
 
 ```tsx
 createApp({
@@ -53,7 +62,7 @@ createApp({
 });
 ```
 
-Также можно зарегистрировать экшены в провайдерах:
+You can also register actions with providers:
 
 ```tsx
 import { ACTIONS_LIST_TOKEN } from '@tramvai/core';
@@ -66,11 +75,11 @@ const provider = provide({
 });
 ```
 
-#### Глобальные экшены для бандла
+#### Global actions for the bundle
 
-Для регистрации внутри бандла, мы должны передать в [createBundle](references/tramvai/create-bundle.md) список экшенов, которые будут после этого выполняться для всех страниц которые присутствуют и используются в бандле.
+To register inside a bundle, we must pass to [createBundle](references/tramvai/create-bundle.md) a list of actions that will then be executed for all pages that are present and used in the bundle.
 
-##### Подключение
+##### Connection
 
 ```tsx
 createBundle({
@@ -79,13 +88,13 @@ createBundle({
 });
 ```
 
-#### Глобальные экшены привязанные к странице
+#### Global actions linked to the page
 
-Это самый низкий уровень добавление глобальных экшенов, для отдельного Page компонента мы можем привязать список экшенов, которые нужно выполнить перед рендерингом страницы.
+This is the lowest level of adding global actions, for a separate Page component, we can bind a list of actions that need to be performed before rendering the page.
 
-##### Подключение
+##### Connection
 
-Для этого необходимо добавить статичное свойство для page компонента `actions` и передать список необходимых экшенов
+To do this, you need to add a static property to the page of the `actions` component and pass the list of required actions
 
 ```tsx
 class PageComponent extends Copmponent {
@@ -93,9 +102,9 @@ class PageComponent extends Copmponent {
 }
 ```
 
-## Ограничения
+## Restrictions
 
-Не все экшены могут выполняться при любых обстоятельствах, у нас могут быть экшены которые должны выполняться только на сервере, другие только в браузере, так и имеющие какие любые другие ограничения. Для решения этой проблемы есть свойство `conditions`:
+Not all actions can be executed under all circumstances, we can have actions that should be executed only on the server, others only in the browser, and having any other restrictions. There is a `conditions` property to solve this problem:
 
 ```tsx
 createAction({
@@ -108,11 +117,11 @@ createAction({
 });
 ```
 
-В примере выше мы создаем экшен, который будет выполняться только в браузере и только когда у нас будет роль пользователя у основного core API равная `client`.
+In the example above, we create an action that will be executed only in the browser and only when we have the user role of the main core API equal to `client`.
 
-### Добавление новых ограничений в приложение
+### Adding new restrictions to the application
 
-Можно реализовать в приложении или модуле свои собственные ограничения. Для этого мы должны создать объект с интерфейсом:
+You can implement your own constraints in an application or module. To do this, we must create an object with an interface:
 
 ```tsx
 interface Condition {
@@ -121,10 +130,10 @@ interface Condition {
 }
 ```
 
-- `key` - идентификатор ограничения
-- `fn` - функция проверки, которая будет вызвана для каждого экшена
+- `key` - restriction identifier
+- `fn` - a validation function that will be called for each action
 
-Функция получит в аргументе checker, который имеет интерфейс
+The function will receive in the argument checker, which has an interface
 
 ```tsx
 interface ActionConditionChecker {
@@ -139,16 +148,16 @@ interface ActionConditionChecker {
 }
 ```
 
-- `payload` - данные, которые были переданы с экшеном
-- `parameters` - параметры которые были переданы при создании экшена
-- `conditions` - ограничения для текущего экшена
-- `type` - тип выполняемого экшена, может быть глобальным или простое выполнение через executeAction
-- `forbid` - запрещает выполнение экшена. Если хотя бы один чекер вызовет эту функцию, выполнение экшена будет остановлено
-- `setState` - позволяет записать данные проверок. Нужно для кейсов, когда нам нужно знать, с какими данными выполнялось до этого и нужно ли повторить, к примеру ограничения по роли авторизации
-- `getState` - получение записанного ранее состояния
-- `allow` - сообщаем экшену, что нужно выполниться повторно. Экшен выполнится, если не будет запрещено выполнение через `forbid`
+- `payload` - data that was transferred with the action
+- `parameters` - parameters that were passed when creating the action
+- `conditions` - restrictions for the current action
+- `type` - type of the executed action, can be global or simple execution via executeAction
+- `forbid` - prohibits the execution of the action. If at least one checker calls this function, the action execution will be stopped
+- `setState` - allows you to write the check data. It is necessary for cases when we need to know with what data it was executed before and whether it needs to be repeated, for example, restrictions on the authorization role
+- `getState` - getting the previously recorded state
+- `allow` - tell the action to be executed again. The action will execute unless execution is forbidden via `forbid`
 
-### Пример ограничения
+### Example of a constraint
 
 ```tsx
 const isServer = typeof window === 'undefined';
@@ -163,11 +172,11 @@ export const onlyServer: ActionCondition = {
 };
 ```
 
-После подключение, ограничение будет смотреть, есть ли в экшене поле `onlyServer` в `conditions`, и если есть, изменит поведение экшена
+After connecting, the constraint will look if the action has a `onlyServer` field in `conditions`, and if so, it will change the action's behavior
 
-### Подключение ограничений в приложение
+### Connecting restrictions to the application
 
-Для этого необходимо добавить `multi` провайдер `ACTION_CONDITIONALS` и передать функцию которая будет иметь интерфейс
+To do this, you need to add the `multi` provider `ACTION_CONDITIONALS` and pass a function that will have an interface
 
 ```tsx
 import { provide } from '@tramvai/core';
@@ -179,37 +188,37 @@ const provider = provide({
 });
 ```
 
-### Предустановленные ограничения, доступные каждому экшену
+### Preset limits available for each action
 
-- _`always`_ - экшен выполняется на сервере, затем в браузере и на каждый SPA переход внутри приложения
-- _`onlyBrowser`_ - экшен выполняется только в браузере
-- _`onlyServer`_ - экшен выполняется только на сервере
-- _`pageBrowser`_ - глобальный экшен выполняется только в браузере
-- _`pageServer`_ - глобальный экшен выполняется только на сервере
-- _`always`_ + _`onlyBrowser`_ -  экшен выполняется в браузере и на каждый SPA переход внутри приложения
+- _`always`_ - the action is executed on the server, then in the browser and on each SPA transition within the application
+- _`onlyBrowser`_ - the action is executed only in the browser
+- _`onlyServer`_ - the action is executed only on the server
+- _`pageBrowser`_ - the global action is executed only in the browser
+- _`pageServer`_ - the global action is executed only on the server
+- _`always`_ + _`onlyBrowser`_ - the action is executed in the browser and for each SPA transition within the application
 
-## Особенности
+## Peculiarities
 
-Нужно помнить, что экшены по-умолчанию **кэшируются** и выполняются только **1 раз** за время жизненного цикла приложения.
+Keep in mind that actions are **cached** by default and are only executed **once** during the life cycle of the application.
 
-Из этого вытекают следующая особенность.
+The following feature follows from this.
 
-Допустим следующую ситуацию:
+Let's assume the following situation:
 
-- у нас есть страница концертной площадки по урлу `/concertvenue-[objectId]` - где `objectId` это параметр который соответствует идентификатору концертной площадки;
-- на эту страницу у нас один компонент `ConcertVenuePage` и один страничный экшен `preparePageAction`;
-- `objectId` в урле страницы используется для получения данных в `preparePageAction`, а также для выборки данных для отрисовки страницы;
-- у нас есть страница концерта `/concert` на которой есть ссылки на концертные площадки - `/concertvenue-1`, `/concertvenue-2`, `/concertvenue-1`. На все эти ссылки мы можем перейти SPA переходом;
-- Переходы между страницами клиентские (SPA), не серверные;
+- we have a page of the concert venue at the url `/concertvenue-[objectId]` - where `objectId` is a parameter that corresponds to the concert venue identifier;
+- on this page we have one component `ConcertVenuePage` and one page action `preparePageAction`;
+- `objectId` in the url of the page is used to get data in `preparePageAction`, as well as to fetch data for rendering the page;
+- we have a concert page `/concert` on which there are links to concert venues -`/concertvenue-1`, `/concertvenue-2`, `/concertvenue-1`. We can navigate to all these links with a SPA transition;
+- Transitions between pages are client-side (SPA), not server-side;
 
-Последовательность действий:
+Sequencing:
 
-1. На странице концерта мы кликаем на `/concertvenue-1`, открывается старница концертной площадки, страничный экшен выполняется **первый раз**.
-2. Уходим обратно на страницу концерта SPA переходом.
-3. Кликаем на `/concertvenue-2`.
-4. Попадаем на пустую страницу, так как страничный экшен уже **был выполнен**, новые данные не запросились, а выборка данных для отрисовки страницы была произведена по айди из урла - 2.
+1. On the concert page we click on `/concertvenue-1`, the page of the concert venue opens, the page action is performed **for the first time**.
+2. We go back to the SPA concert page by transition.
+3. Click on `/concertvenue-2`.
+4. We get to an empty page, since the page action has already **been executed**, new data has not been requested, and the data selection for drawing the page was made according to ID from url - 2.
 
-Если нужно, чтобы при каждом заходе на страницу выполнялся страничный экшен, нужно передать ему соответствующее условие:
+If you want a page action to be executed every time you visit the page, you need to pass it the appropriate condition:
 
 ```tsx
 const preparePageAction = creareAction({
@@ -218,10 +227,9 @@ const preparePageAction = creareAction({
     // ...
   },
   conditions: {
-    // с always: true экшен будет вызываться всегда и не кэшироваться
+    // with always: true, the action will always be called and not cached
     always: true,
   },
 });
 
 ConcertVenuePage.actions = [preparePageAction];
-```

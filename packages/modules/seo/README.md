@@ -1,16 +1,16 @@
 # Seo
 
-Модуль которые внутри себя получает данные из конфигурации страницы, генерирует мета теги и добавляет на страницу.
+The module internally takes data from the page configuration, generates meta tags and adds to the page.
 
-## Подключение
+## Installation
 
-Необходимо установить `@tramvai/module-seo` с помощью npm
+You need to install `@tramvai/module-seo`
 
 ```bash
 npm i @tramvai/module-seo
 ```
 
-И подключить в проекте
+And connect to the project
 
 ```tsx
 import { createApp } from '@tramvai/core';
@@ -22,20 +22,21 @@ createApp({
 });
 ```
 
-## Интеграция с tramvai
+## Tramvai integration
 
-Модуль не добавляет публичное api в di для использования. Для рендера seo используется возможности @tramvai/module-render для вставки кода в html-страницу.
+The module does not add a public api to the DI.
+The seo renderer uses the `@tramvai/module-render` capabilities to insert code into the html page.
 
-## Базовые источники данных
+## Basic data sources
 
-- `default` - список базовых пред установленных параметров
-- `config/meta` - список мета параметров, которые были переданы и проставлены в блоке seo в админке
+- `default` - list of basic default parameters
+- `config/meta` - a list of meta parameters from the route configuration
 
-## Подключение дополнительных источников данных
+## Connecting additional data sources
 
-Библиотека `@tinkoff/meta-tags-generate` позволяет подключать дополнительные источники данных для мета тегов с возможностью перезаписать базовые.
+The `@tinkoff/meta-tags-generate` library allows you to connect additional data sources for meta tags with the ability to overwrite basic ones.
 
-Для этого необходимо определить мульти провайдер `META_UPDATER_TOKEN`
+To do this, you need to define a multi-provider `META_UPDATER_TOKEN`.
 
 ```tsx
 import { createApp, provide } from '@tramvai/core';
@@ -43,10 +44,10 @@ import { SeoModule, META_UPDATER_TOKEN, META_PRIORITY_ROUTE } from '@tramvai/mod
 
 const metaSpecial = (meta) => {
   meta.updateMeta(META_PRIORITY_ROUTE, {
-    // приоритет - 10
-    title: 'title', // ключ/значение в мете,
+    // priority - 10
+    title: 'title', // key/value in meta,
     metaCustom: {
-      // подробная информация о формате [в доке](references/libs/meta-tags-generate.md)
+      // more information about the format [in the documentation](references/libs/meta-tags-generate.md)
       tag: 'meta',
       attributes: {
         name: 'metaCustomNameAttribute',
@@ -59,7 +60,7 @@ const metaSpecial = (meta) => {
 createApp({
   providers: [
     provide({
-      // либо добавить через провайдер
+      // or add via provider
       provide: META_UPDATER_TOKEN,
       multi: true,
       useValue: metaSpecial,
@@ -73,13 +74,14 @@ createApp({
 });
 ```
 
-Каждый источник представляет собой функцию которая принимает meta и позволяет расширять мету через вызов _updateMeta_. Приоритет представляет собой положительное число, для каждого конкретного ключа меты будет использовано значение с наивысшим приоритетом, значение с приоритетом 0 обозначают значение по умолчанию.
+Each source is a function that takes a meta and allows you to extend the meta through a _updateMeta_ call.
+The priority is a positive number, for each specific meta key the value with the highest priority will be used, the value with priority 0 denotes the default value.
 
-Подробнее о формате [в доке](references/libs/meta-tags-generate.md)
+More about the format [in the documentation](references/libs/meta-tags-generate.md)
 
-## Установка seo данных динамически
+## Setting seo data dynamically
 
-Если требуется установить seo в страничном экшене или на одном из шагов commandLineRunner, то можно использовать явно сущность `MetaWalk` из либы `@tinkoff/meta-tags-generate`
+If you want to install seo in a page action or in one of the commandLineRunner steps, you can explicitly use the `MetaWalk` entity from the `@tinkoff/meta-tags-generate` lib.
 
 ```tsx
 import { createAction } from '@tramvai/core';
@@ -101,9 +103,9 @@ createAction({
 });
 ```
 
-## Замена default seo данных
+## Replacing default seo data
 
-SEO модуль поставляется с default паком seo тегов. Если они вам не подходят, вы можете заменить реализацию провайдера и поставить свои данные:
+The SEO module comes with a default package of seo tags. If they do not suit you, you can replace the provider's implementation and put your own data:
 
 ```tsx
 import { createApp } from '@tramvai/core';
@@ -111,7 +113,7 @@ import { SeoModule, META_DEFAULT_TOKEN } from '@tramvai/module-seo';
 
 createApp({
   providers: [
-    // Изменяем реализацию токена metaDefaultPack
+    // Change metaDefaultPack token implementation
     {
       provide: META_DEFAULT_TOKEN,
       useValue: { title: 'E Corp' },
@@ -121,23 +123,23 @@ createApp({
 });
 ```
 
-После этого у нас будут подставляться другие дефолтные параметры
+After that we will substitute the new default parameters
 
-## Meta параметры
+## Meta parameters
 
-В библиотеке уже предопределены часть базовых параметров для удобного использования при конфигурировании роутов.
+The library already predefines some basic parameters for convenient use when configuring routers.
 
-И мы можем использовать мета параметры вида `title: 'Тинькофф'`
+And we can use meta parameters like `title: 'Tinkoff'`.
 
-Список таких конвертеров, необходимо смотреть в файле src/converters/converters.ts
+See the list of such converters in the `src/converters/converters.ts` file
 
 ## How to
 
-### Тестирование
+### Testing
 
-#### Тестирование работы с META_UPDATER_TOKEN и META_DEFAULT_TOKEN
+#### Testing work with META_UPDATER_TOKEN and META_DEFAULT_TOKEN
 
-Если у вас имеется модуль или провайдеры которые определяют META_UPDATER_TOKEN или META_DEFAULT_TOKEN, то удобно будет использовать специальные утилиты для того чтобы протестировать их отдельно
+If you have a module or providers that define `META_UPDATER_TOKEN` or `META_DEFAULT_TOKEN` then it is convenient to use special utilities to test them separately
 
 ```ts
 import { Module, provide } from '@tramvai/core';

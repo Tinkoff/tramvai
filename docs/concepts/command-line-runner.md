@@ -1,15 +1,15 @@
 ---
 id: command-line-runner
-title: Цепочка действий
+title: Actions chain
 ---
 
-При обработке запроса клиента нам необходимо выполнить стандартный список действий, такие как получение роута, получение нужных данных для клиента, рендеринг приложения и ответа клиенту. При этом, у нас модульная система, когда модули не знают о друг друге, но их надо как то связать.
+When processing a client request, we need to perform a standard list of actions, such as getting a route, getting the desired data for the client, rendering the application and responding to the client. At the same time, we have a modular system, when the modules do not know about each other, but they need to be connected somehow.
 
-Для решение этой проблемы был разработан `commandLineRunner`, который содержит в себе фиксированный список шагов, в которые модули могут добавлять необходимые задачи через провайдеры. Выполнение всех шагов происходит последовательно, но при этом задачи, зарегистрированные на каждый отдельный шаг, выполняются параллельно.
+To solve this problem, `commandLineRunner` was developed, which contains a fixed list of steps in which modules can add the necessary tasks through providers. All steps are executed sequentially, but the tasks registered for each individual step are executed in parallel.
 
-## Пример использования
+## Usage example
 
-Мы зарегистрировали новый провайдер, который вызовется, когда `commandLineRunner` дойдет до токена `commandLineListTokens.generatePage` и выполнится функция `render`:
+We have registered a new provider that will be called when `commandLineRunner` reaches the `commandLineListTokens.generatePage` token and the `render` function is executed:
 
 ```tsx
 import { provide } from '@tramvai/core';
@@ -32,103 +32,132 @@ import { provide } from '@tramvai/core';
 export class RenderModule {}
 ```
 
-## Блоки действий
+## Action blocks
 
-В трамвае предустановлены некоторое количество базовых действий, которые выполняются в определенные этапы работы приложения. На основе этих этапов строится работа базовых модулей трамвая и можно добавлять действия кастомными модулям.
+A number of basic actions are predefined in the tramvai, which are performed at certain stages of the application. Based on these stages, the work of the basic tram modules is built and actions can be added to custom modules.
 
-### Инициализация (init)
+### Initialization (init)
 
-При старте tramvai запускается цепочка действий в которой можно инициализировать асинхронные сервисы (если это необходимо) и добавить базовый функционал. Эти действия выполняются только один раз и не доступны провайдерам, которым нужен пользовательский контекст.
+When tramvai starts, a chain of actions is launched in which you can initialize asynchronous services (if necessary) and add basic functionality. These actions are performed only once and are not available to providers who need a custom context.
 
 ![init command](/img/commands/command-line-init.jpg)
 
-### Обработка запросов клиента (customer)
+### Handling customer requests
 
-Для каждого клиента мы запускаем список действий в котором доступен пользовательский контекст и данные. Для каждого клиента, мы создаем свой di контекст в котором будут жить реализации только пока мы обрабатываем запрос клиента.
+For each client, we run a list of actions in which the user context and data are available. For each client, we create our own di context in which the implementations will live only while we process the client's request.
 
 ![customer command](/img/commands/customer-command.drawio.svg)
 
-### SPA-переходы (spa)
+### SPA transitions (spa)
 
-При SPA-переходах в браузере роутинг запускает список действий
+For SPA transitions in the browser, routing triggers a list of actions
 
 ![spa command](/img/commands/command-line-spa.jpg)
 
-### Завершение работы (close)
+### Shutdown (close)
 
-Перед завершением работы приложения, запускается этот список действий
+Before exiting the application, this list of actions is launched
 
 ![close command](/img/commands/command-line-close.jpg)
 
-## Токены
+## Tokens
 
 ### init
 
-Инициализация асинхронных сервисов
+Initializing Asynchronous Services
 
-_Для чего_: Если вам нужно асинхронно проинициализировать глобальные синглтоны
+_For what_: If you need to initialize global singletons asynchronously
 
 ### listen
 
-Подписка на глобальные события приложением
+Subscribing to global events by the application
 
-_Для чего_: Если вам нужно подписаться на глобальные события или порт
+_For what_: If you need to subscribe to global events or a port
 
 ### customer_start
 
-Стартовый токен в цепочке обработки клиентского запроса. Необходимо для инициализации специальных асинхронных конструкторов.
+The starting token in the client request processing chain. Required to initialize custom asynchronous constructors.
 
-На этом этапе не советуется делать каких-либо долгих асинхронных задач, так как ожидаются только синхронные действия.
+It is not advised to do any lengthy asynchronous tasks at this stage, as only synchronous actions are expected.
 
-_Для чего_: Для инициализации асинхронных сервисов для каждого клиента
+_For what_: To initialize asynchronous services for each client
 
 ### resolve_user_deps
 
-Главная цель этого этапа узнать всю необходимую информацию о странице и клиенте которого мы сейчас обрабатываем.
+The main goal of this stage is to find out all the necessary information about the client we are currently processing.
 
-Так как у нас все действия внутри одного этапа выполняются параллельно, то именно в этом этапе эффективно и быстро можно запросить всю необходимую информацию, к примеру одновременно с запросом данных о странице, можно узнать о состоянии авторизации клиента, получить аналитическую информацию о клиенте и подобные действия.
+Since all actions within one stage are performed in parallel with us, it is at this stage that you can efficiently and quickly request all the necessary information, for example, simultaneously with the request for customer data, you can find out about the status of the customer's authorization, get analytical information about the customer and similar actions.
 
-_Для чего_: Для запроса любой глобальной информации о клиенте и странице
+_For what_: To request any global customer information
+
+### resolve_page
+
+The main goal of this stage is to find out all the necessary information about the page the client visited.
+
+_For what_: To request information about the page
 
 ### resolve_page_deps
 
-На этом этапы мы уже знаем о клиенте, о том, какая эта страница. Но, мы не запросили необходимые данные для страницы. К примеру: запросить ресурсы из админки, получить список регионов, загрузить необходимые блоки страницы. И всю ту информацию, которая необходима будет при генерации страницы.
+At this stage, we already know about the client, about what this page is. But, we have not requested the necessary data for the page. For example: request resources from the admin panel, get a list of regions, load the necessary page blocks. And all the information that will be needed when generating the page.
 
-В этом этапе не стоит делать долгие асинхронные действия и предполагается кэширование либо вынос в `resolveUserDeps` для достижения максимальной скорости ответа клиентам.
+At this stage, it is not worth doing long asynchronous actions and it is supposed to be cached or moved to `resolveUserDeps` to achieve the maximum speed of response to clients.
 
-На этом этапе выполняются [action](concepts/action.md) и возможно они вам лучше подойдут, так как есть множество дополнительного функционала
+At this stage, [action](concepts/action.md) is executed and perhaps they will suit you better, as there are many additional functionality
 
-_Для чего_: Для получение информации необходимой для отрисовки страницы
+_For what_: To get the information needed to render the page
 
 ### generate_page
 
-На этом этапе мы уже знаем текущий роут, какой клиент и все действия для страницы уже были загружены. И на этом этапе мы по информации из прошлых этапов генерируем html страницу и отдаем клиенту
+At this stage, we already know the current route, which client and all actions for the page have already been loaded. And at this stage, according to the information from the previous stages, we generate an html page and give it to the client
 
-_Для чего_: это больше внутренний этап и его не стоит использовать в обычных кейсах. Так как могут появится [race condition](https://ru.wikipedia.org/wiki/%D0%A1%D0%BE%D1%81%D1%82%D0%BE%D1%8F%D0%BD%D0%B8%D0%B5_%D0%B3%D0%BE%D0%BD%D0%BA%D0%B8) с рендером приложения
+_For what_: this is more of an internal stage and should not be used in ordinary cases. Since [race condition](https://en.wikipedia.org/wiki/Race_condition) with application rendering
 
 ### clear
 
-Этот этап вызовется уже после того, как мы ответили клиенту, но некоторым модулям или библиотекам необходимо удалить данные о клиенте
+This stage will be called after we have responded to the client, but some modules or libraries need to delete client data
 
-_Для чего_: Метод нужен, если вам нужно выполнить действия, после успешного ответа пользователю
+_For what_: The method is needed if you need to perform actions after a successful response to the user
 
 ### spa_transition
 
-Задачи, зарегистрированные на этом этапе, выполняются при SPA-переходах в приложении
+Tasks registered at this stage are executed on SPA transitions in the application
 
-_Для чего_: Для обновления meta информации на текущей странице
+_For what_: To update meta information on the current page
 
 ### close
 
-Перед закрытием приложения, некоторым модулям может быть необходимо выполнить специальные действия, к примеру закрыть соединения, отправить данные и подобные активности. Для того, что бы не дублировать код отслеживания закрытия приложения в каждом модуле, был сделан этот этап.
+Before closing the application, some modules may need to perform special actions, for example, close connections, send data and similar activities. In order not to duplicate the application closure tracking code in each module, this stage was made.
 
-_Для чего_: Если вам нужно выполнить действия, перед закрытием приложения. например закрыть соединения, отправить логи и так далее
+_For what_: If you need to perform actions before closing the application. for example close connections, send logs and so on
 
-## Кастомизация
+## Errors in stages
 
-Приложение может переопределить стандартный список действий, например удалить не нужные или добавить новые.
+On the server side, you can intercept errors from `commandLineRunner` stages by adding `express` error middleware with a multi token `WEB_APP_AFTER_INIT_TOKEN`.
+In this middleware you can change the response status, headers and body, and end the response.
+For example, exceptions when rendering React components from current page, get into this handler (`Error Boundary` not working at server-side).
 
-Для этого необходимо в приложении или модуле определить провайдер, который перепишет базовый список
+Middleware example:
+
+```js
+{
+  provide: WEB_APP_AFTER_INIT_TOKEN,
+  multi: true,
+  useFactory: (deps) => {
+    return (app) => {
+      app.use((err, req: Request, res: Response, next) => {
+        next(err);
+      });
+    };
+  },
+  deps: {},
+},
+```
+
+## Customization
+
+The application can override the standard list of actions, for example, delete unnecessary ones or add new ones.
+
+To do this, you need to define a provider in the application or module that will rewrite the base list
 
 ```tsx
 import { provide } from '@tramvai/core';
@@ -141,4 +170,4 @@ import { provide } from '@tramvai/core';
 ];
 ```
 
-**_Предостережение_**: не стоит удалять этапы, так как из-за этого могут перестать корректно работать некоторые модули. В таком случае лучшим решением будет удалить модуль, который привязывается на не нужный этап.
+**_Caution_**: do not delete stages, as this may cause some modules to stop working correctly. In this case, the best solution would be to delete the module that is being linked to an unnecessary stage.

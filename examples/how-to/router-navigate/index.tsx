@@ -48,7 +48,7 @@ const bundle = createBundle({
 });
 
 createApp({
-  name: 'route-navigate',
+  name: 'router-navigate',
   modules: [
     SpaRouterModule.forRoot([
       {

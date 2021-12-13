@@ -49,7 +49,7 @@ const action = createAction({
 });
 
 createApp({
-  name: 'route-navigate',
+  name: 'router-guards',
   modules: [
     SpaRouterModule.forRoot([
       {

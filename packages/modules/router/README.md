@@ -315,6 +315,37 @@ Such a route is specified in the list of routes with the special `*` character i
 </details>
 </p>
 
+### How to change Not found route response status
+
+By default, responses for the Not found route return a status of 200.
+You can change status in custom Route Guard, by using `RESPONSE_MANAGER_TOKEN`.
+
+<p>
+<details>
+<summary>An example of changing a Not Found route response status</summary>
+
+@inline ../../../examples/how-to/router-not-found-custom-status/index.tsx
+
+</details>
+</p>
+
+### How to change response status in actions
+
+For example, you make a important request in action, and if this request will fail, application need to return 500 or 404 status.
+
+Page actions running after router navigation flow, when route is completely resolved.
+You can change status by using `RESPONSE_MANAGER_TOKEN`.
+If you want to prevent page component rendering, you can throw `NotFoundError` from `@tinkoff/errors` library.
+
+<p>
+<details>
+<summary>An example of changing response status in actions</summary>
+
+@inline ../../../examples/how-to/router-action-error/index.tsx
+
+</details>
+</p>
+
 ### Testing
 
 #### Testing ROUTER_GUARD_TOKEN extensions
