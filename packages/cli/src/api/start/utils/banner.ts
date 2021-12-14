@@ -28,13 +28,30 @@ export function showBanner(di: Container) {
     titleLines.push(`${label('FileSystemPages')}  true`);
   }
 
-  // Listeners
-  messageLines.push(
-    chalk.bold('Static: ') + chalk.underline.blue(`${config.staticHost}:${config.staticPort}`)
-  );
-  messageLines.push(
-    chalk.bold('App:    ') + chalk.underline.blue(`http://${config.host}:${config.port}`)
-  );
+  const server = `http://${config.host.replace('0.0.0.0', 'localhost')}:${config.port}`;
+  const staticServer = `http://${config.staticHost.replace('0.0.0.0', 'localhost')}:${
+    config.staticPort
+  }`;
+
+  if (config.type === 'application') {
+    // Listeners
+    messageLines.push(chalk.bold('Static: ') + chalk.underline.blue(staticServer));
+    messageLines.push(chalk.bold('App:    ') + chalk.underline.blue(server));
+  }
+
+  if (config.type === 'child-app') {
+    messageLines.push(chalk.bold('Base Url: ') + chalk.underline.blue(`${server}/`));
+
+    messageLines.push(
+      chalk.bold('JS:       ') +
+        chalk.underline.blue(`${config.name}/${config.name}_(client|server)@${config.version}.js`)
+    );
+
+    messageLines.push(
+      chalk.bold('CSS:      ') +
+        chalk.underline.blue(`${config.name}/${config.name}@${config.version}.css`)
+    );
+  }
 
   di.get(STDOUT_TOKEN).write(successBox(titleLines, messageLines));
 }

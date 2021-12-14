@@ -1,6 +1,6 @@
 import type { ConfigEntry } from './configEntry/common';
 
-export type ProjectType = 'application' | 'module' | 'package';
+export type ProjectType = 'application' | 'module' | 'package' | 'child-app';
 
 export type BuildType = 'server' | 'client';
 

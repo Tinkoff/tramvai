@@ -27,7 +27,7 @@ const CIRCULAR = '__CIRCULAR__MARKER';
 function proxyHydrationError(token: string, e: Record<string, unknown>) {
   if (!e.__extendedWithStack) {
     e.__extendedWithStack = true;
-    e.message = `${e.message} at ${token}`;
+    e.message = `${e.message} at "${token}"`;
   } else {
     e.message += ` < ${token}`;
   }
@@ -83,7 +83,7 @@ function checkValidateInterfaceProvider(provider: Provider) {
 
 function checkFound(record: RecordProvide<any> | undefined, token: string) {
   if (record === undefined) {
-    throw createError(`Token not found ${token}`, {
+    throw createError(`Token not found "${token}"`, {
       type: Errors.NOT_FOUND,
     });
   }
@@ -91,7 +91,7 @@ function checkFound(record: RecordProvide<any> | undefined, token: string) {
 
 function checkCircularDeps(record: RecordProvide<any>, token: string, value: any) {
   if (value === CIRCULAR) {
-    throw createError(`Circular dep for ${token}`, {
+    throw createError(`Circular dep for "${token}"`, {
       type: Errors.CIRCULAR_DEP,
       stack: record.stack,
     });
@@ -156,11 +156,14 @@ export class Container {
   protected records = new Map<string, RecordProvide<any>>();
 
   protected recordValues = new Map<RecordProvide<any>, any>();
+  private readonly fallback?: Container;
 
-  constructor(additionalProviders?: Provider[]) {
+  constructor(additionalProviders?: Provider[], fallback?: Container) {
     if (additionalProviders) {
       additionalProviders.forEach((provider) => this.register(provider));
     }
+
+    this.fallback = fallback;
 
     this.register({ provide: DI_TOKEN, useValue: this });
   }
@@ -184,6 +187,10 @@ export class Container {
 
     token = token.toString();
     const record = this.getRecord(token);
+
+    if (!record && this.fallback?.getRecord(token)) {
+      return this.fallback.get(tokenORObject);
+    }
 
     if (!record && optional) {
       return null;
@@ -210,6 +217,23 @@ export class Container {
     const record: RecordProvide<T> | undefined = this.records.get(token);
 
     return record;
+  }
+
+  has(token: any) {
+    return !!this.getRecord(token.toString());
+  }
+
+  borrowToken(from: Container, token: any) {
+    const tokenStr = token.toString();
+
+    if (!this.getRecord(tokenStr)) {
+      const record = from.getRecord(tokenStr);
+
+      if (record) {
+        this.records.set(tokenStr, record);
+        this.recordValues.set(record, NOT_YET);
+      }
+    }
   }
 
   getValue<T>(record: RecordProvide<T>): T | typeof NOT_YET {

@@ -16,6 +16,7 @@ import { pagesResolve } from '../../blocks/pagesResolve';
 import { serverInline } from '../../blocks/serverInline';
 import { browserslistConfigResolve } from '../../blocks/browserslistConfig';
 import { configToEnv } from '../../blocks/configToEnv';
+import { commonApplication } from '../common';
 
 // eslint-disable-next-line import/no-default-export
 export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config: Config) => {
@@ -29,6 +30,7 @@ export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config
   config.name('server');
 
   config.batch(common(configManager));
+  config.batch(commonApplication(configManager));
   config.batch(files(configManager));
   config.batch(apiResolve(configManager));
 

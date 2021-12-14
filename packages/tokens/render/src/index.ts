@@ -50,7 +50,9 @@ export const RENDERER_CALLBACK = createToken<((e?: Error) => void)[]>('RENDERER_
  * @description
  * Used as async function which overrides app render. This function may define render parameters or override render result.
  */
-export const CUSTOM_RENDER = createToken('CUSTOM_RENDER');
+export const CUSTOM_RENDER = createToken<(content: JSX.Element) => Promise<string>>(
+  'CUSTOM_RENDER'
+);
 
 /**
  * @description

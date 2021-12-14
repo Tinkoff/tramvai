@@ -134,7 +134,7 @@ describe('test/unit/app/testApp', () => {
       const { render } = testEnv;
 
       await expect(render('/')).rejects.toThrowError(
-        'Error: Token not found _unknown_provider at resolve_user_deps'
+        'Error: Token not found &quot;_unknown_provider&quot; at &quot;resolve_user_deps&quot;'
       );
     });
   });

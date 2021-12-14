@@ -9,6 +9,7 @@ import type { AnalyzePlugin } from './plugins/pluginBase';
 import webpackBuild from '../../utils/webpackBuild';
 import { webpackClientConfig as applicationClientConfig } from '../../library/webpack/application/client/prod';
 import { webpackClientConfig as moduleClientConfig } from '../../library/webpack/module/client/prod';
+import { webpackClientConfig as childAppClientConfig } from '../../library/webpack/child-app/client/prod';
 import type { ProjectType } from '../../typings/projectType';
 import { ConfigManager } from '../../config/configManager';
 import { npmRequireList } from '../../utils/npmRequire';
@@ -29,6 +30,7 @@ function getClientConfig(configManager: ConfigManager) {
   const clientTypeMap: Record<ProjectType, ({ configManager: ConfigManager }) => ChainConfig> = {
     application: applicationClientConfig,
     module: moduleClientConfig,
+    'child-app': childAppClientConfig,
     package: null,
   };
   const getConfig = clientTypeMap[configManager.type];

@@ -48,6 +48,13 @@
               "id": "http-client-tokens",
               "title": "http-client-tokens"
             }
+          },
+          {
+            "path": "child-app/README.md",
+            "doc": {
+              "id": "child-app-tokens",
+              "title": "child-app-tokens"
+            }
           }
         ]
       }

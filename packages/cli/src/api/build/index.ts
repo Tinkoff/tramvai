@@ -5,6 +5,7 @@ import { buildApplication } from './application';
 import { buildModule } from './module';
 import { CONFIG_ENTRY_TOKEN } from '../../di/tokens';
 import { buildPackage } from './package';
+import { buildChildApp } from './child-app';
 
 export type Params = WithConfig<{
   buildType?: 'server' | 'client' | 'all';
@@ -42,6 +43,8 @@ export default createCommand({
         return buildApplication(di);
       case 'module':
         return buildModule(di);
+      case 'child-app':
+        return buildChildApp(di);
       case 'package':
         return buildPackage(di);
     }

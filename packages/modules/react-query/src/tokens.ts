@@ -24,3 +24,7 @@ export const QUERY_CLIENT_DEFAULT_OPTIONS_TOKEN = createToken<DefaultOptions>(
 export const QUERY_CLIENT_DEHYDRATED_STATE_TOKEN = createToken<DehydratedState>(
   'reactQuery queryClientDehydratedState'
 );
+
+export const QUERY_DEHYDRATE_STATE_NAME_TOKEN = createToken<string>(
+  'reactQuery dehydrate state name'
+);

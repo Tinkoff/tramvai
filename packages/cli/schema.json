@@ -1663,28 +1663,571 @@
               ]
             },
             "else": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "enum": [
-                    "package"
-                  ]
-                },
-                "name": {
-                  "title": "Package name",
-                  "type": "string"
-                },
-                "root": {
-                  "title": "Package root folder",
-                  "type": "string"
+              "if": {
+                "properties": {
+                  "type": {
+                    "const": "child-app"
+                  }
                 }
               },
-              "additionalProperties": false,
-              "required": [
-                "name",
-                "type"
-              ]
+              "then": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "child-app"
+                    ]
+                  },
+                  "commands": {
+                    "default": {},
+                    "type": "object",
+                    "properties": {
+                      "build": {
+                        "default": {},
+                        "type": "object",
+                        "properties": {
+                          "options": {
+                            "default": {},
+                            "type": "object",
+                            "properties": {
+                              "output": {
+                                "title": "Path to build module assets",
+                                "default": "dist/child-app",
+                                "type": "string"
+                              }
+                            },
+                            "additionalProperties": false
+                          },
+                          "configurations": {
+                            "default": {},
+                            "additionalProperties": false,
+                            "type": "object",
+                            "properties": {
+                              "modern": {
+                                "title": "Enable production build for modern browsers",
+                                "default": false,
+                                "type": "boolean"
+                              },
+                              "dedupe": {
+                                "title": "Enable DedupePlugin",
+                                "default": false,
+                                "enum": [
+                                  "equality",
+                                  false,
+                                  "semver"
+                                ]
+                              },
+                              "dedupeIgnore": {
+                                "title": "Sets ignore to DedupePlugin",
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "removeTypeofWindow": {
+                                "title": "Enable replacing `typeof window` expression",
+                                "default": true,
+                                "type": "boolean"
+                              },
+                              "sourceMap": {
+                                "title": "Enable source maps in production build",
+                                "default": false,
+                                "type": "boolean"
+                              },
+                              "sourceMapServer": {
+                                "title": "Enable source maps for server assets in production build",
+                                "default": false,
+                                "type": "boolean"
+                              },
+                              "terserParallel": {
+                                "title": "Configuration for enabling parallel compression for terser plugin",
+                                "default": true,
+                                "type": "boolean"
+                              },
+                              "excludesPresetEnv": {
+                                "title": "List of modules to exclude from",
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "threadLoader": {
+                                "title": "thread-loader config",
+                                "additionalProperties": true,
+                                "type": "object"
+                              },
+                              "definePlugin": {
+                                "title": "Define plugin config",
+                                "default": {
+                                  "prod": {},
+                                  "dev": {}
+                                },
+                                "additionalProperties": true,
+                                "type": "object"
+                              },
+                              "generateDataQaTag": {
+                                "default": false,
+                                "type": "boolean"
+                              },
+                              "enableFillActionNamePlugin": {
+                                "default": false,
+                                "type": "boolean"
+                              },
+                              "cssMinimize": {
+                                "title": "Set minimizer for css",
+                                "type": "string",
+                                "enum": [
+                                  "csso"
+                                ]
+                              },
+                              "postcss": {
+                                "default": {
+                                  "config": "postcss.config",
+                                  "cssLocalIdentName": "[hash:base64:5]"
+                                },
+                                "type": "object",
+                                "properties": {
+                                  "config": {
+                                    "title": "Path to postcss config file",
+                                    "type": "string"
+                                  },
+                                  "cssLocalIdentName": {
+                                    "title": "CSS identifiers build algorythm",
+                                    "type": "string"
+                                  },
+                                  "cssLocalIdentNameDev": {
+                                    "title": "CSS identifiers build algorythm for development buld",
+                                    "type": "string"
+                                  },
+                                  "cssLocalIdentNameProd": {
+                                    "title": "CSS identifiers build algorythm for production build",
+                                    "type": "string"
+                                  },
+                                  "assetsConfig": {
+                                    "title": "Path to postcss config file for assets",
+                                    "type": "string"
+                                  }
+                                },
+                                "additionalProperties": false
+                              },
+                              "alias": {
+                                "title": "Aliases for project imports",
+                                "additionalProperties": true,
+                                "type": "object"
+                              },
+                              "svgo": {
+                                "title": "svgo-loader options",
+                                "type": "object",
+                                "properties": {
+                                  "plugins": {
+                                    "title": "svgo plugins",
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "additionalProperties": false
+                                    }
+                                  }
+                                },
+                                "additionalProperties": false
+                              },
+                              "imageOptimization": {
+                                "title": "Settings for image-webpack-loader",
+                                "type": "object",
+                                "properties": {
+                                  "enabled": {
+                                    "title": "Enable image-webpack-loader",
+                                    "type": "boolean"
+                                  },
+                                  "options": {
+                                    "title": "Pass options to image-webpack-loader",
+                                    "additionalProperties": true,
+                                    "type": "object"
+                                  }
+                                },
+                                "additionalProperties": false
+                              },
+                              "transpileOnlyModernLibs": {
+                                "title": "transpile libs based only on @tinkoff/is-modern-lib",
+                                "default": true,
+                                "type": "boolean"
+                              },
+                              "experiments": {
+                                "title": "Experimental settings",
+                                "default": {},
+                                "type": "object",
+                                "properties": {
+                                  "webpack": {
+                                    "title": "experiments configuration for [webpack](https://webpack.js.org/configuration/experiments/)",
+                                    "default": {},
+                                    "additionalProperties": false,
+                                    "type": "object",
+                                    "properties": {
+                                      "asyncWebAssembly": {
+                                        "description": "Support WebAssembly as asynchronous EcmaScript Module.",
+                                        "type": "boolean"
+                                      },
+                                      "backCompat": {
+                                        "description": "Enable backward-compat layer with deprecation warnings for many webpack 4 APIs.",
+                                        "type": "boolean"
+                                      },
+                                      "cacheUnaffected": {
+                                        "title": "Enable additional in-memory caching of modules which are unchanged and reference only unchanged modules.",
+                                        "default": true,
+                                        "type": "boolean"
+                                      },
+                                      "futureDefaults": {
+                                        "description": "Apply defaults of next major version.",
+                                        "type": "boolean"
+                                      },
+                                      "layers": {
+                                        "description": "Enable module layers.",
+                                        "type": "boolean"
+                                      },
+                                      "outputModule": {
+                                        "description": "Allow output javascript files as module source type.",
+                                        "type": "boolean"
+                                      },
+                                      "syncWebAssembly": {
+                                        "description": "Support WebAssembly as synchronous EcmaScript Module (outdated).",
+                                        "type": "boolean"
+                                      },
+                                      "topLevelAwait": {
+                                        "description": "Allow using top-level-await in EcmaScript Modules.",
+                                        "type": "boolean"
+                                      }
+                                    }
+                                  },
+                                  "minicss": {
+                                    "title": "experimental settings for [mini-css-extract-plugin](https://github.com/webpack-contrib/mini-css-extract-plugin)",
+                                    "default": {},
+                                    "type": "object",
+                                    "properties": {
+                                      "useImportModule": {
+                                        "title": "Use a new webpack API to execute modules instead of child compilers. This improves performance and memory usage a lot.",
+                                        "default": false,
+                                        "type": "boolean"
+                                      }
+                                    },
+                                    "additionalProperties": false
+                                  },
+                                  "fileSystemPages": {
+                                    "title": "experimental settings for File-System Routing feature",
+                                    "default": {},
+                                    "type": "object",
+                                    "properties": {
+                                      "enable": {
+                                        "title": "Read pages from file system",
+                                        "default": false,
+                                        "type": "boolean"
+                                      },
+                                      "routesDir": {
+                                        "title": "Folder with pages from which static routers are generated",
+                                        "default": "routes",
+                                        "anyOf": [
+                                          {
+                                            "enum": [
+                                              false
+                                            ],
+                                            "type": "boolean"
+                                          },
+                                          {
+                                            "type": "string"
+                                          }
+                                        ]
+                                      },
+                                      "pagesDir": {
+                                        "title": "Folder with components which can be manually added to static routers",
+                                        "default": "pages",
+                                        "anyOf": [
+                                          {
+                                            "enum": [
+                                              false
+                                            ],
+                                            "type": "boolean"
+                                          },
+                                          {
+                                            "type": "string"
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    "additionalProperties": false
+                                  }
+                                },
+                                "additionalProperties": false
+                              }
+                            }
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      "serve": {
+                        "default": {},
+                        "type": "object",
+                        "properties": {
+                          "notifications": {
+                            "default": {},
+                            "additionalProperties": false,
+                            "type": "object",
+                            "properties": {
+                              "suppressSuccess": {
+                                "title": "Defines when success notifications are shown",
+                                "enum": [
+                                  "always",
+                                  false,
+                                  "initial",
+                                  true
+                                ]
+                              },
+                              "suppressWarning": {
+                                "title": "True to suppress the warning notifications, otherwise false",
+                                "type": "boolean"
+                              },
+                              "activateTerminalOnError": {
+                                "title": "True to activate (focus) the terminal window when a compilation error occurs",
+                                "type": "boolean"
+                              },
+                              "client": {
+                                "type": "object",
+                                "properties": {
+                                  "suppressSuccess": {
+                                    "title": "Defines when success notifications are shown",
+                                    "enum": [
+                                      "always",
+                                      false,
+                                      "initial",
+                                      true
+                                    ]
+                                  },
+                                  "suppressWarning": {
+                                    "title": "True to suppress the warning notifications, otherwise false",
+                                    "type": "boolean"
+                                  },
+                                  "activateTerminalOnError": {
+                                    "title": "True to activate (focus) the terminal window when a compilation error occurs",
+                                    "type": "boolean"
+                                  }
+                                },
+                                "additionalProperties": false
+                              },
+                              "server": {
+                                "type": "object",
+                                "properties": {
+                                  "suppressSuccess": {
+                                    "title": "Defines when success notifications are shown",
+                                    "enum": [
+                                      "always",
+                                      false,
+                                      "initial",
+                                      true
+                                    ]
+                                  },
+                                  "suppressWarning": {
+                                    "title": "True to suppress the warning notifications, otherwise false",
+                                    "type": "boolean"
+                                  },
+                                  "activateTerminalOnError": {
+                                    "title": "True to activate (focus) the terminal window when a compilation error occurs",
+                                    "type": "boolean"
+                                  }
+                                },
+                                "additionalProperties": false
+                              }
+                            }
+                          },
+                          "configurations": {
+                            "default": {},
+                            "type": "object",
+                            "properties": {
+                              "sourceMap": {
+                                "title": "Enable source maps in development build (for client and server build)",
+                                "default": false,
+                                "type": "boolean"
+                              },
+                              "modern": {
+                                "title": "Enable development build for modern browsers",
+                                "default": false,
+                                "type": "boolean"
+                              },
+                              "hotRefresh": {
+                                "title": "Enable react hot-refresh",
+                                "default": false,
+                                "type": "boolean"
+                              },
+                              "hotRefreshOptions": {
+                                "title": "Configure react hot-refresh https://github.com/pmmmwh/react-refresh-webpack-plugin#options",
+                                "type": "object",
+                                "additionalProperties": {},
+                                "properties": {
+                                  "overlay": {
+                                    "anyOf": [
+                                      {
+                                        "type": "object",
+                                        "additionalProperties": false
+                                      },
+                                      {
+                                        "type": "boolean"
+                                      }
+                                    ]
+                                  }
+                                }
+                              },
+                              "experiments": {
+                                "title": "Experimental settings",
+                                "default": {},
+                                "type": "object",
+                                "properties": {
+                                  "webpack": {
+                                    "title": "experiments configuration for [webpack](https://webpack.js.org/configuration/experiments/)",
+                                    "default": {},
+                                    "additionalProperties": false,
+                                    "type": "object",
+                                    "properties": {
+                                      "asyncWebAssembly": {
+                                        "description": "Support WebAssembly as asynchronous EcmaScript Module.",
+                                        "type": "boolean"
+                                      },
+                                      "backCompat": {
+                                        "description": "Enable backward-compat layer with deprecation warnings for many webpack 4 APIs.",
+                                        "type": "boolean"
+                                      },
+                                      "cacheUnaffected": {
+                                        "title": "Enable additional in-memory caching of modules which are unchanged and reference only unchanged modules.",
+                                        "default": true,
+                                        "type": "boolean"
+                                      },
+                                      "futureDefaults": {
+                                        "description": "Apply defaults of next major version.",
+                                        "type": "boolean"
+                                      },
+                                      "layers": {
+                                        "description": "Enable module layers.",
+                                        "type": "boolean"
+                                      },
+                                      "outputModule": {
+                                        "description": "Allow output javascript files as module source type.",
+                                        "type": "boolean"
+                                      },
+                                      "syncWebAssembly": {
+                                        "description": "Support WebAssembly as synchronous EcmaScript Module (outdated).",
+                                        "type": "boolean"
+                                      },
+                                      "topLevelAwait": {
+                                        "description": "Allow using top-level-await in EcmaScript Modules.",
+                                        "type": "boolean"
+                                      }
+                                    }
+                                  },
+                                  "minicss": {
+                                    "title": "experimental settings for [mini-css-extract-plugin](https://github.com/webpack-contrib/mini-css-extract-plugin)",
+                                    "default": {},
+                                    "type": "object",
+                                    "properties": {
+                                      "useImportModule": {
+                                        "title": "Use a new webpack API to execute modules instead of child compilers. This improves performance and memory usage a lot.",
+                                        "default": false,
+                                        "type": "boolean"
+                                      }
+                                    },
+                                    "additionalProperties": false
+                                  },
+                                  "fileSystemPages": {
+                                    "title": "experimental settings for File-System Routing feature",
+                                    "default": {},
+                                    "type": "object",
+                                    "properties": {
+                                      "enable": {
+                                        "title": "Read pages from file system",
+                                        "default": false,
+                                        "type": "boolean"
+                                      },
+                                      "routesDir": {
+                                        "title": "Folder with pages from which static routers are generated",
+                                        "default": "routes",
+                                        "anyOf": [
+                                          {
+                                            "enum": [
+                                              false
+                                            ],
+                                            "type": "boolean"
+                                          },
+                                          {
+                                            "type": "string"
+                                          }
+                                        ]
+                                      },
+                                      "pagesDir": {
+                                        "title": "Folder with components which can be manually added to static routers",
+                                        "default": "pages",
+                                        "anyOf": [
+                                          {
+                                            "enum": [
+                                              false
+                                            ],
+                                            "type": "boolean"
+                                          },
+                                          {
+                                            "type": "string"
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    "additionalProperties": false
+                                  }
+                                },
+                                "additionalProperties": false
+                              }
+                            },
+                            "additionalProperties": false
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "root": {
+                    "type": "string"
+                  },
+                  "version": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "name",
+                  "root",
+                  "type"
+                ]
+              },
+              "else": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "package"
+                    ]
+                  },
+                  "name": {
+                    "title": "Package name",
+                    "type": "string"
+                  },
+                  "root": {
+                    "title": "Package root folder",
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false,
+                "required": [
+                  "name",
+                  "type"
+                ]
+              }
             }
           }
         }

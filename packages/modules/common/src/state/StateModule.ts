@@ -9,6 +9,7 @@ import {
   DISPATCHER_CONTEXT_TOKEN,
   STORE_TOKEN,
 } from '@tramvai/tokens-common';
+import { INITIAL_APP_STATE_TOKEN } from '../tokens';
 
 @Module({
   providers: [
@@ -26,15 +27,16 @@ import {
     {
       provide: DISPATCHER_CONTEXT_TOKEN,
       scope: Scope.REQUEST,
-      useFactory: ({ dispatcher, initialState, middlewares }) =>
-        dispatcher.createContext({}, initialState, [
+      useFactory: ({ dispatcher, initialState, middlewares }) => {
+        return dispatcher.createContext({}, initialState, [
           devTools.middleware(),
           ...flatten(middlewares || []),
-        ]),
+        ]);
+      },
       deps: {
         dispatcher: DISPATCHER_TOKEN,
         middlewares: { token: STORE_MIDDLEWARE, optional: true },
-        initialState: { token: 'initialAppState', optional: true },
+        initialState: { token: INITIAL_APP_STATE_TOKEN, optional: true },
       },
     },
     {

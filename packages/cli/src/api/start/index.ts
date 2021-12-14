@@ -5,6 +5,7 @@ import type { WithConfig } from '../shared/types/withConfig';
 import { startApplication } from './application';
 import { startModule } from './module';
 import { CONFIG_ENTRY_TOKEN } from '../../di/tokens';
+import { startChildApp } from './child-app';
 
 export type Params = WithConfig<{
   buildType?: 'server' | 'client' | 'all';
@@ -51,6 +52,8 @@ export default createCommand({
         return startApplication(di);
       case 'module':
         return startModule(di);
+      case 'child-app':
+        return startChildApp(di);
     }
   },
 });

@@ -32,6 +32,14 @@ export const STORE_TOKEN = createToken<Store>('store');
  */
 export const STORE_MIDDLEWARE = createToken<Middleware>('storeMiddleware', { multi: true });
 
+/**
+ * @description
+ * Начальное состояние для клиента
+ */
+export const INITIAL_APP_STATE_TOKEN = createToken<{ stores: Record<string, any> }>(
+  'initialAppState'
+);
+
 export interface Store<State = Record<string, any>> {
   dispatch: <Payload>(actionOrNameEvent: string | Event<Payload>, payload?: Payload) => Payload;
 

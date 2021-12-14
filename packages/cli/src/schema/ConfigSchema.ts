@@ -1,6 +1,7 @@
 import type { ModuleConfigEntry } from '../typings/configEntry/module';
 import type { ApplicationConfigEntry } from '../typings/configEntry/application';
 import type { PackageConfigEntry } from '../typings/configEntry/package';
+import type { ChildAppConfigEntry } from '../typings/configEntry/child-app';
 
 /**
  * Исходный интерфейс для генерации JSON Schema файла конфигурации.
@@ -15,5 +16,6 @@ import type { PackageConfigEntry } from '../typings/configEntry/package';
 export type ConfigSchema = {
   application: ApplicationConfigEntry;
   module: ModuleConfigEntry;
+  'child-app': ChildAppConfigEntry;
   package: PackageConfigEntry;
 };

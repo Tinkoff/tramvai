@@ -1,4 +1,4 @@
-import type { TokenType, Container, Provider } from '@tinkoff/dippy';
+import type { Container, Provider } from '@tinkoff/dippy';
 import { createToken } from '@tinkoff/dippy';
 import type { Command } from './command/command.h';
 import type { Action } from './types/action';
@@ -21,12 +21,7 @@ export interface CommandLine {
   ): Promise<Container>;
 }
 
-export type CommandLineDescription = {
-  init: Array<TokenType<any> | string>;
-  close?: Array<TokenType<any> | string>;
-  customer: Array<TokenType<any> | string>;
-  spa?: Array<TokenType<any> | string>;
-};
+export type CommandLineDescription = Record<string, Command[]>;
 
 export type CommandLines = {
   server: CommandLineDescription;

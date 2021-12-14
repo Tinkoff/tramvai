@@ -10,7 +10,7 @@ import type { Options } from 'lru-cache';
 import { cacheFactory } from './cacheFactory';
 import { providers } from './serverProviders';
 
-const cachesToken = createToken<Cache[]>('_cachesList');
+export const cachesToken = createToken<Cache[]>('_cachesList');
 
 @Module({
   providers: [

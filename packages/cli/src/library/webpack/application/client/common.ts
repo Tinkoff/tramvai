@@ -7,6 +7,7 @@ import type { ConfigManager } from '../../../../config/configManager';
 import type { ApplicationConfigEntry } from '../../../../typings/configEntry/application';
 
 import common from '../../common/main';
+import { commonApplication } from '../common';
 import files from '../../blocks/filesClient';
 import ts from '../../blocks/ts';
 import js from '../../blocks/js';
@@ -29,6 +30,7 @@ export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config
   config.name('client');
 
   config.batch(common(configManager));
+  config.batch(commonApplication(configManager));
   config.batch(files(configManager));
 
   if (fileSystemPages.enable) {

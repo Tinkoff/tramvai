@@ -1,19 +1,17 @@
-import { dirname } from 'path';
 import type Config from 'webpack-chain';
-import { IgnorePlugin } from 'webpack';
+import { container } from 'webpack';
+import { getSharedModules } from '../child-app/moduleFederationShared';
+import type { ModuleFederationPluginOptions } from '../types/webpack';
+import type { ConfigManager } from '../../../config/configManager';
+import type { ApplicationConfigEntry } from '../../../typings/configEntry/application';
 
-interface Options {
-  entry: string;
-  onlyBundles?: string[];
-}
-
-export const commonApplicationDev = ({ entry, onlyBundles }: Options) => (config: Config) => {
-  if (onlyBundles) {
-    config.plugin('only-bundles').use(IgnorePlugin, [
-      {
-        resourceRegExp: new RegExp(`bundles/(?!${onlyBundles.join('|')})`),
-        contextRegExp: new RegExp(`${dirname(entry)}$`),
-      },
-    ]);
-  }
+export const commonApplication = (configManager: ConfigManager<ApplicationConfigEntry>) => (
+  config: Config
+) => {
+  config.plugin('module-federation').use(container.ModuleFederationPlugin, [
+    {
+      name: 'host',
+      shared: getSharedModules(configManager),
+    } as ModuleFederationPluginOptions,
+  ]);
 };

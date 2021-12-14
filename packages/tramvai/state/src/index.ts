@@ -13,4 +13,5 @@ export { StoreClass } from './typings';
 export { BaseStore } from './stores/BaseStore';
 
 export * from './connect/index';
+export { Subscription } from './connect/Subscription';
 export { devTools };

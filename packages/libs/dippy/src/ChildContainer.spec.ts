@@ -4,7 +4,7 @@ import { Scope } from './constant';
 
 describe('new ChildContainer', () => {
   it('Обработка создания child версий инстансов', () => {
-    const result = [];
+    const result: string[] = [];
     const resultTest = ['create C', 'create A', 'create C', 'create A', 'create B'];
 
     const rootContainer = new Container([
@@ -60,7 +60,7 @@ describe('new ChildContainer', () => {
   });
 
   it('children инстансы и multi провайдеры', () => {
-    const result = [];
+    const result: string[] = [];
 
     const rootContainer = new Container([
       {
@@ -142,13 +142,13 @@ describe('new ChildContainer', () => {
     expect(childContainer2.get('b')).toEqual({ a: 3 });
 
     /* MULTI провайдеры */
-    const resultMulti1 = [];
+    const resultMulti1: string[] = [];
 
-    const generateProvider = (name) => {
+    const generateProvider = (name: string) => {
       return {
         provide: 'c',
         useClass: class C {
-          constructor({ b }) {
+          constructor({ b }: { b: { a: number } }) {
             resultMulti1.push(`Class ${name}: ${b.a}`);
           }
         },
@@ -207,7 +207,7 @@ describe('new ChildContainer', () => {
   });
 
   it('singleton провайдеры должны иметь доступ только к провайдерам из родительского контейнера', () => {
-    const calls = [];
+    const calls: { name: string; de: string }[] = [];
 
     const rootContainer = new Container([
       {
@@ -264,5 +264,209 @@ describe('new ChildContainer', () => {
       { name: 'rootDelay', de: 'root' },
       { name: 'request', de: 'child' },
     ]);
+  });
+
+  describe('sub di hierarchy', () => {
+    it('should use implementation from fallback container', () => {
+      const rootContainer = new Container([
+        {
+          provide: 'a',
+          useValue: 'root',
+        },
+        {
+          provide: 'b',
+          useFactory: ({ a }) => {
+            return `${a}-b`;
+          },
+          deps: {
+            a: 'a',
+          },
+        },
+      ]);
+
+      const subRootContainer = new Container(undefined, rootContainer);
+
+      const childContainer = new ChildContainer(rootContainer);
+
+      childContainer.register({
+        provide: 'a',
+        useValue: 'child',
+      });
+
+      const subChildContainer = new ChildContainer(subRootContainer, childContainer);
+
+      expect(subChildContainer.get('b')).toBe('child-b');
+      expect(childContainer.get('b')).toBe('child-b');
+    });
+
+    it('should instantiate provider if fallback not used it yet', () => {
+      const mockFactory = jest.fn(({ a }) => `mock:${a}`);
+      const rootContainer = new Container([
+        {
+          provide: 'a',
+          useValue: 'root',
+        },
+        {
+          provide: 'b',
+          useFactory: mockFactory,
+          deps: {
+            a: 'a',
+          },
+        },
+      ]);
+
+      const subRootContainer = new Container(undefined, rootContainer);
+      const childContainer = new ChildContainer(rootContainer);
+
+      const subChildContainer = new ChildContainer(subRootContainer, childContainer);
+
+      expect(subChildContainer.get('b')).toBe('mock:root');
+      expect(childContainer.get('b')).toBe('mock:root');
+      expect(mockFactory).toHaveBeenCalledTimes(1);
+    });
+
+    it('should use instantiated provider from fallback container if fallback has it', () => {
+      const mockFactory = jest.fn(({ a }) => `mock:${a}`);
+      const rootContainer = new Container([
+        {
+          provide: 'a',
+          useValue: 'root',
+        },
+        {
+          provide: 'b',
+          useFactory: mockFactory,
+          deps: {
+            a: 'a',
+          },
+        },
+      ]);
+
+      const subRootContainer = new Container(undefined, rootContainer);
+      const childContainer = new ChildContainer(rootContainer);
+
+      const subChildContainer = new ChildContainer(subRootContainer, childContainer);
+
+      childContainer.get('b');
+
+      expect(subChildContainer.get('b')).toBe('mock:root');
+      expect(childContainer.get('b')).toBe('mock:root');
+      expect(mockFactory).toHaveBeenCalledTimes(1);
+    });
+
+    it('should override parent multi provider', () => {
+      const rootContainer = new Container([
+        {
+          provide: 'b',
+          useFactory: ({ a }) => {
+            return `root:${a}`;
+          },
+          deps: {
+            a: 'a',
+          },
+        },
+        {
+          provide: 'a',
+          multi: true,
+          useValue: 'child',
+        },
+      ]);
+      const subRootContainer = new Container(
+        [
+          {
+            provide: 'a',
+            multi: true,
+            useValue: 'sub-child',
+          },
+          {
+            provide: 'b',
+            useFactory: ({ a }) => {
+              return `sub:${a}`;
+            },
+            deps: {
+              a: 'a',
+            },
+          },
+        ],
+        rootContainer
+      );
+
+      const childContainer = new ChildContainer(rootContainer);
+
+      const subChildContainer = new ChildContainer(subRootContainer, childContainer);
+
+      expect(subChildContainer.get('b')).toBe('sub:sub-child');
+      expect(childContainer.get('b')).toBe('root:child');
+    });
+
+    it('should not leak to root container', () => {
+      const rootContainer = new Container([
+        {
+          provide: 'a',
+          useValue: 'root',
+        },
+        {
+          provide: 'b',
+          useFactory: ({ a }) => `root:${a}`,
+          scope: Scope.SINGLETON,
+          deps: {
+            a: 'a',
+          },
+        },
+      ]);
+      const subRootContainer = new Container(
+        [
+          {
+            provide: 'b',
+            scope: Scope.SINGLETON,
+            useFactory: ({ a }) => {
+              return `sub:${a}`;
+            },
+            deps: {
+              a: 'a',
+            },
+          },
+        ],
+        rootContainer
+      );
+
+      const childContainer = new ChildContainer(rootContainer);
+
+      const subChildContainer = new ChildContainer(subRootContainer, childContainer);
+
+      expect(subChildContainer.get('b')).toBe('sub:root');
+      expect(childContainer.get('b')).toBe('root:root');
+      expect(rootContainer.get('b')).toBe('root:root');
+    });
+
+    it('should get value from fallback provider from ChildContainer', () => {
+      const rootContainer = new Container([
+        {
+          provide: 'a',
+          useValue: 'root',
+        },
+        {
+          provide: 'b',
+          useFactory: ({ a }) => `root:${a}`,
+          deps: {
+            a: 'a',
+          },
+        },
+      ]);
+      const subRootContainer = new Container(undefined, rootContainer);
+
+      const childContainer = new ChildContainer(rootContainer);
+
+      childContainer.register({
+        provide: 'a',
+        useValue: 'child',
+      });
+
+      const subChildContainer = new ChildContainer(subRootContainer, childContainer);
+
+      expect(rootContainer.get('b')).toBe('root:root');
+      expect(childContainer.get('b')).toBe('root:child');
+      expect(subRootContainer.get('b')).toBe('root:root');
+      expect(subChildContainer.get('b')).toBe('root:child');
+    });
   });
 });

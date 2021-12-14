@@ -1,7 +1,7 @@
 import path from 'path';
-import type { ModuleConfigEntry } from '../typings/configEntry/module';
+import type { ConfigEntry } from '../typings/configEntry/common';
 
-export default (configEntry: ModuleConfigEntry): string => {
+export default (configEntry: ConfigEntry): string => {
   if (process.env.MODULE_VERSION) {
     return process.env.MODULE_VERSION;
   }

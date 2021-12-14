@@ -4,6 +4,7 @@ import type { ConfigManager } from './configManager';
 import type { ApplicationConfigEntry } from '../typings/configEntry/application';
 import type { ModuleConfigEntry } from '../typings/configEntry/module';
 import { extensions } from './constants';
+import type { ChildAppConfigEntry } from '../typings/configEntry/child-app';
 
 export const isApplication = (
   configManager: ConfigManager
@@ -15,6 +16,12 @@ export const isModule = (
   configManager: ConfigManager
 ): configManager is ConfigManager<ModuleConfigEntry> => {
   return configManager.type === 'module';
+};
+
+export const isChildApp = (
+  configManager: ConfigManager
+): configManager is ConfigManager<ChildAppConfigEntry> => {
+  return configManager.type === 'child-app';
 };
 
 const throwErrorMissing = (config: string, path: string) => {

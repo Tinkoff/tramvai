@@ -1,14 +1,15 @@
 import { commandLineListTokens, Scope, COMMAND_LINE_RUNNER_TOKEN } from '@tramvai/core';
+import { INITIAL_APP_STATE_TOKEN } from '../tokens';
 
 declare global {
   interface Window {
-    initialState: any;
+    initialState: string;
   }
 }
 
 export const providers = [
   {
-    provide: 'initialAppState',
+    provide: INITIAL_APP_STATE_TOKEN,
     useFactory: () => JSON.parse(window.initialState || '{}'),
     scope: Scope.REQUEST,
   },

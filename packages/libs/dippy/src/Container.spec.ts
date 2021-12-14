@@ -99,7 +99,7 @@ describe('DI Container', () => {
   });
 
   it('Зависимости', () => {
-    const result = [];
+    const result: string[] = [];
     const container = new Container();
 
     class A {
@@ -107,14 +107,14 @@ describe('DI Container', () => {
         return 'Token A';
       }
     }
-    function bbb({ tokenC }) {
+    function bbb({ tokenC }: any) {
       return { a: { b: `token B ${tokenC.a.b}` } };
     }
     const c = {
       a: { b: 'token C' },
     };
     class D {
-      constructor({ tokenA, tokenB, tokenC }) {
+      constructor({ tokenA, tokenB, tokenC }: any) {
         result.push(tokenA.get());
         result.push(tokenC.a.b);
         result.push(tokenB.a.b);
@@ -146,7 +146,7 @@ describe('DI Container', () => {
 
   it('Опциональные зависимости - получение null если нет', () => {
     const container = new Container();
-    const result = [];
+    const result: any[] = [];
 
     container.register({
       provide: 'A',
@@ -168,7 +168,7 @@ describe('DI Container', () => {
 
   it('Опциональные зависимости - получение значения если есть', () => {
     const container = new Container();
-    const result = [];
+    const result: any[] = [];
 
     container.register({
       provide: 'A',
@@ -195,7 +195,7 @@ describe('DI Container', () => {
 
   it('Опциональные зависимости - получение null если не удалось создать запрошенную сущность', () => {
     const container = new Container();
-    const result = [];
+    const result: any[] = [];
 
     container.register({
       provide: 'A',
@@ -291,7 +291,7 @@ describe('DI Container', () => {
         container.get(token);
         expect(true).toBe(false);
       } catch (e) {
-        expect(e.message).toBe('Token not found jj at tadam');
+        expect(e.message).toBe('Token not found "jj" at "tadam"');
         expect(e.type).toBe('NotFound');
         expect(e.stack).toMatch(/---- caused by: ----[\s\S]+Container.spec.ts/);
       }
@@ -318,14 +318,14 @@ describe('DI Container', () => {
         container.get('B');
         expect(true).toBe(false);
       } catch (e) {
-        expect(e.message).toBe('Circular dep for B at A < B');
+        expect(e.message).toBe('Circular dep for "B" at "A" < B');
         expect(e.type).toBe('CircularDep');
       }
     });
 
     it('не верный формат provider', () => {
       const container = new Container();
-      expect(() => container.register(undefined)).toThrowErrorMatchingInlineSnapshot(
+      expect(() => container.register(undefined as any)).toThrowErrorMatchingInlineSnapshot(
         `"Invalid provider. Проверь что отправляется в DI, сейчас нам приходит не верный формат: \\"undefined\\""`
       );
 
@@ -402,7 +402,7 @@ describe('DI Container', () => {
       expect(() =>
         // @ts-ignore
         container.get({ token: 'Token multi', optional: true })
-      ).toThrowErrorMatchingInlineSnapshot(`"Token not found aa at Token multi"`);
+      ).toThrowErrorMatchingInlineSnapshot(`"Token not found \\"aa\\" at \\"Token multi\\""`);
     });
 
     it('optional with deep multi error deps', () => {
@@ -433,7 +433,7 @@ describe('DI Container', () => {
       expect(() =>
         container.get({ token: 'Multi first', optional: true })
       ).toThrowErrorMatchingInlineSnapshot(
-        `"Token not found token not found at Multi error < Multi second < Multi first"`
+        `"Token not found \\"token not found\\" at \\"Multi error\\" < Multi second < Multi first"`
       );
     });
 
@@ -456,7 +456,7 @@ describe('DI Container', () => {
 
       expect(() => {
         container.get('test_module_token');
-      }).toThrow('Test error at test_module_token');
+      }).toThrow('Test error at "test_module_token"');
     });
 
     it('two levels of modules', () => {
@@ -478,7 +478,58 @@ describe('DI Container', () => {
 
       expect(() => {
         container.get('dependant');
-      }).toThrow('Some error at dependency < dependant');
+      }).toThrow('Some error at "dependency" < dependant');
+    });
+  });
+
+  describe('fallback', () => {
+    it('base case', () => {
+      const mockFactory = jest.fn(() => 'mock');
+      const fallback = new Container();
+
+      fallback.register({
+        provide: 'test',
+        useFactory: mockFactory,
+      });
+
+      const container = new Container([], fallback);
+
+      expect(container.get('test')).toBe('mock');
+    });
+  });
+
+  describe('borrowing tokens', () => {
+    it('base', () => {
+      const from = new Container([
+        {
+          provide: 'dep',
+          useValue: 'from',
+        },
+        {
+          provide: 'test',
+          useFactory: ({ dep }) => {
+            return `test-${dep}`;
+          },
+          deps: {
+            dep: 'dep',
+          },
+        },
+      ]);
+      const container = new Container(
+        [
+          {
+            provide: 'dep',
+            useValue: 'container',
+          },
+        ],
+        from
+      );
+
+      expect(container.get('test')).toBe('test-from');
+
+      container.borrowToken(from, 'test');
+
+      expect(container.get('test')).toBe('test-container');
     });
   });
 });

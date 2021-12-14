@@ -6,9 +6,9 @@ import type { Env } from '../typings/Env';
 import type { ConfigEntry, Experiments } from '../typings/configEntry/common';
 import { validate } from './validate';
 import moduleVersion from '../utils/moduleVersion';
+import { packageVersion } from '../utils/packageVersion';
 import type { DeduplicateStrategy } from '../library/webpack/plugins/DedupePlugin';
 import { showConfig } from './showConfig';
-import type { ModuleConfigEntry } from '../typings/configEntry/module';
 import type { Target } from '../typings/target';
 
 export interface Settings {
@@ -121,10 +121,11 @@ export class ConfigManager<T extends ConfigEntry = ConfigEntry> implements Requi
 
     this.settings = settings;
     this.env = settings.env || 'development';
+    this.rootDir = settings.rootDir || process.cwd();
     this.version =
       settings.version ||
-      (this.type === 'module' ? moduleVersion(configEntry as ModuleConfigEntry) : '');
-    this.rootDir = settings.rootDir || process.cwd();
+      (this.type === 'module' ? moduleVersion(configEntry) : '') ||
+      (this.type === 'child-app' ? packageVersion(this.env, this.rootDir) : '');
     this.buildType = settings.buildType || 'client';
     this.debug = settings.debug || false;
     this.trace = settings.trace || false;
@@ -195,6 +196,8 @@ export class ConfigManager<T extends ConfigEntry = ConfigEntry> implements Requi
           this.name,
           this.version
         );
+      case 'child-app':
+        return resolve(this.rootDir, ...this.build.options.output.split('/'));
     }
 
     throw new Error('projectType not supported');

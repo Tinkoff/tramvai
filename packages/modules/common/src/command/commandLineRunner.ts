@@ -1,8 +1,8 @@
 import noop from '@tinkoff/utils/function/noop';
 import { isHttpError } from '@tinkoff/errors';
-import type { CommandLineDescription, CommandLine, CommandLines } from '@tramvai/core';
+import type { CommandLineDescription, CommandLine, CommandLines, Command } from '@tramvai/core';
 import type { METRICS_MODULE_TOKEN } from '@tramvai/tokens-metrics';
-import type { Container, Provider, TokenType } from '@tinkoff/dippy';
+import type { Container, Provider } from '@tinkoff/dippy';
 import { createChildContainer } from '@tinkoff/dippy';
 import type { LOGGER_TOKEN } from '@tramvai/tokens-common';
 
@@ -61,7 +61,7 @@ export class CommandLineRunner implements CommandLine {
     providers?: Provider[],
     customDi?: Container
   ) {
-    const di = resolveDi(type, status, customDi || this.rootDi, providers);
+    const di = customDi ?? resolveDi(type, status, this.rootDi, providers);
 
     this.log.debug({
       event: 'command-run',
@@ -86,8 +86,8 @@ export class CommandLineRunner implements CommandLine {
     );
   }
 
-  private createLineChain(di: Container, line: string | TokenType<any>) {
-    let lineInstance;
+  private createLineChain(di: Container, line: Command) {
+    let lineInstance: Command;
     try {
       lineInstance = di.get({ token: line, optional: true });
 

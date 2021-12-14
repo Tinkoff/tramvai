@@ -100,6 +100,19 @@ module.exports = {
     'features/migration',
     'features/static-html-export',
     'features/file-system-pages',
+    {
+      type: 'category',
+      label: 'Child App',
+      items: [
+        'features/child-app/child-app',
+        'features/child-app/how-create-child-app',
+        {
+          type: 'ref',
+          label: 'Module to connect Child App',
+          id: 'references/modules/child-app',
+        },
+      ],
+    },
   ],
   Guides: [
     'guides/tramvai-library',

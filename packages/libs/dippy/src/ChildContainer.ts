@@ -10,10 +10,10 @@ export class ChildContainer extends Container {
   /**
    * Список дочерних провайдеров
    */
-  private root: Container;
+  private readonly root: Container;
 
-  constructor(root: Container) {
-    super();
+  constructor(root: Container, fallback?: Container) {
+    super(undefined, fallback);
     this.root = root;
 
     this.register({ provide: DI_TOKEN, useValue: this });

@@ -114,7 +114,7 @@ describe('CommandLineRunner', () => {
 
       expect.assertions(1);
 
-      await expect(flow.run('server', 'init')).rejects.toThrow('Token not found fff at A');
+      await expect(flow.run('server', 'init')).rejects.toThrow('Token not found "fff" at "A"');
     });
   });
 });

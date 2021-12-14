@@ -56,6 +56,12 @@
         },
         {
             "path": "../../tramvai/experiments"
+        },
+        {
+            "path": "../../tokens/child-app"
+        },
+        {
+            "path": "../../tokens/render"
         }
     ]
 }
