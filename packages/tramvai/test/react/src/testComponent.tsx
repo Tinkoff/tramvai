@@ -1,4 +1,5 @@
 import React from 'react';
+import type { FC } from 'react';
 import type { RenderOptions } from '@testing-library/react';
 import { render, act, fireEvent } from '@testing-library/react';
 import { Provider as StateProvider } from '@tramvai/state';
@@ -36,15 +37,19 @@ export const testComponent = (
     renderOptions,
   }: Options = {}
 ) => {
+  const Wrapper: FC<{}> = ({ children }) => (
+    <StateProvider context={context}>
+      <DIContext.Provider value={context.di}>
+        <RouterProvider router={router}>{children}</RouterProvider>
+      </DIContext.Provider>
+    </StateProvider>
+  );
+
+  const renderResults = render(<Wrapper>{element}</Wrapper>, renderOptions);
+
   return {
-    render: render(
-      <StateProvider context={context}>
-        <DIContext.Provider value={context.di}>
-          <RouterProvider router={router}>{element}</RouterProvider>
-        </DIContext.Provider>
-      </StateProvider>,
-      renderOptions
-    ),
+    render: renderResults,
+    rerender: (el: React.ReactElement) => renderResults.rerender(<Wrapper>{el}</Wrapper>),
     act,
     fireEvent,
     context,

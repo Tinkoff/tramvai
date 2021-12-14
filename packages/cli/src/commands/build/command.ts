@@ -57,7 +57,7 @@ class BuildCommand extends CLICommand<Params> {
   ];
 
   action(parameters: Params) {
-    // сделано через require, что бы стартовать код только тогда, когда он нужен
+    // used require for lazy code execution
     return require('./build').default(this.context, parameters);
   }
 }

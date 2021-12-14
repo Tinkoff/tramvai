@@ -21,7 +21,7 @@ class AddCommand extends CLICommand {
   validators = [checkPackage];
 
   async action(parameters: Params) {
-    // сделано через require, что бы стартовать код только тогда, когда он нужен
+    // used require for lazy code execution
     return require('./add').default(this.context, parameters);
   }
 }

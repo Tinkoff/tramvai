@@ -24,7 +24,7 @@ class GenerateCommand extends CLICommand<Params> {
   validators = [checkConfigExists];
 
   action(parameters: Params) {
-    // сделано через require, что бы стартовать код только тогда, когда он нужен
+    // used require for lazy code execution
     return require('./generate').default(this.context, parameters);
   }
 }

@@ -5,25 +5,19 @@ import type { Params } from './update';
 class UpdateCommand extends CLICommand {
   name = 'update';
 
-  description = 'Tramvai package update command';
+  description = `All tramvai packages update command
+  [to] - target version <latest|X.X.X|^X.X.X> (default: latest)`;
 
-  command = 'update';
+  command = `update <to>`;
 
-  options = [
-    {
-      name: '-to, --to',
-      value: '[to]',
-      description: 'Версия <latest|X.X.X>',
-      defaultValue: 'latest',
-    },
-  ];
+  options = [];
 
   alias = 'u';
 
   validators = [checkVersion];
 
   async action(parameters: Params) {
-    // сделано через require, что бы стартовать код только тогда, когда он нужен
+    // used require for lazy code execution
     return require('./update').default(this.context, parameters);
   }
 }

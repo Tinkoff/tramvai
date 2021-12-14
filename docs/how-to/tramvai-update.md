@@ -1,57 +1,61 @@
 ---
 id: tramvai-update
-title: Обновление tramvai в приложении
-sidebar_label: Обновление tramvai
+title: How to update tramvai version?
+sidebar_label: How to update tramvai?
 ---
 
-Большинство библиотек в `tramvai` репозитории объединены в общее версионирование - это `core` пакеты, трамвай модули и токены.
-Это значительно упрощает обновление `tramvai` на конкретную версию.
+Most of the libraries in the `tramvai` repository are combined into a common versioning - these are `core` packages, tram modules and tokens.
+This makes it much easier to upgrade tramvai to a specific version.
 
-Подробная документация доступна в разделе [Версионирование](concepts/versioning.md)
+Detailed documentation is available in the [Release section](concepts/versioning.md)
 
-Для обновления пакетов разработана cli команда `tramvai update`.
-Эта команда обновляет версии всех `@tramvai/*` и `@tramvai-tinkoff/*` зависимостей в приложении, и старается сделать дедупликацию в `lock` файле, подстраиваясь под используемый пакетный менеджер.
-Также запускаются миграции.
+The cli command `tramvai update` has been developed to update packages.
+This command updates the versions of all `@tramvai/*` and `@tramvai-tinkoff/*` dependencies in the application, and tries to deduplicate the `lock` file, adjusting to the package manager being used.
+Migrations are also triggered.
 
-Для установки пакетов разработана cli команда `tramvai add <packageName>`.
-Эта команда устанавливает указанную `@tramvai/*` или `@tramvai-tinkoff/*` зависимость нужной версии в приложении, и старается сделать дедупликацию в `lock` файле, подстраиваясь под используемый пакетный менеджер.
-Также запускаются миграции.
+The cli command `tramvai add <packageName>` is developed to install packages.
+This command sets the specified `@tramvai/*` or `@tramvai-tinkoff/*` dependency of the desired version in the application, and tries to deduplicate in the `lock` file, adjusting to the used package manager.
+Migrations are also triggered.
 
-## Обновление до latest версии
+## Upgrading to a latest version
 
-`tramvai update` по умолчанию использует `latest`:
+`tramvai update` by default use `latest`:
 
 ```bash
 tramvai update
 ```
 
-## Обновление до конкретной версии
+## Upgrading to a specific version
 
-Флаг `--to` позволяет указать точную версию:
-
-```bash
-tramvai update --to 1.0.0
-```
-
-## Проверка версий tramvai в приложении
-
-Для автоматической проверки синхронизации версий трамвай зависимостей создана утилита `@tramvai/tools-check-versions`,
-для запуска нужно выполнить команду:
+Third argument allows you to specify the version range or exact version:
 
 ```bash
-yarn tramvai-check-versions
+tramvai update ^1
+```
+or
+```bash
+tramvai update 1.0.0
 ```
 
-## Установка нового @tramvai пакета в приложении
+## Installing the new tramvai package in the app
 
-`tramvai add <packageName>` по умолчанию устанавливает пакет в `dependencies`:
+`tramvai add <packageName>` by default installs the package to `dependencies`:
 
 ```bash
 tramvai add @tramvai/module-router
 ```
 
-Флаг `--dev` установит пакет в `devDependencies`:
+The `--dev` flag will install the package to `devDependencies`:
 
 ```bash
 tramvai add @tramvai/test-unit --dev
+```
+
+## Checking tramvai versions in the app
+
+The utility `@tramvai/tools-check-versions` has been created to automatically check the synchronization of tramvai versions.
+To check, you need to run the command:
+
+```bash
+yarn tramvai-check-versions
 ```

@@ -28,18 +28,23 @@ import { testComponent } from '@tramvai/test-react';
 
 describe('test', () => {
   it('render', async () => {
-    const { render, context, act, fireEvent } = testComponent(<Cmp />);
+    const { render, rerender, context, act, fireEvent, Wrapper } = testComponent(<Cmp id={1} />);
 
     // проверить рендер компонента
-    expect(render.getByTestId('test').textContent).toBe('Content');
+    expect(render.getByTestId('test').textContent).toBe('Content 1');
 
     // проверить рендер после обновления данных в сторе
     act(() => {
       context.dispatch(event('data'));
     });
 
-    // Взаимодействовать с компонентом
+    // взаимодействовать с компонентом
     fireEvent.click(render.getByText('Button'));
+
+    // повторный рендеринг компонента
+    rerender(<Cmp id={2} />)
+
+    expect(render.getByTestId('test').textContent).toBe('Content 2');
   });
 });
 ```

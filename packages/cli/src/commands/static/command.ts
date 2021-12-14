@@ -33,7 +33,7 @@ export class StaticCommand extends CLICommand<Params> {
   validators = [checkApplication, runMigrationsAndCheckVersions];
 
   action(parameters: Params) {
-    // сделано через require, что бы стартовать код только тогда, когда он нужен
+    // used require for lazy code execution
     return require('./static').default(this.context, parameters);
   }
 }

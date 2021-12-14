@@ -31,7 +31,7 @@ class NewCommand extends CLICommand<Params> {
   validators = [];
 
   action(parameters: Params) {
-    // сделано через require, что бы стартовать код только тогда, когда он нужен
+    // used require for lazy code execution
     return require('./new').default(this.context, parameters);
   }
 }

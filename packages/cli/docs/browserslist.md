@@ -1,28 +1,28 @@
-# Интеграция @tramvai/cli с browserslist
+# @tramvai/cli integration with browserslist
 
-[browserslist](https://github.com/browserslist/browserslist) позволяет указывать целевые браузеры, для которых происходит сборка и тем самым выполнять минимум преобразований, только там где это нужно.
+[browserslist](https://github.com/browserslist/browserslist) is used for targeting specific browsers for the build. It allows to make only necessary transformations of the source code and to provide most modern code to the end browsers.
 
-Где используется browserslist:
+Where browserslist is used:
 
-- При сборке js/ts кода - через [@babel/preset-env](https://babeljs.io/docs/en/babel-preset-env)
-- При сборке css, при использовании postcss-плагина [autoprefixer](https://github.com/postcss/autoprefixer)
+- For building js/ts code - with [@babel/preset-env](https://babeljs.io/docs/en/babel-preset-env)
+- For build css - with postcss-plugin [autoprefixer](https://github.com/postcss/autoprefixer)
 
-## Виды env для browserslist
+## Supported envs for browserslist
 
-В cli используется определённый список возможных env target для работы с browserslist:
+In cli only specific list of supported env targets is used for browserslist:
 
-- `modern` - используется для сборки клиентского кода для современных браузеров
-- `node` - используется при сборке серверного кода
-- `defaults` - используется в остальных случаях, т.е. для сборки клиентского кода для устаревших браузеров
+- `modern` - used for builds supposed to be provided for modern browsers
+- `node` - used for builds running on server
+- `defaults` - used otherwise, usually for outdated browsers
 
-## Настройка в cli
+## cli setup
 
-По умолчанию в cli используются определения из библиотеки `@tinkoff/browserslist-config`.
+By default, cli uses browserslist config from a library `@tinkoff/browserslist-config`.
 
-Чтобы расширить или переопределить настройки по умолчанию можно использовать любой из способов [задания конфига browserslist](https://github.com/browserslist/browserslist#queries) следуя правилам:
+To extend or override default settings, you can use any of the methods [for browserslist config](https://github.com/browserslist/browserslist#queries) following next rules:
 
-- Менять конфигурацию можно для [env из списка, используемого в cli](#виды-env-для-browserslist) - [как задавать](https://github.com/browserslist/browserslist#configuring-for-different-environments). Если какого-то env в конфиге не будет, то будет использован конфиг по умолчанию.
-- Если необходимо расширить списки по умолчанию, то используйте [возможность расширения конфига](https://github.com/browserslist/browserslist#shareable-configs)
+- It is allowed to change config only for [envs from the list used in cli](#supported-envs-for-browserslist). How to do it see [browserslist docs](https://github.com/browserslist/browserslist#configuring-for-different-environments). If some of env is not defined, the default config for the env will be used.
+- If you want to extend default settings then use [the ability to extend config](https://github.com/browserslist/browserslist#shareable-configs)
   ```json
   "browserslist": {
     "modern": [
@@ -38,20 +38,20 @@
     ]
   }
   ```
-- В случае если необходимо сузить список браузеров, то откажитесь от использования `extends @tinkoff/browserslist-config` и пропишите список всех браузеров самостоятельно, ориентируясь на список в `@tinkoff/browserslist-config`. При необходимости сделайте это для всех [env](#виды-env-для-browserslist) - те env которые не будут переопределены будут работать по умолчанию
+- If you want to narrow down the supported list of the browsers, then do not use `extends @tinkoff/browserslist-config` and specify list of the supported browsers yourself. Take the default list from the `@tinkoff/browserslist-config` as a basis. Do it for every [env](#supported-envs-for-browserslist) if you need it. Not overrided env will use default settings.
 
-## Дебаг
+## Debug
 
-Чтобы проверить работу browserslist можно выполнить следующие команды из корня приложения:
+You can test how browserslist works using next commands:
 
 ```sh
-npx browserslist --env=modern # покажет список браузеров для modern
-npx browserslist --env=node # покажет список поддерживаемых версий nodejs
-npx browserslist # покажет список браузеров вместе с legacy браузерами
+npx browserslist --env=modern # list of the modern browsers
+npx browserslist --env=node # list of the supported nodejs versions
+npx browserslist # list of the browsers including legacy one
 ```
 
-## Нюансы
+## Caveats
 
 ### autoprefixer
 
-Из-за особенностей устройства самого `autoprefixer` при сборке будет использован только `defaults` конфиг. Если есть серьёзная заинтересованность в раздельной компиляции css, то напишите, пожалуйста, об этом в slack-чате #tramvai
+Because of the some internal restrictions of the `autoprefixer` build will be executed only using `defaults` config. If you really interested in this feature, please, create an issue on the github.

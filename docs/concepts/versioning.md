@@ -1,32 +1,32 @@
-# Версионирование
+# Versioning
 
-Большинство библиотек в `tramvai` репозитории объединены в общее версионирование.
+Most of the libraries in the `tramvai` repository are bundled into a unified versioning.
 
-Все актуальные версии библиотек хранятся в релизных тегах, в `package.json` используются версии - заглушки `0.0.0-stub`.
+All current versions of libraries are stored in release tags, in `package.json` versions are used - stubs `0.0.0-stub`.
 
-Версионирование `tramvai` библиотек придерживается [semver](https://semver.org/lang/ru/). Для версий, которые начинаются с нуля (`0.x.x`), мажорной (`major`) считается вторая цифра в версии, а минорной (`minor`) считается третья цифра - `0.major.minor`. Таким образом, при `BREAKING CHANGE` коммите, пакет версии `1.0.0` поднимется до `2.0.0`, а пакет версии `0.1.0` поднимется до `0.2.0`.
+The versioning of `tramvai` libraries follows [semver](https://semver.org/lang/ru/). For versions that start with zero (`0.x.x`), the major (` major`) is the second digit in the version, and the minor (`minor`) is the third digit - `0.major.minor`. Thus, on a `BREAKING CHANGE` commit, package version `1.0.0` will go up to `2.0.0`, and package version `0.1.0` will go up to `0.2.0`.
 
-Версии библиотек обновляются согласно [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/)
+Library versions are updated according to [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/)
 
-## Сквозное версионирование
+## Unified versioning
 
-Большинство библиотек в `tramvai` репозитории объединены в сквозное версионирование - это `core` пакеты, трамвай модули и токены, все что входит в скоупы `@tramvai` и `@tramvai-tinkoff`. Релиз и публикация этих библиотек происходит одновременно, даже если изменения затронули только один пакет из списка.
-Такой подход вы можете увидеть у [Angular](https://angular.io/guide/releases), и с некоторыми ограничениями, в монорепозиториях использующих [Lerna](https://github.com/lerna/lerna#fixedlocked-mode-default)
+Most of the libraries in the `tramvai` repository are combined into end-to-end versioning - these are `core` packages, tram modules and tokens, everything that is included in the `@tramvai` and `@tramvai-tinkoff` scopes. The release and publication of these libraries occurs at the same time, even if the changes affect only one package from the list.
+You can see this approach in [Angular](https://angular.io/guide/releases), and with some restrictions, in monorepositories using [Lerna](https://github.com/lerna/lerna#fixedlocked-mode-default)
 
-Основной плюс unified версионирования - гарантируется совместимость между пакетами одной версии.
+The main advantage of unified versioning is that compatibility between packages of the same version is guaranteed.
 
-Раньше у пользователя был только один способ поднять версию фреймворка, не потеряв совместимость между пакетами - устанавливать все пакеты до их latest версии.
-Сейчас, можно указать общую целевую версию для каждой `tramvai` библиотеки, либо использовать команду `tramvai update`.
+Previously, the user had only one way to raise the framework version without losing compatibility between packages - to install all packages to their latest version.
+Now, you can specify a common target version for each `tramvai` library, or use the [tramvai update](how-to/tramvai-update.md) command.
 
-Один из минусов подхода - любое обновление пакета из списка unified, требует поднять версии и опубликовать все эти пакеты из списка, что значительно замедляет CI.
+One of the drawbacks of this approach is that any update of a package from the unified list requires raising versions and publishing all these packages from the list, which significantly slows down CI.
 
-## Хранение версий в релизных тегах
+## Storing versions in release tags
 
-Одна из причин для хранения версии в релизных тегах - protected ветка `master`, в которую мы не можем автоматически внести изменения после релиза и обновления версий пакетов.
+One of the reasons for storing a version in release tags is the protected `master` branch, which we cannot automatically make changes to after the release and update of package versions.
 
-Хранение версий в релизных тегах само по себе не дает преимуществ, и у нас используется вместе со stub версиями пакетов в исходных `package.json` файлах.
+Storing versions in release tags does not in itself provide any advantage, and we use it together with stub versions of packages in the source `package.json` files.
  
-Допустим, у нас был пакет с зависимостями:
+Let's say we had a package with dependencies:
 
 ```json
 { 
@@ -39,9 +39,10 @@
 }
 ```
 
-Раньше, каждый крупный Merge Request сопровождался конфликтами, если в master ветке обновлялась версии пакетов, а затронутые библиотеки в MR содержали изменения в dependencies.
+Previously, every big Merge Request was accompanied by conflicts if package versions were updated in the master branch, and the affected libraries in MR contained changes in dependencies.
 
-Теперь, наш пакет выглядит так:
+Now, our package looks like this:
+
 ```json
 { 
   "name": "@tramvai/foo", 
@@ -53,4 +54,4 @@
 }
 ```
 
-Версия `0.0.0-stub` никогда не вызовет конфликтов слияния, а вычисление реальных версий происходит только в CI - при создании нового релизного тега и публикации, внутри библиотеки `pvm`.
+The version `0.0.0-stub` will never cause merge conflicts, and the calculation of real versions occurs only in CI - when creating a new release tag and publishing, inside the `pvm` library.

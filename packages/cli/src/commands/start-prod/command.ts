@@ -79,7 +79,7 @@ export class StartProdCommand extends CLICommand<Params> {
   validators = [checkConfigExists, checkApplication, runMigrationsAndCheckVersions];
 
   action(parameters: Params) {
-    // сделано через require, что бы стартовать код только тогда, когда он нужен
+    // used require for lazy code execution
     return require('./startProd').startProd(this.context, parameters);
   }
 }
