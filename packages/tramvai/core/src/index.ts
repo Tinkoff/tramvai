@@ -11,4 +11,4 @@ export { ModuleType, ExtendedModule } from './modules/module.h';
 export { Command } from './command/command.h';
 export * from './tokens';
 
-export { Scope, Provider } from '@tinkoff/dippy';
+export { Scope, Provider, createToken } from '@tinkoff/dippy';

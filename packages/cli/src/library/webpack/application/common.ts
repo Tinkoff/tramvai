@@ -8,10 +8,11 @@ import type { ApplicationConfigEntry } from '../../../typings/configEntry/applic
 export const commonApplication = (configManager: ConfigManager<ApplicationConfigEntry>) => (
   config: Config
 ) => {
-  config.plugin('module-federation').use(container.ModuleFederationPlugin, [
-    {
-      name: 'host',
-      shared: getSharedModules(configManager),
-    } as ModuleFederationPluginOptions,
-  ]);
+  // TODO: fix moduleFederation and uncomment
+  // config.plugin('module-federation').use(container.ModuleFederationPlugin, [
+  //   {
+  //     name: 'host',
+  //     shared: getSharedModules(configManager),
+  //   } as ModuleFederationPluginOptions,
+  // ]);
 };
