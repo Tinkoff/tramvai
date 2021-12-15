@@ -150,7 +150,7 @@ export const serverRunner = ({
     proxy.on('error', async (err, req, res) => {
       await waitWorkerPort();
 
-      proxy.web(req, res, { target: `http://localhost:${workerPort}` });
+      proxy.web(req, res as any, { target: `http://localhost:${workerPort}` });
     });
 
     // задаём свой http-сервер который будет проксировать запросы к дочернему процессу
