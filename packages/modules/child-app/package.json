@@ -1,0 +1,52 @@
+{
+  "name": "@tramvai/module-child-app",
+  "version": "0.0.0-stub",
+  "description": "Module for child apps",
+  "browser": {
+    "./lib/server.js": "./lib/browser.js",
+    "./lib/server/child/providers.js": "./lib/browser/child/providers.js"
+  },
+  "main": "lib/server.js",
+  "typings": "src/server.ts",
+  "files": [
+    "lib"
+  ],
+  "sideEffects": false,
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+  },
+  "scripts": {
+    "build": "tramvai-build --for-publish",
+    "watch": "tsc -w",
+    "build-for-publish": "true"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "@tinkoff/env-validators": "0.0.0-stub",
+    "@tinkoff/module-loader-client": "0.0.0-stub",
+    "@tinkoff/module-loader-server": "0.0.0-stub",
+    "@tramvai/child-app-core": "0.0.0-stub",
+    "@tramvai/safe-strings": "0.0.0-stub",
+    "@tramvai/tokens-child-app": "0.0.0-stub"
+  },
+  "devDependencies": {},
+  "peerDependencies": {
+    "@tinkoff/dippy": "0.0.0-stub",
+    "@tinkoff/utils": "^2.1.2",
+    "@tramvai/core": "0.0.0-stub",
+    "@tramvai/state": "0.0.0-stub",
+    "@tramvai/react": "0.0.0-stub",
+    "@tramvai/tokens-common": "0.0.0-stub",
+    "@tramvai/tokens-render": "0.0.0-stub",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0",
+    "object-assign": "^4.1.1",
+    "tslib": "^2.0.3"
+  },
+  "module": "lib/server.es.js",
+  "es2017": "lib/browser.es2017.js"
+}

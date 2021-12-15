@@ -1,0 +1,49 @@
+{
+    "extends": "../../../tsconfig.lib.json",
+    "include": [
+        "./src"
+    ],
+    "compilerOptions": {
+        "outDir": "./lib",
+        "declarationDir": "./lib",
+        "rootDir": "./src"
+    },
+    "references": [
+        {
+            "path": "../../tramvai/core"
+        },
+        {
+            "path": "../../libs/dippy"
+        },
+        {
+            "path": "../../libs/module-loader-client"
+        },
+        {
+            "path": "../../libs/module-loader-server"
+        },
+        {
+            "path": "../../tramvai/child-app-core"
+        },
+        {
+            "path": "../../tramvai/react"
+        },
+        {
+            "path": "../../tokens/render"
+        },
+        {
+            "path": "../../tokens/common"
+        },
+        {
+            "path": "../../libs/safe-strings"
+        },
+        {
+            "path": "../../tokens/child-app"
+        },
+        {
+            "path": "../../tramvai/state"
+        },
+        {
+            "path": "../../libs/env-validators"
+        }
+    ]
+}

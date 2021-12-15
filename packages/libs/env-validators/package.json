@@ -1,0 +1,26 @@
+{
+  "name": "@tinkoff/env-validators",
+  "version": "0.0.0-stub",
+  "description": "Lightweighted validators library",
+  "main": "./lib/validators.js",
+  "typings": "src/validators.ts",
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+  },
+  "scripts": {
+    "build": "tramvai-build --for-publish",
+    "watch": "tsc -w",
+    "build-for-publish": "true"
+  },
+  "dependencies": {
+    "@tinkoff/utils": "^2.2.0"
+  },
+  "sideEffects": false,
+  "module": "./lib/validators.es.js",
+  "es2017": "./lib/validators.es2017.js",
+  "license": "Apache-2.0"
+}

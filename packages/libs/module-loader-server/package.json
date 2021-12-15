@@ -1,0 +1,35 @@
+{
+  "name": "@tinkoff/module-loader-server",
+  "version": "0.0.0-stub",
+  "description": "Helper utils for loading js/css resources in node.js",
+  "main": "lib/index.js",
+  "browser": "lib/browser.js",
+  "typings": "src/index.ts",
+  "module": "lib/index.es.js",
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+  },
+  "scripts": {
+    "build": "tramvai-build --for-publish",
+    "watch": "tsc -w",
+    "build-for-publish": "true"
+  },
+  "dependencies": {
+    "@tinkoff/request-core": "^0.8.9",
+    "@tinkoff/request-plugin-cache-deduplicate": "^0.8.9",
+    "@tinkoff/request-plugin-protocol-http": "^0.10.18",
+    "@tinkoff/utils": "^2.1.2",
+    "ssri": "^7.1.0",
+    "tslib": "^2.0.3"
+  },
+  "sideEffects": false,
+  "devDependencies": {
+    "@types/ssri": "^6.0.1"
+  },
+  "es2017": "lib/browser.es2017.js",
+  "license": "Apache-2.0"
+}

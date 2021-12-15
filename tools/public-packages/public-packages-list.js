@@ -9,6 +9,7 @@ const publicPackages = [
   '@tramvai/state',
   '@tramvai/types-actions-state-context',
   '@tramvai/experiments',
+  '@tramvai/child-app-core',
   // TEST
   '@tramvai/test-unit-jest',
   '@tramvai/test-unit',
@@ -36,6 +37,7 @@ const publicPackages = [
   '@tramvai/tokens-render',
   '@tramvai/tokens-router',
   '@tramvai/tokens-server',
+  '@tramvai/tokens-child-app',
   // MODULES
   '@tramvai/module-common',
   '@tramvai/module-cookie',
@@ -55,6 +57,7 @@ const publicPackages = [
   '@tramvai/module-cache-warmup',
   '@tramvai/module-client-hints',
   '@tramvai/module-autoscroll',
+  '@tramvai/module-child-app',
   // LIBS
   '@tramvai/react-lazy-hydration-render',
   '@tramvai/safe-strings',
@@ -87,6 +90,9 @@ const publicPackages = [
   'prettier-config-tinkoff',
   '@tinkoff/pack-polyfills',
   '@tinkoff/package-manager-wrapper',
+  '@tinkoff/module-loader-client',
+  '@tinkoff/module-loader-server',
+  '@tinkoff/env-validators',
 ];
 
 module.exports = publicPackages;
