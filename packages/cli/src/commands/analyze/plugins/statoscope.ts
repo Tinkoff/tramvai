@@ -4,7 +4,7 @@ import { AnalyzePlugin } from './pluginBase';
 export class StatoscopeAnalyzePlugin extends AnalyzePlugin {
   statsFileName = 'stats-all.json';
 
-  requireDeps = ['webpack-stats-plugin'];
+  requireDeps = [];
 
   statsFilePath: string;
 
