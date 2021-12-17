@@ -1,10 +1,10 @@
 # Tramvai test integration
 
-Библиотека хелперов для интеграционного тестирования приложений. Подразумевается полноценный старт всего приложения со сборкой с помощью `@tramvai/cli` и использования хелперов для анализа результата запросов на сервер и проверки рендера приложения в браузере
+Set of helpers to simplify the process of writing integration tests for the tramvai app. Implies full-fledged run of the app with build made by `@tramvai/cli` and use of helpers for test result of requests to the server and test render of the app in the browser.
 
-> Для работы должен быть установлен отдельно `@tramvai/cli`
+> The `@tramvai/cli` package is required and should be installed manually
 
-## Подключение
+## Installation
 
 ```bash
 npm i --save-dev @tramvai/test-integration
@@ -12,13 +12,13 @@ npm i --save-dev @tramvai/test-integration
 
 ## How To
 
-### Тестирование запросов к `tramvai` приложению без запуска в браузере (aka `curl`)
+### Test request to the tramvai app without using browser (aka `curl`)
 
-Для тестирования полноценных запросов к `tramvai` приложению используется библиотеки [superagent](https://github.com/visionmedia/superagent) и [node-html-parser](https://github.com/taoqf/node-html-parser)
+For testing requests to the tramvai app libraries [superagent](https://github.com/visionmedia/superagent) and [node-html-parser](https://github.com/taoqf/node-html-parser) are used under hood.
 
-При вызове метода `app.request` отправляются запросы в приложение, и доступны все возможности `superagent`.
+Call of `app.request` sends requests to the app. All of the features of `superagent` are available.
 
-При вызове метода `app.render` можно получить доступ к HTML разметке, которую вернул запрос в приложение.
+Call of `app.render` resolves to the HTML render that is returned from server while serving the request.
 
 ```ts
 import { startCli } from '@tramvai/test-integration';
@@ -36,7 +36,7 @@ afterAll(() => {
   return app.close();
 });
 
-it('request to main page return status 200', async () => {
+it('request to main page should return status 200', async () => {
   return app.request('/').expect(200);
 });
 
@@ -48,15 +48,15 @@ it('main page HTML snapshot', async () => {
 });
 ```
 
-### Тестирование приложения в браузере с помощью `Puppeteer`
+### Testing app in browser with the `puppeteer`
 
-Для запуска полноценных браузерных тестов можно использовать библиотеку [@tramvai/test-puppeteer](references/test/test-puppeteer.md)
+You may use another library [@tramvai/test-puppeteer](references/test/test-puppeteer.md) to implement testing in the browser.
 
-### Использование @tinkoff/mocker в тестах
+### Usage of `@tinkoff/mocker` in tests
 
-Для использования мокера в интеграционных тестах необходимо добавить модуль [`@tramvai/module-mocker`](references/modules/mocker.md) в список модулей для приложения
+In order to use mocker there should be added [`@tramvai/module-mocker`](references/modules/mocker.md) to the tramvai app modules list.
 
-Затем мокер подтянет файловые моки как описано в доке к самому мокеру и есть возможность добавлять моки динамически в тестах:
+After thar mocker will read file based mocks as it described in the docs to the mocker itself and it can be used dynamically in the tests:
 
 ```ts
 it('should work with mocker', async () => {

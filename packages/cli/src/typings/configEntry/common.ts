@@ -36,7 +36,7 @@ export interface Experiments {
   minicss?: {
     /**
      * @title Use a new webpack API to execute modules instead of child compilers. This improves performance and memory usage a lot.
-     * @default false
+     * @default true
      */
     useImportModule?: boolean;
   };

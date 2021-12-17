@@ -133,7 +133,7 @@ describe('JSON schema для tramvai.json', () => {
                     cacheUnaffected: true,
                   },
                   minicss: {
-                    useImportModule: false,
+                    useImportModule: true,
                   },
                   fileSystemPages: {
                     enable: false,
@@ -154,7 +154,7 @@ describe('JSON schema для tramvai.json', () => {
                     cacheUnaffected: true,
                   },
                   minicss: {
-                    useImportModule: false,
+                    useImportModule: true,
                   },
                   fileSystemPages: {
                     enable: false,
@@ -196,7 +196,7 @@ describe('JSON schema для tramvai.json', () => {
                     cacheUnaffected: true,
                   },
                   minicss: {
-                    useImportModule: false,
+                    useImportModule: true,
                   },
                   fileSystemPages: {
                     enable: false,
@@ -219,7 +219,7 @@ describe('JSON schema для tramvai.json', () => {
                     cacheUnaffected: true,
                   },
                   minicss: {
-                    useImportModule: false,
+                    useImportModule: true,
                   },
                   fileSystemPages: {
                     enable: false,

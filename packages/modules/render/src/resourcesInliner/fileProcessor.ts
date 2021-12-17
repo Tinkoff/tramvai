@@ -9,12 +9,17 @@ const isAbsoluteUrl = (resourceUrl) =>
   ['http://', 'https://', '//'].some((prefix) => startsWith(prefix, resourceUrl));
 
 const toHttpsUrl = (resourceUrl) => {
+  if (resourceUrl.indexOf('//localhost') !== -1) {
+    return resourceUrl;
+  }
+
   if (startsWith('http://', resourceUrl)) {
     return resourceUrl.replace('http://', 'https://');
   }
   if (startsWith('//', resourceUrl)) {
     return resourceUrl.replace('//', 'https://');
   }
+
   return resourceUrl;
 };
 
