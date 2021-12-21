@@ -318,6 +318,16 @@
                       },
                       "additionalProperties": false
                     },
+                    "webpackResolveAlias": {
+                      "title": "Browser package resolve aliases. E.g. { \"stream\": \"stream-browserify\" }",
+                      "additionalProperties": true,
+                      "type": "object"
+                    },
+                    "webpackProvide": {
+                      "title": "Browser packages to provide with ProvidePlugin. E.g. { \"Buffer\": [\"buffer\", \"Buffer\"] }",
+                      "additionalProperties": true,
+                      "type": "object"
+                    },
                     "granularChunks": {
                       "title": "Separate one common chunk to many small dynamic chunks",
                       "default": false,
@@ -1385,6 +1395,16 @@
                         }
                       },
                       "additionalProperties": false
+                    },
+                    "webpackResolveAlias": {
+                      "title": "Browser package resolve aliases. E.g. { \"stream\": \"stream-browserify\" }",
+                      "additionalProperties": true,
+                      "type": "object"
+                    },
+                    "webpackProvide": {
+                      "title": "Browser packages to provide with ProvidePlugin. E.g. { \"Buffer\": [\"buffer\", \"Buffer\"] }",
+                      "additionalProperties": true,
+                      "type": "object"
                     }
                   }
                 }
@@ -1919,6 +1939,16 @@
                         }
                       },
                       "additionalProperties": false
+                    },
+                    "webpackResolveAlias": {
+                      "title": "Browser package resolve aliases. E.g. { \"stream\": \"stream-browserify\" }",
+                      "additionalProperties": true,
+                      "type": "object"
+                    },
+                    "webpackProvide": {
+                      "title": "Browser packages to provide with ProvidePlugin. E.g. { \"Buffer\": [\"buffer\", \"Buffer\"] }",
+                      "additionalProperties": true,
+                      "type": "object"
                     }
                   }
                 }

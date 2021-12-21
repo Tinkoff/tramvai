@@ -251,6 +251,16 @@ export interface ConfigEntry {
          * @default {}
          */
         experiments?: Experiments;
+        /**
+         * @title Browser package resolve aliases. E.g. { "stream": "stream-browserify" }
+         * @additionalProperties true
+         */
+        webpackResolveAlias?: Record<string, string>;
+        /**
+         * @title Browser packages to provide with ProvidePlugin. E.g. { "Buffer": ["buffer", "Buffer"] }
+         * @additionalProperties true
+         */
+        webpackProvide?: Record<string, any>;
       };
     };
     /**

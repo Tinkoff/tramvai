@@ -7,9 +7,17 @@ export default (configManager: ConfigManager) => (config: Config) => {
   // поэтому если они всё же где-то используются на клиенте их надо добавить явно
   config.resolve.alias.set('path', 'path-browserify').set('vm', false);
 
+  const browserifyPolyfills = configManager.build.configurations.webpackResolveAlias;
+  if (browserifyPolyfills) {
+    Object.entries(browserifyPolyfills).forEach(([key, value]) => {
+      config.resolve.alias.set(key, value);
+    });
+  }
+
   config.plugin('provide').use(webpack.ProvidePlugin, [
     {
       process: 'process',
+      ...configManager.build.configurations.webpackProvide,
     },
   ]);
 };
