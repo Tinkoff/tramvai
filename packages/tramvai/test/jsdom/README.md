@@ -1,8 +1,8 @@
 # Tramvai test jest
 
-Библиотека хелперов для тестирования в среде [jsdom](https://github.com/jsdom/jsdom)
+Set of helpers for testing in [jsdom environment](https://github.com/jsdom/jsdom)
 
-## Подключение
+## Installation
 
 ```bash
 npm i --save-dev @tramvai/test-jsdom
@@ -12,7 +12,7 @@ npm i --save-dev @tramvai/test-jsdom
 
 ### waitRaf
 
-Позволяет подождать выполнения requestAnimationFrame калбеков в тесте
+Wait for execution of `requestAnimationFrame` callback
 
 ```ts
 import { waitRaf } from '@tramvai/test-jsdom';

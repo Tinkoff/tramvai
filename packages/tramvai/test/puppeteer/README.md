@@ -1,10 +1,10 @@
 # Tramvai test puppeteer
 
-Библиотека хелперов для работы с [puppeteer](https://github.com/puppeteer/puppeteer) в интеграционных тестах
+Set of helpers for using [puppeteer](https://github.com/puppeteer/puppeteer) in the integration tests
 
-> Для работы должен быть установлен отдельно `puppeteer`
+> `puppeter` should be installed separately
 
-## Подключение
+## Installation
 
 ```bash
 npm i --save-dev @tramvai/test-puppeteer
@@ -12,9 +12,9 @@ npm i --save-dev @tramvai/test-puppeteer
 
 ## How To
 
-### Тестирование приложения в браузере с помощью `Puppeteer`
+### Tests in browser
 
-`Puppeteer` запускает тесты в headless Chrome браузере, документация доступна на [официальном сайте](https://pptr.dev/)
+`Puppeteer` runs tests in headless Chrome browser, documentation can be found on [official site](https://pptr.dev/)
 
 ```ts
 import { startCli } from '@tramvai/test-integration';

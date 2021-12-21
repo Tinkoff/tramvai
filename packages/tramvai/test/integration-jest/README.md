@@ -1,10 +1,10 @@
 # Tramvai test integration jest
 
-Пресет для работы с интеграционными тестами в jest
+Jest preset for integration-testing
 
-> Для работы должен быть установлены отдельно `@tramvai/cli` и `puppeteer`
+> `@tramvai/cli` and `puppeteer` should be installed separately
 
-## Подключение
+## Installation
 
 ```bash
 npm i --save-dev @tramvai/test-integration-jest
@@ -12,11 +12,11 @@ npm i --save-dev @tramvai/test-integration-jest
 
 ## How To
 
-### Дебаг и разработка интеграционных тестов в Jest
+### Debug and development of integration tests in Jest
 
-Используя наш пресет для jest можно запускать в watch режиме интеграционные тесты, при этом само приложение запустится только один раз и будет работать в фоне.
+Using this jest preset you can run integration tests in watch mode. In this case, application itself will be launched only once and will work in background.
 
-1. Добавляем в `jest.integration.config.js` пресет `@tramvai/test-integration-jest`
+1. Add preset `@tramvai/test-integration-jest` to `jest.integration.config.js`:
 
    ```js
    module.exports = {
@@ -24,7 +24,7 @@ npm i --save-dev @tramvai/test-integration-jest
    };
    ```
 
-2. Добавляем в `package.json` отдельный скрипт для запуска в watch-режиме:
+2. Add new script for running tests in watch mode to `package.json`:
 
    ```json
    {
@@ -35,11 +35,11 @@ npm i --save-dev @tramvai/test-integration-jest
    }
    ```
 
-3. Запускаем интересующий тест через `yarn test:integration:watch <path_to_test>`. При этом можно будет зайти на стандартный урл `http://localhost:3000` и посмотреть приложение во время работы.
+3. Run some test with `yarn test:integration:watch <path_to_test>`. In this case you are able to go to local url `http://localhost:3000` and see application at work.
 
-### Окружение для запуска Jest
+### Environment for Jest
 
-Минимальный набор зависимостей для запуска `jest`:
+Minimal set of dependencies for running `jest`:
 
 ```bash
 npm i --save-dev jest @types/jest jest-circus
