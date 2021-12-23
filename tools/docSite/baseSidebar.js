@@ -97,7 +97,6 @@ module.exports = {
       label: 'React Query',
       items: [],
     },
-    'features/migration',
     'features/static-html-export',
     'features/file-system-pages',
     {
@@ -113,6 +112,48 @@ module.exports = {
         },
       ],
     },
+    {
+      type: 'category',
+      label: 'SEO',
+      items: [
+        'references/modules/seo',
+        {
+          type: 'ref',
+          label: 'Meta tags generator',
+          id: 'references/libs/meta-tags-generate',
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Logs and metrics',
+      items: [
+        'references/modules/log',
+        {
+          type: 'ref',
+          label: 'Logger Lib',
+          id: 'references/libs/logger',
+        },
+        {
+          type: 'ref',
+          label: 'Metrics',
+          id: 'references/modules/metrics',
+        },
+        {
+          type: 'ref',
+          label: 'Sentry',
+          id: 'references/modules/sentry',
+        },
+        {
+          type: 'ref',
+          label: 'Error interceptor',
+          id: 'modules/error-interceptor',
+        },
+      ],
+    },
+    'guides/deploy',
+    'references/modules/mocker',
+    'features/migration',
   ],
   Guides: [
     'guides/tramvai-library',

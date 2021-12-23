@@ -1,6 +1,6 @@
 ---
 id: deploy
-title: Application deploy
+title: Deployment
 ---
 
 ## Introduction
@@ -67,8 +67,9 @@ If you deploy to kubernetes, then for these cases there are special urls for pro
 Tramvai has a built-in static return server. It is better not to do this, for the reason that nodeJS is not the best tool for this and static will affect the application.
 
 In general, everything is the same as in a regular deployment, but you need to add copying user assets to the docker image, for this:
-* add copy files `COPY dist/client /app/public/statics`
-* change ENV variable ASSETS_PREFIX
+
+- add copy files `COPY dist/client /app/public/statics`
+- change ENV variable ASSETS_PREFIX
 
 Dockerfile example
 

@@ -1,4 +1,4 @@
-# Seo
+# SEO
 
 The module internally takes data from the page configuration, generates meta tags and adds to the page.
 
@@ -24,8 +24,7 @@ createApp({
 
 ## Tramvai integration
 
-The module does not add a public api to the DI.
-The seo renderer uses the `@tramvai/module-render` capabilities to insert code into the html page.
+The module does not add a public api to the DI. The seo renderer uses the `@tramvai/module-render` capabilities to insert code into the html page.
 
 ## Basic data sources
 
@@ -74,8 +73,7 @@ createApp({
 });
 ```
 
-Each source is a function that takes a meta and allows you to extend the meta through a _updateMeta_ call.
-The priority is a positive number, for each specific meta key the value with the highest priority will be used, the value with priority 0 denotes the default value.
+Each source is a function that takes a meta and allows you to extend the meta through a _updateMeta_ call. The priority is a positive number, for each specific meta key the value with the highest priority will be used, the value with priority 0 denotes the default value.
 
 More about the format [in the documentation](references/libs/meta-tags-generate.md)
 

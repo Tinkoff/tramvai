@@ -2,22 +2,18 @@ import { isInvalidUrl } from '@tinkoff/url';
 import type { Options } from './abstract';
 import { AbstractRouter } from './abstract';
 import { ServerHistory } from '../history/server';
-import type { Navigation, NavigateOptions, HookName, NavigationHook } from '../types';
+import type { Navigation, NavigateOptions, HookName } from '../types';
 import { RouteTree } from '../tree/tree';
 import { logger } from '../logger';
 
 export class Router extends AbstractRouter {
+  protected defaultRedirectCode: number;
   protected blocked = false;
   protected redirectCode?: number;
-  constructor(
-    options: Options & {
-      onRedirect: (navigation: Navigation) => Promise<void>;
-      onNotFound: NavigationHook;
-      onBlock: NavigationHook;
-    }
-  ) {
+  constructor(options: Options) {
     super(options);
     this.tree = new RouteTree(options.routes);
+    this.defaultRedirectCode = options.defaultRedirectCode ?? 308;
 
     this.history = new ServerHistory();
   }
@@ -74,7 +70,7 @@ export class Router extends AbstractRouter {
     const normalized = super.normalizePathname(pathname);
 
     if (normalized !== pathname) {
-      this.redirectCode = 308;
+      this.redirectCode = this.defaultRedirectCode;
     }
 
     return normalized;
@@ -82,7 +78,7 @@ export class Router extends AbstractRouter {
 
   protected resolveUrl(options: NavigateOptions) {
     if (options.url && isInvalidUrl(options.url)) {
-      this.redirectCode = 308;
+      this.redirectCode = this.defaultRedirectCode;
     }
 
     return super.resolveUrl(options);

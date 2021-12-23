@@ -115,7 +115,8 @@ describe('router/no-spa', () => {
 
   describe('redirects', () => {
     it('should redirect for trailing slashes', async () => {
-      await getApp().request('/test').expect(308).expect('Location', '/test/');
+      await getApp().request('/test').expect(301).expect('Location', '/test/');
+      await getApp().request('/test', { method: 'post' }).expect(308).expect('Location', '/test/');
     });
 
     it('should redirect with custom http code', async () => {

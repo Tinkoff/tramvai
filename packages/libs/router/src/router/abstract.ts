@@ -46,6 +46,8 @@ export interface Options {
   guards?: NavigationGuard[];
 
   onChange?: NavigationSyncHook[];
+
+  defaultRedirectCode?: number;
 }
 
 interface InternalOptions {

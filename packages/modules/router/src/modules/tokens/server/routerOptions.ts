@@ -1,15 +1,17 @@
-import type { RESPONSE_MANAGER_TOKEN } from '@tramvai/tokens-common';
+import type { REQUEST_MANAGER_TOKEN, RESPONSE_MANAGER_TOKEN } from '@tramvai/tokens-common';
 import { throwRedirectFoundError, throwHttpError } from '@tinkoff/errors';
 import type { Navigation, Router } from '@tinkoff/router';
 
 type RouterOptions = Pick<
   ConstructorParameters<typeof Router>[0],
-  'onRedirect' | 'onNotFound' | 'onBlock'
+  'onRedirect' | 'onNotFound' | 'onBlock' | 'defaultRedirectCode'
 >;
 
 export const routerOptions = ({
+  requestManager,
   responseManager,
 }: {
+  requestManager: typeof REQUEST_MANAGER_TOKEN;
   responseManager: typeof RESPONSE_MANAGER_TOKEN;
 }): RouterOptions => {
   const throwError = (defaultStatus: number) => {
@@ -33,5 +35,6 @@ export const routerOptions = ({
     onBlock: async () => {
       throwError(500);
     },
+    defaultRedirectCode: requestManager.getMethod() === 'GET' ? 301 : 308,
   };
 };

@@ -40,10 +40,9 @@ Information about all successfully executed actions will be transferred to the c
 
 ### Errors in actions
 
-By default, errors in actions only logged with event `action-execution-error`, but they do not stop the page rendering pipeline.
-The only exceptions are actions that throw `NotFoundError` or `RedirectFoundError` errors from `@tinkoff/errors` library.
+By default, errors in actions only logged with event `action-execution-error`, but they do not stop the page rendering pipeline. The only exceptions are actions that throw `NotFoundError` or `RedirectFoundError` errors from `@tinkoff/errors` library.
 
-When `new RedirectFoundError({ nextUrl })` is thrown, the page request will be redirected to `nextUrl` with `308` status (default).
+When `new RedirectFoundError({ nextUrl })` is thrown, the page request will be redirected to `nextUrl` with `301` status (default).
 
 When `new NotFoundError()` is thrown, the page request will have a status of `404` (default), and if your application has `not-found` route, that route **will not be render**.
 
@@ -233,3 +232,4 @@ const preparePageAction = creareAction({
 });
 
 ConcertVenuePage.actions = [preparePageAction];
+```

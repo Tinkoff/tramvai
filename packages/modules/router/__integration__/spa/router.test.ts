@@ -126,7 +126,8 @@ describe('router/spa', () => {
 
   describe('redirects', () => {
     it('should redirect for trailing slash on first entry', async () => {
-      await getApp().request('/test').expect(308).expect('Location', '/test/');
+      await getApp().request('/test').expect(301).expect('Location', '/test/');
+      await getApp().request('/test', { method: 'post' }).expect(308).expect('Location', '/test/');
     });
 
     it('should redirect for trailing slash on spa navigations', async () => {
