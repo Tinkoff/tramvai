@@ -6,13 +6,7 @@ import type { CreateMutationOptions, Mutation, MutationKey } from './types';
 import { MUTATION_PARAMETERS } from './types';
 import { defaultKey } from '../defaultKey';
 
-export const convertToRawMutation = <
-  Options,
-  Variables,
-  Result,
-  Deps,
-  Key extends MutationKey<Options>
->(
+const convertToRawMutation = <Options, Variables, Result, Deps, Key extends MutationKey<Options>>(
   mutation: Mutation<Options, Variables, Result, Deps, Key>,
   context: ActionContext,
   options?: Options
@@ -53,6 +47,9 @@ export const createMutation = <Options, Variables, Result, Deps, Key extends Mut
           ...options,
         },
       });
+    },
+    raw: (context: ActionContext, options?: Options) => {
+      return convertToRawMutation(mutation, context, options);
     },
   };
 

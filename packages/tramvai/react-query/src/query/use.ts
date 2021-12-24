@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 import type { UseQueryOptions, QueryObserverResult } from 'react-query';
-import { useQuery as useOriginalQuery } from 'react-query';
+import { useQuery as useOriginalQuery, useQueries as useOriginalQueries } from 'react-query';
 import { useConsumerContext } from '@tramvai/state';
+import { useShallowEqual } from '@tinkoff/react-hooks';
 import type { Query } from './types';
 import { isQuery } from '../baseQuery/types';
-import { convertToRawQuery } from './create';
 
 function useQuery<Options extends void, Result, Deps>(
   query: UseQueryOptions<Result, Error> | Query<Options, Result, Deps>
@@ -20,7 +20,7 @@ function useQuery<Options, Result, Deps>(
   const context = useConsumerContext();
   const resultQuery = useMemo(() => {
     if (isQuery(query)) {
-      return convertToRawQuery(query, context, options as Options);
+      return query.raw(context, options as Options);
     }
 
     return query;
@@ -29,4 +29,22 @@ function useQuery<Options, Result, Deps>(
   return useOriginalQuery<Result, Error>(resultQuery);
 }
 
-export { useQuery };
+function useQueries<Result, Deps>(
+  queries: Array<UseQueryOptions<Result, Error> | Query<any, Result, Deps>>
+) {
+  const context = useConsumerContext();
+  const memoQueries = useShallowEqual(queries);
+  const resultQueries = useMemo(() => {
+    return memoQueries.map((query) => {
+      if (isQuery(query)) {
+        return query.raw(context);
+      }
+
+      return query;
+    });
+  }, [memoQueries, context]);
+
+  return useOriginalQueries(resultQueries);
+}
+
+export { useQuery, useQueries };

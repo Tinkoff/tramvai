@@ -1,16 +1,67 @@
 # React Query
 
-Библиотека для работы с запросами в React-компонентах. Базируется на [react-query](https://react-query.tanstack.com/).
+A library for handling requests in React components. Based on [react-query](https://react-query.tanstack.com/).
 
 ## Explanation
 
-Для работы библиотеки необходимо, чтобы в tramvai-приложение был добавлен модуль [@tramvai/module-react-query](references/modules/react-query.md)
+For the library to work, the module [@tramvai/module-react-query](references/modules/react-query.md) must be added to the tramvai application
 
 ## Api
 
+### Query
+
+A wrapper around react-query options with tramvai integration.
+
+#### fork
+
+Create new `Query` from an existing query with option to override settings.
+
+```ts
+import { createQuery } from '@tramvai/react-query';
+
+const query = createQuery();
+const newQuery = query.fork({
+  refetchInterval: 2000,
+  refetchIntervalInBackground: false,
+});
+```
+
+#### prefetchAction
+
+Return a tramvai action that can be used to prefetch current query
+
+```ts
+export default function PageComponent() {
+  const { data, isLoading } = useQuery(query);
+
+  return <div>{isLoading ? 'loading...' : data}</div>;
+}
+
+Component.actions = [query.prefetchAction()];
+```
+
+#### fetchAction
+
+Return a tramvai action that can be used to fetch current query
+
+```ts
+const action = createAction({
+  name: 'action',
+  fn: async (context) => {
+    const result = await context.executeAction(query.fetchAction());
+
+    console.log('__action__', result);
+  },
+});
+```
+
+#### raw
+
+Might be used when the raw query options is needed. The result can be passed to the underlying methods of `react-query` lib in cases when `@tramvai/react-query` doesn't provide appropriate wrapper. This method is used internally in the lib to redirect calls to `react-query`.
+
 ### createQuery
 
-Позволяет создать объект `Query` который позже можно будет использовать в компонентах с помощью `useQuery`. Используется для выполнения единичных запросов на получение данных.
+Allows you to create a `Query` object that can later be used in components using `useQuery`. Used to execute single data retrieval requests.
 
 ```ts
 import { createQuery } from '@tramvai/react-query';
@@ -28,17 +79,16 @@ const query = createQuery({
 });
 ```
 
-#### Уникальные параметры запроса
+#### Unique query parameters
 
-Для создания общей `query`, принимающий параметры для запроса, необходимо возвращать уникальный `key`,
-подробнее об этом можно почитать в разделе официальной документации [Query Keys](https://react-query.tanstack.com/guides/query-keys)
+To create a generic `query` that takes parameters for a query, you must return a unique `key`, you can read more about this in the official documentation section [Query Keys](https://react-query.tanstack.com/guides/query-keys)
 
-В качестве параметра `key` можно использовать:
+As a parameter `key` you can use:
 
-- строку, например `key: 'query-name'`
-- массив, где в качестве элементов можно использовать любые сериализуемые данные, например `key: ['query-name', false, { bar: 'baz }]`
-- функция, которая принимает параметры, с которыми вызвана `query`, и возвращает строку - `key: (options) => 'query-name'`
-- функция, которая принимает параметры, с которыми вызвана `query`, и возвращает массив, где в качестве элементов можно использовать любые сериализуемые данные - `key: (options) => ['query-name', options, { bar: 'baz }]`
+- a string, such as `key: 'query-name'`
+- an array where any serializable data can be used as elements, for example `key: ['query-name', false, { bar: 'baz }]`
+- a function that takes the parameters with which `query` is called and returns a string - `key: (options) => 'query-name'`
+- a function that accepts parameters, with which `query` is called, and returns an array, where any serializable data can be used as elements - `key: (options) => ['query-name', options, { bar: 'baz' }]`
 
 ```ts
 import { createQuery, useQuery } from '@tramvai/react-query';
@@ -64,9 +114,9 @@ export function Component({ id }) {
 
 ### useQuery
 
-React-хук для работы с объектом `Query`
+React hook for working with `Query` object
 
-[Документация из react-query](https://react-query.tanstack.com/reference/useQuery)
+[react-query docs](https://react-query.tanstack.com/reference/useQuery)
 
 ```ts
 import { useQuery } from '@tramvai/react-query';
@@ -78,9 +128,33 @@ export function Component() {
 }
 ```
 
+### useQueries
+
+React Hook for working with the list of `Query` objects
+
+[react-query docs](https://react-query.tanstack.com/reference/useQueries)
+
+```ts
+import { useQueries } from '@tramvai/react-query';
+
+export function Component() {
+  const [
+    { data: data1, isLoading: isLoading1 },
+    { data: data2, isLoading: isLoading2 },
+  ] = useQueries([query1, query2]);
+
+  return (
+    <div>
+      <div>{isLoading1 ? 'loading1...' : data1}</div>
+      <div>{isLoading2 ? 'loading2...' : data2}</div>
+    </div>
+  );
+}
+```
+
 ### createInfiniteQuery
 
-Позволяет создать объект `InfiniteQuery` который позже можно будет использовать в компонентах с помощью `useInfiniteQuery`. Используется для выполнения запросов на получение последовательности данных, которые можно подгружать по мере работы компонента.
+Creates an `InfiniteQuery` object that can later be used in components using `useInfiniteQuery`. It is used to execute queries to obtain a sequence of data that can be loaded as the component runs.
 
 ```ts
 import { createInfiniteQuery } from '@tramvai/react-query';
@@ -108,9 +182,9 @@ const query = createInfiniteQuery({
 
 ### useInfiniteQuery
 
-React-хук для работы с объектом `InfiniteQuery`
+React hook for working with the `InfiniteQuery` object
 
-[Документация из react-query](https://react-query.tanstack.com/reference/useInfiniteQuery)
+[react-query docs](https://react-query.tanstack.com/reference/useInfiniteQuery)
 
 ```ts
 import { useInfiniteQuery } from '@tramvai/react-query';
@@ -143,7 +217,7 @@ export function Component() {
 
 ### createMutation
 
-Позволяет создать объект `Mutation` который позже можно будет использовать в компонентах с помощью `useMutation`. Используется для отправки и изменения данных в апи.
+Creates a `Mutation` object that can later be used in components using `useMutation`. Used to send and modify data in the api.
 
 ```ts
 import { createMutation } from '@tramvai/react-query';
@@ -167,9 +241,9 @@ const mutation = createMutation({
 
 ### useMutation
 
-React-хук для работы с объектом `Mutation`
+React hook for working with the `Mutation` object
 
-[Документация из react-query](https://react-query.tanstack.com/reference/useMutation)
+[react-query docs](https://react-query.tanstack.com/reference/useMutation)
 
 ```ts
 import { useMutation } from '@tramvai/react-query';
@@ -191,4 +265,12 @@ export function Component() {
 
 ## How-to
 
-[Примеры использования @tramvai/react-query](how-to/react-query-usage.md)
+[Examples of using @tramvai/react-query](how-to/react-query-usage.md)
+
+### Use `react-query` directly
+
+:::warning Prefer to use methods from the `@tramvai/react-query` as it is can work both with the `Query` wrapper and the query options to `react-query` itself :::
+
+You can get [`QueryClient`](https://react-query.tanstack.com/reference/QueryClient) from di by token `QUERY_CLIENT_TOKEN` or using method `useQueryClient` in React-components.
+
+To convert wrapped `Query` object to object acceptable by `react-query` use method [raw](#raw) of the `Query` instance.

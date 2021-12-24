@@ -4,7 +4,6 @@ import { useInfiniteQuery as useOriginalInfiniteQuery } from 'react-query';
 import { useConsumerContext } from '@tramvai/state';
 import type { InfiniteQuery } from './types';
 import { isQuery } from '../baseQuery/types';
-import { convertToRawQuery } from './create';
 
 function useInfiniteQuery<Options extends void, PageParam, Result, Deps>(
   query: UseInfiniteQueryOptions<Result, Error> | InfiniteQuery<Options, PageParam, Result, Deps>
@@ -20,7 +19,7 @@ function useInfiniteQuery<Options, PageParam, Result, Deps>(
   const context = useConsumerContext();
   const resultQuery = useMemo(() => {
     if (isQuery(query)) {
-      return convertToRawQuery(query, context, options as Options);
+      return query.raw(context, options as Options);
     }
 
     return query;

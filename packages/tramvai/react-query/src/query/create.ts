@@ -7,7 +7,7 @@ import type { CreateQueryOptions, Query } from './types';
 import { QUERY_PARAMETERS } from '../baseQuery/types';
 import { defaultKey } from '../defaultKey';
 
-export const convertToRawQuery = <Options, Result, Deps>(
+const convertToRawQuery = <Options, Result, Deps>(
   query: Query<Options, Result, Deps>,
   context: ActionContext,
   options: Options
@@ -49,11 +49,29 @@ export const createQuery = <Options = unknown, Result = unknown, Deps = unknown>
         },
       });
     },
+    raw: (context: ActionContext, options: Options) => {
+      return convertToRawQuery(query, context, options);
+    },
     prefetchAction: (options: Options) => {
       return createAction({
         name: 'queryPrefetch',
         fn: (context, __, { queryClient }) => {
           return queryClient.prefetchQuery(convertToRawQuery(query, context, options));
+        },
+        deps: {
+          queryClient: QUERY_CLIENT_TOKEN,
+        },
+        conditions: {
+          ...conditions,
+          onlyServer: true,
+        },
+      });
+    },
+    fetchAction: (options: Options) => {
+      return createAction({
+        name: 'queryFetch',
+        fn: (context, __, { queryClient }) => {
+          return queryClient.fetchQuery(convertToRawQuery(query, context, options));
         },
         deps: {
           queryClient: QUERY_CLIENT_TOKEN,

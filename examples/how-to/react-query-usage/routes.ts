@@ -1,4 +1,4 @@
-import { ROUTES_TOKEN } from '@tramvai/module-router';
+import type { ROUTES_TOKEN } from '@tramvai/module-router';
 
 export const routes: Array<typeof ROUTES_TOKEN> = [
   {
@@ -13,6 +13,13 @@ export const routes: Array<typeof ROUTES_TOKEN> = [
     path: '/use-query-prefetch',
     config: {
       pageComponent: 'use-query-prefetch',
+    },
+  },
+  {
+    name: 'use-query-fetch',
+    path: '/use-query-fetch',
+    config: {
+      pageComponent: 'use-query-fetch',
     },
   },
   {
@@ -62,6 +69,13 @@ export const routes: Array<typeof ROUTES_TOKEN> = [
     path: '/use-query-conditions',
     config: {
       pageComponent: 'use-query-conditions',
+    },
+  },
+  {
+    name: 'use-queries',
+    path: '/use-queries',
+    config: {
+      pageComponent: 'use-queries',
     },
   },
 ];

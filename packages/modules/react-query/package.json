@@ -22,12 +22,13 @@
     "@tramvai/safe-strings": "0.0.0-stub",
     "@tramvai/tokens-child-app": "0.0.0-stub",
     "@tramvai/tokens-render": "0.0.0-stub",
-    "react-query": "^3.16.0"
+    "react-query": "^3.34.5"
   },
   "devDependencies": {},
   "peerDependencies": {
     "@tinkoff/dippy": "0.0.0-stub",
     "@tramvai/core": "0.0.0-stub",
+    "@tramvai/module-dev-tools": "0.0.0-stub",
     "react": ">=16.8.0",
     "tslib": "^2.0.3"
   },

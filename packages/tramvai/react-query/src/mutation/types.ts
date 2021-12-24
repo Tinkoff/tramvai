@@ -1,4 +1,4 @@
-import type { ActionConditionsParameters } from '@tramvai/core';
+import type { ActionConditionsParameters, ActionContext } from '@tramvai/core';
 import type { ProvideDepsIterator } from '@tinkoff/dippy';
 import type {
   MutationKey as ReactMutationKey,
@@ -35,8 +35,9 @@ export interface CreateMutationOptions<
 export interface Mutation<Options, Variables, Result, Deps, Key extends MutationKey<Options>> {
   [MUTATION_PARAMETERS]: CreateMutationOptions<Options, Variables, Result, Deps, Key>;
   fork(
-    options: MutationOptions<Result, any, Variables, any>
+    options: MutationOptions<Result, Error, Variables, any>
   ): Mutation<Options, Variables, Result, Deps, Key>;
+  raw(context: ActionContext, options?: Options): UseMutationOptions<Result, Error, Variables>;
 }
 
 export const isMutation = <Options, Variables, Result, Deps, Key extends MutationKey<Options>>(

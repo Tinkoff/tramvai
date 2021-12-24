@@ -3,6 +3,7 @@ import { QUERY_CLIENT_DEHYDRATED_STATE_TOKEN, QUERY_DEHYDRATE_STATE_NAME_TOKEN }
 import { sharedQueryProviders } from './shared/providers';
 
 export * from './tokens';
+export * from './devTools';
 
 @Module({
   imports: [],

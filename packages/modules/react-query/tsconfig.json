@@ -23,6 +23,9 @@
         },
         {
             "path": "../../tokens/child-app"
+        },
+        {
+            "path": "../devTools"
         }
     ]
 }

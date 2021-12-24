@@ -8,7 +8,6 @@ import { useMutation as useOriginalMutation } from 'react-query';
 import { useConsumerContext } from '@tramvai/state';
 import type { Mutation, MutationKey } from './types';
 import { isMutation } from './types';
-import { convertToRawMutation } from './create';
 
 interface UseMutation {
   <Options, Variables, Result, Deps, Key extends (options?: Options) => ReactMutationKey>(
@@ -40,7 +39,7 @@ export const useMutation: UseMutation = <
   const context = useConsumerContext();
   const resultMutation = useMemo(() => {
     if (isMutation(mutation)) {
-      return convertToRawMutation(mutation, context, options);
+      return mutation.raw(context, options);
     }
 
     return mutation;

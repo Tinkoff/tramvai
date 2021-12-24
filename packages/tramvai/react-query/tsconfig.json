@@ -21,6 +21,9 @@
         },
         {
             "path": "../../libs/dippy"
+        },
+        {
+            "path": "../../libs/react-hooks"
         }
     ]
 }

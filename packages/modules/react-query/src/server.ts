@@ -11,6 +11,7 @@ import {
 import { sharedQueryProviders } from './shared/providers';
 
 export * from './tokens';
+export * from './devTools';
 
 @Module({
   imports: [],

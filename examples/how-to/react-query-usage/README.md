@@ -1,96 +1,96 @@
-# Работа с @tramvai/react-query
+# Working with @tramvai/react-query
 
-Для работы [@tramvai/react-query](features/react-query/api.md) необходимо подключить в приложение модуль [@tramvai/module-react-query](references/modules/react-query.md)
+For [@tramvai/react-query](features/react-query/api.md) to work, you need to connect the [@tramvai/module-react-query](references/modules/react-query.md) module to the application
 
-## Базовый пример c createQuery и useQuery
+## Basic example with createQuery and useQuery
 
 <p>
 <details>
-<summary>Подробнее</summary>
+<summary>Expand</summary>
 
 @inline components/use-query-base.tsx
 
 </details>
 </p>
 
-## Предзагрузка данных на сервере для useQuery
+## Preloading data on the server for useQuery
 
 <p>
 <details>
-<summary>Подробнее</summary>
+<summary>Expand</summary>
 
 @inline components/use-query-prefetch.tsx
 
 </details>
 </p>
 
-## Шаринг данных useQuery между компонентами
+## Sharing useQuery data between components
 
 <p>
 <details>
-<summary>Подробнее</summary>
+<summary>Expand</summary>
 
 @inline components/use-same-query-many-components.tsx
 
 </details>
 </p>
 
-## Передача параметров для запроса
+## Passing parameters for the request
 
 <p>
 <details>
-<summary>Подробнее</summary>
+<summary>Expand</summary>
 
 @inline components/use-query-parameters.tsx
 
 </details>
 </p>
 
-## Задание параметров react-query
+## Setting react-query parameters
 
 <p>
 <details>
-<summary>Подробнее</summary>
+<summary>Expand</summary>
 
 @inline components/use-query-options.tsx
 
 </details>
 </p>
 
-## Падающие запросы
+## Failed requests
 
 <p>
 <details>
-<summary>Подробнее</summary>
+<summary>Expand</summary>
 
 @inline components/use-query-fail.tsx
 
 </details>
 </p>
 
-## Использование conditions для query
+## Using conditions for query
 
 <p>
 <details>
-<summary>Подробнее</summary>
+<summary>Expand</summary>
 
 @inline components/use-query-conditions.tsx
 
 </details>
 </p>
 
-## Базовый пример для createInfiniteQuery и useInfiniteQuery
+## Basic example for createInfiniteQuery and useInfiniteQuery
 
 <p>
 <details>
-<summary>Подробнее</summary>
+<summary>Expand</summary>
 
 @inline components/use-infinite-query.tsx
 
 </details>
 </p>
 
-## Базовый пример для createMutation и useMutation
+## Basic example for createMutation and useMutation
 
 <p>
 <details>
