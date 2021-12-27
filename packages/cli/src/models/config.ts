@@ -89,7 +89,7 @@ export class ConfigManager {
     const valid = validate(configParameters);
 
     // сохраняем обновленные параметры, в них были добавлены значения по умолчанию
-    this.set(configParameters);
+    this.config = configParameters;
 
     if (!valid) {
       const errorsMessage = validate.errors
