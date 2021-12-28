@@ -147,7 +147,7 @@ module.exports = {
         {
           type: 'ref',
           label: 'Error interceptor',
-          id: 'modules/error-interceptor',
+          id: 'references/modules/error-interceptor',
         },
       ],
     },

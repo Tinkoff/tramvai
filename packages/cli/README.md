@@ -86,7 +86,7 @@ npm i --save-dev @tramvai/cli
 
 ## Настройки для build этапа
 
-[Общее описание механизма сборки артефактов и их доставки](https://github.com/TinkoffCreditSystems/tramvai/-/blob/master/packages/cli/APP_BUILD_EXPLANATION.md)
+[Общее описание механизма сборки артефактов и их доставки](https://github.com/Tinkoff/tramvai/-/blob/master/packages/cli/APP_BUILD_EXPLANATION.md)
 
 ```
 "options": {

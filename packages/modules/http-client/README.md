@@ -26,7 +26,7 @@ createApp({
 
 The `http-client` module adds functionality to the application related to API requests. Available providers allow you to create new services to work with any API and create more specific services with preset settings for specific APIs.
 
-The module implements interfaces from the library [@tramvai/http-client](references/libs/http-client.md) using a special library - adapter [@tramvai/tinkoff-request-http-client-adapter](references/libs/tinkoff-request-http-client-adapter.md), running on top of [@tinkoff/request](https://tinkoffcreditsystems.github.io/tinkoff-request/).
+The module implements interfaces from the library [@tramvai/http-client](references/libs/http-client.md) using a special library - adapter [@tramvai/tinkoff-request-http-client-adapter](references/libs/tinkoff-request-http-client-adapter.md), running on top of [@tinkoff/request](https://tinkoff.github.io/tinkoff-request/).
 
 ## Concepts
 
@@ -198,9 +198,7 @@ describe('testApi', () => {
 
 ### Logging
 
-By default, `@tinkoff/request` will log every failed requests with level `error`.
-You can disable logging by pass `{ silent: true }` parameter to request parameters.
-Useful meta information about request will be available in `error.__meta` property.
+By default, `@tinkoff/request` will log every failed requests with level `error`. You can disable logging by pass `{ silent: true }` parameter to request parameters. Useful meta information about request will be available in `error.__meta` property.
 
 Example:
 
@@ -234,4 +232,4 @@ NODE_DEBUG=request tramvai start<appName>
 ## Environment Variables
 
 - `HTTP_CLIENT_CACHE_DISABLED` - disable caching for all HTTP clients
-- `HTTP_CLIENT_CIRCUIT_BREAKER_DISABLED` - disable plugin https://tinkoffcreditsystems.github.io/tinkoff-request/docs/plugins/circuit-breaker.html
+- `HTTP_CLIENT_CIRCUIT_BREAKER_DISABLED` - disable plugin https://tinkoff.github.io/tinkoff-request/docs/plugins/circuit-breaker.html

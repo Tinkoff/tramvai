@@ -11,7 +11,7 @@
   "sideEffects": false,
   "repository": {
     "type": "git",
-    "url": "git@github.com:TinkoffCreditSystems/tramvai.gitt"
+    "url": "git@github.com:Tinkoff/tramvai.gitt"
   },
   "scripts": {
     "build": "tramvai-build --for-publish",

@@ -1,6 +1,6 @@
 # @tramvai/tinkoff-request-http-client-adapter
 
-Interface implementation `HttpClient` from [@tramvai/http-client](references/libs/http-client.md) based on the library [@tinkoff/request](https://tinkoffcreditsystems.github.io/tinkoff-request/)
+Interface implementation `HttpClient` from [@tramvai/http-client](references/libs/http-client.md) based on the library [@tinkoff/request](https://tinkoff.github.io/tinkoff-request/)
 
 ## API
 

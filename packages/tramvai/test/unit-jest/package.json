@@ -9,7 +9,7 @@
   "sideEffects": false,
   "repository": {
     "type": "git",
-    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+    "url": "git@github.com:Tinkoff/tramvai.git"
   },
   "scripts": {
     "build": "tsc",

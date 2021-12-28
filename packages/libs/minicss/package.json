@@ -19,10 +19,10 @@
   "files": [
     "lib"
   ],
-  "homepage": "https://github.com/TinkoffCreditSystems/tramvai",
+  "homepage": "https://github.com/Tinkoff/tramvai",
   "repository": {
     "type": "git",
-    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+    "url": "git@github.com:Tinkoff/tramvai.git"
   },
   "peerDependencies": {},
   "dependencies": {

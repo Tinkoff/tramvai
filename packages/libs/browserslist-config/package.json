@@ -9,10 +9,10 @@
     "index.js",
     "index.d.ts"
   ],
-  "homepage": "https://github.com/TinkoffCreditSystems/tramvai",
+  "homepage": "https://github.com/Tinkoff/tramvai",
   "repository": {
     "type": "git",
-    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+    "url": "git@github.com:Tinkoff/tramvai.git"
   },
   "sideEffects": false,
   "license": "Apache-2.0"

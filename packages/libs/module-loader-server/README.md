@@ -28,7 +28,7 @@ loader.resolveByUrl('https://cdn.example.com/js/module.js').then((moduleExports)
 });
 ```
 
-В конструктор можно передать опции (см. интерфейс `LoaderDeps`), из важных это параметр `request` который по умлочанию определяется библиотекой [request](https://tinkoffcreditsystems.github.io/tinkoff-request/), и содержит только [deduplicate](https://tinkoffcreditsystems.github.io/tinkoff-request/docs/plugins/cache-deduplicate.html) плагин.
+В конструктор можно передать опции (см. интерфейс `LoaderDeps`), из важных это параметр `request` который по умлочанию определяется библиотекой [request](https://tinkoff.github.io/tinkoff-request/), и содержит только [deduplicate](https://tinkoff.github.io/tinkoff-request/docs/plugins/cache-deduplicate.html) плагин.
 
 Если вам нужны другие плагины или поведение при запросе на сервер, переопределите параметр `request` в конструкторе лоадера.
 

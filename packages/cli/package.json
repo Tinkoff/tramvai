@@ -22,10 +22,10 @@
   "bugs": {
     "url": "https://tinkoff.slack.com/archives/CHF0KE8TX"
   },
-  "homepage": "https://github.com/TinkoffCreditSystems/tramvai",
+  "homepage": "https://github.com/Tinkoff/tramvai",
   "repository": {
     "type": "git",
-    "url": "git@github.com:TinkoffCreditSystems/tramvai.git"
+    "url": "git@github.com:Tinkoff/tramvai.git"
   },
   "main": "lib/api/index.js",
   "dependencies": {

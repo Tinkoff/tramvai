@@ -84,7 +84,7 @@ const routes = [
 ];
 ```
 
-[Example application](https://github.com/TinkoffCreditSystems/tramvai/-/tree/master/examples/fs-external-pages)
+[Example application](https://github.com/Tinkoff/tramvai/-/tree/master/examples/fs-external-pages)
 
 ### File-System Routing
 
@@ -118,7 +118,7 @@ Where path with square brackets relates to dynamic parts of url.
 
 > File for `/login/` page must be named `login/index.tsx` instead of `login.tsx`, because we must have strictly one way to convert url back to page component name.
 
-[Example application](https://github.com/TinkoffCreditSystems/tramvai/-/tree/master/examples/fs-routing)
+[Example application](https://github.com/Tinkoff/tramvai/-/tree/master/examples/fs-routing)
 
 ## Usage
 

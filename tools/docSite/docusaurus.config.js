@@ -22,7 +22,7 @@ const docusaurusConfig = {
         docs: {
           path: resolve('./tmp-docs'),
           editUrl:
-            'https://github.com/TinkoffCreditSystems/tramvai/-/edit/master/docs/get-started/overview.md',
+            'https://github.com/Tinkoff/tramvai/-/edit/master/docs/get-started/overview.md',
           // sidebars file relative to website dir.
           sidebarPath: require.resolve('./sidebars.json'),
           versions: {
@@ -87,7 +87,7 @@ const docusaurusConfig = {
         { to: 'docs/get-started/overview', label: 'Docs', position: 'right' },
         { to: 'docs/references/tramvai/create-app', label: 'API', position: 'right' },
         {
-          href: 'https://github.com/TinkoffCreditSystems/tramvai',
+          href: 'https://github.com/Tinkoff/tramvai',
           label: 'Репозиторий',
           position: 'right',
         },
@@ -121,7 +121,7 @@ const docusaurusConfig = {
         {
           title: 'Ссылки',
           items: [
-            { label: 'Репозиторий', href: 'https://github.com/TinkoffCreditSystems/tramvai' },
+            { label: 'Репозиторий', href: 'https://github.com/Tinkoff/tramvai' },
             
           ],
         },

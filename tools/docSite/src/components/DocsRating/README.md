@@ -8,7 +8,7 @@
 
 ## Использование
 
-Пример подключения можно посмотреть в [документации tramvai](https://github.com/TinkoffCreditSystems/tramvai/-/blob/master/tools/docSite/src/theme/DocItem/index.js)
+Пример подключения можно посмотреть в [документации tramvai](https://github.com/Tinkoff/tramvai/-/blob/master/tools/docSite/src/theme/DocItem/index.js)
 
 Для получения возможности внесения изменений в компоненты docusaurus нужно воспользоваться командой [swizzle](https://v2.docusaurus.io/docs/cli#docusaurus-swizzle)
 
