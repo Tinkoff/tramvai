@@ -77,4 +77,32 @@ Array [
 `);
     expect(preload).toMatchInlineSnapshot(`Array []`);
   });
+
+  it('should render image on ssr', async () => {
+    const { page } = await getPageWrapper('/image/');
+
+    const image = await page.evaluate(() => {
+      const elem = document.getElementById('page-image');
+
+      // @ts-ignore
+      return elem?.src;
+    });
+
+    expect(image).toMatch(`${getApp().staticUrl}/`);
+  });
+
+  it('should render image on spa', async () => {
+    const { page, router } = await getPageWrapper('/test/');
+
+    await router.navigate('/image/');
+
+    const image = await page.evaluate(() => {
+      const elem = document.getElementById('page-image');
+
+      // @ts-ignore
+      return elem?.src;
+    });
+
+    expect(image).toMatch(`${getApp().staticUrl}/`);
+  });
 });

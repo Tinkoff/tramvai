@@ -32,7 +32,7 @@ export default class RuntimePathPlugin implements webpack.WebpackPluginInstance 
           // some of the webpack plugins may use [importModule](https://webpack.js.org/api/loaders/#thisimportmodule) that allows execute modules at build time
           // for example mini-css-extract-plugin uses this method that leads to error `window is not defined` at build if we don't
           // prevent adding dynamic code to every chunk altogether
-          const isEntry = compilation.entries.has(chunk.id.toString());
+          const isEntry = compilation.entries.has(chunk.name.toString());
 
           compilation.addRuntimeModule(
             chunk,

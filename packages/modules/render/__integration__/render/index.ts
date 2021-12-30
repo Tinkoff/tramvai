@@ -1,12 +1,16 @@
 import { createApp, provide } from '@tramvai/core';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { HTML_ATTRS, RESOURCE_INLINE_OPTIONS, ResourceType } from '@tramvai/module-render';
+import { HTML_ATTRS } from '@tramvai/module-render';
 import { modules, bundles } from '@tramvai/internal-test-utils/shared/common';
+import { ROUTES_TOKEN } from '@tramvai-tinkoff/module-router';
 
 createApp({
   name: 'render',
   modules,
-  bundles,
+  bundles: {
+    ...bundles,
+    image: () => import(/* webpackChunkName: "image" */ './bundles/image'),
+  },
   providers: [
     {
       provide: HTML_ATTRS,
@@ -40,5 +44,16 @@ createApp({
       },
       multi: true,
     },
+    provide({
+      provide: ROUTES_TOKEN,
+      multi: true,
+      useValue: {
+        name: 'image',
+        path: '/image/',
+        config: {
+          bundle: 'image',
+        },
+      },
+    }),
   ],
 });
