@@ -4,11 +4,11 @@ import { logger } from '@tinkoff/logger';
 const log = logger('tramvai-check-versions');
 
 export const checkVersions = (depsVersions: Map<string, SemVer>) => {
-  // Пререлизные версии должны обрабатываться отдельно,
-  // для них достаточно проверить, что они выше,
-  // чем прочие стабильные версии.
-  // Если все версии tramvai библиотек приложения будут пререлизными,
-  // они не будут сравниваться между собой.
+  // Pre-release versions must be processed separately,
+  // for them it is enough to check that they are higher,
+  // than other stable versions.
+  // If all versions of the tramvai libraries of the application will be pre-release,
+  // they will not be compared to each other.
   const prereleaseDepsVersions: Map<string, SemVer> = new Map();
   let maxVersion: SemVer;
   let hasWrongVersions = false;
@@ -36,19 +36,19 @@ export const checkVersions = (depsVersions: Map<string, SemVer>) => {
   });
 
   if (!hasWrongVersions) {
-    log.info('С версиями tramvai все ок!');
+    log.info('The tramvai versions are okay!');
     return;
   }
 
-  log.error(`Версии модулей tramvai не совпадают!
+  log.error(`The versions of the tramvai modules do not match!
 
-  Необходимо сделать следующее:
-    1. Проверить package.json и поправить версии пакетов на фиксированную версию "${maxVersion.raw}" для пакетов из списка ниже
-    2. Обновить лок-файл командой "npm i" или "yarn"
-    3. Если после обновления ошибка всё равно проявляется - проверить лок-файл на наличие неправильных версий и возможно пересобрать лок-файл
-    4. Если при обновлении какая-то версия пакета не находится, то скорее всего это устаревший пакет и стоит поискать информацию о таком пакете в https://tramvai.dev/docs/releases/migration
+  It is necessary to do the following:
+    1. Check package.json and set the package versions to a fixed version "${maxVersion.raw}" for the packages listed below
+    2. Update the lock file with the command "npm i" or "yarn"
+    3. If after upgrading the error still occurs - check the lock file for incorrect versions and maybe rebuild the lock file
+    4. If there is no version of a package when you upgrade, it is probably an outdated package and you should look up for the replacement at https://tramvai.dev/docs/releases/migration.
 
-  Список пакетов для обновления:
+  List of packages to update:
 `);
 
   depsVersions.forEach((version, name) => {

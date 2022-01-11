@@ -1,3 +1,3 @@
 # @tinkoff-monorepo/pkgs-collector-workspaces
 
-Получает все пакеты, описанные в `package.json -> workspaces`
+Get all of the packages defined in `package.json -> workspaces`

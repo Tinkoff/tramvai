@@ -1,5 +1,7 @@
 import chalk from 'chalk';
 import { AnalyzePlugin } from './pluginBase';
+import type { FileStatsOptions } from '../../../library/webpack/plugins/FileStats';
+import { FileStatsPlugin } from '../../../library/webpack/plugins/FileStats';
 
 export class StatoscopeAnalyzePlugin extends AnalyzePlugin {
   statsFileName = 'stats-all.json';
@@ -8,10 +10,9 @@ export class StatoscopeAnalyzePlugin extends AnalyzePlugin {
 
   statsFilePath: string;
 
-  options = [
+  options: [FileStatsOptions] = [
     {
       filename: this.statsFileName,
-      fields: null,
       stats: {
         hash: true, // add compilation hash
         entrypoints: true, // add entrypoints stats
@@ -30,6 +31,8 @@ export class StatoscopeAnalyzePlugin extends AnalyzePlugin {
     },
   ];
 
+  plugin = FileStatsPlugin;
+
   afterBuild = () => {
     console.log(
       chalk.yellow(
@@ -44,9 +47,4 @@ export class StatoscopeAnalyzePlugin extends AnalyzePlugin {
 
     return Promise.resolve();
   };
-
-  get plugin() {
-    // eslint-disable-next-line import/no-unresolved
-    return require('webpack-stats-plugin').StatsWriterPlugin;
-  }
 }

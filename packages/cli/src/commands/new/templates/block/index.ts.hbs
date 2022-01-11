@@ -1,4 +1,4 @@
-import { createApp, createAction } from '@tramvai/core';
+import { createApp } from '@tramvai/core';
 import { CommonModule } from '@tramvai/module-common';
 import { SpaRouterModule } from '@tramvai/module-router';
 import { RenderModule } from '@tramvai/module-render';
@@ -10,52 +10,20 @@ import {
   ResourceType,
   ResourceSlot,
 } from '@tramvai/tokens-render';
-
-import { CounterModule } from 'entities/counter';
-import { HeaderModule } from 'shared/header';
-import { FooterModule } from 'shared/footer';
-
-export const globalAction = createAction({
-  name: 'global-action',
-  fn: (context, payload) => {
-    console.log(
-      'Performed for each transition on the server and on the client'
-    );
-  },
-  conditions: {
-    always: true,
-  },
-});
+import { HeaderModule } from '~shared/header';
 
 createApp({
   name: '{{configEntry.name}}',
   modules: [
     CommonModule,
-    SpaRouterModule.forRoot([
-      // set a static route for the application, which will be available by https://localhost:3000/
-      {
-        name: 'main',
-        path: '/',
-      },
-      // set a static route for the application, which will be available by https://localhost:3000/second/
-      {
-        name: 'second',
-        path: '/second/',
-        config: {
-          pageComponent: '{{configEntry.name}}/second',
-        },
-      },
-    ]),
+    SpaRouterModule,
     RenderModule.forRoot({ mode: 'strict' }),
     SeoModule,
     ServerModule,
     ErrorInterceptorModule,
-    CounterModule,
     HeaderModule,
-    FooterModule,
   ],
   providers: [
-    // register a meta viewport that will be added to each page
     {
       provide: RENDER_SLOTS,
       multi: true,
@@ -67,11 +35,4 @@ createApp({
       },
     },
   ],
-  // register actions that will be executed for all pages of the application
-  actions: [globalAction],
-  bundles: {
-    // register a bundle that will be used for all pages by default
-    mainDefault: () =>
-      import(/* webpackChunkName: "mainDefault" */ 'pages/index'),
-  },
 });

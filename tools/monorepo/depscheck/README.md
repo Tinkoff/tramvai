@@ -1,59 +1,57 @@
 # @tinkoff-monorepo/depscheck
 
-Утилита для проверки корректности описания зависимостей
+Tool for checking correctness dependency description.
 
-Конфигурируется через .depscheckrc и параметры командной строки
+Tool is configured through `.depscheckrc` file and cli options.
 
-Под капотом использует [depcheck](https://github.com/depcheck/depcheck)
+Under the hood [depcheck](https://github.com/depcheck/depcheck) is used.
 
-## Параметры конфига для .depscheckrc.yml и cli
+## Config parameters for .depscheckrc.yml and cli
 
-Все доступные параметры для `depcheck` можно посмотреть в [доке](https://github.com/depcheck/depcheck/tree/0.9.2), но есть проблема с [недопубликованностью](https://github.com/depcheck/depcheck/issues/537). Поэтому параметры ниже работают, но с оговорками (см `--ignore-patterns`), а остальные нужно проверять.
+All of the available parameters for the `depscheck` can be seen in [docs](https://github.com/depcheck/depcheck/tree/0.9.2).
 
-```
-> yarn depscheck -h
+```sh
+collector
+  --collector                  Module for collecting packages for depshcheck.
+                               Should implement interface
+                               @tinkoff-monorepo/pkgs-collector ->
+                               CollectorInterface (currently
+                               @tinkoff-monorepo/pkgs-collector-pvm is used)
+    [required] [default: {"name":"@tinkoff-monorepo/pkgs-collector-workspaces"}]
+  --collector-config-strategy
+                      [string] [choices: "about-to-update", "update", "changed",
+    "changed-since-release", "affected", "released", "updated", "all"] [default:
+                                                                   ["affected"]]
 
- collector
-   --collector                  Модуль, отвечающий за сбор пакетов для проверки и
-                                реализующий интерфейс
-                                @tinkoff-monorepo/pkgs-collector ->
-                                CollectorInterface (сейчас используется
-                                @tinkoff-monorepo/pkgs-collector-pvm)
-     [required] [default: {"name":"@tinkoff-monorepo/pkgs-collector-workspaces"}]
-   --collector-config-strategy
-                       [string] [choices: "about-to-update", "update", "changed",
-     "changed-since-release", "affected", "released", "updated", "all"] [default:
-                                                                    ["affected"]]
+depcheck
+  --depcheck-ignore-matches      List of module patterns that should not
+                                 generate error in case they are missing in
+                                 package.json              [array] [default: []]
+  --depcheck-ignore-dirs         List of directory names that depscheck should
+                                 not check                 [array] [default: []]
+  --depcheck-skip-missing        Disable check for missing dependencies
+                                                      [boolean] [default: false]
+  --depcheck-ignore-bin-package  Disable checks in bin files for project
+                                                      [boolean] [default: false]
 
- depcheck
-   --depcheck-ignore-matches      Список паттернов имен модулей отсутствие
-                                  которых в зависимостях не должно приводить к
-                                  ошибке                    [array] [default: []]
-   --depcheck-ignore-dirs         Список имен директорий, которые не нужно
-                                  проверять на не описанные зависимости
-                                                            [array] [default: []]
-   --depcheck-skip-missing        Вообще не проверять на не описанные зависимости
-                                                       [boolean] [default: false]
-   --depcheck-ignore-bin-package  Не делать проверок в bin файлах пакета
-                                                       [boolean] [default: false]
-
- Options:
-   --version                   Show version number                      [boolean]
-   --config                    false если конфиг не нужен совсем и можно задать
-                               путь до файла конфига. Иначе отработает логика
-                               cosmiconfig                      [default: "auto"]
-   --fix                       Включает режим исправления ошибок. В данный момент
-                               исправляет только unused ошибки.
-                                                       [boolean] [default: false]
-   --ignore-patterns           Список паттернов файлов, в которых не нужно делать
-                               проверку на missing deps     [array] [default: []]
-   --ignore-peer-dependencies  Список паттернов модулей из peerDependencies,
-                               отсутствие которых в dependencies не должно
-                               приводить к ошибке           [array] [default: []]
-   -h                          Show help                                [boolean]
+Options:
+  --version                   Show version number                      [boolean]
+  --config                    Path to the config (by default cosmiconfig is
+                              used)                                     [string]
+  --fix                       Enables fix error mode. Currently only fixes
+                              unused dependency errors[boolean] [default: false]
+  --ignore-patterns           List of file patterns that should be ignored for
+                              checks on missing deps       [array] [default: []]
+  --ignore-peer-dependencies  List of module patterns from peerDependencies that
+                              should not generate error when dependency is
+                              missing                      [array] [default: []]
+  --ignore-unused             List of module patterns that should not generate
+                              error when dependency is not used
+                                                           [array] [default: []]
+  -h                          Show help                                [boolean]
 ```
 
-### Пример конфига
+### Config example
 
 ```yaml
 ignore-patterns:

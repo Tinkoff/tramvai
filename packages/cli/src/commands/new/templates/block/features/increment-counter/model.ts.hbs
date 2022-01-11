@@ -1,9 +1,0 @@
-import { createAction } from '@tramvai/core';
-import { incrementEvent } from 'entities/counter';
-
-export const incrementAction = createAction({
-  name: 'increment',
-  fn: (store) => {
-    return store.dispatch(incrementEvent());
-  },
-});

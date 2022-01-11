@@ -63,12 +63,12 @@ function extractConfig() {
 function addConfigOpt(cli: typeof yargs) {
   return cli.option('config', {
     type: 'string',
-    description: 'Путь до конфига (по-умолчанию ищет cosmiconfig)',
+    description: 'Path to the config (by default cosmiconfig is used)',
   });
 }
 
 function describeCollectorOption(usedCollector: string) {
-  return `Модуль, отвечающий за сбор пакетов для проверки и реализующий интерфейс @tinkoff-monorepo/pkgs-collector -> CollectorInterface (сейчас используется ${usedCollector})`;
+  return `Module for collecting packages for depshcheck. Should implement interface @tinkoff-monorepo/pkgs-collector -> CollectorInterface (currently ${usedCollector} is used)`;
 }
 
 export function buildInitialCliAndExtractCollector() {

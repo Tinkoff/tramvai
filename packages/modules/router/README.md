@@ -1,7 +1,6 @@
 # @tramvai/module-router
 
-Module for routing in the application.
-Exports two sub-modules: with client SPA transitions, and no-SPA.
+Module for routing in the application. Exports two sub-modules: with client SPA transitions, and no-SPA.
 
 ## Installation
 
@@ -28,21 +27,28 @@ createApp({
 
 The module is based on the library [@tinkoff/router](references/libs/router.md)
 
+### Default Settings
+
+Next [settings](references/libs/router.md#constructor-options) are used
+
+- `trailingSlashes = true`
+- `mergeSlashes = true`
+
 ### Navigation flow on the server
 
-![Diagramm](/img/router/navigate-flow-server.drawio.svg)
+![Diagram](/img/router/navigate-flow-server.drawio.svg)
 
 ### Flow of the first navigation on the client
 
-![Diagramm](/img/router/rehydrate-client.drawio.svg)
+![Diagram](/img/router/rehydrate-client.drawio.svg)
 
 ### Flow of navigation on the client without SPA transitions
 
-![Diagramm](/img/router/navigate-flow-client-no-spa.drawio.svg)
+![Diagram](/img/router/navigate-flow-client-no-spa.drawio.svg)
 
 ### Flow of navigation on the client with SPA transitions
 
-![Diagramm](/img/router/navigate-flow-client-spa.drawio.svg)
+![Diagram](/img/router/navigate-flow-client-spa.drawio.svg)
 
 ## API
 
@@ -275,8 +281,7 @@ You can work with routing inside React components using hooks and components - `
 
 ### How to set static routes
 
-[RouterModule](references/modules/router.md) allows you to add new routes when configuring your application.
-The second way is to pass static routes to DI via the `ROUTES_TOKEN` token.
+[RouterModule](references/modules/router.md) allows you to add new routes when configuring your application. The second way is to pass static routes to DI via the `ROUTES_TOKEN` token.
 
 <p>
 <details>
@@ -289,7 +294,7 @@ The second way is to pass static routes to DI via the `ROUTES_TOKEN` token.
 
 ### How to set Route Guard
 
-[ROUTER_GUARD_TOKEN](references/modules/router.md#router_guard_token) is set as an asynchronous function, which allows you to perform various actions and influence the routing behavior.
+`ROUTER_GUARD_TOKEN` is set as an asynchronous function, which allows you to perform various actions and influence the routing behavior.
 
 <p>
 <details>
@@ -299,6 +304,14 @@ The second way is to pass static routes to DI via the `ROUTES_TOKEN` token.
 
 </details>
 </p>
+
+### How to add transition hooks
+
+[Transition hooks](references/libs/router.md#transition-hooks) allows to subscribe on different steps of the transition
+
+1. Get router instance with `ROUTER_TOKEN` token
+2. Use methods `registerHook`, `registerSyncHook` to add new hooks to the router
+3. Registration should happen as soon as possible so appropriate line is `customerStart` as it executes before navigation happens.
 
 ### How to set the Not found route
 
@@ -317,8 +330,7 @@ Such a route is specified in the list of routes with the special `*` character i
 
 ### How to change Not found route response status
 
-By default, responses for the Not found route return a status of 200.
-You can change status in custom Route Guard, by using `RESPONSE_MANAGER_TOKEN`.
+By default, responses for the Not found route return a status of 200. You can change status in custom Route Guard, by using `RESPONSE_MANAGER_TOKEN`.
 
 <p>
 <details>
@@ -333,9 +345,7 @@ You can change status in custom Route Guard, by using `RESPONSE_MANAGER_TOKEN`.
 
 For example, you make a important request in action, and if this request will fail, application need to return 500 or 404 status.
 
-Page actions running after router navigation flow, when route is completely resolved.
-You can change status by using `RESPONSE_MANAGER_TOKEN`.
-If you want to prevent page component rendering, you can throw `NotFoundError` from `@tinkoff/errors` library.
+Page actions running after router navigation flow, when route is completely resolved. You can change status by using `RESPONSE_MANAGER_TOKEN`. If you want to prevent page component rendering, you can throw `NotFoundError` from `@tinkoff/errors` library.
 
 <p>
 <details>

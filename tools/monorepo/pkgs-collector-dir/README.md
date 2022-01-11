@@ -1,9 +1,9 @@
 # @tinkoff-monorepo/pkgs-collector-dir
 
-Ищет пакеты по переданным паттернам
+Search for packages with patterns
 
-## Конфиг
+## Configuration
 
 ### `pkgDirs`
 
-Список паттернов путей до пакетов в формате `glob`
+List of the path patterns to packages in `glob` format

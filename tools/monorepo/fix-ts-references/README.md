@@ -1,6 +1,6 @@
 # @tinkoff-monorepo/fix-ts-references
 
-Все зависимости от слинкованных модулей монорепы должны быть зеркально отражены в `tsconfig.references`, чтобы позволить `tsc` собрать модули и зависимые от них модули в правильном порядке и за один вызов компилятора.
+All of the dependencies for linked packages in monorepo should be specified in `tsconfig.references` file in order to let `tsc` to build packages and their dependencies in the right order within single compilation pass.
 
 ## Install
 
@@ -14,14 +14,14 @@ yarn add fix-ts-references
 npx fix-ts-references --fix
 ```
 
-Соответственно скрипт выполняет:
+Script will do next:
 
-С флагом `--fix`:
+With flag `--fix`:
 
-1. Удаление ссылки из references модуля если зависимость убрана из `package.json`
-1. Добавление ссылки в references модуля если зависимость добавлена в `package.json`
-1. Простановка `tsconfig.compilerOptions.rootDir=./src` если не поставлена
-1. Удаление ссылки из reference solution'а проекта если модуль удален из репозитория
-1. Добавление ссылки в reference solution'а проекта если модуль добавлен в репозиторий
+1. Remove references from references list for package if dependency has been removed from `package.json`
+2. Add new references to references list for package if dependency has been added to `package.json`
+3. Setting `tsconfig.compilerOptions.rootDir=./src` if it is not set
+4. Remove reference from project reference solution if package has been removed from repository
+5. Add reference to project reference solution if package has been added to the repository
 
-Без флага `--fix` выводит список неисправленных ошибок
+Without flag `--fix` will just show list of errors

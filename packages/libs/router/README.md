@@ -66,7 +66,23 @@ export const myGuard: NavigationGuard = async ({ to }) => {
 
   // if nothing is returned, the transition will be performed as usual
 };
+
+router.registerGuard(myGuard);
 ```
+
+#### Rules
+
+- guards are asynchronous and it execution will be awaited inside routing
+- all guards are running in parallel and they are all awaited
+- if several guars return something then the result from a guard that was registered early will be used
+
+#### Possible result
+
+The behaviour of routing depends on the result of executing guards functions and there result might be next:
+
+- if all of the guards returns `undefined` than navigation will continue executing
+- if any of the guards returns `false` than navigation is getting blocked and next action differs on server and client
+- if any of the guards returns `string` it is considered as url to which redirect should be happen
 
 ### Transitions hooks
 
@@ -78,7 +94,26 @@ import { NavigationHook } from '@tinkoff/router';
 export const myHook: NavigationHook = async ({ from, to, url, fromUrl }) => {
   console.log(`navigating from ${from} to route ${to}`);
 };
+
+router.registerHook('beforeNavigate', myHook);
 ```
+
+#### Rules
+
+- all hooks from the same event are running in parallel
+- most of the hooks are asynchronous and are awaited inside router
+- if some error happens when running hook it will be logged to console but wont affect navigation (except for the `beforeResolve` hook - error for it will be rethrown)
+
+#### List of available hooks
+
+Async hooks:
+
+- [navigate hooks](#navigate-hooks) - asynchronous hooks only for navigate calls
+- [updateCurrentRoute hooks](#updatecurrentroute-hooks) - asynchronous hooks only for updateCurrentRoute calls
+
+Sync hooks:
+
+- `change` - runs when any of changes to current route\url happens
 
 ## API
 
@@ -102,11 +137,19 @@ router.navigate('/test');
 router.navigate({ url: './test', query: { a: '1' } });
 ```
 
-Transition hooks:
+##### navigate hooks
 
 - beforeResolve
 - beforeNavigate
 - afterNavigate
+
+##### navigate workflow
+
+1. `beforeResolve` hook
+2. [guards](#router-guards)
+3. `beforeNavigate`
+4. `change`
+5. `afterNavigate`
 
 #### updateCurrentRoute
 
@@ -117,10 +160,16 @@ router.updateCurrentRoute({ params: { id: 'abc' } });
 router.updateCurrentRoute({ query: { a: '1' } });
 ```
 
-Hooks:
+##### updateCurrentRoute hooks
 
 - beforeUpdateCurrent
 - afterUpdateCurrent
+
+##### updateCurrentRoute workflow
+
+1. `beforeUpdateCurrent`
+2. `change`
+3. `afterUpdateCurrent`
 
 ### Working with query
 
@@ -160,6 +209,11 @@ router.updateCurrentRoute({ query: { a: undefined, c: 'c' }, preserveQuery: true
 
 router.getCurrentUrl().query; // { b: 'b', c: 'c' }
 ```
+
+### Constructor options
+
+- `trailingSlash` - do router should force all urls to end with slash. If `true` - force trailing slash for every path, `false` - force no trailing slash, `undefined` - trailing slash is specified by request and both trailing and not trailing slashes are used. By default value if `undefined`
+- `mergeSlashes` - replace several consecutive slashes by single slashes (slashes after protocol are still be with `//` after protocol name). By default is `false` - no merge for slashes.
 
 ### Integration with React
 
@@ -229,3 +283,26 @@ export const WrapLink = () => {
   return <Link url="/test/">Click me</Link>;
 };
 ```
+
+## How to
+
+### Load route config from external api
+
+Use [transition hook](#transitions-hooks) `beforeResolve` and load routes config based on url.
+
+```ts
+router.registerHook('beforeResolve', async (navigation) => {
+  const route = await routeResolve(navigation);
+
+  if (route) {
+    router.addRoute(routeTransform(route));
+  }
+});
+```
+
+### App behind proxy
+
+Router doesn't support proxy setup directly. But proxy still can be used with some limitations:
+
+- setup proxy server to pass requests to app with rewriting request and response paths. (E.g. for [nginx](http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_redirect))
+- it wont work as expected on spa navigation on client, so only option in this case is use the `NoSpaRouter`

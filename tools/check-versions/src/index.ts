@@ -7,7 +7,7 @@ const log = logger('tramvai-check-versions');
 logger.enable('info', 'tramvai-check-versions');
 
 export const run = async () => {
-  log.info('Проверка версий tramvai модулей в приложении');
+  log.info('Checking the versions of tramvai modules in the application');
 
   const depsVersions = await getTramvaiDepsVersions();
 

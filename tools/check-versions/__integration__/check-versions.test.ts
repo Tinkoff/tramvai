@@ -56,8 +56,10 @@ describe('[tools/check-versions] integration test', () => {
     await run();
 
     expect(mockError).not.toHaveBeenCalled();
-    expect(mockInfo).toHaveBeenCalledWith('Проверка версий tramvai модулей в приложении');
-    expect(mockInfo).toHaveBeenCalledWith('С версиями tramvai все ок!');
+    expect(mockInfo).toHaveBeenCalledWith(
+      'Checking the versions of tramvai modules in the application'
+    );
+    expect(mockInfo).toHaveBeenCalledWith('The tramvai versions are okay!');
   });
 
   it('should just pass for right versions v2', async () => {
@@ -66,8 +68,10 @@ describe('[tools/check-versions] integration test', () => {
     await run();
 
     expect(mockError).not.toHaveBeenCalled();
-    expect(mockInfo).toHaveBeenCalledWith('Проверка версий tramvai модулей в приложении');
-    expect(mockInfo).toHaveBeenCalledWith('С версиями tramvai все ок!');
+    expect(mockInfo).toHaveBeenCalledWith(
+      'Checking the versions of tramvai modules in the application'
+    );
+    expect(mockInfo).toHaveBeenCalledWith('The tramvai versions are okay!');
   });
 
   it('should just pass for right versions with different alpha version', async () => {
@@ -76,8 +80,10 @@ describe('[tools/check-versions] integration test', () => {
     await run();
 
     expect(mockError).not.toHaveBeenCalled();
-    expect(mockInfo).toHaveBeenCalledWith('Проверка версий tramvai модулей в приложении');
-    expect(mockInfo).toHaveBeenCalledWith('С версиями tramvai все ок!');
+    expect(mockInfo).toHaveBeenCalledWith(
+      'Checking the versions of tramvai modules in the application'
+    );
+    expect(mockInfo).toHaveBeenCalledWith('The tramvai versions are okay!');
   });
 
   it('should throw error for wrong versions, @tramvai/core have highest version', async () => {
@@ -85,19 +91,21 @@ describe('[tools/check-versions] integration test', () => {
 
     await expect(run()).rejects.toThrow();
 
-    expect(mockInfo).toHaveBeenCalledWith('Проверка версий tramvai модулей в приложении');
+    expect(mockInfo).toHaveBeenCalledWith(
+      'Checking the versions of tramvai modules in the application'
+    );
     expect(mockError.mock.calls[0][0]).toMatchInlineSnapshot(`
-      "Версии модулей tramvai не совпадают!
+"The versions of the tramvai modules do not match!
 
-        Необходимо сделать следующее:
-          1. Проверить package.json и поправить версии пакетов на фиксированную версию \\"0.5.3\\" для пакетов из списка ниже
-          2. Обновить лок-файл командой \\"npm i\\" или \\"yarn\\"
-          3. Если после обновления ошибка всё равно проявляется - проверить лок-файл на наличие неправильных версий и возможно пересобрать лок-файл
-          4. Если при обновлении какая-то версия пакета не находится, то скорее всего это устаревший пакет и стоит поискать информацию о таком пакете в https://tramvai.dev/docs/releases/migration
+  It is necessary to do the following:
+    1. Check package.json and set the package versions to a fixed version \\"0.5.3\\" for the packages listed below
+    2. Update the lock file with the command \\"npm i\\" or \\"yarn\\"
+    3. If after upgrading the error still occurs - check the lock file for incorrect versions and maybe rebuild the lock file
+    4. If there is no version of a package when you upgrade, it is probably an outdated package and you should look up for the replacement at https://tramvai.dev/docs/releases/migration.
 
-        Список пакетов для обновления:
-      "
-    `);
+  List of packages to update:
+"
+`);
     expect(mockError).toHaveBeenCalledWith('\t\t@tramvai/module-common');
     expect(mockError).toHaveBeenCalledWith('\t\t@tramvai/module-router');
     expect(mockError).toHaveBeenCalledWith('\t\t@tramvai/state');
@@ -108,19 +116,21 @@ describe('[tools/check-versions] integration test', () => {
 
     await expect(run()).rejects.toThrow();
 
-    expect(mockInfo).toHaveBeenCalledWith('Проверка версий tramvai модулей в приложении');
+    expect(mockInfo).toHaveBeenCalledWith(
+      'Checking the versions of tramvai modules in the application'
+    );
     expect(mockError.mock.calls[0][0]).toMatchInlineSnapshot(`
-      "Версии модулей tramvai не совпадают!
+"The versions of the tramvai modules do not match!
 
-        Необходимо сделать следующее:
-          1. Проверить package.json и поправить версии пакетов на фиксированную версию \\"0.8.0\\" для пакетов из списка ниже
-          2. Обновить лок-файл командой \\"npm i\\" или \\"yarn\\"
-          3. Если после обновления ошибка всё равно проявляется - проверить лок-файл на наличие неправильных версий и возможно пересобрать лок-файл
-          4. Если при обновлении какая-то версия пакета не находится, то скорее всего это устаревший пакет и стоит поискать информацию о таком пакете в https://tramvai.dev/docs/releases/migration
+  It is necessary to do the following:
+    1. Check package.json and set the package versions to a fixed version \\"0.8.0\\" for the packages listed below
+    2. Update the lock file with the command \\"npm i\\" or \\"yarn\\"
+    3. If after upgrading the error still occurs - check the lock file for incorrect versions and maybe rebuild the lock file
+    4. If there is no version of a package when you upgrade, it is probably an outdated package and you should look up for the replacement at https://tramvai.dev/docs/releases/migration.
 
-        Список пакетов для обновления:
-      "
-    `);
+  List of packages to update:
+"
+`);
     expect(mockError).toHaveBeenCalledWith('\t\t@tramvai/core');
     expect(mockError).toHaveBeenCalledWith('\t\t@tramvai/module-common');
     expect(mockError).toHaveBeenCalledWith('\t\t@tramvai/module-router');
@@ -131,20 +141,22 @@ describe('[tools/check-versions] integration test', () => {
 
     await expect(run()).rejects.toThrow();
 
-    expect(mockInfo).toHaveBeenCalledWith('Проверка версий tramvai модулей в приложении');
+    expect(mockInfo).toHaveBeenCalledWith(
+      'Checking the versions of tramvai modules in the application'
+    );
 
     expect(mockError.mock.calls[0][0]).toMatchInlineSnapshot(`
-      "Версии модулей tramvai не совпадают!
+"The versions of the tramvai modules do not match!
 
-        Необходимо сделать следующее:
-          1. Проверить package.json и поправить версии пакетов на фиксированную версию \\"0.4.2\\" для пакетов из списка ниже
-          2. Обновить лок-файл командой \\"npm i\\" или \\"yarn\\"
-          3. Если после обновления ошибка всё равно проявляется - проверить лок-файл на наличие неправильных версий и возможно пересобрать лок-файл
-          4. Если при обновлении какая-то версия пакета не находится, то скорее всего это устаревший пакет и стоит поискать информацию о таком пакете в https://tramvai.dev/docs/releases/migration
+  It is necessary to do the following:
+    1. Check package.json and set the package versions to a fixed version \\"0.4.2\\" for the packages listed below
+    2. Update the lock file with the command \\"npm i\\" or \\"yarn\\"
+    3. If after upgrading the error still occurs - check the lock file for incorrect versions and maybe rebuild the lock file
+    4. If there is no version of a package when you upgrade, it is probably an outdated package and you should look up for the replacement at https://tramvai.dev/docs/releases/migration.
 
-        Список пакетов для обновления:
-      "
-    `);
+  List of packages to update:
+"
+`);
     expect(mockError).toHaveBeenCalledWith('\t\t@tramvai/state');
   });
 });

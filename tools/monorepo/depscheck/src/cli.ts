@@ -10,50 +10,49 @@ const args = buildResultCliWithCollectorOpts(collector)
   .option('fix', {
     type: 'boolean',
     default: false,
-    description:
-      'Включает режим исправления ошибок. В данный момент исправляет только unused ошибки.',
+    description: 'Enables fix error mode. Currently only fixes unused dependency errors',
   })
   .option('ignore-patterns', {
     type: 'array',
     default: [],
-    description: 'Список паттернов файлов, в которых не нужно делать проверку на missing deps',
+    description: 'List of file patterns that should be ignored for checks on missing deps',
   })
   .option('ignore-peer-dependencies', {
     type: 'array',
     default: [],
     description:
-      'Список паттернов модулей из peerDependencies, отсутствие которых в dependencies не должно приводить к ошибке',
+      'List of module patterns from peerDependencies that should not generate error when dependency is missing',
   })
   .option('ignore-unused', {
     type: 'array',
     default: [],
     description:
-      'Список паттернов модулей, наличие которых в списке не испольуемых модулей не должно приводить к ошибке',
+      'List of module patterns that should not generate error when dependency is not used',
   })
   .option('depcheck-ignore-matches', {
     group: 'depcheck',
     type: 'array',
     default: [],
     description:
-      'Список паттернов имен модулей отсутствие которых в зависимостях не должно приводить к ошибке',
+      'List of module patterns that should not generate error in case they are missing in package.json',
   })
   .option('depcheck-ignore-dirs', {
     group: 'depcheck',
     type: 'array',
     default: [],
-    description: 'Список имен директорий, которые не нужно проверять на не описанные зависимости',
+    description: 'List of directory names that depscheck should not check',
   })
   .option('depcheck-skip-missing', {
     group: 'depcheck',
     type: 'boolean',
     default: false,
-    description: 'Вообще не проверять на не описанные зависимости',
+    description: 'Disable check for missing dependencies',
   })
   .option('depcheck-ignore-bin-package', {
     group: 'depcheck',
     type: 'boolean',
     default: false,
-    description: 'Не делать проверок в bin файлах пакета',
+    description: 'Disable checks in bin files for project',
   })
   .help('h').argv;
 

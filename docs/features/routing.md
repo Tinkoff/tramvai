@@ -1,12 +1,13 @@
 ---
 id: routing
-title: Введение
+title: Introduction
 ---
 
-На нижнем уровне роутинг основан на библиотеке [@tinkoff/router](references/libs/router.md), которая предоставляет удобные хуки на все этапы жизненного цикла маршрутизатора. Интеграцией роутера в приложение занимаются специальные модули. Ожидается, что все роуты приложения описаны в админке, но есть возможность задавать статичные роуты на уровне кода приложения.
+At the lowest level, routing is based on the [@tinkoff/router](references/libs/router.md) library, which provides convenient hooks for all stages of the router lifecycle. Special modules are involved in integrating the router into the application. Basic functionality provides ability to use static routes but modules are extensible to integrate with some external router provider.
 
-[NoSpaRouterModule](references/modules/router.md) создает экземпляр роутера, инициализирует стор для маршрутизации и синхронизирует его с роутером, регистрирует экшены, бандлы, валидаторы, редиректы и прочие возможности на соответствующие хуки роутера.
+To use all these features in the application, it is enough to install and enable [@tramvai/module-router](references/modules/router.md)
 
-[SpaRouterModule](references/modules/router.md) переключает роутер на использование History API на клиенте.
+## Base modules
 
-Для использования всех этих возможностей в приложении, достаточно установить и подключить [@tramvai/module-router](references/modules/router.md)
+- [NoSpaRouterModule](references/modules/router.md) - creates a router instance, initializes a router for routing and synchronizes it with a router, registers actions, bundles, validators, redirects and other features to the corresponding router hooks.
+- [SpaRouterModule](references/modules/router.md) - same as previous plus switches the router to use the History API on the client.

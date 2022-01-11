@@ -3,31 +3,32 @@ import { join } from 'path';
 import chalk from 'chalk';
 import { AnalyzePlugin } from './pluginBase';
 import { toWebpackConfig } from '../../../library/webpack/utils/toWebpackConfig';
+import type { FileStatsOptions } from '../../../library/webpack/plugins/FileStats';
+import { FileStatsPlugin } from '../../../library/webpack/plugins/FileStats';
 
 export class WhyBundledAnalyzePlugin extends AnalyzePlugin {
   statsFileName = 'stats.json';
 
   statsFilePath: string;
 
-  options = [];
+  plugin = FileStatsPlugin;
+  options: [FileStatsOptions] = [
+    {
+      filename: this.statsFileName,
+      stats: {
+        assets: true,
+        publicPath: true,
+        chunkModules: true,
+        reasons: true,
+        chunks: true,
+        modulesSpace: Infinity,
+      },
+    },
+  ];
 
   patchConfig = (config: ChainConfig) => {
     const outputPath = toWebpackConfig(config).output.path;
     this.statsFilePath = join(outputPath, this.statsFileName);
-    this.options = [
-      {
-        filename: this.statsFileName,
-        fields: null,
-        stats: {
-          assets: true,
-          publicPath: true,
-          chunkModules: true,
-          reasons: true,
-          chunks: true,
-          maxModules: Infinity,
-        },
-      },
-    ];
 
     return super.patchConfigInternal(config);
   };
@@ -41,8 +42,4 @@ export class WhyBundledAnalyzePlugin extends AnalyzePlugin {
 
     return Promise.resolve();
   };
-
-  get plugin() {
-    return require('webpack-stats-plugin').StatsWriterPlugin;
-  }
 }

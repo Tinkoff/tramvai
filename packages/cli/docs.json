@@ -11,21 +11,49 @@
             "path": "./README.md",
             "doc": {
               "id": "base",
-              "title": "Основная дока"
+              "title": "Base"
+            }
+          },
+          {
+            "path": "./docs/config.md",
+            "doc": {
+              "id": "config",
+              "title": "Configuration"
+            }
+          },
+          {
+            "path": "./docs/start.md",
+            "doc": {
+              "id": "start",
+              "title": "start command"
+            }
+          },
+          {
+            "path": "./docs/build.md",
+            "doc": {
+              "id": "build",
+              "title": "build command"
+            }
+          },
+          {
+            "path": "./docs/analyze.md",
+            "doc": {
+              "id": "analyze",
+              "title": "analyze command"
             }
           },
           {
             "path": "./src/library/webpack/blocks/serverInline.md",
             "doc": {
               "id": "serverInline",
-              "title": "Вставка inline-кода для клиента на сервере"
+              "title": "Putting inline code for the client on server"
             }
           },
           {
             "path": "./docs/browserslist.md",
             "doc": {
               "id": "browserslist",
-              "title": "Интеграция с browserslist"
+              "title": "Integration with browserslist"
             }
           },
           {
@@ -39,7 +67,7 @@
             "path": "./docs/troubleshooting.md",
             "doc": {
               "id": "troubleshooting",
-              "title": "Проблемы и решения"
+              "title": "Troubleshooting"
             }
           }
         ]

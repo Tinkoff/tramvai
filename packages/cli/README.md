@@ -1,292 +1,43 @@
 # Tramvai CLI
 
-cli интерфейс которые решает актуальные проблемы и задачи CI части фронтенда. Позволяет уменьшить сложность настройки webpack, typescript, babel, postcss и множества других необходимых инструментов.
+CLI interface for resolving actual problems and tasks of frontend CI. Reduces complexity of setting up webpack, typescript, babel, postcss and other tools.
 
-Инструмент позволяет собирать проекты для продашена, запускать код в режиме разработки с автоматической пересборкой если изменился файл, анализ приложений и генерация кода.
+`@tramvai/cli` may build projects to production, run code in development mode with automatic rebuilds, project analyze and code generation
 
-## Установка
+## Installation
 
-Глобальная установка на машине разработчика. В терминале будет доступна команда tramvai.
+Global installation on the developer machine. After that the new command `tramvai` will be available in terminal.
 
 ```bash
-npm i -g --registry https://registry.npmjs.org/ @tramvai/cli
+npm i -g @tramvai/cli
 ```
 
-Локальная установка в проекте
+Local installation to the project
 
 ```bash
 npm i --save-dev @tramvai/cli
 ```
 
-## Команды
+## API
 
-После любой команды можно набрать `--help`, к примеру `tramvai --help` или `tramvai start --help`. После это в консоли появится описание команды и возможные параметры для использования.
+### Commands
 
-- `tramvai new` - генерация нового репозитория с tramvai/cli и tramvai
-- `tramvai start` - запуск приложений в режиме разработки
-- `tramvai start-prod` - запуск приложений в режиме разработки, при этом статика собрана в production режиме
-- `tramvai build` - сборка приложений для сервера и клиента
-- `tramvai analyze` - анализ размер приложения
-- `tramvai generate` - кодогенерация различных компонентов. К примеру новых проектов, react компонентов, экшенов, сервис и так далее
-- `tramvai update` - обновление `@tramvai/cli` и всех `@tramvai` и `@tramvai-tinkoff` зависимостей в приложении (делает дедупликацию зависимостей и запускает миграции)
-- `tramvai add` - добавление `@tramvai` или `@tramvai-tinkoff` зависимости в приложении (делает дедупликацию зависимостей и запускает миграции)
+After any command you can pass `--help` string, e.g. `tramvai --help` or `tramvai start --help`. After that you will see description of the command and its options.
 
-## Конфигурация
+- `tramvai new` - generate new tramvai app with @tramvai/cli
+- `tramvai start` - run app in the development mode
+- `tramvai start-prod` - run app in development mode, but code will be build in the production mode
+- `tramvai build` - build an app for server and client
+- `tramvai analyze` - analyze bundle size
+- `tramvai generate` - code generation for different components. E.g. new projects, react components, actions and etc.
+- `tramvai update` - update `@tramvai/cli` and all of the `@tramvai` and `@tramvai-tinkoff` dependencies in the project. This command additionally executes dependency deduplication and code migrations
+- `tramvai add` - add `@tramvai` or `@tramvai-tinkoff` dependency to the app. This command additionally executes dependency deduplication and code migrations
 
-Для работы tramvai-cli обязательно должен в корне проекта быть создан конфигурационный файл в формате `json`, с описанием используемых проектов. tramvai-cli поддерживает следующие названия конфигурационных файлов:
+## Explanation
 
-- `platform.json`
-- `tramvai.json`
+### Notifications settings
 
-## Формат файла конфигурации
-
-```json
-{
-  "projects": {
-    "react-app": {
-      "name": "new-app",
-      "root": "src",
-      "type": "application",
-      "commands": {
-        "build": {
-          "options": { ... },
-          "configurations": { ... }
-        },
-        "serve": {
-          "configurations": { ... }
-        }
-      }
-    }
-  }
-}
-```
-
-- `projects` - описание всех проектов, которые доступны в этом репозитории. Поддерживает множество различных приложений в одном репозитории. Реализовывая концепцию монорепы.
-
-## Поддержка JSON схемы файла конфигурации в IDE
-
-Ссылка на актуальную JSON схему для `tramvai.json` - `./node_modules/@tramvai/cli/schema.json`
-
-Самый простой способ добавить валидацию и автокомплит схемы - добавить ссылку в поле `$schema` для `tramvai.json`:
-
-```json
-{
-  "$schema": "./node_modules/@tramvai/cli/schema.json",
-  "projects": {}
-}
-```
-
-Другой способ - добавление схемы в настройках IDE:
-
-Как добавить схему в **JetBrains IDE** можно посмотреть в [официальной документации](https://www.jetbrains.com/help/idea/json.html#ws_json_schema_add_custom), кроме добавления ссылки на схему, надо добавить `tramvai.json` как file path pattern.
-
-Как добавить схему в **VSCode** можно посмотреть в [официальной документации](https://code.visualstudio.com/docs/languages/json#_json-schemas-and-settings)
-
-Новое приложение, созданное через `tramvai new`, уже содержит поле `$schema` в `tramvai.json`.
-
-## Настройки для build этапа
-
-[Общее описание механизма сборки артефактов и их доставки](https://github.com/Tinkoff/tramvai/-/blob/master/packages/cli/APP_BUILD_EXPLANATION.md)
-
-```
-"options": {
-  "vendor": "", // Путь до vendor файла, если не указан, то не генерируется
-  "polyfill": "", // Путь до полифилов необходимых для работы приложения, если не указан, то не генерируется
-  "server": "src/server",  // Путь до стартвой точки серверного файла, который будет отдельно собран
-  "outputServer": "dist/server", // Директория, куда после сборки скопируется серверный код
-  "outputClient": "dist/client"  // Директория, куда после сборки скопируется клиенский код
-},
-"configurations": {
-  "commonChunk": true, // включает генерацию js файла с общим кодом между чанками
-  "commonChunkSplitNumber": 3, // количество дубликатов, для выноса в common чанк
-  "sourceMap": false, // будут ли сгенерированны сорсмапы для клиентских чанков
-  "sourceMapServer": false, // будут ли сгенерированны сорсмапы для серверных чанков
-  "modern": true, // Включение отдельной сборки для новых браузеров без дополнительной компиляции
-  "checkAsyncTs": false, // включает проверку в фоне типов, подробное описание ниже
-  "terserParallel": true, // включает параллельное сжатие
-  "granularChunks": false, // Включает разбитие common chunk на множество мелких частей. Потенциально может снизить размер js в сборке
-  "granularChunksSplitNumber": 2, // количество дубликатов, для выноса в granular чанки
-  "generateDataQaTag": false, // автоматическая генерация уникальных id для реакт компонентов. Депрекейтед!
-  "definePlugin": { // конфигурация параметров сборки приложения. Позволяет во время сборки заменить значения на преданные ниже
-    "prod": {},
-    "dev": {}
-  },
-  "threadLoader": { // конфигурация параметров многопоточной сборки приложения (https://webpack.js.org/loaders/thread-loader/).
-  },
-  "postcss": { // конфигурация postcss лоадера
-    "cssLocalIdentName": "[hash:base64:5]", // какой будет идентификатор
-    "config": "postcss.config" // где расположен конфиг для postcss
-  },
-  "alias": {}, // объект с алисами внутри приложения. Документация подробнее о формате можно прочитать в https://www.npmjs.com/package/babel-plugin-module-resolver
-  "removeTypeofWindow": true, // настраивает babel плагин transform-define на замену всех конструкций typeof window на 'undefined' или 'object' в зависимости от окружения
-  "dedupe": "equality" | "semver" | false, // подключение плагина для дедупликации зависимостей, с которыми не справился пакетный менеджер
-  "svgo": {
-    "plugins": [{ "cleanupIDs": false }, { "collapseGroups": false }], // плагины для svgo (https://github.com/svg/svgo#what-it-can-do)
-  },
-  "imageOptimization": { // конфигурация процесса оптимизации изображений
-    enabled: true, // включение оптимизации изображений
-    options: {} // опции для гибкой настройки оптимизации (https://github.com/tcoopman/image-webpack-loader#options)
-  }
-}
-```
-
-## Добавление новых параметров конфигурации
-
-Параметры конфигурации CLI описаны в TypeScript интерфейсах, из них автоматически генерируется JSON Schema. Схема используется для валидации конфига, и применения значений по умолчанию, с помощью [ajv](https://github.com/ajv-validator/ajv).
-
-Например, если мы хотим добавить параметр для команды build, для приложения:
-
-- Описываем параметр в интерфейсе `ApplicationBuild`
-
-## Возможности
-
-### Генерация кода
-
-Для упрощения жизни разработчиков в `tramvai cli` доступна возможность кодогенерации, которая позволяет при выполнении команды сгенерировать шаблонный код. Для запуска генератора, введи в консоли `npm tramvai generate` и выберете из списка то, что нужно сгенерировать:
-
-- action
-- bundle
-- reducer
-- page
-- component
-- module
-
-После ввода названия, будет сгенерирован шаблонный файл
-
-### Генерация нового проекта
-
-Для быстрого старта нового проекта добавлена команда `tramvai new` которая позволяет сгенерировать чистый проект с tramvai и tramvai-cli
-
-- Установите глобального [tramvai-cli](#Установка)
-- Введите команду `tramvai new NAME_YOUR_APP`
-- И выберете опции: будет ли это монорепа, нужен ли CI и какие используются тестовые фреймворки
-
-После выполнения команды и установки зависимостей, для вас сгенерируется проект
-
-### Сборка библиотек
-
-Команда `tramvai build` позволяет собирать библиотеки в отдельные бандлы под разные окружения:
-
-- CommonJS модули + код стандарта ES2015 (для NodeJS без поддержки ES модулей) - поле `main` в `package.json`
-- ES модули + код стандарта ES2015 (для NodeJS с поддержкой ES модулей) - поле `module` в `package.json`
-- ES модули + код стандарта ES5 (для legacy браузеров) - поле `browser` в `package.json`
-- ES модули + код стандарта ES2017 (для современных браузеров) - поле `es2017` в `package.json`
-
-Для создания библиотеки в `tramvai.json` необходимо добавить проект с типом `package`:
-
-```json
-{
-  "projects": {
-    "{{packageName}}": {
-      "name": "{{packageName}}",
-      "type": "package",
-      "root": "libs/{{packageName}}"
-    }
-  }
-}
-```
-
-Все дополнительные настройки необходимо указать в `package.json` библиотеки:
-
-```json
-{
-  "name": "{{packageName}}",
-  "version": "1.0.0",
-  "source": "src/index.ts", // точка входа в библиотеку
-  "browserSource": "src/browser.ts", // опциональное поле, точка входа в библиотеку для браузерного окружения, использовать если требуется разделить реализации для сервера и браузера
-  "main": "dist/index.js", // название собранного CommonJS + ES2015 бандла
-  "module": "dist/index.es.js", // название собранного ESM + ES2015 бандла
-  "browser": "dist/browser.js", // опциональное поле, название собранного CommonJS + ES2015 бандла, использовать вместе с полем `browserSource`
-  "es2017": "dist/browser.es2017.js", // название собранного ESM + ES2017 бандла, если не указывать, вычисляется из поля `source`
-  "sideEffects": false,
-  "scripts": {
-    "start": "tramvai build {{packageName}} --watch", // продакшн сборка в watch режиме
-    "build": "tramvai build {{packageName}}" // разовая продакшн сборка
-  }
-}
-```
-
-### Hot refresh в dev-режиме
-
-Есть возможность включить обновление react-компонентов на странице без перезагрузки страницы, аналогичный [фиче из React Native](https://reactnative.dev/docs/fast-refresh).
-
-Помимо быстрой перезагрузки страницы (hot-reload), в этом режиме сохраняется значение в хуках `useState` и `useRef`.
-
-Для возможности принудительно сбросить значения, можно добавить комментарий `// @refresh reset` - он действует на весь файл.
-
-При различных синтаксических и рантайм ошибках, fast-refresh плагин ждет исправления ошибки, затем разработка продолжается в обычном режиме.
-
-Ограничения режима:
-
-1. state у классовых компонентов не сохраняется
-2. `useEffect`, `useMemo`, и `useCallback` обновляются при каждом изменении кода, независимо от списка их зависимостей, в том числе если список пустой, т.е. `useEffect(() => {}, [])` будет выполняться постоянно - это не ожидаемое поведение, но приучает писать устойчивый к холостым ререндерам код
-
-Подключение режима:
-
-```json
-"commands": {
-    "serve": {
-      "configurations": {
-        "hotRefresh": true
-      }
-    }
-}
-```
-
-Конфигурация режима через настройку `hotRefreshOptions`, подробная конфигурация в [доке react-refresh](https://github.com/pmmmwh/react-refresh-webpack-plugin#options):
-
-```json
-"commands": {
-    "serve": {
-      "configurations": {
-        "hotRefresh": true,
-        "hotRefreshOptions": {
-          "overlay": false // отключаем overlay с сообщением об ошибках
-        }
-      }
-    }
-}
-```
-
-### Анализ бандлов приложений
-
-#### Посмотреть что попадает в бандл
-
-Для это существует отличный плагин [webpack-bundle-analyzer](https://github.com/webpack-contrib/webpack-bundle-analyzer) который позволяет показать наглядно все файлы
-
-Для запуска необходимо выполнить команду
-
-```
-npx tramvai analyze APP_ID
-```
-
-после этого приложение соберется в проде и откроется новая вкладка в браузере
-
-#### Найти причину попадания зависимости в бандл
-
-Для решения этого кейса существует утилита [whybundled](https://github.com/d4rkr00t/whybundled) которая позволяет распарсить stats.json файл webpack и отобразить причину попадения файла
-
-Для использования необходимо выполнить команду
-
-```
-npx  tramvai analyze APP_ID --plugin whybundled
-```
-
-После этого сгенерируется json файл сборки который можно будет анализировать с помощью whybundled. Путь до файла будет отображен в терминале
-
-```
-# Хочу найти причину попадания зависимости debug в сборку
-npx whybundled ./dist/client/stats.json debug
-
-# Хочу узнать что за собой потянула зависимость debug в сборку
-npx whybundled ./dist/client/stats.json --by debug
-```
-
-Больше возможностей можно найти в [whybundled](https://github.com/d4rkr00t/whybundled)
-
-### Настройка нотификаций при сборке\пересборке проекта
-
-В файле platform.json можно задать настройки для нотификации по пути `commands.serve.notifications`. Параметры задаются для пакета [webpack-build-notifier](https://github.com/RoccoC/webpack-build-notifier#config-options). Можно задать как общую конфигурацию, так и отдельную для клиента\сервера.
+Inside `tramvai.json` the settings for the notification can be specified at path `commands.serve.notifications`. Parameters are passed to [webpack-build-notifier](https://github.com/RoccoC/webpack-build-notifier#config-options). You can specify global configuration or a specific configuration either for client or server build.
 
 ```json
 "commands": {
@@ -304,200 +55,166 @@ npx whybundled ./dist/client/stats.json --by debug
 }
 ```
 
-### Включение сорсмапов в дев-режиме
+### CSS class names generation settings
 
-В platform.json
-
-```json
-"commands": {
-    "serve": {
-      "configurations": {
-        "sourceMap": true
-      }
-    }
-}
-```
-
-### Работа modern в дев-режиме
-
-В деве возможно работать только с одним режимом: modern или legacy. По умолчанию выставлен legacy. Для включения modern режима в деве необходимо в platform.json добавить опцию `modern: true`:
-
-```json
-"commands": {
-    "serve": {
-      "configurations": {
-        "modern": true
-      }
-    }
-}
-```
-
-### Настройка генерации имен css классов
-
-Генерация настраивается через свойства `cssLocalIdentNameDev` и `cssLocalIdentNameProd` (или общее `cssLocalIdentName` которое будет использовано если явно не заданы prod или dev).
+Name generation is configured via the options `cssLocalIdentNameDev` and `cssLocalIdentNameProd` (common option `cssLocalIdentName` might be used to specify settings for both prod and dev).
 
 ```json
 "commands": {
   "build": {
     "configurations": {
       "postcss": {
-        "cssLocalIdentName": "[hash:base64:5]", // значение по умолчанию, переопределит оба нижних параметра (deprecated)
-        "cssLocalIdentNameDev": "[name]__[local]_[minicss]", // возможные опции смотри в readme для css-loader https://github.com/webpack-contrib/css-loader
-        "cssLocalIdentNameProd": "[minicss]", // можно дополнительно указать при генерации тег minicss чтобы генерировать минимальные имена css https://dev.to/denisx/reduce-bundle-size-via-one-letter-css-classname-hash-strategy-10g6
+        "cssLocalIdentName": "[hash:base64:5]", // default value (deprecated)
+        "cssLocalIdentNameDev": "[name]__[local]_[minicss]", // available values see in the docs to [css-loader](https://github.com/webpack-contrib/css-loader)
+        "cssLocalIdentNameProd": "[minicss]", // additionally new tag `minicss` can be used for the generating minimal css names. Based on [article](https://dev.to/denisx/reduce-bundle-size-via-one-letter-css-classname-hash-strategy-10g6)
       };
     };
   };
 };
 ```
 
-### Полифиллы для страндартных NodeJS модулей
+### Polyfills for the standard NodeJS modules
 
-По умолчанию, `webpack` начиная с 5й версии, больше не добавляет в бандл полифиллы для браузера, при использовании стандартных NodeJS модулей в универсальном коде, пример таких модулей - _crypto_, _path_, _process_, _buffer_, etc.
+By default, `webpack` starting with 5th version, do not add polyfills to browser bundle when using nodejs standard modules in the browser code, e.g. when using _crypto_, _path_, _process_, _buffer_, etc.
 
-В `@tramvai/cli` явно подключены полифиллы для _path_ и _process_. Эти модули часто используются, а их полифиллы имеют небольшой размер.
+`@tramvai/cli` explicitly adds polyfills for _path_ and _process_ modules as these modules are often used and lightweighted.
 
-### Проверка типов checkAsyncTs
+### Checking TypeScript types
 
-Включается по флагу
+Checking types is enabled by flag `checkAsyncTs`.
 
-```
-“checkAsyncTs”: true
-```
+When running `tramvai start` ts compilation and type checks will be executed.
 
-При запуске `tramvai start` будет происходить компиляция ts и проверка типов.
+Inside `tramvai.json`
 
-Можно задать в формате объекта:
-
-```
+```json
 "checkAsyncTs": {
-  "failOnBuild": true, // необязательная опция
-  "pluginOptions": {} // необязательная опция
+  "failOnBuild": true, // optional
+  "pluginOptions": {} // optional
 },
 ```
 
-**failOnBuild** добавит компиляцию ts при работе `tramvai build.` Таким образом команда build не будет проходить при невалидном ts.
+**failOnBuild** adds type checks when running `tramvai build`. This way build will fail in case of wrong types.
 
-**pluginOptions** – [список дополнительных опций](https://github.com/TypeStrong/fork-ts-checker-webpack-plugin#options) плагина fork-ts-checker-webpack-plugin
+**pluginOptions** – [list of the additional options](https://github.com/TypeStrong/fork-ts-checker-webpack-plugin#options) for the plugin `fork-ts-checker-webpack-plugin`
 
-Если вы хотите переопределить путь до конфига в **pluginOptions.tsconfig**, его нужно рассчитать относительно папки c tramvai cli, т.е. _node_modules/@tramvai/cli_. По умолчанию конфиг ищется в корне проекта: _\<rootDir\>/tsconfig.json_
+If you want to override path to tsconfig through **pluginOptions.tsconfig** the option should be specified relative to the `@tramvai/cli` folder itself e.g. _node_modules/@tramvai/cli_. By default tsconfig is expected to be in the project root directory: _\<rootDir\>/tsconfig.json_
 
-### Дедупликация модулей
+### Deduplication of modules
 
-Параметр `commands.build.configurations.dedupe` отвечает за подключение плагина, отвечающего за дедупликацию модулей. Возможные значения:
+Option `commands.build.configurations.dedupe` controls the settings of plugin for the deduplication process. Available options are:
 
-- `"equality"` - выбран по умолчанию, строгое сравнение версий, схлопывает импорты пакетов одинаковых версий из разных мест Например, импорты `node_modules/package/index.js` и `node_modules/nested-package/node_modules/package/index.js`, в обычном случае положили бы в бандл оба модуля.
+- `"equality"` - uses strict version comparison. Dedupes modules in `node_modules` with equal package version that are imported from different sources. E.g. imports for `node_modules/package/index.js` and `node_modules/nested-package/node_modules/package/index.js` are deduped into a single `node_modules/package/index.js` import whilst without dedupe it will bundle two files as separate modules.
+- `"semver"` - compares version of packages based on semver. It can dedupe all of the imports with the same major version and any of the minor and patch versions. E.g. next versions will be deduped: from `1.14.0` and `1.16.2` to `1.16.2`, from `0.14.1` and `0.16.5` to `0.16.5`, whilst versions `0.0.2` and `0.0.5` will be left without deduplication.
+- `false` - disable deduplication, by default
 
-- `"semver"` - сравнение версий пакетов по semver, позволяет схлопнуть дополнительно те импорты, у которых отличаются только minor или patch версии. Например, будут схлопнуты пакеты версий `1.14.0` и `1.16.2` до `1.16.2`, `0.14.1` и `0.16.5` до `0.16.5`, а пакеты версий `0.0.2` и `0.0.5` останутся без изменений.
+### Debug an app
 
-- `false` - отключает плагин дедупликации
+While developing sometimes it is needed to debug nodejs app directly so see CPU, memory consumptions etc. To do it the options `--debug` might be passed to commands `start` and `start-prod` which do next:
 
-## Explanation
+- enables source maps for build on client and server
+- starts the server process with the flag [`--inspect`](https://nodejs.org/ru/docs/guides/debugging-getting-started/).
 
-### Debug приложения
-
-При разработке приложения иногда нужно напрямую продебажить node.js приложение, посмотреть потребление CPU, памяти. Для этого в команды `start` и `start-prod` добавлен параметр `--debug` которая:
-
-- включит сорсмапы для сборки на клиенте и сервере
-- запустит процесс сервера с флагом [`--inspect`](https://nodejs.org/ru/docs/guides/debugging-getting-started/).
-
-И далее можно открыть отладчик в chrome devtools - `chrome://inspect`
+After that you can open debugger in the chrome devtools - `chrome://inspect`
 
 #### Source Maps
 
-`webpack` предлагает несколько видов [качества](https://webpack.js.org/configuration/devtool/#qualities) кода при генерации source maps, из них основные это:
+`webpack` offers several kind of [sourcemap qualities](https://webpack.js.org/configuration/devtool/#qualities). Some of the examples are:
 
-1. Исходный код - код до транспиляции и бандлинга, слепок наших исходников, разделенный по модулям
-1. Трансформированный код - код после транспиляции лоадерами (etc. babel), разделенный по модулям
-1. Сгенерированный код - код после транспиляции и бандлинга, разделенный по модулям, все импорты и экспорты заменены на webpack-специфичные
+1. Source code - the code before transpilation and bundling. Snapshot of the source code, splitted by modules
+2. Transformed code - the code after transpilation by loaders (etc. babel-loader), splitted by modules
+3. Generated code - the code after transpilation and bundling, splitted by modules. Every import and exported are replaced by webpack wrapper code
 
-Для разработки используются source maps для трансформированного или сгенерированного кода, т.к. скорость их сборки выше, и показан именно тот код, который выполняется в целевом окружении, основное отличие от отладки без source map - указаны модули, в которых находится отлаживаемый код.
+For development source maps for transformed or generated code is used as it is more performant and shows the exact code that is executed in the target environment. The main differences from the debugging without sourcemaps is that code has links to modules to original source files.
 
-`tramvai` генерирует большой общий бандл с серверным кодом, поэтому для отладки серверного кода лучше не увеличивать размер этого файла и использовать source maps в отдельном `.js.map` файле, который генерируется с исходным кодом приложения.
+`tramvai` generates big single bundle with server code and that's why it is preferred to not include sourcemaps in the code itself and put it to the separate `.js.map` file.
 
 ##### Development
 
-По умолчанию, для клиентского кода включены самые быстрые source maps, для серверного кода source-maps отключены.
+By default, for browser is used the fastest sourcemaps, while for server no sourcemaps is used.
 
-Флаг `--debug` активирует генерацию source map с исходным кодом для серверного бандла.
+Flag `--debug` enables sourcemap generation for the server bundle.
 
-Параметр `commands.serve.configurations.sourceMap` активирует генерацию source map с исходным кодом для клиентского и серверного бандлов.
+Option `commands.serve.configurations.sourceMap` enables sourcemap generation both for browser and server code.
 
 ##### Production
 
-По умолчанию, отключены source maps для клиентского и серверного кода.
+By default, sourcemaps are disabled both for the client and server code.
 
-Флаг `--debug` активирует генерацию source map с исходным кодом для клиентского и серверного бандлов.
+Flag `--debug` enables sourcemaps generation for the client and server bundles.
 
-Параметр `commands.build.configurations.sourceMap` активирует генерацию source map с исходным кодом для клиентского бандла.
+Option `commands.build.configurations.sourceMap` enables sourcemap generation for the client bundle.
 
-Параметр `commands.build.configurations.sourceMapServer` активирует генерацию source map с исходным кодом для серверного бандла.
+Option `commands.build.configurations.sourceMapServer` enables sourcemap generation for the server bundle.
 
 ## How to
 
-### Как можно запустить nodejs приложение в debug режиме?
+### Code generation
 
-Добавить при запуске приложения параметр `--debug`
+For make life easier for developers `@tramvai/cli` has ability to automatically generate code with template. For running code generator use command `tramvai generate` and pick up one of the options available to generate that entity:
+
+- action
+- bundle
+- reducer
+- page
+- component
+- module
+
+After that template files will be generated
+
+### Generate new project
+
+For the quick start of new project you can use command `tramvai new` that will generate new base project with the tramvai and tramvai-cli
+
+- install tramvai-cli [globally](#installation)
+- enter command `tramvai new NAME_YOUR_APP` in the shell
+- choose options based on your preferences: monorepo or multirepo, CI integration and testing framework
+
+After command execution and dependency installation new project will be ready to use
+
+### How to run nodejs app in debug mode?
+
+Add flag `--debug` when running app
 
 ```sh
 tramvai start my-app --debug
 ```
 
-Далее открыть chrome devTools в левом верхнем углу кликнуть на лого Node.js.
+Then open chrome devTools, click on NodeJs logo in the upper left corner. New window with the nodejs devtools will be opened that allows to debug memory and cpu usage, debug code and take the performance profiles.
 
-В итоге у вас откроется отдельный инспекторовщик вашего node.js приложения и вы можете снять снэпшот памяти, продебажить код и провести профилировку приложения
+### Get details for deprecated and warning logs
 
-### Получить расширенную информацию о deprecated и warnings
+It might be useful to get the stacktraces of some of the warnings.
 
-Может быть полезно для получения стектрейса различных предупреждений. Запускает сервер приложения с [дополнительными опциями](https://nodejs.org/dist/latest-v14.x/docs/api/cli.html#cli_trace_warnings).
-
-Например, если при работе приложения отображается лог вида
+E.g., while running app if you see logs like this
 
 ```
 (node:2898) DeprecationWarning: ...
 (Use `node --trace-deprecation ...` to show where the warning was created)
 ```
 
-Нужно добавить при запуске приложения параметр `--trace`
+You may add flag `--trace` in order to run nodejs server with the [additional options](https://nodejs.org/dist/latest-v14.x/docs/api/cli.html#cli_trace_warnings).
 
 ```sh
 tramvai start my-app --trace
 ```
 
-После запуска приложения с такой опцией логи будут отображаться со стеком вызова.
+After that these logs will be printed with their stacktraces
 
-### Как протестировать приложение используя browserstack
+### How to use browserstack for testing
 
-> Получить доступы к browserstack можно написав в слаке команду `/bs`
+> To get access to browserstack just type command `/bs` in slack
 
-Запустите приложение как обычно командой `tramvai start` и используя инструкцию [browserstack](https://www.browserstack.com/docs/live/local-testing) настройте локальное тестирование на своей машине. Если всё сделано правильно, то теперь в browserstack можно будет получить доступ к localhost и протестировать работу приложения.
+Run app as usual with `tramvai start` command and follow the [browsertack instruction for the local development](https://www.browserstack.com/docs/live/local-testing). If everything were done right you will be able to get access to localhost inside browserstack and test your app through it.
 
-### Как протестировать приложение на мобилке или другом устройстве в локальной сети
+### How to test app on mobile or other device in local network
 
-Необходимо чтобы оба устройства на котором запускается приложение и на котором требуется проверить работу находилось в одной сети.
+Both devices one that running the app and one for testing must reside in the same network.
 
-Для организации доступа приложения в сети необходимо:
+For setting access through local network follow next steps:
 
-1. узнать ip адрес машины на которой запускается приложение в интересующей сети
-1. запустить команду `tramvai start` с параметров `staticHost` равным этому ip адресу (пример `tramvai start tincoin --staticHost 192.168.1.3`)
-1. с тестового устройства теперь можно будет получить доступ к приложению обратившись по адресу хоста = ip
+1. figure out the ip of the machine that runs app
+2. run command `tramvai start` with flag `--staticHost` with value of the ip address that was resolved on previous step (e.g. `tramvai start tincoin --staticHost 192.168.1.3`)
+3. from the testing device open the new page in the browser and use the ip address from the previous step as domain name
 
-> При передаче параметров в @tramvai/cli через npm скрипты необходимо перед параметрами для cli добавить `--`, т.е. команда должна выглядеть примерно так `npm start -- --staticHost 192.168.1.3`
-
-### Как ускорить сборку приложения при разработке
-
-#### Указать только определённые бандлы для разработки
-
-Приложение может содержать несколько бандлов и чем их больше, тем больше кода в приложении, а, следовательно, и дольше сборка и пересборка проекта в процессе разработки.
-
-Чтобы ускорить этот процесс при запуске @tramvai/cli можно указать какие бандлы нужны сейчас для разработки и cli будет собирать только их
-
-> Бандлы должны находиться в папке `bundles` и импортироваться из главного файла приложения.
-
-> При попытке запроса бандлов, которые отключены в данный момент, сервер упадёт с 500-ой ошибкой, т.к. это неожидаемое поведение для сервера, что бандла нет
-
-```sh
-# если нужен только один бандл для разработки
-tramvai start myapp --onlyBundles=account
-# если нужно несколько бандлов
-tramvai start myapp --onlyBundle=account,trading
-```
+> When calling @tramvai/cli using npm you need to pass `--` before any additional arguments, e.g. command should look similar to this `npm start -- --staticHost 192.168.1.3`

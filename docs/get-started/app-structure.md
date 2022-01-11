@@ -7,7 +7,7 @@ A quick overview of the structure of the application that generates by tramvai `
 At the same time, we support both monorepositories and repositories with one application.
 Repository type, package manager and testing framework settings are selected when the command `new` executed.
 
-Application structure follow [feature-sliced methodology](https://feature-sliced.design/) guidlines.
+We recommend follow [feature-sliced methodology](https://feature-sliced.design/) guidlines to structure application code.
 
 ### Repository type
 
@@ -50,9 +50,7 @@ app-directory
 ├── polyfill.ts - polyfills used by the application (absent by default)
 ├── postcss.js - postcss configuration object 
 ├── shared - reused modules of the application
-├── entities - application domain logic and ui
-├── features - key functionality of the application
-└── pages - application pages
+└── routes - application pages
 ```
 
 <!-- #### Library
