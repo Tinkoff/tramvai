@@ -14,7 +14,7 @@ import type { BuildParams } from './build.h';
 import { logger } from '../logger';
 
 const checkExternal = (path: string): boolean => {
-  return rollupExternalModules(path) || !!path.match(/\.css$/);
+  return rollupExternalModules(path) || !!path.match(/\.(css|svg)$/);
 };
 
 /**
