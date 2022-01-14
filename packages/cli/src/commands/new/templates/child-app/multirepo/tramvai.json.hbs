@@ -1,0 +1,28 @@
+{
+  "$schema": "./node_modules/@tramvai/cli/schema.json",
+  "projects": {
+    "{{configEntry.name}}" : {
+      "name": "{{configEntry.name}}",
+      "root": "src",
+      "type": "child-app",
+      "commands": {
+        "build": {
+          "configurations": {
+            "postcss": {
+              "config": "src/postcss"
+            },
+            "alias": {
+              "~shared": "./src/shared",
+              "~entities": "./src/entities",
+              "~features": "./src/features",
+              "~widgets": "./src/widgets",
+              "~pages": "./src/pages",
+              "~processes": "./src/processes",
+              "~app": "./src/app"
+            }
+          }
+        }
+      }
+    }
+  }
+}

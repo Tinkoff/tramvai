@@ -71,6 +71,15 @@ export class PageService implements PageServiceInterface {
     return this.componentRegistry.get(name, group);
   }
 
+  resolveComponentFromConfig(property: 'page' | 'layout' | 'header' | 'footer') {
+    const configName = `${property}Component`;
+    const defaultComponent = `${property}Default`;
+
+    const componentName = this.getConfig()[configName] ?? defaultComponent;
+
+    return this.getComponent(componentName) || this.getComponent(defaultComponent);
+  }
+
   private getComponentsGroupName(): string {
     const { bundle, pageComponent } = this.getConfig();
     const group = isFileSystemPageComponent(pageComponent) ? pageComponent : bundle;

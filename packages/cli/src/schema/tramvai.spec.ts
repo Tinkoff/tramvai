@@ -140,6 +140,9 @@ describe('JSON schema для tramvai.json', () => {
                     routesDir: 'routes',
                     pagesDir: 'pages',
                   },
+                  transpilation: {
+                    loader: 'babel',
+                  },
                 },
               },
             },
@@ -160,6 +163,9 @@ describe('JSON schema для tramvai.json', () => {
                     enable: false,
                     routesDir: 'routes',
                     pagesDir: 'pages',
+                  },
+                  transpilation: {
+                    loader: 'babel',
                   },
                 },
               },
@@ -203,6 +209,9 @@ describe('JSON schema для tramvai.json', () => {
                     routesDir: 'routes',
                     pagesDir: 'pages',
                   },
+                  transpilation: {
+                    loader: 'babel',
+                  },
                 },
               },
               options: {
@@ -225,6 +234,9 @@ describe('JSON schema для tramvai.json', () => {
                     enable: false,
                     routesDir: 'routes',
                     pagesDir: 'pages',
+                  },
+                  transpilation: {
+                    loader: 'babel',
                   },
                 },
               },

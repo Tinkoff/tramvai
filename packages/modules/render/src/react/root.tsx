@@ -1,5 +1,6 @@
 import memoOne from '@tinkoff/utils/function/memoize/one';
 import strictEqual from '@tinkoff/utils/is/strictEqual';
+import type { ComponentType } from 'react';
 import React, { PureComponent } from 'react';
 import { withError } from '@tramvai/react';
 import type { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
@@ -33,26 +34,16 @@ const pageWrapper = memoOne(withError(), strictEqual);
 export const Root = withError()(
   ({ pageService }: { pageService: typeof PAGE_SERVICE_TOKEN; children?: React.ReactNode }) => {
     const { config } = useRoute();
-
-    const {
-      pageComponent,
-      layoutComponent = 'layoutDefault',
-      headerComponent = 'headerDefault',
-      footerComponent = 'footerDefault',
-    } = config;
+    const { pageComponent } = config;
 
     const PageComponent = pageService.getComponent(pageComponent);
-    // Достаем компоненты для текущей страницы, либо берем default реализации
-    const LayoutComponent =
-      pageService.getComponent(layoutComponent) || pageService.getComponent('layoutDefault');
-    const HeaderComponent =
-      pageService.getComponent(headerComponent) || pageService.getComponent('headerDefault');
-    const FooterComponent =
-      pageService.getComponent(footerComponent) || pageService.getComponent('footerDefault');
-
     if (!PageComponent) {
       throw new Error(`Page component '${pageComponent}' not found`);
     }
+    // Достаем компоненты для текущей страницы, либо берем default реализации
+    const LayoutComponent: ComponentType<any> = pageService.resolveComponentFromConfig('layout');
+    const HeaderComponent = pageService.resolveComponentFromConfig('header');
+    const FooterComponent = pageService.resolveComponentFromConfig('footer');
 
     return (
       <RootComponent

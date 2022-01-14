@@ -28,12 +28,20 @@ import {
   REGISTER_CLEAR_CACHE_TOKEN,
 } from '@tramvai/tokens-common';
 import { EXTEND_RENDER } from '@tramvai/tokens-render';
+import { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
 import { SingletonDiManager } from './singletonDi';
 import { DiManager } from './di';
 import { CommandLineRunner } from './command';
 import { ChildAppStore } from './store';
 import { extendRender } from './render';
 import { initModuleFederation } from './webpack/moduleFederation';
+import { resolveComponent } from './utils/resolveComponent';
+
+declare module '@tramvai/tokens-common' {
+  export interface RegistryComponentExtend {
+    childApps?: ChildAppRequestConfig[];
+  }
+}
 
 export const sharedProviders: Provider[] = [
   provide({
@@ -167,6 +175,27 @@ export const sharedProviders: Provider[] = [
       logger: LOGGER_TOKEN,
       rootCommandLineRunner: COMMAND_LINE_RUNNER_TOKEN,
       diManager: CHILD_APP_DI_MANAGER_TOKEN,
+    },
+  }),
+  provide({
+    provide: commandLineListTokens.resolvePageDeps,
+    useFactory: ({ pageService, preloadManager }) => {
+      return async function preloadChildAppByComponent() {
+        const [layoutComponent, pageComponent] = await Promise.all([
+          resolveComponent(pageService.resolveComponentFromConfig('layout')),
+          resolveComponent(pageService.resolveComponentFromConfig('page')),
+        ]);
+
+        await Promise.all([
+          ...(layoutComponent.childApps?.map((request) => preloadManager.preload(request)) ?? []),
+          ...(pageComponent.childApps?.map((request) => preloadManager.preload(request)) ?? []),
+        ]);
+      };
+    },
+    multi: true,
+    deps: {
+      pageService: PAGE_SERVICE_TOKEN,
+      preloadManager: CHILD_APP_PRELOAD_MANAGER_TOKEN,
     },
   }),
   provide({

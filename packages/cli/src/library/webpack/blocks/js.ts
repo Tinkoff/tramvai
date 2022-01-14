@@ -1,6 +1,7 @@
 import type Config from 'webpack-chain';
 import { modernLibsFilter } from '@tinkoff/is-modern-lib';
 import babelConfig from '../../babel';
+import { getSwcOptions } from '../../swc';
 import { createWorkerPoolBabel } from '../utils/workersPool';
 import type { ConfigManager } from '../../../config/configManager';
 
@@ -30,23 +31,28 @@ export default (configManager: ConfigManager) => (config: Config) => {
   };
 
   const jsRule = (babelCfg: Parameters<typeof babelConfig>[0]) => (rule: Config.Rule) => {
-    return (
-      rule
-        .test(/\.[cm]?js[x]?$/)
-        .oneOf('default')
-        // TODO разобраться почему на винде все плохо с thread-loader
-        .when(process.platform !== 'win32' && !configManager.debug, (cfg) =>
-          cfg
-            .use('thread')
-            .loader('thread-loader')
-            .options(createWorkerPoolBabel(configManager))
-            .end()
-        )
-        .use('babel')
-        .loader('babel-loader')
-        .options(babelConfig(babelCfg))
-        .end()
-    );
+    const { loader } = configManager.experiments.transpilation;
+
+    const cfg = rule
+      .test(/\.[cm]?js[x]?$/)
+      .oneOf('default')
+      // TODO разобраться почему на винде все плохо с thread-loader
+      .when(process.platform !== 'win32' && !configManager.debug, (cfg) =>
+        cfg
+          .use('thread')
+          .loader('thread-loader')
+          .options(createWorkerPoolBabel(configManager))
+          .end()
+      )
+      .use('babel');
+
+    if (loader === 'swc') {
+      return cfg.loader('swc-loader').options(getSwcOptions(babelCfg)).end();
+    }
+
+    if (loader === 'babel') {
+      return cfg.loader('babel-loader').options(babelConfig(babelCfg)).end();
+    }
   };
 
   if (transpileOnlyModernLibs) {

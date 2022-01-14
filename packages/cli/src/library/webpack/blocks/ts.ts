@@ -2,6 +2,7 @@ import type Config from 'webpack-chain';
 import babelConfig from '../../babel';
 import { createWorkerPoolBabel } from '../utils/workersPool';
 import type { ConfigManager } from '../../../config/configManager';
+import { getSwcOptions } from '../../swc';
 
 export default (configManager: ConfigManager) => (config: Config) => {
   const {
@@ -10,8 +11,9 @@ export default (configManager: ConfigManager) => (config: Config) => {
     removeTypeofWindow,
     enableFillActionNamePlugin,
   } = configManager.build.configurations;
+  const { loader } = configManager.experiments.transpilation;
   const { env, modern } = configManager;
-  const babelLoaderConfig = babelConfig({
+  const loaderConfig = {
     isServer: configManager.buildType === 'server',
     env,
     generateDataQaTag,
@@ -25,9 +27,9 @@ export default (configManager: ConfigManager) => (config: Config) => {
     enableFillActionNamePlugin,
     rootDir: configManager.rootDir,
     target: configManager.target,
-  });
+  };
 
-  config.module
+  const cfg = config.module
     .rule('ts:project')
     .test(/\.ts[x]?$/)
     .exclude.add(/node_modules/)
@@ -37,8 +39,13 @@ export default (configManager: ConfigManager) => (config: Config) => {
     .when(process.platform !== 'win32', (cfg) =>
       cfg.use('thread').loader('thread-loader').options(createWorkerPoolBabel(configManager)).end()
     )
-    .use('babel')
-    .loader('babel-loader')
-    .options(babelLoaderConfig)
-    .end();
+    .use('babel');
+
+  if (loader === 'swc') {
+    return cfg.loader('swc-loader').options(getSwcOptions(loaderConfig)).end();
+  }
+
+  if (loader === 'babel') {
+    return cfg.loader('babel-loader').options(babelConfig(loaderConfig)).end();
+  }
 };

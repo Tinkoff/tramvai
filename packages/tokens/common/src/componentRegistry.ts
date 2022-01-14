@@ -1,4 +1,13 @@
+import type { ComponentType } from 'react';
 import { createToken } from '@tinkoff/dippy';
+import type { Action } from '@tramvai/core';
+
+export interface RegistryComponentExtend {
+  redirects?: any;
+  actions?: Action[];
+}
+
+export type Component = ComponentType & RegistryComponentExtend;
 
 /**
  * @description
@@ -9,11 +18,11 @@ import { createToken } from '@tinkoff/dippy';
 export const COMPONENT_REGISTRY_TOKEN = createToken<ComponentRegistry>('componentRegistry');
 
 export interface ComponentRegistry {
-  components: Record<string, any>;
+  components: Record<string, Component>;
 
-  add(name: string, component: any, group?: string): void;
+  add(name: string, component: Component, group?: string): void;
 
-  get(name: string, group?: string): any;
+  get(name: string, group?: string): Component;
 
   getComponentParam<T>(param: string, defaultValue: T, component: string, group?: string): T;
 }

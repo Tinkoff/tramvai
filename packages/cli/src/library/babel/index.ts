@@ -32,7 +32,6 @@ interface BabelConfig {
   useESModules?: boolean;
   removeTypeofWindow?: boolean;
   alias?: Record<string, any>;
-  bugfixes?: boolean; // https://babeljs.io/docs/en/babel-preset-env#bugfixes
   tramvai?: boolean;
   hot?: boolean;
   excludesPresetEnv?: string[];

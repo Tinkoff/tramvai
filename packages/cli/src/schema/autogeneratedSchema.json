@@ -314,6 +314,23 @@
                             }
                           },
                           "additionalProperties": false
+                        },
+                        "transpilation": {
+                          "title": "experimental settings for code transpilation",
+                          "default": {},
+                          "type": "object",
+                          "properties": {
+                            "loader": {
+                              "title": "specify loader to transpile js-ts code",
+                              "default": "babel",
+                              "enum": [
+                                "babel",
+                                "swc"
+                              ],
+                              "type": "string"
+                            }
+                          },
+                          "additionalProperties": false
                         }
                       },
                       "additionalProperties": false
@@ -1067,6 +1084,23 @@
                             }
                           },
                           "additionalProperties": false
+                        },
+                        "transpilation": {
+                          "title": "experimental settings for code transpilation",
+                          "default": {},
+                          "type": "object",
+                          "properties": {
+                            "loader": {
+                              "title": "specify loader to transpile js-ts code",
+                              "default": "babel",
+                              "enum": [
+                                "babel",
+                                "swc"
+                              ],
+                              "type": "string"
+                            }
+                          },
+                          "additionalProperties": false
                         }
                       },
                       "additionalProperties": false
@@ -1392,6 +1426,23 @@
                             }
                           },
                           "additionalProperties": false
+                        },
+                        "transpilation": {
+                          "title": "experimental settings for code transpilation",
+                          "default": {},
+                          "type": "object",
+                          "properties": {
+                            "loader": {
+                              "title": "specify loader to transpile js-ts code",
+                              "default": "babel",
+                              "enum": [
+                                "babel",
+                                "swc"
+                              ],
+                              "type": "string"
+                            }
+                          },
+                          "additionalProperties": false
                         }
                       },
                       "additionalProperties": false
@@ -1620,6 +1671,23 @@
                                   "type": "string"
                                 }
                               ]
+                            }
+                          },
+                          "additionalProperties": false
+                        },
+                        "transpilation": {
+                          "title": "experimental settings for code transpilation",
+                          "default": {},
+                          "type": "object",
+                          "properties": {
+                            "loader": {
+                              "title": "specify loader to transpile js-ts code",
+                              "default": "babel",
+                              "enum": [
+                                "babel",
+                                "swc"
+                              ],
+                              "type": "string"
                             }
                           },
                           "additionalProperties": false
@@ -1936,6 +2004,23 @@
                             }
                           },
                           "additionalProperties": false
+                        },
+                        "transpilation": {
+                          "title": "experimental settings for code transpilation",
+                          "default": {},
+                          "type": "object",
+                          "properties": {
+                            "loader": {
+                              "title": "specify loader to transpile js-ts code",
+                              "default": "babel",
+                              "enum": [
+                                "babel",
+                                "swc"
+                              ],
+                              "type": "string"
+                            }
+                          },
+                          "additionalProperties": false
                         }
                       },
                       "additionalProperties": false
@@ -2164,6 +2249,23 @@
                                   "type": "string"
                                 }
                               ]
+                            }
+                          },
+                          "additionalProperties": false
+                        },
+                        "transpilation": {
+                          "title": "experimental settings for code transpilation",
+                          "default": {},
+                          "type": "object",
+                          "properties": {
+                            "loader": {
+                              "title": "specify loader to transpile js-ts code",
+                              "default": "babel",
+                              "enum": [
+                                "babel",
+                                "swc"
+                              ],
+                              "type": "string"
                             }
                           },
                           "additionalProperties": false

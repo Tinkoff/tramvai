@@ -10,6 +10,11 @@ class NewCommand extends CLICommand<Params> {
 
   options = [
     {
+      name: '--type',
+      value: '[type]',
+      description: 'Type of the new generated project <app|child-app>',
+    },
+    {
       name: '--template',
       value: '[template]',
       description: 'Template for the project <monorepo|multirepo>',

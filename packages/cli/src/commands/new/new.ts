@@ -14,20 +14,24 @@ import type { PackageManagers } from './questions/packageManager';
 import { packageManagerQuestion } from './questions/packageManager';
 import type { TestingFrameworks } from './questions/testingFramework';
 import { testingFrameworkQuestion } from './questions/testingFramework';
+import type { Type } from './questions/type';
+import { typeQuestion } from './questions/type';
 
 // ts не копирует файлы, так что шаблона не будет в lib директории =(
-const getPathToTemplate = (template: Templates) =>
-  path.resolve(__dirname, '../../../src/commands/new/templates', template);
+const getPathToTemplate = (type: Type, template: Templates) =>
+  path.resolve(__dirname, '../../../src/commands/new/templates', type, template);
 const getPathToShared = () => path.resolve(__dirname, '../../../src/commands/new/templates/shared');
-const getPathToBlock = () => path.resolve(__dirname, '../../../src/commands/new/templates/block');
+const getPathToBlock = (type: Type) =>
+  path.resolve(__dirname, '../../../src/commands/new/templates', type, 'block');
 const getPathToMonorepoBlock = () =>
   path.resolve(__dirname, '../../../src/commands/new/templates/monorepo-block');
-const getPathToTestingFramework = (testingFramework: TestingFrameworks) =>
-  path.resolve(__dirname, '../../../src/commands/new/templates/testing', testingFramework);
+const getPathToTestingFramework = (type: Type, testingFramework: TestingFrameworks) =>
+  path.resolve(__dirname, '../../../src/commands/new/templates', type, 'testing', testingFramework);
 
 export default async function createNew(context: Context, params: Params): Promise<CommandResult> {
   const {
     name,
+    type: inputType,
     template: inputTemplate,
     packageManager: inputPackageManager,
     testingFramework: inputTestingFramework,
@@ -41,27 +45,30 @@ export default async function createNew(context: Context, params: Params): Promi
   };
 
   const {
+    type = inputType,
     template = inputTemplate,
     packageManager = inputPackageManager,
     testingFramework = inputTestingFramework,
   } = await inquirer.prompt<{
+    type: Type;
     template: Templates;
     packageManager: PackageManagers;
     testingFramework: TestingFrameworks;
   }>([
+    typeQuestion(inputType),
     templateQuestion(inputTemplate),
     packageManagerQuestion(inputPackageManager),
     testingFrameworkQuestion(inputTestingFramework),
   ]);
 
-  const templateDir = getPathToTemplate(template);
+  const templateDir = getPathToTemplate(type, template);
   const sharedDir = getPathToShared();
-  const blockDir = getPathToBlock();
+  const blockDir = getPathToBlock(type);
   const isNpm = packageManager === 'npm';
   const isJest = testingFramework === 'jest';
 
   const blockDirectoryName = {
-    monorepo: path.join('apps', name),
+    monorepo: path.join(type === 'app' ? 'apps' : 'child-apps', name),
     multirepo: 'src',
   }[template];
 
@@ -82,14 +89,14 @@ export default async function createNew(context: Context, params: Params): Promi
   }
 
   if (testingFramework !== 'none') {
-    await renderTemplate(getPathToTestingFramework(testingFramework), directoryName, {
+    await renderTemplate(getPathToTestingFramework(type, testingFramework), directoryName, {
       configEntry,
       isJest,
     });
   }
 
   await initializationGit(directoryName);
-  await installDependencies(directoryName, packageManager, testingFramework);
+  await installDependencies({ localDir: directoryName, type, packageManager, testingFramework });
 
   console.log(
     `\n\n Project ${name} has been successfully created. To run the project, enter in the terminal`,

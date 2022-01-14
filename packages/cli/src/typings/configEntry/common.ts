@@ -61,6 +61,18 @@ export interface Experiments {
      */
     pagesDir?: string | false;
   };
+
+  /**
+   * @title experimental settings for code transpilation
+   * @default {}
+   */
+  transpilation?: {
+    /**
+     * @title specify loader to transpile js-ts code
+     * @default "babel"
+     */
+    loader?: 'babel' | 'swc';
+  };
 }
 
 type serveConfig = {

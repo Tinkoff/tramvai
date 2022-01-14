@@ -14,34 +14,27 @@ jest.mock('@tramvai/module-router', () => ({
   useRoute: jest.fn(),
 }));
 
-const routeMock = {
+const mockRoute = {
   config: {
     layoutComponent: 'layout',
     pageComponent: 'page',
   },
 };
 
-const routerMock = {
-  getCurrentRoute: () => routeMock,
+const mockRouter = {
+  getCurrentRoute: () => mockRoute,
 };
 
-let updateState;
-
 (useRoute as any).mockImplementation(() => {
-  const [route, setState] = React.useState(routeMock);
-
-  updateState = setState;
-
-  return route;
+  return mockRoute;
 });
-
 const mockLog = jest.fn();
 
 describe('react/root', () => {
   it('should memoize wrapper function', async () => {
     const mock = jest.fn();
     class Layout extends React.Component<any, any> {
-      constructor(props) {
+      constructor(props: any) {
         super(props);
         mock();
       }
@@ -58,9 +51,9 @@ describe('react/root', () => {
     componentRegistry.add('layout2', Layout2);
     componentRegistry.add('page', Page);
 
-    const pageService = new PageService({ componentRegistry, router: routerMock });
+    const pageService = new PageService({ componentRegistry, router: mockRouter });
 
-    testComponent(<Root pageService={pageService} />, {
+    const { rerender } = testComponent(<Root pageService={pageService} />, {
       providers: [
         {
           provide: LOGGER_TOKEN,
@@ -73,22 +66,21 @@ describe('react/root', () => {
 
     expect(mock).toHaveBeenCalledTimes(1);
 
-    updateState({
-      config: {
-        layoutComponent: 'layout',
-        pageComponent: 'page',
-      },
-    });
+    mockRoute.config = {
+      layoutComponent: 'layout',
+      pageComponent: 'page',
+    };
 
     await waitRaf();
+    await rerender(<Root pageService={pageService} />);
     expect(mock).toHaveBeenCalledTimes(1);
-    updateState({
-      config: {
-        layoutComponent: 'layout2',
-        pageComponent: 'page',
-      },
-    });
+
+    mockRoute.config = {
+      layoutComponent: 'layout2',
+      pageComponent: 'page',
+    };
     await waitRaf();
+    await rerender(<Root pageService={pageService} />);
     expect(mock).toHaveBeenCalledTimes(2);
   });
 });

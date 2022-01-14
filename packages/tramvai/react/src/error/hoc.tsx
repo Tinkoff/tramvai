@@ -4,7 +4,7 @@ import { ErrorBoundary } from './component';
 
 export const withError = ({
   fallbackComponent,
-}: { fallbackComponent?: React.ReactElement } = {}) => <T extends React.ComponentType>(
+}: { fallbackComponent?: React.ReactElement } = {}) => <T extends React.ComponentType<any>>(
   WrappedComponent: T
 ) => {
   function WrapperWithError(props: any) {

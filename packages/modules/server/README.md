@@ -101,12 +101,12 @@ import { PROXY_CONFIG_TOKEN } from '@tramvai/tokens-server';
 
 The `ServerModule` has a built-in static server that allows you to distribute static files to users.
 
-To serve files, you need to create a directory `public` in the root of the project in which to place the necessary files.
-After that, all files will be available for request by browsers.
+To serve files, you need to create a directory `public` in the root of the project in which to place the necessary files. After that, all files will be available for request by browsers.
 
 _For example, we want to distribute sw.js file from the project's root:_ for this we create a folder `public` in which we put the file `sw.js`. Now on the client side, we will be able to request data from the url http://localhost:3000/sw.js. Also, we will most likely need some modifications on the CI/CD side to copy the public folder to the stands.
 
 This function is also available in production. For this purpose, copy the folder `public` into the docker container
+
 ### PAPI
 
 Papi - API routes for the `tramvai` application. More information is available in [Papi](features/papi/introduction.md)
@@ -148,13 +148,11 @@ To enable such logging, simply add the `server:node-debug:request` key to the `L
 
 Metrics
 
-The metrics module is automatically connected into the server module.
-For more information on metrics, you can read [in the metrics documentation](references/modules/metrics.md)
+The metrics module is automatically connected into the server module. For more information on metrics, you can read [in the metrics documentation](references/modules/metrics.md)
 
 ### Warming application caches
 
-The cache-warmup module is automatically plugged into the server module.
-Detailed information on cache warmup can be found [in cache-warmup documentation](references/modules/cache-warmup.md)
+The cache-warmup module is automatically plugged into the server module. Detailed information on cache warmup can be found [in cache-warmup documentation](references/modules/cache-warmup.md)
 
 ### Custom headers
 
@@ -172,9 +170,18 @@ There are special headers in the module, which help to determine the exact infor
 
 For all of the headers above which are passed via environment variables to be available, you need the external infrastructure to pass them when building and deprovisioning the application image (inside tinkoff this is done automatically).
 
-## Debugging
+### Debugging
 
 Module uses loggers with identifiers: `server`, `server:static`, `server:webapp`, `server:node-debug:request`
+
+## How to
+
+### Specify server port
+
+By default server starts at `3000` port. You can change this value by specifying environment variable `PORT`:
+
+- in dev environment it can be done by adding env `PORT` to file `env.development.json` e.g. `PORT: "8080"`
+- it can be specified explicitly as an environment variable `PORT` e.g. `PORT=8080`
 
 ## Exportable tokens
 

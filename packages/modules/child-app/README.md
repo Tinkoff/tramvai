@@ -200,6 +200,39 @@ This token is considered dangerous as it leads to high coupling with stores from
    ];
    ```
 
+### Preload child-app
+
+Preloading is vital for using child-app without extensive overhead on its loading.
+
+You may preload using next ways:
+
+1. Preload with `CHILD_APP_PRELOAD_MANAGER_TOKEN`
+
+   ```ts
+   provide({
+     provide: commandLineListTokens.customerStart,
+     multi: true,
+     useFactory: ({ preloadManager }) => {
+       return function preloadHeaderChildApp() {
+         return preloadManager.preload({ name: '[name]' });
+       };
+     },
+     deps: {
+       preloadManager: CHILD_APP_PRELOAD_MANAGER_TOKEN,
+     },
+   });
+   ```
+
+1. Add needed child-apps to the pageComponent or layoutComponent through field `childApps`
+
+```ts
+const PageComponent = () => {
+  return 'Page';
+};
+
+PageComponent.childApps = [{ name: '[name]' }];
+```
+
 ### Debug child-app
 
 #### Single child-app

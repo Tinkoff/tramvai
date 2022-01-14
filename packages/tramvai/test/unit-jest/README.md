@@ -24,7 +24,7 @@ This presets implements next settings:
 
 - use jest-circus as testRunner
 - default testEnvironment is `node`
-- uses `babel-jest` for transformation
+- uses `@swc-node/jest` for transformation
 - css files are mapped with [`identity-obj-proxy`](https://www.npmjs.com/package/identity-obj-proxy)
 - image files are mapped to empty string
 

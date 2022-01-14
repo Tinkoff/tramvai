@@ -3,24 +3,40 @@ import chalk from 'chalk';
 import ora from 'ora';
 import type { PackageManagers } from '../questions/packageManager';
 import type { TestingFrameworks } from '../questions/testingFramework';
+import type { Type } from '../questions/type';
 
-const dependencies = [
-  '@tramvai/core',
-  '@tramvai/react',
-  '@tramvai/state',
-  '@tramvai/module-common',
-  '@tramvai/module-error-interceptor',
-  '@tramvai/module-render',
-  '@tramvai/module-router',
-  '@tramvai/module-seo',
-  '@tramvai/module-server',
-  '@tramvai/tokens-render',
-  '@tramvai/tokens-router',
-  '@tramvai/tokens-router',
-  'react',
-  'react-dom',
-  'tslib@^2.0.3',
-];
+const DEPS: Record<Type, { dependencies: string[] }> = {
+  app: {
+    dependencies: [
+      '@tramvai/core',
+      '@tramvai/react',
+      '@tramvai/state',
+      '@tramvai/module-common',
+      '@tramvai/module-error-interceptor',
+      '@tramvai/module-render',
+      '@tramvai/module-router',
+      '@tramvai/module-seo',
+      '@tramvai/module-server',
+      '@tramvai/tokens-render',
+      '@tramvai/tokens-router',
+      '@tramvai/tokens-router',
+      'react',
+      'react-dom',
+      'tslib@^2.0.3',
+    ],
+  },
+  'child-app': {
+    dependencies: [
+      '@tramvai/core',
+      '@tramvai/react',
+      '@tramvai/state',
+      '@tramvai/child-app-core',
+      'react',
+      'react-dom',
+      'tslib@^2.0.3',
+    ],
+  },
+};
 
 const devDependencies = [
   '@tinkoff/eslint-config',
@@ -63,11 +79,17 @@ const packagesInstallCommands = {
   },
 };
 
-export async function installDependencies(
+export async function installDependencies({
   localDir,
-  packageManager: PackageManagers,
-  testingFramework: TestingFrameworks
-) {
+  type,
+  packageManager,
+  testingFramework,
+}: {
+  localDir: string;
+  type: Type;
+  packageManager: PackageManagers;
+  testingFramework: TestingFrameworks;
+}) {
   const spinner = ora({
     prefixText: `${chalk.blue('[START]')} Install dependencies`,
   }).start();
@@ -75,7 +97,7 @@ export async function installDependencies(
   const installCommands = packagesInstallCommands[packageManager];
   const options = { cwd: localDir, env: { SKIP_TRAMVAI_MIGRATIONS: 'true' } };
 
-  await execa(packageManager, [...installCommands.deps, ...dependencies], options);
+  await execa(packageManager, [...installCommands.deps, ...DEPS[type].dependencies], options);
   await execa(packageManager, [...installCommands.devDeps, ...devDependencies], options);
 
   if (testingFramework === 'jest') {
