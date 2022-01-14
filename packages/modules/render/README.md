@@ -1,24 +1,24 @@
 # RenderModule
 
-Модуль для рендера react-приложения на сервере и в браузере
+Module for rendering React application on the server and in the browser
 
-## Быстрый обзор
+## Overview
 
-![init command](/img/tramvai/render-module.jpg)
+![init command](/img/render/render-module.drawio.svg)
 
-Модуль который внутри себя содержит логику по генерацию html страницы, начиная от получения текущего компонента, так и заканчивая генерации конечного html c помощью библиотеки htmlpagebuilder.
+Module contains the logic for generating HTML pages, starting from getting current page component, and finishing with the rendering result HTML using the `@tinkoff/htmlpagebuilder` library.
 
-Из особенностей, в этом модуле присутствует код создания верхнеуровнего реакт компонента, получения пэйдж компонента и лайаута из роутинга и создание композиции из провайдеров в приложении
+This module includes code for creating top-level React component with all necessary providers composition, and page and layout components from the current route.
 
-## Подключение
+## Installation
 
-Необходимо установить `@tramvai/module-render` с помощью npm
+You need to install `@tramvai/module-render`
 
-```bash
-npm i @tramvai/module-render
+```bash npm2yarn
+npm install @tramvai/module-render
 ```
 
-И подключить в проекте
+And connect to the project
 
 ```tsx
 import { createApp } from '@tramvai/core';
@@ -32,25 +32,25 @@ createApp({
 
 ## Explanation
 
-### Разные режимы отрисовки React
+### Different React rendering modes
 
-Подробнее о режимах рендеринга можете узнать в [официальной доке](https://ru.reactjs.org/docs/concurrent-mode-adoption.html) в module-render есть поддержка всех типов и вы можете выбрать для своего приложения актуальный тип
+More information about rendering modes can be found in the [official documentation](https://reactjs.org/docs/concurrent-mode-adoption.html), `RenderModule` has support for all rendering types and you can choose the right one for your application.
 
-Для задания режима, необходимо при инициализации `RenderModule` передать параметр `mode`
+To set the mode, you must pass the `mode` parameter when initializing the `RenderModule`.
 
 ```typescript
 RenderModule.forRoot({ mode: 'concurrent' });
 ```
 
-Доступны варианты: `'legacy' | 'strict' | 'blocking' | 'concurrent'`
+Available modes: `'legacy' | 'strict' | 'blocking' | 'concurrent'`
 
-[Постепенная миграция на concurrent режим](#Как-можно-перевести-приложения-на-Concurrent-render-mode)
+[Gradual concurrent mode adoption](#gradual-concurrent-mode-adoption)
 
-### Ассеты в приложении
+### Application static assets
 
-Для работы с ресурсами в tramvai был разработан модуль ассетов который позволяет задать в DI список ресурсов и дальше их отрисовать в определенные слоты.
+For static assets (JS, CSS, fonts, etc.) we create special resources registry module, which allow to provide in DI list of resources, and then render them to specifics slots in final HTML.
 
-Пример:
+Example:
 
 ```typescript
 createApp({
@@ -59,12 +59,12 @@ createApp({
       multi: true,
       useValue: [
         {
-          type: ResourceType.inlineScript, // inlineScript обернет payload в тег <script>
-          slot: ResourceSlot.HEAD_CORE_SCRIPTS, // определяет позицию где в html будет вставлен ресурс
+          type: ResourceType.inlineScript, // inlineScript wrap payload in tag <script>
+          slot: ResourceSlot.HEAD_CORE_SCRIPTS, // define position where in HTML will be included resource
           payload: 'alert("render")',
         },
         {
-          type: ResourceType.asIs, // asIs занчит вставить ресурс как есть. без обработки
+          type: ResourceType.asIs, // asIs just add payload as a string, without special processing
           slot: ResourceSlot.BODY_TAIL,
           payload: '<div>hello from render slots</div>',
         },
@@ -74,13 +74,13 @@ createApp({
 });
 ```
 
-- **type** - тип ресурса, уже есть готовые пресеты которые упрощает добавление кода на страницу, без прокидывания дополнительных параметров и так далее
-- **slot** - место в html странице, куда будет добавлен этот ресурс
-- **payload** - что будет отрисовано
+- **type** - presets for different resources types
+- **slot** - slot in HTML where resource will be included
+- **payload** - information that will be rendered
 
 <p>
 <details>
-<summary>Доступные слоты</summary>
+<summary>Available slots</summary>
 
 @inline src/server/constants/slots.ts
 
@@ -89,29 +89,30 @@ createApp({
 
 <p>
 <details>
-<summary>Схема разметки слотов в HTML странице</summary>
+<summary>Layout of slots in the HTML page</summary>
 
 @inline src/server/htmlPageSchema.ts
 
 </details>
 </p>
 
-[Как добавить загрузку ассетов на странице](#Как-добавить-загрузку-ассетов-на-странице)
+[How to add assets loading to a page](#How-to-add-assets-loading-to-a-page)
 
-### Автоматический инлайнинг ресурсов
+### Automatic resource inlining
 
-#### Контекст
+#### Concept
 
-Большое количество файлов ресурсов создаёт проблемы при загрузке страницы, т.к. браузеру приходится создавать много соединений на небольшие файлы
+A large number of resource files creates problems when loading the page, because the browser has to create a lot of connections to small files
 
-#### Решение
+#### Solution
 
-Решили добавить возможность включить часть ресурсов прямо в приходящий с сервера HTML. Чтобы не инлайнить вообще всё, добавлена возможность задать верхнюю границу размера файлов.
+To optimize page loading, we've added the ability to include some resources directly in the incoming HTML from the server.
+To avoid inlining everything at all, we've added the ability to set an upper limit for file size.
 
-#### Подключение и конфигурация
+#### Connection and configuration
 
-С версии 0.60.7 инлайнинг для стилей включен по умолчанию, инлайнятся CSS-файлы размером меньше 40kb до gzip (+-10kb после gzip).
-Для переопределения этих настроек нужно добавить провайдер с указанием типов ресурсов, которые будут инлайниться (стили и\или скрипты), а также верхнюю границу размера файлов (в байтах, до gzip):
+Since version `0.60.7` inlining for styles is enabled by default, CSS files smaller than 40kb before gzip (+-10kb after gzip) are inlined.
+To override these settings, add a provider specifying types of resources to be inlined (styles and/or scripts) and an upper limit for file size (in bytes, before gzip):
 
 ```js
 import { RESOURCE_INLINE_OPTIONS } from '@tramvai/tokens-render';
@@ -121,61 +122,43 @@ import { provide } from '@tramvai/core';
 provide({
   provide: RESOURCE_INLINE_OPTIONS,
   useValue: {
-    types: [ResourceType.script, ResourceType.style], // Включаем для стилей и скриптов
+    types: [ResourceType.script, ResourceType.style], // Turn on for a CSS and JS files
     threshold: 1024, // 1kb unzipped
   },
 }),
 ```
 
-#### Особенности
+#### Peculiarities
 
-Инлайнятся все скрипты и\или стили (в зависимости от настроек), зарегистрированные через ResourcesRegistry
+All scripts and styles (depending on the settings) registered through the `ResourcesRegistry` are inlined.
 
-Загрузка файлов на сервере происходит в lazy-режиме асинхронно. Это означает, что при первой загрузке страницы инлайнинга не будет происходить. Также это означает, что никакого дополнительного ожидания загрузки ресурсов на стороне сервера не происходит. После попадания файла в кэш он будет инлайниться. Кэш имеет TTL 30 минут, сброс кэша не предусмотрен.
+File uploading to the server occurs in lazy mode, asynchronously.
+This means that there will be no inlining when the page first loads.
+It also means that there is no extra waiting for resources to load on the server side.
+Once the file is in the cache it will be inline.
+The cache has a TTL of 30 minutes and there is no resetting of the cache.
 
-### Автоматический предзагрузка ассетов приложений
+### Automatic resource preloading
 
-Для ускорения загрузки данных добавлена система подзагрузки данных для ресурсов и асинхронных чанков, которая работает по следующему сценарию:
+To speed up data loading, we've added a preloading system for resources and asynchronous chunks, which works according to the following scenario:
 
-- После рендеринга приложения мы получаем информацию о всех используемых в приложении css, js и асинхронных чанках
-- Дальше добавляем все css в прелоад тег и навешиваем onload событие. Нам необходимо максимально быстро загрузить блокирующие ресурсы.
-- При загрузке любого css файла, добавляем в предзагрузку все необходимые js файлы
+- After rendering the application, we get information about all the CSS, JS bundles and asynchronous chunks used in the application
+- Next we add all the CSS to the **preload** tag and add onload event on them. We need to load the blocking resources as quickly as possible.
+- When loading any CSS file, onload event will be fired (only once time) and add all **preload** tags to the necessary JS files
 
-#### Особенности
+### Basic layout
 
-Обязательно должен быть синхронизирована последняя часть идентификатора бандла с названием чанка
+The `RenderModule` has a default basic layout that supports different ways of extending and adding functionality
 
-```
-const dashboard = () => require.ensure([], (require) => require('./bundles/dashboard'), 'dashboard');
-bundles: {
-  'platform/mvno/dashboard': dashboard,
-}
-```
+[Read more about layout on the library page](references/libs/layout-factory.md)
 
-или если используете import
+#### Adding a basic header and footer
 
-```
-const dashboard = () => import(/* webpackChunkName: "dashboard" */ './bundles/dashboard');
-bundles: {
-  'platform/mvno/dashboard': dashboard,
-}
-```
+The module allows you to add header and footer components, which will be rendered by default for all pages
 
-В примере выше, 'dashboard' и last('platform/mvno/dashboard'.split('/')) имеют одинаковое значение. Иначе мы не сможем на стороне сервера узнать, какой из списка чанков подходит в бандлу и подзагрузка произойдет только на стороне клиента.
+##### Via provider
 
-### Базовый layout
-
-В module-render встроен дефолтный базовый layout, который поддерживает различные способы расширения и добавления функциональности
-
-[Подробнее про лайаут можете почитать на странице библиотеке](references/libs/layout-factory.md)
-
-#### Добавление базовых header и footer
-
-Можно добавить компоненты header и footer, которые будут отрисовываться по умолчанию для всех страниц
-
-##### Через провайдер
-
-Зарегистрировать компоненты header и footer через провайдеры
+Register header and footer components through providers:
 
 ```tsx
 import { DEFAULT_HEADER_COMPONENT, DEFAULT_FOOTER_COMPONENT } from '@tramvai/tokens-render';
@@ -195,9 +178,9 @@ createApp({
 });
 ```
 
-##### Через бандл
+##### Via bundle
 
-Можно зарегистрировать в бандле компонент `headerDefault` и `footerDefault`, которые будет отрисовываться для всех роутов, у которых не переопределены `headerComponent` и `footerComponent`.
+You can register a `headerDefault` and `footerDefault` component in the bundle, which will be rendered for all routes that do not have `headerComponent` and `footerComponent` redefined in configuration:
 
 ```tsx
 createBundle({
@@ -209,9 +192,9 @@ createBundle({
 });
 ```
 
-#### Добавление компонентов и враперов
+#### Adding components and wrappers
 
-Добавить кастомные компоненты и врапперы для layout можно через токен `LAYOUT_OPTIONS`
+You can add custom components and wrappers for layout via the token `LAYOUT_OPTIONS`
 
 ```tsx
 import { provide } from '@tramvai/core';
@@ -221,17 +204,18 @@ import { provide } from '@tramvai/core';
       provide: 'LAYOUT_OPTIONS',
       multi: true,
       useValue: {
-        // react компоненты
+        // React components
         components: {
-          // базовые кастомные компоненты врапперы для отрисовки страницы и контента
+          // content component, this component wraps the header, page and footer
           content: Content,
+          // page component
           page: Page,
 
-          // глобальные компоненты
+          // any global components
           alerts: Alerts,
           feedback: Feedback,
         },
-        // HOC для компонентов
+        // HOC's for components
         wrappers: {
           layout: layoutWrapper,
           alerts: [alertWrapper1, alertWrapper2],
@@ -243,17 +227,19 @@ import { provide } from '@tramvai/core';
 export class MyLayoutModule {}
 ```
 
-Подробнее про опции `components` и `wrappers` можно узнать в [@tinkoff/layout-factory](references/libs/layout-factory.md)
+More details about the `components` and `wrappers` options can be found in [@tinkoff/layout-factory](references/libs/layout-factory.md)
 
-#### Замена базового layout
+#### Replacing the basic layout
 
-Если вам не подходит базовый лайаут, вы можете его подменить на любой другой React компонент. При этом вам нужно самостоятельно реализовывать все врапперы и подключать глобальные компоненты, если они вам нужны.
+If the basic layout doesn't work for you, you can replace it with any other React component.
+In doing so, you need to implement all the wrappers yourself and plug in global components if you need them.
 
-Заменить можно двумя способами:
+You can replace it in two ways:
 
-##### Добавить layoutComponent у роута
+##### Add layoutComponent to route 
 
-Вы можете прописать параметр `layoutComponent` у роута в `properties` и зарегистрировать компонент в `bundle`. При отрисовке страницы отобразится зарегистрированный компонент
+You can add a `layoutComponent` property to route `config` and register component in `bundle`.
+This layout will be rendered when you go to the corresponding route.
 
 ```tsx
 createBundle({
@@ -264,9 +250,9 @@ createBundle({
 });
 ```
 
-##### Переопределить layoutDefault
+##### Replace layoutDefault
 
-Вы можете зарегистрировать в бандле компонент `layoutDefault` который автоматически будет отрисовываться для всех роутов, у которых не переопределен `layoutComponent`
+You can register a `layoutDefault` component in `bundle`, which will be automatically rendered for all routes that do not have an `layoutComponent` in `config` property.
 
 ```tsx
 createBundle({
@@ -279,79 +265,79 @@ createBundle({
 
 ## How to
 
-### Как добавить загрузку ассетов на странице
+### How to add assets loading to a page
 
-Присутствует 2 способа, как можно добавить ресурсы в приложение
+There are 2 main ways how you can add resources to your application
 
-- токен `RENDER_SLOTS`, в который можно передать список ресурсов, например HTML разметка, inline скрипты, тег script
-- токен `RESOURCES_REGISTRY` для получения менеджера ресурсов, и регистрации нужных ресурсов вручную
+- The `RENDER_SLOTS` token, where you can pass a list of resources, such as HTML markup, inline scripts, script tag
+- Token `RESOURCES_REGISTRY` to get the resource manager, and register the desired resources manually
 
-Пример:
+Example:
 
 <p>
 <details>
-<summary>Пример приложения</summary>
+<summary>Application example</summary>
 
 @inline ../../../examples/how-to/render-add-resources/index.tsx
 
 </details>
 </p>
 
-### Как можно перевести приложения на Concurrent render mode
+### Gradual concurrent mode adoption
 
-React позволяет выполнить постепенную миграцию приложения
+React allows a gradual migration of an application
 
-**Этапы миграции:**
+**Stages of migration:**
 
-1. [Strict Mode](https://reactjs.org/docs/strict-mode.html) - строгий режим, в котором React предупреждает об использовании легаси API
+1. [Strict Mode](https://reactjs.org/docs/strict-mode.html) - strict mode, in which React warns about using the legacy API
 
-Для подключения необходимо сконфигурировать render-module
+To connect, you must configure the `RenderModule`
 
-```
+```js
 modules: [
   RenderModule.forRoot({ mode: 'strict' })
 ]
 ```
 
-Затем необходимо исправить все новые предупреждения, такие как использование легаси методов жизненного цикла и строковые рефы.
+Then you need to fix any new warnings, such as using legacy lifecycle methods and string refs.
 
-2. [Blocking Mode](https://reactjs.org/docs/concurrent-mode-adoption.html#migration-step-blocking-mode) - добавляет часть возможностей Concurrent Mode, например Suspense на сервере. Подходит для постепенной миграции на Concurrent Mode.
+2. [Blocking Mode](https://reactjs.org/docs/concurrent-mode-adoption.html#migration-step-blocking-mode) - adds some Concurrent Mode features, such as Suspense on the server. Suitable for gradual migration to Concurrent Mode.
 
-Для подключения необходимо установить экспериментальную версию React и сконфигурировать render-module
+To connect, install an experimental version of React and configure the `RenderModule`
 
-```bash
+```bash npm2yarn
 npm install react@experimental react-dom@experimental
 ```
 
-```
+```js
 modules: [
   RenderModule.forRoot({ mode: 'blocking' })
 ]
 ```
 
-На этом этапе надо проверить работоспособность приложения, и можно попробовать новые API, например [SuspenseList](https://reactjs.org/docs/concurrent-mode-patterns.html#suspenselist)
+At this stage, you need to check the performance of the application, and you can try new APIs, for example [SuspenseList](https://reactjs.org/docs/concurrent-mode-patterns.html#suspenselist)
 
 3. Concurrent Mode
 
-Для подключения необходимо установить экспериментальную версию React и сконфигурировать render-module
+To connect, install an experimental version of React and configure the `RenderModule`
 
-```bash
+```bash npm2yarn
 npm install react@experimental react-dom@experimental
 ```
 
-```
+```js
 modules: [
   RenderModule.forRoot({ mode: 'concurrent' })
 ]
 ```
 
-На этом этапе надо проверить работоспособность приложения, и можно попробовать новые API, например [useTransition](https://reactjs.org/docs/concurrent-mode-patterns.html#transitions)
+At this stage, you need to check the performance of the application, and you can try new APIs, for example [useTransition](https://reactjs.org/docs/concurrent-mode-patterns.html#transitions)
 
-### Тестирование
+### Testing
 
-#### Тестирование расширений рендера через токены RENDER_SLOTS или RESOURCES_REGISTRY
+#### Testing render extensions via RENDER_SLOTS or RESOURCES_REGISTRY tokens
 
-Если у вас имеется модуль или провайдеры которые определяют RENDER_SLOTS или используют RESOURCES_REGISTRY, то удобно будет использовать специальные утилиты для того чтобы протестировать их отдельно
+If you have a module or providers that define `RENDER_SLOTS` or use `RESOURCES_REGISTRY`, it is convenient to use special utilities to test them separately
 
 ```ts
 import {
@@ -401,6 +387,6 @@ describe('testPageResources', () => {
 });
 ```
 
-## Экспортируемые токены
+## Exported tokens
 
-[ссылка](references/tokens/render-tokens.md)
+[link](references/tokens/render-tokens.md)

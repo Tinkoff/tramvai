@@ -24,19 +24,19 @@ createApp({
   modules: [...modules],
   providers: [
     {
-      // Если требуется добавить свои ресурсы (скрипты, стили, картинки) для загрузки, то можно использовать
-      // провайдер RENDER_SLOTS для добавления необходимого, все это потом будет использовано в RenderModule
-      // и вставлено в html
+      // If you want to add your own resources (scripts, styles, images) for loading,
+      // you can use the provider RENDER_SLOTS to add the necessary assets,
+      // all this will then be used in the RenderModule and inserted into HTML
       provide: RENDER_SLOTS,
       multi: true,
       useValue: [
         {
-          type: ResourceType.inlineScript, // inlineScript обернет payload в тег <script>
-          slot: ResourceSlot.HEAD_CORE_SCRIPTS, // определяет позицию где в html будет вставлен ресурс
+          type: ResourceType.inlineScript, // inlineScript wrap payload in tag <script>
+          slot: ResourceSlot.HEAD_CORE_SCRIPTS, // define position where in HTML will be included resource
           payload: 'alert("render")',
         },
         {
-          type: ResourceType.asIs, // asIs занчит вставить ресурс как есть. без обработки
+          type: ResourceType.asIs, // asIs just add payload as a string, without special processing
           slot: ResourceSlot.BODY_TAIL,
           payload: '<div>hello from render slots</div>',
         },
@@ -45,12 +45,12 @@ createApp({
     {
       provide: commandLineListTokens.resolveUserDeps,
       multi: true,
-      // также ресурсы можно добавить отдельно через di и токен RESOURCES_REGISTRY
+      // You can also add resources separately via DI and the RESOURCES_REGISTRY token
       useFactory: ({ resourcesRegistry }) => {
         return function addMyScripts() {
           resourcesRegistry.register({
-            slot: ResourceSlot.HEAD_ANALYTICS, // место вставки
-            type: ResourceType.script, // script создаст новый тег скрипт с src равном payload
+            type: ResourceType.script, // script will create new script tag with src equal to payload
+            slot: ResourceSlot.HEAD_ANALYTICS, // define position where in HTML will be included resource
             payload: './some-script.js',
           });
         };
