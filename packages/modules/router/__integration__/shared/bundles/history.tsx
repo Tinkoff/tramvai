@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { createBundle } from '@tramvai/core';
 
-const layoutDefault = ({ children }) => (
+const layoutDefault = ({ children }: { children: React.ElementType }) => (
   <>
     <h3 id="layout">Test Layout</h3>
     <div>{children}</div>
@@ -56,6 +56,7 @@ export const PushStateExternal = () => {
   );
 };
 
+// eslint-disable-next-line import/no-default-export
 export default createBundle({
   name: 'history',
   components: {

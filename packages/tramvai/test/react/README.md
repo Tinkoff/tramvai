@@ -14,6 +14,20 @@ If you are using jest for testing, consider to add a library [@testing-library/j
 npm i --save-dev @tramvai/test-react
 ```
 
+## Explanation
+
+### act
+
+Based on the React [act test helper](https://reactjs.org/docs/test-utils.html#act) that is used to perform rerender component after start changes.
+
+Put you actions that will update React state inside `act` function in order to check result render in the next code.
+
+:::warning
+
+Current wrapper should be awaited in tests to execute some additional internal steps
+
+:::
+
 ## How to
 
 ### Test component

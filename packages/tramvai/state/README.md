@@ -1,37 +1,49 @@
 # State
 
-**State** - встроенная в `tramvai` библиотека для управления состоянием приложения.
+**State** is a library built into `tramvai` for managing application state.
 
-## Особенности
+## Peculiarities
 
-- Redux-like стейт-менеджер
-- Встроенная библиотека, похожая на [redux-act](https://github.com/pauldijou/redux-act), для уменьшения boilerplate кода
-- Содержит привязки к `react` компонентам, такие как `connect` и `useSelector`
-- Динамическая инициализация редьюсеров. Можно в любое время зарегистрировать редьюсер или сгенерировать новый.
-- Точечные подписки на изменения состояний редьюсеров. При изменении данных повторно пересчитываются только затронутые `connect` и `useSelector`, а не все.
-- Поддержка SSR режима.
+- Redux-like state manager
+- Built-in library similar to [redux-act](https://github.com/pauldijou/redux-act) to reduce boilerplate code
+- Contains bindings to `react` components such as `connect` and `useSelector`
+- Dynamic initialization of reducers. You can register a reducer at any time or generate a new one.
+- Point subscriptions to changes in the states of reducers. When data changes, only the affected `connect` and `useSelector` are recalculated, not everything.
+- Support for SSR mode.
 
-## Основные концепции
+## Basic concepts
 
-- Стор - Класс, который содержит состояние всех редьюсеров, подписки на изменения и создается для каждого клиента
-- Редьюсеры - сущности в которых мы описываем то, как будут храниться и преобразовываться данные
-- Эвенты - события, с помощью которых можно изменить состояния редьюсеров
-- Экшены - функции, которые позволяют выполнять сайд-эффекты и обновлять данные в сторе. Похожи на `redux-thunk`
+- Store - A class that contains the state of all reducers, change subscriptions and is created for each client
+- Reducers - entities in which we describe how data will be stored and transformed
+- Events - events with which you can change the states of reducers
+- Actions - functions that allow you to perform side effects and update data in the store. Similar to `redux-thunk`
 
-## Рекомендации
+## Recommendations
 
-- Нельзя мутировать данные в редьюсерах. Иначе из-за различных оптимизаций не произойдёт оповещение подписчиков о изменениях
-- Инициализировать редьюсеры как можно раньше и до его использования. Иначе при вызове `dispatch(userLoadInformation())` редьюсер еще не будет отслеживать события и не получит данные.
-- Не хранить статичные данные в сторах. Так как эти данные будут передаваться с сервера на клиент, то данные задублируются. Лучше вынести в константы.
-- Разбивать на небольшие редьюсеры. Иначе у нас появляется огромный редьюсер, который содержит большое количество информации и любые изменения будут вызывать перерасчеты для большого количества компонентов.
+- You cannot mutate data in reducers. Otherwise, due to various optimizations, subscribers will not be notified about the changes.
+- Initialize reducers as early as possible and before using it. Otherwise, when calling `dispatch(userLoadInformation())`, the reducer will not yet track events and will not receive data.
+- Do not store static data in stores. Since this data will be transferred from the server to the client, the data will be duplicated. Better to put in constants.
+- Break into small reducers. Otherwise, we have a huge reducer that contains a large amount of information and any changes will cause recalculations for a large number of components.
 
-## Установка
+## Installation
 
 ```bash
 npm i --save @tramvai/state
 ```
 
-## Базовый пример
+## Explanation
+
+### schedule
+
+Some of the functions that deals with state (e.g. connect, useStoreSelector) will use some sort of batching (using requestAnimationFrame or SetTimeout) in browser. So any updates to state are not synchronous and happens after some time.
+
+Most of the time this is not an issue or noticeable thing. But in tests that might be unexpected.
+
+> In order to take into account scheduling while testing use [waitRaf helper](references/test/test-jsdom.md#waitraf) or [act from test-unit](references/test/test-unit.md#act)
+
+## How to
+
+### Basic example
 
 ```tsx
 import { createReducer, createEvent } from '@tramvai/state';

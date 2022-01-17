@@ -33,6 +33,7 @@ const docusaurusConfig = {
           remarkPlugins: [
             [require('./plugins/remark/inline'), { cwd: resolve('../../') }],
             require('./plugins/remark/typescript-check'),
+            [require('@docusaurus/remark-plugin-npm2yarn'), { sync: true }],
           ],
           exclude: ['**/*.public.md'],
           // rehypePlugins: [[require('rehype-partials'), {}]],

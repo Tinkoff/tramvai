@@ -1,32 +1,32 @@
 ---
 id: deploy
-title: Deploy приложения
+title: Deployment
 ---
 
-## Общее
+## Introduction
 
-Tramvai это обычное node.js приложение которое можно запустить стандартными инструментами доступными в node.js комьюнити. Ограничения только накладываются на файловую структуру и необходимости передать ENV переменные приложению
+Tramvai is a regular node.js application that can be run using standard tools available in the node.js community. Restrictions are only imposed on the file structure and the need to pass ENV variables to the application
 
-## Список действий необходимых для деплоя приложения
+## List of actions required to deploy the application
 
-- собрать приложение в продакшен режиме
-- залить ассеты
-- сбилдить докер контейнер с файлами приложения
-- запустить, передав ENV переменные
+- build the application in production mode
+- fill in assets
+- build a docker container with application files
+- run by passing ENV variables
 
-### Сборка проекта
+### Build the project
 
-Для сборки проекта необходимо использовать команду (перед этим установив зависимости в проекте)
+To build the project, you must use the command (before installing the dependencies in the project)
 
 ```bash
 tramvai build APP_ID
 ```
 
-в APP_ID необходимо передать идентификатор приложения. После выполнения команды появится директория `dist` с файлами сборки сервера и клиентского кода
+in APP_ID, you must pass the application identifier. After executing the command, the `dist` directory will appear with the build files for the server and client code
 
-### Создание докер контейнера
+### Create a docker container
 
-Рекомендуемый Dockerfile
+Recommended Dockerfile
 
 ```dockerfile
 FROM node:14-buster-slim
@@ -39,38 +39,40 @@ EXPOSE 3000
 CMD [ "node", "--max-http-header-size=80000", "/app/server.js" ]
 ```
 
-- `FROM` - можете поставить 14+ версию ноды, желательно alpine версию для снижения размера
+- `FROM` - you can put a 14+ version of the node, preferably an alpine version to reduce the size
 
-### Заливки клиенской статики
+### Deploy static assets
 
-Рекомендуемый способ это заливка файлов на CDN, так как node.js не очень хорошо справляется с раздачей статики, так и будет большой трафик для нашей инфрастуктуры. По этому для продакшен приложений, которые будут использовать клиенты, стоит всегда испольвать CDN. 
+The recommended way is to upload files to a CDN, since node.js does not do a very good job of serving static content, so there will be a lot of traffic for our infrastructure. Therefore, for production applications that clients will use, you should always use a CDN.
 
-Для этого, содержимое папки `dist/client` заливаете на CDN по выбранному вами способу, получается URL по которому будут доступны файлы и подставляете этот урл в ENV переменную `ASSETS_PREFIX` например `ASSETS_PREFIX=https://cdn-domain.com/my-awesome-app/`
+To do this, upload the contents of the `dist/client` folder to the CDN according to the method you choose, you get the URL at which the files will be available and substitute this url into the ENV variable `ASSETS_PREFIX` for example `ASSETS_PREFIX=https://cdn-domain.com/my-awesome-app/`
 
-Если вам не нужен CDN, то можете посмотреть ниже в пункте "Запуск приложения без клиентского CDN", стоит использовать для тестовых стендов или не нагруженных приложений
+If you do not need a CDN, then you can see below in the paragraph "Launching an application without a client CDN", it is worth using for test benches or not loaded applications
 
-### Деплой приложения
+### Deploy application
 
-Приложение запускается как обычный node.js процес командой node, при запуске необходимо передать все необходимые ENV переменные (список ENV зависит от используемых модулей приложением). Если не добавить ENV переменные - то приложение не запустится. Не забудьте про переменную `ASSETS_PREFIX`
+The application is launched as a normal node.js process with the node command; when starting, it is necessary to pass all the necessary ENV variables (the list of ENVs depends on the modules used by the application). If you do not add ENV variables, the application will not start. Don't forget about the variable `ASSETS_PREFIX`
 
 ## Explanation
 
-### Пробы
+### Probes
 
-Если вы деплоетесь в kubernetes, то для этих кейсов есть специальные урлы для проб которые необходимо использовать
+If you deploy to kubernetes, then for these cases there are special urls for probes that you need to use
 
-- `/healthz` - после старта приложения всегда отдает ответ OK
-- `/readyz` - после старта приложения всегда отдает OK
+- `/healthz` - after starting the application, it always response OK
+- `/readyz` - after starting the application, it always response OK
 
-### Запуск приложения без клиентского CDN
+### Launching an application without a client CDN
 
-В трамвай встроен сервер отдачи статики. Так лучше не делать, по той причине что nodeJS не лучший инструмент для этого и статика будет влиять на приложение.
+Tramvai has a built-in static return server. It is better not to do this, for the reason that nodeJS is not the best tool for this and static will affect the application.
 
-В общем виде все то же самое как и при обычном деплое, но необходимо добавить копирование ассетов пользователя, в docker образ, для этого:
-* добавить копирование файлов `COPY dist/client /app/public/statics`
-* изменить ENV переменную ASSETS_PREFIX
+In general, everything is the same as in a regular deployment, but you need to add copying user assets to the docker image, for this:
 
-Пример готового Dockerfile
+- add copy files `COPY dist/client /app/public/statics`
+- change ENV variable ASSETS_PREFIX
+
+Dockerfile example
+
 ```dockerfile
 FROM node:14-buster-slim
 WORKDIR /app
@@ -83,33 +85,33 @@ EXPOSE 3000
 CMD [ "node", "--max-http-header-size=80000", "/app/server.js" ]
 ```
 
-При запуске приложения необходимо передать `ASSETS_PREFIX=/statics/`. При старте приложения поднимется сервер отдачи статитики и будет доступны все файлы внутри директории /public/. Тем самым клиент сможет получить данные по урлу /statics/payment.js
+When starting the application, you must pass `ASSETS_PREFIX=/statics/`. When the application starts, the server for serving statistics will rise and all files inside the /public/ directory will be available. Thus, the client will be able to receive data on the url /statics/payment.js
 
-### Локальный запуск в docker контейнере
+### Run locally in a docker container
 
-На устройстве должен быть установлен https://www.docker.com/products/docker-desktop и выполняться команда `docker run hello-world`
+The device must have https://www.docker.com/products/docker-desktop installed and run the command `docker run hello-world`
 
-#### Собираем проект в продакшен режиме, у нас появится артифакт в директории dist
+#### We build the project in production mode, we will have an artifact in the dist directory
 
 ```bash
 yarn build
 ```
 
-#### Собираем докер образ приложения
+#### Build a docker application image
 
 ```bash
 docker build -t test/myapp .
 ```
 
-#### Запускаем собранный образ
+#### Run the created image
 
 ```bash
 docker run --rm -e DANGEROUS_UNSAFE_ENV_FILES='true' -e ASSETS_PREFIX='http://localhost:4000/static/' -v ${PWD}/env.development.js:/app/env.development.js -v ${PWD}/dist/client:/app/static  -e DEV_STATIC=true -p 3000:3000 -p 4000:4000 -d test/myapp
 ```
 
-Для остановки контейнера нужно получить CONTAINER ID, выполним команду docker ps и далее выполнить команду docker stop <CONTAINER ID\>
+To stop the container, you need to get the CONTAINER ID, run the docker ps command and then run the command docker stop <CONTAINER ID\>
 
-#### Для остановки всех контейнеров
+#### To stop all containers
 
 ```bash
 docker kill $(docker ps --quiet)

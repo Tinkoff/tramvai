@@ -9,6 +9,7 @@ import type { AbstractRouter } from '@tinkoff/router';
 import { Provider as RouterProvider } from '@tinkoff/router';
 import type { createMockDi } from '@tramvai/test-mocks';
 import { createMockContext, createMockRouter } from '@tramvai/test-mocks';
+import { waitRaf } from '@tramvai/test-jsdom';
 
 type OptionsDi = Parameters<typeof createMockDi>[0];
 type OptionsContext = Parameters<typeof createMockContext>[0];
@@ -50,7 +51,16 @@ export const testComponent = (
   return {
     render: renderResults,
     rerender: (el: React.ReactElement) => renderResults.rerender(<Wrapper>{el}</Wrapper>),
-    act,
+    act: (callback: () => Promise<void> | void) => {
+      return act(async () => {
+        await callback();
+        if (typeof window.requestAnimationFrame !== 'undefined') {
+          // as some of the state changes in browsers uses requestAnimationFrame to batch updates in single one
+          // but in tests requestAnimationFrame should mostly should be resolved manually
+          await waitRaf();
+        }
+      });
+    },
     fireEvent,
     context,
     router,

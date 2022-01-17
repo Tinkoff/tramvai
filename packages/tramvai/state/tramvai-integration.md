@@ -1,18 +1,16 @@
 # Интеграция с tramvai
 
-Для работы с состоянием приложения есть три основные возможности:
+There are three main options for working with application state:
 
-- Изменить состояние
-- Получить состояние
-- Подписаться на изменение состояния
+- Change state
+- Get the state
+- Subscribe to change of state
 
-При работе с состоянием в `React` компонентах, `@tramvai/state` предоставляет удобные хуки, которые описаны в доке [Хуки для React](features/state/hooks.md).
-Но, в `tramvai` приложениях этого недостаточно, так как есть дополнительные сущности, в которых происходит работа с состоянием - `провайдеры` и `экшены`.
+When working with state in `React` components, `@tramvai/state` provides convenient hooks, which are described in the [React Hooks](features/state/hooks.md) documentation. But, in `tramvai` applications, this is not enough, since there are additional entities in which work with state occurs - `providers` and `actions`.
 
-## Провайдеры
+## Providers
 
-Модуль `@tramvai/module-common` подключает `StateModule`, который делает доступным в приложении провайдер `STORE_TOKEN`,
-реализующий все возможности управления стейтом:
+The module `@tramvai/module-common` connects the `StateModule`, which makes the provider `STORE_TOKEN` available in the application, which implements all the possibilities of state management:
 
 ```tsx
 type Store = {
@@ -21,12 +19,12 @@ type Store = {
   subscribe(reducer, listener);
   getState();
   getState(reducer);
-}
+};
 ```
 
-### Изменение состояния
+### Change of state
 
-Метод `store.dispatch()` используется для изменения состояния, например:
+The `store.dispatch()` method is used to change state, for example:
 
 ```tsx
 import { commandLineListTokens } from '@tramvai/core';
@@ -47,17 +45,16 @@ const provider = {
   deps: {
     store: STORE_TOKEN,
   },
-}
+};
 ```
 
-### Чтение состояния
+### Read state
 
-Метод `store.getState()` используется для получения общего состояния, или состояния конкретного редьюсера.
+The `store.getState()` method is used to get the general state, or the state of a particular reducer.
 
-> Использование `store.getState(reducer)` не подходит для опциональных сторов -
-> если вы не уверены, что стор подключается в приложении напрямую или через модули, используйте `const { storeName = defaultValue } = store.getState()`
+> Using `store.getState(reducer)` is not suitable for optional stores - if you are not sure if the store is connected in the application directly or through modules, use `const { storeName = defaultValue } = store.getState()`
 
-Пример:
+Example:
 
 ```tsx
 import { commandLineListTokens } from '@tramvai/core';
@@ -71,21 +68,21 @@ const provider = {
   multi: true,
   useFactory: ({ store }) => {
     return function readUserState() {
-      // { user: {} } - получаем все состояние
+      // { user: {} } - get all state
       const state = store.getState();
-      // user: {} - получаем состояние конкретного редьюсера
+      // user: {} - get the state of a specific reducer
       const user = store.getState(userReducer);
     };
   },
   deps: {
     store: STORE_TOKEN,
   },
-}
+};
 ```
 
-### Подписка
+### Subscription
 
-Метод `store.subscribe()` используется для подписки на изменение глобального состояния, например:
+The `store.subscribe()` method is used to subscribe to a global state change, for example:
 
 ```tsx
 import { commandLineListTokens } from '@tramvai/core';
@@ -119,10 +116,10 @@ const provider = {
   deps: {
     store: STORE_TOKEN,
   },
-}
+};
 ```
 
-Или для подписки на изменение состояния конкретного редьюсера:
+Or to subscribe to a change in the state of a specific reducer:
 
 ```tsx
 import { commandLineListTokens } from '@tramvai/core';
@@ -149,12 +146,12 @@ const provider = {
   deps: {
     store: STORE_TOKEN,
   },
-}
+};
 ```
 
-## Экшены
+## Actions
 
-Модуль `@tramvai/module-common` подключает в приложении провайдер `CONTEXT_TOKEN`, которые помимо работы с состоянием (под капотом используется `STORE_TOKEN`), позволяет запускать экшены:
+The module `@tramvai/module-common` connects the provider `CONTEXT_TOKEN` in the application, which, in addition to working with state (under the hood, `STORE_TOKEN` is used), allows you to run actions:
 
 ```tsx
 type ConsumerContext = {
@@ -163,10 +160,10 @@ type ConsumerContext = {
   subscribe(listener);
   getState();
   getState(reducer);
-}
+};
 ```
 
-Пример использования контекста:
+An example of using context:
 
 ```tsx
 import { createAction } from '@tramvai/core';
@@ -180,15 +177,14 @@ userReducer.on(loadUser, (state, payload) => payload);
 const fetchUserAction = createAction({
   name: 'fetchUser',
   fn: async (context, payload, { httpClient }) => {
-    
     const { name } = context.getState(userReducer);
-    
+
     if (name !== 'anonymus') {
       return;
     }
-    
+
     const response = await httpClient.get('/user');
-    
+
     context.dispatch(loadUser(response.payload));
   },
   deps: {

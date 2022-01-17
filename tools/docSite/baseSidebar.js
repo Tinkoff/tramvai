@@ -5,6 +5,20 @@ module.exports = {
     'get-started/app-structure',
     'get-started/core-modules',
   ],
+  Tutorials: [
+    {
+      type: 'category',
+      label: 'Pokedex App',
+      items: [
+        'tutorials/pokedex-app/new-app',
+        'tutorials/pokedex-app/add-page',
+        'tutorials/pokedex-app/create-http-client',
+        'tutorials/pokedex-app/fetch-data',
+        'tutorials/pokedex-app/dynamic-page',
+        'tutorials/pokedex-app/styling',
+      ],
+    },
+  ],
   'Основные концепции': [
     'concepts/overview',
     'concepts/di',

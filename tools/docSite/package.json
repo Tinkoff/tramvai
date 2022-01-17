@@ -9,7 +9,8 @@
     "write-translations:en": "yarn write-translations --locale en"
   },
   "dependencies": {
-    "@docusaurus/theme-common": "2.0.0-beta.4",
+    "@docusaurus/remark-plugin-npm2yarn": "2.0.0-beta.13",
+    "@docusaurus/theme-common": "2.0.0-beta.13",
     "@tinkoff/utils": "^2.1.2",
     "clsx": "^1.1.1",
     "directory-tree": "^2.2.4",
@@ -21,9 +22,9 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "*",
-    "@docusaurus/core": "2.0.0-beta.4",
-    "@docusaurus/plugin-google-analytics": "2.0.0-beta.4",
-    "@docusaurus/preset-classic": "2.0.0-beta.4",
+    "@docusaurus/core": "2.0.0-beta.13",
+    "@docusaurus/plugin-google-analytics": "2.0.0-beta.13",
+    "@docusaurus/preset-classic": "2.0.0-beta.13",
     "@types/prop-types": "^15.7.3",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",

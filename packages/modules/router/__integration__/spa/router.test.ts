@@ -88,6 +88,7 @@ describe('router/spa', () => {
   });
 
   describe('http statuses', () => {
+    // eslint-disable-next-line jest/expect-expect
     it('should return status 200 for success pages', async () => {
       await Promise.all([
         getApp().request('/').expect(200),
@@ -95,6 +96,7 @@ describe('router/spa', () => {
       ]);
     });
 
+    // eslint-disable-next-line jest/expect-expect
     it('should return redirect status for redirects', async () => {
       await Promise.all([
         getApp().request('/redirect/').expect(307).expect('Location', `/after/static/redirect/`),
@@ -109,6 +111,7 @@ describe('router/spa', () => {
       ]);
     });
 
+    // eslint-disable-next-line jest/expect-expect
     it('should set custom httpStatus', async () => {
       await Promise.all([
         getApp().request('/status-204/').expect(204),
@@ -116,6 +119,7 @@ describe('router/spa', () => {
       ]);
     });
 
+    // eslint-disable-next-line jest/expect-expect
     it('should return 404 status', async () => {
       await Promise.all([
         getApp().request('/some/page/').expect(404),
@@ -125,6 +129,7 @@ describe('router/spa', () => {
   });
 
   describe('redirects', () => {
+    // eslint-disable-next-line jest/expect-expect
     it('should redirect for trailing slash on first entry', async () => {
       await getApp().request('/test').expect(301).expect('Location', '/test/');
       await getApp().request('/test', { method: 'post' }).expect(308).expect('Location', '/test/');
@@ -148,6 +153,7 @@ describe('router/spa', () => {
       expect(page.url()).toBe(`${serverUrl}/after/static/redirect/`);
     });
 
+    // eslint-disable-next-line jest/expect-expect
     it('should redirect with custom http code', async () => {
       await getApp()
         .request('/redirect/code/')
@@ -182,6 +188,7 @@ describe('router/spa', () => {
       expect(page.url()).toBe(`${serverUrl}/after/action/redirect/`);
     });
 
+    // eslint-disable-next-line jest/expect-expect
     it('should redirect by guard at first load', async () => {
       await getApp().request('/redirect/guard/').expect(307).expect('Location', `/test/`);
     });
@@ -194,6 +201,8 @@ describe('router/spa', () => {
 
       expect(page.url()).toBe(`${serverUrl}/test/`);
     });
+
+    // eslint-disable-next-line jest/expect-expect
     it('should redirect from action with default httpStatus', async () => {
       await getApp()
         .request('/action/redirect/')
@@ -201,6 +210,7 @@ describe('router/spa', () => {
         .expect('Location', '/after/action/redirect/');
     });
 
+    // eslint-disable-next-line jest/expect-expect
     it('should redirect from action with custom httpStatus', async () => {
       await getApp()
         .request('/action/redirect/code/')

@@ -7,7 +7,7 @@ const redirectAction = createAction({
     return pageService.navigate({
       url: '/after/action/redirect/',
       replace: true,
-      code: pageService.getCurrentUrl().pathname.endsWith('/code/') ? 301 : undefined,
+      code: pageService.getCurrentUrl()?.pathname.endsWith('/code/') ? 301 : undefined,
     });
   },
   deps: {
@@ -15,6 +15,7 @@ const redirectAction = createAction({
   },
 });
 
+// eslint-disable-next-line import/no-default-export
 export default createBundle({
   name: 'action-redirect',
   components: {

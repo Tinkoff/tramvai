@@ -4,7 +4,7 @@ import { useRoute, useUrl } from '@tramvai/module-router';
 import { pageActions } from '../actions/page';
 import { bundleActions } from '../actions/bundle';
 
-const layoutDefault = ({ children }) => (
+const layoutDefault = ({ children }: { children: React.ElementType }) => (
   <>
     <h3 id="layout">Default Layout</h3>
     <div>{children}</div>
@@ -27,6 +27,7 @@ const pageWithActions = Object.assign(() => 'pageWithActions', { actions: pageAc
 
 const notFound = () => 'not found';
 
+// eslint-disable-next-line import/no-default-export
 export default createBundle({
   name: 'mainDefault',
   actions: bundleActions,

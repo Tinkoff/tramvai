@@ -3,7 +3,7 @@
  */
 
 import React, { useEffect, useRef } from 'react';
-import { createReducer, createEvent, useStore } from '@tramvai/state';
+import { createReducer, createEvent, useStore, useStoreSelector } from '@tramvai/state';
 import { useDi } from '@tramvai/react';
 import { useRoute } from '@tinkoff/router';
 import { testComponent } from './testComponent';
@@ -41,7 +41,30 @@ describe('test/unit/react/testComponent', () => {
     const { context, render, act } = testComponent(<Cmp />, { stores: [store] });
     expect(render.getByTestId('content').textContent).toBe('Counter: 1');
 
-    act(() => {
+    await act(() => {
+      context.dispatch(event());
+    });
+
+    expect(render.getByTestId('content').textContent).toBe('Counter: 2');
+  });
+
+  it('should rerender component on store updates using storeSelector', async () => {
+    const event = createEvent<void>('evnt');
+    const store = createReducer('store', { a: 1 }).on(event, (state) => ({ a: state.a + 1 }));
+
+    const Cmp = () => {
+      const a = useStoreSelector(store, (s) => s.a);
+
+      return (
+        <div>
+          <span data-testid="content">Counter: {a}</span>
+        </div>
+      );
+    };
+
+    const { context, render, act } = testComponent(<Cmp />, { stores: [store] });
+    expect(render.getByTestId('content').textContent).toBe('Counter: 1');
+    await act(() => {
       context.dispatch(event());
     });
 
@@ -52,7 +75,7 @@ describe('test/unit/react/testComponent', () => {
     const Cmp = () => {
       const { provider } = useDi({ provider: 'provider' });
 
-      return <span role="text">{provider}</span>;
+      return <span role="status">{provider}</span>;
     };
 
     const { render } = testComponent(<Cmp />, {
@@ -64,9 +87,9 @@ describe('test/unit/react/testComponent', () => {
       ],
     });
 
-    expect(render.getByRole('text')).toMatchInlineSnapshot(`
+    expect(render.getByRole('status')).toMatchInlineSnapshot(`
       <span
-        role="text"
+        role="status"
       >
         test
       </span>
@@ -138,7 +161,7 @@ describe('test/unit/react/testComponent', () => {
     });
     expect(render.getByTestId('content').textContent).toBe('1. first render: 1');
 
-    act(() => {
+    await act(() => {
       context.dispatch(event());
     });
     expect(render.getByTestId('content').textContent).toBe('2. first render: 2');
