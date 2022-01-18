@@ -83,6 +83,7 @@ The behaviour of routing depends on the result of executing guards functions and
 - if all of the guards returns `undefined` than navigation will continue executing
 - if any of the guards returns `false` than navigation is getting blocked and next action differs on server and client
 - if any of the guards returns `string` it is considered as url to which redirect should be happen
+- if any of the guards returns `NavigateOptions` interface, `url` property from it is considered as url to which redirect should be happen
 
 ### Transitions hooks
 

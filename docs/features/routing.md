@@ -11,3 +11,8 @@ To use all these features in the application, it is enough to install and enable
 
 - [NoSpaRouterModule](references/modules/router.md) - creates a router instance, initializes a router for routing and synchronizes it with a router, registers actions, bundles, validators, redirects and other features to the corresponding router hooks.
 - [SpaRouterModule](references/modules/router.md) - same as previous plus switches the router to use the History API on the client.
+
+## Additional features
+
+- [File-System Pages](features/file-system-pages.md) - file-based routing with strict naming conventions
+- [Static HTML Export](features/static-html-export.md) - static HTML pages creation at build time

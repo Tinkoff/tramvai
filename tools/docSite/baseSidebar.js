@@ -46,6 +46,8 @@ module.exports = {
           label: 'Library @tinkoff/router',
           id: 'references/libs/router',
         },
+        'features/file-system-pages',
+        'features/static-html-export',
       ],
     },
     {
@@ -111,8 +113,6 @@ module.exports = {
       label: 'React Query',
       items: [],
     },
-    'features/static-html-export',
-    'features/file-system-pages',
     {
       type: 'category',
       label: 'Child App',

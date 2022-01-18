@@ -1,20 +1,20 @@
 # @tramvai/build
 
-Библиотека предназначена для `production` сборки написанных на TypeScript пакетов под разные окружения:
+Library for building `production` ready bundles for packages written in TypeScript targetting next environments:
 
 - NodeJS
-- Бандлеры (Webpack, etc.)
-- Браузеры
+- Bundlers (Webpack, etc.)
+- Browsers
 
-## Подключение
+## Installation
 
-Необходимо установить `@tramvai/build`:
+Install `@tramvai/build` first:
 
 ```bash
 yarn add @tramvai/build
 ```
 
-Заполнить необходимые поля в `package.json`:
+Add necessary fields to `package.json`:
 
 ```json
 {
@@ -23,11 +23,11 @@ yarn add @tramvai/build
 }
 ```
 
-> `"main": "lib/index.js"` на основе этого поля вычисляется, что точка входа для сборки должна называться `"src/index.ts"`
+> `"main": "lib/index.js"` based on that field lib calculates entry point for the build and it will be `"src/index.ts"` in this case
 
-> `"typings": "src/index.ts"` желательно должен указывать на точку входа, это удобно для монореп, т.к. не требует сборки пакета для его использования в других пакетах. После сборки для публикации это поле заменится на файл с собранными типами, в данном случае - `"typings": "lib/index.d.ts"`
+> `"typings": "src/index.ts"` desirable to specify that field to entry point as it is useful for the monorepo projects and allows to use current package in other packages without build. After build package for publication this filed will be replaced to point to the built typedef file, in this case - `"typings": "lib/index.d.ts"`
 
-И в `tsconfig.json`:
+And to `tsconfig.json`:
 
 ```json
 {
@@ -42,72 +42,59 @@ yarn add @tramvai/build
     "outDir": "./lib",
     "declarationDir": "./lib"
   },
-  "include": [
-    "./src"
-  ]
+  "include": ["./src"]
 }
 ```
 
-Добавить в `dependencies` библиотеку [tslib](https://www.npmjs.com/package/tslib):
+Add to `dependencies` library [tslib](https://www.npmjs.com/package/tslib):
 
 ```bash
 yarn add tslib
 ```
 
-Собрать пакет через команду `tramvai-build`:
+Build package with command `tramvai-build`:
 
 ```bash
 tramvai-build --forPublish
 ```
 
-> с флагом `--forPublish` tramvai-build заменяет некоторые поля в `package.json` на необходимые для корректного использования библиотеки в приложениях, например `"typings": "src/index.ts"` заменяется на `"typings": "lib/index.d.ts"`
+> with flag `--forPublish` tramvai-build replaces some fields in `package.json` in order to make built package usable in the end apps, for example `"typings": "src/index.ts"` replaces by `"typings": "lib/index.d.ts"`
 
 ## Explanation
 
-Основное предназначение библиотеки - эффективная `production` сборка TypeScript пакетов с помощью [rollup](https://rollupjs.org/),
-также поддерживается [watch](https://rollupjs.org/guide/en/#rollupwatch) режим.
+The main purpose for the lib is the effective `production` build for TypeScript package using [rollup](https://rollupjs.org/), with [watch](https://rollupjs.org/guide/en/#rollupwatch) mode support.
 
-Такие сборки, особенно при наличии большого количества пакетов в монорепозитории, могут занимать слишком много времени, и не подойдут для эффективной и удобной разработки.
-По этой причине, для `development` окружения рекомендуется использовать [tsc](https://www.typescriptlang.org/docs/handbook/compiler-options.html), с фичами [project references](https://www.typescriptlang.org/docs/handbook/project-references.html) и [incremental build](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#faster-subsequent-builds-with-the---incremental-flag).
+Such builds, especially for monorepositories with big number of packages, can take a long time and are not very comfortable to work. Thats why, for the `development` environment it is preferred to use [tsc](https://www.typescriptlang.org/docs/handbook/compiler-options.html) with [project references](https://www.typescriptlang.org/docs/handbook/project-references.html) and [incremental build](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#faster-subsequent-builds-with-the---incremental-flag).
 
-Рекомендуемый и автоматически генерируемый `package.json` для `@tramvai/build` позволяет приложениям использовать пакеты собранные и через `tsc`, и через `@tramvai/build`, без дополнительных действий.
+Recommended and automatically generated `package.json` for `@tramvai/build` allows apps to use packages that were built either with `tsc`, or with `@tramvai/build` without any additional steps.
 
-Все собранные бандлы содержат код стандарта `ES2019`, ожидается то их будет резолвить бандлер (Webpac, etc.), для которого уже настроена транспиляция через `babel` пакетов в `node_modules`, написанных на современном JS, в код стандарта `ES5`.
+All of the built bundles will contain `ES2019` standard code, it is expected that they will be bundled to `ES5` using bundler (Webpack, etc.) with configured transpilation through `babel` for packages inside `node_modules`, written in modern JS.
 
-### Бандл под NodeJS в CommonJS формате
+### NodeJS bundle in CommonJs format
 
-NodeJS до 12 версии не поддерживает ES модули, либо поддерживает их под специальным флагом.
-`@tramvai/build` генерирует бандл с кодом стандарта `ES2019`, в формате `CommonJS`, автоматически,
-название итогового бандла берется из поля `main` в `package.json`, например `lib/index.js`.
+NodeJS before 12 version hasn't supported ES modules or supported it only behind special flag. `@tramvai/build` generates bundle in `ES2019` standard in `CommonJS` format automatically. Name of the result bundle is taken from field `main` in `package.json`, e.g. `lib/index.js`.
 
-При сборке нашего пакета в приложении через `webpack` с опцией `target: 'node'`, этот бандл скорее всего не будет использован,
-т.к. в приоритете будет бандл из поля `module`.
+When bundling package in the app using `webpack` with option `target: 'node'` this `CommonJS` bundle probably will not be used as webpack will prefer to use `module` field while resolving source code.
 
-> Ожидается, что этот бандл, из поля `"main"`, будет резолвить только NodeJS, а бандлеры (Webpac, etc.) предпочтут бандл из поля `"module"`
+> It is expected that bundle from field `"main"` will be resolved only by `NodeJS` itself while bundlers will use bundle from field `"module"`
 
-### Бандл под бандлеры (Webpack, etc.) в формате ES modules
+### Bundle for bundlers (Webpack, etc.) in ES modules format
 
-Современные бандлеры (Webpac, etc.) поддерживают ES модули, и нестандартное поле `"module"` в `package.json`.
-`@tramvai/build` генерирует бандл с кодом стандарта `ES2019`, в формате `ES modules`, автоматически,
-название итогового бандла вычисляется из поля `main` в `package.json`, и добавляется суффикс `.es` например `lib/index.es.js`.
+Modern bundlers support ES modules and non-standard field `"module"` in `package.json`. `@tramvai/build` generates bundle in `ES2019` standard in `ES modules` format automatically. Name of the result bundle is calculates from field `main` in `package.json` by adding postfix `.es` e.g. `lib/index.es.js`.
 
-Если сборка произведена через `tramvai-build --forPublish`, в `package.json` добавится поле `"module": "lib/index.es.js"`.
+If build was called with flag `--forPublish` to `package.json` will be added new field `"module": "lib/index.es.js"`.
 
-При сборке нашего пакета в приложении через `webpack` с опцией `target: 'node'`, бандл из поля `module` будет иметь больший приоритет, чем поле `main`.
+When bundling package in the app through `webpack` with option `target: 'node'` bundle from field `module` will have higher priority over bundle from `main`.
 
-> Генерируется код стандарта `ES2019`, т.к. ожидается, что этот бандл, из поля `"module"`, будут резолвить бандлер (Webpac, etc.), для которого уже настроена транспиляция через `babel` пакетов в `node_modules`, написанных на современном JS, в код стандарта `ES5`.
-> Почему мы не советуем оставлять `ES2019` код? Оказалось, что код в `ES5` работает заметно быстрее на NodeJS сервере. При этом, размер итогового бандла на сервере не имеет значения.
+> `ES2019` code standard is generated as it is expected that bundle from field `"module"` will be resolved by bundler with configured transpilation through `babel` for packages inside `node_modules`, written in modern JS. Why we still prefer to use `ES5` code over `ES2019`? Apparently, code in `ES5` is still notably faster on NodeJS server. In the same time output bundle size is not important on server.
 
-### Бандл для браузеров
+### Bundle for browsers
 
-Современные бандлеры (Webpac, etc.) поддерживают ES модули, и нестандартное поле `"browser"` в `package.json`.
-При наличии поля `browser` в `package.json`, `@tramvai/build` генерирует бандл с кодом стандарта `ES2019`, в формате `ES modules`.
+Modern bundlers support ES modules and non-standard field `"browser"` in `package.json`. When field `browser` in specified in `package.json`, `@tramvai/build` will generate bundle in `ES2019` standard in `ES modules` format.
 
-Если поле `browser` в `package.json` является строкой, то из этого файла вычисляется точка входа для `browser` бандла, и его новое название.
-Например, при `"browser": "lib/browser.js"`, точкой входа будет `src/browser.ts`, а бандл будет называться `lib/browser.js`.
+If field `browser` in `package.json` is defined as a string then this string determines entry point to `browser` bundle and its name. E.g. when `"browser": "lib/browser.js"` entry point will be `src/browser.ts` and bundle will have a name `lib/browser.js`.
 
-Иначе, если поле `browser` является объектом и сборка произведена через `tramvai-build --forPublish`, название вычисляется из поля `main` в `package.json`, и добавляется суффикс `.browser`, например `lib/index.browser.js`.
-Далее в поле `browser` добавится свойство, указывающее сборщикам приложений, какой бандл резолвить для браузерной сборки, вместо поля `module`:
+Otherwise, if field `browser` is defined as an object and build was called with flag `--forPublish` then name is defined by the field `main` in `package.json` with adding postfix `.browser` e.g. `lib/index.browser.js`. After that to field `browser` new property will be added as pointer for bundlers to bundle for the browser, instead of the field `module`:
 
 ```json
 {
@@ -118,46 +105,45 @@ NodeJS до 12 версии не поддерживает ES модули, ли�
 }
 ```
 
-> Спецификация поля [browser](https://github.com/defunctzombie/package-browser-field-spec)
-> Генерируется код стандарта `ES2019`, т.к. ожидается, что этот бандл, из поля `"browser"`, будут резолвить бандлер (Webpac, etc.), для которого уже настроена транспиляция через `babel` пакетов в `node_modules`, написанных на современном JS, в код согласно актуальному browserslist конфигу.
+> Specification for the field [browser](https://github.com/defunctzombie/package-browser-field-spec)
 
-При сборке нашего пакета в приложении через `webpack` с опцией `target: 'web'`, бандл из поля `browser` будет иметь больший приоритет, чем поле `module`.
+> `ES2019` code standard is generated as it is expected that bundle from `"browser"` field will be resolved by bundler with configured transpilation through `babel` for packages inside `node_modules` written in modern JS to the code according to the `browserslist` config.
 
-### Копирование статических файлов
+When building our package in the app with `webpack` with option `target: 'web'` bundle from field `browser` will be prioritized over field `module`.
 
-При каждом билде автоматически копируются все файлы, кроме JS/TS скриптов и JSON, например CSS, изображения, шрифты, и сохраняются исходные пути до файлов (`src/css/style.css` -> `lib/css/style.css`).
-Копирование можно отключить, собирая пакет с флагом `copyStaticAssets`:
+### Copy static assets
+
+For every build, all of the non JS/TS/JSON files (e.g. CSS, fonts, images) are copied to the output bundle preserving their relative paths (e.g. `src/css/style.css` -> `lib/css/style.css`). You can disable such copying by using flag `copyStaticAssets`:
 
 ```bash
 tramvai-build --copyStaticAssets false
 ```
 
-### Сборка и копирование миграций
+### Build and copy migrations
 
-При наличии файлов в папке `migrations`, они считаются исходниками миграций.
-Эти файлы компилируются в `.js` и копируются в папку `__migrations__`.
+When directory `migrations` has any code files they are considered as migration files. These files will be compiled to `.js` and copied to directory `__migrations__`.
 
 ## CLI
 
-### Разовая сборка
+### Single build
 
 ```bash
 tramvai-build
 ```
 
-### Сборка в watch режиме
+### Build in watch mode
 
 ```bash
 tramvai-build --watch
 ```
 
-### Копирование статических файлов
+### Copy static assets
 
 ```bash
 tramvai-copy
 ```
 
-### Доступные флаги
+### Available flags
 
 ```bash
 tramvai-build --help
@@ -167,7 +153,7 @@ tramvai-build --help
 
 ### TramvaiBuild
 
-`TramvaiBuild` позволяет конфигурировать утилиту для дальнейшего использования.
+`TramvaiBuild` is used to configure build process for following usage.
 
 ```ts
 import { TramvaiBuild } from '@tramvai/build';
@@ -175,13 +161,13 @@ import { TramvaiBuild } from '@tramvai/build';
 new TramvaiBuild(options);
 ```
 
-**Доступные опции:**
+**Available options:**
 
 @inline src/options.h.ts
 
-### Сборка
+### Build
 
-Метод `TramvaiBuild.start` позволяет собрать пакет, разово или в `watch` режиме, в зависимости от конфигурации экземпляра `TramvaiBuild`:
+Method `TramvaiBuild.start` builds package either single time or in `watch` mode depending on configuration of `TramvaiBuild`:
 
 ```ts
 import { TramvaiBuild } from '@tramvai/build';
@@ -189,9 +175,9 @@ import { TramvaiBuild } from '@tramvai/build';
 new TramvaiBuild(options).start();
 ```
 
-### Копирование статических файлов
+### Copy static files
 
-Метод `TramvaiBuild.copy` позволяет разово копировать статические файлы в `output` директорию:
+Method `TramvaiBuild.copy` copies static assets to the `output` directory:
 
 ```ts
 import { TramvaiBuild } from '@tramvai/build';
@@ -201,10 +187,9 @@ new TramvaiBuild(options).copy();
 
 ## How to
 
-### Как собрать отдельный бандл для браузерной сборки?
+### Build separate bundle for browsers
 
-Допустим, у нас есть две точки входа, серверная - `src/server.ts`, и клиентская - `src/browser.ts`.
-В таком случае, необходимо настроить поле `browser` в `package.json` таким образом:
+Let's say we have to entry points. One is for the server - `src/server.ts` and for the client - `src/browser.ts`. In this case we should set field `browser` in `package.json` the next way:
 
 ```json
 {
@@ -213,7 +198,7 @@ new TramvaiBuild(options).copy();
 }
 ```
 
-После сборки для публикации мы получим такой `package.json`:
+After build for publication we will get next `package.json`:
 
 ```json
 {
@@ -224,10 +209,9 @@ new TramvaiBuild(options).copy();
 }
 ```
 
-### Как заменить отдельный модуль для браузерной сборки?
+### Replace specific module for browser bundle
 
-Допустим, у нас есть одна точка входа - `src/index.ts`, а модуль `src/external.ts` мы хотим заменить на `src/external.browser.ts`.
-В таком случае, необходимо настроить поле `browser` в `package.json` таким образом:
+Let's say we have one entry point - `src/index.ts` and a module `src/external.ts` we want to replace by `src/external.browser.ts`. In this case we should set field `browser` in `package.json` the next way:
 
 ```json
 {
@@ -238,27 +222,27 @@ new TramvaiBuild(options).copy();
 }
 ```
 
-После сборки для публикации мы получим такой `package.json`:
+After build for publication we will get next `package.json`:
 
 ```json
 {
   "main": "lib/index.js",
   "browser": {
     "./lib/external.js": "./lib/external.browser.js",
-    "./lib/index.es.js": "./lib/index.browser.js",
+    "./lib/index.es.js": "./lib/index.browser.js"
   },
   "typings": "lib/index.d.ts",
   "module": "lib/index.es.js"
 }
 ```
 
-### Как собирать все пакеты в монорепе при разработке, в watch режиме?
+### Build all of the packages in monorepo in watch mode
 
-@TODO + ссылка на `@tinkoff/fix-ts-references`
+@TODO + link to `@tinkoff/fix-ts-references`
 
-### Как сделать чтобы модуль импортировался только при определенных условиях, а иначе игнорировался при сборке?
+### Import module only under some circumstances or put module to separate chunk
 
-Вместо статичных импортов можно использовать динамический import или require. В этом случае, импортированный модуль будет собран в отдельный чанк и будет добавлен в сборку вебпаком при необходимости, причем при использовании динамического импорта также будет создан отдельный чанк после сборки вебпака, при использовании require отдельного чанка не будет.
+Instead of static imports you can use dynamic import or require. In this case imported module will be build in the separate chunk. Later this chunk can be added by bundler to the generated bundle and if dynamic import was used it will be separate chunk as well after bundlers build, but when using require separate chunk will not be generated.
 
 ```tsx
 let func = noop;
@@ -270,9 +254,9 @@ if (process.env.NODE_ENV !== 'production') {
 export { func };
 ```
 
-### Как использовать json файлы в пакете?
+### Use JSON in package
 
-По умолчанию в корневом `tsconfig.json` включена опция `resolveJsonModule` которая позволяет импортировать json-файлы также как и обычный код используя `import`, причем всё будет работать с типизацией и tree-shaking при публикации пакета. Для того чтобы ts не ругался на такие импорты необходимо в `tsconfig.json` пакета добавить новое вхождение в поле `includes`:
+By default in root `tsconfig.json` option `resolveJsonModule` is enabled. It is allows to import json-files the same way as usual source code using `import`, moreover typecheck and tree-shaking will work to json as well when publishing package. To disable ts errors for json imports add to `tsconfig.json` of the package new entry to field `includes`:
 
 ```json
 {
@@ -280,9 +264,9 @@ export { func };
 }
 ```
 
-### Как использовать файлы других расширений в пакете (например .css)?
+### Use assets file in the package (e.g. css, svg)
 
-Такие файлы не используются в сборке или явно в коде, и ts такие файлы игнорирует. Для правильной работы пакета потребуется дополнительная настройка, а именно прописать в `package.json` пакета скрипт `tramvai-copy`:
+These files are not used in bundle or source code and ts will ignore them. For proper package usage additional setup should be done. Add script `tramvai-copy` to `package.json`:
 
 ```json
 {
@@ -292,11 +276,11 @@ export { func };
 }
 ```
 
-Цель этого скрипта в копировании файлов не относящихся к исходному коду в директорию сборки. Само копирование происходит либо при установке зависимостей в корне репозитория, либо при непосредственной публикации пакетов. Так как в некоторых кейсах по какой-либо причине директория сборки может быть удалена то возможно потребуется перезапуск команды `tramvai-copy` для данных пакетов.
+This script will copy not related files to source code to the output directory. Copying itself happens either on dependencies install in the repository root or on package publishing. As for some reasons output directory might be deleted it may be needed to rerun `tramvai-copy` command for package.
 
-### Как использовать css-модули в пакете?
+### Use css-modules
 
-Для того, чтобы typescript не ругался на импорты css-модулей, в папку `src` внутри пакета нужно добавить файл `typings.d.ts` с определением:
+In order to disable typescript errors for css-modules imports add new file `typings.d.ts` to the `src` folder with the next content:
 
 ```tsx
 declare module '*.css' {
@@ -305,10 +289,12 @@ declare module '*.css' {
 }
 ```
 
-Для копирования css во время dev-сборки нужно изменить команду:
+To copy css while deb-build change next command:
 
 ```json
 "watch": "tramvai-copy && tsc -w"
 ```
 
-Такие импорты никак не преобразуются, для правильной сборки нужно использовать `@tramvai/cli` или другие решения для css-модулей. При сборке корректность импортов не проверяется, так что проверяйте пакет перед публикацией.
+Such imports are not compiled. To use it properly you can use `@tramvai/cli` for building app or any other solution for the css-modules.
+
+> When building correctness of imports for the css is not checking so check your package manually before publication.

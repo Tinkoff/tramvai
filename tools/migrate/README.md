@@ -1,22 +1,26 @@
-# Инструмент миграции кода
+# Tool for code migrations
 
-Утилита для выполнения миграции для трамвайный модулей.
+Tool for executing code migrations for the tramvai modules.
 
-Принцип работы:
+How does it work:
 
-- в опубликованном модуле в папке `__migrations__` находятся файлы миграций для выполнения
-- найденные и ранее не исполненные миграции выполняются
-- миграции могут изменять файлы 'package.json', 'tramvai.json' и исходный код проекта
-- после выполнения миграции информация о выполненной миграции добавится в файл '.tramvai-migrate-applied.json' в корень проекта
-- все измененные файлы после миграции добавляются в гит и комитятся как часть обновления пакетов
+- in published module folder `__migrations__` contains migrations files for the execution
+- found migrations that were have not been executed before are running
+- migrations can change files `package.json`, `tramvai.json` and project source code
+- after migration run information about executed migrations is added to file `.tramvai-migrate-applied.json` to the project root
+- all of the changed files after migrations should be added and committed to remote repository
 
-## Отключение выполнения миграций
+## How to
 
-Для отключения миграций можно проставить переменную окружения `SKIP_TRAMVAI_MIGRATIONS`.
+### Disable migrations
 
-## Добавление новой миграции
+To disable migration add environment variable `SKIP_TRAMVAI_MIGRATIONS`.
 
-Добавить новую миграцию можно с помощью команды `yarn generate:migration` после чего потребуется указать имя пакета для которого предназначена миграция и имя новой миграции. Также для этого пакета потребуется добавить в `package.json` в поле `files` папку с собранными миграциями, если они не были указаны ранее:
+### Add new migration
+
+You can add new migration with command `yarn generate:migration`. You will need to specify package name for the migration and the migration name itself.
+
+Also add to this package's `package.json` folder with the built migrations to the field `files` if it wasn't specified before:
 
 ```json
 "files": [
@@ -25,19 +29,17 @@
 ],
 ```
 
-## Реализация миграции
-
-Миграция представляет собой функцию, принимающую специальное апи с помощью которого можно осуществлять изменения кода или конфигов.
+Migration is a function that accepts special api using which it implements changes to the source code or configs.
 
 ```tsx
 export interface Api {
-  packageJSON: PackageJSON; // объект-представление корневого package.json
-  tramvaiJSON: TramvaiJSON; // объект-представление файла tramvai.json или platform.json
-  transform: (transformer: Transform, pathTransformer?: PathTransformer) => Promise<void>; // функция принимающая функцию-траснформер для jscodeshift и функцию-трансформер для переименования файлов
+  packageJSON: PackageJSON; // object represented root package.json
+  tramvaiJSON: TramvaiJSON; // object represented tramvai.json
+  transform: (transformer: Transform, pathTransformer?: PathTransformer) => Promise<void>; // function that accepts transform function for `jscodeshift` and transform function for the file renames
 }
 ```
 
-Трансформация кода осуществляется с помощью [jscodeshift](https://github.com/facebook/jscodeshift)
+Code transformations is done with [jscodeshift](https://github.com/facebook/jscodeshift)
 
 ## How to
 
