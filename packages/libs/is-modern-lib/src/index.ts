@@ -28,6 +28,7 @@ export const modernLibs = [
   'dynamic-components',
   'browser-timings',
   'tinkoff-offers',
+  '@platform/utils',
   // external libs
   'proxy-polyfill',
   'react-diff-viewer',
