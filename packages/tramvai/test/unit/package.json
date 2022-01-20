@@ -22,6 +22,7 @@
     "@tramvai/core": "0.0.0-stub",
     "@tramvai/module-common": "0.0.0-stub",
     "@tramvai/module-log": "0.0.0-stub",
+    "@tramvai/module-metrics": "0.0.0-stub",
     "@tramvai/module-mocker": "0.0.0-stub",
     "@tramvai/module-render": "0.0.0-stub",
     "@tramvai/module-router": "0.0.0-stub",

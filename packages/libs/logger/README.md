@@ -20,7 +20,8 @@ yarn add @tinkoff/logger
 
 ### Child loggers
 
-You can create child loggers using method `.child` of the current logger instance. Child logger will inherit parent logger settings and can override these settings.
+You can create child loggers using method `.child` of the current logger instance.
+Child logger will inherit parent logger settings and can override these settings.
 
 ```tsx
 const log = logger({ name: 'test' });

@@ -1,12 +1,23 @@
 import mapObj from '@tinkoff/utils/object/map';
 import values from '@tinkoff/utils/object/values';
-import { createApp } from '@tramvai/core';
+import { createApp, Module, MODULE_PARAMETERS } from '@tramvai/core';
 import { CommonModule, ENV_USED_TOKEN } from '@tramvai/module-common';
 import { SpaRouterModule } from '@tramvai/module-router';
 import { RenderModule } from '@tramvai/module-render';
 import { ServerModule, SERVER_TOKEN } from '@tramvai/module-server';
 import { LogModule } from '@tramvai/module-log';
 import { MOCKER, MockerModule } from '@tramvai/module-mocker';
+import { MetricsModule as OriginalMetricsModule } from '@tramvai/module-metrics';
+
+// create fake metrics module as we don't need it in tests
+// but it causes some compatibility tests
+@Module({
+  providers: [],
+})
+class MetricsModule {}
+
+// @ts-ignore
+MetricsModule[MODULE_PARAMETERS].id = OriginalMetricsModule[MODULE_PARAMETERS].id;
 
 type Options = Partial<Parameters<typeof createApp>[0]> & {
   env?: Record<string, string>;
@@ -60,6 +71,7 @@ export const createTestApp = async ({
     modules: excludeDefaultModules
       ? modules
       : [
+          MetricsModule,
           CommonModule,
           LogModule,
           SpaRouterModule,

@@ -49,6 +49,9 @@
         },
         {
             "path": "../../../cli"
+        },
+        {
+            "path": "../../../modules/metrics"
         }
     ]
 }

@@ -1,10 +1,10 @@
 # Log
 
-Модуль добавляющий логгирование на основе [@tinkoff/logger](references/libs/logger.md)
+Модуль добавляет реализацию токена `LOGGER_TOKEN` на основе библиотеки [@tinkoff/logger](references/libs/logger.md).
 
 ## Подключение
 
-Уже входит в `@tramvai/module-common` и отдельно не нужно подключать
+Подключается в модуле `@tramvai/module-common`
 
 ## Пример
 

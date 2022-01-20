@@ -1,14 +1,40 @@
 import each from '@tinkoff/utils/array/each';
 import split from '@tinkoff/utils/string/split';
+import { hostname } from 'os';
+import env from 'std-env';
 import { Module, Scope } from '@tramvai/core';
 import { LOGGER_TOKEN, LOGGER_INIT_HOOK } from '@tramvai/tokens-common';
 import { ENV_USED_TOKEN } from '@tramvai/module-environment';
-import { logger } from '@tinkoff/logger';
+import {
+  createLoggerFactory,
+  JSONReporter,
+  NodeBasicReporter,
+  NodeDevReporter,
+} from '@tinkoff/logger';
 import { serverProviders } from './devLogs';
+import { LOGGER_NAME, LOGGER_KEY } from './constants';
 
 export * from './LogStore';
 
 export { LOGGER_TOKEN };
+
+const DefaultReporter = env.ci || env.test ? NodeBasicReporter : NodeDevReporter;
+const reporter =
+  process.env.DEBUG_PLAIN || process.env.NODE_ENV !== 'production'
+    ? new DefaultReporter()
+    : new JSONReporter();
+
+const logger = createLoggerFactory({
+  name: LOGGER_NAME,
+  key: LOGGER_KEY,
+  reporters: [reporter],
+  defaults: {
+    pid: process.pid,
+    hostname: hostname(),
+  },
+});
+
+export { logger };
 
 export function factory({ environmentManager, loggerInitHooks }) {
   const level = environmentManager.get('LOG_LEVEL') ?? environmentManager.get('DEBUG_LEVEL');

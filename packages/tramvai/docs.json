@@ -120,6 +120,14 @@
               "id": "test-integration-jest",
               "title": "Jest integration"
             }
+          },
+          {
+            "path": "test/child-app/README.md",
+            "priority": 50,
+            "doc": {
+              "id": "test-child-app",
+              "title": "Child app"
+            }
           }
         ]
       }

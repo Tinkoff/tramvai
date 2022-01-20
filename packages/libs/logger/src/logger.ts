@@ -27,6 +27,7 @@ class Logger implements LoggerInterface {
   private static enabledLevel: number[] = [];
 
   private name: string;
+  private key: string;
   private level?: number;
   private beforeReporters: Reporter[];
   private reporters: Reporter[];
@@ -47,9 +48,10 @@ class Logger implements LoggerInterface {
   // eslint-disable-next-line sort-class-members/sort-class-members
   constructor(options: Options = { name: '' }) {
     this.name = toLower(options.name);
+    this.key = options.key || this.name;
 
-    if (Logger.instances[this.name]) {
-      return Logger.instances[this.name];
+    if (Logger.instances[this.key]) {
+      return Logger.instances[this.key];
     }
 
     this.beforeReporters = options.beforeReporters || [];
@@ -68,7 +70,7 @@ class Logger implements LoggerInterface {
 
     this.checkEnabled();
 
-    Logger.instances[this.name] = this;
+    Logger.instances[this.key] = this;
 
     eachObj((level, levelName) => {
       this[levelName] = (...args: LogArgs) => {
@@ -109,7 +111,9 @@ class Logger implements LoggerInterface {
 
     const regexp = createRegexpFromNamespace(ns);
 
-    eachObj((instance, name) => {
+    eachObj((instance) => {
+      const { name } = instance;
+
       if (regexp.test(name)) {
         instance.setLevel(lvl);
       }
@@ -131,7 +135,9 @@ class Logger implements LoggerInterface {
 
     const regexp = createRegexpFromNamespace(ns);
 
-    eachObj((instance, name) => {
+    eachObj((instance) => {
+      const { name } = instance;
+
       if (regexp.test(name)) {
         instance.setLevel(lvl);
       }
@@ -144,7 +150,7 @@ class Logger implements LoggerInterface {
     Logger.enabledLevel = [];
     Logger.save();
 
-    eachObj((instance, name) => {
+    eachObj((instance) => {
       instance.setLevel(undefined);
     }, Logger.instances);
   }
@@ -159,8 +165,9 @@ class Logger implements LoggerInterface {
 
   child(options: Options | string) {
     const opts = typeof options === 'string' ? { name: options } : options;
-
+    const childKey = opts.key || opts.name;
     const name = this.name ? `${this.name}.${opts.name}` : opts.name;
+    const key = this.key ? `${this.key}.${childKey}` : childKey;
 
     return new Logger({
       beforeReporters: this.beforeReporters,
@@ -170,6 +177,7 @@ class Logger implements LoggerInterface {
       defaults: this.defaults,
       ...opts,
       name,
+      key,
     });
   }
 

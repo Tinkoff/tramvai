@@ -2,6 +2,7 @@ import type { LEVELS } from './constants';
 
 export type Options = {
   name: string;
+  key?: string;
   enabled?: boolean;
   level?: LogLevel;
   beforeReporters?: Reporter[];

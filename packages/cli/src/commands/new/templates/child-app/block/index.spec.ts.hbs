@@ -1,0 +1,21 @@
+/**
+ * @jest-environment jsdom
+ */
+import React from 'react';
+import { testComponent } from '@tramvai/test-react';
+import { testChildApp } from '@tramvai/test-child-app';
+import childApp from './index';
+
+describe('testChildApp', () => {
+  it('base test', async () => {
+    const {
+      childApp: { di, Component },
+      close,
+    } = await testChildApp(childApp);
+    const { render, rerender } = testComponent(
+      <Component di={di} />
+    );
+
+    return close();
+  });
+});

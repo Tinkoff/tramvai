@@ -1,25 +1,22 @@
 # Sentry
 
-Модуль интеграции с [Sentry](https://docs.sentry.io/), который подключает `Sentry SDK` для отправки отчетов об ошибках от клиента и сервера.
+Integration with [Sentry](https://docs.sentry.io/). Uses `Sentry SDK` for sending error reports from client and server.
 
-## Подключение в проект
+## Installation
 
-### Переменные окружения
+You need to install `@tramvai/module-sentry`:
 
-Обязательные:
+```bash
+yarn add @tramvai/module-sentry
+```
 
-- `SENTRY_DSN` - [DSN](https://docs.sentry.io/product/sentry-basics/dsn-explainer/) приложения
+And connect to the project: `SentryModule`:
 
-Опциональные:
+:::warning
 
-- `SENTRY_RELEASE` - информация о текущем [релизе приложения](https://docs.sentry.io/workflow/releases/)
-- `SENTRY_ENVIRONMENT` - информация об [окружении](https://docs.sentry.io/product/sentry-basics/environments/)
-- `SENTRY_SDK_URL` - URL для загрузки Sentry SDK в браузере, задан по умолчанию
-- `SENTRY_DSN_CLIENT` - [DSN](https://docs.sentry.io/product/sentry-basics/dsn-explainer/) приложения для использования только в браузере.
+Put `SentryModule` as one of the first modules in the list.
 
-### Подключение модуля
-
-`SentryModule` следует подключать в приложение одним из первых
+:::
 
 ```tsx
 import { SentryModule } from '@tramvai/module-sentry';
@@ -29,9 +26,46 @@ createApp({
 });
 ```
 
-И обязательно добавьте `SENTRY_DSN` параметр на стендах. Иначе плагин не будет работать.
+And make sure to add `SENTRY_DSN` environment on deployed stands. Otherwise module will not work.
 
-### Пример отправки кастомных ошибок
+## Explanation
+
+### Environment variables
+
+Required:
+
+- `SENTRY_DSN` - [DSN](https://docs.sentry.io/product/sentry-basics/dsn-explainer/) of the app
+
+Optional:
+
+- `SENTRY_RELEASE` - information about current [app release](https://docs.sentry.io/workflow/releases/)
+- `SENTRY_ENVIRONMENT` - information about [environment](https://docs.sentry.io/product/sentry-basics/environments/)
+- `SENTRY_SDK_URL` - URL for downloading Sentry SDK in browser
+- `SENTRY_DSN_CLIENT` - [DSN](https://docs.sentry.io/product/sentry-basics/dsn-explainer/) of the app for use in browser
+
+### Sensitive Data
+
+Before start to use the module take a closer look to the [sentry documentation](https://docs.sentry.io/platforms/javascript/data-management/sensitive-data/).
+
+Sentry tries to [enrich error context as much as possible](https://docs.sentry.io/platforms/javascript/enriching-events/) by using [breadcrumbs](https://docs.sentry.io/platforms/javascript/enriching-events/breadcrumbs/), getting information from [additional integrations](https://docs.sentry.io/platforms/javascript/configuration/integrations/). It is all configurable but it still should be carefully monitored what data is saved in Sentry storage.
+
+### Behaviour
+
+Module uses _universal_ approach that let use error logging on the client and server. Integration with Sentry SDK happens on `commandLineListTokens.init`.
+
+By default Sentry is enabled only on production and if `DSN` was provided.
+
+#### Browser
+
+Module uses [lazy loaded approach](https://docs.sentry.io/platforms/javascript/install/lazy-load-sentry/). This way Sentry SDK is added dynamically and only if needed, e.g. `@sentry/browser` is not bundled to the app
+
+#### Node
+
+Uses `@sentry/node` and [Sentry express middleware](https://docs.sentry.io/platforms/node/express/)
+
+## How to
+
+### Send custom error
 
 ```tsx
 import { createAction } from '@tramvai/core';
@@ -54,59 +88,39 @@ export default createAction({
 });
 ```
 
-## Локальный дебаг модуля
+### Debug locally
 
-Локально Sentry отключен и если вы хотите оддебажить модуль, то необходимо явно включить Sentry
+Sentry is disabled on local run and if you want to debug it you have to enable Sentry explicitly.
 
 ```tsx
 SentryModule.forRoot({ enabled: true, debug: true });
 ```
 
-И добавить в `env.development.js` параметр `SENTRY_DSN`
+Add parameter `SENTRY_DSN` to `env.development.js`.
 
-после этого Sentry включится при локальной разработке
+After steps below Sentry will be enabled while local development.
 
-## Получение DSN
+### Get DSN
 
-Для этого:
+1. Go to the Sentry UI
+2. Click on tab `Settings`
+3. In the tab `Projects` pick up your project выберите свой проект
+4. Choose `Client Keys (DSN)`
+5. From `DSN` field copy text with `Default` .
 
-- Зайдите в UI интерфейс Sentry
-- Нажмите на таб `Settings`
-- В табе `Projects` выберите свой проект
-- Выберите `Client Keys (DSN)`
-- Скопируйте текст с `Default` `DSN` поля.
+### Upload sourcemaps
 
-## Sensitive Data
+To upload sourcemaps to Sentry storage you can use [@sentry/cli](https://github.com/getsentry/sentry-cli).
 
-Прежде чем начать использовать модуль, следует ознакомиться с [документаций](https://docs.sentry.io/data-management/sensitive-data/) и в случае необходимости сконфигурировать под свое приложение
+:::warning
 
-Sentry старается максимально обогощать [контекст ошибки](https://docs.sentry.io/platforms/javascript/enriching-events/), формируя [breadcrumbs](https://docs.sentry.io/platforms/javascript/enriching-events/breadcrumbs/) и получая информацию от [дополнительных интеграций](https://docs.sentry.io/platforms/javascript/configuration/integrations/). Все это можно конфигурировать, но следует внимательно следить за тем, какая информация в итоге попадает в Sentry хранилище.
+It is important to specify `--url-prefix` [in right way](https://docs.sentry.io/platforms/javascript/config/sourcemaps/#using-sentry-cli).
 
-## Поведение
+:::
 
-Модуль использует universal подход, что позволяет логировать ошибки на клиенте и сервере. Интеграция c Sentry SDK происходит на шаге `commandLineListTokens.init`.
+Flag [`--rewrite`](https://docs.sentry.io/cli/releases/#sentry-cli-sourcemaps) is used to reduce size of the files to upload and perform checks for the sourcemaps correctness.
 
-По умолчанию Sentry включается только для production и если имется DSN.
-
-### Browser
-
-Концептуально используется [lazy loaded подход](https://docs.sentry.io/platforms/javascript/install/lazy-load-sentry/) при котором Sentry SDK подключается динамически (возможно по необходимости), то есть `@sentry/browser` не попадает в итоговый бандл
-
-### Node
-
-Используется `@sentry/node` и [Sentry express middleware](https://docs.sentry.io/platforms/node/express/)
-
-## Загрузка sourcemaps
-
-Для загрузки sourcemaps в Sentry систему можно использовать [@sentry/cli](https://github.com/getsentry/sentry-cli).
-
-Важно [правильно](https://docs.sentry.io/platforms/javascript/config/sourcemaps/#using-sentry-cli) указать `--url-prefix`.
-
-[`--rewrite`](https://docs.sentry.io/cli/releases/#sentry-cli-sourcemaps) нужен, чтобы сократить размер загружаемых файлов и выполнить проверку валидности сорсмап
-
-Пример такого скрипта для загрузки:
-
-#### `ci/sentry-upload-sourcemaps`:
+Example script:
 
 ```sh
 set -eu -o pipefail -x
@@ -120,22 +134,22 @@ sentry-cli releases files $VERSION upload-sourcemaps --rewrite --url-prefix "~/"
 sentry-cli releases files $VERSION upload-sourcemaps --rewrite --url-prefix "~/platform/" ./assets/
 ```
 
-Чтобы генерировались sourcemaps для сервера, нужно указать `"sourceMapServer": true` в `configurations` для приложения в `platform.json`.
+In order to generate sourcemaps for server specify `"sourceMapServer": true` to `configurations` to app's `tramvai.json`.
 
-## Экспортируемые токены
+## Exported tokens
 
 #### `SENTRY_TOKEN`
 
-Подготовленный инстанс Sentry на основе Node SDK или Browser SDK
+Ready to use instance of Sentry that was created with Node SDK or Browser SDK
 
 ### `SENTRY_OPTIONS_TOKEN`
 
-Опции для конфигурирования Sentry для [Node](https://docs.sentry.io/platforms/node/configuration/) и [Browser](https://docs.sentry.io/platforms/javascript/configuration/) окружений
+Configuration options for Sentry either for [Node](https://docs.sentry.io/platforms/node/configuration/) or for [Browser](https://docs.sentry.io/platforms/javascript/configuration/) environment
 
 ### `SENTRY_REQUEST_OPTIONS_TOKEN`
 
-Опции для [конфигурирования](https://docs.sentry.io/platforms/node/express/) парсера данных из запроса для express middleware
+Configuration options for the [request data parser](https://docs.sentry.io/platforms/node/express/) for the express middleware
 
 ### `SENTRY_FILTER_ERRORS`
 
-Позволяет передать функцию для фильтрации ошибок перед отправкой в Sentry. Механизм фильтрации описан в [документации Sentry](https://docs.sentry.io/platforms/javascript/configuration/filtering/), в функцию передаются аргументы `event` и `hint` метода `beforeSend`.
+Can be used to pass function to perform filtering on error objects before sending it to Sentry. Process is described in [Sentry docs](https://docs.sentry.io/platforms/javascript/configuration/filtering/). Function accepts arguments `event` and `hint` for method `beforeSend`.

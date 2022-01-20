@@ -117,12 +117,21 @@ module.exports = {
       type: 'category',
       label: 'Child App',
       items: [
-        'features/child-app/child-app',
-        'features/child-app/how-create-child-app',
+        'features/child-app',
+        {
+          type: 'ref',
+          label: 'How to create Child App?',
+          id: 'how-to/how-create-child-app',
+        },
         {
           type: 'ref',
           label: 'Module to connect Child App',
           id: 'references/modules/child-app',
+        },
+        {
+          type: 'ref',
+          label: 'Test Child App',
+          id: 'references/test/test-child-app',
         },
       ],
     },

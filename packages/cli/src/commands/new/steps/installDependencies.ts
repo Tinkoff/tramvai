@@ -5,7 +5,21 @@ import type { PackageManagers } from '../questions/packageManager';
 import type { TestingFrameworks } from '../questions/testingFramework';
 import type { Type } from '../questions/type';
 
-const DEPS: Record<Type, { dependencies: string[] }> = {
+const COMMON_JEST_DEPENDENCIES = [
+  '@testing-library/react',
+  '@testing-library/react-hooks',
+  '@tramvai/test-unit',
+  '@tramvai/test-react',
+  '@tramvai/test-integration',
+  '@tramvai/test-unit-jest',
+  '@tramvai/test-integration-jest',
+  '@types/jest',
+  'jest',
+  'jest-circus',
+  'react-test-renderer',
+];
+
+const DEPS: Record<Type, { dependencies: string[]; jestDevDependencies: string[] }> = {
   app: {
     dependencies: [
       '@tramvai/core',
@@ -24,6 +38,7 @@ const DEPS: Record<Type, { dependencies: string[] }> = {
       'react-dom',
       'tslib@^2.0.3',
     ],
+    jestDevDependencies: COMMON_JEST_DEPENDENCIES,
   },
   'child-app': {
     dependencies: [
@@ -35,6 +50,7 @@ const DEPS: Record<Type, { dependencies: string[] }> = {
       'react-dom',
       'tslib@^2.0.3',
     ],
+    jestDevDependencies: [...COMMON_JEST_DEPENDENCIES, '@tramvai/test-child-app'],
   },
 };
 
@@ -52,20 +68,6 @@ const devDependencies = [
   'lint-staged',
   'prettier-config-tinkoff',
   'typescript',
-];
-
-const jestDevDependencies = [
-  '@testing-library/react',
-  '@testing-library/react-hooks',
-  '@tramvai/test-unit',
-  '@tramvai/test-react',
-  '@tramvai/test-integration',
-  '@tramvai/test-unit-jest',
-  '@tramvai/test-integration-jest',
-  '@types/jest',
-  'jest',
-  'jest-circus',
-  'react-test-renderer',
 ];
 
 const packagesInstallCommands = {
@@ -101,7 +103,11 @@ export async function installDependencies({
   await execa(packageManager, [...installCommands.devDeps, ...devDependencies], options);
 
   if (testingFramework === 'jest') {
-    await execa(packageManager, [...installCommands.devDeps, ...jestDevDependencies], options);
+    await execa(
+      packageManager,
+      [...installCommands.devDeps, ...DEPS[type].jestDevDependencies],
+      options
+    );
   }
 
   spinner.stop();
