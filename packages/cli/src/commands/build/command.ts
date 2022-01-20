@@ -41,9 +41,14 @@ class BuildCommand extends CLICommand<Params> {
       description: 'Show config with which cli was launched',
     },
     {
-      name: '--watch',
-      value: '[watch]',
-      description: 'Watch build mode for libraries',
+      name: '--watchMode',
+      value: '[watchMode]',
+      description: '<package> Build library in watch mode',
+    },
+    {
+      name: '--forPublish',
+      value: '[forPublish]',
+      description: '<package> Prepare library package.json for publication',
     },
   ];
 

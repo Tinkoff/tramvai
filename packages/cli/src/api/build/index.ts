@@ -17,7 +17,10 @@ export type Params = WithConfig<{
   disableProdOptimization?: boolean;
   showConfig?: boolean;
   env?: Record<string, string>;
-  watch?: boolean;
+
+  // `package` target parameters
+  watchMode?: boolean;
+  forPublish?: boolean;
 }>;
 
 export type Result = Promise<{

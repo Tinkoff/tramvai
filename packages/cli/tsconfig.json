@@ -36,6 +36,9 @@
         },
         {
             "path": "../libs/package-manager-wrapper"
+        },
+        {
+            "path": "../../tools/build"
         }
     ]
 }

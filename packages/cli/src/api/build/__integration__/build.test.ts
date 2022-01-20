@@ -143,22 +143,21 @@ Array [
     });
   });
 
-  // TODO: тесты падают потому что какой-то рассинхрон при установке @tramvai/build
-  describe.skip('package', () => {
+  describe('package', () => {
     it('should build package by target', async () => {
       await build({
         rootDir: FIXTURES_DIR,
         target: 'package',
-        resolveSymlinks: false,
       });
 
-      const files = await promises.readdir(resolve(FIXTURES_DIR, 'dist'));
+      const files = await promises.readdir(resolve(FIXTURES_DIR, 'package', 'dist'));
 
-      expect(normalizeFiles(files)).toMatchInlineSnapshot(`
+      expect(files).toMatchInlineSnapshot(`
         Array [
+          "browser.d.ts",
           "browser.js",
-          "browser.js",
-          "index.js",
+          "index.d.ts",
+          "index.es.js",
           "index.js",
         ]
       `);
@@ -170,17 +169,18 @@ Array [
         config: {
           type: 'package',
           name: 'package',
-          root: resolve(FIXTURES_DIR),
+          root: resolve(FIXTURES_DIR, 'package'),
         },
       });
 
-      const files = await promises.readdir(resolve(FIXTURES_DIR, 'dist'));
+      const files = await promises.readdir(resolve(FIXTURES_DIR, 'package', 'dist'));
 
-      expect(normalizeFiles(files)).toMatchInlineSnapshot(`
+      expect(files).toMatchInlineSnapshot(`
         Array [
+          "browser.d.ts",
           "browser.js",
-          "browser.js",
-          "index.js",
+          "index.d.ts",
+          "index.es.js",
           "index.js",
         ]
       `);

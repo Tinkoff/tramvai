@@ -18,9 +18,10 @@
       "root": "module",
       "type": "module"
     },
-    "build-package": {
-      "name": "build-package",
-      "type": "package"
+    "package": {
+      "name": "package",
+      "type": "package",
+      "root": "package"
     }
   }
 }

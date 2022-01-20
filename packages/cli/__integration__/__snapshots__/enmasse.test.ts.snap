@@ -96,15 +96,21 @@ Commands:
 exports[`enmasse test package platform build package 1`] = `
 Array [
   Object {
-    "extension": ".js",
-    "name": "browser.es2017.js",
-    "path": "dist/browser.es2017.js",
+    "extension": ".ts",
+    "name": "browser.d.ts",
+    "path": "dist/browser.d.ts",
     "type": "file",
   },
   Object {
     "extension": ".js",
     "name": "browser.js",
     "path": "dist/browser.js",
+    "type": "file",
+  },
+  Object {
+    "extension": ".ts",
+    "name": "index.d.ts",
+    "path": "dist/index.d.ts",
     "type": "file",
   },
   Object {

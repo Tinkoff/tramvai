@@ -5,7 +5,7 @@ export interface PackageConfigEntry {
    */
   name: string;
   /**
-   * @title Package root folder
+   * @title Package root folder (need to contain `package.json`, `tsconfig.json` and `src` folder with source code)
    */
-  root?: string;
+  root: string;
 }

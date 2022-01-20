@@ -67,6 +67,7 @@
     "@tinkoff/utils": "^2.1.3",
     "@tramvai/tools-check-versions": "0.0.0-stub",
     "@tramvai/tools-migrate": "0.0.0-stub",
+    "@tramvai/build": "0.0.0-stub",
     "ajv": "^6.12.6",
     "ansi-escapes": "^4.3.1",
     "autoprefixer": "^10.3.6",
@@ -172,8 +173,7 @@
     "react": "^17.0.1"
   },
   "hiddenDependencies": {
-    "image-webpack-loader": "^6.0.0",
-    "@tramvai/build": "^1.2.0"
+    "image-webpack-loader": "^6.0.0"
   },
   "license": "Apache-2.0"
 }
