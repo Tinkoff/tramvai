@@ -9,7 +9,7 @@ title: Introduction to tramvai
 
 - **Modular approach** - you can extend the functionality of applications using modules
 - **Universal** - Works equally well for browsers and server
-- **Быстрый** - lightweight, does not affect the overall performance of the application, maximizes parallelization of actions on the server
+- **Fast** - lightweight, does not affect the overall performance of the application, maximizes parallelization of actions on the server
 
 ## Approaches used
 

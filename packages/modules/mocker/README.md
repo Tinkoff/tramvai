@@ -1,16 +1,16 @@
 # @tramvai/module-mocker
 
-Модуль подключает библиотеку [@tinkoff/mocker](references/libs/mocker.md) в `tramvai` приложение, и делает доступным мокер на [papi](references/modules/server.md#papi) роуте `/mocker`.
+Module uses library [@tinkoff/mocker](references/libs/mocker.md) to add a mocker functionality to the `tramvai` app. Mocker will be available as [papi](references/modules/server.md#papi) route with path `/mocker`.
 
-## Подключение
+## Installation
 
-Необходимо установить `@tramvai/module-mocker`:
+First, install `@tramvai/module-mocker`:
 
-```bash
-yarn add @tramvai/module-mocker
+```bash npm2yarn
+npm install @tramvai/module-mocker
 ```
 
-Создать первый мок, в файле `mocks/my-api.js`, где свойство `api` должно содержать env переменную с урлом API, который требуется мокировать, в данном случае `MY_API`:
+Then, add your first mock to a new file `mocks/my-api.js`. In this file add export of object literal with the field `api` that should be specified as a name of environment variable for the API url that should be mocked:
 
 ```tsx
 module.exports = {
@@ -23,7 +23,7 @@ module.exports = {
         result: {
           type: 'json',
           value: {
-            a: 'b'
+            a: 'b',
           },
         },
       },
@@ -32,7 +32,7 @@ module.exports = {
 };
 ```
 
-Подключить модуль в проекте:
+Add module to the project:
 
 ```tsx
 import { createApp } from '@tramvai/core';
@@ -40,46 +40,44 @@ import { MockerModule } from '@tramvai/module-module';
 
 createApp({
   name: 'tincoin',
-  modules: [ MockerModule ],
+  modules: [MockerModule],
 });
 ```
 
-Запустить приложения с env переменной `MOCKER_ENABLED`, например:
+Run app with env `MOCKER_ENABLED`, e.g.:
 
 ```bash
 MOCKER_ENABLED="true" tramvai start tincoin
 ```
 
-После этого, все запросы на `MY_API` и на клиенте и на сервере автоматически будут отправлены в мокер, а если не нашлось подходящих моков, проксируются в оригинальное API.
+After that, all of the requests to `MY_API` in browser and on server will be automatically sent to mocker. In case mocker doesn't have a suitable mock the request, the request will be proxied to the original API.
 
 ## Explanation
 
-Особенности мокера описаны в [документации библиотеки](references/libs/mocker.md#Explanation).
+Most of the mocker features are described in the [lib documentation](references/libs/mocker.md#Explanation).
 
-Модуль подключает middleware мокера на `papi` роуте `/mocker`, и заменяет все `env` переменные мокируемых API ссылками на `papi`, подходящие для серверного и для клиентского кода.
+Module adds mocker middleware to `papi` route `/mocker` and replaces all of the env variables that were defined in mocks by links to the `papi`. After that all of the request to the original API are routed first to mocker that accepts requests from the client and the server side.
 
-По умолчанию, мокируются все API, которые были найдены в моках, это поведение можно переопределить.
+By default, all of the API that were defined mocks are mocked, but it might be overridden.
 
-Мокер подключается только при наличии env переменной `MOCKER_ENABLED="true"`.
+Mocker us enabled only when env variable `MOCKER_ENABLED` is defined.
 
-### Замена env переменных
+### Env variables replacement
 
-Допустим, приложение имеет env переменную `MY_API: https://www.my-api.com/`, и для этого API зарегистрирован мок.
+Let's say app has env variable `MY_API: https://www.my-api.com/` and for that api some mock is defined.
 
-Модуль рассчитан на работу локально, на динамических стендах, и в test/stage окружениях, это порождает сложность с определением пути до `papi` эндпоинта:
+The module can work locally, on dynamic stand, in test/stage environments. But this flexibility leads to the following problems when resolving path to the `papi` endpoint:
 
-1. На сервере мы должны делать запрос по абсолютном пути, и тут приложение всегда доступно на `localhost`, значит env переменные заменяются на урлы вида `http://localhost:3000/tincoin/papi/mocker/MY_API/`
+1. On server we should execute requests with absolute path. In this case we know that app is always available at `localhost` that mean we can replace API env variables by urls like `http://localhost:3000/tincoin/papi/mocker/MY_API/`
+2. On client test stands we do not known the domain of the app. In this case we should make requests by relative urls that mean we can replace API env variables by urls like `/tincoin/papi/mocker/MY_API/`
 
-1. На клиенте, на стендах мы не знаем текущий домен приложения, и надо делать запросы по относительным путям, поэтому клиентские env переменные заменяются на урлы вида `/tincoin/papi/mocker/MY_API/`
-
-Благодаря этой замене, все запросы приложения на мокируемое API, клиентские и серверные, автоматически отправляются в мокер.
+Thanks to this env replacement we can redirect all of the request to the APIs to our mocker first automatically.
 
 ## How to
 
-### У меня есть моки для нескольких API, как мокировать только одно из них?
+### Mock only specific API
 
-По умолчанию все API считываются из моков при старте приложения.
-Это поведение можно переопределить, передавая список API для мокирования при инициализации модуля:
+By default, all of the API that has corresponding mock will be mocked. It might be overridden by passing list of the APIs to mock when initializing module:
 
 ```tsx
 MockerModule.forRoot({
@@ -89,6 +87,6 @@ MockerModule.forRoot({
 });
 ```
 
-##  Экспортируемые токены
+## Exported tokens
 
 @inline src/tokens.ts

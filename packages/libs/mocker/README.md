@@ -6,8 +6,8 @@ A server and a middleware for API mocking.
 
 Install `@tinkoff/mocker`:
 
-```bash
-yarn add @tinkoff/mocker
+```bash npm2yarn
+npm install @tinkoff/mocker
 ```
 
 Add your first mock to file `mocks/first-api.js`:
