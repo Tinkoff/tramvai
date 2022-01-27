@@ -28,6 +28,11 @@ export interface Experiments {
      * @default true
      */
     cacheUnaffected?: boolean;
+    /**
+     * @title Enable backward compatibility with webpack previous major versions
+     * @default false
+     */
+    backCompat?: boolean;
   };
   /**
    * @title experimental settings for [mini-css-extract-plugin](https://github.com/webpack-contrib/mini-css-extract-plugin)

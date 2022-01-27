@@ -10,12 +10,14 @@ import { createApp } from '../commands/createApp';
 import type { StartCommand } from './start';
 import type { BuildCommand } from './build';
 import type { BenchmarkCommand } from './benchmark';
+import type { AnalyzeCommand } from './analyze';
 
 const app = createApp({
   commands: {
     start: () => import('./start'),
     build: () => import('./build'),
     benchmark: () => import('./benchmark'),
+    analyze: () => import('./analyze'),
   },
   providers: [
     {
@@ -53,4 +55,8 @@ export const build: BuildCommand = (parameters) => {
 
 export const benchmark: BenchmarkCommand = (parameters) => {
   return app.run('benchmark', parameters);
+};
+
+export const analyze: AnalyzeCommand = (parameters) => {
+  return app.run('analyze', parameters);
 };

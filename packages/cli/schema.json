@@ -250,7 +250,8 @@
                                     "type": "boolean"
                                   },
                                   "backCompat": {
-                                    "description": "Enable backward-compat layer with deprecation warnings for many webpack 4 APIs.",
+                                    "title": "Enable backward compatibility with webpack previous major versions",
+                                    "default": false,
                                     "type": "boolean"
                                   },
                                   "cacheUnaffected": {
@@ -1020,7 +1021,8 @@
                                     "type": "boolean"
                                   },
                                   "backCompat": {
-                                    "description": "Enable backward-compat layer with deprecation warnings for many webpack 4 APIs.",
+                                    "title": "Enable backward compatibility with webpack previous major versions",
+                                    "default": false,
                                     "type": "boolean"
                                   },
                                   "cacheUnaffected": {
@@ -1370,7 +1372,8 @@
                                       "type": "boolean"
                                     },
                                     "backCompat": {
-                                      "description": "Enable backward-compat layer with deprecation warnings for many webpack 4 APIs.",
+                                      "title": "Enable backward compatibility with webpack previous major versions",
+                                      "default": false,
                                       "type": "boolean"
                                     },
                                     "cacheUnaffected": {
@@ -1618,7 +1621,8 @@
                                       "type": "boolean"
                                     },
                                     "backCompat": {
-                                      "description": "Enable backward-compat layer with deprecation warnings for many webpack 4 APIs.",
+                                      "title": "Enable backward compatibility with webpack previous major versions",
+                                      "default": false,
                                       "type": "boolean"
                                     },
                                     "cacheUnaffected": {
@@ -1956,7 +1960,8 @@
                                         "type": "boolean"
                                       },
                                       "backCompat": {
-                                        "description": "Enable backward-compat layer with deprecation warnings for many webpack 4 APIs.",
+                                        "title": "Enable backward compatibility with webpack previous major versions",
+                                        "default": false,
                                         "type": "boolean"
                                       },
                                       "cacheUnaffected": {
@@ -2204,7 +2209,8 @@
                                         "type": "boolean"
                                       },
                                       "backCompat": {
-                                        "description": "Enable backward-compat layer with deprecation warnings for many webpack 4 APIs.",
+                                        "title": "Enable backward compatibility with webpack previous major versions",
+                                        "default": false,
                                         "type": "boolean"
                                       },
                                       "cacheUnaffected": {

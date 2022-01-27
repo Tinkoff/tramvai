@@ -131,6 +131,7 @@ describe('JSON schema для tramvai.json', () => {
                 experiments: {
                   webpack: {
                     cacheUnaffected: true,
+                    backCompat: false,
                   },
                   minicss: {
                     useImportModule: true,
@@ -155,6 +156,7 @@ describe('JSON schema для tramvai.json', () => {
                 experiments: {
                   webpack: {
                     cacheUnaffected: true,
+                    backCompat: false,
                   },
                   minicss: {
                     useImportModule: true,
@@ -200,6 +202,7 @@ describe('JSON schema для tramvai.json', () => {
                 experiments: {
                   webpack: {
                     cacheUnaffected: true,
+                    backCompat: false,
                   },
                   minicss: {
                     useImportModule: true,
@@ -226,6 +229,7 @@ describe('JSON schema для tramvai.json', () => {
                 experiments: {
                   webpack: {
                     cacheUnaffected: true,
+                    backCompat: false,
                   },
                   minicss: {
                     useImportModule: true,

@@ -23,7 +23,7 @@ export const buildPackage = async (di: Container): Result => {
   }).start();
 
   return {
-    getStats() {
+    getBuildStats() {
       return {};
     },
   };

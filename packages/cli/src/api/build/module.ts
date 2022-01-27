@@ -1,43 +1,28 @@
 import type { Container } from '@tinkoff/dippy';
 import type { Result } from './index';
-import { sharedProviders } from './providers/moduleShared';
-import { clientProviders } from './providers/moduleClient';
-import { serverProviders } from './providers/moduleServer';
-import { runHandlers } from '../shared/utils/runHandlers';
-import {
-  INIT_HANDLER_TOKEN,
-  PROCESS_HANDLER_TOKEN,
-  WEBPACK_SERVER_COMPILER_TOKEN,
-  WEBPACK_CLIENT_COMPILER_TOKEN,
-  CLOSE_HANDLER_TOKEN,
-} from './tokens';
-import { calculateBuildTime } from '../shared/utils/calculateBuildTime';
+import { sharedProviders } from './providers/shared';
+import { registerProviders } from '../../utils/di';
+import { ABSTRACT_BUILDER_FACTORY_TOKEN, CONFIG_MANAGER_TOKEN } from '../../di/tokens';
 
 export const buildModule = async (di: Container): Result => {
-  [...sharedProviders, ...clientProviders, ...serverProviders].forEach((provider) =>
-    di.register(provider)
-  );
+  registerProviders(di, [...sharedProviders]);
 
-  await runHandlers(di.get({ token: INIT_HANDLER_TOKEN, optional: true }));
+  const configManager = di.get(CONFIG_MANAGER_TOKEN);
 
-  const clientCompiler = di.get(WEBPACK_CLIENT_COMPILER_TOKEN);
-  const serverCompiler = di.get(WEBPACK_SERVER_COMPILER_TOKEN);
+  const builderFactory = di.get(ABSTRACT_BUILDER_FACTORY_TOKEN);
+  const builder = await builderFactory.createBuilder('webpack', {
+    options: {
+      shouldBuildClient: true,
+      shouldBuildServer: true,
+    },
+  });
 
-  const getClientTime = calculateBuildTime(clientCompiler);
-  const getServerTime = calculateBuildTime(serverCompiler);
-
-  await runHandlers(di.get({ token: PROCESS_HANDLER_TOKEN, optional: true }));
-
-  await runHandlers(di.get({ token: CLOSE_HANDLER_TOKEN, optional: true }));
+  const builderBuild = await builder.build({
+    modern: configManager.modern,
+  });
 
   return {
-    clientCompiler,
-    serverCompiler,
-    getStats: () => {
-      return {
-        clientBuildTime: getClientTime?.(),
-        serverBuildTime: getServerTime?.(),
-      };
-    },
+    builder,
+    ...builderBuild,
   };
 };

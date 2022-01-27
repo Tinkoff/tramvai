@@ -1,20 +1,12 @@
 import type { Container } from '@tinkoff/dippy';
 import type { Params, Result } from './index';
-import { COMMAND_PARAMETERS_TOKEN, CONFIG_MANAGER_TOKEN } from '../../di/tokens';
-import { sharedProviders } from './providers/applicationShared';
-import { clientProviders } from './providers/applicationClient';
-import { clientModernProviders } from './providers/applicationClientModern';
-import { serverProviders } from './providers/applicationServer';
-import { runHandlers } from '../shared/utils/runHandlers';
 import {
-  INIT_HANDLER_TOKEN,
-  PROCESS_HANDLER_TOKEN,
-  WEBPACK_CLIENT_MODERN_COMPILER_TOKEN,
-  WEBPACK_SERVER_COMPILER_TOKEN,
-  WEBPACK_CLIENT_COMPILER_TOKEN,
-  CLOSE_HANDLER_TOKEN,
-} from './tokens';
-import { calculateBuildTime } from '../shared/utils/calculateBuildTime';
+  ABSTRACT_BUILDER_FACTORY_TOKEN,
+  COMMAND_PARAMETERS_TOKEN,
+  CONFIG_MANAGER_TOKEN,
+} from '../../di/tokens';
+import { sharedProviders } from './providers/shared';
+import { registerProviders } from '../../utils/di';
 
 export const buildApplication = async (di: Container): Result => {
   const options = di.get(COMMAND_PARAMETERS_TOKEN as Params);
@@ -22,44 +14,25 @@ export const buildApplication = async (di: Container): Result => {
 
   const shouldBuildClient = buildType !== 'server';
   const shouldBuildServer = buildType !== 'client';
-  sharedProviders.forEach((provider) => di.register(provider));
 
-  const { modern } = di.get(CONFIG_MANAGER_TOKEN);
-  const shouldBuildModern = shouldBuildClient && modern;
+  registerProviders(di, sharedProviders);
 
-  [
-    ...(shouldBuildClient ? clientProviders : []),
-    ...(shouldBuildModern ? clientModernProviders : []),
-    ...(shouldBuildServer ? serverProviders : []),
-  ].forEach((provider) => di.register(provider));
+  const configManager = di.get(CONFIG_MANAGER_TOKEN);
 
-  await runHandlers(di.get({ token: INIT_HANDLER_TOKEN, optional: true }));
-
-  const clientCompiler = di.get({ token: WEBPACK_CLIENT_COMPILER_TOKEN, optional: true });
-  const clientModernCompiler = di.get({
-    token: WEBPACK_CLIENT_MODERN_COMPILER_TOKEN,
-    optional: true,
+  const builderFactory = di.get(ABSTRACT_BUILDER_FACTORY_TOKEN);
+  const builder = await builderFactory.createBuilder('webpack', {
+    options: {
+      shouldBuildClient,
+      shouldBuildServer,
+    },
   });
-  const serverCompiler = di.get({ token: WEBPACK_SERVER_COMPILER_TOKEN, optional: true });
 
-  const getClientTime = clientCompiler && calculateBuildTime(clientCompiler);
-  const getClientModernTime = clientModernCompiler && calculateBuildTime(clientModernCompiler);
-  const getServerTime = serverCompiler && calculateBuildTime(serverCompiler);
-
-  await runHandlers(di.get({ token: PROCESS_HANDLER_TOKEN, optional: true }));
-
-  await runHandlers(di.get({ token: CLOSE_HANDLER_TOKEN, optional: true }));
+  const builderBuild = await builder.build({
+    modern: configManager.modern,
+  });
 
   return {
-    clientCompiler,
-    clientModernCompiler,
-    serverCompiler,
-    getStats: () => {
-      return {
-        clientBuildTime: getClientTime?.(),
-        clientModernBuildTime: getClientModernTime?.(),
-        serverBuildTime: getServerTime?.(),
-      };
-    },
+    builder,
+    ...builderBuild,
   };
 };

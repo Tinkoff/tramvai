@@ -14,7 +14,7 @@ import { ConfigManager } from '../../config/configManager';
 import { request } from './request';
 import { generateStatic } from './generate';
 import { toWebpackConfig } from '../../library/webpack/utils/toWebpackConfig';
-import { copyStatsJsonFileToServerDirectory } from '../../api/build/utils/copyStatsJsonFile';
+import { copyStatsJsonFileToServerDirectory } from '../../builder/webpack/utils/copyStatsJsonFile';
 import { safeRequire } from '../../utils/safeRequire';
 import { startStaticServer } from './staticServer';
 import { startServer } from './server';
@@ -32,6 +32,7 @@ export const staticApp = async (
   });
   const serverConfigManager = clientConfigManager.withSettings({ buildType: 'server' });
 
+  // TODO: перевести на builder
   await Promise.all([
     webpackBuild(
       clientConfigManager,

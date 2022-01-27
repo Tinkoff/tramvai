@@ -1,11 +1,12 @@
 import type { Server } from 'http';
-import type { Compiler, MultiCompiler, Watching } from 'webpack';
+import type { PromiseType } from 'utility-types';
 import { createCommand } from '../../commands/createCommand';
 import type { WithConfig } from '../shared/types/withConfig';
 import { startApplication } from './application';
 import { startModule } from './module';
 import { CONFIG_ENTRY_TOKEN } from '../../di/tokens';
 import { startChildApp } from './child-app';
+import type { Builder } from '../../typings/build/Builder';
 
 export type Params = WithConfig<{
   buildType?: 'server' | 'client' | 'all';
@@ -26,19 +27,18 @@ export type Params = WithConfig<{
   strictErrorHandle?: boolean;
 }>;
 
-export type Result = Promise<{
-  close: () => Promise<void>;
-  compiler: MultiCompiler;
-  watching: Watching;
-  clientCompiler?: Compiler;
-  serverCompiler?: Compiler;
-  staticServer?: Server;
-  server?: Server;
-  getStats: () => {
-    clientBuildTime?: number;
-    serverBuildTime?: number;
-  };
-}>;
+export type Result<T extends string = any> = Promise<
+  PromiseType<ReturnType<Builder<T>['start']>> & {
+    close: () => Promise<void>;
+    // compiler: MultiCompiler;
+    // watching: Watching;
+    // clientCompiler?: Compiler;
+    // serverCompiler?: Compiler;
+    staticServer?: Server;
+    server?: Server;
+    builder: Builder<T>;
+  }
+>;
 
 export type StartCommand = (params: Params) => Result;
 

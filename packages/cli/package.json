@@ -138,6 +138,7 @@
     "text-table": "^0.2.0",
     "thread-loader": "^3.0.4",
     "universal-analytics": "^0.4.23",
+    "utility-types": "^3.10.0",
     "v8-compile-cache": "^2.2.0",
     "validate-npm-package-name": "^3.0.0",
     "wait-on": "^5.2.0",

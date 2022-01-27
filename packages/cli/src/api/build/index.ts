@@ -1,4 +1,4 @@
-import type { Compiler } from 'webpack';
+import type { PromiseType } from 'utility-types';
 import { createCommand } from '../../commands/createCommand';
 import type { WithConfig } from '../shared/types/withConfig';
 import { buildApplication } from './application';
@@ -6,6 +6,7 @@ import { buildModule } from './module';
 import { CONFIG_ENTRY_TOKEN } from '../../di/tokens';
 import { buildPackage } from './package';
 import { buildChildApp } from './child-app';
+import type { Builder } from '../../typings/build/Builder';
 
 export type Params = WithConfig<{
   buildType?: 'server' | 'client' | 'all';
@@ -23,16 +24,14 @@ export type Params = WithConfig<{
   forPublish?: boolean;
 }>;
 
-export type Result = Promise<{
-  clientCompiler?: Compiler;
-  clientModernCompiler?: Compiler;
-  serverCompiler?: Compiler;
-  getStats: () => {
-    clientBuildTime?: number;
-    clientModernBuildTime?: number;
-    serverBuildTime?: number;
-  };
-}>;
+export type Result<T extends string = any> = Promise<
+  PromiseType<ReturnType<Builder<T>['build']>> & {
+    // clientCompiler?: Compiler;
+    // clientModernCompiler?: Compiler;
+    // serverCompiler?: Compiler;
+    builder?: Builder<T>;
+  }
+>;
 
 export type BuildCommand = (params: Params) => Result;
 

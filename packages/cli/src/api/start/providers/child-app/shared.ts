@@ -1,22 +1,10 @@
 import type { Provider } from '@tinkoff/dippy';
-import { DI_TOKEN } from '@tinkoff/dippy';
-import webpack from 'webpack';
-import {
-  WEBPACK_COMPILER_TOKEN,
-  WEBPACK_CLIENT_CONFIG_TOKEN,
-  WEBPACK_SERVER_CONFIG_TOKEN,
-  WEBPACK_CLIENT_COMPILER_TOKEN,
-  WEBPACK_SERVER_COMPILER_TOKEN,
-  STATIC_SERVER_TOKEN,
-  CLOSE_HANDLER_TOKEN,
-  INIT_HANDLER_TOKEN,
-  PROCESS_HANDLER_TOKEN,
-} from '../../tokens';
-import { childAppDevServer } from '../../devServer/child-app';
+import { CLOSE_HANDLER_TOKEN, INIT_HANDLER_TOKEN } from '../../tokens';
 import {
   CONFIG_MANAGER_TOKEN,
   CONFIG_ENTRY_TOKEN,
   COMMAND_PARAMETERS_TOKEN,
+  STATIC_SERVER_TOKEN,
 } from '../../../../di/tokens';
 import type { ChildAppConfigEntry } from '../../../../typings/configEntry/child-app';
 import type { Params } from '../../index';
@@ -25,7 +13,6 @@ import {
   closeWorkerPoolBabel,
   closeWorkerPoolStyles,
 } from '../../../../library/webpack/utils/workersPool';
-import { toWebpackConfig } from '../../../../library/webpack/utils/toWebpackConfig';
 import { stopServer } from '../../utils/stopServer';
 import { createServer } from '../../utils/createServer';
 import { listenServer } from '../../utils/listenServer';
@@ -50,67 +37,6 @@ export const sharedProviders: readonly Provider[] = [
     deps: {
       configEntry: CONFIG_ENTRY_TOKEN,
       parameters: COMMAND_PARAMETERS_TOKEN,
-    },
-  },
-  {
-    provide: WEBPACK_COMPILER_TOKEN,
-    deps: {
-      clientConfig: { token: WEBPACK_CLIENT_CONFIG_TOKEN, optional: true },
-      serverConfig: { token: WEBPACK_SERVER_CONFIG_TOKEN, optional: true },
-    },
-    useFactory: ({
-      clientConfig,
-      serverConfig,
-    }: {
-      clientConfig: typeof WEBPACK_CLIENT_CONFIG_TOKEN;
-      serverConfig: typeof WEBPACK_SERVER_CONFIG_TOKEN;
-    }) => {
-      const configs = [clientConfig, serverConfig].filter(Boolean).map(toWebpackConfig);
-
-      return webpack(configs);
-    },
-  },
-  {
-    provide: WEBPACK_CLIENT_COMPILER_TOKEN,
-    useFactory: ({
-      compiler,
-      clientConfig,
-    }: {
-      compiler: typeof WEBPACK_COMPILER_TOKEN;
-      clientConfig: typeof WEBPACK_CLIENT_CONFIG_TOKEN | null;
-    }) => {
-      if (clientConfig) {
-        return compiler.compilers[0];
-      }
-    },
-    deps: {
-      compiler: WEBPACK_COMPILER_TOKEN,
-      clientConfig: { token: WEBPACK_CLIENT_CONFIG_TOKEN, optional: true },
-    },
-  },
-  {
-    provide: WEBPACK_SERVER_COMPILER_TOKEN,
-    useFactory: ({
-      compiler,
-      clientConfig,
-      serverConfig,
-    }: {
-      compiler: typeof WEBPACK_COMPILER_TOKEN;
-      clientConfig: typeof WEBPACK_SERVER_CONFIG_TOKEN | null;
-      serverConfig: typeof WEBPACK_SERVER_CONFIG_TOKEN | null;
-    }) => {
-      if (serverConfig) {
-        if (clientConfig) {
-          return compiler.compilers[1];
-        }
-
-        return compiler.compilers[0];
-      }
-    },
-    deps: {
-      compiler: WEBPACK_COMPILER_TOKEN,
-      clientConfig: { token: WEBPACK_CLIENT_CONFIG_TOKEN, optional: true },
-      serverConfig: { token: WEBPACK_SERVER_CONFIG_TOKEN, optional: true },
     },
   },
   {
@@ -146,17 +72,6 @@ export const sharedProviders: readonly Provider[] = [
     deps: {
       staticServer: STATIC_SERVER_TOKEN,
       parameters: COMMAND_PARAMETERS_TOKEN,
-    },
-  },
-  {
-    provide: PROCESS_HANDLER_TOKEN,
-    multi: true,
-    useFactory: childAppDevServer,
-    deps: {
-      di: DI_TOKEN,
-      compiler: WEBPACK_COMPILER_TOKEN,
-      configManager: CONFIG_MANAGER_TOKEN,
-      staticServer: STATIC_SERVER_TOKEN,
     },
   },
   {

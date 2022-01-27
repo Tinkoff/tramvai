@@ -1,26 +1,23 @@
 import type { Container } from '@tinkoff/dippy';
 import type { Params, Result } from './index';
 import { showBanner } from './utils/banner';
-import { resolveDone } from './utils/resolveDone';
-import { COMMAND_PARAMETERS_TOKEN } from '../../di/tokens';
 import {
-  WEBPACK_CLIENT_COMPILER_TOKEN,
-  WEBPACK_SERVER_COMPILER_TOKEN,
-  WEBPACK_COMPILER_TOKEN,
-  STATIC_SERVER_TOKEN,
+  ABSTRACT_BUILDER_FACTORY_TOKEN,
+  COMMAND_PARAMETERS_TOKEN,
   SERVER_TOKEN,
+  STATIC_SERVER_TOKEN,
+} from '../../di/tokens';
+import {
   INIT_HANDLER_TOKEN,
   CLOSE_HANDLER_TOKEN,
   PROCESS_HANDLER_TOKEN,
   STRICT_ERROR_HANDLE,
-  WEBPACK_WATCHING_TOKEN,
 } from './tokens';
-import { runHandlers } from '../shared/utils/runHandlers';
-import { clientProviders } from './providers/applicationClient';
-import { serverProviders } from './providers/applicationServer';
-import { sharedProviders } from './providers/applicationShared';
+import { runHandlers } from '../../utils/runHandlers';
+import { serverProviders } from './providers/application/server';
+import { sharedProviders } from './providers/application/shared';
 import { sharedProviders as commonSharedProviders } from './providers/shared';
-import { calculateBuildTime } from '../shared/utils/calculateBuildTime';
+import { registerProviders } from '../../utils/di';
 
 export const startApplication = async (di: Container): Result => {
   const options = di.get(COMMAND_PARAMETERS_TOKEN as Params);
@@ -29,12 +26,11 @@ export const startApplication = async (di: Container): Result => {
   const shouldBuildClient = buildType !== 'server';
   const shouldBuildServer = buildType !== 'client';
 
-  [
+  registerProviders(di, [
     ...commonSharedProviders,
     ...sharedProviders,
-    ...(shouldBuildClient ? clientProviders : []),
     ...(shouldBuildServer ? serverProviders : []),
-  ].forEach((provider) => di.register(provider));
+  ]);
 
   await runHandlers(di.get({ token: INIT_HANDLER_TOKEN, optional: true }));
 
@@ -43,37 +39,25 @@ export const startApplication = async (di: Container): Result => {
 
   showBanner(di);
 
+  const builderFactory = di.get(ABSTRACT_BUILDER_FACTORY_TOKEN);
+  const builder = await builderFactory.createBuilder('webpack', {
+    options: {
+      shouldBuildClient,
+      shouldBuildServer,
+    },
+  });
+
   await runHandlers(di.get({ token: PROCESS_HANDLER_TOKEN, optional: true }));
-
-  const compiler = di.get(WEBPACK_COMPILER_TOKEN);
-  const clientCompiler = di.get({ token: WEBPACK_CLIENT_COMPILER_TOKEN, optional: true });
-  const serverCompiler = di.get({ token: WEBPACK_SERVER_COMPILER_TOKEN, optional: true });
-  const getClientTime = clientCompiler && calculateBuildTime(clientCompiler);
-  const getServerTime = serverCompiler && calculateBuildTime(serverCompiler);
-
-  try {
-    await resolveDone(compiler);
-  } catch (error) {
-    if (di.get(STRICT_ERROR_HANDLE)) {
-      throw error;
-    }
-  }
+  const builderStart = await builder.start({ strictError: di.get(STRICT_ERROR_HANDLE) });
 
   return {
-    compiler,
-    watching: di.get(WEBPACK_WATCHING_TOKEN),
-    clientCompiler,
-    serverCompiler,
     server,
     staticServer,
+    builder,
+    ...builderStart,
     close: async () => {
+      await builderStart.close();
       await runHandlers(di.get({ token: CLOSE_HANDLER_TOKEN, optional: true }));
-    },
-    getStats: () => {
-      return {
-        clientBuildTime: getClientTime?.(),
-        serverBuildTime: getServerTime?.(),
-      };
     },
   };
 };

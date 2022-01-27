@@ -25,8 +25,3 @@ export function Module<Providers extends Provider[]>({
 /**
  * @deprecated Используйте Module вместо module - `import { Module } from '@tramvai/core';` Иначе не будет работать hot reload
  */ export const deprecatedModule = Module;
-
-// Исключительно для тайпчека переданного описания провайдера
-export function provide<Deps, P = any>(descr: Provider<Deps, P>): Provider<Deps, P> {
-  return descr;
-}

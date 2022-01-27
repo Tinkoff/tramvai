@@ -64,14 +64,18 @@ module.exports = class TramvaiWatchPlugin extends BaseWatchPlugin {
 
         let resolveCompilationInProgress: () => void;
 
-        this.rawApp.compiler.hooks.invalid.tap('tramvai-jest-watch', () => {
-          this.compilationInProgress = new Promise((resolve) => {
-            resolveCompilationInProgress = resolve;
-          });
+        this.rawApp.builder.on('invalid', (type) => {
+          if (type === 'server') {
+            this.compilationInProgress = new Promise((resolve) => {
+              resolveCompilationInProgress = resolve;
+            });
+          }
         });
 
-        this.rawApp.compiler.hooks.done.tap('tramvai-jest-watch', () => {
-          resolveCompilationInProgress();
+        this.rawApp.builder.on('done', (type) => {
+          if (type === 'server') {
+            resolveCompilationInProgress();
+          }
         });
 
         global.app = {
