@@ -61,10 +61,7 @@ export const createQuery = <Options = unknown, Result = unknown, Deps = unknown>
         deps: {
           queryClient: QUERY_CLIENT_TOKEN,
         },
-        conditions: {
-          ...conditions,
-          onlyServer: true,
-        },
+        conditions,
       });
     },
     fetchAction: (options: Options) => {
@@ -76,10 +73,7 @@ export const createQuery = <Options = unknown, Result = unknown, Deps = unknown>
         deps: {
           queryClient: QUERY_CLIENT_TOKEN,
         },
-        conditions: {
-          ...conditions,
-          onlyServer: true,
-        },
+        conditions,
       });
     },
   };

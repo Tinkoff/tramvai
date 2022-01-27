@@ -76,10 +76,7 @@ export const createInfiniteQuery = <
         deps: {
           queryClient: QUERY_CLIENT_TOKEN,
         },
-        conditions: {
-          ...conditions,
-          onlyServer: true,
-        },
+        conditions,
       });
     },
     fetchAction: (options: Options) => {
@@ -91,10 +88,7 @@ export const createInfiniteQuery = <
         deps: {
           queryClient: QUERY_CLIENT_TOKEN,
         },
-        conditions: {
-          ...conditions,
-          onlyServer: true,
-        },
+        conditions,
       });
     },
   };
