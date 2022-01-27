@@ -32,7 +32,7 @@
     "cookie-parser": "^1.4.3",
     "express": "^4.17.1",
     "finalhandler": "^1.1.2",
-    "http-proxy-middleware": "^1.0.1"
+    "http-proxy-middleware": "^2.0.2"
   },
   "peerDependencies": {
     "@tinkoff/utils": "^2.1.2",

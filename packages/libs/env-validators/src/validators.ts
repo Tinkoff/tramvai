@@ -10,7 +10,11 @@ export const isUrl: Validator = (value: string) => {
   let url;
 
   try {
-    url = new URL(value);
+    if (value.startsWith('/')) {
+      url = new URL(value, 'http://localhost:3000');
+    } else {
+      url = new URL(value);
+    }
   } catch (_) {
     return 'URL is not valid';
   }

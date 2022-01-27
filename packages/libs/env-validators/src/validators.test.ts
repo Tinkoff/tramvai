@@ -12,6 +12,7 @@ import {
 describe('validators', () => {
   it('isUrl', () => {
     expect(isUrl('https://google.com')).toEqual(false);
+    expect(isUrl('/foo/bar')).toEqual(false);
     expect(isUrl('file://google.com')).toEqual('Invalid protocol file:');
     expect(isUrl('not valid url')).toEqual('URL is not valid');
   });
@@ -44,10 +45,11 @@ describe('validators', () => {
 describe('combine validators', () => {
   it('should work', () => {
     expect(combineValidators([isUrl, endsWith('/')])('https://google.com/')).toEqual(false);
+    expect(combineValidators([isUrl, endsWith('/')])('/foo/bar/')).toEqual(false);
     expect(combineValidators([isUrl, endsWith('/')])('https://google.com')).toEqual(
       'value should ends with /'
     );
-    expect(combineValidators([isUrl, endsWith('/')])('//google.com/')).toEqual('URL is not valid');
+    expect(combineValidators([isUrl, endsWith('/')])('google.com/')).toEqual('URL is not valid');
     expect(combineValidators([isUrl, endsWith('/')])('asdjhpasojdh')).toEqual(
       'URL is not valid; value should ends with /'
     );

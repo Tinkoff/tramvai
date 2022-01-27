@@ -1,10 +1,73 @@
-## О модуле
+# @tramvai/module-metrics
 
-Модуль метрик предоставляет интерфейс, описанный в пакете `@platform/metrics-types`. На сервере при этом будет подключена реализация на оснонове публичного пакета `prom-client`, выставляющая метрики с `/metrics` в формате Prometheus.
+Module provides the interface described in `@platform/metrics-types`. On server the interface is implemented with public package `prom-client` that provides metrics on url `/metrics` Prometheus format.
 
-Для подробной информации о типах метрик, их поведении и параметрах – см. [`prom-client`](https://github.com/siimon/prom-client).
+More details about metrics type, parameters and how to use it see in [docs to `prom-client`](https://github.com/siimon/prom-client).
 
-## Как пользоваться
+## Explanation
+
+### Monitoring outgoing requests
+
+To monitor the state of the outgoing requests (like number of requests, number of error, time execution) the module monkey-patches `request` and `get` methods of the standard modules `http` and `https`. To make it work just add metrics module to the app.
+
+Next labels are added to metrics:
+
+- http method
+- http response code
+- service name
+
+Name of the service calculates by comparing request urls with values in `MetricsServicesRegistry`. Initially the register is bootstrapped with the inverted content of env variables, e.g. if some url from env is a substring of the request url, then the name of the env become the service name. If several envs matches this logic then the env with the longest url is used.
+
+### Client metrics
+
+Module implements feature to collect metrics from the clients and share it with Prometheus by sending metrics from the client to server papi-route.
+
+Metrics module can help in implementing this functionality in common cases. To create metric register provider for the token `REGISTER_INSTANT_METRIC_TOKEN`. Your provider should return list of two entities - first is a slug of papi-route and second is an instance of Counter. E.g.:
+
+```javascript
+import { provide } from '@tramvai/core';
+
+provide({
+  provide: REGISTER_INSTANT_METRIC_TOKEN,
+  multi: true,
+  deps: {
+    metrics: METRICS_MODULE_TOKEN,
+  },
+  useFactory({ metrics }) {
+    return ['page-load', new Counter({ name: 'client_page_load_total', help: 'Client page load' })];
+  },
+});
+```
+
+After that to increment metric `client_page_load_total` you can call papi-route `/metrics/page-load`.
+
+#### instantMetricsReporter
+
+In practice it become clear that besides metric collection it often needed to collect logs with details. This can be implemented with `instantMetricsReporter`. When calling logger module will check that any metric with the slug equal to the event of the log is exist. If so module will send request to the corresponding papi-route.
+
+Next way you can log event and increment server metric:
+
+```javascript
+import { provide } from '@tramvai/core';
+provide({
+  provide: commandLineListTokens.init,
+  multi: true,
+  deps: {
+    logger: LOGGER_TOKEN,
+  },
+  useFactory({ logger }) {
+    return () => {
+      window.on('load', () => {
+        logger.info({ event: 'page-load' });
+      })
+    };
+  },
+}),
+```
+
+## How to
+
+### Usage Example
 
 ```tsx
 import { createToken } from '@tinkoff/dippy';
@@ -48,121 +111,55 @@ export const SOME_MODULE = createToken<SomeModule>('someModule');
 export class SomeModuleContainer {}
 ```
 
-## Мониторинг исходящих запросов
+### Make service names showed in metrics instead of hostnames
 
-Для того чтобы мониторить состояние исходящих запросов (количество запросов, количество ошибок, время выполнения) в модуле манкипатчатся методы request и get модулей http и https. Чтобы это заработало необходимо просто подключить модуль метрик в приложение.
+It is possible to give a hint to module about the service name in case url is dynamic. To do that:
 
-В метрики попадают лейблы:
+- use token `METRICS_SERVICES_REGISTRY_TOKEN`;
+- call `metricsServicesRegistry.register("Part of the url or the whole url", "Name of service")`
 
-- http метод
-- http код ответа
-- имя сервиса
+### Use metrics to profile performance in browser
 
-Метрики определяют имя сервиса сопоставляя урлы со значениями в MetricsServicesRegistry. Изначательно туда загружается инвертированное содержимое env, то есть если урл из env является подстрокой урла запроса, то ключ станет именем сервиса. Если совпадает несколько, то берётся самый длинный урл из env.
+To measure length of the events you must use method `startTimer` of classes Gauge, Histogram, Summary. In dev-mode these classes are patched and methods to work with timers will use [PerformanceApi](https://developer.mozilla.org/en-US/docs/Web/API/Performance).
 
-### Как сделать чтобы для запросов в метриках было имя сервиса вместо адреса хоста
+Example without additional fields:
 
-Можно подсказать модулю метрик имя сервиса, если урл получается динамически. Для этого нужно:
-
-- подключить модуль по токену `METRICS_SERVICES_REGISTRY_TOKEN`;
-- вызвать `metricsServicesRegistry.register("Часть урла или весь урл", "Имя сервиса")`
-
-## Использование метрик для профилирования перформанса на стороне браузера
-
-Для измерения продолжительности события, необходимо использовать метод `startTimer` у классов Gauge, Histogram и Summary. В dev-режиме эти классы патчатся и методы работы с таймером использует [PerformanceApi](https://developer.mozilla.org/en-US/docs/Web/API/Performance).
-
-## Пример использования
-
-Без дополнительных полей
-
-```
+```ts
 const metric = metrics.gauge({
-    name: 'request_measure',
-    help: 'Request duration measure',
+  name: 'request_measure',
+  help: 'Request duration measure',
 });
 
 const endTimer = metric.startTimer();
 
 fetch(url).then(() => {
-    endTimer();
+  endTimer();
 
-    // выводим результат - performance.getEntriesByName('request_measure');
+  // output the result - performance.getEntriesByName('request_measure');
 });
 ```
 
-Добавляем динамические поля
+Example with adding dynamic fields:
 
-```
+```ts
 const metric = metrics.gauge({
-    name: 'request_measure',
-    help: 'Request duration measure',
+  name: 'request_measure',
+  help: 'Request duration measure',
 });
 
 const endTimer = metric.startTimer({ method: 'GET' });
 
 fetch(url).then(() => {
-    endTimer({ status: 200 });
+  endTimer({ status: 200 });
 
-    // выводим результат - performance.getEntriesByName('request_measure{method="GET",status="200"}');
+  // output the result - performance.getEntriesByName('request_measure{method="GET",status="200"}');
 });
 ```
 
-## Клиентские метрики
+## Debug
 
-Модуль реализует в себе возможность собирать метрики с клиента и раздавать их прометеусам с помощью обычного серверного механизма через отправку метрик в papi-роуты.
+The module uses loggers with the next ids: `metrics:perf`, `metrics:papi`
 
-Механика работы заключается в том что заводится counter и специальный папи-роут, дёрнув который по http мы можем инкрементировать этот counter.
+## Exported tokens
 
-В модуле уже реализован весь общий для таких случаев функционал. Чтобы создать метрику необходимо создать провайдер с токеном `REGISTER_INSTANT_METRIC_TOKEN`, провайдер должен возвращать список из двух сущностей где первая это slug papi-роута, а вторая это инстанс счётчика. Например:
-
-```javascript
-import { provide } from '@tramvai/core';
-
-provide({
-  provide: REGISTER_INSTANT_METRIC_TOKEN,
-  multi: true,
-  deps: {
-    metrics: METRICS_MODULE_TOKEN,
-  },
-  useFactory({ metrics }) {
-    return [
-      'page-load',
-      new Counter({ name: 'client_page_load_total', help: 'Загрузки страниц у клиентов' }),
-    ];
-  },
-});
-```
-
-Теперь для того чтобы инкрементировать метрику `client_page_load_total` достаточно дёрнуть papi-роут `/metrics/page-load`.
-
-#### instantMetricsReporter
-
-На практике выяснилось что часто помимо сбора метрик необходимо отправить логи с подробностями. Эту потребность реализует instantMetricsReporter. При вызове логгера он проверяет наличие метрик со slug аналогичным полю event в логах и если такие метрики существуют, то отправляет запрос на соответствующий papi-роут.
-
-Таким образом можно одновременно залогировать событие и инкрементировать серверную метрику.
-
-```javascript
-import { provide } from '@tramvai/core';
-provide({
-  provide: commandLineListTokens.init,
-  multi: true,
-  deps: {
-    logger: LOGGER_TOKEN,
-  },
-  useFactory({ logger }) {
-    return () => {
-      window.on('load', () => {
-        logger.info({ event: 'page-load' });
-      })
-    };
-  },
-}),
-```
-
-## Отладка
-
-Модуль использует логгеры с идентификаторами: `metrics:perf`, `metrics:papi`
-
-## Экспортируемые токены
-
-[ссылка](references/tokens/metrics-tokens.md)
+[link](references/tokens/metrics-tokens.md)
