@@ -20,6 +20,7 @@ describe('test/integration/app/runFakeApp', () => {
   it('should return 200 status', async () => {
     return app.request('/').expect(200);
   });
+
   it('should run app', async () => {
     const { application } = await app.render('/');
     expect(application).toMatchInlineSnapshot(`"fake app"`);

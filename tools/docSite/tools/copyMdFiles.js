@@ -82,8 +82,8 @@ const sortDocs = (doc) => {
   });
 };
 
-async function copyRootDocs() {
-  const docsRoot = resolve(root, 'docs');
+async function copyRootDocs({ docsFolder }) {
+  const docsRoot = resolve(root, docsFolder);
 
   return Promise.all([
     // находим все .md файлы в папке docs, исключая локали
@@ -263,7 +263,8 @@ async function writeSidebar(docsResult) {
 
 async function main() {
   await deleteTmpFolder();
-  await copyRootDocs();
+  await copyRootDocs({ docsFolder: 'docs' });
+  await copyRootDocs({ docsFolder: 'tinkoff-docs' });
 
   const docsResult = await collectAllProjectDocs();
 

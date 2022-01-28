@@ -26,17 +26,11 @@
   },
   "workspaces": [
     "packages/cli",
-    "packages/tramvai/**",
-    "packages/libs/**",
-    "packages/modules/**",
-    "packages/tokens/**",
-    "examples/**",
-    "tools/migrate",
-    "tools/check-versions",
-    "tools/generate-schema",
-    "tools/build",
-    "tools/public-packages",
-    "tools/monorepo/*"
+    "packages/!(cli)/*",
+    "packages/!(cli)/*/*",
+    "tools/!(docSite)",
+    "tools/monorepo/*",
+    "examples/**"
   ],
   "devDependencies": {
     "@types/jest": "^26.0.23",

@@ -1,0 +1,29 @@
+{
+    "extends": "../../../../tsconfig.lib.json",
+    "include": [
+        "./src"
+    ],
+    "compilerOptions": {
+        "declarationDir": "./lib",
+        "outDir": "./lib",
+        "rootDir": "./src",
+        "strict": true
+    },
+    "references": [
+        {
+            "path": "../../child-app-core"
+        },
+        {
+            "path": "../../core"
+        },
+        {
+            "path": "../unit"
+        },
+        {
+            "path": "../../../modules/child-app"
+        },
+        {
+            "path": "../../react"
+        }
+    ]
+}

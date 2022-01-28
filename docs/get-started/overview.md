@@ -1,32 +1,32 @@
 ---
 id: overview
-title: Введение в документацию
+title: Documentation overview
 ---
 
-**`Tramvai`** это легковесный веб-фреймворк для создания SSR приложений с модульной системой и DI для возможности быстрого расширения функциональности приложений.
+**`Tramvai`** is a lightweight web framework for building SSR applications with a modular system and DI to quickly extend the functionality of applications.
 
-Эта документация описывает возможности и особенности фреймворка, содержит уроки по созданию приложений на **tramvai**, популярные рецепты и подробные описания API.
+This documentation describes the capabilities and features of the framework, contains tutorials on creating applications on **tramvai**, popular recipes and detailed API descriptions.
 
-### Первые шаги
+### First steps
 
-Для первого знакомства с фреймворком рекомендуется пройти урок **[Создаем приложение на Tramvai](get-started/create-app.md)**
+For the first acquaintance with the framework, it is recommended to take a lesson **[Create tramvai application](get-started/create-app.md)**
 
-### Погружение в tramvai
+### Deep dive
 
-Познакомиться с концепциями, которые лежат в основе фреймворка, можно в разделе **[Основные концепции](concepts/overview.md)**
+You can get acquainted with the concepts that underlie the framework in the section **[Concepts](concepts/overview.md)**
 
-### Основные возможности
+### Features
 
-Узнать больше о возможностях фреймворка можно в разделе **[Возможности](features/react.md)**
+You can learn more about the capabilities of the framework in the section **[Features](features/react.md)**
 
-### Джедайские техники
+### Jedi tricks
 
-Гайды и рецепты для решения самых популярных задач расположены в разделе **[Рецепты](how-to/how-create-module.md)**
+Guides and recipes for solving the most popular tasks are located in the section **[How-to](how-to/how-create-module.md)**
 
-### Справочник API
+### API references
 
-Справочник API фреймворка, документация к встроенным модулям и библиотекам расположены в разделе **[API](references/tramvai/create-app.md)**
+The framework API reference, documentation for built-in modules and libraries are located in the section **[API](references/tramvai/create-app.md)**
 
 ### Tramvai CLI
 
-Документация к **Tramvai CLI** находится на странице **[CLI](references/cli/base.md)**
+Documentation for **Tramvai CLI** is on the page **[CLI](references/cli/base.md)**

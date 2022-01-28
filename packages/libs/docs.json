@@ -23,20 +23,6 @@
           },
           {
               "doc": {
-                  "id": "cfg-client",
-                  "title": "cfg-client"
-              },
-              "path": "api-clients/cfg-client/README.md"
-          },
-          {
-              "doc": {
-                  "id": "common-api-client",
-                  "title": "common-api-client"
-              },
-              "path": "api-clients/common-api-client/README.md"
-          },
-          {
-              "doc": {
                   "id": "error-handlers",
                   "title": "error-handlers"
               },
@@ -69,13 +55,6 @@
                   "title": "http-client"
               },
               "path": "http-client/README.md"
-          },
-          {
-              "doc": {
-                  "id": "imgproxy",
-                  "title": "imgproxy"
-              },
-              "path": "imgproxy/README.md"
           },
           {
               "doc": {
@@ -135,13 +114,6 @@
           },
           {
               "doc": {
-                  "id": "papi-client",
-                  "title": "papi-client"
-              },
-              "path": "api-clients/papi-client/README.md"
-          },
-          {
-              "doc": {
                   "id": "pubsub",
                   "title": "pubsub"
               },
@@ -184,24 +156,10 @@
           },
           {
               "doc": {
-                  "id": "send-log",
-                  "title": "send-log"
-              },
-              "path": "send-log/README.md"
-          },
-          {
-              "doc": {
                   "id": "tinkoff-request-http-client-adapter",
                   "title": "tinkoff-request-http-client-adapter"
               },
               "path": "tinkoff-request-http-client-adapter/README.md"
-          },
-          {
-              "doc": {
-                  "id": "tsconfig",
-                  "title": "tsconfig"
-              },
-              "path": "tsconfig/README.md"
           },
           {
               "doc": {

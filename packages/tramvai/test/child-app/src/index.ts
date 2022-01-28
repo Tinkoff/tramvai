@@ -1,0 +1,1 @@
+export { testChildApp } from './testChildApp';

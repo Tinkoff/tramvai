@@ -1,25 +1,26 @@
 ---
 id: universal
-title: Разделение кода для сервера и клиента
+title: Separating code for server and client
 ---
 
-Фреймворк tramvai и его базовые компоненты являются универсальными, и работают одинаково хорошо во всех окружениях. tramvai cli собирает код для сервера и для клиента в отдельные сборки. При этом, контролировать выполнение пользовательского кода в нужном окружении требуется вручную. Основные механизмы для этого - package.json, dependency injection и непосредственные проверки в коде на окружение.
+The tramvai framework and its core components are universal and work equally well in all environments. tramvai cli collects server and client code into separate assemblies. At the same time, it is required to manually control the execution of user code in the required environment. The main mechanisms for this are package.json, dependency injection and direct checks in the code against the environment.
 
-Подробнее о том, как webpack выбирает нужные файлы для разных `target`, [в этой статье](https://www.jonathancreamer.com/how-webpack-decides-what-entry-to-load-from-a-package-json/).
 
-Пользовательский код, который зависит от окружения, можно разделить на несколько видов:
+Learn more about how webpack picks the right files for different `target`, [in this article](https://www.jonathancreamer.com/how-webpack-decides-what-entry-to-load-from-a-package-json/).
 
-- Код приложения
-- npm библиотеки
-- tramvai модули и DI провайдеры
+User code that depends on the environment can be divided into several types:
 
-### Код приложения
+- Application code
+- npm libraries
+- tramvai modules and DI providers
 
-Для выполнения веток кода или в определенных окружения, можно использовать несколько проверок:
+### Application code
+
+To execute branches of code or in specific environments, several checks can be used:
 
 #### process.env
 
-При сборке проекта tramvai cli проставляет две переменные, указывающие на окружение - `process.env.SERVER` и `process.env.BROWSER`. Webpack автоматически удалит код с условием, не соответствующим текущему окружению, например следующий код не попадет в серверный бандл:
+When building a project, tramvai cli sets two variables indicating the environment - `process.env.SERVER` and `process.env.BROWSER`. Webpack will automatically remove code with a condition that does not match the current environment, for example, the following code will not be included in the server bundle:
 
 ```javascript
 if (process.env.BROWSER) {
@@ -27,7 +28,7 @@ if (process.env.BROWSER) {
 }
 ```
 
-Для исключения кода из production сборки, независимо от окружения, можно использовать переменную `process.env.NODE_ENV`:
+To exclude code from a production build, regardless of the environment, you can use the variable `process.env.NODE_ENV`:
 
 ```javascript
 if (process.env.NODE_ENV === 'development') {
@@ -35,7 +36,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 ```
 
-Для исключения импортируемых библиотек из сборки требуется замена верхнеуровневых `import` на `require` внутри условия:
+To exclude imported libraries from the assembly, you need to replace the top-level `import` with `require` inside the condition:
 
 ```javascript
 if (process.env.BROWSER) {
@@ -48,7 +49,7 @@ if (process.env.BROWSER) {
 
 #### typeof window
 
-Для дополнительных оптимизаций, используется [babel плагин](https://github.com/FormidableLabs/babel-plugin-transform-define), который превращает `typeof window` из серверной сборке в `'undefined'`, а из клиентской - в `'object'`, что позволяет webpack'у вырезать лишний код, например следующее условие работает аналогично проверке `process.env.BROWSER`:
+For additional optimizations, the [babel plugin](https://github.com/FormidableLabs/babel-plugin-transform-define) is used, which turns `typeof window` from the server assembly to `'undefined'`, and from the client assembly to `'object'`, which allows webpack to cut out unnecessary code, for example, the following condition works similarly to checking `process.env.BROWSER`:
 
 ```javascript
 if (typeof window !== 'undefined') {
@@ -58,7 +59,7 @@ if (typeof window !== 'undefined') {
 
 #### package.json
 
-Если нам потребовалось заменять целый файл, а не определенные строки кода, можно вынести его в отдельную папку, описать реализацию для всех окружений, и добавить `package.json`:
+If we needed to replace a whole file, and not specific lines of code, we can move it to a separate folder, describe the implementation for all environments, and add `package.json`:
 
 ```javascript
 // module.server.js
@@ -70,7 +71,7 @@ export const CONSTANT = 'SERVER_SIDE';
 export const CONSTANT = 'CLIENT_SIDE';
 ```
 
-Далее, в `package.json` надо указать бандлеру, какой код использовать для разных окружений. Поле `main` используется для серверного бандла, а `browser` для клиентского:
+Next, in `package.json`, you need to tell the bundler which code to use for different environments. The `main` field is used for the server bundle, and the `browser` field is used for the client bundle:
 
 ```json
 {
@@ -79,11 +80,11 @@ export const CONSTANT = 'CLIENT_SIDE';
 }
 ```
 
-### npm библиотеки
+### npm packages
 
-Для создания библиотеки, реализации которой должны отличаться на сервере и клиенте, необходимо поддерживать общий интерфейс экспорта, и настроить `package.json` аналогично предыдущему примеру. Например, библиотека экспортирует класс `Library`, и константу `LIBRARY_CONSTANT`.
+To create a library, the implementation of which should be different on the server and the client, you need to maintain a common export interface, and configure `package.json` in the same way as in the previous example. For example, the library exports the class `Library`, and the constant `LIBRARY_CONSTANT`.
 
-Создадим две точки входа в нашу библиотеку - `server.js` и `client.js`:
+Let's create two entry points to our library - `server.js` и `client.js`:
 
 ```javascript
 // server.js
@@ -107,7 +108,7 @@ export class Library {
 export const LIBRARY_CONSTANT = 'CLIENT_SIDE_LIBRARY';
 ```
 
-Далее, в `package.json` надо указать бандлеру, какой код использовать для разных окружений. Поле `main` используется для серверного бандла, а `browser` для клиентского:
+Next, in `package.json`, you need to tell the bundler which code to use for different environments. The `main` field is used for the server bundle, and the `browser` field is used for the client bundle:
 
 ```json
 {
@@ -119,28 +120,28 @@ export const LIBRARY_CONSTANT = 'CLIENT_SIDE_LIBRARY';
 }
 ```
 
-После публикации библиотеки, можно импортировать ее в tramvai приложение, и не заботиться о том, какую именно реализацию мы получим:
+After publishing the library, you can import it into the tramvai application, and not worry about which implementation we get:
 
 ```javascript
 import { LIBRARY_CONSTANT } from 'library';
 
-// при запуске приложения через tramvai start, увидим 'SERVER_SIDE_LIBRARY' в терминале, и 'CLIENT_SIDE_LIBRARY' в консоли браузера
+// when starting the application via tramvai start, we will see 'SERVER_SIDE_LIBRARY' in the terminal, and 'CLIENT_SIDE_LIBRARY' in the browser console
 console.log(LIBRARY_CONSTANT);
 ```
 
-### tramvai модули
+### tramvai modules
 
-Новый функционал в tramvai приложение добавляется с помощью модулей, и как правило, поведение этих модулей кардинально отличается в разных окружениях, например:
+New functionality in the tramvai application is added using modules, and as a rule, the behavior of these modules is radically different in different environments, for example:
 
-- Рендеринг приложения в строку на сервере и гидрация реального DOM на клиенте
-- Запуск https сервера
-- Инициализация service worker'а
+- Rendering the application to a string on the server and hydrating the real DOM on the client
+- Start https server
+- Service worker initialization
 
-По этой причине, в репозитории tramvai, стандартный шаблон tramvai модуля, генерируемый через команду `npm run generate:module`, сразу разделяет точки входа в модуль на `server.js` и `client.js` , с помощью `package.json`.
+For this reason, in the tramvai repository, the standard tramvai module template generated via the `npm run generate: module` command immediately separates the module entry points into `server.js` and `client.js` using `package.json`
 
-Разберем это на примере создания модуля, который добавляет в приложение сервис для работы с `cookie`:
+Let's analyze this using the example of creating a module that adds a service to the application for working with `cookie`:
 
-Этот сервис должен иметь общий интерфейс:
+This service should have a common interface:
 
 ```tsx
 export interface ICookie {
@@ -149,11 +150,11 @@ export interface ICookie {
 }
 ```
 
-И разные реализации для серверного и клиентского окружения:
+And different implementations for server and client environments:
 
 ```tsx
 // src/cookie.server.ts
-// серверная реализация требует объекты Request и Response для работы с куками
+// server-side implementation requires Request and Response objects to work with cookies
 export class Cookie implements ICookie {
   constructor({ req, res }) {
     // ...
@@ -169,7 +170,7 @@ export class Cookie implements ICookie {
 
 ```tsx
 // src/cookie.client.ts
-// клиентская реализация обращается напрямую к объекту Window
+// the client implementation accesses the Window object directly
 export class Cookie implements ICookie {
   get(key) {
     // ...
@@ -180,7 +181,7 @@ export class Cookie implements ICookie {
 }
 ```
 
-Добавляем сервис в DI с помощью модулей:
+Add a service to DI using modules:
 
 ```tsx
 // src/server.ts
@@ -221,7 +222,7 @@ import { Cookie } from './cookie.client';
 export class CookieModule {}
 ```
 
-Настраиваем `package.json`:
+Configure `package.json`:
 
 ```json
 {
@@ -233,7 +234,7 @@ export class CookieModule {}
 }
 ```
 
-После импорта модуля в приложение, мы получаем универсальный доступ к cookies, и не думаем про окружение, при использовании:
+After importing the module into the application, we get universal access to cookies, and do not think about the environment when using:
 
 ```tsx
 import { createApp, commandLineListTokens, provide } from '@tramvai/core';

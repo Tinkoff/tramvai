@@ -1,0 +1,186 @@
+{
+  "$schema": "../../node_modules/@tramvai/cli/schema.json",
+  "projects": {
+    "actions-execution": {
+      "name": "actions-execution",
+      "root": "actions-execution",
+      "type": "application",
+      "commands": {
+        "build": {
+          "options": {
+            "server": "actions-execution/index.ts"
+          }
+        }
+      }
+    },
+    "actions-conditions": {
+      "name": "actions-conditions",
+      "root": "actions-conditions",
+      "type": "application",
+      "commands": {
+        "build": {
+          "options": {
+            "server": "actions-conditions/index.ts"
+          }
+        }
+      }
+    },
+    "feature-toggle-async": {
+      "name": "feature-toggle-async",
+      "root": "feature-toggle-async",
+      "type": "application",
+      "commands": {
+        "build": {
+          "options": {
+            "server": "feature-toggle-async/index.ts"
+          }
+        }
+      }
+    },
+    "react-query-usage": {
+      "name": "react-query-usage",
+      "root": "react-query-usage",
+      "type": "application",
+      "commands": {
+        "build": {
+          "options": {
+            "server": "react-query-usage/index.ts"
+          }
+        }
+      }
+    },
+    "render-add-resources": {
+      "name": "render-add-resources",
+      "root": "render-add-resources",
+      "type": "application",
+      "commands": {
+        "build": {
+          "options": {
+            "server": "render-add-resources/index.tsx"
+          }
+        }
+      }
+    },
+    "router-static-routes": {
+      "name": "router-static-routes",
+      "root": "router-static-routes",
+      "type": "application",
+      "commands": {
+        "build": {
+          "options": {
+            "server": "router-static-routes/index.tsx"
+          }
+        }
+      }
+    },
+    "router-navigate": {
+      "name": "router-navigate",
+      "root": "router-navigate",
+      "type": "application",
+      "commands": {
+        "build": {
+          "options": {
+            "server": "router-navigate/index.tsx"
+          }
+        }
+      }
+    },
+    "router-not-found": {
+      "name": "router-not-found",
+      "root": "router-not-found",
+      "type": "application",
+      "commands": {
+        "build": {
+          "options": {
+            "server": "router-not-found/index.tsx"
+          }
+        }
+      }
+    },
+    "router-not-found-custom-status": {
+      "name": "router-not-found-custom-status",
+      "root": "router-not-found-custom-status",
+      "type": "application",
+      "commands": {
+        "build": {
+          "options": {
+            "server": "router-not-found-custom-status/index.tsx"
+          }
+        }
+      }
+    },
+    "router-guards": {
+      "name": "router-guards",
+      "root": "router-guards",
+      "type": "application",
+      "commands": {
+        "build": {
+          "options": {
+            "server": "router-guards/index.tsx"
+          }
+        }
+      }
+    },
+    "router-action-error": {
+      "name": "router-action-error",
+      "root": "router-action-error",
+      "type": "application",
+      "commands": {
+        "build": {
+          "options": {
+            "server": "router-action-error/index.tsx"
+          }
+        }
+      }
+    },
+    "ssr-async-components": {
+      "name": "ssr-async-components",
+      "root": "ssr-async-components",
+      "type": "application",
+      "commands": {
+        "build": {
+          "options": {
+            "server": "ssr-async-components/index.ts"
+          }
+        }
+      }
+    },
+    "ssr-dynamic-components": {
+      "name": "ssr-dynamic-components",
+      "root": "ssr-dynamic-components",
+      "type": "application",
+      "commands": {
+        "build": {
+          "options": {
+            "server": "ssr-dynamic-components/index.ts"
+          }
+        }
+      }
+    },
+    "server-add-path-handler": {
+      "name": "server-add-path-handler",
+      "root": "server-add-path-handler",
+      "type": "application",
+      "commands": {
+        "build": {
+          "options": {
+            "server": "server-add-path-handler/index.ts"
+          }
+        }
+      }
+    },
+    "server-add-file-api": {
+      "name": "server-add-file-api",
+      "root": "server-add-file-api",
+      "type": "application",
+      "commands": {
+        "build": {
+          "options": {
+            "server": "server-add-file-api/index.ts",
+            "serverApiDir": "server-add-file-api/papi"
+          }
+        }
+      }
+    }
+  }
+}

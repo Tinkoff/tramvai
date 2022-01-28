@@ -7,7 +7,7 @@ import dirTree from 'directory-tree';
 import rimraf from 'rimraf';
 
 const bin = join(__dirname, '../bin/platform.js');
-const examplesRoot = join(__dirname, '../../../examples');
+const examplesRoot = join(__dirname, '../../../tinkoff-examples');
 const examplesList = ['module', 'package', 'react-app'];
 
 const normalizePath = (pth: string) => pth.replace(/\\/g, '/');

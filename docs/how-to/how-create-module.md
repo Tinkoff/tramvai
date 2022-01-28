@@ -1,19 +1,19 @@
 ---
 id: how-create-module
-title: Как создать модуль?
+title: How to create a module?
 ---
 
-Рассмотрим на основе кейса: у нас появилась задача создать модуль, который для каждого клиента проставляет `X-Frame-Options`
+Let's use a case study: we have the task of creating a module that, for each client, puts `X-Frame-Options` header
 
-В общем виде создание модуля можно разделить на несколько этапов:
+In general, the creation of a module can be divided into several stages:
 
-1. Создаем пустой модуль
-2. Добавляем необходимые провайдеры
-3. Подключаем модуль в приложение
+1. Create an empty module
+2. Add the necessary providers
+3. Include the module into the application
 
-### Создаем пустой модуль
+### Create an empty module
 
-Создаем базовый модуль, для этого создаем пустой класс `SecurityModule` и подключаем декоратор `module` который необходим для модулей и в который мы будем добавлять интеграции с приложением.
+We create a basic module, to do this we create an empty class `SecurityModule` and connect the decorator `Module` which is required for modules and in which we will add integrations with the application.
 
 ```tsx
 import { Module } from '@tramvai/core';
@@ -24,11 +24,11 @@ import { Module } from '@tramvai/core';
 export class SecurityModule {}
 ```
 
-Модуль уже можно подключить в приложение, но он не будет ничего делать.
+The module can already be plugged into the application, but it won't do anything.
 
-### Добавляем провайдеры
+### Adding providers
 
-Для этого нам необходимо добавить провайдеры в поле `providers`. У нас была задача добавить хэдеры, для этого мы будем использовать `commandLineListTokens`, что бы выполнять действия для каждого клиента и будем использовать `responseManager` в который сможем записать информацию о хэдерах.
+To do this we need to add providers in the `providers` field. We had the task to add the headers, for that we will use `commandLineListTokens` to perform actions for each client and we will use `responseManager` to which we can write the information about the headers.
 
 ```tsx
 import { Module, commandLineListTokens, RESPONSE_MANAGER_TOKEN, provide } from '@tramvai/core';
@@ -51,13 +51,13 @@ import { Module, commandLineListTokens, RESPONSE_MANAGER_TOKEN, provide } from '
 export class SecurityModule {}
 ```
 
-Мы реализовали новый мульти-провайдер, который имеет зависимости и создается через `useFactory`
+We have implemented a new multi-provider that has dependencies and is created through `useFactory`
 
-После подключения модуля в приложение, для каждого клиента сначала выполнится функция `useFactory` с переданными `deps`, и после этого вызовется функция `securityHeader`, в которой мы в полученную зависимость запишем данные, и тем самым выполним нашу цель.
+After plugging the module into the application, for each client the `useFactory` function will be executed first with the `deps` passed and then the `securityHeader` function will be called, in which we will write the data into the obtained dependency and thus fulfill our goal.
 
-### Подключаем в приложение наш новый модуль
+### Include our new module in the application
 
-Теперь осталось подключить модуль в приложение, что бы он смог добавить свою реализацию.
+Now it remains to plug the module into the application so that it can add its implementation:
 
 ```tsx
 import { createApp } from '@tramvai/core';
@@ -68,9 +68,7 @@ createApp({
 });
 ```
 
-После этого модуль добавит свою реализацию и начнет выполняться.
-
-Мы можем добавить модуль не только в приложение, но и в другой модуль. Для этого нужно передать в блок `imports` и тогда при подключении модуля `MyCommonModule` автоматически подключится и `SecurityModule`
+We can add the module not only to the application, but also to another module. To do this, we need to pass in the `imports` block and then when the `MyCommonModule` is connected, the `SecurityModule` will also be automatically connected
 
 ```tsx
 import { Module } from '@tramvai/core';
@@ -83,10 +81,10 @@ import { SecurityModule } from '@tramvai/module-security';
 export class MyCommonModule {}
 ```
 
-### Итог
+### Summary
 
-Был создан `SecurityModule` который будет вызываться для каждого клиента и будет добавлять необходимые хэдеры
+A `SecurityModule` was created, which will be called for each client and will add the necessary headers
 
-- [Подробная дока по модулям](concepts/module.md)
-- [Подробная дока по createApp](references/tramvai/create-app.md)
-- [Подробная дока по DI](concepts/di.md)
+- [Documentation about modules](concepts/module.md)
+- [Documentation about createApp](references/tramvai/create-app.md)
+- [Documentation about DI](concepts/di.md)

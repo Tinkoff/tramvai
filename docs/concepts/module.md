@@ -1,19 +1,19 @@
 ---
 id: module
-title: Модуль
+title: Module
 ---
 
-Модули — это реализация какого-либо ограниченного функционала приложения с использованием DI системы и провайдеров.
+Modules are the implementation of some limited functionality of the application using the DI system and providers.
 
-## Жизненный цикл модулей
+## Module life cycle
 
-### Инициализация приложения
+### Initializing the application
 
-При создании приложения происходит обработка всех задекларированных [провайдеров](concepts/provider.md), которые попадут в общий [DI](concepts/di.md) контейнер.
+When creating an application, all declared [providers](concepts/provider.md) are processed, which will fall into the general [DI](concepts/di.md) container.
 
-### Обработка запросов клиента
+### Handling customer requests
 
-Экземпляр модуля создается один раз на сервере (и используется для всех клиентов), после инициализации приложения, и один раз в браузере, после загрузки страницы и инициализации клиентской части. Эти инстансы содержат экземпляры классов, которые были переданы в `deps`, и будут переданы в конструктор модуля:
+The module is instantiated once on the server (and used for all clients), after initializing the application, and once in the browser, after loading the page and initializing the client side. These instances contain instances of the classes that were passed to `deps` and will be passed to the module's constructor:
 
 ```tsx
 import { Module } from '@tramvai/core';
@@ -31,9 +31,9 @@ class TestModule {
 }
 ```
 
-## Пример модуля
+## Example module
 
-Основной функционал модуля находится в списке `providers`. Каждый провайдер либо добавляет новый функционал, например делает доступным во всех остальных модулях констатное значение `New` под ключем `Token`:
+The main functionality of the module is in the `providers` list. Each provider either adds new functionality, for example, makes available in all other modules the constant value `New` under the key `Token`:
 
 ```tsx
 import { Module, provide } from '@tramvai/core';
@@ -49,7 +49,7 @@ import { Module, provide } from '@tramvai/core';
 class TestModule {}
 ```
 
-Либо использует токены из других модулей, например добавление нового параметра окружения через токен `ENV_USED_TOKEN`, который обработает EnvModule:
+Or it uses tokens from other modules, for example, adding a new environment parameter via the `ENV_USED_TOKEN` token, which will be processed by the EnvModule:
 
 ```tsx
 import { Module, provide } from '@tramvai/core';
@@ -73,11 +73,11 @@ import { ENV_USED_TOKEN } from '@tramvai/module-common';
 class TestModule {}
 ```
 
-## Импорт в модуле сторонних модулей
+## Import in module third party modules
 
-Модули могут внутри себя импортировать провайдеры сторонних модулей. Тем самым позволяя строить цепочку взаимосвязанных модулей.
+Modules can be imported internally by providers of third-party modules. Thus, allowing you to build a chain of interconnected modules.
 
-Пример кода
+Code example
 
 ```tsx
 import { Module } from '@tramvai/core';
@@ -90,16 +90,16 @@ import { LogModule } from '@tramvai/module-log';
 class TestModule {}
 ```
 
-В этом случае, при инициализации TestModule, предварительно произойдет инициализация провайдеров из модуля ModuleLogger и вложенных imports, если они присутствуют.
+In this case, when initializing TestModule, the providers from the ModuleLogger module and nested imports, if present, will be initialized beforehand.
 
-## Динамические модули
+## Dynamic modules
 
-Конфигурировать модули можно двумя способами, причем оба способа можно использовать одновременно:
+Modules can be configured in two ways, and both methods can be used simultaneously:
 
-- передача параметров в `module`
-- возврат параметров в статическом методе `forRoot`
+- passing parameters to `module`
+- return parameters in the static method `forRoot`
 
-Пример динамического модуля, в котором мы добавим в DI зависимости `metaGenerate` первым способом и `meta-list` вторым, причем одна из них зависит от другой:
+An example of a dynamic module, in which we will add dependencies `metaGenerate` to the DI in the first way and `meta-list` in the second, and one of them depends on the other:
 
 ```tsx
 import { Module, provide } from '@tramvai/core';
@@ -132,18 +132,18 @@ export class SeoModule {
 }
 ```
 
-Статичный метод должен вернуть объект с интерфейсом:
+A static method must return an object with an interface:
 
 ```tsx
 type staticModule = {
-  mainModule: Module; // Ссылка на основной модуль, из которого мы вощьмем всю основную информацию
-  providers: Provider[]; // Провайдеры которые будут добавлены в DI
+  mainModule: Module; // Link to the main module, from which we will extract all the basic information
+  providers: Provider []; // Providers to be added to DI
 };
 ```
 
-Теперь этот модуль содержит статичный метод `forRoot` который к стандартному модулю `SeoModule` добавляет дополнительные `providers`. Без этой конструкции нам нужно было бы явно прописывать в приложении провайдеры. Все данные, которые были добавлены в `SeoModule` будут наследованы и расширены.
+Now this module contains a static method `forRoot` which adds additional `providers` to the standard `SeoModule` module. Without this construct, we would need to explicitly write providers in the application. All data that has been added to the `SeoModule` will be inherited and expanded.
 
-Теперь мы можем в приложении или в других модулях вызвать наш статичный метод. И результат выполнения `forRoot` будет добавлен в `DI`
+Now we can call our static method in the application or in other modules. And the result of execution of `forRoot` will be added to` DI`
 
 ```tsx
 import { Module } from '@tramvai/core';
@@ -156,41 +156,41 @@ import { metaFromConfig } from './metaFromConfig';
 export class ApplicationModule {}
 ```
 
-При этом стоит учитывать, что `forRoot` конструкция должна только упрощать использование модуля и мы должны так же поддерживать работоспособность модуля через обычное конфигурирование `providers`
+It should be borne in mind that the `forRoot` construction should only simplify the use of the module and we should also maintain the functionality of the module through the usual configuration of `providers`
 
-## Рекомендации для модулей
+## Recommendations for modules
 
-### Низкая связанность
+### Low cohesion
 
-Желательно модули строить так, что бы они не зависели прямо от других модулей. Связанность только должна происходить на основе интерфейсов и с возможностью замены. Иначе нельзя будет просто заменить модули и произвести рефакторинг
+It is advisable to build modules so that they do not directly depend on other modules. Coupling only needs to be interface-based and replaceable. Otherwise, it will not be possible to simply replace modules and refactor.
 
-### Не большой размер
+### Small size
 
-Чем больше модуль, тем больше кода он содержит внутри и тем больше потенциально он имеет связей и причин для изменений.
+The larger the module, the more code it contains inside and the more potentially it has connections and reasons for changes.
 
-По этому причине модуль будет сложнее менять и будет больше шанс для поломки функционала при изменениях.
+For this reason, the module will be more difficult to change and there will be a greater chance of breaking functionality when changed.
 
-Желательно, что бы модули реализовывали какую-то не большую часть функциональности.
+It is desirable that the modules implement some small part of the functionality.
 
-### Опциональные зависимости/конфигурирование
+### Optional dependencies / configuration
 
-Модулем удобно пользоваться, если он не требует какое либо конфигурирование и по дефолту работает нормально. Но, если понятно, что для некоторых приложений и кейсов нужна будет дополнительная настройка поведения, то желательно использовать опциональные зависимости, которые смогут определить в приложении.
+It is convenient to use the module if it does not require any configuration and works normally by default. But, if it is clear that for some applications and cases additional behavior setting will be needed, then it is advisable to use optional dependencies that can be defined in the application.
 
-Стоит помечать опциональными зависимостями не критичный функционал, который не обязательно нужен модулю. Для того, чтобы можно было не реализовывать интерфейсы и выкинуть часть логики. К примеру, логирование
-
-```tsx
-// @todo пример опциональной зависимости
-```
-
-### Отладка модулей
-
-Рекомендуется указывать в документации модуля уникальный идентификатор/namespace логгера, который используется в этом модуле. Пример идентификатора модуля для `@tramvai/module-server`:
+It is worth marking non-critical functionality with optional dependencies, which the module does not necessarily need. So that you can not implement interfaces and throw out some of the logic. For example, logging
 
 ```tsx
-const log = logger('server'); // получаем экземпляр logger по токену LOGGER_TOKEN
+// @todo example of optional dependency
 ```
 
-## Дополнительные ссылки
+### Debugging Modules
 
-- Про [DI контейнер](concepts/di.md)
-- Про [провайдеры](concepts/provider.md)
+It is recommended to specify in the module documentation the unique identifier / namespace of the logger, which is used in this module. Example module id for `@tramvai/module-server`:
+
+```tsx
+const log = logger ('server'); // get a logger instance by LOGGER_TOKEN token
+```
+
+## Additional links
+
+- About [DI container](concepts/di.md)
+- About [providers](concepts/provider.md)

@@ -1,21 +1,21 @@
 ---
 id: how-create-action
-title: Как создать экшен?
+title: How to create an action?
 ---
 
-Рассмотрим на основе кейса: у нас на странице нужно выводить информацию о процентах по депозитам. При этом:
+Let's consider next case: on our page we need to display information about interest on deposits. Wherein:
 
-- эти числа часто меняются и для клиента сделали метод в API, в который мы должны ходить за данными.
-- у нас есть SEO и нам нужно отдавать эти данные в HTML странице
+- these numbers change often and for the client we made a method in the API, into which we have to go for data.
+- we have SEO and we need to give this data in the HTML page
 
-Мы рассмотрим следующие этапы:
+We'll cover the following steps:
 
-1. Создание экшена
-2. Подключение в приложении
+1. Creating an action
+2. Connection in the application
 
-## Создание экшена
+## Create an action
 
-Подключаем `createAction` и добавляем функцию по загрузки данных из api и отправки данных в store.
+Import `createAction` and write a function to load data from api and send data to store.
 
 ```tsx
 import { createAction } from '@tramvai/core';
@@ -33,11 +33,11 @@ export const loadDepositAction = createAction({
 });
 ```
 
-Мы создали экшен, которому требуется для работы провайдер `tinkoffApiClient`, этот экшен делает запрос за данными и сохраняет полученные данные в стор.
+We have created an action that requires the `tinkoffApiClient` provider to work, this action makes a request for the data and saves the received data to the side.
 
-## Выполнение для конкретной страницы
+## Run action for a specific page
 
-Мы создали экшен и хотим подключить его в приложение. Нам важно, что бы экшен выполнялся на сервере, и сервер дожидался выполнения. При этом данные нужны только на конкретной странице, поэтому мы добавляем его в статическое поле `actions` нужной страницы.
+We have created an action and want to connect it to the application. It is important for us that the action is executed on the server, and the server is waiting for execution. In this case, the data is needed only on a specific page, so we add it to the static `actions` field of the desired page.
 
 ```javascript
 import react, { Component } from 'react';
@@ -56,9 +56,9 @@ class DepositPage extends Component {
 }
 ```
 
-После этого, при открытии роута пользователем, сервер автоматически запустит экшен привязанный к DepositPage и загрузится данные
+After that, when the user opens the route, the server will automatically launch the action linked to DepositPage and the data will be loaded
 
-## Что еще стоит прочитать
+## What else is worth reading
 
-- [О createAction](references/tramvai/create-action.md)
-- [Как работают экшены](concepts/action.md)
+- [About createAction](references/tramvai/create-action.md)
+- [How do actions work](concepts/action.md)

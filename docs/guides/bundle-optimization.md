@@ -1,21 +1,21 @@
 ---
 id: bundle-optimization
-title: Оптимизация бандла
+title: Bundle optimization
 ---
 
-[@tramvai/cli](references/cli/base.md) использует `webpack` для сборки приложения, и настраивает большинство известных оптимизация для production сборки - минификация и обфускация кода, оптимизация CSS и изображений, code splitting, хэши для эффективного кэширования статики - и позволяет настраивать некоторые этапы оптимизации.
+[@tramvai/cli](references/cli/base.md) use `webpack` for building an application, and configures most of the well-known optimizations for production builds - code minification and obfuscation, CSS and image optimization, code splitting, hashes for efficient static caching - and allows you to customize some optimization stages.
 
 ## Code Splitting
 
-Предоставление клиенту минимально необходимого JavaScript кода является одной из самый важных вещей в оптимизации web-приложений. Разделение точек входа при сборке бандлов и динамический `import` модулей, и использование этих банлов на основе роутинга / пользовательских действий - основные механизмы разделения кода. При сборке множества бандлов и динамических чанков возникает проблема дублирования кода между ними, которую позволяет решить [SplitChunksPlugin](https://webpack.js.org/plugins/split-chunks-plugin/)
+Providing the client with the minimum required JavaScript code is one of the most important things in optimizing web applications. Separating entry points when building bundles and dynamically importing modules and using these bans based on routing / custom actions are the main mechanisms for splitting code. When assembling many bundles and dynamic chunks, the problem of code duplication between them arises, which allows you to solve [SplitChunksPlugin](https://webpack.js.org/plugins/split-chunks-plugin/)
 
-Tramvai приложения имеют ряд особенностей - единая точнка входа (`platform.js` на выходе), динамический импорт на уровне каждого [bundle](concepts/bundle.md), отдельная сборка vendor чанка. Для приложения, имеющего несколько tramvai бандлов под разные страницы, каждая страница будет загружать как минимум чанк `platform.js` с общим кодом фреймворка и модулей, и чанк `{bundleName}.js` с уникальным кодом для страницы. Дубликаты могут быть в чанках, созданных под tramvai бандлы (например компоненты ui-kit), и этот код желательно вынести в общие чанки.
+Tramvai applications have a number of features - a single entry point (`platform.js` at the exit), dynamic import at the level of each [bundle](concepts/bundle.md), a separate assembly of the vendor chunk. For an application that has several tramvai bundles for different pages, each page will load at least the `platform.js` chunk with the common framework and modules code, and the `{bundleName} .js` chunk with the unique code for the page. Duplicates can be in chunks created under tramvai bundles (for example, ui-kit components), and it is desirable to move this code into common chunks.
 
-CLI предлагает три стратегии для разделения кода - один общий common чанк, множество granular чанков, и отключение SplitChunksPlugin.
+The CLI offers three strategies for splitting code - one common chunk, many granular shared chunks, and disabling the SplitChunksPlugin.
 
-### Отключение SplitChunksPlugin
+### Disabling SplitChunksPlugin
 
-Для приложений, которые имеют только один tramvai бандл на все страницы, либо разделяют бандл для десктопной и мобильной версии, в большинстве случаев не требуется разделение кода, и стоит выставить опцию `"commonChunk": false`:
+For applications that have only one tramvai bundle for all pages, or separate the bundle for the desktop and mobile versions, in most cases, code separation is not required, and it is worth setting the option `"commonChunk": false`:
 
 ```json
 {
@@ -33,15 +33,16 @@ CLI предлагает три стратегии для разделения �
 }
 ```
 
-**Почему не оставить common чанк, если он не мешает?** Проблема в сторонных библиотеках, которые могут использовать динамический `import` под капотом, при этом приложение может не использовать этот код, но он может попасть в common чанк, который будет загружаться на каждой странице.
+**Why not leave the common chunk if it doesn't interfere?** The problem is in third-party libraries that can use dynamic `import` under the hood, while the application may not use this code, but it may end up in the common chunk, which will be loaded on every page.
 
-Также, если приложение обслуживает множество страниц, и разделяет код на уровне page компонентов через [@tramvai/react lazy](how-to/how-create-async-component.md), имеет смысл рассмотреть другие стратегии, т.к. появятся дубликаты в динамических чанках страниц.
+Also, if your application is serving multiple pages and separating the code at the page component level via [@tramvai/react lazy](how-to/how-create-async-component.md), it makes sense to consider other strategies, since duplicates will appear in dynamic chunks of pages.
 
 ### Common Chunk
 
-Стратегия включена в CLI по умолчанию, весь общий код из бандлов и динамических чанков выносится в `common-chunk.js`. Параметр `commonChunkSplitNumber` позволяет указать, какое минимальное количество чанков должно использовать этот код, что бы вынести его в common.
+The strategy is included in the CLI by default, all common code from bundles and dynamic chunks is moved to common-chunk.js. The `commonChunkSplitNumber` parameter allows you to specify the minimum number of chunks this code should use in order to move it to common.
 
-Для приложений с большим количеством бандлов, `common-chunk.js` может включать огромное количество кода, которое не нужно на каждой отдельной странице, и стоит либо увеличить `commonChunkSplitNumber`, либо использовать стратегию Granular Chunks. Пример конфигурации для увеличения минимального количества чанков, использующих общий код:
+For applications with a lot of bundles, `common-chunk.js` can include a huge amount of code that is not needed on every single page, and it is worth either increasing the `commonChunkSplitNumber` or using the Granular Chunks strategy. Example configuration to increase the minimum number of chunks using shared code:
+
 
 ```json
 {
@@ -59,17 +60,17 @@ CLI предлагает три стратегии для разделения �
 }
 ```
 
-**Как выбрать подходящее число `commonChunkSplitNumber`?** Как вариант, число можно вычислить по формулам `commonChunkSplitNumber = bundles / 3` или `commonChunkSplitNumber = bundles / 2`, где bundles - это количество tramvai бандлов, которые подключаются в конкретное приложение, но скорее всего каждое приложение будет лучше рассматривать отдельно.
+**How to choose a suitable number of `commonChunkSplitNumber`?** Alternatively, the number can be calculated using the formulas `commonChunkSplitNumber = bundles / 3` or `commonChunkSplitNumber = bundles / 2`, where bundles is the number of tramvai bundles that are connected to a specific application, but most likely each application will be better viewed separately.
 
 ### Granular Chunks
 
-[Подробное описание использования стратегии в Next.js и Gatsby.js](https://web.dev/granular-chunking-nextjs/)
+[A detailed description of using the strategy in Next.js and Gatsby.js](https://web.dev/granular-chunking-nextjs/)
 
-Стратегия включается через параметр `granularChunks`, позволяет вынести общий код во множество мелких чанков, для эффективного кэширования общего кода, и загрузки на каждую страницу только нужного кода. Баланс достигается за счет того, что общий код как минимум между двумя (настройки по умолчанию) чанками выносится в отдельный чанк с уникальным именем, и таких чанков будет от одного на все остальные, до одного на каждые два чанка.
+The strategy is enabled through the `granularChunks` parameter, allows you to move the common code into many small chunks, for efficient caching of the common code, and loading only the necessary code on each page. The balance is achieved due to the fact that the common code between at least two (default settings) chunks is placed in a separate chunk with a unique name, and there will be such chunks from one for all the others, to one for every two chunks.
 
-Недостатки этой стратегии: на одну страницу может загружаться значительно больше js скриптов, до нескольких десятков, что не значительно влияет на производительность при использовании HTTP/2; и менее эффективная gzip/brotli архивация, что не так заметно по сравнению с уменьшением количества исходного кода.
+Disadvantages of this strategy: significantly more js scripts can be loaded on one page, up to several dozen, which does not significantly affect performance when using HTTP / 2; and less efficient gzip / brotli archiving, which is not so noticeable compared to the reduction in the amount of source code.
 
-Параметр `granularChunksSplitNumber` позволяет переопределить число общих чанков по умолчанию (`2`), если по каким-то причинам необходимо уменьшить количество итоговых чанков:
+The `granularChunksSplitNumber` parameter allows you to override the default number of shared chunks (`2`), if for some reason you need to reduce the number of resulting chunks:
 
 ```json
 {

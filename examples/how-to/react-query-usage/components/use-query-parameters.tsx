@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createQuery, useQuery } from '@tramvai/react-query';
-import { TINKOFF_API_SERVICE } from '@tramvai/module-api-clients';
+import { FAKE_API_CLIENT } from '../../fakeApiClient';
 
 const query = createQuery({
   key: (parameter: string) => ['api-group', parameter],
@@ -13,7 +13,7 @@ const query = createQuery({
     return payload;
   },
   deps: {
-    apiClient: TINKOFF_API_SERVICE,
+    apiClient: FAKE_API_CLIENT,
   },
 });
 

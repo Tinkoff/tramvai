@@ -16,13 +16,6 @@
           },
           {
             "doc": {
-              "id": "browser-check",
-              "title": "browser-check"
-            },
-            "path": "browser-check/README.md"
-          },
-          {
-            "doc": {
               "id": "cache-warmup",
               "title": "cache-warmup"
             },
@@ -62,13 +55,6 @@
               "title": "deps-graph"
             },
             "path": "deps-graph/README.md"
-          },
-          {
-            "doc": {
-              "id": "devTools",
-              "title": "devTools"
-            },
-            "path": "devTools/README.md"
           },
           {
             "doc": {
@@ -121,24 +107,10 @@
           },
           {
             "doc": {
-              "id": "mountebank",
-              "title": "mountebank"
-            },
-            "path": "mountebank/README.md"
-          },
-          {
-            "doc": {
               "id": "react-query",
               "title": "react-query"
             },
             "path": "react-query/README.md"
-          },
-          {
-            "doc": {
-              "id": "referrer",
-              "title": "referrer"
-            },
-            "path": "referrer/README.md"
           },
           {
             "doc": {
@@ -286,13 +258,6 @@
               "title": "server"
             },
             "path": "server/README.md"
-          },
-          {
-            "doc": {
-              "id": "yandex-maps",
-              "title": "yandex-maps"
-            },
-            "path": "yandex-maps/README.md"
           }
         ]
       }

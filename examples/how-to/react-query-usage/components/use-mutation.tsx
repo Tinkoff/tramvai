@@ -1,6 +1,6 @@
 import React from 'react';
 import { createMutation, useMutation } from '@tramvai/react-query';
-import { TINKOFF_API_SERVICE } from '@tramvai/module-api-clients';
+import { FAKE_API_CLIENT } from '../../fakeApiClient';
 
 const mutation = createMutation({
   key: 'post',
@@ -14,7 +14,7 @@ const mutation = createMutation({
     return payload;
   },
   deps: {
-    apiClient: TINKOFF_API_SERVICE,
+    apiClient: FAKE_API_CLIENT,
   },
 });
 // eslint-disable-next-line import/no-default-export

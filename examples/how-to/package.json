@@ -1,0 +1,37 @@
+{
+  "name": "@tinkoff-test-app/tramvai-how-to",
+  "version": "0.0.0-stub",
+  "dependencies": {
+    "@tinkoff/roles": "0.0.0-stub",
+    "@tinkoff/utils": "^2.1.1",
+    "@tinkoff/errors": "0.0.0-stub",
+    "@tramvai/core": "0.0.0-stub",
+    "@tramvai/module-common": "0.0.0-stub",
+    "@tramvai/module-http-client": "0.0.0-stub",
+    "@tramvai/module-dev-tools": "0.0.0-stub",
+    "@tramvai/module-log": "0.0.0-stub",
+    "@tramvai/module-mocker": "0.0.0-stub",
+    "@tramvai/module-react-query": "0.0.0-stub",
+    "@tramvai/module-render": "0.0.0-stub",
+    "@tramvai/module-router": "0.0.0-stub",
+    "@tramvai/module-server": "0.0.0-stub",
+    "@tramvai/papi": "0.0.0-stub",
+    "@tramvai/react": "0.0.0-stub",
+    "@tramvai/react-query": "0.0.0-stub",
+    "@tramvai/state": "0.0.0-stub",
+    "@tramvai/tokens-router": "0.0.0-stub",
+    "@tramvai/tokens-common": "0.0.0-stub"
+  },
+  "scripts": {
+    "tramvai": "cross-env MOCKER_ENABLED=true tramvai"
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.0"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "private": true,
+  "license": "Apache-2.0"
+}

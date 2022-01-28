@@ -20,14 +20,6 @@
         }
       },
       {
-        "path": "feature-toggle-async/README.md",
-        "priority": 50,
-        "doc": {
-          "id": "feature-toggle-async",
-          "title": "Загрузка асинхронных компонентов в зависимости от feature-toggle"
-        }
-      },
-      {
         "path": "react-query-usage/README.md",
         "priority": 50,
         "doc": {
@@ -41,14 +33,6 @@
         "doc": {
           "id": "ssr-async-components",
           "title": "SSR with async components"
-        }
-      },
-      {
-        "path": "ssr-dynamic-components/README.md",
-        "priority": 50,
-        "doc": {
-          "id": "ssr-dynamic-components",
-          "title": "SSR при использование динамических компонентов"
         }
       },
       {

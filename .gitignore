@@ -37,13 +37,15 @@ stats.modern.json
 webpackAssets.json
 .tmp
 test/tramvai.json
-examples/granular/src/bundles
-examples/granular/src/pages
-examples/granular/src/deps
+tinkoff-examples/granular/src/bundles
+tinkoff-examples/granular/src/pages
+tinkoff-examples/granular/src/deps
 
 # package-lock
 examples/*/package-lock.json
+tinkoff-examples/*/package-lock.json
 packages/**/package-lock.json
+tinkoff-packages/**/package-lock.json
 tsconfig.tsbuildinfo
 
 smokeYarn

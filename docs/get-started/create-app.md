@@ -1,15 +1,15 @@
 ---
 id: create-app
-title: Создаем приложение на tramvai
+title: Сreate an application on tramvai
 ---
 
-В этом уроке мы создадим новое приложение с помощью фреймворка tramvai.
+In this tutorial, we will create a new application using the tramvai framework.
 
-Для быстрой разработки мы будем использовать консольную утилиту **`@tramvai/cli`**
+For quick development, we will use the console utility **`@tramvai/cli`**
 
 <p>
 <details>
-<summary>Demo приложение доступно на Codesandbox</summary>
+<summary>Demo app available on Codesandbox</summary>
 
 <iframe
   src="https://codesandbox.io/embed/tramvai-new-qgk90?fontsize=14&hidenavigation=1&theme=dark"
@@ -22,62 +22,61 @@ title: Создаем приложение на tramvai
 </details>
 </p>
 
-### Настройка системы
+### System setup
 
-Для работы tramvai и @tramvai/cli необходим [NodeJS версии 10+](https://nodejs.org/en/download)
+[NodeJS version 10+](https://nodejs.org/en/download) is required for tramvai and @tramvai/cli to work
 
-### Установка tramvai CLI
+### Install tramvai CLI
 
-Мы будем использовать tramvai CLI для генерации нового проекта и запуска в режиме разработки
+We will use the tramvai CLI to generate a new project and run in development mode
 
 ```bash
 npm i @tramvai/cli -g
 ```
 
-После этого в терминале будет доступна команда `tramvai`
+After that, the command will be available in the terminal `tramvai`
 
-### Генерация приложения
+### Generate application
 
-Теперь нам нужно сгенерировать приложение с помощью `tramvai`
+Now we need to generate the application with `tramvai`
 
 ```bash
 tramvai new new-app
 ```
 
-После запуска, необходимо выбрать настройки - шаблон проекта, настройки CI и пакетный менеджер.
-Для быстрого старта подойдут настройки по умолчанию.
+After starting, you need to select settings - project template, CI settings and package manager.
+For a quick start, the default settings are fine.
 
-Затем команда сгенерирует в директории new-app стартовый проект с базовыми модулями
+Then the command will generate a starter project with basic modules in the new-app directory
 
-### Запуск приложения
+### Run application
 
-Теперь нам нужно запустить наш проект в режиме разработки, для удобной разработки и проверки, что наш проект работает. Для этого выполняем команду
+Now we need to run our project in development mode, for easy development and to check that our project is working.
+To do this, execute the command
 
 ```bash
 cd new-app && npm start
 ```
 
-Эта команда запустит в dev режиме сервер который будет следить за серверным и клиентским кодом.
-После выполнения команды можно зайти по адресу `http://localhost:3000/` и увидеть поднятое чистое приложение
+This command will start a server in dev mode that will monitor the server and client code. After executing the command, you can go to the address `http://localhost:3000/` and see the lifted clean application
 
-### Разбора структуры проекта и процесса инициализации приложения
+### Project structure and application initialization process
 
-Стартовой точкой проекта является `src/index.ts`, который создает экземпляр tramvai приложения и подключает необходимые для работы модули.
-В проекте уже подключены базовые модули, которые реализуют следующий функционал:
+The entry point of the project is `src/index.ts`, which creates an instance of the tramvai application and connects the necessary modules.
+The project has already connected basic modules that implement the following functionality:
 
-- Получение роутов (из админки или статичных роутов)
-- Рендеринг приложения на сервере и клиенте
-- Запуск сервера для приложения
-- Предоставление сервисов для работы с внешними\внутренним API
+- Getting routes (from the admin panel or static routes)
+- Rendering the application on the server and client
+- Starting the server for the application
+- Providing services for working with external / internal API
 
-> При этом не обязательно использовать модули из базового набора tramvai, можно написать свои реализации которые реализуют интерфейсы базовых модулей
+> In this case, it is not necessary to use modules from the base tramvai set, you can write your own implementations that implement the interfaces of the base modules
 
-При старте приложения происходит инициализация зависимостей модули и начинают выполнятся команды из цепочки действий,
-во время которых происходят запросы данных из API, рендеринг, etc.
+When the application starts, the modules' dependencies are initialized and the commands from the chain of actions are executed, during which data requests from the API, rendering, etc. occur.
 
-### Дополнительные ссылки
+### Additional links
 
-По ссылкам можно ознакомиться со структурой проекта и базовыми модулями, необходимыми для полноценной работы приложения.
+The links provide information on the structure of the project and the basic modules required for the full-fledged operation of the application.
 
-- [Структура проекта](get-started/app-structure.md)
-- [Обязательные модули](get-started/core-modules.md)
+- [Project structure](get-started/app-structure.md)
+- [Required modules](get-started/core-modules.md)

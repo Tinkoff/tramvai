@@ -1,40 +1,41 @@
 ---
 id: migration
-title: Автоматические миграции
+title: Automatic migrations
 ---
 
-Автоматические миграции позволяют обновлять код и настройки приложения при обновлении в самом приложении версий трамвайных модулей или пакетов.
+Automatic migrations allow you to update the code and application settings when updating versions of tram modules or packages in the application itself.
 
-## Зачем нужны миграции
+## Why migrations are needed
 
-Иногда в трамвае бывает необходимость внести какие-то ломающие изменения и чтобы упростить такой переход для конечных пользователей используются автоматические миграции, т.к. миграции позволяют перевести кодовую базу приложения на новую версию интерфейсов в автоматическом режиме и практически без участия разработчиков.
+Sometimes in the tram there is a need to make some kind of breaking changes and to simplify such a transition for end users, automatic migrations are used. Migrations allow you to transfer the application codebase to a new version of the interfaces in an automatic mode and practically without the participation of developers.
 
-## Как использовать миграции
+## How to use migrations
 
-Миграции выполняются автоматически при установке новых версий пакетов трамвая. Для сохранения информации об уже выполненных миграциях используется файл `.tramvai-migrate-applied.json` в корне проекта.
+Migrations are performed automatically when new versions of tram packages are installed. The file `.tramvai-migrate-applied.json` in the root of the project is used to save information about migrations that have already been performed.
 
-Всё что остается сделать разработчикам приложений:
+All that remains for application developers to do is:
 
-- изучить доку по [последним миграциям для пакетов](https://tramvai.dev/docs/releases/migration)
-- закомитить изменения в файле `.tramvai-migrate-applied.json`, т.к. в нем сохраняется игформация о выполненных миграциях и лучше его сохранить чтобы не выполнять миграции повторно
-- если после миграций изменился `package.json`, то необходимо выполнить установку пакетов чтобы обновился lock файл в проекте.
-- проревьювить и закомитить все остальные изменения которые произошли в проекте (ревью необходимо т.к. в миграции сложно учесть все кейсы использований, а также результат после преобразования кода может не соответсвовать настройкам линтера в текущем проекте).
-- проверить работу приложения на наличие проблем и внести изменения в соответсвии с докой по миграции
+- study the doc on [latest migrations for packages](https://tramvai.dev/docs/releases/migration)
+- commit changes in the file `.tramvai-migrate-applied.json`, because it saves information about completed migrations and it is better to save it so as not to perform migrations again
+- if after migrations `package.json` has changed, then you need to install packages to update the lock file in the project.
+- review and commit all other changes that have occurred in the project (review is necessary because it is difficult to take into account all use cases in the migration, and also the result after the code transformation may not correspond to the linter settings in the current project).
+- check the application for problems and make changes in accordance with the migration dock
 
-## Как отключить миграции
+## How to disable migrations
 
-Добавить переменную окружения `SKIP_TRAMVAI_MIGRATIONS` перед запуском установки пакетов.
+Add environment variable `SKIP_TRAMVAI_MIGRATIONS` before starting package installation.
 
-## Как работают миграции
+## How migrations work
 
-1. `@tramvai/core` содержит зависимость `@tramvai/tools-migrate`
-1. в `@tramvai/tools-migrate` содержится скрипт который выполняется на 'postinstall'
-1. скрипт выполняет анализ tramvai модулей в 'node_modules' и находим все миграции
-1. дальше проверяется файл `.tramvai-migrate-applied.json` и из него берется список уже выбранных миграций если такой файл есть
-1. выполняется код миграций, которых нет в списке выполненных. Миграции выполняются последовательно
-1. в файл `.tramvai-migrate-applied.json` добавляется информация о только что выполненных миграциях, если файл был до этого, либо этот файл создаётся
+1.`@tramvai/core` contains the dependency `@tramvai/tools-migrate`
+1.`@tramvai/tools-migrate` contains a script that runs on 'postinstall'
+1.script analyzes tramvai modules in 'node_modules' and find all migrations
+1.further the file `.tramvai-migrate-applied.json` is checked and a list of already selected migrations is taken from it if such a file exists
+1.The code of migrations that are not in the list of completed ones is executed. Migrations are performed sequentially
+1.in the file `.tramvai-migrate-applied.json` is added information about the migrations just performed, if the file was before, or this file is created
 
-## Вопросы/ответы
-### Нужно ли хранить `.tramvai-migrate-applied.json` в гите
+## Q/A
 
-Да, иначе при следующих миграциях мы не будем знать какие миграции уже были выполнены и будут произведены повторные миграции
+### Do I need to store `.tramvai-migrate-applied.json` in VCS?
+
+Yes, otherwise, during the next migrations, we will not know which migrations have already been performed and repeated migrations will be performed

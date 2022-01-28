@@ -1,0 +1,34 @@
+{
+  "name": "@tramvai/test-child-app",
+  "version": "0.0.0-stub",
+  "description": "",
+  "main": "lib/index.js",
+  "typings": "src/index.ts",
+  "files": [
+    "lib"
+  ],
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Tinkoff/tramvai.git"
+  },
+  "scripts": {
+    "build": "tramvai-build --for-publish",
+    "watch": "tsc -w",
+    "build-for-publish": "true"
+  },
+  "dependencies": {
+    "@tramvai/child-app-core": "0.0.0-stub",
+    "@tramvai/core": "0.0.0-stub",
+    "@tramvai/test-unit": "0.0.0-stub",
+    "tslib": "^2.0.3"
+  },
+  "devDependencies": {
+    "@tramvai/react": "0.0.0-stub",
+    "react": "^17.0.2"
+  },
+  "peerDependencies": {
+    "@tramvai/module-child-app": "0.0.0-stub"
+  },
+  "license": "Apache-2.0"
+}

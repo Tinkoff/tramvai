@@ -25,7 +25,7 @@
             "path": "../../tokens/child-app"
         },
         {
-            "path": "../devTools"
+            "path": "../../../tinkoff-packages/modules/dev-tools"
         }
     ]
 }

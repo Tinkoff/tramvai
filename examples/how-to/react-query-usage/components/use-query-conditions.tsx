@@ -1,7 +1,7 @@
 import React from 'react';
 import { createQuery, useQuery } from '@tramvai/react-query';
-import { TINKOFF_API_SERVICE } from '@tramvai/module-api-clients';
 import { TAPI_ROLES } from '@tinkoff/roles';
+import { FAKE_API_CLIENT } from '../../fakeApiClient';
 
 const query = createQuery({
   key: 'base',
@@ -11,7 +11,7 @@ const query = createQuery({
     return payload;
   },
   deps: {
-    apiClient: TINKOFF_API_SERVICE,
+    apiClient: FAKE_API_CLIENT,
   },
   conditions: {
     requiredCoreRoles: [TAPI_ROLES.REGISTERED],

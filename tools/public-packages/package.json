@@ -1,9 +1,0 @@
-{
-  "name": "@tramvai/tools-public-packages",
-  "version": "0.0.0-stub",
-  "private": true,
-  "main": "./public-packages-list.js",
-  "types": "./public-packages-list.d.ts",
-  "dependencies": {},
-  "license": "Apache-2.0"
-}

@@ -1,13 +1,13 @@
 ---
 id: how-create-papi
-title: Как создать обработчик papi?
+title: How to create a papi handler?
 ---
 
-Рассмотрим на основе кейса: необходимо создать отдельный апи сервис который по урлу вида `${APP_ID}/papi/getSum` будет возвращать сумму переданных параметров a и b
+Let's consider on the basis of the case: it is necessary to create a separate api service which, according to an url like `${APP_ID}/papi/getSum` will return the sum of the passed parameters a and b
 
-## Автоматическое создание обработчика
+## Automatic handler creation
 
-На основе параметра конфигурации `application.commands.build.options.serverApiDir` в platform.json (по умолчанию папка `./src/api`) определяется директория, в которой хранятся papi-обработчики. Создаем в этой папке новый файл с именем нашего нового обработчика, т.е. `getSum.ts` для нашего примера. В качестве обработчика будет использован дефолтный экспорт из файла, создаем его:
+Based on the configuration parameter `application.commands.build.options.serverApiDir` in tramvai.json (by default folder `./src/api`) the directory where the papi handlers are stored is determined. Create a new file in this folder with the name of our new handler, i.e. `getSum.ts` for our example. The default export from the file will be used as a handler, create it:
 
 ```tsx
 export default () => {
@@ -15,40 +15,40 @@ export default () => {
 };
 ```
 
-Перезапускаем сервер, чтобы новый обработчик добавился в список papi. Результат вызова функции будет использован как тело ответа, поэтому теперь если обратить по адресу `http://localhost:3000/tincoin/papi/getSum` то в ответе мы получим объект со свойством `payload: 'hello'`.
+We restart the server so that the new handler is added to the papi list. The result of the function call will be used as the body of the response, so now if we turn to the address `http://localhost:3000/tincoin/papi/getSum`, then in the response we will receive an object with the property `payload: 'hello'`.
 
-Далее добавим логику в наш обработчик:
+Next, let's add logic to our handler:
 
 ```tsx
-import { Req } from '@tramvai/papi'; // импорт нужен только для типизации, можно обойтись без него или использовать типы из express
+import { Req } from '@tramvai/papi'; // import is needed only for typing, you can do without it or use types from express
 
 export default (req: Req) => {
   const {
     body: { a, b },
     method,
-  } = req; // получаем из объекта запроса всю необходимую ифнормацию
+  } = req; // get all the necessary information from the request object
 
   if (method !== 'POST') {
-    throw new Error('only post methods'); // выбрасываем ошибку, если хотим обрабатывать только определенные http-методы
+    throw new Error('only post methods'); // throw an error if we want to process only certain http methods
   }
 
   if (!a || !b) {
-    // проверяем что были переданы необходимые параметры запроса
+    // check that the required request parameters have been passed
     return {
       error: true,
       message: 'body parameters a and b should be set',
     };
   }
 
-  return { error: false, result: +a + +b }; // возвращаем результат, не забыв сделать все преобразования над строками
+  return { error: false, result: +a + +b }; // return the result, not forgetting to do all conversions on strings
 };
 ```
 
-Сборку уже перезапускать не нужно и @tramvai/cli сам все пересоберет после сохранения изменений на диск. Теперь можно сделать POST-запрос на `http://localhost:3000/tincoin/papi/getSum`, передать параметры `a` и `b` и получить результат.
+There is no need to restart the build, @tramvai/cli will rebuild everything itself after saving the changes to disk. Now you can make a POST request to `http://localhost:3000/tincoin/papi/getSum`, pass the parameters `a` and `b` and get the result.
 
-## Создание обработчика через провайдер
+## Creating a handler via provider
 
-При необходимости использовать в обработчике другие зависимости приложения из di, можно добавить провайдер с токеном `SERVER_MODULE_PAPI_PUBLIC_ROUTE`:
+If you need to use other application dependencies from di in the handler, you can add a provider with the `SERVER_MODULE_PAPI_PUBLIC_ROUTE` token:
 
 ```tsx
 // ...
@@ -71,7 +71,7 @@ createApp({
           method: 'get',
           path: '/ping',
           async handler() {
-            log.error('/ping requested'); // логируем с уровнем error, чтобы наверняка увидеть лог
+            log.error('/ping requested'); // log with the error level to see the log for sure
             return 'pong';
           },
         });
@@ -84,8 +84,8 @@ createApp({
 });
 ```
 
-Теперь можно сделать запрос по адресу `http://localhost:3000/tincoin/papi/ping`, в ответе мы получим объект со свойством `payload: 'pong'`, а в терминале с запущенным процессом `tramvai start ${APP_ID}` увидим лог ошибки `/ping requested`.
+Now you can make a request to the address `http://localhost:3000/tincoin/papi/ping`, in the response we will receive an object with the property `payload: 'pong'`,  in the terminal with the running process `tramvai start ${APP_ID}` we will see the error log `/ping requested`.
 
-### Дополнительные ссылки
+### Additional links
 
-- [Документация к ServerModule](references/modules/server.md)
+- [ServerModule documentation](references/modules/server.md)

@@ -1,29 +1,29 @@
 ---
 id: provider
-title: Провайдер
+title: Provider
 ---
 
-Провайдер - это простой объект, который предоставляет реализацию для интерфейса (идентефикатора) конкретной зависимости. Реализацией может быть константное значение (строка, функция, symbol, экземпляр класса), фабрика или класс. Фабрика или класс инициализируются по запросу к соответствующему идентификатору. Можно регистрировать несколько провайдеров на один токен, при наличии параметра `multi`.
+provider is a simple object that provides an implementation for an interface (identifier) ​​for a particular dependency. An implementation can be a constant value (string, function, symbol, class instance), factory, or class. A factory or class is initialized upon request to the corresponding identifier. It is possible to register several providers for one token, if the `multi` parameter is present.
 
-## Формат
+## Format
 
 ```tsx
 type Provider = {
-  provide: Token | string; // идентификатор провайдера
-  useValue?: any; // реализация идентификатора
-  useFactory?: any; // реализация идентификатора
-  useClass?: any; // реализация идентификатора
-  deps?: Record<string, Token | string>; // список зависимостей которые необходимы провайдеру для работы
-  multi?: boolean; // возможность зарегистрировать множество реализаций провайдеров, если true, при получении значения этого идентификатора, все зарегестрированные значения будут приходить в массиве
-  scope?: 'request' | 'singleton'; // Если singleton, то контейнер зарегестрирует один экземпляр провайдера на все запросы клиента. Если request то будет создавать свой инстанс для каждого клиента и Request
+  provide: Token | string; // provider id
+  useValue?: any; // implementation of the identifier
+  useFactory?: any; // implementation of the identifier
+  useClass?: any; // implementation of the identifier
+  deps?: Record<string, Token | string>; // list of dependencies that the provider needs to work
+  multi?: boolean; // the ability to register multiple provider implementations, if true, when receiving the value of this identifier, all registered values ​​will come in the scope array
+  scope?: 'request' | 'singleton'; // If a singleton, then the container will register one instance of the provider for all client requests. If request will create its own instance for each client and Request
 };
 ```
 
-## Разновидности провайдеров
+## Types of providers
 
 ### Class
 
-При инициализации инстанса произойдет создание класса переданного в `useClass`, если были заданы `deps` то класс вызовется с объектом реализаций первым аргументом
+When the instance is initialized, the class passed to `useClass` will be created, if `deps` were specified, then the class will be called with the object of implementations as the first argument
 
 ```tsx
 import { provide } from '@tramvai/core';
@@ -40,7 +40,7 @@ const provider = provide({
 
 ### Factory
 
-При инициализации инстанса произойдет вызов функции переданной в `useFactory`, если были заданы `deps` то функция вызовется с объектом реализаций первым аргументом
+When the instance is initialized, the function passed to `useFactory` will be called, if `deps` were specified, then the function will be called with the object of implementations as the first argument
 
 ```tsx
 import { provide } from '@tramvai/core';
@@ -55,7 +55,7 @@ const provider = provide({
 
 ### Value
 
-Устанавливает значение провайдера теми данными, которые были переданы в параметре `useValue`, не будет производится дополнительная инициализация и нельзя использовать `deps`
+Sets the provider's value to the data that was passed in the `useValue` parameter, no additional initialization will be performed and `deps` cannot be used
 
 ```tsx
 import { provide } from '@tramvai/core';
@@ -65,9 +65,9 @@ const provider = provide({
 });
 ```
 
-## Multi провайдеры
+## Multi providers
 
-Нам может понадобиться возможность регистрации для одного токена множества реализаций. Например, несколько действий для одного шага. Что бы это реализовать, нужно передать параметр `multi` в провайдер. В таком случае в di контейнере сохраняется массив провайдеров:
+We may need to be able to register multiple implementations for a single token. For example, several actions for one step. To implement this, you need to pass the `multi` parameter to the provider. In this case, an array of providers is stored in the di container:
 
 ```tsx
 import { provide } from '@tramvai/core';
@@ -85,11 +85,11 @@ const providers = [
 ];
 ```
 
-## Зависимости (deps)
+## Dependencies (deps)
 
-Нужны для указания зависимостей, которые нужны для работы провайдера. При создании провайдера будут созданы инстансы зависимостей, которые указаны в deps и переданы в провайдер первым аргументом. Ключами объекта deps будут являться реализации, которые попадут в провайдер. При этом, если не будет найден провайдер в глобальном DI, будет выброшена ошибка с уведомлением что текущий токен не найден.
+Needed to specify the dependencies that are needed for the provider to work. When creating a provider, dependency instances will be created, which are specified in deps and passed to the provider as the first argument. The keys of the deps object will be the implementations that will be sent to the provider. In this case, if the provider is not found in the global DI, an error will be thrown notifying that the current token was not found.
 
-### Формат
+### Format
 
 ```tsx
 type Provider = {
@@ -105,9 +105,9 @@ type Provider = {
 };
 ```
 
-### Опциональные зависимости
+### Optional Dependencies
 
-Нам не всегда нужны обязательные зависимости для работы. И мы хотим пометить, что зависимость не обязательно для работы и не нужно кидать ошибку. Для этого можно передать параметр `optional` который отключит выброс ошибки при отсутствии зависимости. Вместо реализации зависимости провайдеру придет значение `null`.
+We don't always need mandatory dependencies to work. And we want to point out that the dependency is not necessary to work and it is not necessary to throw an error. To do this, you can pass the `optional` parameter, which will disable throwing an error if there is no dependency. Instead of implementing the dependency, the provider will receive the value `null`.
 
 ```tsx
 import { provide } from '@tramvai/core';
@@ -125,9 +125,9 @@ const provider = provide({
 });
 ```
 
-### Multi зависимости
+### Multi dependencies
 
-Некоторые провайдеры являются мульти провайдерами и вместо одной реализации, нам придет массив реализаций. Для правильного вывода типов, мы должны передать параметр `multi: true`, применить `as const` для `deps` блока для корректного вывода типов через TS:
+Some providers are multi-providers and instead of one implementation, we will receive an array of implementations. For correct type inference, we must pass the `multi: true` parameter, apply `as const` for the `deps` block for correct type inference via TS:
 
 ```tsx
 import { provide } from '@tramvai/core';
@@ -149,7 +149,7 @@ const provider = provide({
 
 ### Circular dependency
 
-DI не позволяет объявлять зависимости, которые находятся в зависимости у друг друга, например:
+DI does not allow declaring dependencies that depend on each other, for example:
 
 ```tsx
 import { provide } from '@tramvai/core';
@@ -169,19 +169,19 @@ const providers = [
 ];
 ```
 
-В этом примере мы с не сможем коректно создать инстансы провайдеров и код выкинет ошибку.
+In this example, we will not be able to correctly create provider instances and the code will throw an error.
 
-Подобные провайдеры стоит пересмотреть и вынести общую часть в отдельный класс и провайдер и использовать совместно `A` и `B`
+Such providers should reconsider and make a common part in a separate class, and provider and used in conjunction `A` and `B`
 
 ## Scope
 
-> Опция влияет только на работу контейнера на сервере, на клиенте работает только один общий контейнер, в котором провайдеры с разным скопом хранятся вместе
+> option only affects the operation of the container on the server, only one common container running on the client, in which service providers with a different crowd kept together
 
-Позволяет создавать синглтон инстансы которые будут общие между множеством клиентов. В стандартном поведение, каждый объявленный провайдер будет автоматически удаляться и пересоздаваться для каждого нового клиента. Этот функционал был сделан для того, чтобы у нас была возможность хранить, как и синглтоны, к примеру кэш, так и различные персонализированные данные. К примеру статус пользователя и персонализацию.
+Allows you to create singleton instances that will be shared between multiple clients. In standard behavior, each declared provider will be automatically deleted and recreated for each new client. This functionality was made in order for us to be able to store both singletons, for example, cache, and various personalized data. For example, user status and personalization.
 
-По дефолту все провайдеры имеют значение `Scope.REQUEST`, что означает, что значения провайдера будет создавать для каждого клиента. Исключение составляют провайдеры `useValue`, которые ведут себя как синглтон.
+By default, all providers have the value `Scope.REQUEST`, which means that provider values ​​will be generated for each client. The exception is the `useValue` providers, which behave like a singleton.
 
-## Интерфейс
+## Interface
 
 ```tsx
 import { provide } from '@tramvai/core';
@@ -192,19 +192,19 @@ const provider = provide({
 });
 ```
 
-В этом случае, провайдер `Cache` зарегистрируются как глобальный синглтон, так как был передан параметр `scope` и будет использоваться единый инстанс для всех пользователей.
+In this case, the `Cache` provider will be registered as a global singleton, since the `scope` parameter was passed and a single instance for all users will be used.
 
-## Токены (token)
+## Tokens
 
-Токены используются как идентификатор для провайдера в DI. По значению токена происходит регистрация провайдера и поиск реализации.
+Tokens are used as an identifier for the provider in DI. By the value of the token, the provider is registered and the implementation is searched.
 
-## Интерфейс
+## Interface
 
 ```tsx
 type token = Token | string;
 ```
 
-Токен может быть как строкой, так и специально созданным с помощью функции `createToken` в который можно передать интерфейс. При этом можно использовать одновременно и строку и createToken, главное то, что бы идентификатор был одинаковым
+A token can be either a string or a specially created using the `createToken` function into which an interface can be passed. In this case, you can use both a string and createToken at the same time, the main thing is that the identifier is the same
 
 ## createToken
 
@@ -220,4 +220,4 @@ const provider = provide({
 });
 ```
 
-Основное отличие заключается в том, что в createToken можно передать интерфейс реализации, который потом будет использоваться для проверки типов при получение зависимостей и создание провайдеров.
+The main difference is that you can pass an implementation interface to createToken, which will then be used for type checking when getting dependencies and creating providers.

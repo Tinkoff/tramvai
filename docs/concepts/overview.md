@@ -1,137 +1,137 @@
 ---
 id: overview
-title: Введение в tramvai
+title: Introduction to tramvai
 ---
 
-`tramvai` это легковесный веб-фреймворк для создания SSR приложений с модульной системой и DI для возможности быстрого расширения функциональности приложений.
+`tramvai` is a lightweight web framework for building SSR applications with a modular system and DI to quickly extend the functionality of applications.
 
-## Основные особенности
+## Main features
 
-- **Модульный подход** - можно расширять функционал приложений с помощью модулей
-- **Universal** - Работает одинаково хорошо для браузеров и сервера
-- **Быстрый** - имеет малый вес, не оказывает влияния на общую производительность приложения, максимально распараллеливает действия на сервере
+- **Modular approach** - you can extend the functionality of applications using modules
+- **Universal** - Works equally well for browsers and server
+- **Fast** - lightweight, does not affect the overall performance of the application, maximizes parallelization of actions on the server
 
-## Используемые подходы
+## Approaches used
 
 ![tramvai main](/img/tramvai/tramvai-main.jpg)
 
-### Модульность
+### Modularity
 
-Архитектура `tramvai` строится на идее, что у нас весь функционал разделен на различные модули и все общение между модулями строится на общих интерфейсах, взаимодействуя через `DI`. Такая архитектура дает возможность легко добавлять новую функциональность в приложение, и заменять уже существующий функционал.
+The architecture `tramvai` is based on the idea that we have all the functionality divided into various modules and all communication between the modules is based on common interfaces, interacting through `DI`. This architecture makes it possible to easily add new functionality to the application, and replace existing functionality.
 
-### Стандартизация
+### Standardization
 
-`tramvai` дает основу которая позволяет поддерживать и создавать приложения с одинаковой архитектурой для множества команд с возможностью шарить код между проектами, так как `tramvai` это легковесный слой, который помогает взаимодействовать различными модулям в приложении
+`tramvai` is a framework that allows you to maintain and create applications with the same architecture for many teams with the ability to share code between projects, as it `tramvai` is a lightweight layer that helps to interact different modules in the application
 
-### Скорость
+### Performance
 
-Ядро `tramvai` вместе с `DI` весит 4 кб, всё остальное реализуется через сторонние модули, который расширяют функционал приложения. Это дает возможность делать приложения минимального размера, исключая ненужные фичи. Архитектура и модули разработаны с концепцией `performance first` для максимальной параллелизации, согласно `best practice`.
+The core `tramvai` together with `DI` weighs 4 kb, everything else is implemented through third-party modules that extend the functionality of the application. This makes it possible to make applications of the minimum size, excluding unnecessary features. The architecture and modules are designed with a concept `performance first` for maximum parallelization, according to best practice.
 
-### Универсальность
+### Universal
 
-`tramvai` это SSR-first фреймворк и учитывает все особенности и проблемы, связанные с сервером, клиентом и взаимодействием между ними:
+`tramvai` it is an SSR-first framework and takes into account all the features and problems associated with the server, client and the interaction between them:
 
-- Все модули разрабатываются и для браузера и для сервера
-- Используются общие интерфейсы
-- Используется [цепочка команд](concepts/command-line-runner.md) на сервере и браузере которая позволяет выполнять действия в определение время жизни приложения
-- [Cистема экшенов](concepts/action.md) позволяет одинаково запрашивать данные на сервере и в браузере, используя различные фичи (e.g. повторение в браузере экшена, упавшего на сервере)
+- All modules are developed for both the browser and the server
+- Common interfaces are used
+- A [chain of commands](concepts/command-line-runner.md) on the server and the browser is used which allows you to perform actions in determining the lifetime of the application
+- The [action system](concepts/action.md) allows you to equally request data on the server and in the browser, using various features (e.g. repetition in the browser of an action that crashed on the server)
 
-### Разбиение на внешние библиотеки
+### Splitting into external libraries
 
-При разработке `tramvai` стараемся использовать уже готовые решения, либо создавать базовые библиотеки, которые никак не связаны с `tramvai` и могут использовать в других проектах и фреймворках.
+When developing `tramvai` we try to use open source solutions, or create basic libraries that are in no way related to `tramvai` and can be used in other projects and frameworks.
 
-### DI с интерфейсом взятым с Nest или Angular DI
+### DI with interface taken from Nest or Angular DI
 
-`DI` это основа `tramvai` позволяющая уменьшить связанность кода и разделение функциональности на модули. Внутри `tramvai` используется библиотека `dippy` которая реализует `DI` составляющую. Внутренний интерфейс `DI` повторяет интерфейс `Nest`, который позволяет удобно описать зависимости и реализации классов.
+`DI` is the core part of `tramvai` that allows you to reduce code cohesion and separation of functionality into modules. `tramvai` use a library `@tinkoff/dippy` that implements the `DI` container. The internal interface `DI` repeats the interface `Nest`, which allows you to conveniently describe the dependencies and implementations of classes.
 
-### Возможность мягкого перехода
+### Soft migration option
 
-На www.tinkoff.ru уже было написано миллион+ строк кода и новое решение не должно было ломать имеющийся код, а также требовать от приложений тяжелого и долгого перехода
+A million + lines of code have already been written on `tinkoff.ru` and the new solution should not break the existing code, and also require applications from a difficult and long transition
 
-## Почему был разработан:
+## Why was it developed
 
 ### tramvai
 
-Зачастую React приложения — это конструктор из разных библиотек, которые были подключены в проект. Это хорошо работает на маленьких масштабах, но плохо работает для больших приложений, где работают 70+ разработчиков, так как в таком подходе легко подключить свое и разойтись кардинально в архитектуре приложений. Эту проблему берет на себя `tramvai` и стандартизирует и реализует общую архитектуру приложений которую используют все продуктовые команды.
+Often, React applications are a constructor from different libraries that have been included in the project. This works well on a small scale, but it does not work well for large applications with 70+ developers, since in this approach it is easy to connect your own and disperse radically in the application architecture. This problem is taken over `tramvai` and standardized and implemented by a common application architecture that all product teams use.
 
-На github можно найти не так много open source решений, которые реализуют архитектуру больших приложений.
+There are not many open source solutions on github that implement the architecture of large applications.
 
-#### Альтернативы
+#### Alternatives
 
 ##### next.js
 
-Один из самых лучших простых фреймворков для React, которые берет на себя проблему с рендерингом приложений на сервере и роутингом. При этом это легковесный фреймворк который никак не стандартизирует и не решает проблемы с модульностью компонентов. Поэтому большинство кода, который был написан на `tramvai` пришлось бы написать для `next.js` и пытаться как-то внедрить, так как в next.js очень ограничена возможность расширения функциональности
+One of the best simple React frameworks that takes care of server-side rendering and routing. At the same time, this is a lightweight framework that does not standardize in any way and does not solve the problems with the modularity of components. Therefore, most of the code that was written on `tramvai` would have to be written for `next.js` and try to somehow implement, since in `next.js` the ability to extend functionality is very limited
 
-##### fusionjs
+##### fusion.js
 
-Похожий фремворк, который развивался и появился в одно и тоже время с `tramvai`. У fusionjs нет полноценного DI, ограниченная возможность вынесения функциональности в модули и вся архитектура построена на основе middlewares, и присутствуют сложности вокруг зашитых приоритетов плагинов и отсутствия параллелизации действий
+A similar framework that evolved and emerged at the same time with `tramvai`. Fusion.js does not have a full-fledged DI, a limited ability to move functionality into modules and the entire architecture is built on the basis of middlewares, and there are difficulties around the hard-coded priorities of plugins and the lack of parallelization of actions
 
 ##### nest.js
 
-Отличный backend фреймворк который использует схожий DI, но полностью не заточен под SSR. И при использовании его, у нас должно было быть 2 архитектуры, одна для бекенда, другая написанная самим под клиент
+An excellent backend framework that uses similar DI, but is not completely sharpened for SSR. And when using it, we had to have 2 architectures, one for the backend, the other written by ourselves for the client
 
-### dippy
+### @tinkoff/dippy
 
-Легковесная DI библиотека с Angular подобным интерфейсом. В открытом доступе нет так много различных вариантов DI которые позволяют разделить реализации классов как базовые общие, так и специфичные для каждого клиента.
+Lightweight DI library with Angular-like interface. In the open source, there are not so many different DI options that allow you to separate class implementations, both basic general and specific for each client.
 
-#### Альтернативы
+#### Alternatives
 
 ##### inversify
 
-Это самая популярная библиотека для создания DI, при этом:
+This is the most popular library for creating DI, with:
 
-- весит 11кб, в сравнении dippy 1.2кб
-- низкоуровневый API который требует различных врапперов для реализации модульной системы.
-- `ts-nest` это пример враппера над inversify который имеет слабую поддержку и только враппер содержит примерно столько-же кода как и `dippy`
+- weighs 11kb, compared to dippy 1.2kb
+- a low-level API that requires different wrappers to implement a modular system.
+- `ts-nest` this is an example of a wrapper over inversify that has weak support and only the wrapper contains about the same code as `@tinkoff/dippy`
 
 ### state
 
-Встроенная в tramvai [библиотека для управления состоянием](features/state/overview.md) почти полностью схожа интерфейсом с Redux, при этом:
+The [state management library](features/state/overview.md) built into tramvai is almost completely similar to the Redux interface, with few nuances:
 
-- Позволяет подписывать компоненты только на обновление определенных редьюсеров, решая проблему с перфомансом
-- Имеется много кода, написанного с использованием deprecated версии стейта и нельзя просто перейти на другое решение
+- Allows you to sign components only for updating certain reducers, solving the problem with performance
+- There is a lot of code written using the deprecated version of the state and you can't just switch to another solution
 
-#### Альтернативы
+#### Alternatives
 
 ##### redux
 
-Переход на чистый redux не решит проблемы, а только добавит связанные с performance
+Moving to pure redux will not solve the problems, it will only add performance-related ones
 
 ##### reatom
 
-Очень похожая на state-management новая библиотека, в которой решена проблема с обновлениями и performance. Хороший кандидат, с которого можно взять некоторые фичи. Полный переход сильно дорог из-за кодовой базы
+Very similar to our state manager, a new library that addresses the issue of updates and performance. A good candidate to take some features from. Full transition is very expensive due to the codebase
 
 ##### effector
 
-Интересная библиотека, которая имеет фокус на client side и не очень подходит для SSR
+Interesting library that has a focus on the client side and is not very suitable for SSR
 
 ## Concepts
 
 ### Module
 
-Основные базовые элементы `tramvai` архитектуры которые содержат в себе реализацию функциональности. При этом предполагается, что такие модули не будут огромными и будет появляться большое количество разных видов.
+The main basic elements of the `tramvai` architecture that contain the implementation of functionality. At the same time, it is assumed that such modules will not be huge and a large number of different types will appear.
 
-[Документация](concepts/module.md)
+[Documentation](concepts/module.md)
 
-### DI система
+### DI system
 
-`tramvai` строится на DI системе которая хранит в себе реализации функциональности и получения реализаций по токенам и ключам. Это позволяет реализовать связи между модулями основываясь только на интерфейсах, при этом имея возможность изменять реализации по необходимости.
+`tramvai` is built on a DI system that stores the implementation of functionality and receiving implementations for tokens and keys. This allows you to implement communications between modules based only on interfaces, while having the ability to change implementations as needed.
 
-[Документация](concepts/di.md)
+[Documentation](concepts/di.md)
 
 ### CommandLineRunner
 
-Раннер для списка действий, на которые могут навесить действия модули. Списки действий бывают 2 видов:
+Runner for a list of actions that modules can attach actions to. There are 2 types of action lists:
 
-- Инициализация приложения
-- Обработка запроса для клиента
+- Application initialization
+- Processing a request for a client
 
-В рамках эти списка действий происходит получение роутов, статуса пользователя, рендеринга страницы и отдачи клиенту html.
+Within the framework of this list of actions, routes, user status, page rendering and html return to the client are received.
 
-[Документация](concepts/command-line-runner.md)
+[Documentation](concepts/command-line-runner.md)
 
-## Диаграммы
+## Diagrams
 
-### Принцип работы на серверной стороне
+### How it works on the server side
 
-![Схема работы приложения на сервере](/img/arch-server.png)
+![Scheme of the request flow on the server](/img/arch-server.png)

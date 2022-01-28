@@ -160,54 +160,6 @@ Commands:
 exports[`enmasse test react-app platform build react-app 1`] = `
 Array [
   Object {
-    "extension": ".js",
-    "name": "examples_react-app_src_bundles_first_ts.chunk.js",
-    "path": "dist/client/examples_react-app_src_bundles_first_ts.chunk.js",
-    "type": "file",
-  },
-  Object {
-    "extension": ".map",
-    "name": "examples_react-app_src_bundles_first_ts.chunk.js.map",
-    "path": "dist/client/examples_react-app_src_bundles_first_ts.chunk.js.map",
-    "type": "file",
-  },
-  Object {
-    "extension": ".js",
-    "name": "examples_react-app_src_bundles_main_ts.chunk.js",
-    "path": "dist/client/examples_react-app_src_bundles_main_ts.chunk.js",
-    "type": "file",
-  },
-  Object {
-    "extension": ".map",
-    "name": "examples_react-app_src_bundles_main_ts.chunk.js.map",
-    "path": "dist/client/examples_react-app_src_bundles_main_ts.chunk.js.map",
-    "type": "file",
-  },
-  Object {
-    "extension": ".js",
-    "name": "examples_react-app_src_bundles_second_ts.chunk.js",
-    "path": "dist/client/examples_react-app_src_bundles_second_ts.chunk.js",
-    "type": "file",
-  },
-  Object {
-    "extension": ".map",
-    "name": "examples_react-app_src_bundles_second_ts.chunk.js.map",
-    "path": "dist/client/examples_react-app_src_bundles_second_ts.chunk.js.map",
-    "type": "file",
-  },
-  Object {
-    "extension": ".js",
-    "name": "examples_react-app_src_bundles_third_ts.chunk.js",
-    "path": "dist/client/examples_react-app_src_bundles_third_ts.chunk.js",
-    "type": "file",
-  },
-  Object {
-    "extension": ".map",
-    "name": "examples_react-app_src_bundles_third_ts.chunk.js.map",
-    "path": "dist/client/examples_react-app_src_bundles_third_ts.chunk.js.map",
-    "type": "file",
-  },
-  Object {
     "extension": ".css",
     "name": "platform.css",
     "path": "dist/client/platform.css",
@@ -229,6 +181,54 @@ Array [
     "extension": ".json",
     "name": "stats",
     "path": "dist/client/stats",
+    "type": "file",
+  },
+  Object {
+    "extension": ".js",
+    "name": "tinkoff-examples_react-app_src_bundles_first_ts.chunk.js",
+    "path": "dist/client/tinkoff-examples_react-app_src_bundles_first_ts.chunk.js",
+    "type": "file",
+  },
+  Object {
+    "extension": ".map",
+    "name": "tinkoff-examples_react-app_src_bundles_first_ts.chunk.js.map",
+    "path": "dist/client/tinkoff-examples_react-app_src_bundles_first_ts.chunk.js.map",
+    "type": "file",
+  },
+  Object {
+    "extension": ".js",
+    "name": "tinkoff-examples_react-app_src_bundles_main_ts.chunk.js",
+    "path": "dist/client/tinkoff-examples_react-app_src_bundles_main_ts.chunk.js",
+    "type": "file",
+  },
+  Object {
+    "extension": ".map",
+    "name": "tinkoff-examples_react-app_src_bundles_main_ts.chunk.js.map",
+    "path": "dist/client/tinkoff-examples_react-app_src_bundles_main_ts.chunk.js.map",
+    "type": "file",
+  },
+  Object {
+    "extension": ".js",
+    "name": "tinkoff-examples_react-app_src_bundles_second_ts.chunk.js",
+    "path": "dist/client/tinkoff-examples_react-app_src_bundles_second_ts.chunk.js",
+    "type": "file",
+  },
+  Object {
+    "extension": ".map",
+    "name": "tinkoff-examples_react-app_src_bundles_second_ts.chunk.js.map",
+    "path": "dist/client/tinkoff-examples_react-app_src_bundles_second_ts.chunk.js.map",
+    "type": "file",
+  },
+  Object {
+    "extension": ".js",
+    "name": "tinkoff-examples_react-app_src_bundles_third_ts.chunk.js",
+    "path": "dist/client/tinkoff-examples_react-app_src_bundles_third_ts.chunk.js",
+    "type": "file",
+  },
+  Object {
+    "extension": ".map",
+    "name": "tinkoff-examples_react-app_src_bundles_third_ts.chunk.js.map",
+    "path": "dist/client/tinkoff-examples_react-app_src_bundles_third_ts.chunk.js.map",
     "type": "file",
   },
   Object {

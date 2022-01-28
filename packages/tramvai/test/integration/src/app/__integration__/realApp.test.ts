@@ -10,7 +10,7 @@ describe('test/integration/app/runFakeApp', () => {
 
   beforeAll(async () => {
     app = await runRealApp(
-      resolve(__dirname, '../../../../../../../examples/bootstrap'),
+      resolve(__dirname, '../../../../../../../tinkoff-examples/bootstrap'),
       'bootstrap',
       {
         env: {
@@ -27,10 +27,11 @@ describe('test/integration/app/runFakeApp', () => {
   it('should return 200 status', async () => {
     return app.request('/').expect(200);
   });
+
   it('should run app', async () => {
     const { application } = await app.render('/');
     expect(application).toMatchInlineSnapshot(
-      `"<div class=\\"layout__layout_fZcJz\\"><div><h1>Tramvai<span role=\\"img\\" aria-label=\\"dummy icon\\">🥳</span></h1></div><div>Main Page <button>click link</button></div><div class=\\"Footer__footer_AOPKq\\"><div>this Footer in bootstrap</div></div></div>"`
+      `"<div class=\\"layout__layout_yfynK\\"><div><h1>Tramvai<span role=\\"img\\" aria-label=\\"dummy icon\\">🥳</span></h1></div><div>Main Page <button>click link</button></div><div class=\\"Footer__footer_a6x7v\\"><div>this Footer in bootstrap</div></div></div>"`
     );
   });
 

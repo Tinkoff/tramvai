@@ -1,52 +1,52 @@
 ---
 id: tramvai-library
-title: Создание tramvai библиотеки
+title: Creating a tramvai library
 ---
 
-Добавление новой библиотеки или модуля в репозитории `tramvai` подробно рассмотрено в разделе [Contribute](contribute/contribute.md)
+Adding a new library or module to the `tramvai` repository is detailed in the [Contribute section](contribute/contribute.md)
 
-Этот гайд содержит набор советов для разработки отдельных `tramvai` пакетов в репозиториях приложений,
-также многие команды поддерживают отдельные монорепы с общими пакетами для ряда приложений, разделенных по разным репозитриям.
+This guide contains a set of tips for developing individual `tramvai` packages in application repositories,
+also, many teams maintain separate monoreps with common packages for a number of applications, divided into different repositories.
 
-### Предпосылки
+### Prerequisites
 
-Рассмотрим все важные кейсы на примере создания нового `tramvai` модуля.
-Допустим, модуль будет предоставлять новый HTTP клиент для работы с `API` Github.
+Let's consider all important cases using the example of creating a new `tramvai` module.
+Let's say the module will provide a new HTTP client to work with the Github `API`.
 
-### Название пакета
+### Package name
 
-Крайне не рекомендуется использовать скоупы `@tramvai` и `@tramvai-tinkoff` вне репозитория `tramvai`.
-Если наше приложение называется `tincoin`, можно например выбрать один из таких скоупов:
+It is highly discouraged to use the `@tramvai` and `@tramvai-tinkoff` scopes outside the `tramvai` repository.
+If our application is called `tincoin`, you can, for example, select one of these scopes:
 
 - `@tincoin`
 - `@tramvai-tincoin`
 - `@tincoin-core`
 
-Для модулей, как правило используется префикс `module-`, например: `@tramvai-tincoin/module-github-api-client`
+For modules, the prefix is ​​usually `module-`, for example: `@tramvai-tincoin/module-github-api-client`
 
-### Версионирование
+### Versioning
 
-Выбор стратегии версионирования исключительно за вами.
-Мы определенно рекомендуем следовать `semver`, и можем рекомендовать использовать [сквозное версионирование](concepts/versioning.md), если:
+The choice of a versioning strategy is entirely yours.
+We definitely recommend following `semver`, and we can recommend using [unified versioning](concepts/versioning.md) if:
 
-- вы поддерживаете монорепу с core библиотеками
-- эти библиотеки могут быть связаны между собой
-- и эти пакеты используются в приложениях все вместе (или большинство из них)
+- you support monorep with core libraries
+- these libraries can be linked
+- and these packages are used in applications all together (or most of them)
 
 ### Dependencies
 
-Работа с зависимостями у библиотек - не простая задача, и не имеет идеального решения, но есть ряд советов, упрощающих управление зависимостями.
-Лучше всего начать с разделения зависимостей на различные типы:
+Dealing with library dependencies is not an easy task, and there is no ideal solution, but there are a number of tips to make it easier to manage dependencies.
+The best place to start is by dividing dependencies into different types:
 
 #### Framework
 
-Пример таких зависимостей - `react` и `react-dom`, `@tramvai/*` и `@tramvai-tinkoff/*`.
-Если мы пишем `babel` или `eslint` плагин, то это могут быть `@babel/core` и `eslint`.
+Examples of such dependencies are `react` and `react-dom`, `@tramvai/*` and `@tramvai-tinkoff/*`.
+If we write `babel` or `eslint` plugin, it can be `@babel/core` and `eslint`.
 
-Как правило, конечный пользователь, например `tramvai` приложение, обязано устанавливать фреймворк зависимости,
-без них оно просто не будет работать.
+Typically, an end user, such as a `tramvai` application, is required to install a dependency framework,
+without them it simply won't work.
 
-Поэтому наша библиотека должна устанавливать их в `peerDependencies`, с максимально свободными версиями, например если пакет завязан на базовый функционал `tramvai`, и использует React хуки:
+Therefore, our library should set them to `peerDependencies`, with the most free versions, for example, if the package is tied to the basic functionality of `tramvai`, and uses React hooks:
 
 ```json
 {
@@ -60,10 +60,10 @@ title: Создание tramvai библиотеки
 
 #### Singleton
 
-Ряд зависимостей должен быть строго один в приложении.
-Любые дубликаты это минус, т.к. увеличивают вес бандла приложения, но такие библиотеки как `react` или `@tinkoff/logger` требуют быть в единственном экземпляре в нашем приложении.
+A number of dependencies must be strictly one in the application.
+Any duplicates are a minus. increase the weight of the application bundle, but libraries such as `react` or `@tinkoff/logger` require a single copy in our application.
 
-Для них действует правило как с framework, надо устанавливать их в `peerDependencies`, с максимально свободными версиями:
+For them, the rule applies as with the framework, you need to install them in `peerDependencies`, with the most free versions:
 
 ```json
 {
@@ -75,10 +75,10 @@ title: Создание tramvai библиотеки
 
 #### Popular
 
-Многие пакеты достаточно популярны, и большая вероятность, что они уже используются в конечном приложении.
-Пример таких зависимостей - `date-fns`, `lru-cache`, `@tinkoff/dippy`
+Many packages are popular enough that chances are they are already being used in the final application.
+An example of such dependencies is - `date-fns`, `lru-cache`, `@tinkoff/dippy`
 
-Для них действует правило как с framework, надо устанавливать их в `peerDependencies`, с максимально свободными версиями:
+For them, the rule applies as with the framework, you need to install them in `peerDependencies`, with the most free versions:
 
 ```json
 {
@@ -92,11 +92,11 @@ title: Создание tramvai библиотеки
 
 #### Specific
 
-Допустим, наш новый tramvai модуль поставляет в приложение уникальный функционал, для которого требуется сторонняя библиотека (или даже другой пакет в вашей монорепе)
+Let's say our new tramvai module delivers unique functionality to the application that requires a third-party library (or even another package in your monorepo)
 
-Если мы разрабатываем сервис для работы с API Github, это может быть пакет `@octokit/rest`.
+If we are developing a service to work with the Github API, it might be the `@octokit/rest` package.
 
-В таком случае, нужно ставить библиотеку в `dependencies`, и можно оставить стандартный range с помощью `^`:
+In this case, you need to put the library in `dependencies`, and you can leave the standard range using `^`:
 
 ```json
 {
@@ -108,11 +108,11 @@ title: Создание tramvai библиотеки
 
 #### Development
 
-Завимость может участвовать в сборке вашего пакета - например `rollup` или `@tramvai/build`.
-Зависимость требуется для запуска тестов библиотеки.
-Зависимость содержит необходимые для сборки тайпинги.
+A dependency may be involved in building your package - for example, `rollup` or `@tramvai/build`.
+The dependency is required to run library tests.
+The dependency contains the taipings required for the build.
 
-Во всех этих случаях, даже если либа уже есть в `peerDependencies`, стоит добавить более конкретную версию в `devDependencies`, например:
+In all these cases, even if either is already in `peerDependencies`, it is worth adding a more specific version to `devDependencies`, for example:
 
 ```json
 {
@@ -124,24 +124,24 @@ title: Создание tramvai библиотеки
 }
 ```
 
-#### Исключения
+#### Exclusion
 
-Конечно, есть исключительные кейсы.
+Of course, there are exceptional cases.
 
-Например, tramvai предоставляет множество тестовых утилит, где все основные `@tramvai` зависимости были в `peerDependencies`.
-Как только эти утилиты начали использовать не в репозиториях с приложениями, а в монорепах с core пакетами, появилась проблема отсутствующих зависимостей, и мы перенесли почти все из `peerDependencies` в `dependencies`
+For example, tramvai provides many test utilities where all the main `@tramvai` dependencies were in `peerDependencies`.
+As soon as these utilities began to be used not in repositories with applications, but in monoreps with core packages, the problem of missing dependencies appeared, and we moved almost everything from `peerDependencies` to `dependencies`
 
-Действуйте по ситуации, и всегда думайте об удобстве использования вашего продукта :)
+Proceed according to the situation and always think about the usability of your product :)
 
-### Сборка
+### Build
 
-Предполагается, что итоговую сборку пакетов в контексте приложения будет осуществлять `@tramvai/cli`.
-Поэтому, для публикации пакетов, написанных на `TypeScript`, достаточно использовать `tsc`, и публиковать множество собранных `.js` и `.d.ts` файлов.
+It is assumed that the final assembly of packages in the context of the application will be done by `@tramvai/cli`.
+Therefore, to publish packages written in `TypeScript`, it suffices to use` tsc`, and publish many compiled `.js` and` .d.ts` files.
 
-Но сборка пакетов в бандлы перед публикацией, например через `rollup` или `@tramvai/build`,  дает ряд возможностей:
+But building packages into bundles before publishing, for example via `rollup` or` @tramvai/build`, gives a number of possibilities:
 
-- предварительный tree-shaking отсечет все лишнее, это положительно скажется на сборке приложения
-- можно сделать несколько бандлов для разного окружения, в CJS или ES modules форматах
-- можно сделать отдельный бандл для браузерной сборки, отдельный для серверной - топ для библиотек с поддержкой SSR 
+- preliminary tree-shaking will cut off all unnecessary, this will have a positive effect on the assembly of the application
+- you can make several bundles for different environments, in CJS or ES modules formats
+- you can make a separate bundle for the browser build, separate for the server one - top for libraries with SSR support
 
-Подробная документация про использование `@tramvai/build` доступна в [документации](references/tools/build.md)
+Detailed documentation on using `@tramvai/build` is available in [documentation](references/tools/build.md)

@@ -84,7 +84,7 @@ const routes = [
 ];
 ```
 
-[Example application](https://github.com/Tinkoff/tramvai/-/tree/master/examples/fs-external-pages)
+[Example application](https://github.com/Tinkoff/tramvai/-/tree/master/examples/fs-pages)
 
 ### File-System Routing
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { createInfiniteQuery, useInfiniteQuery } from '@tramvai/react-query';
-import { TINKOFF_API_SERVICE } from '@tramvai/module-api-clients';
+import { FAKE_API_CLIENT } from '../../fakeApiClient';
 
 interface Response {
   nextPage?: number;
@@ -23,7 +23,7 @@ const query = createInfiniteQuery({
     return page.nextPage;
   },
   deps: {
-    apiClient: TINKOFF_API_SERVICE,
+    apiClient: FAKE_API_CLIENT,
   },
   infiniteQueryOptions: {},
 });

@@ -3,25 +3,25 @@ id: di
 title: Dependency Injection
 ---
 
-В основе tramvai работает `DI` система, которая содержит в себе информацию о зависимостях, связи между ними, и уже созданные экземпляры зависимостей.
+Tramvai is based on a `DI` system that contains information about dependencies, connections between them, and already created instances of dependencies.
 
-## Концепции
+## Concepts 
 
-- [Провайдер](concepts/provider.md) - Имплементация токена в DI
-- [Токены](concepts/provider.md) - индетификатор провайдера в DI системе и одновременно его интерфейс
-- Контейнер - хранилище со всеми провайдерами и их реализациями
+- [Provider](concepts/provider.md) - Token implementation in DI
+- [Tokens](concepts/provider.md) - provider identifier in DI system and at the same time its interface
+- Container - storage with all providers and their implementations
 
-## Особенности
+## Features
 
-### Динамическая инициализация
+### Dynamic Initialization
 
-Провадйры инициализируются только если в коде прозошло получение инстанса с помощью метода `get` у di контейнера или если провайдер был указан как `deps` зависимость у `module`. В остальных случаях провайдер не будет создан и проинициализирован.
+Providers are initialized only if the code got an instance using the `get` method from the di container or if the provider was specified as a` deps` dependency on `module`. In other cases, the provider will not be created and initialized.
 
-Эта особенность позволяем нам регистрировать провайдеры в любой последовательности и заменять реализации.
+This feature allows us to register providers in any order and replace implementations.
 
-### Замена реализаций
+### Replacing implementations
 
-В некоторых случаях, нам может не подойти базовая реализация функционала и для решения этой проблемы, мы можем переопределить реализацию провайдеров. К примеру нам не подходит текущий логгер из common-module и мы хотим его заменить, для этого нам необходимо закинуть в `providers` новую реализацию для токена.
+In some cases, the basic implementation of the functionality may not be suitable for us, and to solve this problem, we can override the implementation of the providers. For example, the current logger from the common-module is not suitable for us and we want to replace it, for this we need to drop a new implementation for the token into the providers.
 
 ```tsx
 import { provide } from '@tramvai/core';
@@ -36,17 +36,17 @@ createApp({
 });
 ```
 
-После этого, мы заменим реализацию `LOGGER_TOKEN`, которая была объявлена в `CommonModule`, на нативный объект `console`
+After that, we will replace the implementation of` LOGGER_TOKEN`, which was declared in `CommonModule`, with a native object `console`
 
-### Проверка доступности реализации всех зависимостей
+### Checking the availability of the implementation of all dependencies
 
-При инициализации провайдера автоматически проверяется доступность всех зависимостей, если не была найдена зависимость и провайдер не является optional, в development режиме выбрасывается исключение.
+When initializing the provider, the availability of all dependencies is automatically checked if no dependency was found and the provider is not optional, an exception is thrown in development mode.
 
-## Использование DI
+## Using DI
 
-### В модулях
+### In modules
 
-Передача массива в параметр `providers` который будут добавлены при инициализации приложения в DI. [Подробнее о модулях](concepts/module.md)
+Passing an array to the `providers` parameter that will be added when the application is initialized in DI. [More about modules](concepts/module.md)
 
 ```tsx
 @Module({
@@ -57,9 +57,9 @@ createApp({
 export class MyModule {}
 ```
 
-### В createApp
+### In createApp
 
-Можно передать в [createApp](references/tramvai/create-app.md) массив `providers`, который будет иметь максимальный приоритет и перепишет реализации интерфейсов модулей и core:
+You can pass the `providers` array to [createApp](references/tramvai/create-app.md), which will have the highest priority and will overwrite the implementations of the modules and core interfaces:
 
 ```tsx
 createApp({
@@ -69,9 +69,9 @@ createApp({
 });
 ```
 
-### В экшенах
+### In actions
 
-Для получшения реализаций провайдеров, можно передать объект `deps` при создании экшена:
+To get provider implementations, you can pass a `deps` object when creating an action:
 
 ```tsx
 createAction({
@@ -85,21 +85,21 @@ createAction({
 });
 ```
 
-## Контейнер
+## Container A
 
-Контейнер в котором хранится список зарегистрированных провайдеров в приложении, так и инстансы реализаций провайдеров, которые уже были созданы.
+container that stores a list of registered providers in the application, as well as instances of provider implementations that have already been created.
 
-### Корневой контейнер
+### Root container
 
-Глобальный контейнер верхнего уровня, который содержит в себе всех зарегистрированых провайдеров и глобальные синглтоны которые живут все время, пока живет приложение.
+Top-level global container that contains all registered providers and global singletons that live as long as the application lives.
 
-### Контейнер - потомок
+### Container is a child
 
-Создаваемый для каждого клиента (пользователя, отправившего запрос на сервер) инстанс DI который наследуется от root контейнера. Но позволяет создавать и хранить собственные инстансы классов. Которые могут содержать приватную информацию о клиенте и при этом, эта информация не утечет другим клиентам, например ссылка на актуальный объект Request.
+A DI instance created for each client (user who sent a request to the server) that inherits from the container root. But it allows you to create and store your own class instances. Which can contain private information about the client and at the same time, this information will not leak to other clients, for example, a link to the actual Request object.
 
-Consumer di создается и живет пока мы отвечаем клиенту. Как только мы ответили, consumer di удаляется и очищается вся приватная информация. При этом не нужно делать ручную очистку и удалять di контейнер или его зависимости. Это работа основывается на том, что при ответе клиенту, теряется ссылка на контекст и DI контейнер. После чего GC удалит все из памяти.
+Consumer di is created and lives on while we respond to the client. As soon as we answered, consumer di is deleted and all private information is cleared. This does not require manual cleaning and deletion of the di container or its dependencies. This work is based on the fact that when responding to the client, the reference to the context and the DI container is lost. Then the GC will delete everything from memory.
 
-## Дополнительный материал
+## Additional material
 
-- Видео с рассказом о том, зачем нужен DI и почему его стоит использовать [Part 1](https://www.youtube.com/watch?v=ETyltCwtQHs) [Part 2](https://www.youtube.com/watch?v=RwLWYB9C2Tc)
-- Выпуск девшахты который посвещен DI и зачем он нужен https://www.youtube.com/watch?v=3NgWwzwDeTQ
+- Video explaining why DI is needed and why you should use it [Part 1](https://www.youtube.com/watch?v=ETyltCwtQHs) [Part 2](https://www.youtube.com/watch?v=RwLWYB9C2Tc)
+- Release of the devshakhta which is dedicated to DI and why is it needed https://www.youtube.com/watch?v=3NgWwzwDeTQ
