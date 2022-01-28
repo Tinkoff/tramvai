@@ -19,8 +19,8 @@
     "build-for-publish": "true"
   },
   "dependencies": {
-    "@sentry/node": "^6.10.0",
-    "@sentry/types": "^6.10.0"
+    "@sentry/node": "^6.17.2",
+    "@sentry/types": "^6.17.2"
   },
   "peerDependencies": {
     "@tinkoff/utils": "^2.1.2",

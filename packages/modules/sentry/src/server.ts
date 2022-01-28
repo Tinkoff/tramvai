@@ -1,4 +1,5 @@
-import { Module, Scope, commandLineListTokens } from '@tramvai/core';
+import noop from '@tinkoff/utils/function/noop';
+import { Module, Scope } from '@tramvai/core';
 import { RENDER_SLOTS, ResourceType, ResourceSlot } from '@tramvai/module-render';
 import { ENV_MANAGER_TOKEN, ENV_USED_TOKEN } from '@tramvai/module-common';
 import { WEB_APP_BEFORE_INIT_TOKEN, WEB_APP_AFTER_INIT_TOKEN } from '@tramvai/tokens-server';
@@ -58,7 +59,18 @@ const composeOptions = (multiOptions, defaultOptions?) =>
       multi: true,
       useFactory: ({ multiOptions }) => {
         return (app) => {
-          app.use(Sentry.Handlers.requestHandler(composeOptions(multiOptions)));
+          const sentryHandler = Sentry.Handlers.requestHandler(composeOptions(multiOptions));
+
+          app.use((req, res, next) => {
+            // suddenly, sentry uses nodejs's module `domain` in order to catch all of the error that happens when handling requests
+            // including async one, [see code](https://github.com/getsentry/sentry-javascript/blob/8cbcff25235b8d67043820032dba7a9e9cae3a2a/packages/node/src/handlers.ts#L415)
+            // and now, imagine, some of the code in this request creates async function out of main promise chain that throws
+            // sentry will handle that error as usual error and will call express error handler leading to 500-page for error that is not important and might be handled by unhandledPromiseRejection
+            // that also may lead to double error handling by the express app in case the `next` function is called twice - [issue](https://github.com/expressjs/express/issues/3024)
+            // we will handle most of the errors for request by ourselves and sentry still will send errors by its `errorHandler` below
+            sentryHandler(req, res, noop);
+            setImmediate(next);
+          });
         };
       },
       deps: {

@@ -12,7 +12,7 @@ import {
   NodeDevReporter,
 } from '@tinkoff/logger';
 import { serverProviders } from './devLogs';
-import { LOGGER_NAME, LOGGER_KEY } from './constants';
+import { LOGGER_NAME, LOGGER_KEY, LOGGER_DEPTH_LIMIT } from './constants';
 
 export * from './LogStore';
 
@@ -32,6 +32,7 @@ const logger = createLoggerFactory({
     pid: process.pid,
     hostname: hostname(),
   },
+  depthLimit: LOGGER_DEPTH_LIMIT,
 });
 
 export { logger };

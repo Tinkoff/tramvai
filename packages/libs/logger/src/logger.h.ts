@@ -10,6 +10,7 @@ export type Options = {
   filters?: Filter[];
   extensions?: Extension[];
   defaults?: any;
+  depthLimit?: number;
 };
 
 export type LogArg = {

@@ -1,7 +1,7 @@
 import { BrowserReporter, createLoggerFactory } from '@tinkoff/logger';
 import { Module } from '@tramvai/core';
 import { LOGGER_TOKEN, LOGGER_INIT_HOOK } from '@tramvai/tokens-common';
-import { LOGGER_NAME, LOGGER_KEY } from './constants';
+import { LOGGER_NAME, LOGGER_KEY, LOGGER_DEPTH_LIMIT } from './constants';
 
 import { clientProviders } from './devLogs';
 
@@ -13,6 +13,7 @@ const logger = createLoggerFactory({
   name: LOGGER_NAME,
   key: LOGGER_KEY,
   reporters: [new BrowserReporter()],
+  depthLimit: LOGGER_DEPTH_LIMIT,
 });
 
 export { logger };
