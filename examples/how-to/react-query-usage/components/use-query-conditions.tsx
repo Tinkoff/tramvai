@@ -1,6 +1,5 @@
 import React from 'react';
 import { createQuery, useQuery } from '@tramvai/react-query';
-import { TAPI_ROLES } from '@tinkoff/roles';
 import { FAKE_API_CLIENT } from '../../fakeApiClient';
 
 const query = createQuery({
@@ -14,7 +13,7 @@ const query = createQuery({
     apiClient: FAKE_API_CLIENT,
   },
   conditions: {
-    requiredCoreRoles: [TAPI_ROLES.REGISTERED],
+    onlyServer: true,
   },
 });
 // eslint-disable-next-line import/no-default-export
