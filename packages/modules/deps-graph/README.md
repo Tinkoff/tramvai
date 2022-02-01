@@ -1,22 +1,18 @@
 # DepsGraphModule
 
-> Работает только в development режиме и показывает граф только для серверной сборки
+> Works only in development mode and shows dependency graph for the server build
 
-Модуль для построения графа зависимостей токенов.
+Module to show token dependency graph.
 
-## Установка
+## Installation
 
-### 1. Зависимости
+First install `@tramvai/module-deps-graph`:
 
-Необходимо установить `@tramvai/module-deps-graph` с помощью npm/yarn
-
-```bash
+```bash npm2yarn
 npm i @tramvai/module-deps-graph
 ```
 
-### 2. Подключение модуля
-
-Нужно передать в список модулей приложения CommonModule
+Add module to the `modules` list
 
 ```tsx
 import { createApp } from '@tramvai/core';
@@ -27,14 +23,18 @@ createApp({
 });
 ```
 
-## Использование
+## Explanation
 
-Добавляет папи роут `/deps-graph` (можно найти по адресу /:appName/papi/deps-graph, где appName - поле name из tramvai.json), по которому выводится граф всех зависимостей с возможностью поиска по токену и имени модуля
+### Usage
 
-#### Описание графа
+Module adds papi-route `/deps-graph` that will display dependency graph with the functionality to search by token or module name.
 
-- Синий - обычный провайдер
-- Желтый - mutli-провайдер
-- Красный - подпавший под поиск
+> Actual relative path to the papi-route will be `/:appName/papi/deps-graph` where `appName` - name of the app passed to the `createApp`
+
+### Graph legend
+
+- Blue - usual provider
+- Yellow - multi-provider
+- Red - provider satisfying to search expression
 
 ![img.png](http://s.csssr.ru/UAHCBP6MS/localhost_3000_pfphome_papi_deps-graph_search%3Dboxy%26lines%3Dgenerate_page%252Cinit_-_Google_Chrome_2021-04-13_14.55.05.png)

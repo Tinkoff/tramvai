@@ -160,7 +160,7 @@ It should be borne in mind that the `forRoot` construction should only simplify 
 
 ## Recommendations for modules
 
-### Low cohesion
+### Low coupling
 
 It is advisable to build modules so that they do not directly depend on other modules. Coupling only needs to be interface-based and replaceable. Otherwise, it will not be possible to simply replace modules and refactor.
 

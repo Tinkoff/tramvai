@@ -26,6 +26,9 @@ Experimental flags are provided in `tramvai.json` and should be passed separatel
               },
               "webpack": {
                 "cacheUnaffected": true
+              },
+              "transpilation": {
+                "loader": "swc"
               }
             }
           }
@@ -38,6 +41,9 @@ Experimental flags are provided in `tramvai.json` and should be passed separatel
               },
               "webpack": {
                 "cacheUnaffected": true
+              },
+              "transpilation": {
+                "loader": "swc"
               }
             }
           }
@@ -59,7 +65,7 @@ Webpack by itself has [a list of experimental flags](https://webpack.js.org/conf
 
 - `cacheUnaffected=true` - should improve build performance in `serve` mode
 
-### minicss
+## minicss
 
 Flags are specified through `experiments.minicss` and allows to enable experimental settings for [`mini-css-extract-plugin`](https://github.com/webpack-contrib/mini-css-extract-plugin)
 
@@ -68,3 +74,21 @@ Flags are specified through `experiments.minicss` and allows to enable experimen
 ### Defaults
 
 - `useImportModule=true` - enabled by default as this improves build time and provides better css related error descriptions
+
+## transpilation
+
+Settings for the js-ts transpilation process
+
+- `loader="babel"|"swc"` - use specific transpiler
+
+### swc
+
+To use `loader="swc"` you need to install additional libraries by yourself:
+
+- `"@swc/core": "^1.2.124"`
+- `"@swc/helpers": "^0.3.2"`
+- `"swc-loader": "^0.1.15"`
+
+### Defaults
+
+- `loader="babel"` - babel in not experimental setup and can be safely used

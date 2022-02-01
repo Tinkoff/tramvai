@@ -1,11 +1,13 @@
 # Error interceptor
 
-Модуль-обертка над [@tinkoff/error-handlers](../libs/error-handlers)
+Wrapper module for the [@tinkoff/error-handlers](../libs/error-handlers)
 
-## Интеграция с tramvai
+## Explanation
 
-Модуль не предоставляет публтичного интерфейса, а только подписывается на события инициализации и подключает @tinkoff/error-handlers который перехватывает ошибки в браузере и клиенте
+### Integration with tramvai
 
-## Принцип работы
+Module doesn't provide any public interface and only registers error handlers with `@tinkoff/error-handlers` which will catch errors on server and client.
 
-На сервере подписываемся на события `unhandledRejection` и внезапные остановки выполнения с помощью библиотеки `death`, затем ошибку кидает в консоль.
+### How does it work on server
+
+Subscribes to the event `unhandledRejection` and any sudden signals and uncaughtErrors with library `death` then logs it to the console.

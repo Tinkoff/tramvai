@@ -1,6 +1,6 @@
 # @tramvai/http-client
 
-Абстрактный интерфейс `HttpClient` для стандартизации работы с внешними API в tramvai приложениях
+Abstract interface `HttpClient` used as standard interface for the http request api to external API in the tramvai ecosystem
 
 ## API
 
@@ -36,7 +36,7 @@ type HttpClient = {
   ): Promise<HttpClientResponse<R>>;
   // method for creating a new instance of the HTTP client, based on the settings of the current
   fork(options?: HttpClientRequest, mergeOptionsConfig?: { replace?: boolean }): HttpClient;
-}
+};
 ```
 
 ### HttpClientRequest
@@ -76,7 +76,7 @@ type HttpClientRequest = {
   // method to modify the error object
   modifyError?: (error: HttpClientError, req: HttpClientRequest) => HttpClientError;
   [key: string]: any;
-}
+};
 ```
 
 ### HttpClientResponse
@@ -89,7 +89,7 @@ type HttpClientResponse<P = any> = {
   status: number;
   // HTTP response headers
   headers: Record<string, any>;
-}
+};
 ```
 
 ### HttpClientError
@@ -97,7 +97,7 @@ type HttpClientResponse<P = any> = {
 ```tsx
 type HttpClientError = Error & {
   [key: string]: any;
-}
+};
 ```
 
 ### ApiService
@@ -121,6 +121,6 @@ class CustomApiService extends ApiService {
 
 const service = new CustomApiService({ httpClient });
 
-service.request({ path: 'fake' }) // show alert
-service.get('fake') // also show alert
+service.request({ path: 'fake' }); // show alert
+service.get('fake'); // also show alert
 ```

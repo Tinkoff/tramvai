@@ -1,20 +1,24 @@
 # CookieModule
 
-Модуль для получения и изменения cookie, который поставляется с common module.
+Module for cookie parsing and setting. The module is provided with the `@tramvai/module-common`.
 
-## Features
+## Installation
 
-- Изоморфный код, работает на сервере и в браузере
-- На сервере происходит дедубликация одинаковых кук и при добавлении куки, кука будет доступна в методе get
-- По дефолту мы проставляем secure параметр
+Module is already provided with the `@tramvai/module-common` so no additional actions are needed if you are already use common module. Otherwise install `@tramvai/module-cookie` manually.
 
-## Установка
+## Explanation
 
-Уже поставляется внутри @tramvai/module-common и не нужно устанавливать, если подключен module-common.
+Implements interface `CookieManager` and adds provider `COOKIE_MANAGER` from the `@tinkoff/core`
 
-Иначе, нужно подключить `@tramvai/module-cookie`
+### Features
 
-## Использование
+- Isomorphic code that works on server and client
+- Uses deduplication for the same cookie entries on server
+- Uses secure parameter by default
+
+## How to
+
+### Get cookie
 
 ```tsx
 import { COOKIE_MANAGER, Module, provide } from '@tramvai/core';
@@ -22,13 +26,12 @@ import { COOKIE_MANAGER, Module, provide } from '@tramvai/core';
 @Module({
   providers: [
     provide({
-      // Управление куками в приложении
       provide: 'my_module',
       useFactory: ({ cookie }) => {
         cookie.get('sid'); // > ads.api3
       },
       deps: {
-        cookie: COOKIE_MANAGER, // добавляем в зависимость
+        cookie: COOKIE_MANAGER,
       },
     }),
   ],
@@ -36,15 +39,11 @@ import { COOKIE_MANAGER, Module, provide } from '@tramvai/core';
 class MyModule {}
 ```
 
-## Интерфейс
+## Exported tokens
 
-Реализует интерфейс CookieManager и добавляет в di провайдер `COOKIE_MANAGER`. @tinkoff/core
+### COOKIE_MANAGER_TOKEN
 
-## Экспортируемые токены
-
-#### COOKIE_MANAGER_TOKEN
-
-Сущность для работы с куками
+Instance of cookie manager
 
 ```tsx
 interface CookieSetOptions {
