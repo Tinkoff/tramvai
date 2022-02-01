@@ -1,12 +1,12 @@
 {
-  "name": "@tramvai/core",
+  "name": "@tramvai/tokens-core",
   "version": "0.0.0-stub",
-  "description": "",
+  "description": "Tramvai core tokens",
   "main": "lib/index.js",
+  "module": "lib/index.es.js",
   "typings": "src/index.ts",
   "files": [
-    "lib",
-    "__migrations__"
+    "lib"
   ],
   "sideEffects": false,
   "repository": {
@@ -19,18 +19,12 @@
     "build-for-publish": "true"
   },
   "dependencies": {
-    "@tinkoff/utils": "^2.1.2",
-    "@tramvai/tokens-common": "0.0.0-stub",
-    "@tramvai/tokens-core": "0.0.0-stub",
-    "@tramvai/types-actions-state-context": "0.0.0-stub",
+    "@tramvai/types-actions-state-context": "0.0.0-stub"
+  },
+  "peerDependencies": {
     "@tinkoff/dippy": "0.0.0-stub",
     "tslib": "^2.0.3"
   },
-  "peerDependencies": {
-    "jscodeshift": "^0.7.0"
-  },
-  "gitHead": "8e826a214c87b188fc4d254cdd8f2a2b2c55f3a8",
-  "module": "lib/index.es.js",
   "es2017": "lib/index.es2017.js",
   "license": "Apache-2.0"
 }

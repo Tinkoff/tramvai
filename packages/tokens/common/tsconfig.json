@@ -14,9 +14,6 @@
             "path": "../../libs/dippy"
         },
         {
-            "path": "../../tramvai/core"
-        },
-        {
             "path": "../../tramvai/state"
         },
         {
@@ -24,6 +21,9 @@
         },
         {
             "path": "../../tramvai/types-actions-state-context"
+        },
+        {
+            "path": "../core"
         }
     ]
 }

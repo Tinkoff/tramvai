@@ -1,15 +1,16 @@
 import type { Container, Provider } from '@tinkoff/dippy';
 import { createContainer, Scope } from '@tinkoff/dippy';
-import { MODULE_PARAMETERS } from './modules/module';
-import type { ModuleType, ExtendedModule, ModuleParameters } from './modules/module.h';
+import type { Bundle } from '@tramvai/tokens-core';
 import {
   ACTIONS_LIST_TOKEN,
   BUNDLE_LIST_TOKEN,
   MODULES_LIST_TOKEN,
   APP_INFO_TOKEN,
   COMMAND_LINE_RUNNER_TOKEN,
-} from './tokens';
-import type { Bundle } from './bundles/createBundle.h';
+} from '@tramvai/tokens-core';
+import { LOGGER_TOKEN } from '@tramvai/tokens-common';
+import { MODULE_PARAMETERS } from './modules/module';
+import type { ModuleType, ExtendedModule, ModuleParameters } from './modules/module.h';
 import { walkOfModules } from './modules/walkOfModules';
 import { getModuleParameters } from './modules/getModuleParameters';
 import { isExtendedModule } from './modules/isExtendedModule';
@@ -79,9 +80,34 @@ export class App {
   }
 
   async initialization(env: 'server' | 'client', type = 'init' as const) {
-    const di = await this.di.get(COMMAND_LINE_RUNNER_TOKEN).run(env, type);
+    const logger = this.di.get({ token: LOGGER_TOKEN, optional: true });
+    const log = logger?.('tramvai-core');
+    const commandLineRunner = this.di.get({ token: COMMAND_LINE_RUNNER_TOKEN, optional: true });
+
+    if (!commandLineRunner) {
+      throw new Error(
+        '`COMMAND_LINE_RUNNER_TOKEN` is not defined, have you added `@tramvai/module-common` to your dependency list?'
+      );
+    }
+
+    log?.warn({
+      event: 'tramvai-app-init',
+      message: 'Initializing. Run CommandLineRunner.',
+    });
+
+    const di = await commandLineRunner.run(env, type);
+
+    log?.warn({
+      event: 'tramvai-app-init',
+      message: 'CommandLineRunner executed successfully. Resolving modules.',
+    });
 
     this.resolveModules();
+
+    log?.warn({
+      event: 'tramvai-app-init',
+      message: 'Modules resolved successfully. Tramvai App initialized',
+    });
 
     return di;
   }

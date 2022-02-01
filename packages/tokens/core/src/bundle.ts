@@ -1,4 +1,4 @@
-import type { Action } from '../types/action';
+import type { Action } from './action';
 
 export interface BundleOptions {
   presets?: BundlePreset[];

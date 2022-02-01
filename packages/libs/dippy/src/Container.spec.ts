@@ -326,20 +326,20 @@ describe('DI Container', () => {
     it('не верный формат provider', () => {
       const container = new Container();
       expect(() => container.register(undefined as any)).toThrowErrorMatchingInlineSnapshot(
-        `"Invalid provider. Проверь что отправляется в DI, сейчас нам приходит не верный формат: \\"undefined\\""`
+        `"Invalid provider. Check what is passed to the DI. Current value is not a provider: \\"undefined\\""`
       );
 
       expect(() =>
         container.register({ provide: undefined, useValue: 1 })
       ).toThrowErrorMatchingInlineSnapshot(
-        `"Invalid provider. Проверь что отправляется в DI, сейчас нам приходит не верный формат: {\\"provide\\":\\"undefined\\",\\"useValue\\":1}"`
+        `"Invalid provider. Check what is passed to the DI. Current value is not a provider: {\\"provide\\":\\"undefined\\",\\"useValue\\":1}"`
       );
 
       expect(() =>
         // @ts-ignore
         container.register({ provide: 'testio' })
       ).toThrowErrorMatchingInlineSnapshot(
-        `"Invalid provider. Проверь что отправляется в DI, сейчас нам приходит не верный формат: {\\"provide\\":\\"testio\\"}"`
+        `"Invalid provider. Check what is passed to the DI. Current value is not a provider: {\\"provide\\":\\"testio\\"}"`
       );
 
       try {

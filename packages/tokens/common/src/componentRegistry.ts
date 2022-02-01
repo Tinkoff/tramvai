@@ -1,6 +1,6 @@
 import type { ComponentType } from 'react';
 import { createToken } from '@tinkoff/dippy';
-import type { Action } from '@tramvai/core';
+import type { Action } from '@tramvai/tokens-core';
 
 export interface RegistryComponentExtend {
   redirects?: any;

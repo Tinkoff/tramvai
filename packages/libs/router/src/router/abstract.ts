@@ -195,16 +195,14 @@ export abstract class AbstractRouter {
   }
 
   async navigate(navigateOptions: NavigateOptions | string) {
-    return this.internalNavigate(navigateOptions, {});
+    return this.internalNavigate(
+      typeof navigateOptions === 'string' ? { url: navigateOptions } : navigateOptions,
+      {}
+    );
   }
 
-  protected async internalNavigate(
-    navigateOptions: NavigateOptions | string,
-    { history }: InternalOptions
-  ) {
-    const options =
-      typeof navigateOptions === 'string' ? { url: navigateOptions } : navigateOptions;
-    const { url, replace, params, navigateState, code } = options;
+  protected async internalNavigate(navigateOptions: NavigateOptions, { history }: InternalOptions) {
+    const { url, replace, params, navigateState, code } = navigateOptions;
     const prevNavigation = this.currentNavigation ?? this.lastNavigation;
 
     if (!url && !prevNavigation) {
@@ -213,7 +211,7 @@ export abstract class AbstractRouter {
       );
     }
 
-    const resolvedUrl = this.resolveUrl(options);
+    const resolvedUrl = this.resolveUrl(navigateOptions);
     const { to: from, url: fromUrl } = prevNavigation ?? {};
 
     let navigation: Navigation = {

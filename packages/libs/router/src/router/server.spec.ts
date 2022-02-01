@@ -122,6 +122,21 @@ describe('router/server', () => {
         expect(mockNotFound).not.toHaveBeenCalled();
       });
 
+      it('should call onRedirect for subsequents navigations to external urls', async () => {
+        await router.navigate('/child1/');
+        expect(mockRedirect).not.toHaveBeenCalled();
+        expect(mockNotFound).not.toHaveBeenCalled();
+
+        await router.navigate('https://test.test/path/page/');
+        expect(mockRedirect).toHaveBeenCalledWith(
+          expect.objectContaining({
+            to: null,
+            url: expect.objectContaining({ href: 'https://test.test/path/page/' }),
+          })
+        );
+        expect(mockNotFound).not.toHaveBeenCalled();
+      });
+
       it('should call onNotFound for unknown routes', async () => {
         await router.navigate('/unknown/');
 

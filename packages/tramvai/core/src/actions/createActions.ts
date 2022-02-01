@@ -1,5 +1,5 @@
-import type { ActionParameters, Action } from '../types/action';
-import { ACTION_PARAMETERS } from '../types/action';
+import type { ActionParameters, Action } from '@tramvai/tokens-core';
+import { ACTION_PARAMETERS } from '@tramvai/tokens-core';
 
 export function createAction<Result = any, Payload = any, Deps = any>(
   action: ActionParameters<Payload, Result, Deps>

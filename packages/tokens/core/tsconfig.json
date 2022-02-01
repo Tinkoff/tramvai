@@ -11,16 +11,10 @@
     },
     "references": [
         {
-            "path": "../../tokens/common"
-        },
-        {
-            "path": "../../tokens/core"
-        },
-        {
-            "path": "../types-actions-state-context"
-        },
-        {
             "path": "../../libs/dippy"
+        },
+        {
+            "path": "../../tramvai/types-actions-state-context"
         }
     ]
 }

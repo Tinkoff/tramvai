@@ -1,9 +1,11 @@
 import type { Container, Provider } from '@tinkoff/dippy';
 import { createToken } from '@tinkoff/dippy';
-import type { Command } from './command/command.h';
-import type { Action } from './types/action';
+import type { Command } from './command';
+import type { Action } from './action';
 
-export { DI_TOKEN, IS_DI_CHILD_CONTAINER_TOKEN } from '@tinkoff/dippy';
+export * from './action';
+export * from './command';
+export * from './bundle';
 
 export const BUNDLE_LIST_TOKEN = createToken('bundleList');
 export const ACTIONS_LIST_TOKEN = createToken<Action[]>('actionsList');
@@ -33,20 +35,20 @@ export const COMMAND_LINES_TOKEN = createToken<CommandLines>('commandLines');
 
 const multiOptions = { multi: true };
 export const commandLineListTokens = {
-  // Блок: Создание
+  // Block: Initializing
   init: createToken<Command>('init', multiOptions),
   listen: createToken<Command>('listen', multiOptions),
 
-  // Блок: Обработка клиентов
-  customerStart: createToken<Command>('customer_start', multiOptions), // Инициализация клиента
-  resolveUserDeps: createToken<Command>('resolve_user_deps', multiOptions), // Получение данных о клиенте
-  resolvePageDeps: createToken<Command>('resolve_page_deps', multiOptions), // Получение данных необходимых для роута
-  generatePage: createToken<Command>('generate_page', multiOptions), // Генерация html для страницы
-  clear: createToken<Command>('clear', multiOptions), // Очистка данных
+  // Block: Request handling
+  customerStart: createToken<Command>('customer_start', multiOptions), // Client initialization
+  resolveUserDeps: createToken<Command>('resolve_user_deps', multiOptions), // Get the client data
+  resolvePageDeps: createToken<Command>('resolve_page_deps', multiOptions), // Get the page data
+  generatePage: createToken<Command>('generate_page', multiOptions), // Generate html for the page
+  clear: createToken<Command>('clear', multiOptions), // Cleanup
 
-  // Блок: Переходы на клиенте
+  // Block: Client navigations
   spaTransition: createToken<Command>('spa_transition', multiOptions),
 
-  // Блок: Закрытие сервера
+  // Block: Server stop
   close: createToken<Command>('close', multiOptions),
 };

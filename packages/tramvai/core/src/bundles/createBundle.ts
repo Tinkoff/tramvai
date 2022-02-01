@@ -1,8 +1,7 @@
 import concat from '@tinkoff/utils/array/concat';
 import mergeWith from '@tinkoff/utils/object/mergeWith';
 import omit from '@tinkoff/utils/object/omit';
-
-import type { BundlePreset, BundleOptions, Bundle } from './createBundle.h';
+import type { BundlePreset, BundleOptions, Bundle } from '@tramvai/tokens-core';
 
 const mergePlan = (x: any, y: any): any => {
   if (Array.isArray(x) && Array.isArray(y)) {

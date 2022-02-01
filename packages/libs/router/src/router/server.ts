@@ -28,14 +28,18 @@ export class Router extends AbstractRouter {
     return this.lastNavigation;
   }
 
-  protected async run(navigation: Navigation) {
-    if (this.redirectCode) {
-      return this.redirect(navigation, { url: navigation.url.path, code: this.redirectCode });
-    }
-
+  protected async internalNavigate(navigateOptions: NavigateOptions, internalOptions) {
     // any navigation after initial should be considered as redirects
     if (this.getCurrentRoute()) {
-      return this.redirect(navigation, { url: navigation.url.path, code: navigation.code });
+      return this.redirect(this.lastNavigation, navigateOptions);
+    }
+
+    return super.internalNavigate(navigateOptions, internalOptions);
+  }
+
+  protected async run(navigation: Navigation) {
+    if (this.redirectCode) {
+      return this.redirect(navigation, { url: navigation.url.href, code: this.redirectCode });
     }
 
     await super.run(navigation);

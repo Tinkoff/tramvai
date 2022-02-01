@@ -1,5 +1,5 @@
+import { ACTION_PARAMETERS } from '@tramvai/tokens-core';
 import { createAction } from './createActions';
-import { ACTION_PARAMETERS } from '../types/action';
 
 describe('createAction', () => {
   it('Создание и вызов экшена', () => {

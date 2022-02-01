@@ -1,5 +1,5 @@
 import { createToken } from '@tinkoff/dippy';
-import type { Action } from '@tramvai/core';
+import type { Action } from '@tramvai/tokens-core';
 
 /**
  * @description

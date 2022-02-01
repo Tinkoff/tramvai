@@ -67,7 +67,7 @@ function checkValidateInterfaceProvider(provider: Provider) {
       provider.useFactory === undefined)
   ) {
     throw createError(
-      `Invalid provider. Проверь что отправляется в DI, сейчас нам приходит не верный формат: ${JSON.stringify(
+      `Invalid provider. Check what is passed to the DI. Current value is not a provider: ${JSON.stringify(
         provider,
         (k, v) => {
           return v === undefined ? 'undefined' : v;

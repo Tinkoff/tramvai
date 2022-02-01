@@ -1,5 +1,5 @@
 import { createToken } from '@tinkoff/dippy';
-import type { Bundle } from '@tramvai/core';
+import type { Bundle } from '@tramvai/tokens-core';
 
 /**
  * @description
