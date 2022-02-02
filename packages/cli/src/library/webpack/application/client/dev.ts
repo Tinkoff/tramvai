@@ -119,7 +119,7 @@ export const webpackClientConfig = ({
   // window.ap выставляется в packages/modules/render/src/server/blocks/bundleResource/bundleResource.ts
   // в development сборке, window.ap будет проставлен только если есть валидный ASSETS_PREFIX,
   // поэтому меняем publicPath на window.ap только при таком же условии
-  if (process.env.ASSETS_PREFIX) {
+  if (process.env.ASSETS_PREFIX && process.env.ASSETS_PREFIX !== 'static') {
     config.plugin('runtime-path').use(RuntimePathPlugin, [
       {
         publicPath: 'window.ap',
