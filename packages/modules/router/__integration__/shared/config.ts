@@ -182,4 +182,16 @@ export const routes: Route[] = [
       pageComponent: 'DomNavigateHash',
     },
   },
+  ...(process.env.TEST_NOT_FOUND
+    ? [
+        {
+          name: 'not-found',
+          path: '*',
+          config: {
+            pageComponent: 'notFound',
+            httpStatus: 409,
+          },
+        },
+      ]
+    : []),
 ];

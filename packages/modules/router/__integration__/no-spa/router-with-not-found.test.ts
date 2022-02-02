@@ -11,9 +11,22 @@ import {
   internalRouterStateFromState,
 } from '../shared/testUtils';
 
-describe('router/no-spa', () => {
+describe('router/no-spa-with-not-found', () => {
   const { getApp } = testApp({
-    name: 'router-no-spa',
+    name: 'router-no-spa-with-not-found',
+    config: {
+      commands: {
+        build: {
+          configurations: {
+            definePlugin: {
+              dev: {
+                'process.env.TEST_NOT_FOUND': true,
+              },
+            },
+          },
+        },
+      },
+    },
   });
   const { getPageWrapper } = testAppInBrowser(getApp);
 
@@ -111,8 +124,8 @@ describe('router/no-spa', () => {
       const app = getApp();
 
       await Promise.all([
-        app.request('/some/page/').expect(404),
-        app.request('/unknown/').expect(404),
+        app.request('/some/page/').expect(409),
+        app.request('/unknown/').expect(409),
       ]);
     });
   });
@@ -215,6 +228,10 @@ describe('router/no-spa', () => {
           '/test/',
         ]),
       });
+
+      expect(response.body.payload).not.toContain('*');
+      expect(response.body.payload).not.toContain('/*');
+      expect(response.body.payload).not.toContain('*/');
     });
   });
 

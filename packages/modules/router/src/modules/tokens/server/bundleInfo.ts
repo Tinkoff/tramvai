@@ -3,6 +3,7 @@ import prop from '@tinkoff/utils/object/prop';
 
 import { createPapiMethod } from '@tramvai/papi';
 import type { ROUTES_TOKEN } from '@tramvai/tokens-router';
+import { isWildcard, isHistoryFallback } from '@tinkoff/router';
 import type { routeTransformToken } from '../../tokens';
 import { routerBundleInfoAdditionalToken } from '../../tokens';
 
@@ -28,6 +29,7 @@ export const bundleInfo = ({
           .concat((await loadAdditional()) ?? [])
           .map(routeTransform)
           .map(prop('path'))
+          .filter((path) => !isWildcard(path) && !isHistoryFallback(path))
           .sort()
       );
     },

@@ -1,19 +1,33 @@
 import { testApp } from '@tramvai/internal-test-utils/testApp';
 import { testAppInBrowser } from '@tramvai/internal-test-utils/browser';
-import { sleep } from '@tramvai/test-integration';
 import { startExternalWebsite } from '@tramvai/internal-test-utils/utils/externalWebsite';
 import {
   getUrlPath,
   getPageTitle,
   getRouteName,
+  getUseRoute,
   checkIsSpa,
+  checkLatestNavigationType,
   internalRouterStateFromDi,
   internalRouterStateFromState,
 } from '../shared/testUtils';
 
-describe('router/no-spa', () => {
+describe('router/spa', () => {
   const { getApp } = testApp({
-    name: 'router-no-spa',
+    name: 'router-spa-with-not-found',
+    config: {
+      commands: {
+        build: {
+          configurations: {
+            definePlugin: {
+              dev: {
+                'process.env.TEST_NOT_FOUND': true,
+              },
+            },
+          },
+        },
+      },
+    },
   });
   const { getPageWrapper } = testAppInBrowser(getApp);
 
@@ -34,6 +48,27 @@ describe('router/no-spa', () => {
       expect(test.querySelector('#route-name').innerHTML).toEqual('test');
     });
 
+    it('should not reload browser page', async () => {
+      const { serverUrl } = getApp();
+      const { page, router } = await getPageWrapper();
+      let loadCount = 0;
+
+      page.on('load', () => {
+        loadCount++;
+      });
+
+      await page.goto(`${serverUrl}/`);
+      await router.navigate('/test/');
+      await router.navigate('/inner/page/');
+      await page.goBack();
+      await page.goForward();
+
+      expect(page.url()).toBe(`${serverUrl}/inner/page/`);
+      expect(loadCount).toBe(1);
+
+      expect(await getRouteName(page)).toBe('inner-page');
+    });
+
     it('lazy components', async () => {
       const app = getApp();
 
@@ -51,25 +86,17 @@ describe('router/no-spa', () => {
       });
     });
 
-    it('should reload browser page', async () => {
-      const { page, router } = await getPageWrapper();
-      let loadCount = 0;
+    it('useRoute and useSelector should be in sync', async () => {
+      const { page, router } = await getPageWrapper('/useroute/1/');
 
-      page.on('load', () => {
-        loadCount++;
-      });
+      await router.navigate('../2');
+      expect(await getUseRoute(page)).toBe('/useroute/2/');
 
-      await page.goto(`${getApp().serverUrl}/`);
-      await router.navigateThenWaitForReload('/test/');
-      await sleep(10);
-      await router.navigateThenWaitForReload('/inner/page/');
-      await page.goBack();
-      await page.goForward();
+      await router.navigate('../3/');
+      expect(await getPageTitle(page)).toBe('UseRoute Page Component');
 
-      expect(page.url()).toBe(`${getApp().serverUrl}/inner/page/`);
-      expect(loadCount).toBe(5);
-
-      expect(await getRouteName(page)).toBe('inner-page');
+      await router.navigate('../2/');
+      expect(await getUseRoute(page)).toBe('/useroute/2/');
     });
   });
 
@@ -84,12 +111,13 @@ describe('router/no-spa', () => {
 
     // eslint-disable-next-line jest/expect-expect
     it('should return redirect status for redirects', async () => {
-      const app = getApp();
-
       await Promise.all([
-        app.request('/redirect/').expect(307).expect('Location', `/after/static/redirect/`),
-        app.request('/action/redirect/').expect(307).expect('Location', `/after/action/redirect/`),
-        app
+        getApp().request('/redirect/').expect(307).expect('Location', `/after/static/redirect/`),
+        getApp()
+          .request('/action/redirect/')
+          .expect(307)
+          .expect('Location', `/after/action/redirect/`),
+        getApp()
           .request('/redirect/absolute/')
           .expect(307)
           .expect('Location', 'https://www.tinkoff.ru/redirect/'),
@@ -98,30 +126,44 @@ describe('router/no-spa', () => {
 
     // eslint-disable-next-line jest/expect-expect
     it('should set custom httpStatus', async () => {
-      const app = getApp();
-
       await Promise.all([
-        app.request('/status-204/').expect(204),
-        app.request('/status-501/').expect(501),
+        getApp().request('/status-204/').expect(204),
+        getApp().request('/status-501/').expect(501),
       ]);
     });
 
     // eslint-disable-next-line jest/expect-expect
     it('should return 404 status', async () => {
-      const app = getApp();
-
       await Promise.all([
-        app.request('/some/page/').expect(404),
-        app.request('/unknown/').expect(404),
+        getApp().request('/some/page/').expect(409),
+        getApp().request('/unknown/').expect(409),
       ]);
     });
   });
 
   describe('redirects', () => {
     // eslint-disable-next-line jest/expect-expect
-    it('should redirect for trailing slashes', async () => {
+    it('should redirect for trailing slash on first entry', async () => {
       await getApp().request('/test').expect(301).expect('Location', '/test/');
       await getApp().request('/test', { method: 'post' }).expect(308).expect('Location', '/test/');
+    });
+
+    it('should redirect for trailing slash on spa navigations', async () => {
+      const { serverUrl } = getApp();
+      const { page, router } = await getPageWrapper('/');
+
+      await router.navigate('/test');
+
+      expect(page.url()).toBe(`${serverUrl}/test/`);
+    });
+
+    it('should redirect by static redirect', async () => {
+      const { serverUrl } = getApp();
+      const { page, router } = await getPageWrapper('/');
+
+      await router.navigate('/redirect/');
+
+      expect(page.url()).toBe(`${serverUrl}/after/static/redirect/`);
     });
 
     // eslint-disable-next-line jest/expect-expect
@@ -132,20 +174,31 @@ describe('router/no-spa', () => {
         .expect('Location', `/after/static/redirect/`);
     });
 
-    // eslint-disable-next-line jest/expect-expect
     it('should not preserve query on redirects by default', async () => {
-      await getApp()
-        .request('/redirect/?a=1&b=2')
-        .expect(307)
-        .expect('Location', `/after/static/redirect/`);
+      const { serverUrl } = getApp();
+      const { page, router } = await getPageWrapper('/');
+
+      await router.navigate('/redirect/?a=1&b=2');
+
+      expect(page.url()).toBe(`${serverUrl}/after/static/redirect/`);
     });
 
-    // eslint-disable-next-line jest/expect-expect
     it('should preserve query on redirects if specified', async () => {
-      await getApp()
-        .request('/redirect/query/?a=1&b=2')
-        .expect(307)
-        .expect('Location', `/after/static/redirect/?a=1&b=2`);
+      const { serverUrl } = getApp();
+      const { page, router } = await getPageWrapper('/');
+
+      await router.navigate('/redirect/query/?a=1&b=2');
+
+      expect(page.url()).toBe(`${serverUrl}/after/static/redirect/?a=1&b=2`);
+    });
+
+    it('should redirect by actions', async () => {
+      const { serverUrl } = getApp();
+      const { page, router } = await getPageWrapper('/');
+
+      await router.navigate('/action/redirect/');
+
+      expect(page.url()).toBe(`${serverUrl}/after/action/redirect/`);
     });
 
     // eslint-disable-next-line jest/expect-expect
@@ -153,12 +206,13 @@ describe('router/no-spa', () => {
       await getApp().request('/redirect/guard/').expect(307).expect('Location', `/test/`);
     });
 
-    it('should redirect by guard at subsequent navigations', async () => {
+    it('should redirect by guard on spa', async () => {
+      const { serverUrl } = getApp();
       const { page, router } = await getPageWrapper('/');
 
-      await router.navigateThenWaitForReload('/redirect/guard/');
+      await router.navigate('/redirect/guard/');
 
-      expect(page.url()).toBe(`${getApp().serverUrl}/test/`);
+      expect(page.url()).toBe(`${serverUrl}/test/`);
     });
 
     // eslint-disable-next-line jest/expect-expect
@@ -188,8 +242,10 @@ describe('router/no-spa', () => {
     const { getAddress } = startExternalWebsite();
 
     it('should navigate to external links', async () => {
-      const { page, router } = await getPageWrapper('/');
+      const { serverUrl } = getApp();
+      const { page, router } = await getPageWrapper();
 
+      await page.goto(`${serverUrl}/`);
       await router.navigateThenWaitForReload(getAddress());
 
       expect(page.url()).toBe(getAddress());
@@ -215,53 +271,86 @@ describe('router/no-spa', () => {
           '/test/',
         ]),
       });
+
+      expect(response.body.payload).not.toContain('*');
+      expect(response.body.payload).not.toContain('/*');
+      expect(response.body.payload).not.toContain('*/');
     });
   });
 
   describe('history navigations', () => {
+    it('should use the same navigation type', async () => {
+      const { serverUrl } = getApp();
+      const { page, router } = await getPageWrapper('/');
+
+      await router.navigate({ query: { a: '1' } });
+
+      expect(await checkLatestNavigationType(page)).toBe('navigate');
+      await page.goBack();
+
+      expect(await checkLatestNavigationType(page)).toBe('navigate');
+
+      await page.goForward();
+
+      expect(await checkLatestNavigationType(page)).toBe('navigate');
+      expect(page.url()).toBe(`${serverUrl}/?a=1`);
+    });
     it('should navigate by history', async () => {
       const { serverUrl } = getApp();
       const { page, router } = await getPageWrapper('/');
 
-      await router.navigateThenWaitForReload('/test/');
-      await router.updateCurrentRoute({ replace: true, query: { a: '1' } });
-      await router.navigateThenWaitForReload('/inner/page/');
-      await router.navigateThenWaitForReload('/action/redirect/');
+      await router.navigate('/inner/page/');
+      await router.navigate('/test');
+      await router.updateCurrentRoute({ query: { a: '1' } });
+      await router.navigate('/test/');
+      await router.navigate('/action/redirect/');
 
       expect(await getUrlPath(page)).toBe('/after/action/redirect/');
       expect(page.url()).toBe(`${serverUrl}/after/action/redirect/`);
 
       await page.goBack();
+      expect(await checkLatestNavigationType(page)).toBe('navigate');
       await page.goBack();
+      expect(await checkLatestNavigationType(page)).toBe('updateCurrentRoute');
 
       expect(page.url()).toBe(`${serverUrl}/test/?a=1`);
 
       await page.reload();
 
       await page.goForward();
+      expect(await checkLatestNavigationType(page)).toBe('updateCurrentRoute');
 
-      expect(page.url()).toBe(`${serverUrl}/inner/page/`);
+      expect(page.url()).toBe(`${serverUrl}/test/`);
     });
-    it('updateCurrentRoute should work for no-spa', async () => {
+    it('mix of navigate and updateCurrentRoute with replace', async () => {
       const { serverUrl } = getApp();
       const { page, router } = await getPageWrapper('/');
 
-      expect(await getUrlPath(page)).toBe('/');
-
       await router.updateCurrentRoute({ replace: true, query: { a: '1' } });
-
-      expect(await getUrlPath(page)).toBe('/?a=1');
-
-      await router.updateCurrentRoute({ query: { b: '2' }, preserveQuery: true });
-      expect(await getUrlPath(page)).toBe('/?a=1&b=2');
-
-      expect(page.url()).toBe(`${serverUrl}/?a=1&b=2`);
+      await router.navigate('/test/');
+      await router.updateCurrentRoute({ replace: true, query: { b: '2' } });
 
       await page.goBack();
+      expect(await checkLatestNavigationType(page)).toBe('navigate');
 
       expect(page.url()).toBe(`${serverUrl}/?a=1`);
 
-      expect(await getUrlPath(page)).toBe('/?a=1');
+      expect(await getPageTitle(page)).toBe('Default Page Component');
+    });
+
+    it('mix of navigate and updateCurrentRoute with replace for the same route', async () => {
+      const { serverUrl } = getApp();
+      const { page, router } = await getPageWrapper('/dynamic/first/');
+
+      await router.updateCurrentRoute({ replace: true, query: { a: '1' } });
+      await router.navigate('/dynamic/second/');
+      await router.updateCurrentRoute({ replace: true, query: { b: '2' } });
+
+      await page.goBack();
+      expect(await checkLatestNavigationType(page)).toBe('navigate');
+
+      expect(page.url()).toBe(`${serverUrl}/dynamic/first/?a=1`);
+
       expect(await getPageTitle(page)).toBe('Default Page Component');
     });
   });
@@ -288,7 +377,7 @@ describe('router/no-spa', () => {
       await page.waitForNavigation();
 
       expect(page.url()).toBe(`${serverUrl}/test/`);
-      expect(isSpa()).toBe(false);
+      expect(isSpa()).toBe(true);
       expect(await page.evaluate(() => window.history.length)).toBe(2);
     });
 
@@ -313,7 +402,7 @@ describe('router/no-spa', () => {
       await page.waitForNavigation();
 
       expect(page.url()).toBe(`${serverUrl}/test/`);
-      expect(isSpa()).toBe(false);
+      expect(isSpa()).toBe(true);
       expect(await page.evaluate(() => window.history.length)).toBe(3);
     });
   });
@@ -343,7 +432,6 @@ describe('router/no-spa', () => {
       expect(await page.evaluate(() => window.history.length)).toBe(3);
     });
   });
-
   describe('proxy', () => {
     it('should rehydrate url in browser after proxied request on server', async () => {
       const { request } = getApp();
