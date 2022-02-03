@@ -14,7 +14,6 @@ import type {
   LogLevel,
   LogArgs,
 } from './logger.h';
-import { normalizeLogObj } from './utils/normalizeLogObj';
 
 const createRegexpFromNamespace = (namespace: string) => {
   return new RegExp(`^${namespace.replace(/\*/g, '.*?')}$`);
@@ -35,7 +34,6 @@ class Logger implements LoggerInterface {
   private filters: Filter[];
   private extensions: Extension[];
   private defaults: LogObj;
-  private depthLimit?: number;
 
   // чтобы типы нормально работали, сами функции определяются динамически через Logger.prototype ниже
   debug: LogFn;
@@ -79,10 +77,6 @@ class Logger implements LoggerInterface {
         return this.log(level, args);
       };
     }, LEVELS);
-
-    if (typeof options.depthLimit === 'number') {
-      this.depthLimit = options.depthLimit;
-    }
   }
 
   private static save() {
@@ -181,7 +175,6 @@ class Logger implements LoggerInterface {
       filters: this.filters,
       extensions: this.extensions,
       defaults: this.defaults,
-      depthLimit: this.depthLimit,
       ...opts,
       name,
       key,
@@ -240,19 +233,14 @@ class Logger implements LoggerInterface {
   }
 
   private createLogObj(level: number, args: LogArgs): LogObj {
-    return normalizeLogObj(
-      {
-        date: new Date(),
-        ...this.defaults,
-        name: this.name,
-        type: LEVEL_NAMES[level],
-        level,
-        args,
-      },
-      {
-        depthLimit: this.depthLimit,
-      }
-    );
+    return {
+      date: new Date(),
+      ...this.defaults,
+      name: this.name,
+      type: LEVEL_NAMES[level],
+      level,
+      args,
+    };
   }
 
   private log(level: number, args: LogArgs) {
