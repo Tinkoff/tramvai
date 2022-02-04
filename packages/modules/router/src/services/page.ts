@@ -71,7 +71,7 @@ export class PageService implements PageServiceInterface {
     return this.componentRegistry.get(name, group);
   }
 
-  resolveComponentFromConfig(property: 'page' | 'layout' | 'header' | 'footer') {
+  resolveComponentFromConfig(property: 'page' | 'layout' | 'header' | 'footer' | 'errorBoundary') {
     const configName = `${property}Component`;
     const defaultComponent = `${property}Default`;
 

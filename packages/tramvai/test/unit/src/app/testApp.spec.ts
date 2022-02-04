@@ -1,5 +1,5 @@
 import { NoSpaRouterModule } from '@tramvai/module-router';
-import { commandLineListTokens, createApp, createBundle } from '@tramvai/core';
+import { createApp, createBundle } from '@tramvai/core';
 import { CommonModule, ENV_USED_TOKEN } from '@tramvai/module-common';
 import { LogModule } from '@tramvai/module-log';
 import { RenderModule } from '@tramvai/module-render';
@@ -98,44 +98,6 @@ describe('test/unit/app/testApp', () => {
       const { mocker } = testEnv;
 
       expect(mocker).toBeDefined();
-    });
-  });
-
-  describe('fail', () => {
-    beforeAll(async () => {
-      const app = createApp({
-        name: 'unit-app',
-        bundles: {
-          mainDefault: () => Promise.resolve({ default: bundle }),
-        },
-        modules: [CommonModule, LogModule, RenderModule, ServerModule],
-        providers: [
-          {
-            provide: commandLineListTokens.resolveUserDeps,
-            multi: true,
-            useFactory: ({ wrong }) => {
-              return wrong.test();
-            },
-            deps: {
-              wrong: '_unknown_provider',
-            },
-          },
-        ],
-      });
-
-      testEnv = await testApp(app);
-    });
-
-    afterAll(() => {
-      return testEnv.close();
-    });
-
-    it('render with 500 status should fail', async () => {
-      const { render } = testEnv;
-
-      await expect(render('/')).rejects.toThrowError(
-        'Error: Token not found &quot;_unknown_provider&quot; at &quot;resolve_user_deps&quot;'
-      );
     });
   });
 });

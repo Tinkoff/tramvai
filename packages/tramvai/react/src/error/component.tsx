@@ -13,6 +13,9 @@ interface State {
   hasError: boolean;
 }
 
+/**
+ * @deprecated Use UniversalErrorBoundary component
+ */
 @withDi({
   errorHandlers: { token: ERROR_BOUNDARY_TOKEN, optional: true },
   fallbackComponentFromDi: { token: ERROR_BOUNDARY_FALLBACK_COMPONENT_TOKEN, optional: true },

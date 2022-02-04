@@ -12,16 +12,6 @@ export const renderFactory = (request: ReturnType<typeof requestFactory>) => asy
   const response = await request(path, { method });
   const parsed = parseHtml(response.text, parserOptions);
 
-  if (response.status === 500) {
-    const pre = parsed.parsed.querySelector('body > pre');
-    const [message, ...stack] = pre.innerText.split('&nbsp; &nbsp;');
-
-    throw new Error(`Получена ошибка: ${message}
-Проверьте логи сервера в терминале для подробностей об ошибке
-Cтек ошибки: ${stack.join('\n\t')}
-`);
-  }
-
   return {
     ...parsed,
     get initialState() {
@@ -34,6 +24,7 @@ Cтек ошибки: ${stack.join('\n\t')}
             script.innerHTML
               .replace("var initialState = '", '')
               .replace(/'$/, '')
+              .replace(/'/g, "\\\\'")
               .replace(/\\\\/g, '\\')
           );
         }

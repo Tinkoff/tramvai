@@ -27,7 +27,7 @@ export const errorHandler = (
     log: ReturnType<typeof LOGGER_TOKEN>;
   }
 ) => {
-  app.use((err, req: Request, res: Response, next) => {
+  app.use(async (err, req: Request, res: Response, next) => {
     const requestInfo = {
       ip: req.ip,
       requestId: req.headers['x-request-id'],

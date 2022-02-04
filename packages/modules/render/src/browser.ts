@@ -1,5 +1,5 @@
-import { Module, commandLineListTokens, DI_TOKEN } from '@tramvai/core';
-import { LOGGER_TOKEN, CONTEXT_TOKEN } from '@tramvai/module-common';
+import { Module, commandLineListTokens, DI_TOKEN, provide } from '@tramvai/core';
+import { LOGGER_TOKEN, CONTEXT_TOKEN, STORE_TOKEN } from '@tramvai/module-common';
 import {
   EXTEND_RENDER,
   CUSTOM_RENDER,
@@ -7,11 +7,14 @@ import {
   RENDER_MODE,
   RENDERER_CALLBACK,
 } from '@tramvai/tokens-render';
-import { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
+import { PAGE_SERVICE_TOKEN, ROUTER_TOKEN } from '@tramvai/tokens-router';
 import { rendering as renderInBrowser } from './client';
 import type { RenderModuleConfig } from './shared/types';
 import { LayoutModule } from './shared/LayoutModule';
+import { providers as sharedProviders } from './shared/providers';
+import { PageErrorStore, setPageErrorEvent } from './shared/pageErrorStore';
 
+export * from './shared/pageErrorStore';
 export * from '@tramvai/tokens-render';
 
 export const DEFAULT_POLYFILL_CONDITION = '';
@@ -25,7 +28,25 @@ const throwErrorInDev = (logger: typeof LOGGER_TOKEN) => {
 @Module({
   imports: [LayoutModule],
   providers: [
-    {
+    ...sharedProviders,
+    provide({
+      provide: commandLineListTokens.customerStart,
+      multi: true,
+      useFactory: ({ router, store }) => {
+        return function clearPageError() {
+          router.registerHook('beforeResolve', async () => {
+            if (store.getState(PageErrorStore)) {
+              store.dispatch(setPageErrorEvent(null));
+            }
+          });
+        };
+      },
+      deps: {
+        router: ROUTER_TOKEN,
+        store: STORE_TOKEN,
+      },
+    }),
+    provide({
       provide: RESOURCES_REGISTRY,
       useFactory: ({ logger }: { logger: typeof LOGGER_TOKEN }) => ({
         getPageResources: () => {
@@ -37,8 +58,8 @@ const throwErrorInDev = (logger: typeof LOGGER_TOKEN) => {
       deps: {
         logger: LOGGER_TOKEN,
       },
-    },
-    {
+    }),
+    provide({
       provide: commandLineListTokens.generatePage,
       useFactory: (deps) => {
         return function renderClientCommand() {
@@ -58,11 +79,11 @@ const throwErrorInDev = (logger: typeof LOGGER_TOKEN) => {
         mode: RENDER_MODE,
       },
       multi: true,
-    },
-    {
+    }),
+    provide({
       provide: RENDER_MODE,
       useValue: 'legacy',
-    },
+    }),
   ],
 })
 export class RenderModule {

@@ -1,10 +1,16 @@
-import memoOne from '@tinkoff/utils/function/memoize/one';
-import strictEqual from '@tinkoff/utils/is/strictEqual';
-import type { ComponentType } from 'react';
-import React, { PureComponent } from 'react';
-import { withError } from '@tramvai/react';
+import React, { PureComponent, useMemo } from 'react';
+import type { ComponentType, PropsWithChildren } from 'react';
+import type { UniversalErrorBoundaryFallbackProps } from '@tramvai/react';
+import {
+  useDi,
+  UniversalErrorBoundary,
+  ERROR_BOUNDARY_TOKEN,
+  ERROR_BOUNDARY_FALLBACK_COMPONENT_TOKEN,
+} from '@tramvai/react';
 import type { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
-import { useRoute } from '@tramvai/module-router';
+import { useRoute, useUrl } from '@tramvai/module-router';
+import { useStore } from '@tramvai/state';
+import { deserializeError, PageErrorStore } from '../shared/pageErrorStore';
 
 interface Props {
   LayoutComponent: React.ComponentType<{
@@ -14,44 +20,83 @@ interface Props {
   PageComponent: React.ComponentType;
   HeaderComponent: React.ComponentType;
   FooterComponent: React.ComponentType;
+  ErrorBoundaryComponent?: React.ComponentType<UniversalErrorBoundaryFallbackProps>;
 }
+
+const PageErrorBoundary = (
+  props: PropsWithChildren<{
+    fallback?: React.ComponentType<UniversalErrorBoundaryFallbackProps>;
+  }>
+) => {
+  const { children, fallback } = props;
+  const url = useUrl();
+  const serializedError = useStore(PageErrorStore);
+  const error = useMemo(() => {
+    return serializedError && deserializeError(serializedError);
+  }, [serializedError]);
+  const errorHandlers = useDi({ token: ERROR_BOUNDARY_TOKEN, optional: true });
+  const fallbackFromDi = useDi({ token: ERROR_BOUNDARY_FALLBACK_COMPONENT_TOKEN, optional: true });
+
+  return (
+    <UniversalErrorBoundary
+      url={url}
+      error={error}
+      errorHandlers={errorHandlers}
+      fallback={fallback}
+      fallbackFromDi={fallbackFromDi}
+    >
+      {children}
+    </UniversalErrorBoundary>
+  );
+};
 
 class RootComponent extends PureComponent<Props> {
   render() {
-    const { LayoutComponent, PageComponent, HeaderComponent, FooterComponent } = this.props;
+    const {
+      LayoutComponent,
+      PageComponent,
+      HeaderComponent,
+      FooterComponent,
+      ErrorBoundaryComponent,
+    } = this.props;
 
     return (
       <LayoutComponent Header={HeaderComponent} Footer={FooterComponent}>
-        <PageComponent />
+        <PageErrorBoundary fallback={ErrorBoundaryComponent}>
+          <PageComponent />
+        </PageErrorBoundary>
       </LayoutComponent>
     );
   }
 }
 
-const layoutWrapper = memoOne(withError(), strictEqual);
-const pageWrapper = memoOne(withError(), strictEqual);
+export const Root = ({ pageService }: { pageService: typeof PAGE_SERVICE_TOKEN }) => {
+  const { config } = useRoute();
+  const { pageComponent } = config;
+  let PageComponent = pageService.getComponent(pageComponent);
 
-export const Root = withError()(
-  ({ pageService }: { pageService: typeof PAGE_SERVICE_TOKEN; children?: React.ReactNode }) => {
-    const { config } = useRoute();
-    const { pageComponent } = config;
-
-    const PageComponent = pageService.getComponent(pageComponent);
-    if (!PageComponent) {
+  if (!PageComponent) {
+    // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
+    PageComponent = () => {
       throw new Error(`Page component '${pageComponent}' not found`);
-    }
-    // Достаем компоненты для текущей страницы, либо берем default реализации
-    const LayoutComponent: ComponentType<any> = pageService.resolveComponentFromConfig('layout');
-    const HeaderComponent = pageService.resolveComponentFromConfig('header');
-    const FooterComponent = pageService.resolveComponentFromConfig('footer');
-
-    return (
-      <RootComponent
-        HeaderComponent={HeaderComponent}
-        FooterComponent={FooterComponent}
-        LayoutComponent={layoutWrapper(LayoutComponent)}
-        PageComponent={pageWrapper(PageComponent)}
-      />
-    );
+    };
   }
-);
+
+  // Get components for current page, otherwise use a defaults
+  const LayoutComponent: ComponentType<any> = pageService.resolveComponentFromConfig('layout');
+  const HeaderComponent = pageService.resolveComponentFromConfig('header');
+  const FooterComponent = pageService.resolveComponentFromConfig('footer');
+  const ErrorBoundaryComponent: ComponentType<any> = pageService.resolveComponentFromConfig(
+    'errorBoundary'
+  );
+
+  return (
+    <RootComponent
+      HeaderComponent={HeaderComponent}
+      FooterComponent={FooterComponent}
+      LayoutComponent={LayoutComponent}
+      PageComponent={PageComponent}
+      ErrorBoundaryComponent={ErrorBoundaryComponent}
+    />
+  );
+};

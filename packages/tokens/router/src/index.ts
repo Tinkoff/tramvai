@@ -72,7 +72,9 @@ export interface PageService {
   addComponent(name: string, component: Component): void;
   getComponent(name: string): Component;
 
-  resolveComponentFromConfig(property: 'page' | 'layout' | 'header' | 'footer'): Component;
+  resolveComponentFromConfig(
+    property: 'page' | 'layout' | 'header' | 'footer' | 'errorBoundary'
+  ): Component;
 }
 
 export type RouteResolve = (navigation: Navigation) => Promise<Route | void>;

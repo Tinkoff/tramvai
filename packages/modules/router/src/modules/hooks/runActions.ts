@@ -1,7 +1,11 @@
 import uniq from '@tinkoff/utils/array/uniq';
 
-import { isNotFoundError, isRedirectFoundError } from '@tinkoff/errors';
-import type { ACTION_REGISTRY_TOKEN, ACTION_PAGE_RUNNER_TOKEN } from '@tramvai/tokens-common';
+import { isHttpError, isNotFoundError, isRedirectFoundError } from '@tinkoff/errors';
+import type {
+  ACTION_REGISTRY_TOKEN,
+  ACTION_PAGE_RUNNER_TOKEN,
+  STORE_TOKEN,
+} from '@tramvai/tokens-common';
 
 import type { ROUTER_TOKEN } from '@tramvai/tokens-router';
 
@@ -12,10 +16,12 @@ const stopRunAtError = (error: Error) => {
 };
 
 export const runActionsFactory = ({
+  store,
   router,
   actionRegistry,
   actionPageRunner,
 }: {
+  store: typeof STORE_TOKEN;
   router: typeof ROUTER_TOKEN;
   actionRegistry: typeof ACTION_REGISTRY_TOKEN;
   actionPageRunner: typeof ACTION_PAGE_RUNNER_TOKEN;

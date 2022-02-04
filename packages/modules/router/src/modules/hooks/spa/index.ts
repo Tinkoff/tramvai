@@ -2,7 +2,11 @@ import noop from '@tinkoff/utils/function/noop';
 import type { Provider } from '@tramvai/core';
 import { DI_TOKEN, COMMAND_LINE_RUNNER_TOKEN, commandLineListTokens } from '@tramvai/core';
 import { ROUTER_TOKEN, ROUTER_SPA_ACTIONS_RUN_MODE_TOKEN } from '@tramvai/tokens-router';
-import { ACTION_REGISTRY_TOKEN, ACTION_PAGE_RUNNER_TOKEN } from '@tramvai/tokens-common';
+import {
+  ACTION_REGISTRY_TOKEN,
+  ACTION_PAGE_RUNNER_TOKEN,
+  STORE_TOKEN,
+} from '@tramvai/tokens-common';
 import { beforeNavigateHooksToken } from '../../tokens';
 import { runCommands } from './runCommands';
 import { runActionsFactory } from '../runActions';
@@ -28,6 +32,7 @@ export const spaHooks: Provider[] = [
       return noop;
     },
     deps: {
+      store: STORE_TOKEN,
       router: ROUTER_TOKEN,
       actionRegistry: ACTION_REGISTRY_TOKEN,
       actionPageRunner: ACTION_PAGE_RUNNER_TOKEN,
@@ -53,6 +58,7 @@ export const spaHooks: Provider[] = [
       return noop;
     },
     deps: {
+      store: STORE_TOKEN,
       router: ROUTER_TOKEN,
       actionRegistry: ACTION_REGISTRY_TOKEN,
       actionPageRunner: ACTION_PAGE_RUNNER_TOKEN,

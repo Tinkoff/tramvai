@@ -58,6 +58,7 @@ export const providers: Provider[] = [
     multi: true,
     useFactory: runActionsFactory,
     deps: {
+      store: STORE_TOKEN,
       router: ROUTER_TOKEN,
       actionRegistry: ACTION_REGISTRY_TOKEN,
       actionPageRunner: ACTION_PAGE_RUNNER_TOKEN,

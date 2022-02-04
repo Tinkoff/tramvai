@@ -4,6 +4,7 @@ import {
   REQUEST_MANAGER_TOKEN,
   ACTION_REGISTRY_TOKEN,
   ACTION_PAGE_RUNNER_TOKEN,
+  STORE_TOKEN,
 } from '@tramvai/tokens-common';
 
 import { ROUTER_TOKEN } from '@tramvai/tokens-router';
@@ -46,6 +47,7 @@ import { generateForRoot } from './utils/forRoot';
       multi: true,
       useFactory: runActionsFactory,
       deps: {
+        store: STORE_TOKEN,
         router: ROUTER_TOKEN,
         actionRegistry: ACTION_REGISTRY_TOKEN,
         actionPageRunner: ACTION_PAGE_RUNNER_TOKEN,

@@ -2,6 +2,9 @@ import React from 'react';
 import hoistStatics from 'hoist-non-react-statics';
 import { ErrorBoundary } from './component';
 
+/**
+ * @deprecated Use UniversalErrorBoundary component
+ */
 export const withError = ({
   fallbackComponent,
 }: { fallbackComponent?: React.ReactElement } = {}) => <T extends React.ComponentType<any>>(

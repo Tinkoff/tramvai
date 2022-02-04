@@ -1,20 +1,16 @@
 # Common
 
-Модуль, собравший в себя основные архитектурные блоки для работы приложения. Этот модуль необходим в большинстве случаев и добавляемые этим модулем провайдеры используются подавляющим числом других модулей.
+Base module consisted of the architectural blocks for typical tramvai app. This module is required at most cases and is used a lot by the other modules.
 
-## Подключение в проект
+## Installation
 
-### 1. Зависимости
+First install `@tramvai/module-common`
 
-Необходимо установить `@tramvai/module-common` с помощью npm
-
-```bash
+```bash npm2yarn
 npm i @tramvai/module-common
 ```
 
-### 2. Подключение модуля
-
-Нужно передать в список модулей приложения CommonModule
+Add CommonModule to the modules list
 
 ```tsx
 import { createApp } from '@tramvai/core';
@@ -25,54 +21,68 @@ createApp({
 });
 ```
 
-## Включенные модули
+## Explanation
 
-### CommandModule
+### Submodules
 
-Модуль которые добавляет в проект реализацию [commandLineRunner](concepts/command-line-runner.md) и дефолтных команд
+#### CommandModule
 
-Модуль использует логгер с идентификатором `command:command-line-runner`
+Module that adds implementation for the [commandLineRunner](concepts/command-line-runner.md) and defines default command lines
 
-### StateModule
+This module logs with id `command:command-line-runner`
 
-Подключает и инициализирует state-manager в проекте
+#### StateModule
 
-### ActionModule
+Adds state-manager
 
-Реализация системы [экшенов](concepts/action.md)
+#### ActionModule
 
-Модуль использует логгер с идентификатором `action:action-page-runner`
+Implements [action system](concepts/action.md)
 
-### CookieModule
+This module logs with id `action:action-page-runner`
 
-Подключен модуль который позволяет работать с куками, [документация](references/modules/cookie.md)
+#### CookieModule
 
-### EnvironmentModule
+Add providers that works with cookie. See [docs](references/modules/cookie.md)
 
-Модуль для работы с env переменные в приложении на стороне сервера и клиента, [документация](references/modules/env.md)
+#### EnvironmentModule
 
-### PubSub
+Implements work with environment variables both on server and client. See [docs](references/modules/env.md)
 
-Для отправки событий между модулями используется PubSub который позволяет отправлять сообщения и подписываться на изменения, [документация](references/libs/pubsub.md)
+#### PubSub
 
-Модуль использует логгер с идентификатором `pubsub`
+Provides PubSub interface to implement communication between components. See [docs](references/libs/pubsub.md)
 
-### LogModule
+This modules logs with id `pubsub`
 
-Минимальная реализация логгера для токена `LOGGER_TOKEN` без фильтров и дополнительных фич
+#### LogModule
 
-### CacheModule
+Module for logging. Uses [`@tramvai/module-log`](references/modules/log.md)
 
-Модуль для работы с кешами. Функции:
+#### CacheModule
 
-- Создать новый инстанс кеша (на данный момент это lru-cache)
-- Очистить все ранее созданные кеши
-- Подписка на событие очистки кеша для реализации собственного тригера очистки своих кешей
-- Добавляет papi-метод '/clear-cache' который генерирует событе очистки кешей
+Module that implements caches.
 
-Модуль использует логгер с идентификатором `cache:papi-clear-cache`
+It provides next functionality:
 
-#### Пример
+- create new cache instance (currently it will be instance of lru-cache)
+- clear all of the previously create caches
+- subscribe on cache clearance event to execute own cache clearance actions
+- adds papi-route `/clear-cache` that will trigger caches clear event
+
+This modules logs wit id `cache:papi-clear-cache`
+
+#### RequestManagerModule
+
+Wrapper for the client request
+
+#### ResponseManagerModule
+
+Wrapper for the client response
+
+## How to
+
+### Create cache
 
 ```tsx
 import { provide } from '@tramvai/core';
@@ -82,7 +92,7 @@ export const providers = [
     provide: MY_MODULE_PROVIDER_FACTORY,
     scope: Scope.SINGLETON,
     useFactory: ({ createCache }) => {
-      const cache = createCache('memory', ...args); // тип кеша и дополнительные аргументы которые будут переданы в конструктор кеша
+      const cache = createCache('memory', ...args); // type of the cache and any additional options that will be passed to the cache constructor
 
       return someFactory({ cache });
     },
@@ -109,7 +119,7 @@ export const providers = [
     provide: commandLineListTokens.clear,
     useFactory: ({ clearCache }) => {
       return function clear() {
-        clearCache(); // очистить кеши явно в своем провайдере
+        clearCache(); // clear caches explicitly
       };
     },
     deps: {
@@ -119,15 +129,7 @@ export const providers = [
 ];
 ```
 
-### RequestManagerModule
-
-Модуль для работы с параметрами запроса
-
-### ResponseManagerModule
-
-Модуль для работы с параметрами ответа
-
-## Экспортируемые токены
+## Exported tokens
 
 - [tokens-common](references/tokens/common-tokens.md)
 - [cookie](references/modules/cookie.md)
