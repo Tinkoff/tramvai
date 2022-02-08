@@ -1,5 +1,6 @@
 import type { MakeRequest } from '@tinkoff/request-core';
 import { getHeaders, getStatus } from '@tinkoff/request-plugin-protocol-http';
+import { BaseHttpClient } from '@tramvai/http-client';
 import type {
   HttpClient,
   HttpClientBaseOptions,
@@ -9,7 +10,7 @@ import type {
 } from '@tramvai/http-client';
 import { mergeOptions } from './mergeOptions';
 
-export class HttpClientAdapter implements HttpClient {
+export class HttpClientAdapter extends BaseHttpClient implements HttpClient {
   private options: HttpClientBaseOptions;
   private tinkoffRequest: MakeRequest;
 
@@ -20,6 +21,7 @@ export class HttpClientAdapter implements HttpClient {
     options: HttpClientBaseOptions;
     tinkoffRequest: MakeRequest;
   }) {
+    super();
     this.options = options;
     this.tinkoffRequest = tinkoffRequest;
   }
@@ -65,60 +67,6 @@ export class HttpClientAdapter implements HttpClient {
 
       throw modifyError ? modifyError(errorWithMeta, adaptedReq) : errorWithMeta;
     }
-  }
-
-  get(
-    path: string,
-    payload: Pick<HttpClientRequest, 'query' | 'headers'> = {},
-    config: Omit<HttpClientRequest, 'url' | 'query' | 'body' | 'headers'> = {}
-  ) {
-    return this.request({
-      path,
-      ...payload,
-      ...config,
-      method: 'GET',
-    });
-  }
-
-  post<R = any>(
-    path: string,
-    payload?: Pick<HttpClientRequest, 'query' | 'body' | 'headers'>,
-    config?: Omit<HttpClientRequest, 'url' | 'query' | 'body' | 'headers'>
-  ) {
-    return this.request<R>({
-      path,
-      requestType: 'json',
-      ...payload,
-      ...config,
-      method: 'POST',
-    });
-  }
-
-  put<R = any>(
-    path: string,
-    payload?: Pick<HttpClientRequest, 'query' | 'body' | 'headers'>,
-    config?: Omit<HttpClientRequest, 'url' | 'query' | 'body' | 'headers'>
-  ) {
-    return this.request<R>({
-      path,
-      requestType: 'json',
-      ...payload,
-      ...config,
-      method: 'PUT',
-    });
-  }
-
-  delete<R = any>(
-    path: string,
-    payload: Pick<HttpClientRequest, 'query' | 'headers'> = {},
-    config: Omit<HttpClientRequest, 'url' | 'query' | 'body' | 'headers'> = {}
-  ) {
-    return this.request<R>({
-      path,
-      ...payload,
-      ...config,
-      method: 'DELETE',
-    });
   }
 
   fork(forkOptions: HttpClientRequest = {}, mergeOptionsConfig: { replace?: boolean } = {}) {

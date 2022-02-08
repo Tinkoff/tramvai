@@ -2,12 +2,7 @@ import isNil from '@tinkoff/utils/is/nil';
 import omit from '@tinkoff/utils/object/omit';
 import compose from '@tinkoff/utils/function/compose';
 import type { MakeRequest } from '@tinkoff/request-core';
-import type {
-  HttpClient,
-  HttpClientError,
-  HttpClientRequest,
-  HttpClientResponse,
-} from '@tramvai/http-client';
+import type { HttpClient, HttpClientBaseOptions } from '@tramvai/http-client';
 import type { TinkoffRequestOptions } from '@tramvai/tinkoff-request-http-client-adapter';
 import {
   mergeOptions,
@@ -103,36 +98,9 @@ export const httpClientFactory = ({
     if (!isNil(forceDisableCache)) {
       adapterOptions.disableCache = !!forceDisableCache;
     }
-
     if (!isNil(forceDisabledCircuitBreaker)) {
       adapterOptions.enableCircuitBreaker = !forceDisabledCircuitBreaker;
     }
-
-    if (!adapterOptions.modifyRequest) {
-      adapterOptions.modifyRequest = (req: HttpClientRequest): HttpClientRequest => req;
-    }
-    if (!adapterOptions.modifyResponse) {
-      adapterOptions.modifyResponse = (res: HttpClientResponse<any>): HttpClientResponse<any> =>
-        res;
-    }
-    if (!adapterOptions.modifyError) {
-      adapterOptions.modifyError = (err: HttpClientError): HttpClientError => err;
-    }
-
-    const httpClientOptions = omit(
-      [
-        'logger',
-        'name',
-        'disableCache',
-        'createCache',
-        'cacheTime',
-        'defaultTimeout',
-        'validator',
-        'errorValidator',
-        'errorModificator',
-      ],
-      adapterOptions
-    );
 
     // кэшируем инстанс @tinkoff/request
     if (!tinkoffRequestRegistry.has(adapterOptions.name)) {
@@ -142,7 +110,7 @@ export const httpClientFactory = ({
     const tinkoffRequest = tinkoffRequestRegistry.get(adapterOptions.name);
 
     const httpClientAdapter = new HttpClientAdapter({
-      options: httpClientOptions,
+      options: adapterOptions as HttpClientBaseOptions,
       tinkoffRequest,
     });
 

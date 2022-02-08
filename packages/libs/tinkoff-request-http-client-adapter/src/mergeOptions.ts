@@ -30,23 +30,16 @@ export function mergeOptions(
     },
   };
 
-  if (nextOptions.modifyRequest || options.modifyRequest) {
-    result.modifyRequest =
-      options.modifyRequest && nextOptions.modifyRequest
-        ? compose(nextOptions.modifyRequest, options.modifyRequest)
-        : nextOptions.modifyRequest || options.modifyRequest;
-  }
-  if (nextOptions.modifyResponse || options.modifyResponse) {
-    result.modifyResponse =
-      options.modifyResponse && nextOptions.modifyResponse
-        ? compose(nextOptions.modifyResponse, options.modifyResponse)
-        : nextOptions.modifyResponse || options.modifyResponse;
-  }
-  if (nextOptions.modifyError || options.modifyError) {
-    result.modifyError =
-      options.modifyError && nextOptions.modifyError
-        ? compose(nextOptions.modifyError, options.modifyError)
-        : nextOptions.modifyError || options.modifyError;
-  }
+  const composeModifier = (modifier: 'modifyRequest' | 'modifyResponse' | 'modifyError') => {
+    if (options[modifier] && nextOptions[modifier]) {
+      // eslint-disable-next-line no-param-reassign
+      result[modifier] = compose(nextOptions[modifier]!, options[modifier]!);
+    }
+  };
+
+  composeModifier('modifyRequest');
+  composeModifier('modifyResponse');
+  composeModifier('modifyError');
+
   return result;
 }

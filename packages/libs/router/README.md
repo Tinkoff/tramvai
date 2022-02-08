@@ -60,8 +60,12 @@ export const myGuard: NavigationGuard = async ({ to }) => {
     return false; // block this transition
   }
 
-  if (to.config.redirect) {
-    return '/login/'; // call a redirect to the specified page
+  if (typeof to.config.redirect === 'string') {
+    return to.config.redirect; // call a redirect to the specified page
+  }
+
+  if (typeof to.config.needAuth && !isAuth()) {
+    return { url: '/login/', code: '302' }; // redirect to page with NavigateOptions
   }
 
   // if nothing is returned, the transition will be performed as usual
@@ -83,7 +87,7 @@ The behaviour of routing depends on the result of executing guards functions and
 - if all of the guards returns `undefined` than navigation will continue executing
 - if any of the guards returns `false` than navigation is getting blocked and next action differs on server and client
 - if any of the guards returns `string` it is considered as url to which redirect should be happen
-- if any of the guards returns `NavigateOptions` interface, `url` property from it is considered as url to which redirect should be happen
+- if any of the guards returns [`NavigateOptions`](#navigateoptions) interface, `url` property from it is considered as url to which redirect should be happen
 
 ### Transitions hooks
 
@@ -171,6 +175,13 @@ router.updateCurrentRoute({ query: { a: '1' } });
 1. `beforeUpdateCurrent`
 2. `change`
 3. `afterUpdateCurrent`
+
+### NavigateOptions
+
+Object that allows to specify transition options both to [navigate](#navigate) and [updateCurrentRoute](#updatecurrentroute) transitions
+
+- `code` - redirect code that is returned on server in case of redirects
+- `navigateState` - any additional data that is stored with route
 
 ### Working with query
 
