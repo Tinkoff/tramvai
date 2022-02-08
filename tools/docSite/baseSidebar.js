@@ -182,6 +182,7 @@ module.exports = {
     'guides/tramvai-library',
     'guides/bundle-optimization',
     'guides/universal',
+    'guides/error-boundary',
     'guides/deploy',
   ],
   Рецепты: [

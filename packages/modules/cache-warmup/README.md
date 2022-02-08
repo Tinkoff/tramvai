@@ -1,10 +1,10 @@
 # Cache warmup
 
-Модуль реализующий "прогрев" кэшей при старте приложения.
+Module to execute warmup of the cache when app starts.
 
-## Как подключить?
+## Installation
 
-По умолчанию модуль уже подключается в `@tramvai/module-server` и при его использовании дополнительных действий не требуется.
+By default, the module is already included in `@tramvai/module-server` and no additional actions are needed.
 
 ```tsx
 import { createApp } from '@tramvai/core';
@@ -15,11 +15,16 @@ createApp({
 });
 ```
 
-## Что делает?
+## Explanation
 
-При старте приложения с запрашивает у `bundleInfo` список урлов приложения. Затем шлет по `2` запроса на каждый из урлов, но не более `2` запросов одновременно.
+> Module is executed only when `NODE_ENV === production`.
 
-`2` запроса нужны для того, чтобы симулировать запрос с десктопа и мобильного устройства. `User-Agent`ы, которые использует модуль:
+1. When app starts the module will request list of app urls from papi-route `bundleInfo`.
+2. For every url from the response it sends `2` requests: one for mobile and one for desktop device. But only `2` requests are running simultaneously in total.
+
+### User-agent
+
+In order to emulate mobile or desktop device next user-agent strings are used:
 
 ```js
 [
@@ -30,8 +35,6 @@ createApp({
 ];
 ```
 
-Модуль выполняется только при `NODE_ENV === production`.
+## Debug
 
-## Отладка
-
-Модуль использует логгер с идентификатором `cache-warmup`
+This module logs with id `cache-warmup`

@@ -6,6 +6,8 @@ import type { Samples, RunStats } from './types';
 import { getSamplesStats } from './utils/stats';
 import { clearCacheDirectory } from './utils/clearCache';
 
+const REBUILD_WARMUP_TIMES = 3;
+
 export interface StartParams extends Params {
   command: 'start';
   commandOptions: OriginalStartParams;
@@ -75,6 +77,11 @@ const runRebuild = async (di: Container, { times }: { times: number }): Promise<
   const { close, invalidate, getBuildStats } = await (di
     .get(COMMAND_RUNNER_TOKEN)
     .run('start', commandOptions) as OriginalStartResult);
+
+  // warmup rebuild as it usually pretty slow at first runs
+  for (let i = 0; i < REBUILD_WARMUP_TIMES; i++) {
+    await invalidate();
+  }
 
   for (let i = 0; i < times; i++) {
     await invalidate();

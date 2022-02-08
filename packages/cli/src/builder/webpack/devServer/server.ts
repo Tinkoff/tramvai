@@ -4,7 +4,6 @@ import path from 'path';
 import type webpack from 'webpack';
 import type Config from 'webpack-chain';
 import death from 'death';
-import type { Worker } from 'cluster';
 import { createProxyServer } from 'http-proxy';
 // eslint-disable-next-line no-restricted-imports
 import webOutgoing from 'http-proxy/lib/http-proxy/passes/web-outgoing';
@@ -12,7 +11,10 @@ import { PoolState } from 'lightning-pool';
 import type { Container } from '@tinkoff/dippy';
 import type { ConfigManager } from '../../../config/configManager';
 import type { ApplicationConfigEntry } from '../../../typings/configEntry/application';
-import { createWorkerPool } from './workerPool';
+import type { Worker } from './pool/base/types';
+import { ProcessWorkerBridge } from './pool/process/pool';
+import { ThreadWorkerBridge } from './pool/thread/pool';
+import { createWorkerPool } from './pool/pool';
 import type { SERVER_TOKEN } from '../../../di/tokens';
 import { CLOSE_HANDLER_TOKEN } from '../tokens';
 
@@ -46,12 +48,13 @@ export const serverRunner = ({
   di: Container;
   config: Config;
   compiler: webpack.MultiCompiler;
-  configManager: ConfigManager<ApplicationConfigEntry>;
+  configManager: ConfigManager<ApplicationConfigEntry, 'development'>;
   server: typeof SERVER_TOKEN | null;
 }) => {
   if (!server) {
     return noop;
   }
+  // eslint-disable-next-line max-statements
   return async function runDevServer() {
     const file = `${Object.keys(config.entryPoints.entries())[0]}.js`;
     const filename = path.resolve(config.output.get('path'), file);
@@ -60,7 +63,19 @@ export const serverRunner = ({
     const serverCompiler = compiler.compilers.find((comp) => comp.name === 'server');
 
     const fs = serverCompiler.outputFileSystem as any;
-    const pool = createWorkerPool(di);
+    // ThreadWorkerPool is experimental
+    // it doesn't work well when running integration tests in tramvai repo
+    // mostly because of the some problems with `babel-plugin-lodash`
+    // but thread workers are more lightweight and performant
+    //
+    // also currently they do not support nodejs debugging - [issue](https://github.com/nodejs/node/issues/26609)
+    // in case of debugging fallback to the child processes
+    const { pool, send } = await createWorkerPool(
+      di,
+      configManager.experiments.serverRunner === 'thread' && !configManager.debug
+        ? ThreadWorkerBridge
+        : ProcessWorkerBridge
+    );
     let worker: Worker;
     let serverInvalidated = true;
     let workerPort: number;
@@ -73,7 +88,7 @@ export const serverRunner = ({
       selfHandleResponse: true,
     });
 
-    death({ exit: true, uncaughtException: true })(async (signal, err) => {
+    const deathUnsubscribe = death({ exit: true, uncaughtException: true })(async (signal, err) => {
       await pool.close(true);
 
       if (err instanceof Error) {
@@ -83,7 +98,13 @@ export const serverRunner = ({
       process.exit(1);
     });
 
-    // отключаем инвалидацию и перезапуск сервера если выставлен флан noServerRebuild
+    di.register({
+      provide: CLOSE_HANDLER_TOKEN,
+      multi: true,
+      useValue: deathUnsubscribe,
+    });
+
+    // отключаем инвалидацию и перезапуск сервера если выставлен флаг noServerRebuild
     if (!configManager.noServerRebuild) {
       serverCompiler.hooks.invalid.tap(HOOK_NAME, () => {
         serverInvalidated = true;
@@ -231,10 +252,9 @@ export const serverRunner = ({
           }
         });
 
-        worker.send({
-          filename: realFilename,
-          script: fs.readFileSync(filename, 'utf8'),
-        });
+        const script = fs.readFileSync(filename);
+
+        await send(worker, 'script', { filename: realFilename, script });
       }
     });
   };

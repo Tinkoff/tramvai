@@ -1,18 +1,18 @@
 # Autoscroll
 
-Компонент с автопрокруткой к началу страницы или к якорю в URL при SPA-переходах
+React component that implements autoscroll to page start or to the anchor on page on SPA-navigations
 
-Поведение такое же как в гайде по [react-router](https://reacttraining.com/react-router/web/guides/scroll-restoration/scroll-to-tops)
+The behaviour is similar to the [react-router](https://reacttraining.com/react-router/web/guides/scroll-restoration/scroll-to-tops)
 
-## Подключение
+## Installation
 
-Необходимо установить `@tramvai/module-autoscroll`
+First install `@tramvai/module-autoscroll`:
 
-```bash
+```bash npm2yarn
 yarn add @tramvai/module-autoscroll
 ```
 
-Подключить в проекте `AutoscrollModule`
+And add `AutoscrollModule` to the modules list:
 
 ```tsx
 import { createApp } from '@tramvai/core';
@@ -24,7 +24,17 @@ createApp({
 });
 ```
 
-Если нужно отключить подскрол для отдельных страниц - при переходе `navigate` нужно указать `navigateState.disableAutoscroll = true`
+## Explanation
+
+### Behavior
+
+`behavior: smooth` is not supported by every browser (e.g. doesn't work in Safari). In this case you can use polyfill `smoothscroll-polyfill` that you should add to your app.
+
+## How to
+
+### Disable autoscroll for page
+
+If you need to disable autoscroll on the specific pages you can specify parameter `navigateState.disableAutoscroll = true` to the `navigate` call:
 
 ```tsx
 import { useNavigate } from '@tramvai/module-router';
@@ -38,5 +48,3 @@ function Component() {
   return <Button onClick={navigateToWithoutScroll} />;
 }
 ```
-
-`behavior: smooth` поддерживается не во всех браузерах (например, плавный подскролл не работает в Safari). При необходимости подключите полифил `smoothscroll-polyfill` в свое приложение.

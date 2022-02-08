@@ -11,8 +11,8 @@ import type { DeduplicateStrategy } from '../library/webpack/plugins/DedupePlugi
 import { showConfig } from './showConfig';
 import type { Target } from '../typings/target';
 
-export interface Settings {
-  env?: Env;
+export interface Settings<E extends Env> {
+  env?: E;
   rootDir?: string;
   version?: string;
   buildType?: BuildType;
@@ -48,7 +48,8 @@ const getOption = <T>(optionName: string, cfgs: any[], dflt?: T): T => {
   return dflt;
 };
 
-export class ConfigManager<T extends ConfigEntry = ConfigEntry> implements Required<Settings> {
+export class ConfigManager<T extends ConfigEntry = ConfigEntry, E extends Env = any>
+  implements Required<Settings<E>> {
   private configEntry: T;
 
   public name: string;
@@ -61,11 +62,11 @@ export class ConfigManager<T extends ConfigEntry = ConfigEntry> implements Requi
 
   public serve: T['commands']['serve'];
 
-  private settings: Settings;
+  private settings: Settings<E>;
 
   public version: string;
 
-  public env: Env;
+  public env: E;
 
   public buildType: BuildType;
 
@@ -107,11 +108,13 @@ export class ConfigManager<T extends ConfigEntry = ConfigEntry> implements Requi
 
   public target: Target;
 
-  public experiments: Experiments;
+  public experiments: T['commands'][E extends 'development'
+    ? 'serve'
+    : 'build']['configurations']['experiments'];
 
   public showConfig: boolean;
   // eslint-disable-next-line complexity,max-statements
-  constructor(configEntry: T, settings: Settings) {
+  constructor(configEntry: T, settings: Settings<E>) {
     this.configEntry = configEntry;
     this.name = configEntry.name;
     this.type = configEntry.type;
@@ -120,7 +123,7 @@ export class ConfigManager<T extends ConfigEntry = ConfigEntry> implements Requi
     this.serve = configEntry.commands.serve || configEntry.serve || {};
 
     this.settings = settings;
-    this.env = settings.env || 'development';
+    this.env = settings.env || ('development' as E);
     this.rootDir = settings.rootDir || process.cwd();
     this.version =
       settings.version ||
@@ -203,7 +206,7 @@ export class ConfigManager<T extends ConfigEntry = ConfigEntry> implements Requi
     throw new Error('projectType not supported');
   }
 
-  withSettings(settings: Settings) {
+  withSettings(settings: Settings<E>) {
     return new ConfigManager(this.configEntry, {
       ...this.settings,
       ...settings,

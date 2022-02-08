@@ -1,5 +1,6 @@
+import { provide } from '@tinkoff/dippy';
 import { createCommand } from '../../commands/createCommand';
-import { COMMAND_PARAMETERS_TOKEN } from '../../di/tokens';
+import { COMMAND_PARAMETERS_TOKEN, UI_OS_NOTIFY_TOKEN } from '../../di/tokens';
 import type { BuildParams, BuildResult } from './build';
 import { benchmarkBuild } from './build';
 import type { StartParams, StartResult } from './start';
@@ -32,4 +33,11 @@ export default createCommand({
         return benchmarkBuild(di);
     }
   },
+  providers: [
+    provide({
+      provide: UI_OS_NOTIFY_TOKEN,
+      // disable notification in benchmark as it is annoying and not needed actually
+      useValue: false,
+    }),
+  ],
 });

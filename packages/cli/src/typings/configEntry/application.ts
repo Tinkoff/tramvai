@@ -1,4 +1,4 @@
-import type { ConfigEntry } from './common';
+import type { ConfigEntry, Experiments } from './common';
 import type { CheckAsyncTsConfig } from './CheckAsyncTsConfig';
 
 export interface ApplicationBuild {
@@ -98,6 +98,16 @@ export type ApplicationServe = ConfigEntry['commands']['serve'] & {
      * @default ["react$", "react-dom", "prop-types", "express", "core-js"]
      */
     externals?: string[];
+    /**
+     * @default {}
+     */
+    experiments?: Experiments & {
+      /**
+       * @title How to run server build
+       * @default "process"
+       */
+      serverRunner?: 'process' | 'thread';
+    };
   };
 };
 

@@ -138,7 +138,7 @@ export default ({
           alias,
         },
       ],
-      '@babel/plugin-syntax-dynamic-import',
+      isServer && 'babel-plugin-dynamic-import-node',
       [
         '@babel/plugin-proposal-decorators',
         {

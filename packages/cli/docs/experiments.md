@@ -54,6 +54,16 @@ Experimental flags are provided in `tramvai.json` and should be passed separatel
 }
 ```
 
+## CLI settings
+
+### serve
+
+- `serverRunner="process"|"thread"` - use different ways to run the server app. "thread" most of the time is little faster, but might lead to some bugs, especially when running cli though nodejs api
+
+#### Defaults
+
+- `serverRunner="process"` - "process" is not experimental and can be safely used
+
 ## Webpack settings
 
 Webpack by itself has [a list of experimental flags](https://webpack.js.org/configuration/experiments/#experimentsoutputmodule) which might be passed directly to webpack through `experiments.webpack`.

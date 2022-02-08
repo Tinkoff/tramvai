@@ -154,6 +154,7 @@ describe('JSON schema для tramvai.json', () => {
                 sourceMap: false,
                 externals: ['react$', 'react-dom', 'prop-types', 'express', 'core-js'],
                 experiments: {
+                  serverRunner: 'process',
                   webpack: {
                     cacheUnaffected: true,
                     backCompat: false,

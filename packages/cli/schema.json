@@ -1006,8 +1006,8 @@
                             }
                           },
                           "experiments": {
-                            "title": "Experimental settings",
                             "default": {},
+                            "additionalProperties": false,
                             "type": "object",
                             "properties": {
                               "webpack": {
@@ -1124,9 +1124,17 @@
                                   }
                                 },
                                 "additionalProperties": false
+                              },
+                              "serverRunner": {
+                                "title": "How to run server build",
+                                "default": "process",
+                                "enum": [
+                                  "process",
+                                  "thread"
+                                ],
+                                "type": "string"
                               }
-                            },
-                            "additionalProperties": false
+                            }
                           },
                           "externals": {
                             "title": "Pass list to Webpack config externals field",

@@ -5,7 +5,7 @@ import { ignoreWarnings } from '../utils/warningsFilter';
 export default () => (config: Config) => {
   config.plugin('case-sensitive-path').use(CaseSensitivePathsPlugin);
 
-  config.stats('minimal');
+  config.stats('errors-warnings');
 
   config.set('ignoreWarnings', ignoreWarnings);
 
