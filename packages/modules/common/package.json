@@ -13,6 +13,7 @@
     "./lib/cache/serverProviders.js": "./lib/cache/clientProviders.js",
     "./lib/index.es.js": "./lib/index.browser.js",
     "./lib/providers/serverProviders.js": "./lib/providers/clientProviders.js",
+    "./lib/child-app/serverProviders.js": "./lib/child-app/clientProviders.js",
     "./lib/requestManager/RequestManagerModule.js": "./lib/requestManager/RequestManagerModule.browser.js",
     "./lib/responseManager/ResponseManagerModule.js": "./lib/responseManager/ResponseManagerModule.browser.js"
   },
