@@ -4,6 +4,16 @@ type Args =
   | [Record<string, any> | string | URL, (res: Record<string, any>) => void]
   | [string | URL, Record<string, any>, (res: Record<string, any>) => void];
 
+// https://nodejs.org/api/errors.html#nodejs-error-codes - Common system errors possible for net/http/dns
+const POSSIBLE_ERRORS = [
+  'EADDRINUSE',
+  'ECONNREFUSED',
+  'ECONNRESET',
+  'ENOTFOUND',
+  'EPIPE',
+  'ETIMEDOUT',
+];
+
 export const getUrlAndOptions = (args: Args) => {
   let url;
   let options;
@@ -77,7 +87,11 @@ export const createRequestWithMetrics = ({
       requestsTotal.inc(labelsValues);
       timerDone(labelsValues);
     });
-    req.on('error', () => {
+    req.on('error', (e) => {
+      if (POSSIBLE_ERRORS.includes(e?.code)) {
+        labelsValues.status = e.code;
+      }
+
       requestsTotal.inc(labelsValues);
       requestsErrors.inc(labelsValues);
       timerDone(labelsValues);
