@@ -7,13 +7,25 @@ import http from 'http';
 import { createRequestWithMetrics } from './createRequestWithMetrics';
 import { initRequestsMetrics } from './initRequestsMetrics';
 import { MetricsServicesRegistry } from './MetricsServicesRegistry';
+import { METRICS_MODULE_CONFIG_TOKEN } from '../tokens';
+import type { ModuleConfig } from './types';
 
 @Module({
   providers: [
     {
       provide: commandLineListTokens.init,
       multi: true,
-      useFactory: ({ metrics, envManager, metricsServicesRegistry }) => {
+      useFactory: ({
+        metrics,
+        envManager,
+        metricsServicesRegistry,
+        metricsModuleConfig,
+      }: {
+        envManager: typeof ENV_MANAGER_TOKEN;
+        metricsServicesRegistry: typeof METRICS_SERVICES_REGISTRY_TOKEN;
+        metrics?: typeof METRICS_MODULE_TOKEN;
+        metricsModuleConfig: ModuleConfig;
+      }) => {
         if (!metrics) {
           return noop;
         }
@@ -26,7 +38,14 @@ import { MetricsServicesRegistry } from './MetricsServicesRegistry';
             metricsServicesRegistry
           );
 
-          initRequestsMetrics({ metrics, getServiceName, http, https, createRequestWithMetrics });
+          initRequestsMetrics({
+            metrics,
+            getServiceName,
+            http,
+            https,
+            createRequestWithMetrics,
+            config: metricsModuleConfig,
+          });
         };
       },
       deps: {
@@ -36,6 +55,7 @@ import { MetricsServicesRegistry } from './MetricsServicesRegistry';
         },
         metricsServicesRegistry: METRICS_SERVICES_REGISTRY_TOKEN,
         envManager: ENV_MANAGER_TOKEN,
+        metricsModuleConfig: METRICS_MODULE_CONFIG_TOKEN,
       },
     },
     {

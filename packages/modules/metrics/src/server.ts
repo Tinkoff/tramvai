@@ -1,4 +1,4 @@
-import { Scope, Module } from '@tramvai/core';
+import { Scope, Module, provide } from '@tramvai/core';
 import {
   WEB_APP_TOKEN,
   WEB_APP_BEFORE_INIT_TOKEN,
@@ -11,15 +11,22 @@ import flatten from '@tinkoff/utils/array/flatten';
 import { RequestModule } from './request';
 import { InstantMetricsModule } from './instantMetrics/server';
 import { eventLoopMetrics } from './metrics/eventLoop';
+import { METRICS_MODULE_CONFIG_TOKEN } from './tokens';
 
 @Module({
   imports: [RequestModule, InstantMetricsModule],
   providers: [
-    {
+    provide({
+      provide: METRICS_MODULE_CONFIG_TOKEN,
+      useValue: {
+        enableDnsResolveMetric: false,
+      },
+    }),
+    provide({
       provide: 'metricsDefaultRegistry',
       useClass: Registry,
-    },
-    {
+    }),
+    provide({
       provide: METRICS_MODULE_TOKEN,
       useFactory: ({ registry }): typeof METRICS_MODULE_TOKEN => {
         collectDefaultMetrics({ register: registry });
@@ -35,8 +42,8 @@ import { eventLoopMetrics } from './metrics/eventLoop';
       deps: {
         registry: 'metricsDefaultRegistry',
       },
-    },
-    {
+    }),
+    provide({
       provide: WEB_APP_BEFORE_INIT_TOKEN,
       useFactory: ({
         metrics,
@@ -97,8 +104,8 @@ import { eventLoopMetrics } from './metrics/eventLoop';
         registry: 'metricsDefaultRegistry',
       },
       multi: true,
-    },
-    {
+    }),
+    provide({
       provide: WEB_APP_BEFORE_INIT_TOKEN,
       useFactory: ({ metrics }) => {
         return () => {
@@ -109,7 +116,9 @@ import { eventLoopMetrics } from './metrics/eventLoop';
         metrics: METRICS_MODULE_TOKEN,
       },
       multi: true,
-    },
+    }),
   ],
 })
 export class MetricsModule {}
+
+export { METRICS_MODULE_CONFIG_TOKEN };

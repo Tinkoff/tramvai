@@ -1,9 +1,6 @@
 import { format } from '@tinkoff/url';
-
-type Args =
-  | [Record<string, any> | string | URL, (res: Record<string, any>) => void]
-  | [string | URL, Record<string, any>, (res: Record<string, any>) => void];
-
+import type { ClientRequest } from 'http';
+import type { Args, CreateRequestWithMetrics } from './types';
 // https://nodejs.org/api/errors.html#nodejs-error-codes - Common system errors possible for net/http/dns
 const POSSIBLE_ERRORS = [
   'EADDRINUSE',
@@ -61,18 +58,16 @@ export const getUrlAndOptions = (args: Args) => {
   return [urlWOQuery, options || {}];
 };
 
-export const createRequestWithMetrics = ({
-  metricsInstances: { requestsTotal, requestsErrors, requestsDuration },
+export const createRequestWithMetrics: CreateRequestWithMetrics = ({
+  metricsInstances: { requestsTotal, requestsErrors, requestsDuration, dnsResolveDuration },
   getServiceName,
+  config,
 }) =>
-  function requestWithMetrics(originalRequest, ...args: Args) {
-    const req = originalRequest.apply(this, args);
-
-    const timerDone = requestsDuration.startTimer();
-
+  function requestWithMetrics(originalRequest, ...args) {
     const [url, options] = getUrlAndOptions(args);
     const serviceName = getServiceName(url);
-
+    const req = originalRequest.apply(this, args) as ClientRequest;
+    const timerDone = requestsDuration.startTimer();
     const labelsValues = {
       method: options.method || 'unknown',
       service: serviceName || new URL(url).origin || 'unknown',
@@ -80,14 +75,14 @@ export const createRequestWithMetrics = ({
     };
 
     req.on('response', (res) => {
-      labelsValues.status = res.statusCode;
+      labelsValues.status = res.statusCode.toString();
       if (res.statusCode >= 400) {
         requestsErrors.inc(labelsValues);
       }
       requestsTotal.inc(labelsValues);
       timerDone(labelsValues);
     });
-    req.on('error', (e) => {
+    req.on('error', (e: Error & { code?: string }) => {
       if (POSSIBLE_ERRORS.includes(e?.code)) {
         labelsValues.status = e.code;
       }
@@ -96,6 +91,15 @@ export const createRequestWithMetrics = ({
       requestsErrors.inc(labelsValues);
       timerDone(labelsValues);
     });
+
+    if (config.enableDnsResolveMetric) {
+      req.on('socket', (socket) => {
+        const dnsTimerDone = dnsResolveDuration.startTimer();
+        socket.on('lookup', () => {
+          dnsTimerDone({ service: labelsValues.service });
+        });
+      });
+    }
 
     return req;
   };
