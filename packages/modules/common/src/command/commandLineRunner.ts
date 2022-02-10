@@ -6,6 +6,8 @@ import type { Container, Provider } from '@tinkoff/dippy';
 import { createChildContainer } from '@tinkoff/dippy';
 import type { LOGGER_TOKEN } from '@tramvai/tokens-common';
 
+const DEFAULT_BUCKETS = [0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10, 20, 40, 60];
+
 const resolveDi = (
   type: keyof CommandLines,
   status: keyof CommandLineDescription,
@@ -172,6 +174,7 @@ export class CommandLineRunner implements CommandLine {
         name: `command_line_runner_execution_time`,
         help: 'Command line processing duration',
         labelNames: ['line'],
+        buckets: DEFAULT_BUCKETS,
       });
     }
 

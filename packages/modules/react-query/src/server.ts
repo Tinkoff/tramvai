@@ -1,7 +1,7 @@
-import { Module, provide } from '@tramvai/core';
+import { commandLineListTokens, Module, provide } from '@tramvai/core';
 
 import { RENDER_SLOTS, ResourceType, ResourceSlot } from '@tramvai/tokens-render';
-import { dehydrate as queryDehydrate } from 'react-query/hydration';
+import { dehydrate as queryDehydrate } from 'react-query';
 import { safeDehydrate } from '@tramvai/safe-strings';
 import {
   QUERY_CLIENT_DEHYDRATED_STATE_TOKEN,
@@ -39,6 +39,18 @@ export * from './devTools';
       deps: {
         state: QUERY_CLIENT_DEHYDRATED_STATE_TOKEN,
         propKey: QUERY_DEHYDRATE_STATE_NAME_TOKEN,
+      },
+    }),
+    provide({
+      provide: commandLineListTokens.clear,
+      multi: true,
+      useFactory: ({ queryClient }) => {
+        return function clearReactQueryCache() {
+          queryClient.clear();
+        };
+      },
+      deps: {
+        queryClient: QUERY_CLIENT_TOKEN,
       },
     }),
   ],

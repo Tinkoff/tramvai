@@ -21,7 +21,7 @@ export const eventLoopMetrics = (metrics: Metrics) => {
   const histogram = metrics.histogram({
     name: NODEJS_EVENTLOOP_LAG,
     help: 'Lag of event loop in seconds (setInterval based).',
-    buckets: [0.02, 0.1, 0.2, 0.5, 1, 3, 5],
+    buckets: [0.02, 0.1, 0.2, 0.5, 1, 3, 5, 7.5, 10],
   });
 
   startEventLoopLagMeasure(histogram);

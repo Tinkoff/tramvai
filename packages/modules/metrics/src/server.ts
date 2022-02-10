@@ -19,7 +19,7 @@ import { METRICS_MODULE_CONFIG_TOKEN } from './tokens';
     provide({
       provide: METRICS_MODULE_CONFIG_TOKEN,
       useValue: {
-        enableDnsResolveMetric: false,
+        enableConnectionResolveMetrics: false,
       },
     }),
     provide({

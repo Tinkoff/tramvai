@@ -8,7 +8,7 @@ import type {
 } from '@tramvai/tokens-metrics';
 
 export type ModuleConfig = {
-  enableDnsResolveMetric: boolean;
+  enableConnectionResolveMetrics: boolean;
 };
 export type MetricsModule = typeof METRICS_MODULE_TOKEN;
 export type HttpModule = typeof httpType;
@@ -19,6 +19,8 @@ export type MetricsInstances = {
   requestsErrors: Counter<'status' | 'method' | 'service'>;
   requestsDuration: Histogram<'status' | 'method' | 'service'>;
   dnsResolveDuration: Histogram<'service'>;
+  tcpConnectDuration: Histogram<'service'>;
+  tlsHandshakeDuration: Histogram<'service'>;
 };
 export type GetServiceName = typeof METRICS_SERVICES_REGISTRY_TOKEN['getServiceName'];
 export type Args =

@@ -58,8 +58,20 @@ export const getUrlAndOptions = (args: Args) => {
   return [urlWOQuery, options || {}];
 };
 
+// in seconds
+const getDuration = (current: number, prev: number) =>
+  // max to avoid negative values and turn that into zero
+  prev === 0 ? 0 : Math.max((current - prev) / 1000, 0);
+
 export const createRequestWithMetrics: CreateRequestWithMetrics = ({
-  metricsInstances: { requestsTotal, requestsErrors, requestsDuration, dnsResolveDuration },
+  metricsInstances: {
+    requestsTotal,
+    requestsErrors,
+    requestsDuration,
+    dnsResolveDuration,
+    tcpConnectDuration,
+    tlsHandshakeDuration,
+  },
   getServiceName,
   config,
 }) =>
@@ -92,11 +104,33 @@ export const createRequestWithMetrics: CreateRequestWithMetrics = ({
       timerDone(labelsValues);
     });
 
-    if (config.enableDnsResolveMetric) {
+    if (config.enableConnectionResolveMetrics) {
       req.on('socket', (socket) => {
-        const dnsTimerDone = dnsResolveDuration.startTimer();
+        const timings = {
+          start: Date.now(),
+          lookupEnd: 0,
+          connectEnd: 0,
+          secureConnectEnd: 0,
+        };
+
+        const { service } = labelsValues;
         socket.on('lookup', () => {
-          dnsTimerDone({ service: labelsValues.service });
+          timings.lookupEnd = Date.now();
+          dnsResolveDuration.observe({ service }, getDuration(timings.lookupEnd, timings.start));
+        });
+        socket.on('connect', () => {
+          timings.connectEnd = Date.now();
+          tcpConnectDuration.observe(
+            { service },
+            getDuration(timings.connectEnd, timings.lookupEnd)
+          );
+        });
+        socket.on('secureConnect', () => {
+          timings.secureConnectEnd = Date.now();
+          tlsHandshakeDuration.observe(
+            { service },
+            getDuration(timings.secureConnectEnd, timings.connectEnd)
+          );
         });
       });
     }

@@ -45,9 +45,14 @@ export function measure<T extends string = string>({
 }: MeasureOptions<T>) {
   const labelNames = LABEL_NAMES.concat(additionalLabelNames);
 
+  const requestInit = metrics.counter({
+    name: 'http_requests_init_total',
+    help: 'Total HTTP requests received',
+    labelNames: [],
+  });
   const request = metrics.counter({
     name: 'http_requests_total',
-    help: 'Total HTTP requests received',
+    help: 'Total HTTP requests processed',
     labelNames,
   });
   const error = metrics.counter({
@@ -74,7 +79,10 @@ export function measure<T extends string = string>({
       return;
     }
 
+    requestInit.inc();
+
     const done = duration.startTimer();
+
     onFinished(res, (err) => {
       const labels = {
         method: req.method,
