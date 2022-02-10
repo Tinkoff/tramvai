@@ -13,7 +13,7 @@ const PRESERVE_COMMENT = '// preserve-line';
 const PRESERVE_PATTERN = new RegExp(`\\s${PRESERVE_COMMENT}$`);
 
 function remarkTypescript({ wrapperComponent } = {}) {
-  return function transformer(tree) {
+  return function transformer(tree, file) {
     function visitor(node, index, parent) {
       if (/^(?:tsx?|typescript)/.test(node.lang)) {
         const prevNode = parent.children[index - 1];
@@ -30,14 +30,19 @@ function remarkTypescript({ wrapperComponent } = {}) {
 
         const lines = node.value.split('\n');
 
-        transformSync(
-          lines.map((line) => (PRESERVE_PATTERN.test(line) ? `// ${line}` : line)).join('\n'),
-          {
-            filename: `file.tsx`,
-            retainLines: true,
-            presets: ['@babel/typescript'],
-          }
-        );
+        try {
+          transformSync(
+            lines.map((line) => (PRESERVE_PATTERN.test(line) ? `// ${line}` : line)).join('\n'),
+            {
+              filename: `file.tsx`,
+              retainLines: true,
+              presets: ['@babel/typescript'],
+            }
+          );
+        } catch (error) {
+          console.error(`Error in typescript-check-plugin, file ${file.history[0]}`, error.message);
+          throw error;
+        }
       }
     }
 

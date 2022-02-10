@@ -39,7 +39,7 @@ Some of the functions that deals with state (e.g. connect, useStoreSelector) wil
 
 Most of the time this is not an issue or noticeable thing. But in tests that might be unexpected.
 
-> In order to take into account scheduling while testing use [waitRaf helper](references/test/test-jsdom.md#waitraf) or [act from test-unit](references/test/test-unit.md#act)
+> In order to take into account scheduling while testing use [waitRaf helper](references/tramvai/test/jsdom.md#waitraf) or [act from test-unit](references/tramvai/test/unit.md#act)
 
 ## How to
 

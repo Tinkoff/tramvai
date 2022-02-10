@@ -72,8 +72,8 @@ createApp({
 
 After that, we will have a bundle available in the application and after downloading it, the linked components will be available. Then we can use these components in routing
 
-* [Complete documentation about createBundle](references/tramvai/create-bundle.md)
-* [Complete documentation about createApp](references/tramvai/create-app.md)
+* [Complete documentation about createBundle](references/tramvai/core.md#createBundle)
+* [Complete documentation about createApp](references/tramvai/core.md#createApp)
 
 ## Defaul bundle
 

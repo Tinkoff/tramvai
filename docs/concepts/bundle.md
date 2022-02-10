@@ -1,6 +1,7 @@
 ---
 id: bundle
 title: Bundle
+sidebar_position: 7
 ---
 
 Bundles allow you to select components, reducers and actions common for different pages.
@@ -9,7 +10,7 @@ Bundles are registered for the entire application, the name of the current bundl
 - saves actions to the general action register
 - registers new reducers
 
-Interface details [createBundle](references/tramvai/create-bundle.md)
+Interface details [createBundle](references/tramvai/core.md#createBundle)
 
 ## Dynamic bundle import
 

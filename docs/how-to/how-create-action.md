@@ -60,5 +60,5 @@ After that, when the user opens the route, the server will automatically launch 
 
 ## What else is worth reading
 
-- [About createAction](references/tramvai/create-action.md)
+- [About createAction](references/tramvai/core.md#createAction)
 - [How do actions work](concepts/action.md)

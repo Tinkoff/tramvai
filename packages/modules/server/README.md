@@ -185,4 +185,4 @@ By default server starts at `3000` port. You can change this value by specifying
 
 ## Exportable tokens
 
-[Link](references/tokens/server-tokens.md)
+[Link](references/tokens/server.md)

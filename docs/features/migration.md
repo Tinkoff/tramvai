@@ -1,6 +1,7 @@
 ---
 id: migration
 title: Automatic migrations
+sidebar_position: 4
 ---
 
 Automatic migrations allow you to update the code and application settings when updating versions of tram modules or packages in the application itself.

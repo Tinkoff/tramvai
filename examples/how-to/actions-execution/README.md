@@ -48,7 +48,7 @@ To do this, you can use the static property `actions` of page components:
 
 ## Common actions for the application
 
-Actions connected to [application](references/tramvai/create-app.md) are executed on all pages:
+Actions connected to [application](references/tramvai/core.md#createApp) are executed on all pages:
 
 <p>
 <details>

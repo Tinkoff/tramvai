@@ -1,274 +1,159 @@
-const uniq = require('@tinkoff/utils/array/uniq');
-const toArray = require('@tinkoff/utils/array/toArray');
-const mapObj = require('@tinkoff/utils/object/map');
-const reduceObj = require('@tinkoff/utils/object/reduce');
+const path = require('path');
 const fs = require('fs-extra');
 const glob = require('fast-glob');
-const { resolve, dirname } = require('path');
-const dirTree = require('directory-tree');
-const generateExample = require('./generateExample');
-const readDocFile = require('./readDocFile');
-const isRemotePath = require('./isRemotePath');
 
-const root = resolve('..', '..');
-const locales = ['ru', 'en'];
-const tempDocsPath = resolve('tmp-docs');
-const resolveLocaleDocsPath = (locale) =>
-  resolve(`i18n/${locale}/docusaurus-plugin-content-docs/current`);
+const root = path.resolve('..', '..');
+const docsDest = 'tmp-docs';
+const nestedDocsRegex = /\/docs\/((?:.+\/)?(?:[0-9a-zA-Z_-]+))\.md$/;
 
-const makeHeaders = (doc) => {
-  return reduceObj(
-    (acc, v, k) => {
-      acc.push(`${k}: ${v}`);
-      return acc;
-    },
-    [],
-    doc
-  ).join(' \n');
-};
+async function copyMdFiles() {
+  await clearPreviousCopy();
 
-const copyFile = async (path, name, doc, locale) => {
-  const docsPath = locale ? resolveLocaleDocsPath(locale) : tempDocsPath;
-  const newPath = resolve(docsPath, `${name}.md`);
+  await copyDocs({ from: 'docs' });
+  await copyDocs({ from: 'tinkoff-docs' });
 
-  const file = await readDocFile(path);
+  await fs.copy(path.join(root, 'CHANGELOG.md'), `${docsDest}/releases/changelog.md`);
+  await fs.copy(path.join(root, 'migration.md'), `${docsDest}/releases/migration.md`);
+  await fs.copy(path.join(root, 'CONTRIBUTING.md'), `${docsDest}/contribute/contribute.md`);
 
-  const modifyFile = doc.example ? await generateExample(file, path) : file.split('\n');
+  await copyDocs({ from: 'packages/tramvai', to: `${docsDest}/references/tramvai` });
+  await copyDocs({ from: 'packages/cli', to: `${docsDest}/references/cli` });
+  await copyDocs({ from: 'packages/modules', to: `${docsDest}/references/modules` });
+  await copyDocs({ from: 'packages/tokens', to: `${docsDest}/references/tokens` });
+  await copyDocs({ from: 'packages/libs', to: `${docsDest}/references/libs` });
+  await copyDocs({ from: 'tools', to: `${docsDest}/references/tools` });
 
-  if (modifyFile[0] !== '---') {
-    // удаляем первую строку, так как там будет заголовок
-    modifyFile.shift();
-    // добавляем указание на текущую директорию с файлом
-    modifyFile.unshift(`<!--@doc-cwd ${dirname(path)}-->`);
-    // Добавляем заголовок который необходим для докариуса
-    modifyFile.unshift(`---\n${makeHeaders(doc)} \n---`);
-  }
-
-  // Записываем в файл
-  await fs.outputFile(resolve(root, newPath), modifyFile.join('\n'), 'utf-8');
-
-  console.info('Дока:', name, 'По пути:', path, 'Перенесена в:', newPath);
-};
-
-const priorities = {};
-
-const sortDocs = (doc) => {
-  if (!Array.isArray(doc)) {
-    return;
-  }
-
-  const docCopy = [...doc];
-
-  doc.sort((a, b) => {
-    if (typeof a !== 'string') {
-      sortDocs(a.items);
-      return 0;
-    }
-    if (typeof b !== 'string') {
-      sortDocs(b.items);
-      return 0;
-    }
-
-    const aPrioriry = priorities[b];
-    const bPriority = priorities[a];
-
-    if (aPrioriry > bPriority) {
-      return 1;
-    }
-    if (aPrioriry < bPriority) {
-      return -1;
-    }
-    return docCopy.indexOf(a) - docCopy.indexOf(b);
+  await copyDocs({ from: 'tinkoff-packages/tramvai', to: `${docsDest}/references/tramvai` });
+  await copyDocs({ from: 'tinkoff-packages/cli', to: `${docsDest}/references/cli` });
+  await copyDocs({
+    from: 'tinkoff-packages/modules',
+    to: `${docsDest}/references/tinkoff-modules`,
   });
-};
+  await copyDocs({ from: 'tinkoff-packages/tokens', to: `${docsDest}/references/tinkoff-tokens` });
+  await copyDocs({ from: 'tinkoff-packages/libs', to: `${docsDest}/references/tinkoff-libs` });
+  await copyDocs({ from: 'tinkoff-tools', to: `${docsDest}/references/tinkoff-tools` });
 
-async function copyRootDocs({ docsFolder }) {
-  const docsRoot = resolve(root, docsFolder);
+  await copyDocs({
+    from: 'examples/how-to',
+    to: `${docsDest}/how-to`,
+    ignore: ['examples/how-to/README.md'],
+  });
+  await copyDocs({
+    from: 'tinkoff-examples/how-to',
+    to: `${docsDest}/how-to`,
+    ignore: ['tinkoff-examples/how-to/README.md'],
+  });
+}
 
-  return Promise.all([
-    // находим все .md файлы в папке docs, исключая локали
-    glob(`**/*.md`, {
-      cwd: docsRoot,
-      ignore: [`**/*.{${locales.join(',')}}.md`],
-    }).then((files) => {
-      return Promise.all(
-        files.map((file) => {
-          // копируем их в папку tmp-docs
-          return fs.copy(resolve(docsRoot, file), resolve(tempDocsPath, file));
-        })
-      );
-    }),
-    ...locales.map((locale) => {
-      // находим конкретные локали в папке docs
-      return glob(`**/*.${locale}.md`, {
-        cwd: docsRoot,
-      }).then((files) => {
-        const localeDest = resolveLocaleDocsPath(locale);
+async function copyDocs({ from, to = docsDest, ignore = [] }) {
+  const docs = await glob([`${from}/**/*.md`, `${from}/**/_category_.json`], {
+    cwd: root,
+    ignore: [
+      '**/lib/**',
+      '**/dist/**',
+      '**/__fixtures__/**',
+      '**/__integrations/**',
+      '**/node_modules/**',
+      'tools/docSite/**',
+      'router-way/**',
+      '**/deprecated-*/**',
+      ...ignore,
+    ],
+  });
 
-        return Promise.all(
-          files.map((file) => {
-            return fs.copy(
-              resolve(docsRoot, file),
-              // копируем их в папку i18n/${locale}/docusaurus-plugin-content-docs/current,
-              // заменяем расширения с .${locale}.md на .md
-              resolve(localeDest, file.replace(new RegExp(`\\.${locale}\\.md$`), '.md'))
-            );
+  await Promise.all(
+    docs.map((file) => {
+      const fileExt = path.extname(file);
+      const isMdFile = fileExt === '.md' || fileExt === '.mdx';
+      const fileFrom = path.join(root, file);
+      const fileTo = path.join(process.cwd(), file.replace(from, to));
+
+      return isMdFile
+        ? copyDocFile({
+            from: fileFrom,
+            to: fileTo,
           })
-        );
-      });
-    }),
-  ]);
-}
-
-// Здесь потенциальный баг, нужно сделать ассинхронным
-async function collectAllProjectDocs() {
-  const docsResult = Object.create(null);
-  const promises = [];
-  // eslint-disable-next-line promise/param-names
-  return new Promise((resolvePromise) => {
-    dirTree(
-      root,
-      {
-        exclude: [/node_modules/, /dist/, /docSite/],
-        normalizePath: true,
-      },
-      (docFile) => {
-        if (docFile.name.startsWith('docs.js')) {
-          const doc = require(docFile.path);
-
-          const fillDocs = (items, docs, name) => {
-            items.forEach((entry) => {
-              if (entry.items) {
-                const childDocs = [];
-
-                docs.push({
-                  type: 'category',
-                  label: entry.label || entry.name,
-                  items: childDocs,
-                });
-
-                fillDocs(entry.items, childDocs, `${name}/${entry.name}`);
-              } else if (entry.type) {
-                // Ожидаются элементы из https://docusaurus.io/docs/sidebar#understanding-sidebar-items
-                docs.push(entry);
-              } else {
-                const docName = `${name}/${entry.doc.id}`;
-
-                const filePath = isRemotePath(entry.path)
-                  ? entry.path
-                  : resolve(docFile.path, '..', entry.path);
-
-                const promise = copyFile(filePath, docName, entry.doc)
-                  .then(() => {
-                    priorities[docName] = entry.priority || 100;
-                    docs.push(docName);
-                  })
-                  .catch((e) => {
-                    console.warn(`Дока ${docName} не обнаружена по пути ${filePath}`);
-                  });
-
-                promises.push(promise);
-
-                locales.forEach((locale) => {
-                  // предполагаем, что у каждого файла рядом может лежать локаль с расширением .${locale}.md
-                  const localeFilePath = filePath.replace(/\.md$/, `.${locale}.md`);
-
-                  // копируем локализацию в папку i18n/${locale}/docusaurus-plugin-content-docs/current
-                  const localeCopyPromise = copyFile(
-                    localeFilePath,
-                    docName,
-                    entry.doc,
-                    locale
-                  ).catch((e) => {
-                    // expected behaviour
-                  });
-
-                  promises.push(localeCopyPromise);
-                });
-              }
-            });
-          };
-
-          toArray(doc).forEach((entry) => {
-            const key = entry.label || entry.name;
-            let nextDocs;
-            if (docsResult[key]) {
-              nextDocs = docsResult[key];
-            } else {
-              nextDocs = [];
-              docsResult[key] = nextDocs;
-            }
-
-            fillDocs(entry.items, nextDocs, entry.name);
-          });
-        }
-      }
-    );
-
-    Promise.all(promises).then(() => {
-      resolvePromise(docsResult);
-    });
-  });
-}
-
-async function deleteTmpFolder() {
-  return Promise.all([
-    fs.remove(tempDocsPath),
-    ...locales.map((locale) => fs.remove(resolveLocaleDocsPath(locale))),
-  ]);
-}
-
-async function writeSidebar(docsResult) {
-  const docs = require('../baseSidebar');
-  return fs.outputFile(
-    'sidebars.json',
-    JSON.stringify(
-      {
-        docs: {
-          ...docs,
-          ...mapObj((doc, key) => {
-            const result = [...(docs[key] || [])];
-
-            sortDocs(doc);
-
-            doc.forEach((entry) => {
-              if (typeof entry !== 'string') {
-                const sameEntryIndex = result.findIndex(
-                  (baseEntry) => baseEntry.label === entry.label
-                );
-
-                if (sameEntryIndex !== -1) {
-                  result[sameEntryIndex] = {
-                    ...result[sameEntryIndex],
-                    ...entry,
-                    items: uniq([...result[sameEntryIndex].items, ...entry.items]),
-                  };
-                  return;
-                }
-              }
-
-              result.push(entry);
-            });
-
-            return uniq(result);
-          }, docsResult),
-        },
-      },
-      null,
-      2
-    ),
-    'utf-8'
+        : fs.copy(fileFrom, fileTo);
+    })
   );
 }
 
-async function main() {
-  await deleteTmpFolder();
-  await copyRootDocs({ docsFolder: 'docs' });
-  await copyRootDocs({ docsFolder: 'tinkoff-docs' });
+async function copyDocFile({ from, to }) {
+  let fileContent = (await fs.readFile(from, 'utf-8')).split('\n');
+  const fileCwd = path.dirname(from);
+  const hasMetadata = fileContent[0] === '---';
+  let removedMetadata;
 
-  const docsResult = await collectAllProjectDocs();
+  // комментарии до front matter ломают парсинг документа,
+  // поэтому добавляем комментарий после front matter
+  if (hasMetadata) {
+    const metadataClosedIndex = fileContent.findIndex(
+      (item, index) => index !== 0 && item === '---'
+    );
+    removedMetadata = fileContent.splice(0, metadataClosedIndex + 1);
+  }
 
-  await writeSidebar(docsResult);
+  // добавляем указание на текущую директорию с файлом
+  fileContent.unshift(`<!--@doc-cwd ${path.dirname(from)}-->`);
+
+  // возвращаем удаленный front matter
+  if (removedMetadata) {
+    fileContent = [...removedMetadata, ...fileContent];
+  }
+
+  // удаляем h1 заголовок, его проставляет Docusaurus
+  const headerIndex = fileContent.findIndex((item) => item.startsWith('# '));
+
+  if (headerIndex) {
+    fileContent.splice(headerIndex, 1);
+  }
+
+  //
+  // считаем, что если в папке с файлом есть `_category_.json`,
+  // значит нужно сохранить путь до папки с файлов, и переименовать текущий README.md в base.md,
+  // например файл `packages/libs/foo/README.md` будет скопирован в `tmp-docs/references/libs/foo/base.md`
+  //
+  // если в папке с файлом нет `_category_.json`, переименовываем README.md в название текушей папки,
+  // например файл `packages/libs/foo/README.md` будет скопирован в `tmp-docs/references/libs/foo.md`
+  //
+
+  const hasCategoryJson = isCategoryDir({ directory: fileCwd });
+  let outputFilename = to;
+
+  if (hasCategoryJson) {
+    // @todo заменить 'base.md' на 'index.md' после релиза https://github.com/facebook/docusaurus/pull/6495/files ?
+    outputFilename = to.replace(/(README|readme)\.md$/, 'base.md');
+  } else {
+    outputFilename = to.replace(/\/(README|readme)\.md$/, '.md');
+  }
+
+  //
+  // считаем, что если файл находится в подпапке `docs`,
+  // то при копировании нужно поднять файл на уровень выше,
+  // например `packages/libs/foo/docs/test.md` будет скопирован в `tmp-docs/references/libs/foo/test.md`
+  //
+
+  const nestedCategoryDocsMatch = nestedDocsRegex.exec(from);
+
+  if (nestedCategoryDocsMatch) {
+    outputFilename = outputFilename.replace(nestedDocsRegex, '/$1.md');
+  }
+
+  await fs.outputFile(outputFilename, fileContent.join('\n'), 'utf-8');
 }
 
-main();
+async function clearPreviousCopy() {
+  return fs.remove(path.resolve(docsDest));
+}
+
+function isCategoryDir({ directory }) {
+  let categoryJson;
+  try {
+    categoryJson = require(path.join(directory, '_category_.json'));
+  } catch (e) {
+    // do nothing
+  }
+  return !!categoryJson;
+}
+
+copyMdFiles();

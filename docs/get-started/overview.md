@@ -1,6 +1,7 @@
 ---
 id: overview
 title: Documentation overview
+sidebar_position: 1
 ---
 
 **`Tramvai`** is a lightweight web framework for building SSR applications with a modular system and DI to quickly extend the functionality of applications.
@@ -17,7 +18,7 @@ You can get acquainted with the concepts that underlie the framework in the sect
 
 ### Features
 
-You can learn more about the capabilities of the framework in the section **[Features](features/react.md)**
+You can learn more about the capabilities of the framework in the section **[Features](references/tramvai/react.md)**
 
 ### Jedi tricks
 
@@ -25,7 +26,7 @@ Guides and recipes for solving the most popular tasks are located in the section
 
 ### API references
 
-The framework API reference, documentation for built-in modules and libraries are located in the section **[API](references/tramvai/create-app.md)**
+The framework API reference, documentation for built-in modules and libraries are located in the section **[API](references/tramvai/core.md#createApp)**
 
 ### Tramvai CLI
 

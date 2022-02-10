@@ -1,8 +1,13 @@
+---
+title: '@tramvai/react'
+sidebar_position: 2
+---
+
 # React
 
-`@tramvai/react` - библиотека для интеграции возможностей `tramvai` с `React` компонентами
+`@tramvai/react` - library for integrating tramvai features with `React` components
 
-## Подключение в проекте
+## Install
 
 ```bash
 npm i --save @tramvai/react
@@ -10,7 +15,7 @@ npm i --save @tramvai/react
 
 ## DI
 
-При создание компонентов вам может понадобиться получение данных с di для этого есть hook `useDi` и HoC `withDi`
+When creating components, you may need to get data from di, for this there is a hook `useDi` and HoC `withDi`
 
 ### useDi
 
@@ -22,15 +27,15 @@ type useDi = (deps: Record<string, string | Token>) => Record<string, any>;
 type useDi = (dep: string | Token) => any;
 ```
 
-Хук в который мы можем передать как объект с требуемыми зависимостями и нам вернется объект с данными, так и единичный token, где нам вернется результат. При вызове `useDi` мы получаем данные из di и если мы не нашли данных в di, произойдет ошибка.
+A hook into which we can pass both an object with the required dependencies and an object with data will be returned to us, as well as a single token, where the result will be returned to us. When we call `useDi`, we get data from di and if we don't find data in di, an error will occur.
 
 ```javascript
 import React from 'react';
 import { useDi } from '@tramvai/react';
 
 const MyComponent = () => {
-  const { logger } = useDi({ logger: 'logger' }); // передаем объект
-  const Region = useDi(regionToken); // передаем единичный токен
+  const { logger } = useDi({ logger: 'logger' }); // pass the object
+  const Region = useDi(regionToken); // pass a single token
 
   logger.info('text');
 
@@ -51,7 +56,7 @@ type withDi = (
 ) => (wrapper: React.ReactElement<any>) => React.ReactElement<any>;
 ```
 
-Хок, который позволяет обернуть любые компоненты, получить данные из `DI` и передать результат с зависимостями в props компонента
+A HoC that allows you to wrap any components, get data from `DI` and pass the result with dependencies to the props of the component
 
 ```javascript
 import React from 'react';
@@ -72,31 +77,31 @@ class BoxyPage extends Component {
 type useDiContainer = () => DI.Container;
 ```
 
-Получение инстанса DI контейнера который был добавлен в контекст приложения.
+Getting an instance of a DI container that has been added to the application context.
 
-Лучше не пользоваться этим hook, так как он сильно низкоуровневый и предназначен для разработки новых hook
+It is better not to use this hook, as it is very low-level and is intended for developing new hooks
 
 ## Error
 
-Для обработки ошибок при рендере в React используются [Error Boundary](https://ru.reactjs.org/docs/error-boundaries.html#introducing-error-boundaries). Этот пакет предоставляет свою версию Error Boundary которая залогирует ошибку через общий логгер и отобразит заглушку для обернутого компонента если произошла ошибка.
+To handle errors during rendering, React uses [Error Boundary](https://ru.reactjs.org/docs/error-boundaries.html#introducing-error-boundaries). This package provides its own version of Error Boundary which will log an error through a generic logger and display a stub for the wrapped component if an error occurs.
 
 ### ErrorBoundary
 
-Error Boundary компонент, который следит за ошибками ниже по дереву и в случае возникшей ошибки рендера залогирует ошибку и отобразит компонент `fallbackComponent` (передается как пропс, по дефолту это FallbackError из этого пакета) вместо упавшего поддерева рендера.
+Error Boundary component that monitors errors down the tree and, in case of a render error, will log an error and display the `fallbackComponent` component (passed as a props, by default it is a FallbackError from this package) instead of the fallen render subtree.
 
-Можно переопределить `fallbackComponent` через провайдер `ERROR_BOUNDARY_FALLBACK_COMPONENT_TOKEN`.
+You can override the `fallbackComponent` through the `ERROR_BOUNDARY_FALLBACK_COMPONENT_TOKEN` provider.
 
 ### FallbackError
 
-Компонент используемый по умолчанию как заглушка для поддерева в котором призошла ошибка рендера
+Component used by default as a stub for a subtree in which a render error occurred
 
 ### withError
 
-Хок оборачивающий компонент в ErrorBoundary.
+Hook wrapping component in ErrorBoundary.
 
 ## lazy
 
-Для динамического импорта компонентов с поддержкой SSR, существует high order компонент `lazy`:
+To dynamically import components with SSR support, there is a high order `lazy` component:
 
 ```tsx
 import { lazy } from '@tramvai/react';

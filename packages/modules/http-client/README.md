@@ -227,7 +227,7 @@ NODE_DEBUG=request tramvai start<appName>
 
 ## Exported tokens
 
-[link](references/tokens/http-client-tokens.md)
+[link](references/tokens/http-client.md)
 
 ## Environment Variables
 

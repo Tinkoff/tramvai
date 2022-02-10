@@ -1,6 +1,6 @@
-import type { Context } from '../../models/context';
+import type { Validator } from './validator.h';
 
-export function checkConfigExists({ config }: Context) {
+export const checkConfigExists: Validator = ({ config }) => {
   const configParameters = config.get();
 
   if (!configParameters) {
@@ -10,4 +10,4 @@ export function checkConfigExists({ config }: Context) {
   }
 
   return Promise.resolve({ name: 'checkConfigExists', status: 'ok' });
-}
+};

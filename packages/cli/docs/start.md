@@ -1,3 +1,7 @@
+---
+sidebar_position: 3
+---
+
 ## React hot refresh
 
 It is possible to refresh react components without page similar to the way in works in [React Native](https://reactnative.dev/docs/fast-refresh).

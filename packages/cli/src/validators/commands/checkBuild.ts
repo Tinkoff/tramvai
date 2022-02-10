@@ -1,6 +1,6 @@
-import type { Context } from '../../models/context';
+import type { Validator } from './validator.h';
 
-export function checkApplication({ config }: Context, parameters) {
+export const checkApplication: Validator = ({ config }, parameters) => {
   const { target } = parameters;
   const cfg = config.getProject(target);
 
@@ -9,4 +9,4 @@ export function checkApplication({ config }: Context, parameters) {
   }
 
   return Promise.resolve({ name: 'checkBuild', status: 'ok' });
-}
+};

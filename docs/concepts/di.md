@@ -1,6 +1,7 @@
 ---
 id: di
 title: Dependency Injection
+sidebar_position: 2
 ---
 
 Tramvai is based on a `DI` system that contains information about dependencies, connections between them, and already created instances of dependencies.
@@ -59,7 +60,7 @@ export class MyModule {}
 
 ### In createApp
 
-You can pass the `providers` array to [createApp](references/tramvai/create-app.md), which will have the highest priority and will overwrite the implementations of the modules and core interfaces:
+You can pass the `providers` array to [createApp](references/tramvai/core.md#createApp), which will have the highest priority and will overwrite the implementations of the modules and core interfaces:
 
 ```tsx
 createApp({

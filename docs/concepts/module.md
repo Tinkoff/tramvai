@@ -1,6 +1,7 @@
 ---
 id: module
 title: Module
+sidebar_position: 4
 ---
 
 Modules are the implementation of some limited functionality of the application using the DI system and providers.

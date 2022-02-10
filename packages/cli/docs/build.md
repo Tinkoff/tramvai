@@ -1,3 +1,7 @@
+---
+sidebar_position: 4
+---
+
 ## Library build
 
 Command `tramvai build` can build libraries to separate bundles for various environments:

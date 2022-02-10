@@ -86,5 +86,5 @@ export class MyCommonModule {}
 A `SecurityModule` was created, which will be called for each client and will add the necessary headers
 
 - [Documentation about modules](concepts/module.md)
-- [Documentation about createApp](references/tramvai/create-app.md)
+- [Documentation about createApp](references/tramvai/core.md#createApp)
 - [Documentation about DI](concepts/di.md)

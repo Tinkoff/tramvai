@@ -1,6 +1,6 @@
 # ReactQuery
 
-A module that adds integration with the [react-query](https://react-query.tanstack.com/) library and is required for [@tramvai/react-query](features/react-query/api.md)
+A module that adds integration with the [react-query](https://react-query.tanstack.com/) library and is required for [@tramvai/react-query](references/tramvai/react-query.md)
 
 ## Installation
 
@@ -38,7 +38,7 @@ The browser additionally performs rehydration of the data preloaded on the serve
 
 ## API
 
-The module basically provides the necessary things in DI for the library [@tramvai/react-query](features/react-query/api.md) and itself may be needed only if there is a need to change the settings for QueryClient or use QueryClient directly (but better not to use directly)
+The module basically provides the necessary things in DI for the library [@tramvai/react-query](references/tramvai/react-query.md) and itself may be needed only if there is a need to change the settings for QueryClient or use QueryClient directly (but better not to use directly)
 
 ## How to
 

@@ -162,4 +162,4 @@ The module uses loggers with the next ids: `metrics:perf`, `metrics:papi`
 
 ## Exported tokens
 
-[link](references/tokens/metrics-tokens.md)
+[link](references/tokens/metrics.md)

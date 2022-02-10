@@ -1,3 +1,7 @@
+---
+sidebar_position: 2
+---
+
 `@tramvai/cli` requires that in the project root should exists config file named `tramvai.json`. This config should define projects that `@tramvai/cli` should handle.
 
 ## config file format

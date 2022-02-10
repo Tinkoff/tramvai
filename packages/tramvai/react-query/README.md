@@ -1,3 +1,8 @@
+---
+title: '@tramvai/react-query'
+sidebar_position: 5
+---
+
 # React Query
 
 A library for handling requests in React components. Based on [react-query](https://react-query.tanstack.com/).

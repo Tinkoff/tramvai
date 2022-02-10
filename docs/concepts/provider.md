@@ -1,6 +1,7 @@
 ---
 id: provider
 title: Provider
+sidebar_position: 3
 ---
 
 provider is a simple object that provides an implementation for an interface (identifier) ​​for a particular dependency. An implementation can be a constant value (string, function, symbol, class instance), factory, or class. A factory or class is initialized upon request to the corresponding identifier. It is possible to register several providers for one token, if the `multi` parameter is present.

@@ -1,6 +1,7 @@
 ---
 id: bundle-optimization
 title: Bundle optimization
+sidebar_position: 2
 ---
 
 [@tramvai/cli](references/cli/base.md) use `webpack` for building an application, and configures most of the well-known optimizations for production builds - code minification and obfuscation, CSS and image optimization, code splitting, hashes for efficient static caching - and allows you to customize some optimization stages.

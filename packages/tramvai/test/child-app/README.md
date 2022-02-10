@@ -2,13 +2,13 @@
 
 Helpers library for writing unit tests for tramvai child-app
 
-Uses [`@tramvai/test-unit`](./test-unit.md) under hood to create test root-app that will wrap child-app.
+Uses [`@tramvai/test-unit`](./unit.md) under hood to create test root-app that will wrap child-app.
 
 ## How to
 
 ### Test child-app main component render
 
-You can get React Component returned by child-app from return value of `testChildApp` function and use for example `testComponent` helper from the [`@tramvai/test-react`](./test-react.md)
+You can get React Component returned by child-app from return value of `testChildApp` function and use for example `testComponent` helper from the [`@tramvai/test-react`](./react.md)
 
 :::warning
 

@@ -24,7 +24,7 @@ const docusaurusConfig = {
           editUrl:
             'https://github.com/Tinkoff/tramvai/-/edit/master/docs/get-started/overview.md',
           // sidebars file relative to website dir.
-          sidebarPath: require.resolve('./sidebars.json'),
+          sidebarPath: require.resolve('./sidebars.public.js'),
           versions: {
             current: {
               banner: 'none',
@@ -86,7 +86,7 @@ const docusaurusConfig = {
       },
       items: [
         { to: 'docs/get-started/overview', label: 'Docs', position: 'right' },
-        { to: 'docs/references/tramvai/create-app', label: 'API', position: 'right' },
+        { to: 'docs/references/tramvai/core', label: 'API', position: 'right' },
         {
           href: 'https://github.com/Tinkoff/tramvai',
           label: 'Репозиторий',
@@ -108,7 +108,7 @@ const docusaurusConfig = {
           items: [
             { to: 'docs/concepts/overview', label: 'Архитектура' },
             { to: 'docs/get-started/create-app', label: 'Начало работы' },
-            { to: 'docs/references/tramvai/create-app', label: 'Справочник API' },
+            { to: 'docs/references/tramvai/core', label: 'Справочник API' },
           ],
         },
         {

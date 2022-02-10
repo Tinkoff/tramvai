@@ -1,1 +1,0 @@
-# child-app-core

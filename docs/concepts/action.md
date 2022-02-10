@@ -1,11 +1,12 @@
 ---
 id: action
 title: Action
+sidebar_position: 6
 ---
 
 Actions are needed in the application to localize the execution of asynchronous actions, for example, make a request, update data in the store, and other actions that affect IO or state management.
 
-Detailed description of the interface [createAction](references/tramvai/create-action.md)
+Detailed description of the interface [createAction](references/tramvai/core.md#createAction)
 
 ## Example action
 
@@ -50,7 +51,7 @@ When `new NotFoundError()` is thrown, the page request will have a status of `40
 
 #### Application-wide global actions
 
-To register within the application, we must pass an array of actions to [createApp](references/tramvai/create-app.md), after that all these actions will be executed for each page and any bundles:
+To register within the application, we must pass an array of actions to [createApp](references/tramvai/core.md#createApp), after that all these actions will be executed for each page and any bundles:
 
 ##### Connection
 
@@ -76,7 +77,7 @@ const provider = provide({
 
 #### Global actions for the bundle
 
-To register inside a bundle, we must pass to [createBundle](references/tramvai/create-bundle.md) a list of actions that will then be executed for all pages that are present and used in the bundle.
+To register inside a bundle, we must pass to [createBundle](references/tramvai/core.md#createBundle) a list of actions that will then be executed for all pages that are present and used in the bundle.
 
 ##### Connection
 

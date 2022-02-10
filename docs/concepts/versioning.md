@@ -1,3 +1,9 @@
+---
+id: versioning
+title: Versioning
+sidebar_position: 8
+---
+
 # Versioning
 
 Most of the libraries in the `tramvai` repository are bundled into a unified versioning.

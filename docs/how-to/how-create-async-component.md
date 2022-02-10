@@ -3,7 +3,7 @@ id: how-create-async-component
 title: How to split a component into an asynchronous chunk?
 ---
 
-tramvai supports splitting components into asynchronous chunks with rendering on the server and hydration on the client, using [`@tramvai/react`](features/react.md#lazy)
+tramvai supports splitting components into asynchronous chunks with rendering on the server and hydration on the client, using [`@tramvai/react`](references/tramvai/react.md#lazy)
 
 ## Component example
 

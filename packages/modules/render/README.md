@@ -150,7 +150,7 @@ To speed up data loading, we've added a preloading system for resources and asyn
 
 The `RenderModule` has a default basic layout that supports different ways of extending and adding functionality
 
-[Read more about layout on the library page](references/libs/layout-factory.md)
+[Read more about layout on the library page](references/libs/tinkoff-layout.md)
 
 #### Adding a basic header and footer
 
@@ -227,7 +227,7 @@ import { provide } from '@tramvai/core';
 export class MyLayoutModule {}
 ```
 
-More details about the `components` and `wrappers` options can be found in [@tinkoff/layout-factory](references/libs/layout-factory.md)
+More details about the `components` and `wrappers` options can be found in [@tinkoff/layout-factory](references/libs/tinkoff-layout.md)
 
 #### Replacing the basic layout
 
@@ -389,4 +389,4 @@ describe('testPageResources', () => {
 
 ## Exported tokens
 
-[link](references/tokens/render-tokens.md)
+[link](references/tokens/render.md)

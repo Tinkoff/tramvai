@@ -2,7 +2,7 @@
 
 Helpers library for writing tramvai specific unit-tests
 
-It might be even more useful when used with [`@tramvai/test-mocks`](./test-mocks.md)
+It might be even more useful when used with [`@tramvai/test-mocks`](./mocks.md)
 
 ## Installation
 

@@ -1,3 +1,9 @@
+---
+title: '@tramvai/cli'
+sidebar_label: 'base'
+sidebar_position: 1
+---
+
 # Tramvai CLI
 
 CLI interface for resolving actual problems and tasks of frontend CI. Reduces complexity of setting up webpack, typescript, babel, postcss and other tools.

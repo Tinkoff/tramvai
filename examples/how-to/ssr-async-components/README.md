@@ -1,7 +1,7 @@
 # SSR with async components
 
 When using dynamic `import` to load React components, we lose the ability to render them on the server.
-This problem is solved by the library [@tramvai/react lazy](features/react.md#lazy)
+This problem is solved by the library [@tramvai/react lazy](references/tramvai/react.md#lazy)
 
 <p>
 <details>

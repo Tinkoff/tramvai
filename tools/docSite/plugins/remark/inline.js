@@ -15,7 +15,7 @@ const replaceNode = async (node, path) => {
 };
 
 module.exports = ({ cwd = '' } = {}) => {
-  return async (tree) => {
+  return async (tree, file) => {
     const promises = [];
     let currentCwd = cwd;
 
@@ -31,7 +31,12 @@ module.exports = ({ cwd = '' } = {}) => {
       const match = IMPORT_REGEXP.exec(node.value);
 
       if (match) {
-        promises.push(replaceNode(node, resolve(currentCwd, match[1])));
+        promises.push(
+          replaceNode(node, resolve(currentCwd, match[1])).catch((error) => {
+            console.error(`Error in inline-plugin, file ${file.history[0]}`, error.message);
+            throw error;
+          })
+        );
       }
     });
 

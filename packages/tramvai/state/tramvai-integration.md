@@ -6,7 +6,7 @@ There are three main options for working with application state:
 - Get the state
 - Subscribe to change of state
 
-When working with state in `React` components, `@tramvai/state` provides convenient hooks, which are described in the [React Hooks](features/state/hooks.md) documentation. But, in `tramvai` applications, this is not enough, since there are additional entities in which work with state occurs - `providers` and `actions`.
+When working with state in `React` components, `@tramvai/state` provides convenient hooks, which are described in the [React Hooks](references/tramvai/state/hooks.md) documentation. But, in `tramvai` applications, this is not enough, since there are additional entities in which work with state occurs - `providers` and `actions`.
 
 ## Providers
 

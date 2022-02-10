@@ -2,13 +2,12 @@ import any from '@tinkoff/utils/array/any';
 import eachObj from '@tinkoff/utils/object/each';
 import { sync as resolve } from 'resolve';
 import { diff } from 'semver';
-
-import type { Context } from '../../models/context';
+import type { Validator } from './validator.h';
 
 const depsToCheck = [/^webpack$/, /^@babel/, /^postcss/];
 const criticalDeps = [/^webpack$/, /^@babel\/core/, /^postcss$/];
 
-export const checkDependencies = async ({ logger }: Context) => {
+export const checkDependencies: Validator = async ({ logger }) => {
   const rootDir = process.cwd();
   const packageJson = require('../../../package.json');
   let hasWrongDeps = false;

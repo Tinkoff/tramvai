@@ -1,6 +1,7 @@
 ---
 id: command-line-runner
-title: Actions chain
+title: CommandLineRunner
+sidebar_position: 5
 ---
 
 When processing a client request, we need to perform a standard list of actions, such as getting a route, getting the desired data for the client, rendering the application and responding to the client. At the same time, we have a modular system, when the modules do not know about each other, but they need to be connected somehow.

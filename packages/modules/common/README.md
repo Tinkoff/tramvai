@@ -131,6 +131,6 @@ export const providers = [
 
 ## Exported tokens
 
-- [tokens-common](references/tokens/common-tokens.md)
+- [tokens-common](references/tokens/common.md)
 - [cookie](references/modules/cookie.md)
 - [env](references/modules/env.md)

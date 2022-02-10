@@ -1,8 +1,13 @@
+---
+title: '@tramvai/types-actions-state-context'
+sidebar_position: 6
+---
+
 # @tramvai/types-actions-state-context
 
-В этой библиотеке объединены типы для `@tramvai/core` и `@tramvai/state`.
+This library combines the types for `@tramvai/core` and `@tramvai/state`.
 
-Объединение решает проблему циклической зависимости между `@tramvai/core` и `@tramvai/state`,
-т.к. интерфейсы `Action` и `ConsumerContext` зависят друго от друга.
+The merging solves the problem of cyclic dependency between `@tramvai/core` and `@tramvai/state`,
+because the `Action` and `ConsumerContext` interfaces depend on each other.
 
-Только для внутреннего использования!
+For internal use only!

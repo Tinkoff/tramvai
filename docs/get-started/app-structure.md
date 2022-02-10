@@ -1,6 +1,7 @@
 ---
 id: app-structure
 title: Project structure
+sidebar_position: 3
 ---
 
 A quick overview of the structure of the application that generates by tramvai `new` command.

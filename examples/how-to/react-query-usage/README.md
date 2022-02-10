@@ -1,6 +1,6 @@
 # Working with @tramvai/react-query
 
-For [@tramvai/react-query](features/react-query/api.md) to work, you need to connect the [@tramvai/module-react-query](references/modules/react-query.md) module to the application
+For [@tramvai/react-query](references/tramvai/react-query.md) to work, you need to connect the [@tramvai/module-react-query](references/modules/react-query.md) module to the application
 
 ## Basic example with createQuery and useQuery
 

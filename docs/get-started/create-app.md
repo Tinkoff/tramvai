@@ -1,6 +1,7 @@
 ---
 id: create-app
 title: Сreate an application on tramvai
+sidebar_position: 2
 ---
 
 In this tutorial, we will create a new application using the tramvai framework.

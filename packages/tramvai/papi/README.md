@@ -1,16 +1,21 @@
-# @tramvai/papi
+---
+title: '@tramvai/papi'
+sidebar_position: 4
+---
 
-Библиотека для создания и работы с методами papi.
+# Papi
 
-## Подключение
+Library for creating and working with papi handlers.
 
-Необходимо установить `@tramvai/papi`
+## Installation
+
+You need to install `@tramvai/papi`
 
 ```bash
 yarn add @tramvai/module-papi
 ```
 
-## Использование
+## Usage
 
 ```tsx
 import { createPapiMethod } from '@tramvai/papi';

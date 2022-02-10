@@ -1,6 +1,7 @@
 ---
 id: core-modules
 title: Required modules
+sidebar_position: 4
 ---
 
 Some modules provide basic functionality `tramvai`, without which the application will not work.
@@ -89,4 +90,4 @@ The following links contain descriptions of terms `action`, `dependency injectio
 
 - [Action](concepts/action.md)
 - [Dependency Injection](concepts/di.md)
-- [State management](features/state/overview.md)
+- [State management](references/tramvai/state/base.md)

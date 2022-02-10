@@ -281,7 +281,7 @@ You can work with routing inside React components using hooks and components - `
 
 ### How to set static routes
 
-[RouterModule](references/modules/router.md) allows you to add new routes when configuring your application. The second way is to pass static routes to DI via the `ROUTES_TOKEN` token.
+[RouterModule](references/modules/router/base.md) allows you to add new routes when configuring your application. The second way is to pass static routes to DI via the `ROUTES_TOKEN` token.
 
 <p>
 <details>
@@ -399,4 +399,4 @@ describe('router guards', () => {
 
 ## Exported tokens
 
-[link](references/tokens/router-tokens.md)
+[link](references/tokens/router.md)
