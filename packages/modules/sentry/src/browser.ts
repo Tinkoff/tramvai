@@ -7,6 +7,7 @@ import {
   SENTRY_OPTIONS_TOKEN,
   SENTRY_DSN_TOKEN,
   SENTRY_FILTER_ERRORS,
+  SENTRY_LAZY_LOADING,
 } from './tokens';
 import type { SentryOptions, EventHint, Event, Exception } from './types.h';
 
@@ -41,9 +42,11 @@ const isUselessException = (exception: Exception) => {
       useFactory: ({
         envManager,
         logger,
+        sentryLazyLoading,
       }: {
         envManager: typeof ENV_MANAGER_TOKEN;
         logger: typeof LOGGER_TOKEN;
+        sentryLazyLoading: typeof SENTRY_LAZY_LOADING;
       }) => {
         let sendGlobalErrorsCount: ((count: number) => void) | undefined;
 
@@ -57,12 +60,14 @@ const isUselessException = (exception: Exception) => {
         }
         return createSentry({
           sdkBundleUrl: envManager.get('SENTRY_SDK_URL'),
+          lazyInjecting: sentryLazyLoading,
           sendGlobalErrorsCount,
         });
       },
       deps: {
         envManager: ENV_MANAGER_TOKEN,
         logger: { token: LOGGER_TOKEN, optional: true },
+        sentryLazyLoading: SENTRY_LAZY_LOADING,
       },
     },
     {
@@ -79,6 +84,10 @@ const isUselessException = (exception: Exception) => {
       useValue: (event: Event, hint?: EventHint) => {
         return event?.exception?.values?.every(isUselessException);
       },
+    },
+    {
+      provide: SENTRY_LAZY_LOADING,
+      useValue: false,
     },
   ],
 })

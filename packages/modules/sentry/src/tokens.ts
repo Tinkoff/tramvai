@@ -12,6 +12,7 @@ export const SENTRY_REQUEST_OPTIONS_TOKEN = createToken<SentryRequestOptions[]>(
     multi: true,
   }
 );
+export const SENTRY_LAZY_LOADING = createToken<boolean>('sentryLazyLoading');
 
 export type ErrorsFilter = (event: Event, hint?: EventHint) => boolean;
 
