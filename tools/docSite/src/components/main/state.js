@@ -1,5 +1,4 @@
 import React from 'react';
-import Translate from '@docusaurus/Translate';
 import { Section } from './section';
 import { Code } from '../code';
 
@@ -33,30 +32,20 @@ export function State() {
       left={
         <>
           <h3>
-              <Translate id="MainPage.State.h3">
-                Эффективное управление состоянием
-              </Translate>
+              Effective state management
           </h3>
           <ul>
             <li>
-              <Translate id="MainPage.State.featureRedux">
-                Redux-like библиотека
-              </Translate>
+              Redux-like library
             </li>
             <li>
-              <Translate id="MainPage.State.featureSubscribtions">
-                Точечный механизм подписок на изменения
-              </Translate>
+              Decentralized mechanism for subscriptions to changes
             </li>
             <li>
-              <Translate id="MainPage.State.featureBoilerplate">
-                Отсутствие boilerplate кода
-              </Translate>
+              Lack of boilerplate code
             </li>
             <li>
-              <Translate id="MainPage.State.featureDevTools">
-                Поддержка Redux DevTools
-              </Translate>
+              Redux DevTools support
             </li>
           </ul>
         </>

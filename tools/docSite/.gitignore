@@ -17,4 +17,3 @@ yarn-error.log*
 sidebars.json
 
 tmp-docs
-i18n/**/docusaurus-plugin-content-docs/current

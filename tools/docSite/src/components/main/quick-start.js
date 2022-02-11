@@ -1,5 +1,4 @@
 import React from 'react';
-import Translate from '@docusaurus/Translate';
 import { Code } from '../code';
 import { BaseLink } from '../base-link';
 
@@ -12,21 +11,15 @@ export function QuickStart() {
     <div className="row padding--lg main-section">
       <div className="col col--4 col--offset-4">
         <h3 className="text--center">
-          <Translate id="MainPage.QuickStart.h3">
-            Быстрый старт
-          </Translate>
+          Quick start
         </h3>
         <p className="text--center">
-          <Translate id="MainPage.QuickStart.description">
-            Для создания, разработки и сборки приложения создана мощная и функциональная CLI
-          </Translate>
+          Powerful and functional CLI to create, develop and build applications
         </p>
         <Code language="sh">{code}</Code>
         <div className="text--center">
           <BaseLink to="docs/get-started/create-app">
-            <Translate id="MainPage.QuickStart.getStartedLink">
-              Начало работы
-            </Translate>
+            Get started
           </BaseLink>
         </div>
       </div>

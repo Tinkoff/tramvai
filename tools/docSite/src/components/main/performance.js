@@ -1,5 +1,4 @@
 import React from 'react';
-import Translate from '@docusaurus/Translate';
 import { Section } from './section';
 
 export function Performance() {
@@ -8,25 +7,17 @@ export function Performance() {
       left={
         <>
           <h3>
-            <Translate id="MainPage.Performance.h3">
-              Производительный
-            </Translate>
+            Fast
           </h3>
           <ul>
             <li>
-              <Translate id="MainPage.Performance.featureSize">
-                Минимальный размер фреймворка
-              </Translate>
+              Minimum framework size
             </li>
             <li>
-              <Translate id="MainPage.Performance.featureBestPractice">
-                Лучшие практики для загрузки клиентского кода
-              </Translate>
+              Best practices for loading client code
             </li>
             <li>
-              <Translate id="MainPage.Performance.featureMetrics">
-                Готовые модули для сбора метрик на сервере и клиенте
-              </Translate>
+              Modules for collecting metrics on the server and client
             </li>
           </ul>
         </>

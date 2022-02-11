@@ -2,11 +2,9 @@
   "scripts": {
     "setup": "node ./tools/copyMdFiles.js",
     "start": "docusaurus start",
-    "start:en": "yarn start --locale en",
+    "start:en": "yarn start",
     "build": "docusaurus build",
-    "serve": "docusaurus serve",
-    "write-translations": "docusaurus write-translations",
-    "write-translations:en": "yarn write-translations --locale en"
+    "serve": "docusaurus serve"
   },
   "dependencies": {
     "@docusaurus/remark-plugin-npm2yarn": "2.0.0-beta.13",

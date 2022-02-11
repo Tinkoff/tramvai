@@ -45,7 +45,7 @@ const docusaurusConfig = {
     [
       require.resolve('docusaurus-lunr-search'),
       {
-        languages: ['ru', 'en'],
+        languages: ['en'],
         excludeRoutes: ['docs/changelogs/**/*'],
       },
     ],
@@ -56,7 +56,7 @@ const docusaurusConfig = {
   onDuplicateRoutes: 'throw',
 
   title: 'tramvai', // Title for your website.
-  tagline: 'Фреймворк для создания приложений',
+  tagline: 'Modular framework for universal React applications',
   url: 'https://tramvai.dev/', // Your website URL
   baseUrl: '/', // Base URL for your project */
   // For github.io type URLs, you would set the url and baseUrl like:
@@ -89,11 +89,7 @@ const docusaurusConfig = {
         { to: 'docs/references/tramvai/core', label: 'API', position: 'right' },
         {
           href: 'https://github.com/Tinkoff/tramvai',
-          label: 'Репозиторий',
-          position: 'right',
-        },
-        {
-          type: 'localeDropdown',
+          label: 'Repository',
           position: 'right',
         },
       ],
@@ -106,13 +102,13 @@ const docusaurusConfig = {
         {
           title: 'Docs',
           items: [
-            { to: 'docs/concepts/overview', label: 'Архитектура' },
-            { to: 'docs/get-started/create-app', label: 'Начало работы' },
-            { to: 'docs/references/tramvai/core', label: 'Справочник API' },
+            { to: 'docs/concepts/overview', label: 'Architecture' },
+            { to: 'docs/get-started/create-app', label: 'Get started' },
+            { to: 'docs/references/tramvai/core', label: 'API reference' },
           ],
         },
         {
-          title: 'Ресурсы',
+          title: 'Resources',
           items: [
             { label: 'Codesandbox', href: 'https://codesandbox.io/s/tramvai-new-qgk90' },
             
@@ -120,9 +116,9 @@ const docusaurusConfig = {
           ],
         },
         {
-          title: 'Ссылки',
+          title: 'Links',
           items: [
-            { label: 'Репозиторий', href: 'https://github.com/Tinkoff/tramvai' },
+            { label: 'Repository', href: 'https://github.com/Tinkoff/tramvai' },
             
           ],
         },
@@ -132,11 +128,6 @@ const docusaurusConfig = {
     googleAnalytics: {
       trackingID: 'UA-122261674-2',
     },
-  },
-
-  i18n: {
-    defaultLocale: 'ru',
-    locales: ['ru', 'en'],
   },
 };
 

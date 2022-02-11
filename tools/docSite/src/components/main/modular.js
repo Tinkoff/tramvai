@@ -1,5 +1,4 @@
 import React from 'react';
-import Translate from '@docusaurus/Translate';
 import { Section } from './section';
 import { Code } from '../code';
 
@@ -19,20 +18,14 @@ export function Modular() {
       left={
         <>
           <h3>
-            <Translate id="MainPage.Modular.h3">
-              Модульный
-            </Translate>
+            Modular
           </h3>
           <ul>
             <li>
-              <Translate id="MainPage.Modular.featureModules">
-                Широкие возможности встроенных модулей
-              </Translate>
+              Wide possibilities of built-in modules
             </li>
             <li>
-              <Translate id="MainPage.Modular.featureExtendability">
-                Элементарное добавление нового функционала
-              </Translate>
+              Easy extends by new functionality
             </li>
           </ul>
         </>
