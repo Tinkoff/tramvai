@@ -18,6 +18,7 @@ import nodeClient from '../../blocks/nodeClient';
 import { pagesResolve } from '../../blocks/pagesResolve';
 import { DEFAULT_STATS_OPTIONS, DEFAULT_STATS_FIELDS } from '../../constants/stats';
 import { configToEnv } from '../../blocks/configToEnv';
+import { extendEntry } from '../../utils/extendEntry';
 
 export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config: Config) => {
   const {
@@ -64,14 +65,11 @@ export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config
 
   if (vendor) {
     config.entry('vendor').add(path.resolve(configManager.rootDir, vendor));
-    config
-      .entry('platform')
-      .clear()
-      .add({
-        import: path.resolve(configManager.rootDir, `${configManager.root}/index`),
-        // указываем что platform зависит от vendor, чтобы пакеты не дублировались
-        dependOn: 'vendor',
-      });
+
+    extendEntry(config.entry('platform'), {
+      // указываем что platform зависит от vendor, чтобы пакеты не дублировались
+      dependOn: 'vendor',
+    });
   }
 
   const statsFileName = configManager.modern ? 'stats.modern.json' : 'stats.json';

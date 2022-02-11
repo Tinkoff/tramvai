@@ -296,7 +296,7 @@ declare module 'webpack-chain' {
       assetFilter(value: (assetFilename: string) => boolean): this;
     }
 
-    class EntryPoint extends TypedChainedSet<Config, webpack.Entry> {}
+    class EntryPoint extends TypedChainedSet<Config, webpack.EntryObject[string]> {}
 
     class Resolve extends ChainedMap<Config> {
       alias: TypedChainedMap<this, string>;

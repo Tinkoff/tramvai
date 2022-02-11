@@ -20,6 +20,7 @@ import { commonApplicationDev } from '../dev';
 import type { UI_SHOW_PROGRESS_TOKEN } from '../../../../di/tokens';
 import sourcemaps from '../../blocks/sourcemaps';
 import FancyReporter from '../../plugins/WebpackBar/reporters/fancy';
+import { extendEntry } from '../../utils/extendEntry';
 
 // eslint-disable-next-line max-statements
 export const webpackClientConfig = ({
@@ -152,24 +153,11 @@ export const webpackClientConfig = ({
 
     config.optimization.splitChunks(splitChunks).set('chunkIds', 'named');
 
-    const platformEntry = config.entry('platform').values()[0];
-
-    if (
-      typeof platformEntry === 'object' &&
-      'import' in platformEntry &&
-      typeof platformEntry.import === 'string'
-    ) {
-      config
-        .entry('platform')
-        .clear()
-        .add({
-          ...platformEntry,
-          import: [
-            'webpack-hot-middleware/client?name=client&dynamicPublicPath=true&path=__webpack_hmr',
-            platformEntry.import,
-          ],
-        });
-    }
+    extendEntry(config.entry('platform'), {
+      import: [
+        'webpack-hot-middleware/client?name=client&dynamicPublicPath=true&path=__webpack_hmr',
+      ],
+    });
 
     config.plugin('hot-module').use(webpack.HotModuleReplacementPlugin);
     config.plugin('react-refresh').use(ReactRefreshPlugin, [

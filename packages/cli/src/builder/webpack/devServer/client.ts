@@ -25,6 +25,19 @@ const getPrefix = (configManager: ConfigManager): string => {
   throw new Error(`${configManager.type} is not supported`);
 };
 
+const getHotModulePrefix = (configManager: ConfigManager): string => {
+  switch (configManager.type) {
+    case 'application':
+      return `/${configManager.build.options.outputClient}`;
+    case 'child-app':
+      return `/${configManager.name}`;
+    case 'module':
+      return `/${configManager.name}/:version`;
+  }
+
+  throw new Error(`${configManager.type} is not supported`);
+};
+
 export const createDevServer = ({
   di,
   compiler,
@@ -64,20 +77,15 @@ export const createDevServer = ({
       },
     });
 
-    if (configManager.type === 'application') {
-      if (configManager.hotRefresh) {
-        app.use(
-          `/${configManager.build.options.outputClient}`,
-          webpackHotMiddleware(compiler, { log: false })
-        );
-      }
+    if (configManager.hotRefresh) {
+      app.use(getHotModulePrefix(configManager), webpackHotMiddleware(compiler, { log: false }));
+    }
 
-      const rootDir = di.get(CONFIG_ROOT_DIR_TOKEN);
-      app.use(express.static(rootDir));
+    const rootDir = di.get(CONFIG_ROOT_DIR_TOKEN);
+    app.use(express.static(rootDir));
 
-      if (di.get({ token: UI_OS_NOTIFY_TOKEN, optional: true })) {
-        notifier(compiler, configManager);
-      }
+    if (di.get({ token: UI_OS_NOTIFY_TOKEN, optional: true })) {
+      notifier(compiler, configManager);
     }
 
     staticServer.on('request', app);
