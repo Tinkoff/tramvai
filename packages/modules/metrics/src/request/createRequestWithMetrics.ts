@@ -1,5 +1,6 @@
 import { format } from '@tinkoff/url';
 import type { ClientRequest } from 'http';
+import type { Socket } from 'net';
 import type { Args, CreateRequestWithMetrics } from './types';
 // https://nodejs.org/api/errors.html#nodejs-error-codes - Common system errors possible for net/http/dns
 const POSSIBLE_ERRORS = [
@@ -74,8 +75,10 @@ export const createRequestWithMetrics: CreateRequestWithMetrics = ({
   },
   getServiceName,
   config,
-}) =>
-  function requestWithMetrics(originalRequest, ...args) {
+}) => {
+  const socketSet = new WeakSet<Socket>();
+
+  return function requestWithMetrics(originalRequest, ...args) {
     const [url, options] = getUrlAndOptions(args);
     const serviceName = getServiceName(url);
     const req = originalRequest.apply(this, args) as ClientRequest;
@@ -106,6 +109,14 @@ export const createRequestWithMetrics: CreateRequestWithMetrics = ({
 
     if (config.enableConnectionResolveMetrics) {
       req.on('socket', (socket) => {
+        // due to keep-alive tcp option sockets might be reused
+        // ignore them because they have already emitted events we are interested in
+        if (socketSet.has(socket)) {
+          return;
+        }
+
+        socketSet.add(socket);
+
         const timings = {
           start: Date.now(),
           lookupEnd: 0,
@@ -132,8 +143,12 @@ export const createRequestWithMetrics: CreateRequestWithMetrics = ({
             getDuration(timings.secureConnectEnd, timings.connectEnd)
           );
         });
+        socket.on('close', () => {
+          socketSet.delete(socket);
+        });
       });
     }
 
     return req;
   };
+};
