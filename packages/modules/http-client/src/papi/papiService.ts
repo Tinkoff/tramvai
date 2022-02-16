@@ -2,6 +2,7 @@ import find from '@tinkoff/utils/array/find';
 import flatten from '@tinkoff/utils/array/flatten';
 import type { DI_TOKEN } from '@tramvai/core';
 import type { HttpClientRequest, HttpClientResponse } from '@tramvai/http-client';
+import { BaseHttpClient } from '@tramvai/http-client';
 import { createChildContainer } from '@tinkoff/dippy';
 import { getPapiParameters } from '@tramvai/papi';
 import { REQUEST, RESPONSE } from '@tramvai/module-common';
@@ -12,11 +13,12 @@ export interface Deps {
   papi?: typeof SERVER_MODULE_PAPI_PUBLIC_ROUTE[];
 }
 
-export class PapiService {
+export class PapiService extends BaseHttpClient {
   papi: Deps['papi'];
   di: Deps['di'];
 
   constructor({ papi, di }: Deps) {
+    super();
     this.papi = flatten(papi || []);
     this.di = di;
   }
@@ -58,59 +60,5 @@ export class PapiService {
     });
 
     return { payload, status: 200, headers: {} };
-  }
-
-  get<R = any>(
-    path: string,
-    payload?: Pick<HttpClientRequest, 'query' | 'headers'>,
-    config?: Omit<HttpClientRequest, 'url' | 'query' | 'body' | 'headers'>
-  ): Promise<HttpClientResponse<R>> {
-    return this.request({
-      path,
-      ...payload,
-      ...config,
-      method: 'GET',
-    } as HttpClientRequest);
-  }
-
-  post<R = any>(
-    path: string,
-    payload?: Pick<HttpClientRequest, 'query' | 'body' | 'headers'>,
-    config?: Omit<HttpClientRequest, 'url' | 'query' | 'body' | 'headers'>
-  ): Promise<HttpClientResponse<R>> {
-    return this.request<R>({
-      path,
-      requestType: 'json',
-      ...payload,
-      ...config,
-      method: 'POST',
-    } as HttpClientRequest);
-  }
-
-  put<R = any>(
-    path: string,
-    payload?: Pick<HttpClientRequest, 'query' | 'body' | 'headers'>,
-    config?: Omit<HttpClientRequest, 'url' | 'query' | 'body' | 'headers'>
-  ): Promise<HttpClientResponse<R>> {
-    return this.request<R>({
-      path,
-      requestType: 'json',
-      ...payload,
-      ...config,
-      method: 'PUT',
-    } as HttpClientRequest);
-  }
-
-  delete<R = any>(
-    path: string,
-    payload?: Pick<HttpClientRequest, 'query' | 'headers'>,
-    config?: Omit<HttpClientRequest, 'url' | 'query' | 'body' | 'headers'>
-  ): Promise<HttpClientResponse<R>> {
-    return this.request<R>({
-      path,
-      ...payload,
-      ...config,
-      method: 'DELETE',
-    } as HttpClientRequest);
   }
 }

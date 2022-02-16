@@ -33,13 +33,13 @@ import { provide } from '@tramvai/core';
 export class RenderModule {}
 ```
 
-## Action blocks
+## Commands
 
-A number of basic actions are predefined in the tramvai, which are performed at certain stages of the application. Based on these stages, the work of the basic tram modules is built and actions can be added to custom modules.
+A number of basic commands are predefined in the tramvai, which are performed at certain stages of the application. Based on these stages, the work of the basic tramvai modules is built and actions can be added to custom modules.
 
 ### Initialization (init)
 
-When tramvai starts, a chain of actions is launched in which you can initialize asynchronous services (if necessary) and add basic functionality. These actions are performed only once and are not available to providers who need a custom context.
+When tramvai starts, a chain of commands is launched in which you can initialize asynchronous services (if necessary) and add basic functionality. These actions are performed only once and are not available to providers who need a custom context.
 
 ![init command](/img/commands/command-line-init.jpg)
 

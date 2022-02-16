@@ -1,6 +1,6 @@
 # [Tramvai](https://tramvai.dev/)
 
-A modular framework for universal JS applications
+Modular framework for universal React applications
 
 ---
 ## Features
@@ -9,21 +9,33 @@ A modular framework for universal JS applications
 
   Creates SSR `React` applications - includes solid server with metrics, health checks and graceful degradation support
 
-- 🧱 **Modular**
+- 💉 **Dependency Injection**
 
-  Provide simple and powerful DI system - every application build from list of feature modules, best practices from `Angular` and `Nest.js` ecosystem
+  Provides simple and powerful DI system, inspired by `Angular` and `Nest.js` best practices
+
+- 🧩 **Modular**
+
+  Every application build from list of feature modules - doing one thing right!
 
 - ⚡ **Fast and lightweight**
 
-  Enforce best web-performance techniques - resources preloading and inlining, lazy hydration 🚀, modern ES bundles, tree-shakable libraries
+  Enforces best web-performance techniques - resources preloading and inlining, lazy hydration 🚀, modern ES bundles, tree-shakable libraries
 
-- 🔗 **Actions chain**
+- 🔗 **Chain of commands**
 
   Elegant pattern for complete control over application life-cycle - predictable flow for every HTTP request into application, running async actions in parallel, limits the duration of server-side actions
+
+- 🧱 **Micro Frontends**
+
+  Heavily integrated solution for Micro Frontends with SSR and Module Federation
 
 - 🛠️ **Tooling**
 
   Functional CLI for generating, develop, analyze, and bundling `tramvai` applications - powered by `webpack@5`
+
+- 🧪 **Testing**
+
+  Complete set of unit and integration testing utilites - powered by `jest` and `testing-library`
 
 - 🕊️ **Migrations**
 
@@ -48,6 +60,10 @@ A modular framework for universal JS applications
     ```
     application will be available at `http://localhost:3000/`
 
+## Tutorials
+
+[Pokedex application](https://tramvai.dev/docs/tutorials/pokedex-app/new-app)
+
 ## Sandboxes
 
-[Codesandbox template](https://codesandbox.io/s/tramvai-new-qgk90)
+[![Edit on CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/tramvai-new-qgk90?fontsize=14&hidenavigation=1&theme=dark)

@@ -130,9 +130,3 @@ Runner for a list of actions that modules can attach actions to. There are 2 typ
 Within the framework of this list of actions, routes, user status, page rendering and html return to the client are received.
 
 [Documentation](concepts/command-line-runner.md)
-
-## Diagrams
-
-### How it works on the server side
-
-![Scheme of the request flow on the server](/img/arch-server.png)

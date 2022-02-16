@@ -125,11 +125,15 @@ State Management is almost completely isolated from root-app and other of child-
 
 State for child-apps will be dehydrated on server as separate variable in the result html and then will be automatically rehydrated on client for every child-app.
 
-:::warning Usually child-app cannot read data from root-app stores, but the dangerous workaround that allows to subscribe on any root-app store exists.
+:::warning
+
+Usually child-app cannot read data from root-app stores, but the dangerous workaround that allows to subscribe on any root-app store exists.
 
 It may be done using `CHILD_APP_ROOT_STATE_SUBSCRIPTION_TOKEN` token.
 
-This token is considered dangerous as it leads to high coupling with stores from root-app and this way stores in root-app might not change their public interface. But, in most cases, changes in stores ignore breaking change tracking and often breaks backward-compatibility. So **do not use this token if you can**, and if you should - use as little as possible from root-app and provide some fallback in case of wrong data. :::
+This token is considered dangerous as it leads to high coupling with stores from root-app and this way stores in root-app might not change their public interface. But, in most cases, changes in stores ignore breaking change tracking and often breaks backward-compatibility. So **do not use this token if you can**, and if you should - use as little as possible from root-app and provide some fallback in case of wrong data. 
+
+:::
 
 ## API
 

@@ -1,6 +1,6 @@
 ---
 id: create-app
-title: Сreate an application on tramvai
+title: Сreate tramvai application
 sidebar_position: 2
 ---
 
@@ -8,20 +8,7 @@ In this tutorial, we will create a new application using the tramvai framework.
 
 For quick development, we will use the console utility **`@tramvai/cli`**
 
-<p>
-<details>
-<summary>Demo app available on Codesandbox</summary>
-
-<iframe
-  src="https://codesandbox.io/embed/tramvai-new-qgk90?fontsize=14&hidenavigation=1&theme=dark"
-  style={{ "width": "100%", "height": "500px", "border": 0, "borderRadius": "4px", "overflow": "hidden" }}
-  title="tramvai-new"
-  allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-  sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
-></iframe>
-
-</details>
-</p>
+[![Edit on CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/tramvai-new-qgk90?fontsize=14&hidenavigation=1&theme=dark)
 
 ### System setup
 

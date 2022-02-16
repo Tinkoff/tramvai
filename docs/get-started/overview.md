@@ -12,6 +12,10 @@ This documentation describes the capabilities and features of the framework, con
 
 For the first acquaintance with the framework, it is recommended to take a lesson **[Create tramvai application](get-started/create-app.md)**
 
+### Tutorials
+
+For a detailed introduction to the framework, you can complete a tutorial where you will create a **[Pokedex application](tutorials/pokedex-app/01-new-app.md)**
+
 ### Deep dive
 
 You can get acquainted with the concepts that underlie the framework in the section **[Concepts](concepts/overview.md)**
