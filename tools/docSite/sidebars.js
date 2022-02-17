@@ -175,6 +175,11 @@ module.exports = {
               label: 'Test Child App',
               id: 'references/tramvai/test/child-app',
             },
+            {
+              type: 'ref',
+              label: 'Интеграция с админкой',
+              id: 'references/tinkoff-modules/child-app',
+            },
           ],
         },
       ],

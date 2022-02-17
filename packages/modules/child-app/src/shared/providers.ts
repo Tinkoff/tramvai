@@ -1,14 +1,9 @@
-import flatten from '@tinkoff/utils/array/flatten';
 import type { Provider } from '@tinkoff/dippy';
 import { Scope, DI_TOKEN } from '@tinkoff/dippy';
 import { commandLineListTokens, COMMAND_LINE_RUNNER_TOKEN, provide } from '@tramvai/core';
-import type {
-  ChildAppFinalConfig,
-  ChildAppRequestConfig,
-  ChildAppResolutionConfig,
-} from '@tramvai/tokens-child-app';
+import type { ChildAppFinalConfig, ChildAppRequestConfig } from '@tramvai/tokens-child-app';
 import { CHILD_APP_RESOLUTION_CONFIGS_TOKEN } from '@tramvai/tokens-child-app';
-import { CHILD_APP_GET_RESOLUTION_CONFIG_TOKEN } from '@tramvai/tokens-child-app';
+import { CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN } from '@tramvai/tokens-child-app';
 import { CHILD_APP_RENDER_MANAGER_TOKEN } from '@tramvai/tokens-child-app';
 import { CHILD_APP_RESOLVE_BASE_URL_TOKEN } from '@tramvai/tokens-child-app';
 import {
@@ -36,6 +31,7 @@ import { ChildAppStore } from './store';
 import { extendRender } from './render';
 import { initModuleFederation } from './webpack/moduleFederation';
 import { resolveComponent } from './utils/resolveComponent';
+import { ChildAppResolutionConfigManager } from './resolutionConfigManager';
 
 declare module '@tramvai/tokens-common' {
   export interface RegistryComponentExtend {
@@ -55,41 +51,27 @@ export const sharedProviders: Provider[] = [
     useValue: initModuleFederation,
   }),
   provide({
-    provide: CHILD_APP_GET_RESOLUTION_CONFIG_TOKEN,
-    useFactory: ({ configs }) => {
-      const mapping = flatten<ChildAppResolutionConfig>(configs ?? []).reduce((map, config) => {
-        return map.set(config.name, config);
-      }, new Map<string, ChildAppResolutionConfig>());
-      return (({ name, version, tag = 'latest' }) => {
-        const fromMapping = mapping.get(name);
-
-        if (!fromMapping) {
-          return null;
-        }
-
-        const cfg = fromMapping.byTag[tag];
-
-        if (process.env.NODE_ENV === 'development' && tag === 'debug' && !cfg) {
-          return {
-            baseUrl: 'http://localhost:4040/',
-            version: '0.0.0-stub',
-          };
-        }
-
-        return {
-          ...cfg,
-          baseUrl: cfg.baseUrl ?? fromMapping.baseUrl,
-          version: version ?? cfg.version,
-        };
-      }) as typeof CHILD_APP_GET_RESOLUTION_CONFIG_TOKEN;
-    },
+    provide: CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN,
+    useClass: ChildAppResolutionConfigManager,
     deps: {
       configs: { token: CHILD_APP_RESOLUTION_CONFIGS_TOKEN, optional: true },
     },
   }),
   provide({
+    provide: commandLineListTokens.resolvePageDeps,
+    multi: true,
+    useFactory: ({ resolutionConfigManager }) => {
+      return async function fallbackResolutionConfigManagerInit() {
+        await resolutionConfigManager.init();
+      };
+    },
+    deps: {
+      resolutionConfigManager: CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN,
+    },
+  }),
+  provide({
     provide: CHILD_APP_RESOLVE_CONFIG_TOKEN,
-    useFactory: ({ envManager, rootBaseUrl, getResolutionConfig }) => {
+    useFactory: ({ envManager, rootBaseUrl, resolutionConfigManager }) => {
       const rawEnv = envManager.get('CHILD_APP_DEBUG');
       const debug = new Map<string, string | undefined>();
 
@@ -102,7 +84,12 @@ export const sharedProviders: Provider[] = [
       return (request: ChildAppRequestConfig): ChildAppFinalConfig => {
         const { name, tag = debug.has(name) ? 'debug' : 'latest' } = request;
         const req: ChildAppRequestConfig = { name, tag, version: request.version };
-        const config = getResolutionConfig(req);
+        const config = resolutionConfigManager.resolve(req);
+
+        if (!config) {
+          throw new Error(`Child-app "${name}" with tag "${tag}" has not found`);
+        }
+
         const { version, baseUrl: configBaseUrl, client, server, css, withoutCss } = config;
 
         const baseUrl = debug.get(name) ?? configBaseUrl ?? rootBaseUrl;
@@ -137,7 +124,7 @@ export const sharedProviders: Provider[] = [
     deps: {
       envManager: ENV_MANAGER_TOKEN,
       rootBaseUrl: CHILD_APP_RESOLVE_BASE_URL_TOKEN,
-      getResolutionConfig: CHILD_APP_GET_RESOLUTION_CONFIG_TOKEN,
+      resolutionConfigManager: CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN,
     },
   }),
   provide({

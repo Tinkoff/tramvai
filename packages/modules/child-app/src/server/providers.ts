@@ -16,8 +16,8 @@ import {
   ResourceType,
 } from '@tramvai/tokens-render';
 import {
-  CHILD_APP_PRELOAD_EXTERNAL_CONFIG_TOKEN,
   CHILD_APP_RENDER_MANAGER_TOKEN,
+  CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN,
   CHILD_APP_STATE_MANAGER_TOKEN,
 } from '@tramvai/tokens-child-app';
 import {
@@ -72,7 +72,7 @@ export const serverProviders: Provider[] = [
       loader: CHILD_APP_LOADER_TOKEN,
       runner: CHILD_APP_COMMAND_LINE_RUNNER_TOKEN,
       stateManager: CHILD_APP_STATE_MANAGER_TOKEN,
-      preloadExternalConfig: { token: CHILD_APP_PRELOAD_EXTERNAL_CONFIG_TOKEN, optional: true },
+      resolutionConfigManager: CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN,
       resolveFullConfig: CHILD_APP_RESOLVE_CONFIG_TOKEN,
     },
   }),

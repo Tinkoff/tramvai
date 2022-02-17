@@ -6,48 +6,43 @@ import type {
   ChildAppPreloadManager,
   ChildAppStateManager,
   CHILD_APP_RESOLVE_CONFIG_TOKEN,
-  CHILD_APP_PRELOAD_EXTERNAL_CONFIG_TOKEN,
   ChildAppFinalConfig,
+  CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN,
 } from '@tramvai/tokens-child-app';
 
 export class PreloadManager implements ChildAppPreloadManager {
   private loader: ChildAppLoader;
   private runner: ChildAppCommandLineRunner;
   private stateManager: ChildAppStateManager;
-  private preloadExternalConfig: typeof CHILD_APP_PRELOAD_EXTERNAL_CONFIG_TOKEN | null;
+  private resolutionConfigManager: typeof CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN;
   private readonly resolveFullConfig: typeof CHILD_APP_RESOLVE_CONFIG_TOKEN;
 
   private shouldRunImmediately = false;
   private map = new Map<string, Promise<ChildAppFinalConfig>>();
   private preloadMap = new Map<string, ChildAppFinalConfig>();
 
-  private configHasBeenPreloaded = false;
-
   constructor({
     loader,
     runner,
     stateManager,
-    preloadExternalConfig,
+    resolutionConfigManager,
     resolveFullConfig,
   }: {
     loader: ChildAppLoader;
     runner: ChildAppCommandLineRunner;
     stateManager: ChildAppStateManager;
+    resolutionConfigManager: typeof CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN;
     resolveFullConfig: typeof CHILD_APP_RESOLVE_CONFIG_TOKEN;
-    preloadExternalConfig: typeof CHILD_APP_PRELOAD_EXTERNAL_CONFIG_TOKEN | null;
   }) {
     this.loader = loader;
     this.runner = runner;
     this.stateManager = stateManager;
-    this.preloadExternalConfig = preloadExternalConfig;
+    this.resolutionConfigManager = resolutionConfigManager;
     this.resolveFullConfig = resolveFullConfig;
   }
 
   async preload(request: ChildAppRequestConfig): Promise<void> {
-    if (!this.configHasBeenPreloaded) {
-      await this.preloadExternalConfig?.();
-      this.configHasBeenPreloaded = true;
-    }
+    await this.resolutionConfigManager.init();
 
     const config = this.resolveFullConfig(request);
     const { key } = config;

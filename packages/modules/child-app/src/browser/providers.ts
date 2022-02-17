@@ -5,6 +5,7 @@ import {
   CHILD_APP_DI_MANAGER_TOKEN,
   CHILD_APP_PRELOAD_MANAGER_TOKEN,
   CHILD_APP_RENDER_MANAGER_TOKEN,
+  CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN,
   CHILD_APP_RESOLVE_CONFIG_TOKEN,
 } from '@tramvai/tokens-child-app';
 import {
@@ -39,6 +40,7 @@ export const browserProviders: Provider[] = [
     deps: {
       loader: CHILD_APP_LOADER_TOKEN,
       runner: CHILD_APP_COMMAND_LINE_RUNNER_TOKEN,
+      resolutionConfigManager: CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN,
       resolveExternalConfig: CHILD_APP_RESOLVE_CONFIG_TOKEN,
       store: STORE_TOKEN,
     },
@@ -54,6 +56,7 @@ export const browserProviders: Provider[] = [
       logger: LOGGER_TOKEN,
       diManager: CHILD_APP_DI_MANAGER_TOKEN,
       preloadManager: CHILD_APP_PRELOAD_MANAGER_TOKEN,
+      resolutionConfigManager: CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN,
       resolveExternalConfig: CHILD_APP_RESOLVE_CONFIG_TOKEN,
     },
   }),

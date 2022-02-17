@@ -42,25 +42,22 @@ export const commandLineListTokens = {
  * @public
  * @description Contains child app configs that was used to figure out how to load child apps
  */
-export const CHILD_APP_RESOLUTION_CONFIGS_TOKEN = createToken<ChildAppResolutionConfig[]>(
-  'child-app resolve configs'
-);
+export const CHILD_APP_RESOLUTION_CONFIGS_TOKEN = createToken<
+  Array<
+    | ChildAppResolutionConfig
+    | ChildAppResolutionConfig[]
+    | (() => ChildAppResolutionConfig | ChildAppResolutionConfig[])
+  >
+>('child-app resolve configs', multiOptions);
 
 /**
  * @public
- * @description async function to execute any preload action before any child-app starts execute
+ * @description Used to resolve and extend resolution configs for child-apps
  */
-export const CHILD_APP_PRELOAD_EXTERNAL_CONFIG_TOKEN = createToken<() => Promise<void>>(
-  'child-app preload external config'
-);
-
-/**
- * @public
- * @description Used to resolve resolution config for a specific child-app
- */
-export const CHILD_APP_GET_RESOLUTION_CONFIG_TOKEN = createToken<
-  (config: ChildAppRequestConfig) => ResolutionConfig
->('child-app get resolution config');
+export const CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN = createToken<{
+  resolve(config: ChildAppRequestConfig): ResolutionConfig | null;
+  init(): Promise<void>;
+}>('child-app resolution config manager');
 
 /**
  * @public

@@ -30,10 +30,6 @@ export type Params = WithConfig<{
 export type Result<T extends string = any> = Promise<
   PromiseType<ReturnType<Builder<T>['start']>> & {
     close: () => Promise<void>;
-    // compiler: MultiCompiler;
-    // watching: Watching;
-    // clientCompiler?: Compiler;
-    // serverCompiler?: Compiler;
     staticServer?: Server;
     server?: Server;
     builder: Builder<T>;

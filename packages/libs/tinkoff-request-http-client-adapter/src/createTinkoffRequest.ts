@@ -1,6 +1,6 @@
 import either from '@tinkoff/utils/function/either';
 
-import type { ContextState, Plugin, MakeRequest } from '@tinkoff/request-core';
+import type { ContextState, Plugin, MakeRequest, Request } from '@tinkoff/request-core';
 import request from '@tinkoff/request-core';
 import logPlugin from '@tinkoff/request-plugin-log';
 import deduplicateCache from '@tinkoff/request-plugin-cache-deduplicate';
@@ -35,6 +35,8 @@ export interface TinkoffRequestOptions extends HttpClientBaseOptions {
   errorValidator?: RequestValidator;
   errorModificator?: RequestValidator;
   circuitBreakerOptions?: CircuitBreakerOptions;
+  getCacheKey?: (request: Request) => string;
+  lruOptions?: { maxAge: number; max: number };
   agent?: {
     http: Agent;
     https: Agent;
@@ -54,6 +56,8 @@ export function createTinkoffRequest(options: TinkoffRequestOptions): MakeReques
     errorValidator,
     errorModificator,
     circuitBreakerOptions = {},
+    getCacheKey,
+    lruOptions = { max: 1000, maxAge: cacheTime },
     agent,
     ...defaults
   } = options;
@@ -121,13 +125,14 @@ export function createTinkoffRequest(options: TinkoffRequestOptions): MakeReques
   plugins.push(
     memoryCache({
       shouldExecute: !disableCache,
-      lruOptions: { max: 1000, maxAge: cacheTime },
+      lruOptions,
       allowStale: true,
+      getCacheKey,
       memoryConstructor: createCache,
     })
   );
 
-  plugins.push(deduplicateCache());
+  plugins.push(deduplicateCache(getCacheKey ? { getCacheKey } : undefined));
 
   if (enableCircuitBreaker) {
     plugins.push(

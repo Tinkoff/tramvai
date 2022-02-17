@@ -1,6 +1,7 @@
 import { createTestApp, testApp } from '@tramvai/test-unit';
 import { provide } from '@tramvai/core';
 import type { ChildApp } from '@tramvai/child-app-core';
+import { CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN } from '@tramvai/child-app-core';
 import { CHILD_APP_RESOLVE_BASE_URL_TOKEN } from '@tramvai/child-app-core';
 import { CHILD_APP_RESOLUTION_CONFIGS_TOKEN } from '@tramvai/child-app-core';
 import { CHILD_APP_DI_MANAGER_TOKEN } from '@tramvai/child-app-core';
@@ -31,6 +32,7 @@ export const testChildApp = async (childApp: ChildApp, options: Options = {}) =>
       }),
       provide({
         provide: CHILD_APP_RESOLUTION_CONFIGS_TOKEN,
+        multi: true,
         useValue: [
           {
             name: childApp.name,
@@ -62,6 +64,9 @@ This test wrapper supports only child-app with name "${childApp.name}"`);
   });
   const testAppWrapper = await testApp(testAppInstance.app);
   const appDi = testAppWrapper.app.di;
+
+  await appDi.get(CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN).init();
+
   const resolveExternalConfig = appDi.get(CHILD_APP_RESOLVE_CONFIG_TOKEN);
   const diManager = appDi.get(CHILD_APP_DI_MANAGER_TOKEN);
 

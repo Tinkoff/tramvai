@@ -8,6 +8,8 @@ import { getServerUrl, getStaticUrl } from './utils';
 import { wrapPapi } from './papi';
 import { wrapMocker } from './mocker';
 
+export * from './utils';
+
 export interface StartCliOptions extends Omit<StartOptions, 'config' | 'target'> {
   enableRebuild?: boolean;
 }

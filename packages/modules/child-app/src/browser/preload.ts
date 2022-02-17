@@ -6,6 +6,7 @@ import type {
   ChildAppPreloadManager,
   CHILD_APP_RESOLVE_CONFIG_TOKEN,
   ChildAppFinalConfig,
+  CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN,
 } from '@tramvai/tokens-child-app';
 import type { STORE_TOKEN } from '@tramvai/tokens-common';
 import { ChildAppStore } from '../shared/store';
@@ -13,37 +14,39 @@ import { ChildAppStore } from '../shared/store';
 export class PreloadManager implements ChildAppPreloadManager {
   private loader: ChildAppLoader;
   private runner: ChildAppCommandLineRunner;
+  private store: typeof STORE_TOKEN;
+  private resolutionConfigManager: typeof CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN;
   private resolveExternalConfig: typeof CHILD_APP_RESOLVE_CONFIG_TOKEN;
 
   private pageHasLoaded = false;
   private map = new Map<string, Promise<ChildAppFinalConfig>>();
   private serverPreloaded = new Map<string, ChildAppFinalConfig>();
   private preloadMap = new Map<string, ChildAppFinalConfig>();
+  private hasInitialized = false;
 
   constructor({
     loader,
     runner,
+    resolutionConfigManager,
     resolveExternalConfig,
     store,
   }: {
     loader: ChildAppLoader;
     runner: ChildAppCommandLineRunner;
+    resolutionConfigManager: typeof CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN;
     resolveExternalConfig: typeof CHILD_APP_RESOLVE_CONFIG_TOKEN;
     store: typeof STORE_TOKEN;
   }) {
     this.loader = loader;
     this.runner = runner;
+    this.store = store;
+    this.resolutionConfigManager = resolutionConfigManager;
     this.resolveExternalConfig = resolveExternalConfig;
-
-    const { preloaded } = store.getState(ChildAppStore);
-
-    preloaded.forEach((request) => {
-      const config = this.resolveExternalConfig(request);
-      this.serverPreloaded.set(config.key, config);
-    });
   }
 
   async preload(request: ChildAppRequestConfig): Promise<void> {
+    await this.init();
+
     const config = this.resolveExternalConfig(request);
     const { key } = config;
 
@@ -75,6 +78,8 @@ export class PreloadManager implements ChildAppPreloadManager {
   }
 
   async runPreloaded() {
+    await this.init();
+
     const promises: Promise<void>[] = [];
 
     if (this.pageHasLoaded) {
@@ -132,6 +137,24 @@ export class PreloadManager implements ChildAppPreloadManager {
 
   getPreloadedList(): ChildAppRequestConfig[] {
     return [...this.preloadMap.values()];
+  }
+
+  private initServerPreloaded() {
+    if (!this.hasInitialized) {
+      const { preloaded } = this.store.getState(ChildAppStore);
+
+      preloaded.forEach((request) => {
+        const config = this.resolveExternalConfig(request);
+        this.serverPreloaded.set(config.key, config);
+      });
+
+      this.hasInitialized = true;
+    }
+  }
+
+  private async init() {
+    await this.resolutionConfigManager.init();
+    this.initServerPreloaded();
   }
 
   private async run(status: string, config: ChildAppFinalConfig) {
