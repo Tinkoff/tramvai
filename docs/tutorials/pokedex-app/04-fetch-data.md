@@ -109,7 +109,7 @@ export const fetchPokemonListAction = createAction({
 
     // download detailed information about each pokemon in parallel https://pokeapi.co/api/v2/pokemon/bulbasaur/
     const pokemonList = await Promise.all(
-      pokemonsNames.map(async (name) => {
+      pokemonsNames.map(async ({ name }) => {
         const pokemonResponse = await deps.pokeapiHttpClient.get<Pokemon>(`/pokemon/${name}`);
         return pokemonResponse.payload;
       })
@@ -157,7 +157,7 @@ export const fetchPokemonListAction = createAction({
     const pokemonsNames = pokemonsNamesResponse.payload.results;
 
     const pokemonList = await Promise.all(
-      pokemonsNames.map(async (name) => {
+      pokemonsNames.map(async ({ name }) => {
         const pokemonResponse = await deps.pokeapiHttpClient.get<Pokemon>(`/pokemon/${name}`);
         return pokemonResponse.payload;
       })
@@ -277,7 +277,7 @@ The final touch is left, the integration of the entity into the page component.
 
 :hourglass: Add an action to load the list of pokemon on the page:
 
-```tsx title="pages/pokemons-list/index.tsx"
+```tsx title="routes/index.tsx"
 import React from 'react';
     // highlight-next-line
 import { fetchPokemonListAction } from '~entities/pokemon';
@@ -298,7 +298,7 @@ export default PokemonList;
 
 :hourglass: And render pokemon list:
 
-```tsx title="pages/pokemons-list/index.tsx"
+```tsx title="routes/index.tsx"
 import React from 'react';
 // highlight-start
 import { useStore } from '@tramvai/state';

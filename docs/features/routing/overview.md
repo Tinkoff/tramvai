@@ -15,5 +15,5 @@ To use all these features in the application, it is enough to install and enable
 
 ## Additional features
 
-- [File-System Pages]features/routing/file-system-pages.md) - file-based routing with strict naming conventions
+- [File-System Pages](features/routing/file-system-pages.md) - file-based routing with strict naming conventions
 - [Static HTML Export](features/routing/static-html-export.md) - static HTML pages creation at build time

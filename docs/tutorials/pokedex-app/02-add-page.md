@@ -4,7 +4,7 @@ title: Add new page
 ---
 
 `tramvai` supports file-system based routing.
-Detailed documentation is available in [File-System Pages]features/routing/file-system-pages.md) section.
+Detailed documentation is available in [File-System Pages](features/routing/file-system-pages.md) section.
 
 In this tutorial we will use the automatic way of generating new routes in the application, for which you only need to create a `react` page component, following the naming conventions.
 
