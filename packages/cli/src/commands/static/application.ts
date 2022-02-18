@@ -60,6 +60,12 @@ export const staticApp = async (
   } = serverConfigManager;
   const root = serverConfigManager.getBuildPath();
 
+  context.logger.event({
+    type: 'debug',
+    event: 'COMMAND:STATIC:SERVER_START',
+    message: `message: start application server`,
+  });
+
   const server = node(path.resolve(root, 'server.js'), [], {
     cwd: root,
     stdio: 'inherit',
@@ -85,11 +91,35 @@ export const staticApp = async (
     }),
   ]);
 
+  context.logger.event({
+    type: 'debug',
+    event: 'COMMAND:STATIC:ROUTES_FETCH',
+    message: `message: server started, fetch application routes`,
+  });
+
   const paths = propOr('payload', [], await request({ url: bundleInfoPath }));
+
+  context.logger.event({
+    type: 'debug',
+    event: 'COMMAND:STATIC:GENERATE',
+    message: `message: routes fetched, generate pages`,
+  });
 
   await generateStatic(context, serverConfigManager, paths);
 
+  context.logger.event({
+    type: 'debug',
+    event: 'COMMAND:STATIC:CLOSE_SERVER',
+    message: `message: pages generated, close application server`,
+  });
+
   server.kill();
+
+  context.logger.event({
+    type: 'debug',
+    event: 'COMMAND:STATIC:SERVER_CLOSED',
+    message: `message: server closed successfully`,
+  });
 
   if (options.serve) {
     await new Promise<void>((resolve) => {

@@ -12,7 +12,7 @@
 
 Для получения возможности внесения изменений в компоненты docusaurus нужно воспользоваться командой [swizzle](https://v2.docusaurus.io/docs/cli#docusaurus-swizzle)
 
-`docusaurus swizzle DocItem`
+`npx docusaurus swizzle @docusaurus/theme-classic DocItem --danger`
 
 после чего можно будет добавлять компонент в любое понравившееся место
 

@@ -35,9 +35,21 @@ export const generateStatic = async (
         }
 
         try {
+          context.logger.event({
+            type: 'debug',
+            event: 'COMMAND:STATIC:PAGE_FETCH',
+            message: `path: ${path}, message: start fetching page`,
+          });
+
           const html = await request({ url: `${serverPath}${path}` });
 
           await outputFile(join(staticPath, path, 'index.html'), html);
+
+          context.logger.event({
+            type: 'debug',
+            event: 'COMMAND:STATIC:PAGE_CREATED',
+            message: `path: ${path}, message: page created successfully`,
+          });
         } catch (e) {
           context.logger.event({
             type: 'error',

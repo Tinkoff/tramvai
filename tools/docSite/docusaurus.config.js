@@ -38,17 +38,22 @@ const docusaurusConfig = {
           exclude: ['**/*.public.md'],
           // rehypePlugins: [[require('rehype-partials'), {}]],
         },
+        googleAnalytics: {
+          trackingID: 'UA-122261674-2',
+        }
       },
     ],
   ],
-  plugins: [
-    [
-      require.resolve('docusaurus-lunr-search'),
-      {
-        languages: ['en'],
-        excludeRoutes: ['docs/changelogs/**/*'],
-      },
-    ],
+  themes: [
+    [require.resolve('@easyops-cn/docusaurus-search-local'), {
+      hashed: true,
+      indexDocs: true,
+      indexPages: true,
+      indexBlog: false,
+      language: ['en', 'ru'],
+      highlightSearchTermsOnTargetPage: true,
+      docsDir: resolve('./tmp-docs'),
+    }]
   ],
 
   onBrokenLinks: 'throw',
@@ -124,9 +129,6 @@ const docusaurusConfig = {
         },
       ],
       copyright: `Copyright © ${new Date().getFullYear()} tinkoff.ru`,
-    },
-    googleAnalytics: {
-      trackingID: 'UA-122261674-2',
     },
   },
 };
