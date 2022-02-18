@@ -1,20 +1,17 @@
-import flatten from '@tinkoff/utils/array/flatten';
 import type { Container } from '@tinkoff/dippy';
 import type { Provider } from '@tramvai/core';
-import { provide } from '@tramvai/core';
 import {
-  CHILD_APP_INTERNAL_ACTION_TOKEN,
+  CHILD_APP_INTERNAL_BEFORE_RENDER_TOKEN,
   CHILD_APP_INTERNAL_ROOT_STATE_SUBSCRIPTION_TOKEN,
-  commandLineListTokens,
 } from '@tramvai/tokens-child-app';
-import { ACTION_PAGE_RUNNER_TOKEN, CONTEXT_TOKEN } from '@tramvai/tokens-common';
+import { STORE_TOKEN } from '@tramvai/tokens-common';
 
 export const getChildProviders = (appDi: Container): Provider[] => {
-  const context = appDi.get(CONTEXT_TOKEN);
+  const store = appDi.get(STORE_TOKEN);
 
   return [
     {
-      provide: commandLineListTokens.customerStart,
+      provide: CHILD_APP_INTERNAL_BEFORE_RENDER_TOKEN,
       multi: true,
       useFactory: ({
         subscriptions,
@@ -26,7 +23,7 @@ export const getChildProviders = (appDi: Container): Provider[] => {
             return;
           }
 
-          const state = context.getState();
+          const state = store.getState();
 
           return Promise.all(
             subscriptions.map((sub) => {
@@ -39,18 +36,5 @@ export const getChildProviders = (appDi: Container): Provider[] => {
         subscriptions: { token: CHILD_APP_INTERNAL_ROOT_STATE_SUBSCRIPTION_TOKEN, optional: true },
       },
     },
-    provide({
-      provide: commandLineListTokens.resolvePageDeps,
-      multi: true,
-      useFactory: ({ actionRunner, actions }) => {
-        return function childAppRunActions() {
-          return actionRunner.runActions(flatten(actions));
-        };
-      },
-      deps: {
-        actionRunner: ACTION_PAGE_RUNNER_TOKEN,
-        actions: CHILD_APP_INTERNAL_ACTION_TOKEN,
-      },
-    }),
   ];
 };

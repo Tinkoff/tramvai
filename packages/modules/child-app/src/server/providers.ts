@@ -110,6 +110,7 @@ export const serverProviders: Provider[] = [
     useFactory: customRender,
     deps: {
       renderManager: CHILD_APP_RENDER_MANAGER_TOKEN,
+      diManager: CHILD_APP_DI_MANAGER_TOKEN,
     },
   }),
   provide({

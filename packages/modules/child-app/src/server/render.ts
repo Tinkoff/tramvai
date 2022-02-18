@@ -1,6 +1,7 @@
 import { renderToString } from 'react-dom/server';
 import type { CUSTOM_RENDER } from '@tramvai/tokens-render';
 import type { Container } from '@tinkoff/dippy';
+import { CHILD_APP_INTERNAL_BEFORE_RENDER_TOKEN } from '@tramvai/tokens-child-app';
 import type {
   ChildAppDiManager,
   ChildAppFinalConfig,
@@ -15,10 +16,23 @@ const LOAD_TIMEOUT = 500;
 
 export const customRender = ({
   renderManager,
+  diManager,
 }: {
   renderManager: ChildAppRenderManager;
+  diManager: ChildAppDiManager;
 }): typeof CUSTOM_RENDER => {
   return async (content) => {
+    const promises: Promise<void[]>[] = [];
+    diManager.forEachChildDi((di) => {
+      const beforeAppRender = (di.get(
+        CHILD_APP_INTERNAL_BEFORE_RENDER_TOKEN
+      ) as any) as typeof CHILD_APP_INTERNAL_BEFORE_RENDER_TOKEN[];
+
+      if (beforeAppRender) {
+        promises.push(Promise.all(beforeAppRender.map((fn) => fn())));
+      }
+    });
+    await Promise.all(promises);
     let render = renderToString(content);
     let timeouted = false;
 

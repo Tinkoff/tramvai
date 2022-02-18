@@ -11,7 +11,7 @@ import { CHILD_APP_INTERNAL_ROOT_DI_BORROW_TOKEN } from '@tramvai/tokens-child-a
 import { CHILD_APP_INTERNAL_ACTION_TOKEN } from '@tramvai/tokens-child-app';
 import { CHILD_APP_INTERNAL_CONFIG_TOKEN } from '@tramvai/tokens-child-app';
 import type { LOGGER_TOKEN } from '@tramvai/tokens-common';
-import { getChildProviders } from './child/providers';
+import { getChildProviders } from './child/singletonProviders';
 import { commonModuleStubs } from './child/stubs';
 
 export class SingletonDiManager implements ChildAppDiManager {

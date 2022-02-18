@@ -129,13 +129,69 @@ State for child-apps will be dehydrated on server as separate variable in the re
 
 Usually child-app cannot read data from root-app stores, but the dangerous workaround that allows to subscribe on any root-app store exists.
 
-It may be done using `CHILD_APP_ROOT_STATE_SUBSCRIPTION_TOKEN` token.
+It may be done using `CHILD_APP_INTERNAL_ROOT_STATE_SUBSCRIPTION_TOKEN` token.
 
-This token is considered dangerous as it leads to high coupling with stores from root-app and this way stores in root-app might not change their public interface. But, in most cases, changes in stores ignore breaking change tracking and often breaks backward-compatibility. So **do not use this token if you can**, and if you should - use as little as possible from root-app and provide some fallback in case of wrong data. 
+This token is considered dangerous as it leads to high coupling with stores from root-app and this way stores in root-app might not change their public interface. But, in most cases, changes in stores ignore breaking change tracking and often breaks backward-compatibility. So **do not use this token if you can**, and if you should - use as little as possible from root-app and provide some fallback in case of wrong data.
+
+[See how to do it](#child_app_internal_root_state_subscription_token)
 
 :::
 
 ## API
+
+### CHILD_APP_INTERNAL_ROOT_STATE_SUBSCRIPTION_TOKEN
+
+Allows to subscribe to any store from the root app and execute actions based on its state, e.g. to fill internal child-app state.
+
+1. Create a new store and a new event within child-app. This store might be used inside child-app as usual store.
+
+   ```ts
+   import { createReducer, createEvent } from '@tramvai/state';
+
+   interface State {
+     value: string;
+   }
+   export const setRootState = createEvent<string>('child-root set state');
+
+   export const rootStore = createReducer('child-root', { value: 'child' } as State).on(
+     setRootState,
+     (state, value) => {
+       return { value };
+     }
+   );
+   ```
+
+2. Add provider for the `CHILD_APP_INTERNAL_ROOT_STATE_SUBSCRIPTION_TOKEN` in order to subscribe to store. In subscription you can dispatch internal event from the child-app
+
+   ```ts
+   provide({
+     provide: CHILD_APP_INTERNAL_ROOT_STATE_SUBSCRIPTION_TOKEN,
+     multi: true,
+     useFactory: ({ context }) => {
+       return {
+         stores: ['root'],
+         listener: (state: Record<string, any>) => {
+           return context.dispatch(setRootState(`root ${state.root.value}`));
+         },
+       };
+     },
+     deps: {
+       context: CONTEXT_TOKEN,
+     },
+   });
+   ```
+
+3. Use internal child-app store anywhere in the child-app
+
+   ```tsx
+   export const StateCmp = () => {
+     const value = useSelector([rootStore], (state) => {
+       return state['child-root'].value;
+     });
+
+     return <div id="child-state">Current Value from Root Store: {value}</div>;
+   };
+   ```
 
 ## How to
 
