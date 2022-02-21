@@ -4,6 +4,8 @@ import {
   WEB_APP_TOKEN,
   WEB_APP_INIT_TOKEN,
   SPECIAL_SERVER_PATHS,
+  READINESS_PROBE_TOKEN,
+  LIVENESS_PROBE_TOKEN,
 } from '@tramvai/tokens-server';
 import { LOGGER_TOKEN } from '@tramvai/tokens-common';
 import { Module, COMMAND_LINE_RUNNER_TOKEN } from '@tramvai/core';
@@ -16,17 +18,27 @@ interface Deps {
   app: typeof WEB_APP_TOKEN;
   logger: typeof LOGGER_TOKEN;
   commandLineRunner: typeof COMMAND_LINE_RUNNER_TOKEN;
+  readinessProbe?: typeof READINESS_PROBE_TOKEN;
+  livenessProbe?: typeof LIVENESS_PROBE_TOKEN;
 }
 
 const healthzPath = '/healthz';
 const readyzPath = '/readyz';
+const noopCheck = () => {};
 
 @Module({
   providers: [
     {
       provide: WEB_APP_INIT_TOKEN,
       multi: true,
-      useFactory: ({ server, app, logger, commandLineRunner }: Deps) => {
+      useFactory: ({
+        server,
+        app,
+        logger,
+        commandLineRunner,
+        livenessProbe,
+        readinessProbe,
+      }: Deps) => {
         const log = logger('server');
 
         return function serverListen() {
@@ -55,7 +67,7 @@ const readyzPath = '/readyz';
                 message: 'run commandLineRunner close line',
               });
 
-              return commandLineRunner.run('server', 'close');
+              commandLineRunner.run('server', 'close');
             },
             onShutdown: () => {
               log.warn({
@@ -64,11 +76,10 @@ const readyzPath = '/readyz';
               });
 
               process.exit();
-              return Promise.resolve();
             },
             healthChecks: {
-              [healthzPath]: () => {},
-              [readyzPath]: () => {},
+              [healthzPath]: livenessProbe || noopCheck,
+              [readyzPath]: readinessProbe || noopCheck,
             },
           });
         };
@@ -78,6 +89,8 @@ const readyzPath = '/readyz';
         app: WEB_APP_TOKEN,
         logger: LOGGER_TOKEN,
         commandLineRunner: COMMAND_LINE_RUNNER_TOKEN,
+        readinessProbe: { token: READINESS_PROBE_TOKEN, optional: true },
+        livenessProbe: { token: LIVENESS_PROBE_TOKEN, optional: true },
       },
     },
     {

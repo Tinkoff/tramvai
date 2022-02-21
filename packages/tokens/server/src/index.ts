@@ -166,6 +166,19 @@ export const DEPENDENCIES_VERSION_FILTER_TOKEN = createToken<DepsFilter>(
  */
 export const SPECIAL_SERVER_PATHS = createToken<string>('specialServerPaths', { multi: true });
 
+/**
+ * @description
+ * Custom function for k8s readiness, you might want to wait for something before allowing traffic to your app\
+ * https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+ */
+export const READINESS_PROBE_TOKEN = createToken<() => Promise<any>>('readiness-probe-fn');
+/**
+ * @description
+ * Custom function for k8s liveness, a function accepting a state and returning a promise indicating service health\
+ * https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+ */
+export const LIVENESS_PROBE_TOKEN = createToken<() => Promise<any>>('liveness-probe-fn');
+
 export interface ServerModuleStaticsOptions {
   path: string;
 }

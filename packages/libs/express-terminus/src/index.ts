@@ -3,8 +3,23 @@ import type { Application, Request, Response } from 'express';
 import stoppable from 'stoppable';
 import { promisify } from 'es6-promisify';
 
+type PromiseOrFn<T = void> = () => Promise<T> | T;
+
 export type TerminusOptions = {
-  [key: string]: any;
+  signal?: string;
+  signals?: string[];
+  timeout?: number;
+  healthChecks?: Record<string, PromiseOrFn<any>>;
+  onSendFailureDuringShutdown?: PromiseOrFn;
+  onSignal?: PromiseOrFn;
+  onSigterm?: PromiseOrFn;
+  onShutdown?: PromiseOrFn;
+  beforeShutdown?: PromiseOrFn;
+  logger?: (message: string, err: Error) => void;
+};
+
+export type TerminusState = {
+  isShuttingDown: boolean;
 };
 
 const SUCCESS_RESPONSE = JSON.stringify({
@@ -55,23 +70,23 @@ async function sendFailure(res: Response, options) {
   res.end(FAILURE_RESPONSE);
 }
 
-const intialState = {
+const intialState: TerminusState = {
   isShuttingDown: false,
 };
 
 function noop() {}
 
-function decorateWithHealthCheck(app: Application, state, options) {
+function decorateWithHealthCheck(app: Application, state: TerminusState, options: TerminusOptions) {
   const { healthChecks, logger, onSendFailureDuringShutdown } = options;
 
   const createHandler = (healthCheck: string) => {
-    return (req: Request, res: Response) => {
+    return async (req: Request, res: Response) => {
       if (state.isShuttingDown) {
         return sendFailure(res, { onSendFailureDuringShutdown });
       }
       let info;
       try {
-        info = healthChecks[healthCheck]();
+        info = await healthChecks[healthCheck]();
       } catch (error) {
         logger('healthcheck failed', error);
         return sendFailure(res, { error: error.causes });
@@ -85,7 +100,7 @@ function decorateWithHealthCheck(app: Application, state, options) {
   }
 }
 
-function decorateWithSignalHandler(server: Server, state, options) {
+function decorateWithSignalHandler(server: Server, state: TerminusState, options: TerminusOptions) {
   const { signals, onSignal, beforeShutdown, onShutdown, timeout, logger } = options;
   const stoppableServer = stoppable(server, timeout);
 

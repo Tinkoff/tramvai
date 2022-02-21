@@ -57,6 +57,28 @@ describe('Terminus', () => {
       expect(onHealthCheckRan).toBe(true);
     });
 
+    it('supports promise-based check', async () => {
+      const port = await getPort();
+
+      createTerminus(server, app, {
+        healthChecks: {
+          '/health': () => Promise.resolve({ info: true }),
+        },
+      });
+      server.listen(port);
+
+      const response = await fetch(`http://localhost:${port}/health`);
+      expect(response.status).toBe(200);
+      expect(response.headers.has('Content-Type')).toBe(true);
+      expect(response.headers.get('Content-Type')).toBe('application/json');
+      const json = await response.json();
+      expect(json).toEqual({
+        status: 'ok',
+        info: { info: true },
+        details: { info: true },
+      });
+    });
+
     it('includes info on resolve', async () => {
       const port = await getPort();
       let onHealthCheckRan = false;
