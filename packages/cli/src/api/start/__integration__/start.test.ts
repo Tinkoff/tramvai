@@ -1,7 +1,10 @@
 import { resolve } from 'path';
 import supertest from 'supertest';
+import { outputFile } from 'fs-extra';
 import { start } from '@tramvai/cli';
 import { getPort } from '@tramvai/internal-test-utils/utils/getPort';
+import { getServerUrl } from '@tramvai/test-integration';
+import { initPuppeteer } from '@tramvai/test-puppeteer';
 import { getListeningPort } from '../utils/getListeningPort';
 
 const FIXTURES_DIR = resolve(__dirname, '__fixtures__');
@@ -13,8 +16,26 @@ const supertestByPort = (port: number) => {
   return supertest(`http://localhost:${port}`);
 };
 
+const CMP_FILE_CONTENT_START = `import React from 'react';
+
+export const Cmp = () => {
+  return <div id="cmp">Cmp test: start</div>;
+};
+`;
+
+const CMP_FILE_CONTENT_UPDATE = `import React from 'react';
+
+export const Cmp = () => {
+  return <div id="cmp">Cmp test: update</div>;
+};
+`;
+
 describe('@tramvai/cli start command', () => {
   describe('application', () => {
+    const REFRESH_CMP_PATH = resolve(FIXTURES_DIR, 'app', '__temp__', 'cmp.tsx');
+    beforeAll(async () => {
+      await outputFile(REFRESH_CMP_PATH, CMP_FILE_CONTENT_START);
+    });
     it('should start application by target', async () => {
       const serverPort = await getPort();
       const staticServerPort = await getPort();
@@ -27,19 +48,19 @@ describe('@tramvai/cli start command', () => {
         staticPort: staticServerPort,
       });
 
-      expect(server.address()).toMatchObject({
+      expect(server?.address()).toMatchObject({
         port: serverPort,
       });
-      expect(staticServer.address()).toMatchObject({
+      expect(staticServer?.address()).toMatchObject({
         port: staticServerPort,
       });
 
       const responseServer = await supertestByPort(serverPort).get('/').expect(200);
 
       expect(responseServer.text)
-        .toMatch(`<link rel=\"stylesheet\" href=\"http://localhost:${staticServerPort}/dist/client/platform.css\">
-      <script src=\"http://localhost:${staticServerPort}/dist/client/hmr.js\" defer></script>
-      <script src=\"http://localhost:${staticServerPort}/dist/client/platform.js\" defer></script>`);
+        .toMatch(`<link rel="stylesheet" href="http://localhost:${staticServerPort}/dist/client/platform.css">
+      <script src="http://localhost:${staticServerPort}/dist/client/hmr.js" defer></script>
+      <script src="http://localhost:${staticServerPort}/dist/client/platform.js" defer></script>`);
       expect(responseServer.text).toMatch(`this is App`);
 
       const testStatic = supertestByPort(staticServerPort);
@@ -73,19 +94,19 @@ describe('@tramvai/cli start command', () => {
         },
       });
 
-      expect(server.address()).toMatchObject({
+      expect(server?.address()).toMatchObject({
         port: serverPort,
       });
-      expect(staticServer.address()).toMatchObject({
+      expect(staticServer?.address()).toMatchObject({
         port: staticServerPort,
       });
 
       const responseServer = await supertestByPort(serverPort).get('/').expect(200);
 
       expect(responseServer.text)
-        .toMatch(`<link rel=\"stylesheet\" href=\"http://localhost:${staticServerPort}/dist/client/platform.css\">
-      <script src=\"http://localhost:${staticServerPort}/dist/client/hmr.js\" defer></script>
-      <script src=\"http://localhost:${staticServerPort}/dist/client/platform.js\" defer></script>`);
+        .toMatch(`<link rel="stylesheet" href="http://localhost:${staticServerPort}/dist/client/platform.css">
+      <script src="http://localhost:${staticServerPort}/dist/client/hmr.js" defer></script>
+      <script src="http://localhost:${staticServerPort}/dist/client/platform.js" defer></script>`);
       expect(responseServer.text).toMatch(`this is App`);
 
       const testStatic = supertestByPort(staticServerPort);
@@ -104,10 +125,10 @@ describe('@tramvai/cli start command', () => {
         resolveSymlinks: false,
       });
 
-      expect(server.address()).toMatchObject({
+      expect(server?.address()).toMatchObject({
         port: expect.any(Number),
       });
-      expect(staticServer.address()).toMatchObject({
+      expect(staticServer?.address()).toMatchObject({
         port: expect.any(Number),
       });
 
@@ -120,6 +141,7 @@ describe('@tramvai/cli start command', () => {
       return close();
     });
 
+    // eslint-disable-next-line jest/expect-expect
     it('should allow to exclude bundles from build', async () => {
       let { server, close } = await start({
         rootDir: FIXTURES_DIR,
@@ -156,9 +178,47 @@ describe('@tramvai/cli start command', () => {
 
       return close();
     });
+
+    it('react-refresh should work', async () => {
+      const startResult = await start({
+        rootDir: FIXTURES_DIR,
+        target: 'app',
+        port: 0,
+        staticPort: 0,
+        resolveSymlinks: false,
+      });
+      const { close } = startResult;
+      const serverUrl = getServerUrl(startResult);
+
+      const { browser } = await initPuppeteer(serverUrl);
+
+      const page = await browser.newPage();
+
+      await page.goto(serverUrl);
+
+      expect(
+        await page.$eval('#cmp', (node) => (node as HTMLElement).innerText)
+      ).toMatchInlineSnapshot(`"Cmp test: start"`);
+
+      await outputFile(REFRESH_CMP_PATH, CMP_FILE_CONTENT_UPDATE);
+
+      await page.waitForFunction(
+        () => {
+          return document.getElementById('cmp')?.innerHTML !== 'Cmp test: start';
+        },
+        { polling: 2000, timeout: 10000 }
+      );
+
+      expect(
+        await page.$eval('#cmp', (node) => (node as HTMLElement).innerText)
+      ).toMatchInlineSnapshot(`"Cmp test: update"`);
+
+      await close();
+    });
   });
 
   describe('module', () => {
+    // eslint-disable-next-line jest/expect-expect
     it('should start module by target', async () => {
       const { staticServer, close } = await start({
         rootDir: FIXTURES_DIR,
@@ -187,7 +247,7 @@ describe('@tramvai/cli start command', () => {
         port: staticServerPort,
       });
 
-      expect(staticServer.address()).toMatchObject({
+      expect(staticServer?.address()).toMatchObject({
         port: staticServerPort,
       });
 

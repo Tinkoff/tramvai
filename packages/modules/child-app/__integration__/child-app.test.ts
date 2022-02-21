@@ -1,15 +1,34 @@
 import { resolve } from 'path';
+import { outputFile } from 'fs-extra';
 import { start } from '@tramvai/cli';
 import { testApp } from '@tramvai/internal-test-utils/testApp';
 import { testAppInBrowser } from '@tramvai/internal-test-utils/browser';
 import { getStaticUrl, sleep } from '@tramvai/test-integration';
 import type { PromiseType } from 'utility-types';
 
+const REFRESH_CMP_PATH = resolve(__dirname, 'child-app', 'base', '__temp__', 'cmp.tsx');
+
+const REFRESH_CMP_CONTENT_START = `import React from 'react';
+
+export const Cmp = () => {
+  return <div id="cmp">Cmp test: start</div>;
+};
+`;
+
+const REFRESH_CMP_CONTENT_UPDATE = `import React from 'react';
+
+export const Cmp = () => {
+  return <div id="cmp">Cmp test: update</div>;
+};
+`;
+
 describe('child-app', () => {
   let childAppBase: PromiseType<ReturnType<typeof start>>;
   let childAppState: PromiseType<ReturnType<typeof start>>;
 
   beforeAll(async () => {
+    await outputFile(REFRESH_CMP_PATH, REFRESH_CMP_CONTENT_START);
+
     [childAppBase, childAppState] = await Promise.all([
       start({
         port: 0,
@@ -17,6 +36,13 @@ describe('child-app', () => {
           type: 'child-app',
           root: resolve(__dirname, 'child-app', 'base'),
           name: 'base',
+          commands: {
+            serve: {
+              configurations: {
+                hotRefresh: true,
+              },
+            },
+          },
         },
       }),
       start({
@@ -66,8 +92,29 @@ describe('child-app', () => {
       const { application } = await render('/base/');
 
       expect(application).toMatchInlineSnapshot(
-        `"<div>Content from root</div><div>Children App: I&#x27;m little child app</div>"`
+        `"<div>Content from root</div><div>Children App: I&#x27;m little child app</div><div id=\\"cmp\\">Cmp test: start</div>"`
       );
+    });
+
+    it('react-refresh should work', async () => {
+      const { page } = await getPageWrapper('/base/');
+
+      expect(
+        await page.$eval('#cmp', (node) => (node as HTMLElement).innerText)
+      ).toMatchInlineSnapshot(`"Cmp test: start"`);
+
+      await outputFile(REFRESH_CMP_PATH, REFRESH_CMP_CONTENT_UPDATE);
+
+      await page.waitForFunction(
+        () => {
+          return document.getElementById('cmp')?.innerHTML !== 'Cmp test: start';
+        },
+        { polling: 2000, timeout: 10000 }
+      );
+
+      expect(
+        await page.$eval('#cmp', (node) => (node as HTMLElement).innerText)
+      ).toMatchInlineSnapshot(`"Cmp test: update"`);
     });
   });
 

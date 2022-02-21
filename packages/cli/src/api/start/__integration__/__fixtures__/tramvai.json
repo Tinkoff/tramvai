@@ -10,6 +10,11 @@
           "options": {
             "server": "app/server.tsx"
           }
+        },
+        "serve": {
+          "configurations": {
+            "hotRefresh": true
+          }
         }
       }
     },
