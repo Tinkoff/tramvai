@@ -42,11 +42,13 @@ class CookiesFallback implements ICookies {
 export class CookieManager implements Interface {
   private cookies: ICookies;
 
-  constructor({ cookieOptions = {} }: { cookieOptions?: CookieOptions } = {}) {
+  constructor() {
+    const isSecure = window.location.protocol === 'https:';
+
     this.cookies = checkCookieEnabled()
       ? new Cookies({
-          secure: window.location.protocol === 'https:',
-          ...cookieOptions,
+          sameSite: isSecure ? 'none' : 'lax',
+          secure: isSecure,
         })
       : new CookiesFallback();
   }

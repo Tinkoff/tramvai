@@ -1,9 +1,10 @@
-import { Module, commandLineListTokens } from '@tramvai/core';
+import { Module, commandLineListTokens, Scope } from '@tramvai/core';
 import {
   REQUEST_MANAGER_TOKEN,
   STORE_TOKEN,
   CONTEXT_TOKEN,
   COOKIE_MANAGER_TOKEN,
+  CREATE_CACHE_TOKEN,
 } from '@tramvai/module-common';
 import type { UserAgent } from '@tinkoff/user-agent';
 import { parse } from '@tinkoff/user-agent';
@@ -22,12 +23,29 @@ export * from './shared/stores/userAgent';
   providers: [
     ...providers,
     {
+      provide: 'userAgentLruCache',
+      scope: Scope.SINGLETON,
+      useFactory: ({ createCache }) => {
+        return createCache('userAgent', { max: 50 });
+      },
+      deps: {
+        createCache: CREATE_CACHE_TOKEN,
+      },
+    },
+    {
       provide: USER_AGENT_TOKEN,
-      useFactory: ({ requestManager }) => {
-        return parse(requestManager.getHeader('user-agent') as string);
+      useFactory: ({ requestManager, cache }) => {
+        const reqUserAgent = requestManager.getHeader('user-agent') as string;
+        if (cache.has(reqUserAgent)) {
+          return cache.get(reqUserAgent);
+        }
+        const result = parse(reqUserAgent);
+        cache.set(reqUserAgent, result);
+        return result;
       },
       deps: {
         requestManager: REQUEST_MANAGER_TOKEN,
+        cache: 'userAgentLruCache',
       },
     },
     {
