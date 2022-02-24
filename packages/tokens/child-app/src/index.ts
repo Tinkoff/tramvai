@@ -183,12 +183,3 @@ export const CHILD_APP_COMMON_INITIAL_STATE_TOKEN = createToken<
 export const CHILD_APP_INTERNAL_RENDER_TOKEN = createToken<ComponentType<WrapperProps<any>>>(
   'child-app render'
 );
-
-/**
- * @public
- * @description Allows to subscribe to the event that happens right before React render itself
- */
-export const CHILD_APP_INTERNAL_BEFORE_RENDER_TOKEN = createToken<() => Promise<void>>(
-  'child-app before-render',
-  multiOptions
-);

@@ -18,6 +18,11 @@ import { warmUpCache } from './warmup';
             return;
           }
 
+          if (process.env.CACHE_WARMUP_DISABLED === 'true') {
+            log.info('Skip cache warm up due to CACHE_WARMUP_DISABLED env');
+            return;
+          }
+
           if (process.env.NODE_ENV !== 'production') {
             log.info('Skip cache warm up in dev environment');
             return;

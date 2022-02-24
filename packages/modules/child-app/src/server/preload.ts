@@ -91,6 +91,8 @@ export class PreloadManager implements ChildAppPreloadManager {
     await Promise.all(promises);
   }
 
+  pageRender(): void {}
+
   async clearPreloaded(): Promise<void> {
     const promises: Promise<void>[] = [];
     this.map.forEach((childAppPromise) => {

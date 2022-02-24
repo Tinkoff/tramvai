@@ -64,6 +64,7 @@ export interface ChildAppPreloadManager {
   preload(config: ChildAppRequestConfig): Promise<void>;
   isPreloaded(config: ChildAppRequestConfig): boolean;
   runPreloaded(): Promise<void>;
+  pageRender(): void;
   clearPreloaded(): Promise<void>;
   getPreloadedList(): ChildAppRequestConfig[];
 }
@@ -109,5 +110,5 @@ type OptionalStore = { store: Store; optional?: boolean };
 
 export interface RootStateSubscription {
   stores: Array<Store | OptionalStore>;
-  listener: (state: Record<string, any>) => void | Promise<void>;
+  listener: (state: Record<string, any>) => void;
 }

@@ -42,7 +42,7 @@ export class BrowserLoader extends Loader {
         moduleName,
       });
 
-      await loadModule(config.client.entry);
+      await loadModule(config.client.entry, { cssUrl: config.css?.entry });
 
       container = getModuleFromGlobal(config.client.entry);
 

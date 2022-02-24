@@ -108,7 +108,6 @@ Loading of child-app is happens only after preloading child-app with `CHILD_APP_
 - Calling `PreloadManager.preload(...)` loads a child-app code, executes and marks it as executable to CommandLineRunner
 - Result of `PreloadManager.preload(...)` must be awaited as it is important to synchronize child-app commands lines execution with a root-app `CommandLinerRunner`
 - Preloads after root-app `resolvePageDeps` are useless as they wont change page render and wont be used by root-app.
-- If child-app was not preloaded at all but still is used on render then the child-app is still preloaded automatically, but it will lead to additional React render and may significantly increase response latency.
 
 #### Client
 

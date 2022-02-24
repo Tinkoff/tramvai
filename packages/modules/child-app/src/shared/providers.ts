@@ -32,6 +32,7 @@ import { extendRender } from './render';
 import { initModuleFederation } from './webpack/moduleFederation';
 import { resolveComponent } from './utils/resolveComponent';
 import { ChildAppResolutionConfigManager } from './resolutionConfigManager';
+import { PreloadManager } from '../browser/preload';
 
 declare module '@tramvai/tokens-common' {
   export interface RegistryComponentExtend {
@@ -182,6 +183,18 @@ export const sharedProviders: Provider[] = [
     multi: true,
     deps: {
       pageService: PAGE_SERVICE_TOKEN,
+      preloadManager: CHILD_APP_PRELOAD_MANAGER_TOKEN,
+    },
+  }),
+  provide({
+    provide: commandLineListTokens.generatePage,
+    multi: true,
+    useFactory: ({ preloadManager }) => {
+      return function childAppPageRender() {
+        preloadManager.pageRender();
+      };
+    },
+    deps: {
       preloadManager: CHILD_APP_PRELOAD_MANAGER_TOKEN,
     },
   }),

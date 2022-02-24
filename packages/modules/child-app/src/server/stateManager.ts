@@ -3,8 +3,34 @@ import type {
   ChildAppStateManager,
   ChildAppFinalConfig,
 } from '@tramvai/tokens-child-app';
-import type { LOGGER_TOKEN } from '@tramvai/tokens-common';
+import { CHILD_APP_INTERNAL_ROOT_STATE_SUBSCRIPTION_TOKEN } from '@tramvai/tokens-child-app';
+import type { LOGGER_TOKEN, STORE_TOKEN } from '@tramvai/tokens-common';
 import { CONTEXT_TOKEN } from '@tramvai/tokens-common';
+import type { EXTEND_RENDER } from '@tramvai/tokens-render';
+
+export const executeRootStateSubscriptions = ({
+  store,
+  diManager,
+}: {
+  store: typeof STORE_TOKEN;
+  diManager: ChildAppDiManager;
+}): typeof EXTEND_RENDER[number] => {
+  return (render) => {
+    const state = store.getState();
+
+    diManager.forEachChildDi((di) => {
+      const subscriptions = (di.get({
+        token: CHILD_APP_INTERNAL_ROOT_STATE_SUBSCRIPTION_TOKEN,
+        optional: true,
+      }) as unknown) as typeof CHILD_APP_INTERNAL_ROOT_STATE_SUBSCRIPTION_TOKEN[];
+      subscriptions?.forEach((sub) => {
+        sub.listener(state);
+      });
+    });
+
+    return render;
+  };
+};
 
 export class StateManager implements ChildAppStateManager {
   private readonly log: ReturnType<typeof LOGGER_TOKEN>;

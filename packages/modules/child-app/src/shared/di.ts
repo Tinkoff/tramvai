@@ -5,7 +5,6 @@ import type {
   ChildAppLoader,
   ChildAppFinalConfig,
 } from '@tramvai/tokens-child-app';
-import { getChildProviders } from './child/providers';
 
 export class DiManager implements ChildAppDiManager {
   private appDi: Container;
@@ -60,14 +59,6 @@ export class DiManager implements ChildAppDiManager {
       return;
     }
 
-    const di = new ChildContainer(singletonDi, this.appDi);
-
-    const childProviders = getChildProviders(this.appDi);
-
-    childProviders.forEach((provider) => {
-      di.register(provider);
-    });
-
-    return di;
+    return new ChildContainer(singletonDi, this.appDi);
   }
 }

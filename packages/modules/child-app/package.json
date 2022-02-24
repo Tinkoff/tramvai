@@ -4,8 +4,7 @@
   "description": "Module for child apps",
   "browser": {
     "./lib/server.js": "./lib/browser.js",
-    "./lib/server/child/singletonProviders.js": "./lib/browser/child/singletonProviders.js",
-    "./lib/server/child/providers.js": "./lib/browser/child/providers.js"
+    "./lib/server/child/singletonProviders.js": "./lib/browser/child/singletonProviders.js"
   },
   "main": "lib/server.js",
   "typings": "src/server.ts",

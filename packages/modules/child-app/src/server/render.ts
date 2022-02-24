@@ -1,7 +1,4 @@
-import { renderToString } from 'react-dom/server';
-import type { CUSTOM_RENDER } from '@tramvai/tokens-render';
 import type { Container } from '@tinkoff/dippy';
-import { CHILD_APP_INTERNAL_BEFORE_RENDER_TOKEN } from '@tramvai/tokens-child-app';
 import type {
   ChildAppDiManager,
   ChildAppFinalConfig,
@@ -11,45 +8,6 @@ import type {
   CHILD_APP_RESOLVE_CONFIG_TOKEN,
 } from '@tramvai/tokens-child-app';
 import type { LOGGER_TOKEN } from '@tramvai/tokens-common';
-
-const LOAD_TIMEOUT = 500;
-
-export const customRender = ({
-  renderManager,
-  diManager,
-}: {
-  renderManager: ChildAppRenderManager;
-  diManager: ChildAppDiManager;
-}): typeof CUSTOM_RENDER => {
-  return async (content) => {
-    const promises: Promise<void[]>[] = [];
-    diManager.forEachChildDi((di) => {
-      const beforeAppRender = (di.get(
-        CHILD_APP_INTERNAL_BEFORE_RENDER_TOKEN
-      ) as any) as typeof CHILD_APP_INTERNAL_BEFORE_RENDER_TOKEN[];
-
-      if (beforeAppRender) {
-        promises.push(Promise.all(beforeAppRender.map((fn) => fn())));
-      }
-    });
-    await Promise.all(promises);
-    let render = renderToString(content);
-    let timeouted = false;
-
-    await Promise.race([
-      new Promise((resolve) => setTimeout(resolve, LOAD_TIMEOUT)),
-      (async () => {
-        while ((await renderManager.flush()) && !timeouted) {
-          render = renderToString(content);
-        }
-      })(),
-    ]);
-
-    timeouted = true;
-
-    return render;
-  };
-};
 
 export class RenderManager implements ChildAppRenderManager {
   private readonly preloadManager: ChildAppPreloadManager;

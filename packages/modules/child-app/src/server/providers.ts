@@ -9,7 +9,7 @@ import {
   STORE_TOKEN,
 } from '@tramvai/tokens-common';
 import {
-  CUSTOM_RENDER,
+  EXTEND_RENDER,
   RENDER_SLOTS,
   ResourceSlot,
   RESOURCES_REGISTRY,
@@ -18,6 +18,7 @@ import {
 import {
   CHILD_APP_RENDER_MANAGER_TOKEN,
   CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN,
+  CHILD_APP_SINGLETON_DI_MANAGER_TOKEN,
   CHILD_APP_STATE_MANAGER_TOKEN,
 } from '@tramvai/tokens-child-app';
 import {
@@ -30,9 +31,9 @@ import {
 import { safeDehydrate } from '@tramvai/safe-strings';
 import { ServerLoader } from './loader';
 import { PreloadManager } from './preload';
-import { StateManager } from './stateManager';
+import { executeRootStateSubscriptions, StateManager } from './stateManager';
 import { setPreloaded } from '../shared/store';
-import { customRender, RenderManager } from './render';
+import { RenderManager } from './render';
 import { registerChildAppRenderSlots } from './render-slots';
 
 export const serverProviders: Provider[] = [
@@ -106,10 +107,12 @@ export const serverProviders: Provider[] = [
     },
   }),
   provide({
-    provide: CUSTOM_RENDER,
-    useFactory: customRender,
+    provide: EXTEND_RENDER,
+    multi: true,
+    // execute subscription right before render to get the last actual data
+    useFactory: executeRootStateSubscriptions,
     deps: {
-      renderManager: CHILD_APP_RENDER_MANAGER_TOKEN,
+      store: STORE_TOKEN,
       diManager: CHILD_APP_DI_MANAGER_TOKEN,
     },
   }),

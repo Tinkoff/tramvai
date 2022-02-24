@@ -1,4 +1,3 @@
-import noop from '@tinkoff/utils/function/noop';
 import type {
   ChildAppCommandLineRunner,
   ChildAppRequestConfig,
@@ -18,10 +17,10 @@ export class PreloadManager implements ChildAppPreloadManager {
   private resolutionConfigManager: typeof CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN;
   private resolveExternalConfig: typeof CHILD_APP_RESOLVE_CONFIG_TOKEN;
 
+  private pageHasRendered = false;
   private pageHasLoaded = false;
   private map = new Map<string, Promise<ChildAppFinalConfig>>();
   private serverPreloaded = new Map<string, ChildAppFinalConfig>();
-  private preloadMap = new Map<string, ChildAppFinalConfig>();
   private hasInitialized = false;
 
   constructor({
@@ -50,10 +49,11 @@ export class PreloadManager implements ChildAppPreloadManager {
     const config = this.resolveExternalConfig(request);
     const { key } = config;
 
-    this.preloadMap.set(key, config);
-
-    if (!this.map.has(key)) {
-      if (this.pageHasLoaded) {
+    if (!this.isPreloaded(config)) {
+      // in case React render yet has not been executed do not load any external child-app app as
+      // as it will lead to markup mismatch on markup hydration
+      if (this.pageHasRendered) {
+        // but in case render has happened load child-app as soon as possible
         const promise = (async () => {
           try {
             await this.loader.load(config);
@@ -66,6 +66,7 @@ export class PreloadManager implements ChildAppPreloadManager {
         })();
 
         this.map.set(key, promise);
+        await promise;
       }
     }
   }
@@ -104,30 +105,16 @@ export class PreloadManager implements ChildAppPreloadManager {
     await Promise.all(promises);
   }
 
+  pageRender(): void {
+    this.pageHasRendered = true;
+  }
+
   async clearPreloaded(): Promise<void> {
     this.pageHasLoaded = true;
 
     const promises: Promise<void>[] = [];
-
-    this.preloadMap.forEach((config) => {
-      promises.push(
-        (async () => {
-          if (this.serverPreloaded.has(config.key)) {
-            promises.push(this.run('clear', config));
-          } else {
-            const promise = this.loader
-              .load(config)
-              .catch(noop)
-              .then(() => config);
-
-            this.map.set(config.key, promise);
-
-            await promise;
-            await this.run('customer', config);
-            await this.run('clear', config);
-          }
-        })()
-      );
+    this.serverPreloaded.forEach((config) => {
+      promises.push(this.run('clear', config));
     });
 
     this.serverPreloaded.clear();
@@ -136,7 +123,7 @@ export class PreloadManager implements ChildAppPreloadManager {
   }
 
   getPreloadedList(): ChildAppRequestConfig[] {
-    return [...this.preloadMap.values()];
+    return [...this.serverPreloaded.values()];
   }
 
   private initServerPreloaded() {
