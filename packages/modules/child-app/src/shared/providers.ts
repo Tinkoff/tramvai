@@ -32,7 +32,6 @@ import { extendRender } from './render';
 import { initModuleFederation } from './webpack/moduleFederation';
 import { resolveComponent } from './utils/resolveComponent';
 import { ChildAppResolutionConfigManager } from './resolutionConfigManager';
-import { PreloadManager } from '../browser/preload';
 
 declare module '@tramvai/tokens-common' {
   export interface RegistryComponentExtend {

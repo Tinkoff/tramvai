@@ -1,4 +1,3 @@
-import noop from '@tinkoff/utils/function/noop';
 import type {
   ChildAppCommandLineRunner,
   ChildAppRequestConfig,
@@ -59,7 +58,6 @@ export class PreloadManager implements ChildAppPreloadManager {
           return this.run('customer', config);
         }
       })
-      .catch(noop)
       .then(() => config);
 
     this.map.set(key, promise);

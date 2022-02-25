@@ -12,10 +12,22 @@ export const renderFactory = (request: ReturnType<typeof requestFactory>) => asy
   const response = await request(path, { method });
   const parsed = parseHtml(response.text, parserOptions);
 
+  if (!parsed) {
+    throw new Error(`Cannot parse response
+  got response:
+    status: ${response.statusCode}
+    content: ${response.text}`);
+  }
+
   return {
     ...parsed,
     get initialState() {
-      const parsedWithScripts = parseHtml(response.text, {}).parsed;
+      const parsedWithScripts = parseHtml(response.text, {})?.parsed;
+
+      if (!parsedWithScripts) {
+        return;
+      }
+
       const scripts = parsedWithScripts.querySelectorAll('body > script');
 
       for (const script of scripts) {

@@ -7,6 +7,10 @@ export const parseHtml = (
   html: string,
   parserOptions: ParseOptions = { blockTextElements: { script: false, style: false } }
 ) => {
+  if (!html) {
+    return null;
+  }
+
   const parsed = parse(html, parserOptions);
 
   return {

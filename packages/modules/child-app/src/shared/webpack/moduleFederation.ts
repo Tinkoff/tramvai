@@ -1,7 +1,7 @@
 declare global {
-  // eslint-disable-next-line no-var
+  // eslint-disable-next-line no-var, vars-on-top
   var __webpack_init_sharing__: (name: string) => Promise<void>;
-  // eslint-disable-next-line no-var
+  // eslint-disable-next-line no-var, vars-on-top
   var __webpack_share_scopes__: ModuleFederationSharedScope;
 }
 
@@ -51,6 +51,20 @@ export const initModuleFederation = async (
         loaded: true,
       },
     };
+  }
+
+  if (process.env.NODE_ENV === 'development') {
+    // explicitly add react/jsx-runtime to support production builds of the child-app in dev mode
+    if (!shareScope['react/jsx-runtime']) {
+      shareScope['react/jsx-runtime'] = {
+        '*': {
+          get: () => () => require('react/jsx-runtime'),
+          from: 'tramvai-mf-fix',
+          eager: true,
+          loaded: true,
+        },
+      };
+    }
   }
 };
 

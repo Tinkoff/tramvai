@@ -28,5 +28,11 @@ export const getSharedModules = (configManager: ConfigManager): ModuleFederation
       import: isChild ? false : 'react/jsx-runtime',
       requiredVersion: false,
     },
+    'react/jsx-dev-runtime': {
+      singleton: true,
+      eager: !isChild,
+      import: isChild ? false : 'react/jsx-dev-runtime',
+      requiredVersion: false,
+    },
   };
 };
