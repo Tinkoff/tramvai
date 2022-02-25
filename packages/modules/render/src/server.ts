@@ -251,3 +251,4 @@ export class RenderModule {
     };
   }
 }
+export { ReactRenderServer } from './server/ReactRenderServer';
