@@ -45,6 +45,17 @@ export class Router extends ClientRouter {
       return this.delayNavigation(navigation);
     }
 
+    // ignore previous navigations that were put in delayedNavigation as we have more fresh navigation to execute
+    if (this.delayedNavigation) {
+      logger.info({
+        event: 'delay-navigation-drop',
+        delayedNavigation: this.delayedNavigation,
+        navigation,
+      });
+
+      this.delayedNavigation = null;
+    }
+
     return this.flattenDelayedNavigation(navigation);
   }
 

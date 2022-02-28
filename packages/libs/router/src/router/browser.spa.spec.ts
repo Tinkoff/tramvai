@@ -690,6 +690,35 @@ describe('router/browser-spa', () => {
         expect(router.getCurrentRoute()).toMatchObject({ name: 'test' });
         expect(mockPush).toHaveBeenCalledWith(expect.anything(), '', '/test/');
       });
+
+      it('updateCurrentRoute and updateCurrentRoute while navigation', async () => {
+        router.registerHook('beforeNavigate', async () => {
+          return new Promise((resolve) => setTimeout(resolve, 100));
+        });
+        router.registerHook('afterNavigate', async () => {
+          return router.updateCurrentRoute({ preserveQuery: false, query: { stage: 'after' } });
+        });
+
+        await router.rehydrate({
+          type: 'navigate',
+          to: { name: 'root', path: '/', actualPath: '/', params: {} },
+          url: parse('http://localhost/'),
+        });
+
+        await router.start();
+
+        setTimeout(() => {
+          router.updateCurrentRoute({ query: { a: '1', b: '2' } });
+        }, 0);
+
+        await router.navigate('/test/');
+
+        expect(router.getCurrentRoute()).toMatchObject({ name: 'test' });
+        expect(router.getCurrentUrl()).toMatchObject({ query: { stage: 'after' } });
+
+        expect(mockPush).toHaveBeenCalledWith(expect.anything(), '', '/test/');
+        expect(mockPush).toHaveBeenCalledWith(expect.anything(), '', '/test/?stage=after');
+      });
     });
   });
 

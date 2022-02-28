@@ -63,7 +63,7 @@ export const staticApp = async (
   context.logger.event({
     type: 'debug',
     event: 'COMMAND:STATIC:SERVER_START',
-    message: `message: start application server`,
+    message: `message: start application server on http://${host}:${port}`,
   });
 
   const server = node(path.resolve(root, 'server.js'), [], {
@@ -83,11 +83,15 @@ export const staticApp = async (
   });
 
   const bundleInfoPath = `http://${host}:${port}/${name}/papi/bundleInfo`;
+  const bundleInfoPathFallback = bundleInfoPath.replace(host, 'localhost');
 
   await Promise.race([
     server,
     waitOn({
-      resources: [bundleInfoPath],
+      resources: [bundleInfoPath, bundleInfoPathFallback],
+      delay: 1000,
+      interval: 250,
+      timeout: 10 * 60 * 1000,
     }),
   ]);
 
