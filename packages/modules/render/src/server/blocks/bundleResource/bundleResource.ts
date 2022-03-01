@@ -3,7 +3,7 @@ import last from '@tinkoff/utils/array/last';
 import type { ChunkExtractor } from '@loadable/server';
 import type { PageResource } from '@tramvai/tokens-render';
 import { ResourceType, ResourceSlot } from '@tramvai/tokens-render';
-import { isFileSystemPageComponent } from '@tramvai/experiments';
+import { isFileSystemPageComponent, fileSystemPageToWebpackChunkName } from '@tramvai/experiments';
 import { PRELOAD_JS } from '../../constants/performance';
 import { flushFiles } from '../utils/flushFiles';
 import { fetchWebpackStats } from '../utils/fetchWebpackStats';
@@ -19,18 +19,17 @@ export const bundleResource = async ({
   extractor: ChunkExtractor;
   pageComponent?: string;
 }) => {
-  // file-system pages can work without bundle chunk
+  // for file-system pages preload page chunk against bundle chunk
   const chunkNameFromBundle = isFileSystemPageComponent(pageComponent)
-    ? null
+    ? fileSystemPageToWebpackChunkName(pageComponent)
     : last(bundle.split('/'));
 
   const webpackStats = await fetchWebpackStats({ modern });
   const { publicPath, assetsByChunkName } = webpackStats;
 
-  const bundles: string[] = (has('common-chunk', assetsByChunkName)
+  const bundles: string[] = has('common-chunk', assetsByChunkName)
     ? ['common-chunk', chunkNameFromBundle]
-    : [chunkNameFromBundle]
-  ).filter(Boolean);
+    : [chunkNameFromBundle];
   const lazyChunks = extractor.getMainAssets().map((entry) => entry.chunk);
 
   const { scripts: baseScripts } = flushFiles(['vendor'], webpackStats, {

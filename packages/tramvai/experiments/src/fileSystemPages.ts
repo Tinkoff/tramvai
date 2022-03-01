@@ -85,3 +85,11 @@ export const fileSystemPageComponentExists = (pageComponent: string): boolean =>
     getStaticFileSystemPages()[pageComponent] || getExternalFileSystemPages()[pageComponent]
   );
 };
+
+/**
+ * @example
+ * @/routes/index to @_routes_index
+ */
+export const fileSystemPageToWebpackChunkName = (pageComponent: string): string => {
+  return pageComponent.replace(/\//g, '_');
+};

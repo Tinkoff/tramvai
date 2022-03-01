@@ -1,8 +1,6 @@
 import flatten from '@tinkoff/utils/array/flatten';
 import type { CONTEXT_TOKEN } from '@tramvai/module-common';
 import type { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
-import type { USER_AGENT_TOKEN } from '@tramvai/module-client-hints';
-import { satisfies } from '@tinkoff/user-agent';
 import { buildPage } from '@tinkoff/htmlpagebuilder';
 import type {
   HTML_ATTRS,
@@ -46,8 +44,6 @@ export class PageBuilder {
 
   private polyfillCondition: typeof POLYFILL_CONDITION;
 
-  private userAgent: typeof USER_AGENT_TOKEN;
-
   private modern: boolean;
 
   constructor({
@@ -58,8 +54,8 @@ export class PageBuilder {
     reactRender,
     htmlPageSchema,
     polyfillCondition,
-    userAgent,
     htmlAttrs,
+    modern,
   }) {
     this.htmlAttrs = htmlAttrs;
     this.renderSlots = flatten(renderSlots || []);
@@ -69,8 +65,7 @@ export class PageBuilder {
     this.reactRender = reactRender;
     this.htmlPageSchema = htmlPageSchema;
     this.polyfillCondition = polyfillCondition;
-    this.userAgent = userAgent;
-    this.modern = satisfies(this.userAgent, null, { env: 'modern' });
+    this.modern = modern;
   }
 
   async flow(): Promise<string> {

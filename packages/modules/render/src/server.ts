@@ -25,6 +25,7 @@ import { Scope } from '@tinkoff/dippy';
 import { WEB_APP_AFTER_INIT_TOKEN } from '@tramvai/tokens-server';
 import { ROOT_ERROR_BOUNDARY_COMPONENT_TOKEN } from '@tramvai/react';
 import { parse } from '@tinkoff/url';
+import { satisfies } from '@tinkoff/user-agent';
 import { RESOURCE_INLINER, RESOURCES_REGISTRY_CACHE, ResourcesInliner } from './resourcesInliner';
 import { ResourcesRegistry } from './resourcesRegistry';
 import { PageBuilder } from './server/PageBuilder';
@@ -136,8 +137,8 @@ export const DEFAULT_POLYFILL_CONDITION =
         htmlPageSchema: 'htmlPageSchema',
         renderSlots: { token: RENDER_SLOTS, optional: true },
         polyfillCondition: POLYFILL_CONDITION,
-        userAgent: USER_AGENT_TOKEN,
         htmlAttrs: HTML_ATTRS,
+        modern: 'modernSatisfies',
       },
     }),
     provide({
@@ -230,6 +231,33 @@ export const DEFAULT_POLYFILL_CONDITION =
       deps: {
         RootErrorBoundary: { token: ROOT_ERROR_BOUNDARY_COMPONENT_TOKEN, optional: true },
         logger: LOGGER_TOKEN,
+      },
+    }),
+    provide({
+      provide: 'modernSatisfies',
+      useFactory: ({ requestManager, userAgent, cache }) => {
+        const reqUserAgent = requestManager.getHeader('user-agent') as string;
+        if (cache.has(reqUserAgent)) {
+          return cache.get(reqUserAgent);
+        }
+        const result = satisfies(userAgent, null, { env: 'modern' });
+        cache.set(reqUserAgent, result);
+        return result;
+      },
+      deps: {
+        requestManager: REQUEST_MANAGER_TOKEN,
+        userAgent: USER_AGENT_TOKEN,
+        cache: 'modernSatisfiesLruCache',
+      },
+    }),
+    provide({
+      provide: 'modernSatisfiesLruCache',
+      scope: Scope.SINGLETON,
+      useFactory: ({ createCache }) => {
+        return createCache('modernSatisfies', { max: 50 });
+      },
+      deps: {
+        createCache: CREATE_CACHE_TOKEN,
       },
     }),
   ],

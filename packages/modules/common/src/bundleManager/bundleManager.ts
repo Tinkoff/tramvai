@@ -12,6 +12,7 @@ import {
   isFileSystemPageComponent,
   getAllFileSystemPages,
 } from '@tramvai/experiments';
+import hoistNonReactStatics from 'hoist-non-react-statics';
 import type { ComponentRegistry } from '../componentRegistry/componentRegistry';
 
 type Interface = typeof BUNDLE_MANAGER_TOKEN;
@@ -93,6 +94,12 @@ export class BundleManager implements Interface {
         typeof componentOrLoader.load === 'function'
           ? (await componentOrLoader.load()).default
           : componentOrLoader;
+
+      // manually hoist static properties from preloaded component to loadable wrapper,
+      // this open access to current page component static properties outside before rendering
+      if (componentOrLoader !== component) {
+        hoistNonReactStatics(componentOrLoader, component);
+      }
 
       // allow page components to register any other components
       if (component.components) {
