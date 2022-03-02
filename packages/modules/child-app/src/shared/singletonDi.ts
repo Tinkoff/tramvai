@@ -86,6 +86,7 @@ export class SingletonDiManager implements ChildAppDiManager {
     );
 
     const { modules = [], providers = [], actions = [] } = children;
+    // add providers on the Singleton Level to make it possible to reuse providers from the root-app Container
     const childProviders = getChildProviders(this.appDi);
 
     childProviders.forEach((provider) => {

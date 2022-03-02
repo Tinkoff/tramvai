@@ -3,6 +3,7 @@ import * as devTools from './devTools';
 export { Middleware } from './dispatcher/dispatcher.h';
 export { createDispatcher, Dispatcher } from './dispatcher/dispatcher';
 export { DispatcherContext, convertAction } from './dispatcher/dispatcherContext';
+export { ChildDispatcherContext } from './dispatcher/childDispatcherContext';
 
 export { Event } from './createEvent/createEvent.h';
 export { Reducer } from './createReducer/createReducer.h';

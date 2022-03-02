@@ -127,7 +127,7 @@ describe('child-app', () => {
       const { application } = await render('/state/');
 
       expect(application).toMatchInlineSnapshot(
-        `"<h2>Root</h2><div>Content from root, state: 1</div><button id=\\"button\\" type=\\"button\\">Update Root State</button><h3>Child</h3><div id=\\"child-state\\">Current Value from Root Store: root 1</div>"`
+        `"<h2>Root</h2><div>Content from root, state: 1</div><button id=\\"button\\" type=\\"button\\">Update Root State</button><h3>Child</h3><div id=\\"child-state\\">Current Value from Root Store: 1</div>"`
       );
     });
 
@@ -137,7 +137,7 @@ describe('child-app', () => {
 
       expect(
         await childCmp?.evaluate((node) => (node as HTMLElement).innerText)
-      ).toMatchInlineSnapshot(`"Current Value from Root Store: root 1"`);
+      ).toMatchInlineSnapshot(`"Current Value from Root Store: 1"`);
 
       const button = await page.$('#button');
 
@@ -147,7 +147,7 @@ describe('child-app', () => {
 
       expect(
         await childCmp?.evaluate((node) => (node as HTMLElement).innerText)
-      ).toMatchInlineSnapshot(`"Current Value from Root Store: root 2"`);
+      ).toMatchInlineSnapshot(`"Current Value from Root Store: 2"`);
     });
   });
 });

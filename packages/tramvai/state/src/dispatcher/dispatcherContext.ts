@@ -60,7 +60,7 @@ export class DispatcherContext<TContext> extends SimpleEmitter {
   // eslint-disable-next-line react/static-property-placement
   context: TContext;
 
-  private fullState: Record<string, any>;
+  protected fullState: Record<string, any>;
 
   applyDispatch = <Payload>(event: Event<Payload>) => {
     const eventHandlers = this.dispatcher.handlers[event.type] || [];
@@ -100,7 +100,7 @@ export class DispatcherContext<TContext> extends SimpleEmitter {
       this.rehydrate(initialState);
     }
 
-    if (middlewares) {
+    if (middlewares?.length) {
       this.applyDispatch = this.applyMiddlewares(middlewares);
     }
 
@@ -125,6 +125,28 @@ export class DispatcherContext<TContext> extends SimpleEmitter {
     dispatch = compose(...middlewares.map((middleware) => middleware(api)))(this.applyDispatch);
 
     return dispatch;
+  }
+
+  protected storeSubscribe(storeName: string, storeInstance: StoreInstance) {
+    const subscribeHandler = () => {
+      const newState = storeInstance.getState();
+
+      if (newState !== this.fullState[storeName]) {
+        this.fullState = {
+          ...this.fullState,
+          [storeName]: newState,
+        };
+        this.emit('change');
+      }
+    };
+
+    subscribe(storeInstance, subscribeHandler);
+
+    const unsubscribe = () => {
+      storeInstance.off('change', subscribeHandler);
+    };
+
+    this.storeUnsubscribeCallbacks[storeName] = unsubscribe;
   }
 
   /**
@@ -188,25 +210,7 @@ export class DispatcherContext<TContext> extends SimpleEmitter {
         this.rehydratedStoreState[storeName] = null;
       }
 
-      const subscribeHandler = () => {
-        const newState = storeInstance.getState();
-
-        if (newState !== this.fullState[storeName]) {
-          this.fullState = {
-            ...this.fullState,
-            [storeName]: newState,
-          };
-          this.emit('change');
-        }
-      };
-
-      subscribe(storeInstance, subscribeHandler);
-
-      const unsubscribe = () => {
-        storeInstance.off('change', subscribeHandler);
-      };
-
-      this.storeUnsubscribeCallbacks[storeName] = unsubscribe;
+      this.storeSubscribe(storeName, storeInstance);
 
       // TODO: убрать после того отпадёт надобность связывать сторы router и application
       if (Store.dependencies) {
@@ -219,6 +223,7 @@ export class DispatcherContext<TContext> extends SimpleEmitter {
         });
       }
     }
+
     return this.storeInstances[storeName];
   }
 
@@ -329,7 +334,7 @@ export class DispatcherContext<TContext> extends SimpleEmitter {
     if ('storeName' in args[0]) {
       const reducer = args[0];
       const callback = args[1];
-      const reducerInstance = this.storeInstances[reducer.storeName];
+      const reducerInstance: any = this.getStore(reducer);
       const listener = () => {
         const state = this.getState(reducer);
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

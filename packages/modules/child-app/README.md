@@ -126,66 +126,41 @@ State for child-apps will be dehydrated on server as separate variable in the re
 
 :::warning
 
-Usually child-app cannot read data from root-app stores, but the dangerous workaround that allows to subscribe on any root-app store exists.
+By default, child-app cannot read data from root-app stores, but the you can specify the set of root-app stores that might be used inside child-app.
 
-It may be done using `CHILD_APP_INTERNAL_ROOT_STATE_SUBSCRIPTION_TOKEN` token.
+It may be done using `CHILD_APP_INTERNAL_ROOT_STATE_ALLOWED_STORE_TOKEN` token.
 
-This token is considered dangerous as it leads to high coupling with stores from root-app and this way stores in root-app might not change their public interface. But, in most cases, changes in stores ignore breaking change tracking and often breaks backward-compatibility. So **do not use this token if you can**, and if you should - use as little as possible from root-app and provide some fallback in case of wrong data.
+This token is considered undesirable to use as it leads to high coupling with stores from root-app and this way stores in root-app might not change their public interface. But, in most cases, changes in stores ignore breaking change tracking and may breaks backward-compatibility. So **do not use this token if you can**, and if you should - use as little as possible from root-app and provide some fallback in case of wrong data.
 
-[See how to do it](#child_app_internal_root_state_subscription_token)
+[See how to do it](#child_app_internal_root_state_allowed_store_token)
 
 :::
 
 ## API
 
-### CHILD_APP_INTERNAL_ROOT_STATE_SUBSCRIPTION_TOKEN
+### CHILD_APP_INTERNAL_ROOT_STATE_ALLOWED_STORE_TOKEN
 
-Allows to subscribe to any store from the root app and execute actions based on its state, e.g. to fill internal child-app state.
+Defines the list of allowed root-app store names that might be used inside child-app.
 
-1. Create a new store and a new event within child-app. This store might be used inside child-app as usual store.
-
-   ```ts
-   import { createReducer, createEvent } from '@tramvai/state';
-
-   interface State {
-     value: string;
-   }
-   export const setRootState = createEvent<string>('child-root set state');
-
-   export const rootStore = createReducer('child-root', { value: 'child' } as State).on(
-     setRootState,
-     (state, value) => {
-       return { value };
-     }
-   );
-   ```
-
-2. Add provider for the `CHILD_APP_INTERNAL_ROOT_STATE_SUBSCRIPTION_TOKEN` in order to subscribe to store. In subscription you can dispatch internal event from the child-app
+1. Specify stores that might be used inside child-app
 
    ```ts
    provide({
-     provide: CHILD_APP_INTERNAL_ROOT_STATE_SUBSCRIPTION_TOKEN,
+     provide: CHILD_APP_INTERNAL_ROOT_STATE_ALLOWED_STORE_TOKEN,
      multi: true,
-     useFactory: ({ context }) => {
-       return {
-         stores: ['root'],
-         listener: (state: Record<string, any>) => {
-           return context.dispatch(setRootState(`root ${state.root.value}`));
-         },
-       };
-     },
-     deps: {
-       context: CONTEXT_TOKEN,
-     },
+     useValue: [MediaStore, AuthenticateStore],
    });
    ```
 
-3. Use internal child-app store anywhere in the child-app
+2. Use the specified root-app stores the same way as usual stores
 
-   ```tsx
+   ```ts
+   import React from 'react';
+   import { useSelector } from '@tramvai/state';
+
    export const StateCmp = () => {
-     const value = useSelector([rootStore], (state) => {
-       return state['child-root'].value;
+     const value = useSelector(['root'], (state) => {
+       return state.root.value;
      });
 
      return <div id="child-state">Current Value from Root Store: {value}</div>;

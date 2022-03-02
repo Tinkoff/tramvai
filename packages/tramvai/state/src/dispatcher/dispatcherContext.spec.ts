@@ -28,6 +28,7 @@ describe('dispatcher/dispatcherContext', () => {
     });
 
     it('should throw error if event is not set', () => {
+      // @ts-ignore
       expect(() => dc.dispatch(null)).toThrow();
       expect(() => dc.dispatch('')).toThrow();
     });
@@ -57,7 +58,7 @@ describe('dispatcher/dispatcherContext', () => {
       const nextCheck = expect.any(Function);
 
       it('should throw error, if dispatch called while middleware created', () => {
-        const middleware = (api) => (next) => api.dispatch('error');
+        const middleware = (api: any) => (next: any) => api.dispatch('error');
 
         expect(
           () => new DispatcherContext(dispatcher, context, initialState, [middleware])
@@ -67,8 +68,8 @@ describe('dispatcher/dispatcherContext', () => {
       });
 
       it('should apply middlewares', () => {
-        let calls = [];
-        const middleware1 = (api) => (next) => (event) => {
+        let calls: any[] = [];
+        const middleware1 = (api: any) => (next: any) => (event: any) => {
           calls.push([1, api, next, event]);
           if (event.type === 'stop') {
             return 'stopped';
@@ -76,7 +77,7 @@ describe('dispatcher/dispatcherContext', () => {
 
           return next(event);
         };
-        const middleware2 = (api) => (next) => (event) => {
+        const middleware2 = (api: any) => (next: any) => (event: any) => {
           calls.push([2, api, next, event]);
           return 'middleware2';
         };

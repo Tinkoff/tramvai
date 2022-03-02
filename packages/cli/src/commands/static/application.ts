@@ -82,13 +82,12 @@ export const staticApp = async (
     },
   });
 
-  const bundleInfoPath = `http://${host}:${port}/${name}/papi/bundleInfo`;
-  const bundleInfoPathFallback = bundleInfoPath.replace(host, 'localhost');
+  const bundleInfoPath = `http://localhost:${port}/${name}/papi/bundleInfo`;
 
   await Promise.race([
     server,
     waitOn({
-      resources: [bundleInfoPath, bundleInfoPathFallback],
+      resources: [bundleInfoPath],
       delay: 1000,
       interval: 250,
       timeout: 10 * 60 * 1000,

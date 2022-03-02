@@ -1,7 +1,8 @@
+import type { ComponentType } from 'react';
 import { createToken } from '@tinkoff/dippy';
 import type { Action, Command } from '@tramvai/core';
 import type { INITIAL_APP_STATE_TOKEN } from '@tramvai/tokens-common';
-import type { ComponentType } from 'react';
+import type { StoreClass } from '@tramvai/state';
 import type {
   ChildAppLoader,
   ChildAppDiManager,
@@ -101,11 +102,21 @@ export const CHILD_APP_INTERNAL_ACTION_TOKEN = createToken<Action>(
 );
 
 /**
+ * @deprecated use CHILD_APP_INTERNAL_ROOT_STATE_ALLOWED_STORE_TOKEN
  * @public
  * @description Subscription on a root state updates
  */
 export const CHILD_APP_INTERNAL_ROOT_STATE_SUBSCRIPTION_TOKEN = createToken<RootStateSubscription>(
   'child-app root state subscription',
+  multiOptions
+);
+
+/**
+ * @public
+ * @description Root-app stores that might be used inside child-app
+ */
+export const CHILD_APP_INTERNAL_ROOT_STATE_ALLOWED_STORE_TOKEN = createToken<StoreClass | string>(
+  'child-app root state allowed store',
   multiOptions
 );
 

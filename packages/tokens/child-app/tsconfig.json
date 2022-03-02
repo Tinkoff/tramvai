@@ -17,6 +17,9 @@
         },
         {
             "path": "../../tramvai/core"
+        },
+        {
+            "path": "../../tramvai/state"
         }
     ]
 }
