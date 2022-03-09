@@ -1,0 +1,40 @@
+{
+  "name": "@tramvai/module-request-limiter",
+  "version": "0.0.0-stub",
+  "description": "Enable different rendering modes for pages",
+  "main": "lib/server.js",
+  "module": "lib/server.es.js",
+  "browser": "lib/browser.js",
+  "typings": "src/server.ts",
+  "files": [
+    "lib"
+  ],
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Tinkoff/tramvai.git"
+  },
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "tramvai-build --for-publish",
+    "watch": "tsc -w",
+    "build-for-publish": "true"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "@tinkoff/errors": "0.0.0-stub",
+    "on-finished": "^2.3.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.9"
+  },
+  "peerDependencies": {
+    "@tinkoff/dippy": "0.0.0-stub",
+    "@tramvai/core": "0.0.0-stub",
+    "@tramvai/tokens-server": "0.0.0-stub",
+    "express": "^4.17.1",
+    "tslib": "^2.0.3"
+  }
+}

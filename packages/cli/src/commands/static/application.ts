@@ -1,4 +1,5 @@
 import propOr from '@tinkoff/utils/object/propOr';
+import intersection from '@tinkoff/utils/array/intersection';
 
 import path from 'path';
 import { node } from 'execa';
@@ -19,6 +20,7 @@ import { safeRequire } from '../../utils/safeRequire';
 import { startStaticServer } from './staticServer';
 import { startServer } from './server';
 
+// eslint-disable-next-line max-statements
 export const staticApp = async (
   context: Context,
   configEntry: ApplicationConfigEntry,
@@ -32,21 +34,29 @@ export const staticApp = async (
   });
   const serverConfigManager = clientConfigManager.withSettings({ buildType: 'server' });
 
-  // TODO: перевести на builder
-  await Promise.all([
-    webpackBuild(
-      clientConfigManager,
-      toWebpackConfig(webpackClientConfig({ configManager: clientConfigManager })),
-      context
-    ),
-    webpackBuild(
-      serverConfigManager,
-      toWebpackConfig(webpackServerConfig({ configManager: serverConfigManager })),
-      context
-    ),
-  ]);
+  if (options.buildType !== 'none') {
+    // @TODO: перевести на builder
+    await Promise.all([
+      webpackBuild(
+        clientConfigManager,
+        toWebpackConfig(webpackClientConfig({ configManager: clientConfigManager })),
+        context
+      ),
+      webpackBuild(
+        serverConfigManager,
+        toWebpackConfig(webpackServerConfig({ configManager: serverConfigManager })),
+        context
+      ),
+    ]);
 
-  await copyStatsJsonFileToServerDirectory(clientConfigManager);
+    await copyStatsJsonFileToServerDirectory(clientConfigManager);
+  } else {
+    context.logger.event({
+      type: 'debug',
+      event: 'COMMAND:STATIC:BUILD',
+      message: `message: build step skipped`,
+    });
+  }
 
   const {
     name,
@@ -100,7 +110,11 @@ export const staticApp = async (
     message: `message: server started, fetch application routes`,
   });
 
-  const paths = propOr('payload', [], await request({ url: bundleInfoPath }));
+  let paths = propOr('payload', [], await request({ url: bundleInfoPath }));
+
+  if (options.onlyPages) {
+    paths = intersection(paths, options.onlyPages);
+  }
 
   context.logger.event({
     type: 'debug',

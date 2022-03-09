@@ -7,7 +7,8 @@ import {
   ACTION_REGISTRY_TOKEN,
 } from '@tramvai/tokens-common';
 import { ROUTER_TOKEN } from '@tramvai/tokens-router';
-import { RouterStore, setCurrentNavigation, setUrlOnRehydrate } from '../stores/RouterStore';
+import { TRAMVAI_RENDER_MODE } from '@tramvai/tokens-render';
+import { RouterStore, setUrlOnRehydrate } from '../stores/RouterStore';
 import { providers as commonProviders } from './common';
 
 import { runActionsFactory } from './hooks/runActions';
@@ -17,17 +18,25 @@ export const providers: Provider[] = [
   provide({
     provide: commandLineListTokens.customerStart,
     multi: true,
-    useFactory: ({ router, store }: { router: typeof ROUTER_TOKEN; store: typeof STORE_TOKEN }) => {
-      return function routerInit() {
+    useFactory: ({ router, store, renderMode }) => {
+      return async function routerInit() {
+        const currentRoute = store.getState(RouterStore).currentRoute as NavigationRoute;
+
+        // in client-side rendering mode, run navigation before hydration,
+        // because currentRoute from initialState can be undefined or incorrect
+        if (renderMode === 'client') {
+          await router.navigate(window.location.href);
+        }
+
         return router.rehydrate({
-          // @todo разобраться, почему не подходит тип Route
-          to: store.getState(RouterStore).currentRoute as NavigationRoute,
+          to: currentRoute,
         });
       };
     },
     deps: {
       router: ROUTER_TOKEN,
       store: STORE_TOKEN,
+      renderMode: TRAMVAI_RENDER_MODE,
     },
   }),
   provide({
@@ -56,12 +65,19 @@ export const providers: Provider[] = [
     // рендера реакта, т.к. экшены могут повлиять на рендер
     provide: commandLineListTokens.clear,
     multi: true,
-    useFactory: runActionsFactory,
+    useFactory: (deps) => {
+      // in client-side rendering mode, action already was executed
+      if (deps.renderMode === 'client') {
+        return;
+      }
+      return runActionsFactory(deps);
+    },
     deps: {
       store: STORE_TOKEN,
       router: ROUTER_TOKEN,
       actionRegistry: ACTION_REGISTRY_TOKEN,
       actionPageRunner: ACTION_PAGE_RUNNER_TOKEN,
+      renderMode: TRAMVAI_RENDER_MODE,
     },
   }),
 ];

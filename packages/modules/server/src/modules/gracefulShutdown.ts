@@ -2,10 +2,10 @@ import { createTerminus } from '@tinkoff/express-terminus';
 import {
   SERVER_TOKEN,
   WEB_APP_TOKEN,
-  WEB_APP_INIT_TOKEN,
   SPECIAL_SERVER_PATHS,
   READINESS_PROBE_TOKEN,
   LIVENESS_PROBE_TOKEN,
+  WEB_APP_BEFORE_INIT_TOKEN,
 } from '@tramvai/tokens-server';
 import { LOGGER_TOKEN } from '@tramvai/tokens-common';
 import { Module, COMMAND_LINE_RUNNER_TOKEN } from '@tramvai/core';
@@ -29,7 +29,7 @@ const noopCheck = () => {};
 @Module({
   providers: [
     {
-      provide: WEB_APP_INIT_TOKEN,
+      provide: WEB_APP_BEFORE_INIT_TOKEN,
       multi: true,
       useFactory: ({
         server,

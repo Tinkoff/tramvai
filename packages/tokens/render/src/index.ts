@@ -158,5 +158,13 @@ export const RESOURCE_INLINE_OPTIONS = createToken<ResourceInlineOptions>(
   'resourceInlineThreshold'
 );
 
+/**
+ * @description
+ * Experimental switcher from ssr to client-side rendering mode
+ */
+export const TRAMVAI_RENDER_MODE = createToken<TramvaiRenderMode>('tramvaiRenderMode');
+
+export type TramvaiRenderMode = 'ssr' | 'client';
+
 export { ResourceSlot };
 export { StorageRecord as ResourceType };

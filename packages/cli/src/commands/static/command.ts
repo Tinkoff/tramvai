@@ -6,6 +6,8 @@ export type Params = {
   target: string;
   showConfig?: boolean;
   serve?: boolean;
+  buildType: 'all' | 'none';
+  onlyPages?: string[];
 };
 
 export class StaticCommand extends CLICommand<Params> {
@@ -25,6 +27,18 @@ export class StaticCommand extends CLICommand<Params> {
       name: '--serve',
       value: '[serve]',
       description: 'Run server to preview exported pages',
+    },
+    {
+      name: '-t, --buildType',
+      value: '[type]',
+      description: 'Build type <all|none>',
+      defaultValue: 'all',
+    },
+    {
+      name: '--onlyPages',
+      value: '[onlyPages]',
+      transformer: (value: string) => value.split(','),
+      description: 'Specify the comma separated paths list for static HTML generation',
     },
   ];
 

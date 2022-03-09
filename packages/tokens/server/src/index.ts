@@ -125,19 +125,38 @@ export const WEB_APP_INIT_TOKEN = createToken<APP_INIT_HANDLER>('webAppInit', { 
 
 /**
  * @description
+ * You can limit requests of application.
+ *
+ * @example
+ ```tsx
+ {
+    provide: WEB_APP_LIMITER_TOKEN,
+    multi: true,
+    useValue: (app) => {
+      app.use(logMiddleware())
+    }
+  }
+ ```
+ */
+export const WEB_APP_LIMITER_TOKEN = createToken<APP_INIT_HANDLER>('webAppLimitter', {
+  multi: true,
+});
+
+/**
+ * @description
  * Subscription to after web-app initialization.
  * It is called after any other handlers
  *
  * @example
-  ```tsx
-  {
+ ```tsx
+ {
     provide: WEB_APP_AFTER_INIT_TOKEN,
     multi: true,
     useValue: (app) => {
       app.use(logMiddleware())
     }
   }
-  ```
+ ```
  */
 export const WEB_APP_AFTER_INIT_TOKEN = createToken<APP_INIT_HANDLER>('webAppAfterInit', {
   multi: true,

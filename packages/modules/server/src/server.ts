@@ -11,6 +11,7 @@ import {
   WEB_APP_INIT_TOKEN,
   WEB_APP_BEFORE_INIT_TOKEN,
   WEB_APP_AFTER_INIT_TOKEN,
+  WEB_APP_LIMITER_TOKEN,
 } from '@tramvai/tokens-server';
 import { ENV_MANAGER_TOKEN, ENV_USED_TOKEN, LOGGER_TOKEN } from '@tramvai/module-common';
 import { MetricsModule } from '@tramvai/module-metrics';
@@ -51,6 +52,7 @@ export * from '@tramvai/tokens-server';
         beforeInit: { token: WEB_APP_BEFORE_INIT_TOKEN, optional: true },
         init: { token: WEB_APP_INIT_TOKEN, optional: true },
         afterInit: { token: WEB_APP_AFTER_INIT_TOKEN, optional: true },
+        limiterRequest: { token: WEB_APP_LIMITER_TOKEN, optional: true },
       },
     },
     {

@@ -10,6 +10,7 @@ import type {
   WEB_APP_BEFORE_INIT_TOKEN,
   WEB_APP_INIT_TOKEN,
   WEB_APP_AFTER_INIT_TOKEN,
+  WEB_APP_LIMITER_TOKEN,
 } from '@tramvai/tokens-server';
 import { errorHandler, routerErrorHandler } from './error';
 
@@ -29,6 +30,7 @@ export const webAppInitCommand = ({
   beforeInit,
   init,
   afterInit,
+  limiterRequest,
 }: {
   app: typeof WEB_APP_TOKEN;
   logger: typeof LOGGER_TOKEN;
@@ -36,6 +38,7 @@ export const webAppInitCommand = ({
   beforeInit: typeof WEB_APP_BEFORE_INIT_TOKEN;
   init: typeof WEB_APP_INIT_TOKEN;
   afterInit: typeof WEB_APP_AFTER_INIT_TOKEN;
+  limiterRequest: typeof WEB_APP_LIMITER_TOKEN;
 }) => {
   const log = logger('server:webapp');
 
@@ -47,6 +50,7 @@ export const webAppInitCommand = ({
 
   return async function webAppInit() {
     await runHandlers(beforeInit);
+    await runHandlers(limiterRequest);
 
     app.use(
       bodyParser.urlencoded({
