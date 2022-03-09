@@ -15,6 +15,7 @@ import {
 import {
   PageRenderModeModule,
   PAGE_RENDER_DEFAULT_FALLBACK_COMPONENT,
+  PAGE_RENDER_WRAPPER_TYPE,
 } from '@tramvai/module-page-render-mode';
 
 import { Header } from './components/features/Header/Header';
@@ -53,6 +54,10 @@ createApp({
     {
       provide: PAGE_RENDER_DEFAULT_FALLBACK_COMPONENT,
       useValue: DefaultFallback,
+    },
+    {
+      provide: PAGE_RENDER_WRAPPER_TYPE,
+      useValue: 'page',
     },
   ],
 });

@@ -10,7 +10,7 @@ Enable different rendering modes for specific pages:
 
   Client mode - render only fallback for page component, then render full page on browser, after hydration.
   This mode can significally improve server rendering performance, but not recommended for pages with high SEO impact.
-  Header and Footer will be rendered as usual.
+  By default, Header and Footer will be rendered as usual.
 
 ## Installation
 
@@ -41,13 +41,13 @@ You can change this mode for all pages or for specific pages only.
 
 #### Default mode
 
-For global rendering mode changing, use token `PAGE_RENDER_DEFAULT_MODE`:
+For global rendering mode changing, use token `TRAMVAI_RENDER_MODE` from `@tramvai/tokens-render`:
 
 ```ts
-import { PAGE_RENDER_DEFAULT_MODE } from '@tramvai/module-page-render-mode';
+import { TRAMVAI_RENDER_MODE } from '@tramvai/tokens-render';
 
 const provider = {
-  provide: PAGE_RENDER_DEFAULT_MODE,
+  provide: TRAMVAI_RENDER_MODE,
   useValue: 'client',
 };
 ```
@@ -89,7 +89,7 @@ You can set default fallback for all pages with `client` render mode, or only fo
 
 #### Default fallback
 
-For setting default fallback, use token `PAGE_RENDER_DEFAULT_MODE`:
+For setting default fallback, use token `PAGE_RENDER_DEFAULT_FALLBACK_COMPONENT`:
 
 ```tsx
 import { PAGE_RENDER_DEFAULT_FALLBACK_COMPONENT } from '@tramvai/module-page-render-mode';
@@ -149,8 +149,26 @@ For specific pages available few options:
         pageRenderFallbackComponent: 'myOwnFallbackComponent',
       },
     },
-  ]
+  ];
   ```
+
+## How-to
+
+### How to prevent Header and Footer Rendering
+
+By default, Header and Footer will be rendered as usual, because this module provide Page component wrapper.
+If you want to make less work on server, use token `PAGE_RENDER_WRAPPER_TYPE` with `layout` or `content` value, e.g.:
+
+```ts
+const providers = [
+  {
+    provide: PAGE_RENDER_WRAPPER_TYPE,
+    useValue: 'layout',
+  },
+];
+```
+
+With `client` rendering mode, all layout will be rendered in browser.
 
 ## Troubleshooting
 

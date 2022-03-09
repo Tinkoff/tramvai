@@ -1,9 +1,12 @@
 import { Module } from '@tramvai/core';
-import { LAYOUT_OPTIONS } from '@tramvai/tokens-render';
+import { LAYOUT_OPTIONS, TRAMVAI_RENDER_MODE } from '@tramvai/tokens-render';
 import { pageRenderHOC } from './PageRenderWrapper';
-import { PAGE_RENDER_FALLBACK_COMPONENT_PREFIX, PAGE_RENDER_DEFAULT_MODE } from './tokens';
+import {
+  PAGE_RENDER_FALLBACK_COMPONENT_PREFIX,
+  PAGE_RENDER_DEFAULT_MODE,
+  PAGE_RENDER_WRAPPER_TYPE,
+} from './tokens';
 
-export * from './types';
 export * from './tokens';
 
 @Module({
@@ -11,10 +14,15 @@ export * from './tokens';
     {
       provide: LAYOUT_OPTIONS,
       multi: true,
-      useValue: {
-        wrappers: {
-          page: pageRenderHOC,
-        },
+      useFactory: ({ wrapperType }) => {
+        return {
+          wrappers: {
+            [wrapperType]: pageRenderHOC,
+          },
+        };
+      },
+      deps: {
+        wrapperType: PAGE_RENDER_WRAPPER_TYPE,
       },
     },
     {
@@ -23,7 +31,16 @@ export * from './tokens';
     },
     {
       provide: PAGE_RENDER_DEFAULT_MODE,
-      useValue: 'ssr',
+      useFactory: ({ tramvaiRenderMode }) => {
+        return tramvaiRenderMode;
+      },
+      deps: {
+        tramvaiRenderMode: TRAMVAI_RENDER_MODE,
+      },
+    },
+    {
+      provide: PAGE_RENDER_WRAPPER_TYPE,
+      useValue: 'page',
     },
   ],
 })

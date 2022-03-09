@@ -3,7 +3,7 @@ import type { PropsWithChildren, ComponentType } from 'react';
 import { useDi } from '@tramvai/react';
 import { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
 import { useRoute } from '@tramvai/module-router';
-import type { PageRenderMode } from './types';
+import type { TramvaiRenderMode } from '@tramvai/tokens-render';
 import {
   PAGE_RENDER_FALLBACK_COMPONENT_PREFIX,
   PAGE_RENDER_DEFAULT_MODE,
@@ -26,7 +26,7 @@ export const PageRenderWrapper = ({ children }: PropsWithChildren<{}>) => {
   const FallbackComponent: ComponentType<any> =
     pageService.resolveComponentFromConfig(fallbackKey as any) || DefaultFallbackComponent;
 
-  const mode: PageRenderMode = renderMode || pageRenderMode || defaultRenderMode;
+  const mode: TramvaiRenderMode = renderMode || pageRenderMode || defaultRenderMode;
 
   useEffect(() => {
     if (mode === 'client') {
