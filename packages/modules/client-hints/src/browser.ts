@@ -11,6 +11,8 @@ export * from './shared/stores/mediaSelectors';
 export * from './shared/stores/media';
 export * from './shared/stores/userAgent';
 
+export { ClientHintsChildAppModule } from './child-app/module';
+
 @Module({
   providers: [
     ...providers,

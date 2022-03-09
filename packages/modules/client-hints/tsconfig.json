@@ -26,6 +26,9 @@
         },
         {
             "path": "../../libs/safe-strings"
+        },
+        {
+            "path": "../../tokens/child-app"
         }
     ]
 }
