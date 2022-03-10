@@ -1,10 +1,9 @@
 import noop from '@tinkoff/utils/function/noop';
-import { Module, Scope } from '@tramvai/core';
+import { Module, provide, Scope } from '@tramvai/core';
 import { RENDER_SLOTS, ResourceType, ResourceSlot } from '@tramvai/module-render';
 import { ENV_MANAGER_TOKEN, ENV_USED_TOKEN } from '@tramvai/module-common';
 import { WEB_APP_BEFORE_INIT_TOKEN, WEB_APP_AFTER_INIT_TOKEN } from '@tramvai/tokens-server';
 import { REGISTER_INSTANT_METRIC_TOKEN, METRICS_MODULE_TOKEN } from '@tramvai/tokens-metrics';
-import * as Sentry from '@sentry/node';
 import { createSentry } from './server/sentry';
 import { sharedProviders } from './shared/providers';
 import { createErrorInterceptor } from './browser/inlineErrorInterceptor.inline';
@@ -14,6 +13,7 @@ import {
   SENTRY_OPTIONS_TOKEN,
   SENTRY_REQUEST_OPTIONS_TOKEN,
   SENTRY_DSN_TOKEN,
+  SENTRY_SERVER_ENABLE_DEFAULT_HANDLERS,
 } from './tokens';
 import type { SentryOptions } from './types.h';
 
@@ -32,12 +32,16 @@ const composeOptions = (multiOptions, defaultOptions?) =>
 @Module({
   providers: [
     ...sharedProviders,
-    {
+    provide({
+      provide: SENTRY_SERVER_ENABLE_DEFAULT_HANDLERS,
+      useValue: false,
+    }),
+    provide({
       provide: SENTRY_TOKEN,
       scope: Scope.SINGLETON,
       useFactory: createSentry,
-    },
-    {
+    }),
+    provide({
       provide: REGISTER_INSTANT_METRIC_TOKEN,
       multi: true,
       useFactory: ({ metrics }: { metrics?: typeof METRICS_MODULE_TOKEN }) => [
@@ -53,12 +57,17 @@ const composeOptions = (multiOptions, defaultOptions?) =>
           optional: true,
         },
       },
-    },
-    {
+    }),
+    provide({
       provide: WEB_APP_BEFORE_INIT_TOKEN,
       multi: true,
-      useFactory: ({ multiOptions }) => {
+      useFactory: ({ multiOptions, enableDefaultHandlers }) => {
         return (app) => {
+          if (!enableDefaultHandlers) {
+            return;
+          }
+
+          const Sentry = require('@sentry/node');
           const sentryHandler = Sentry.Handlers.requestHandler(composeOptions(multiOptions));
 
           app.use((req, res, next) => {
@@ -74,28 +83,34 @@ const composeOptions = (multiOptions, defaultOptions?) =>
         };
       },
       deps: {
+        enableDefaultHandlers: SENTRY_SERVER_ENABLE_DEFAULT_HANDLERS,
         multiOptions: {
           token: SENTRY_REQUEST_OPTIONS_TOKEN,
           optional: true,
         },
       },
-    },
-    {
+    }),
+    provide({
       provide: WEB_APP_AFTER_INIT_TOKEN,
       multi: true,
-      useFactory: ({ multiOptions }) => {
+      useFactory: ({ multiOptions, enableDefaultHandlers }) => {
         return (app) => {
-          app.use(Sentry.Handlers.errorHandler(composeOptions(multiOptions)));
+          if (enableDefaultHandlers) {
+            const Sentry = require('@sentry/node');
+
+            app.use(Sentry.Handlers.errorHandler(composeOptions(multiOptions)));
+          }
         };
       },
       deps: {
+        enableDefaultHandlers: SENTRY_SERVER_ENABLE_DEFAULT_HANDLERS,
         multiOptions: {
           token: SENTRY_REQUEST_OPTIONS_TOKEN,
           optional: true,
         },
       },
-    },
-    {
+    }),
+    provide({
       provide: RENDER_SLOTS,
       multi: true,
       useFactory: () => {
@@ -105,8 +120,8 @@ const composeOptions = (multiOptions, defaultOptions?) =>
           payload: `(${createErrorInterceptor})('${ERROR_INTERCEPTOR}')`,
         };
       },
-    },
-    {
+    }),
+    provide({
       provide: ENV_USED_TOKEN,
       useValue: [
         { key: 'SENTRY_DSN', optional: true, dehydrate: true },
@@ -121,15 +136,15 @@ const composeOptions = (multiOptions, defaultOptions?) =>
         { key: 'SENTRY_RELEASE', optional: true, dehydrate: true },
       ],
       multi: true,
-    },
-    {
+    }),
+    provide({
       provide: SENTRY_DSN_TOKEN,
       useFactory: ({ envManager }: { envManager: typeof ENV_MANAGER_TOKEN }) =>
         envManager.get('SENTRY_DSN'),
       deps: {
         envManager: ENV_MANAGER_TOKEN,
       },
-    },
+    }),
   ],
 })
 export class SentryModule {

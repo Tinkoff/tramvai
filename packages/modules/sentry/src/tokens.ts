@@ -19,3 +19,7 @@ export type ErrorsFilter = (event: Event, hint?: EventHint) => boolean;
 export const SENTRY_FILTER_ERRORS = createToken<ErrorsFilter>('SENTRY_FILTER_ERRORS', {
   multi: true,
 });
+
+export const SENTRY_SERVER_ENABLE_DEFAULT_HANDLERS = createToken<boolean>(
+  'SENTRY_SERVER_ENABLE_DEFAULT_HANDLERS'
+);

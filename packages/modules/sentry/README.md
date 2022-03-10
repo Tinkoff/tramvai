@@ -61,6 +61,12 @@ Module uses [lazy loaded approach](https://docs.sentry.io/platforms/javascript/i
 
 #### Node
 
+:::warning
+
+By default, sentry handlers for the express app is disabled, to enable it see [SENTRY_SERVER_ENABLE_DEFAULT_HANDLERS](#sentry_server_enable_default_handlers)
+
+:::
+
 Uses `@sentry/node` and [Sentry express middleware](https://docs.sentry.io/platforms/node/express/)
 
 ## How to
@@ -153,3 +159,7 @@ Configuration options for the [request data parser](https://docs.sentry.io/platf
 ### `SENTRY_FILTER_ERRORS`
 
 Can be used to pass function to perform filtering on error objects before sending it to Sentry. Process is described in [Sentry docs](https://docs.sentry.io/platforms/javascript/configuration/filtering/). Function accepts arguments `event` and `hint` for method `beforeSend`.
+
+### `SENTRY_SERVER_ENABLE_DEFAULT_HANDLERS`
+
+Enables sentry default handlers for the express app.
