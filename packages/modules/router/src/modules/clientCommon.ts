@@ -24,7 +24,10 @@ export const providers: Provider[] = [
 
         // in client-side rendering mode, run navigation before hydration,
         // because currentRoute from initialState can be undefined or incorrect
-        if (renderMode === 'client') {
+        if (
+          renderMode === 'client' &&
+          (!currentRoute || (currentRoute && currentRoute.actualPath !== window.location.pathname))
+        ) {
           await router.navigate(window.location.href);
         }
 
@@ -66,8 +69,13 @@ export const providers: Provider[] = [
     provide: commandLineListTokens.clear,
     multi: true,
     useFactory: (deps) => {
+      const currentRoute = deps.store.getState(RouterStore).currentRoute as NavigationRoute;
+
       // in client-side rendering mode, action already was executed
-      if (deps.renderMode === 'client') {
+      if (
+        deps.renderMode === 'client' &&
+        (!currentRoute || (currentRoute && currentRoute.actualPath !== window.location.pathname))
+      ) {
         return;
       }
       return runActionsFactory(deps);
