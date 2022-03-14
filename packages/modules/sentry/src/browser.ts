@@ -87,7 +87,7 @@ const isUselessException = (exception: Exception) => {
     },
     {
       provide: SENTRY_LAZY_LOADING,
-      useValue: false,
+      useValue: true,
     },
   ],
 })

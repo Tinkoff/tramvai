@@ -1,3 +1,4 @@
+import noop from '@tinkoff/utils/function/noop';
 import type { NavigationRoute } from '@tinkoff/router';
 import type { Provider } from '@tramvai/core';
 import { commandLineListTokens, provide } from '@tramvai/core';
@@ -18,18 +19,9 @@ export const providers: Provider[] = [
   provide({
     provide: commandLineListTokens.customerStart,
     multi: true,
-    useFactory: ({ router, store, renderMode }) => {
+    useFactory: ({ router, store }) => {
       return async function routerInit() {
         const currentRoute = store.getState(RouterStore).currentRoute as NavigationRoute;
-
-        // in client-side rendering mode, run navigation before hydration,
-        // because currentRoute from initialState can be undefined or incorrect
-        if (
-          renderMode === 'client' &&
-          (!currentRoute || (currentRoute && currentRoute.actualPath !== window.location.pathname))
-        ) {
-          await router.navigate(window.location.href);
-        }
 
         return router.rehydrate({
           to: currentRoute,
@@ -39,7 +31,6 @@ export const providers: Provider[] = [
     deps: {
       router: ROUTER_TOKEN,
       store: STORE_TOKEN,
-      renderMode: TRAMVAI_RENDER_MODE,
     },
   }),
   provide({
@@ -71,14 +62,39 @@ export const providers: Provider[] = [
     useFactory: (deps) => {
       const currentRoute = deps.store.getState(RouterStore).currentRoute as NavigationRoute;
 
-      // in client-side rendering mode, action already was executed
+      // in client-side rendering mode, action will be executed on first navigation
       if (
         deps.renderMode === 'client' &&
         (!currentRoute || (currentRoute && currentRoute.actualPath !== window.location.pathname))
       ) {
-        return;
+        return noop;
       }
       return runActionsFactory(deps);
+    },
+    deps: {
+      store: STORE_TOKEN,
+      router: ROUTER_TOKEN,
+      actionRegistry: ACTION_REGISTRY_TOKEN,
+      actionPageRunner: ACTION_PAGE_RUNNER_TOKEN,
+      renderMode: TRAMVAI_RENDER_MODE,
+    },
+  }),
+  provide({
+    provide: commandLineListTokens.clear,
+    multi: true,
+    useFactory: (deps) => {
+      return async function csrFirstNavigation() {
+        const currentRoute = deps.store.getState(RouterStore).currentRoute as NavigationRoute;
+
+        // in client-side rendering mode, if current route inconsistent with current location,
+        // run navigation to current location.
+        if (
+          deps.renderMode === 'client' &&
+          (!currentRoute || (currentRoute && currentRoute.actualPath !== window.location.pathname))
+        ) {
+          return deps.router.navigate(window.location.href);
+        }
+      };
     },
     deps: {
       store: STORE_TOKEN,

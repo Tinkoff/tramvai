@@ -57,7 +57,7 @@ By default Sentry is enabled only on production and if `DSN` was provided.
 
 #### Browser
 
-Module uses [lazy loaded approach](https://docs.sentry.io/platforms/javascript/install/lazy-load-sentry/). This way Sentry SDK is added dynamically and only if needed, e.g. `@sentry/browser` is not bundled to the app
+Module uses [lazy loaded approach](https://docs.sentry.io/platforms/javascript/install/lazy-load-sentry/). This way Sentry SDK is added dynamically and only if needed, e.g. `@sentry/browser` is not bundled to the app and it is loaded lazily when requested by the app.
 
 #### Node
 
@@ -163,3 +163,7 @@ Can be used to pass function to perform filtering on error objects before sendin
 ### `SENTRY_SERVER_ENABLE_DEFAULT_HANDLERS`
 
 Enables sentry default handlers for the express app.
+
+### `SENTRY_LAZY_LOADING`
+
+Enables lazy loading for the sentry bundle in browser.
