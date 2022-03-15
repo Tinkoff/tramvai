@@ -12,22 +12,23 @@ export * from './utils';
 
 export interface StartCliOptions extends Omit<StartOptions, 'config' | 'target'> {
   enableRebuild?: boolean;
+  logger?: Pick<typeof console, 'log' | 'error'>;
 }
 
 export const startCli = async (
   targetOrConfig: StartOptions['target'] | StartOptions['config'],
-  { enableRebuild = false, env, ...cliOptions }: StartCliOptions = {}
+  { enableRebuild = false, env, logger = console, ...cliOptions }: StartCliOptions = {}
 ) => {
   const stdout = new Writable({
     write(chunk, encoding, callback) {
-      console.log(`[@tramvai/cli] log:`, chunk.toString());
+      logger.log(`[@tramvai/cli] log:`, chunk.toString());
 
       callback();
     },
   });
   const stderr = new Writable({
     write(chunk, encoding, callback) {
-      console.error(`[@tramvai/cli] error:`, chunk.toString());
+      logger.error(`[@tramvai/cli] error:`, chunk.toString());
 
       callback();
     },
@@ -59,7 +60,7 @@ export const startCli = async (
       resources: [`${serverUrl}/readyz`],
     });
   } catch (e) {
-    console.error('[@tramvai/cli] /readyz wait failed:', e);
+    logger.error('[@tramvai/cli] /readyz wait failed:', e);
     throw e;
   }
 
