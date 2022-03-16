@@ -1,30 +1,20 @@
-import { createApp, Scope } from '@tramvai/core';
+import { createApp } from '@tramvai/core';
 import { CommonModule } from '@tramvai/module-common';
 import { SpaRouterModule } from '@tramvai/module-router';
 import { RenderModule } from '@tramvai/module-render';
-import { PROXY_CONFIG_TOKEN, ServerModule } from '@tramvai/module-server';
+import { ServerModule } from '@tramvai/module-server';
 import { LogModule } from '@tramvai/module-log';
+import { ServerResponseCacheModule } from '@tramvai/module-server-response-cache';
 import { bundles } from '../../../../test/shared/common';
 
 createApp({
-  providers: [
-    {
-      provide: PROXY_CONFIG_TOKEN,
-      scope: Scope.SINGLETON,
-      useValue: {
-        context: '/from/',
-        target: `http://localhost:${process.env.EXTERNAL_WEBSITE_PORT}/to/`,
-      },
-      multi: true,
-    },
-  ],
-  name: 'server',
+  name: 'server-response-cache',
   modules: [
     CommonModule,
     SpaRouterModule.forRoot([
       {
         name: 'root',
-        path: '/from/',
+        path: '/',
         config: {
           bundle: 'root',
           pageComponent: 'page',
@@ -33,7 +23,7 @@ createApp({
       },
       {
         name: 'test',
-        path: '/to/',
+        path: '/test/',
         config: {
           bundle: 'test',
           pageComponent: 'page',
@@ -44,6 +34,7 @@ createApp({
     RenderModule,
     ServerModule,
     LogModule,
+    ServerResponseCacheModule,
   ],
   bundles,
 });

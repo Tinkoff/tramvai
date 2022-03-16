@@ -1,4 +1,4 @@
-# [Tramvai](https://tramvai.dev/)
+# [<img src="tools/docSite/static/img/logo/tramvai-yellow-full.svg" alt="taiga ui logo" height="32px">](https://tramvai.dev/)
 
 Modular framework for universal React applications
 

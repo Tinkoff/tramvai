@@ -1,6 +1,7 @@
 import { NotFoundError } from './notFound';
 import { RedirectFoundError } from './redirect';
 import { HttpError } from './httpError';
+import { SilentError } from './silentError';
 
 export const throwNotFoundError = (parameters?: ConstructorParameters<typeof NotFoundError>[0]) => {
   throw new NotFoundError(parameters);
@@ -28,4 +29,8 @@ export const isHttpError = (err: Error): err is HttpError => {
   return err.name === HttpError.errorName || isNotFoundError(err) || isRedirectFoundError(err);
 };
 
-export { NotFoundError, RedirectFoundError, HttpError };
+export const isSilentError = (err: Error): err is SilentError => {
+  return !!(err as any).isSilent;
+};
+
+export { NotFoundError, RedirectFoundError, HttpError, SilentError };

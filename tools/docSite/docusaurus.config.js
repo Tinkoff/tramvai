@@ -85,9 +85,9 @@ const docusaurusConfig = {
       darkTheme: require('prism-react-renderer/themes/vsDark'),
     },
     navbar: {
-      title: 'tramvai',
       logo: {
-        src: 'img/logo-tinkoff.svg',
+        src: 'img/logo/tramvai-mono-full.svg',
+        srcDark: 'img/logo/tramvai-yellow-full.svg',
       },
       items: [
         { to: 'docs/get-started/overview', label: 'Docs', position: 'right' },

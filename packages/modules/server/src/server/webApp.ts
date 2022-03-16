@@ -84,16 +84,24 @@ export const webAppInitCommand = ({
         ]);
         const responseManager = di.get(RESPONSE_MANAGER_TOKEN);
 
-        res
-          .set('content-type', 'text/html')
-          .set(responseManager.getHeaders())
-          .status(responseManager.getStatus())
-          .send(responseManager.getBody());
+        if (res.writableEnded) {
+          log.debug({
+            event: 'response-ended',
+            message: 'Response was already ended.',
+            url: req.url,
+          });
+        } else {
+          res
+            .set('content-type', 'text/html')
+            .set(responseManager.getHeaders())
+            .status(responseManager.getStatus())
+            .send(responseManager.getBody());
+        }
       } catch (err) {
         if (err.di) {
           const responseManager: typeof RESPONSE_MANAGER_TOKEN = err.di.get(RESPONSE_MANAGER_TOKEN);
 
-          if (responseManager) {
+          if (responseManager && !res.writableEnded) {
             res.set(responseManager.getHeaders());
           }
         }

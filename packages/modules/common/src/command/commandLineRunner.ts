@@ -1,5 +1,5 @@
 import noop from '@tinkoff/utils/function/noop';
-import { isHttpError } from '@tinkoff/errors';
+import { isSilentError } from '@tinkoff/errors';
 import type { CommandLineDescription, CommandLine, CommandLines, Command } from '@tramvai/core';
 import type { METRICS_MODULE_TOKEN } from '@tramvai/tokens-metrics';
 import type { Container, Provider } from '@tinkoff/dippy';
@@ -152,7 +152,7 @@ export class CommandLineRunner implements CommandLine {
     return Promise.resolve()
       .then(() => instance())
       .catch((err) => {
-        this.log[isHttpError(err) ? 'debug' : 'error']({
+        this.log[isSilentError(err) ? 'debug' : 'error']({
           event: 'line-error',
           error: err,
           line: line.toString(),

@@ -1,0 +1,36 @@
+{
+    "extends": "../../../tsconfig.lib.json",
+    "include": [
+        "./src"
+    ],
+    "compilerOptions": {
+        "outDir": "./lib",
+        "declarationDir": "./lib",
+        "rootDir": "./src",
+        "types": [
+            "node",
+            "jest",
+            "webpack-env"
+        ]
+    },
+    "references": [
+        {
+            "path": "../../tramvai/core"
+        },
+        {
+            "path": "../../libs/dippy"
+        },
+        {
+            "path": "../../tokens/common"
+        },
+        {
+            "path": "../../tokens/server"
+        },
+        {
+            "path": "../../libs/errors"
+        },
+        {
+            "path": "../client-hints"
+        }
+    ]
+}
