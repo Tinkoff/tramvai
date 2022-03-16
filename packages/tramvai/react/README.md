@@ -107,7 +107,7 @@ To dynamically import components with SSR support, there is a high order `lazy` 
 import { lazy } from '@tramvai/react';
 
 const LazyComponent = lazy(() => import('./components/foo'), {
-  loading: <div>Загрузка...</div>,
+  loading: <div>Loading...</div>,
 });
 
 <LazyComponent />;
