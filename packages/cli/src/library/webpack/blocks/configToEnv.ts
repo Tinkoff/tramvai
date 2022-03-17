@@ -1,6 +1,7 @@
 import type Config from 'webpack-chain';
 import type { ConfigManager } from '../../../config/configManager';
 import type { ApplicationConfigEntry } from '../../../typings/configEntry/application';
+import { shouldUseReactRoot } from '../../../utils/shouldUseReactRoot';
 
 export const configToEnv = (configManager: ConfigManager<ApplicationConfigEntry>) => (
   config: Config
@@ -18,6 +19,9 @@ export const configToEnv = (configManager: ConfigManager<ApplicationConfigEntry>
       ),
       'process.env.__TRAMVAI_EXPERIMENTAL_FILE_SYSTEM_PAGES_DIR': JSON.stringify(
         fileSystemPages.pagesDir
+      ),
+      'process.env.__TRAMVAI_CONCURRENT_FEATURES': JSON.stringify(
+        shouldUseReactRoot(configManager)
       ),
     },
   ]);
