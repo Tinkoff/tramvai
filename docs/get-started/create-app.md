@@ -14,33 +14,23 @@ For quick development, we will use the console utility **`@tramvai/cli`**
 
 [NodeJS version 10+](https://nodejs.org/en/download) is required for tramvai and @tramvai/cli to work
 
-### Install tramvai CLI
-
-We will use the tramvai CLI to generate a new project and run in development mode
-
-```bash
-npm i @tramvai/cli -g
-```
-
-After that, the command will be available in the terminal `tramvai`
-
 ### Generate application
 
 Now we need to generate the application with `tramvai`
 
-```bash
-tramvai new new-app
+```sh
+npm init @tramvai new-app # or npx @tramvai/create new-app
+# or for yarn
+yarn create @tramvai new-app
 ```
 
-After starting, you need to select settings - project template, CI settings and package manager.
-For a quick start, the default settings are fine.
+After starting, you need to select settings - project template, CI settings and package manager. For a quick start, the default settings are fine.
 
 Then the command will generate a starter project with basic modules in the new-app directory
 
 ### Run application
 
-Now we need to run our project in development mode, for easy development and to check that our project is working.
-To do this, execute the command
+Now we need to run our project in development mode, for easy development and to check that our project is working. To do this, execute the command
 
 ```bash
 cd new-app && npm start
@@ -50,8 +40,7 @@ This command will start a server in dev mode that will monitor the server and cl
 
 ### Project structure and application initialization process
 
-The entry point of the project is `src/index.ts`, which creates an instance of the tramvai application and connects the necessary modules.
-The project has already connected basic modules that implement the following functionality:
+The entry point of the project is `src/index.ts`, which creates an instance of the tramvai application and connects the necessary modules. The project has already connected basic modules that implement the following functionality:
 
 - Getting routes (from the admin panel or static routes)
 - Rendering the application on the server and client

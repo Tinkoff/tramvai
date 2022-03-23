@@ -3,6 +3,7 @@
 Modular framework for universal React applications
 
 ---
+
 ## Features
 
 - ✈️ **Universal**
@@ -43,22 +44,19 @@ Modular framework for universal React applications
 
 ## Get started
 
-1. Install CLI
-
-    ```bash
-    npm i @tramvai/cli -g
-    ```
-
 1. Generate new application
-    ```bash
-    tramvai new my-awesome-app
-    ```
 
-1. Run development server
-    ```bash
-    cd my-awesome-app && npm start
-    ```
-    application will be available at `http://localhost:3000/`
+   ```sh
+   npm init @tramvai my-awesome-app # or npx @tramvai/create my-awesome-app
+   # or for yarn
+   yarn create @tramvai my-awesome-app
+   ```
+
+2. Run development server
+   ```bash
+   cd my-awesome-app && npm start
+   ```
+   application will be available at `http://localhost:3000/`
 
 ## Tutorials
 

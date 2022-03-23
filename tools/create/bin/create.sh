@@ -1,0 +1,1 @@
+tramvai new "$@"

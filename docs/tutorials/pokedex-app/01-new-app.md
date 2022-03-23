@@ -15,22 +15,15 @@ And we will create a real `Pokedex`!
 
 For development, build and code generation there is a special CLI [@tramvai/cli](references/cli/base.md)
 
-:hourglass: Install `@tramvai/cli` globally:
-
-```bash npm2yarn
-npm install @tramvai/cli -g
-```
-
-After installation, the `tramvai` command will be available in the terminal, you can check the functionality and display a list of basic commands with the command `tramvai --help`.
-
 :hourglass: Generate a template for the new application, name it `pokedex`:
 
 ```bash
-tramvai new pokedex
+npm init @tramvai pokedex # or npx @tramvai/create pokedex
+# or for yarn
+yarn create @tramvai pokedex
 ```
 
-During the execution of the command you will need to select a base template, a package manager and a test framework.
-The command will create a new `pokedex` directory, and generate an application skeleton in it, then install the dependencies.
+During the execution of the command you will need to select a base template, a package manager and a test framework. The command will create a new `pokedex` directory, and generate an application skeleton in it, then install the dependencies.
 
 :hourglass: Go to the application folder, and run application in `development` mode:
 
@@ -42,8 +35,7 @@ The `npm start` under the hood will execute the `tramvai start pokedex` command,
 
 :::note
 
-Most `tramvai` commands run [automatic migrations](features/migration.md) and tramvai libraries version checking in the application, so do not be scared of unexpected logs after running `npm start`.
-Of course, migrations and version checks are not necessary for a freshly created application, but these actions may be useful for future upgrades.
+Most `tramvai` commands run [automatic migrations](features/migration.md) and tramvai libraries version checking in the application, so do not be scared of unexpected logs after running `npm start`. Of course, migrations and version checks are not necessary for a freshly created application, but these actions may be useful for future upgrades.
 
 :::
 
