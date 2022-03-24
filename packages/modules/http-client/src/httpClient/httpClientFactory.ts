@@ -15,6 +15,7 @@ import type {
   HttpClientFactoryOptions,
   HTTP_CLIENT_AGENT,
   HTTP_CLIENT_FACTORY,
+  DISABLE_CIRCUIT_BREAKER,
 } from '@tramvai/tokens-http-client';
 import type {
   LOGGER_TOKEN,
@@ -44,6 +45,7 @@ export const httpClientFactory = ({
   createCache,
   tinkoffRequestRegistry,
   agent,
+  disableCircuitBreaker = false,
 }: {
   logger: typeof LOGGER_TOKEN;
   envManager: typeof ENV_MANAGER_TOKEN;
@@ -53,6 +55,7 @@ export const httpClientFactory = ({
   createCache?: typeof CREATE_CACHE_TOKEN;
   tinkoffRequestRegistry: Map<string, MakeRequest>;
   agent?: typeof HTTP_CLIENT_AGENT;
+  disableCircuitBreaker: typeof DISABLE_CIRCUIT_BREAKER;
 }): typeof HTTP_CLIENT_FACTORY => {
   return (options: HttpClientFactoryOptions): HttpClient => {
     if (!options.name) {
@@ -98,6 +101,12 @@ export const httpClientFactory = ({
     if (!isNil(forceDisableCache)) {
       adapterOptions.disableCache = !!forceDisableCache;
     }
+
+    if (disableCircuitBreaker) {
+      adapterOptions.enableCircuitBreaker = false;
+    }
+
+    // environment variable in priority over disableCircuitBreaker
     if (!isNil(forceDisabledCircuitBreaker)) {
       adapterOptions.enableCircuitBreaker = !forceDisabledCircuitBreaker;
     }

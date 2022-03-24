@@ -42,3 +42,9 @@ export const API_CLIENT_PASS_HEADERS = createToken<string[]>('apiClientPassHeade
  * Uses the value of `APP_INFO_TOKEN` from di for constructing the request address
  */
 export const PAPI_SERVICE = createToken<ApiService>('papi service');
+
+/**
+ * @description
+ * Enable or disable circuit breaker
+ */
+export const DISABLE_CIRCUIT_BREAKER = createToken<boolean>('disable circuit breaker');
