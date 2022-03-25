@@ -72,12 +72,15 @@ export const RESOURCES_REGISTRY = createToken<ResourcesRegistry>('resourcesRegis
 export const POLYFILL_CONDITION = createToken<string>('POLYFILL_CONDITION');
 
 /**
- * @description
- * Allows to specify different modes for React Render - `strict`, `blocking`, `concurrent`, by default value `legacy` is used
- *
- * [More details in doc for module-render](https://tramvai.dev/docs/references/modules/render)
+ * @deprecated tramvai will automatically detect React version, and use hydrateRoot API for 18+ version
+ * For Strict Mode, use token `USE_REACT_STRICT_MODE`
  */
 export const RENDER_MODE = createToken<RenderMode>('RENDER_MODE');
+
+/**
+ * @description add Strict Mode wrapper, more info available in documentation https://reactjs.org/docs/strict-mode.html
+ */
+export const USE_REACT_STRICT_MODE = createToken<boolean>('useReactStrictMode');
 
 /**
  * @description
@@ -141,6 +144,9 @@ export type HtmlAttrs = {
   attrs: { [name: string]: string | boolean | Record<string, any> | number };
 };
 
+/**
+ * @deprecated
+ */
 export type RenderMode = 'legacy' | 'strict' | 'blocking' | 'concurrent';
 
 type ResourceInlineOptions = {

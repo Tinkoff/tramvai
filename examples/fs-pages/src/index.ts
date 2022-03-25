@@ -53,7 +53,7 @@ createApp({
         },
       },
     ]),
-    RenderModule.forRoot({ mode: 'strict' }),
+    RenderModule.forRoot({ useStrictMode: true }),
     SeoModule,
     ServerModule,
     ErrorInterceptorModule,

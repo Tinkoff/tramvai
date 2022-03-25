@@ -1,6 +1,7 @@
 import { testApp } from '@tramvai/internal-test-utils/testApp';
 import { testAppInBrowser } from '@tramvai/internal-test-utils/browser';
 import { startExternalWebsite } from '@tramvai/internal-test-utils/utils/externalWebsite';
+import { sleep } from '@tramvai/test-integration';
 import {
   getUrlPath,
   getPageTitle,
@@ -220,6 +221,9 @@ describe('router/spa', () => {
 
     it('should redirect while running commandline', async () => {
       const { page } = await getPageWrapper('/redirect/commandline/');
+
+      // waiting for hydration
+      await sleep(100);
 
       expect(page.url()).toBe(`${getApp().serverUrl}/after/commandline/redirect/`);
     });

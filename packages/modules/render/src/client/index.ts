@@ -1,10 +1,13 @@
 import each from '@tinkoff/utils/array/each';
-import type { EXTEND_RENDER, RenderMode, RENDERER_CALLBACK } from '@tramvai/tokens-render';
+import { createElement, StrictMode } from 'react';
+import type {
+  EXTEND_RENDER,
+  RENDERER_CALLBACK,
+  USE_REACT_STRICT_MODE,
+} from '@tramvai/tokens-render';
 import type { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
 import { renderReact } from '../react';
-import { legacyRenderer } from './legacy';
-import { strictRenderer } from './strict';
-import { blockingRenderer, concurrentRenderer } from './concurrent';
+import { renderer } from './renderer';
 
 export function rendering({
   pageService,
@@ -13,7 +16,7 @@ export function rendering({
   customRender,
   extendRender,
   di,
-  mode,
+  useStrictMode,
   rendererCallback,
 }: {
   pageService: typeof PAGE_SERVICE_TOKEN;
@@ -22,52 +25,49 @@ export function rendering({
   extendRender?: typeof EXTEND_RENDER;
   customRender?: any;
   di: any;
-  mode: RenderMode;
+  useStrictMode: typeof USE_REACT_STRICT_MODE;
   rendererCallback?: typeof RENDERER_CALLBACK;
 }) {
-  let renderResult = renderReact({ pageService, di }, consumerContext);
+  return new Promise<void>((resolve, reject) => {
+    let renderResult = renderReact({ pageService, di }, consumerContext);
 
-  if (extendRender) {
-    each((render) => {
-      renderResult = render(renderResult);
-    }, extendRender);
-  }
-
-  if (customRender) {
-    return customRender(renderResult);
-  }
-
-  const container = document.querySelector('.application');
-  const executeRendererCallbacks = (renderErr?: Error) =>
-    rendererCallback?.forEach((cb) => {
-      try {
-        cb(renderErr);
-      } catch (cbError) {
-        // eslint-disable-next-line no-console
-        console.error(cbError);
-      }
-    });
-  const callback = () => {
-    log.debug('App rendering');
-    document.querySelector('html').classList.remove('no-js');
-    executeRendererCallbacks();
-  };
-  const params = { element: renderResult, container, callback, log };
-
-  try {
-    switch (mode) {
-      case 'strict':
-        return strictRenderer(params);
-      case 'blocking':
-        return blockingRenderer(params);
-      case 'concurrent':
-        return concurrentRenderer(params);
-      case 'legacy':
-      default:
-        return legacyRenderer(params);
+    if (extendRender) {
+      each((render) => {
+        renderResult = render(renderResult);
+      }, extendRender);
     }
-  } catch (e) {
-    executeRendererCallbacks(e);
-    throw e;
-  }
+
+    if (customRender) {
+      return customRender(renderResult);
+    }
+
+    if (useStrictMode) {
+      renderResult = createElement(StrictMode, null, renderResult);
+    }
+
+    const container = document.querySelector('.application');
+    const executeRendererCallbacks = (renderErr?: Error) =>
+      rendererCallback?.forEach((cb) => {
+        try {
+          cb(renderErr);
+        } catch (cbError) {
+          // eslint-disable-next-line no-console
+          console.error(cbError);
+        }
+      });
+    const callback = () => {
+      log.debug('App rendering');
+      document.querySelector('html').classList.remove('no-js');
+      executeRendererCallbacks();
+      resolve();
+    };
+    const params = { element: renderResult, container, callback, log };
+
+    try {
+      renderer(params);
+    } catch (e) {
+      executeRendererCallbacks(e);
+      reject(e);
+    }
+  });
 }

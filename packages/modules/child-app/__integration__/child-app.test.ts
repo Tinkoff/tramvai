@@ -143,7 +143,7 @@ describe('child-app', () => {
 
       await button?.click();
 
-      await sleep(10);
+      await sleep(100);
 
       expect(
         await childCmp?.evaluate((node) => (node as HTMLElement).innerText)

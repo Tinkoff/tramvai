@@ -37,8 +37,8 @@
     "@tramvai/module-server": "0.0.0-stub",
     "@tramvai/tokens-render": "0.0.0-stub",
     "@tramvai/tokens-router": "0.0.0-stub",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
+    "react": "18.0.0-rc.2",
+    "react-dom": "18.0.0-rc.2",
     "tslib": "^2.0.3"
   }
 }

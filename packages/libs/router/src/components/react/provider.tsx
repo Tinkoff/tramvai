@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { useIsomorphicLayoutEffect } from '@tinkoff/react-hooks';
 import type { Url } from '@tinkoff/url';
 import { RouterContext, RouteContext, UrlContext } from './context';
 import type { AbstractRouter } from '../../router/abstract';
@@ -13,7 +14,7 @@ export const Provider: React.FunctionComponent<{ router: AbstractRouter }> = ({
     url: router.getCurrentUrl(),
   });
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     return router.registerSyncHook('change', ({ to, url }) => {
       setState({ route: to, url });
     });

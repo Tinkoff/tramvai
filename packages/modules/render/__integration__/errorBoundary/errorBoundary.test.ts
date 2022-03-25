@@ -1,6 +1,7 @@
 import type { Page } from 'puppeteer';
 import { testApp } from '@tramvai/internal-test-utils/testApp';
 import { testAppInBrowser } from '@tramvai/internal-test-utils/browser';
+import { sleep } from '@tramvai/test-integration';
 
 describe('errorBoundary', () => {
   const { getApp } = testApp({
@@ -103,6 +104,8 @@ describe('errorBoundary', () => {
     it('SSR hydrate', async () => {
       const { page } = await getPageWrapper('/legacy-error-boundary/');
 
+      await sleep(100);
+
       const pageContent = await getPageContentTitle(page);
 
       expect(pageContent).toBe('Legacy Error Boundary');
@@ -199,7 +202,7 @@ describe('errorBoundary', () => {
       expect(statusCode).toBe(503);
       expect(headers).toMatchObject({
         'cache-control': 'no-cache, no-store, must-revalidate',
-        'content-length': '170',
+        'content-length': '152',
         'content-type': 'text/html; charset=utf-8',
       });
     });
@@ -211,7 +214,7 @@ describe('errorBoundary', () => {
       const documentContent = parsed.outerHTML;
 
       expect(documentContent).toMatchInlineSnapshot(
-        `"<html lang=\\"ru\\" data-reactroot=\\"\\"><head><title>Error Global Error at /global-error/</title></head><body><h1>Root Error Boundary</h1></body></html>"`
+        `"<html lang=\\"ru\\"><head><title>Error Global Error at /global-error/</title></head><body><h1>Root Error Boundary</h1></body></html>"`
       );
     });
 
@@ -223,7 +226,7 @@ describe('errorBoundary', () => {
       });
 
       expect(documentContent).toMatchInlineSnapshot(
-        `"<html lang=\\"ru\\" data-reactroot=\\"\\"><head><title>Error &lt;!-- --&gt;Global Error&lt;!-- --&gt; at &lt;!-- --&gt;/global-error/</title></head><body><h1>Root Error Boundary</h1></body></html>"`
+        `"<html lang=\\"ru\\"><head><title>Error &lt;!-- --&gt;Global Error&lt;!-- --&gt; at &lt;!-- --&gt;/global-error/</title></head><body><h1>Root Error Boundary</h1></body></html>"`
       );
     });
   });

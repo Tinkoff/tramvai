@@ -6,6 +6,7 @@ import {
   RESOURCES_REGISTRY,
   RENDER_MODE,
   RENDERER_CALLBACK,
+  USE_REACT_STRICT_MODE,
 } from '@tramvai/tokens-render';
 import { PAGE_SERVICE_TOKEN, ROUTER_TOKEN } from '@tramvai/tokens-router';
 import { rendering as renderInBrowser } from './client';
@@ -64,8 +65,7 @@ const throwErrorInDev = (logger: typeof LOGGER_TOKEN) => {
       useFactory: (deps) => {
         return function renderClientCommand() {
           (window as any).contextExternal = deps.consumerContext;
-
-          return Promise.resolve(renderInBrowser(deps as any));
+          return renderInBrowser(deps);
         };
       },
       deps: {
@@ -76,9 +76,21 @@ const throwErrorInDev = (logger: typeof LOGGER_TOKEN) => {
         rendererCallback: { token: RENDERER_CALLBACK, optional: true },
         consumerContext: CONTEXT_TOKEN,
         di: DI_TOKEN,
-        mode: RENDER_MODE,
+        useStrictMode: USE_REACT_STRICT_MODE,
       },
       multi: true,
+    }),
+    provide({
+      provide: USE_REACT_STRICT_MODE,
+      useFactory: ({ deprecatedMode }) => {
+        if (deprecatedMode === 'strict') {
+          return true;
+        }
+        return false;
+      },
+      deps: {
+        deprecatedMode: RENDER_MODE,
+      },
     }),
     provide({
       provide: RENDER_MODE,
@@ -87,13 +99,13 @@ const throwErrorInDev = (logger: typeof LOGGER_TOKEN) => {
   ],
 })
 export class RenderModule {
-  static forRoot({ mode }: RenderModuleConfig) {
+  static forRoot({ mode, useStrictMode }: RenderModuleConfig) {
     const providers = [];
 
-    if (typeof mode === 'string') {
+    if (typeof mode === 'string' || typeof useStrictMode === 'boolean') {
       providers.push({
-        provide: RENDER_MODE,
-        useValue: mode,
+        provide: USE_REACT_STRICT_MODE,
+        useValue: useStrictMode ?? mode === 'strict',
       });
     }
 

@@ -25,3 +25,7 @@ export function Cmp({ obj }) {
   }, [objRef]);
 }
 ```
+
+### useIsomorphicLayoutEffect
+
+Use `useLayoutEffect` in universal code without React warnings

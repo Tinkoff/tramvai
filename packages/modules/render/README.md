@@ -32,19 +32,15 @@ createApp({
 
 ## Explanation
 
-### Different React rendering modes
+### React Strict Mode
 
-More information about rendering modes can be found in the [official documentation](https://reactjs.org/docs/concurrent-mode-adoption.html), `RenderModule` has support for all rendering types and you can choose the right one for your application.
+More information about Strict Mode can be found in the [official documentation](https://reactjs.org/docs/strict-mode.html).
 
-To set the mode, you must pass the `mode` parameter when initializing the `RenderModule`.
+To set the mode, you must pass the `useStrictMode` parameter when initializing the `RenderModule`.
 
 ```typescript
-RenderModule.forRoot({ mode: 'concurrent' });
+RenderModule.forRoot({ useStrictMode: true });
 ```
-
-Available modes: `'legacy' | 'strict' | 'blocking' | 'concurrent'`
-
-[Gradual concurrent mode adoption](#gradual-concurrent-mode-adoption)
 
 ### Application static assets
 
@@ -283,56 +279,20 @@ Example:
 </details>
 </p>
 
-### Gradual concurrent mode adoption
+### React 18 concurrent features
 
-React allows a gradual migration of an application
+`tramvai` will automatically detect React version, and use hydrateRoot API on the client for 18+ version.
 
-**Stages of migration:**
+Before switch to React 18, we recommended to activate [Strict Mode](https://reactjs.org/docs/strict-mode.html) in your application.
+In Strict Mode which React warns about using the legacy API.
 
-1. [Strict Mode](https://reactjs.org/docs/strict-mode.html) - strict mode, in which React warns about using the legacy API
-
-To connect, you must configure the `RenderModule`
-
-```js
-modules: [
-  RenderModule.forRoot({ mode: 'strict' })
-]
-```
-
-Then you need to fix any new warnings, such as using legacy lifecycle methods and string refs.
-
-2. [Blocking Mode](https://reactjs.org/docs/concurrent-mode-adoption.html#migration-step-blocking-mode) - adds some Concurrent Mode features, such as Suspense on the server. Suitable for gradual migration to Concurrent Mode.
-
-To connect, install an experimental version of React and configure the `RenderModule`
-
-```bash npm2yarn
-npm install react@experimental react-dom@experimental
-```
+To connect, you must configure the `RenderModule`:
 
 ```js
 modules: [
-  RenderModule.forRoot({ mode: 'blocking' })
+  RenderModule.forRoot({ useStrictMode: true })
 ]
 ```
-
-At this stage, you need to check the performance of the application, and you can try new APIs, for example [SuspenseList](https://reactjs.org/docs/concurrent-mode-patterns.html#suspenselist)
-
-3. Concurrent Mode
-
-To connect, install an experimental version of React and configure the `RenderModule`
-
-```bash npm2yarn
-npm install react@experimental react-dom@experimental
-```
-
-```js
-modules: [
-  RenderModule.forRoot({ mode: 'concurrent' })
-]
-```
-
-At this stage, you need to check the performance of the application, and you can try new APIs, for example [useTransition](https://reactjs.org/docs/concurrent-mode-patterns.html#transitions)
-
 ### Testing
 
 #### Testing render extensions via RENDER_SLOTS or RESOURCES_REGISTRY tokens

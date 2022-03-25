@@ -168,7 +168,7 @@
     "@types/webpack-dev-middleware": "^5.0.2",
     "@types/webpack-stats-plugin": "^0.3.2",
     "babel-plugin-tester": "^10.1.0",
-    "react": "^17.0.1"
+    "react": "18.0.0-rc.2"
   },
   "hiddenDependencies": {
     "@swc/core": "^1.2.124",

@@ -65,6 +65,9 @@
         },
         {
             "path": "../../tokens/server"
+        },
+        {
+            "path": "../../libs/react-hooks"
         }
     ]
 }
