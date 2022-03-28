@@ -6,8 +6,6 @@ export const safeRequire = (path: string, silent?: boolean) => {
       // TODO: replace with logger from di
       console.error(`Require for path ${path} failed`, error);
     }
-
-    return {};
   }
 };
 

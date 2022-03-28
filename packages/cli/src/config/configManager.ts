@@ -128,7 +128,7 @@ export class ConfigManager<T extends ConfigEntry = ConfigEntry, E extends Env = 
     this.version =
       settings.version ||
       (this.type === 'module' ? moduleVersion(configEntry) : '') ||
-      (this.type === 'child-app' ? packageVersion(this.env, this.rootDir) : '');
+      (this.type === 'child-app' ? packageVersion(configEntry, this.env, this.rootDir) : '');
     this.buildType = settings.buildType || 'client';
     this.debug = settings.debug || false;
     this.trace = settings.trace || false;
