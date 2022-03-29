@@ -1,6 +1,6 @@
 import noop from '@tinkoff/utils/function/noop';
 import { Module, provide, Scope } from '@tramvai/core';
-import { RENDER_SLOTS, ResourceType, ResourceSlot } from '@tramvai/module-render';
+import { RENDER_SLOTS, ResourceType, ResourceSlot } from '@tramvai/tokens-render';
 import { ENV_MANAGER_TOKEN, ENV_USED_TOKEN } from '@tramvai/module-common';
 import { WEB_APP_BEFORE_INIT_TOKEN, WEB_APP_AFTER_INIT_TOKEN } from '@tramvai/tokens-server';
 import { REGISTER_INSTANT_METRIC_TOKEN, METRICS_MODULE_TOKEN } from '@tramvai/tokens-metrics';

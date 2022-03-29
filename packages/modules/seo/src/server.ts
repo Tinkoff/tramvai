@@ -1,6 +1,6 @@
 import { Module } from '@tramvai/core';
 import { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
-import { RENDER_SLOTS, ResourceType, ResourceSlot } from '@tramvai/module-render';
+import { RENDER_SLOTS, ResourceType, ResourceSlot } from '@tramvai/tokens-render';
 import flatten from '@tinkoff/utils/array/flatten';
 import path from '@tinkoff/utils/object/path';
 import { Meta, Render } from '@tinkoff/meta-tags-generate';

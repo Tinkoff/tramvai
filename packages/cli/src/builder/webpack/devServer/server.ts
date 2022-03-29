@@ -173,6 +173,13 @@ export const serverRunner = ({
     // в случае ошибки ждём пока получим новый порт и делаем повторный запрос
     // рекурсивные ошибки будут опять попадать сюда и это будет продолжаться до тех пор пока не получим ответ
     proxy.on('error', async (err, req, res) => {
+      if (hasExitedUnexpectedly) {
+        // @ts-ignore
+        res.statusCode = 500;
+        res.end(EXITED_UNEXPECTEDLY);
+        return;
+      }
+
       await waitWorkerPort();
 
       proxy.web(req, res as any, { target: `http://localhost:${workerPort}` });
@@ -181,6 +188,7 @@ export const serverRunner = ({
     // задаём свой http-сервер который будет проксировать запросы к дочернему процессу
     server.on('request', async (req, res) => {
       if (hasExitedUnexpectedly) {
+        res.statusCode = 500;
         res.end(EXITED_UNEXPECTEDLY);
         return;
       }

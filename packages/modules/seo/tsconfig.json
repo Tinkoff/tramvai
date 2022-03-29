@@ -16,9 +16,6 @@
             "path": "../../libs/meta-tags-generate"
         },
         {
-            "path": "../render"
-        },
-        {
             "path": "../common"
         },
         {
@@ -32,6 +29,9 @@
         },
         {
             "path": "../../tramvai/test/helpers"
+        },
+        {
+            "path": "../../tokens/render"
         }
     ]
 }

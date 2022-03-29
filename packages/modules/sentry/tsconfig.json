@@ -16,9 +16,6 @@
             "path": "../common"
         },
         {
-            "path": "../render"
-        },
-        {
             "path": "../../libs/dippy"
         },
         {
@@ -29,6 +26,9 @@
         },
         {
             "path": "../../tokens/metrics"
+        },
+        {
+            "path": "../../tokens/render"
         }
     ]
 }

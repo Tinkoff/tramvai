@@ -1,11 +1,9 @@
 import type Config from 'webpack-chain';
 import type { ConfigManager } from '../../../config/configManager';
-import type { ApplicationConfigEntry } from '../../../typings/configEntry/application';
+import type { ConfigEntry } from '../../../typings/configEntry/common';
 import { shouldUseReactRoot } from '../../../utils/shouldUseReactRoot';
 
-export const configToEnv = (configManager: ConfigManager<ApplicationConfigEntry>) => (
-  config: Config
-) => {
+export const configToEnv = (configManager: ConfigManager<ConfigEntry>) => (config: Config) => {
   const { fileSystemPages } = configManager.build.configurations.experiments;
 
   config.plugin('define').tap((args) => [

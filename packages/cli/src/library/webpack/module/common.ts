@@ -12,6 +12,7 @@ import ts from '../blocks/ts';
 import js from '../blocks/js';
 import css from '../blocks/css';
 import nodeClient from '../blocks/nodeClient';
+import { configToEnv } from '../blocks/configToEnv';
 
 export default (configManager: ConfigManager<ModuleConfigEntry>) => (config: Config) => {
   const { name, version, root } = configManager;
@@ -29,6 +30,8 @@ export default (configManager: ConfigManager<ModuleConfigEntry>) => (config: Con
   config.batch(nodeClient(configManager));
 
   config.batch(common(configManager));
+
+  config.batch(configToEnv(configManager));
 
   config.plugin('limit-chunk').use(webpack.optimize.LimitChunkCountPlugin, [
     {
