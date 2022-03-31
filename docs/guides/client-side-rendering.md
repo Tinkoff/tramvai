@@ -12,6 +12,13 @@ It is very useful to reduce the load on the application server.
 
 ## Get started
 
+:::caution
+
+Before using a feature, make sure you use `SpaRouterModule`!
+With `NoSpaRouterModule` you will have a cyclic redirect.
+
+:::
+
 :hourglass: Install `@tramvai/module-page-render-mode` module:
 
 ```bash npm2yarn
