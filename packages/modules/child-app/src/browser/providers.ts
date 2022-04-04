@@ -18,6 +18,7 @@ import { LOGGER_TOKEN, STORE_TOKEN } from '@tramvai/tokens-common';
 import { BrowserLoader } from './loader';
 import { PreloadManager } from './preload';
 import { RenderManager } from './render';
+import { runCommand } from './runCommand';
 
 declare global {
   interface Window {
@@ -79,13 +80,37 @@ export const browserProviders: Provider[] = [
   provide({
     provide: commandLineListTokens.spaTransition,
     multi: true,
-    useFactory: ({ preloader }) => {
-      return function childAppRunPreloaded() {
-        return preloader.runPreloaded();
+    useFactory: ({ preloader, runner }) => {
+      return async function childAppRunPreloaded() {
+        await runCommand({
+          preloader,
+          runner,
+          status: 'spa',
+        });
       };
     },
     deps: {
       preloader: CHILD_APP_PRELOAD_MANAGER_TOKEN,
+      runner: CHILD_APP_COMMAND_LINE_RUNNER_TOKEN,
+    },
+  }),
+  provide({
+    provide: commandLineListTokens.afterSpaTransition,
+    multi: true,
+    useFactory: ({ preloader, runner }) => {
+      return async function childAppRunPreloaded() {
+        await runCommand({
+          preloader,
+          runner,
+          status: 'afterSpa',
+        });
+
+        await preloader.clearPreloaded();
+      };
+    },
+    deps: {
+      preloader: CHILD_APP_PRELOAD_MANAGER_TOKEN,
+      runner: CHILD_APP_COMMAND_LINE_RUNNER_TOKEN,
     },
   }),
 ];

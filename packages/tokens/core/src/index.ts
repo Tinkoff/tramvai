@@ -48,6 +48,7 @@ export const commandLineListTokens = {
 
   // Block: Client navigations
   spaTransition: createToken<Command>('spa_transition', multiOptions),
+  afterSpaTransition: createToken<Command>('after_spa_transition', multiOptions),
 
   // Block: Server stop
   close: createToken<Command>('close', multiOptions),

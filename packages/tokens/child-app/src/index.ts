@@ -37,6 +37,9 @@ export const commandLineListTokens = {
 
   // section: spa transitions
   spaTransition: createToken<Command>('child-app spa_transition', multiOptions),
+
+  // section: after spa transitions
+  afterSpaTransition: createToken<Command>('child-app after_spa_transition', multiOptions),
 };
 
 /**

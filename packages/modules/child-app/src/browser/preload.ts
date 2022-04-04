@@ -19,8 +19,8 @@ export class PreloadManager implements ChildAppPreloadManager {
 
   private pageHasRendered = false;
   private pageHasLoaded = false;
-  private map = new Map<string, Promise<ChildAppFinalConfig>>();
-  private serverPreloaded = new Map<string, ChildAppFinalConfig>();
+  private currentlyPreloaded = new Map<string, ChildAppFinalConfig>();
+  private hasPreloadBefore = new Set<string>();
   private hasInitialized = false;
 
   constructor({
@@ -54,20 +54,18 @@ export class PreloadManager implements ChildAppPreloadManager {
       // as it will lead to markup mismatch on markup hydration
       if (this.pageHasRendered) {
         // but in case render has happened load child-app as soon as possible
-        const promise = (async () => {
-          try {
-            await this.loader.load(config);
+        try {
+          await this.loader.load(config);
 
-            await this.run('customer', config);
-            await this.run('clear', config);
-          } catch (error) {}
-
-          return config;
-        })();
-
-        this.map.set(key, promise);
-        await promise;
+          await this.run('customer', config);
+          await this.run('clear', config);
+          this.hasPreloadBefore.add(key);
+        } catch (error) {}
       }
+    }
+
+    if (this.pageHasRendered) {
+      this.currentlyPreloaded.set(key, config);
     }
   }
 
@@ -75,32 +73,26 @@ export class PreloadManager implements ChildAppPreloadManager {
     const config = this.resolveExternalConfig(request);
     const { key } = config;
 
-    return this.map.has(key) || this.serverPreloaded.has(key);
+    return this.hasPreloadBefore.has(key);
   }
 
   async runPreloaded() {
     await this.init();
 
+    if (this.pageHasRendered) {
+      return;
+    }
+
     const promises: Promise<void>[] = [];
 
-    if (this.pageHasLoaded) {
-      this.map.forEach((childAppPromise) => {
-        promises.push(
-          (async () => {
-            await this.run('spa', await childAppPromise);
-          })()
-        );
-      });
-    } else {
-      this.serverPreloaded.forEach((config) => {
-        promises.push(
-          (async () => {
-            await this.loader.init(config);
-            await this.run('customer', config);
-          })()
-        );
-      });
-    }
+    this.currentlyPreloaded.forEach((config) => {
+      promises.push(
+        (async () => {
+          await this.loader.init(config);
+          await this.run('customer', config);
+        })()
+      );
+    });
 
     await Promise.all(promises);
   }
@@ -110,20 +102,26 @@ export class PreloadManager implements ChildAppPreloadManager {
   }
 
   async clearPreloaded(): Promise<void> {
+    if (this.pageHasLoaded) {
+      this.currentlyPreloaded.clear();
+      return;
+    }
+
     this.pageHasLoaded = true;
 
     const promises: Promise<void>[] = [];
-    this.serverPreloaded.forEach((config) => {
+
+    this.currentlyPreloaded.forEach((config) => {
       promises.push(this.run('clear', config));
     });
 
-    this.serverPreloaded.clear();
+    this.currentlyPreloaded.clear();
 
     await Promise.all(promises);
   }
 
-  getPreloadedList(): ChildAppRequestConfig[] {
-    return [...this.serverPreloaded.values()];
+  getPreloadedList(): ChildAppFinalConfig[] {
+    return Array.from(this.currentlyPreloaded.values());
   }
 
   private initServerPreloaded() {
@@ -132,7 +130,8 @@ export class PreloadManager implements ChildAppPreloadManager {
 
       preloaded.forEach((request) => {
         const config = this.resolveExternalConfig(request);
-        this.serverPreloaded.set(config.key, config);
+        this.currentlyPreloaded.set(config.key, config);
+        this.hasPreloadBefore.add(config.key);
       });
 
       this.hasInitialized = true;

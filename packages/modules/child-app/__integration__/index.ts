@@ -12,6 +12,8 @@ createApp({
   name: 'root-app',
   bundles: {
     base: () => import(/* webpackChunkName: "base" */ './bundles/base'),
+    'base-not-preloaded': () =>
+      import(/* webpackChunkName: "base-not-preloaded" */ './bundles/base-not-preloaded'),
     state: () => import(/* webpackChunkName: "state" */ './bundles/state'),
   },
   modules: [
@@ -31,6 +33,16 @@ createApp({
         {
           name: 'base',
           baseUrl: process.env.CHILD_APP_BASE,
+          byTag: {
+            latest: {
+              version: '0.0.0-stub',
+              withoutCss: true,
+            },
+          },
+        },
+        {
+          name: 'base-not-preloaded',
+          baseUrl: process.env.CHILD_APP_BASE_NOT_PRELOADED,
           byTag: {
             latest: {
               version: '0.0.0-stub',

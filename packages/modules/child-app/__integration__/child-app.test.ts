@@ -24,12 +24,13 @@ export const Cmp = () => {
 
 describe('child-app', () => {
   let childAppBase: PromiseType<ReturnType<typeof start>>;
+  let childAppBaseNotPreloaded: PromiseType<ReturnType<typeof start>>;
   let childAppState: PromiseType<ReturnType<typeof start>>;
 
   beforeAll(async () => {
     await outputFile(REFRESH_CMP_PATH, REFRESH_CMP_CONTENT_START);
 
-    [childAppBase, childAppState] = await Promise.all([
+    [childAppBase, childAppBaseNotPreloaded, childAppState] = await Promise.all([
       start({
         port: 0,
         config: {
@@ -43,6 +44,14 @@ describe('child-app', () => {
               },
             },
           },
+        },
+      }),
+      start({
+        port: 0,
+        config: {
+          type: 'child-app',
+          root: resolve(__dirname, 'child-app', 'base-not-preloaded'),
+          name: 'base-not-preloaded',
         },
       }),
       start({
@@ -67,6 +76,9 @@ describe('child-app', () => {
                 get 'process.env.CHILD_APP_BASE'() {
                   return `"${getStaticUrl(childAppBase)}/"`;
                 },
+                get 'process.env.CHILD_APP_BASE_NOT_PRELOADED'() {
+                  return `"${getStaticUrl(childAppBaseNotPreloaded)}/"`;
+                },
                 get 'process.env.CHILD_APP_STATE'() {
                   return `"${getStaticUrl(childAppState)}/"`;
                 },
@@ -80,7 +92,11 @@ describe('child-app', () => {
   const { getPageWrapper } = testAppInBrowser(getApp);
 
   afterAll(async () => {
-    await Promise.all([childAppBase.close(), childAppState.close()]);
+    await Promise.all([
+      childAppBase.close(),
+      childAppBaseNotPreloaded.close(),
+      childAppState.close(),
+    ]);
   });
 
   describe('base', () => {
@@ -92,7 +108,7 @@ describe('child-app', () => {
       const { application } = await render('/base/');
 
       expect(application).toMatchInlineSnapshot(
-        `"<div>Content from root</div><div>Children App: I&#x27;m little child app</div><div id=\\"cmp\\">Cmp test: start</div>"`
+        `"<div>Content from root</div><div>Child App: I&#x27;m little child app</div><div id=\\"cmp\\">Cmp test: start</div>"`
       );
     });
 
@@ -115,6 +131,26 @@ describe('child-app', () => {
       expect(
         await page.$eval('#cmp', (node) => (node as HTMLElement).innerText)
       ).toMatchInlineSnapshot(`"Cmp test: update"`);
+    });
+  });
+
+  describe('base-not-preloaded', () => {
+    it('should render child app only after page load', async () => {
+      const { request, render } = getApp();
+
+      await request('/base-not-preloaded/').expect(200);
+
+      const { application } = await render('/base-not-preloaded/');
+
+      expect(application).not.toContain('Child App');
+
+      const { page } = await getPageWrapper('/base-not-preloaded/');
+
+      await sleep(100);
+
+      expect(
+        await page.evaluate(() => document.querySelector('.application')?.innerHTML)
+      ).toContain('Child App');
     });
   });
 
@@ -148,6 +184,23 @@ describe('child-app', () => {
       expect(
         await childCmp?.evaluate((node) => (node as HTMLElement).innerText)
       ).toMatchInlineSnapshot(`"Current Value from Root Store: 2"`);
+    });
+
+    it('should execute action for every transition', async () => {
+      const { page, router } = await getPageWrapper('/state/');
+
+      const getActionCount = () =>
+        page.evaluate(() => window.TRAMVAI_TEST_CHILD_APP_ACTION_CALLED_TIMES);
+
+      expect(await getActionCount()).toBe(1);
+
+      await router.navigate('/base/');
+
+      expect(await getActionCount()).toBe(1);
+
+      await router.navigate('/state/');
+
+      expect(await getActionCount()).toBe(2);
     });
   });
 });

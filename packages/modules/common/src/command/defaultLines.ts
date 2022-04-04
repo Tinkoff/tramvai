@@ -15,6 +15,7 @@ const command = {
     commandLineListTokens.resolvePageDeps,
     commandLineListTokens.spaTransition,
   ],
+  afterSpa: [commandLineListTokens.afterSpaTransition],
 };
 
 export const lines = {

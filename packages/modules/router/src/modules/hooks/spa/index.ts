@@ -7,15 +7,24 @@ import {
   ACTION_PAGE_RUNNER_TOKEN,
   STORE_TOKEN,
 } from '@tramvai/tokens-common';
-import { beforeNavigateHooksToken } from '../../tokens';
-import { runCommands } from './runCommands';
+import { afterNavigateHooksToken, beforeNavigateHooksToken } from '../../tokens';
+import { runCommandsAfterSpa, runCommandsSpa } from './runCommands';
 import { runActionsFactory } from '../runActions';
 
 export const spaHooks: Provider[] = [
   {
     provide: beforeNavigateHooksToken,
     multi: true,
-    useFactory: runCommands,
+    useFactory: runCommandsSpa,
+    deps: {
+      di: DI_TOKEN,
+      commandLineRunner: COMMAND_LINE_RUNNER_TOKEN,
+    },
+  },
+  {
+    provide: afterNavigateHooksToken,
+    multi: true,
+    useFactory: runCommandsAfterSpa,
     deps: {
       di: DI_TOKEN,
       commandLineRunner: COMMAND_LINE_RUNNER_TOKEN,
@@ -43,16 +52,11 @@ export const spaHooks: Provider[] = [
     },
   },
   {
-    provide: commandLineListTokens.customerStart,
+    provide: commandLineListTokens.afterSpaTransition,
     multi: true,
     useFactory: ({ spaMode, ...deps }: any) => {
       if (spaMode === 'after') {
-        return function installRouterRunActions() {
-          (deps.router as typeof ROUTER_TOKEN).registerHook(
-            'afterNavigate',
-            runActionsFactory(deps)
-          );
-        };
+        return runActionsFactory(deps);
       }
 
       return noop;

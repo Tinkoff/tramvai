@@ -9,6 +9,13 @@ export const routes: typeof ROUTES_TOKEN[] = [
     },
   },
   {
+    name: 'base-not-preloaded',
+    path: '/base-not-preloaded',
+    config: {
+      bundle: 'base-not-preloaded',
+    },
+  },
+  {
     name: 'state',
     path: '/state',
     config: {

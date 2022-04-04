@@ -9,7 +9,7 @@ export const BaseCmp = ({ fromRoot }: { fromRoot: string }) => {
 
   return (
     <>
-      <div>Children App: {val}</div>
+      <div>Child App: {val}</div>
       <Cmp />
     </>
   );

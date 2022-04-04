@@ -66,7 +66,7 @@ export interface ChildAppPreloadManager {
   runPreloaded(): Promise<void>;
   pageRender(): void;
   clearPreloaded(): Promise<void>;
-  getPreloadedList(): ChildAppRequestConfig[];
+  getPreloadedList(): ChildAppFinalConfig[];
 }
 
 export interface ChildAppRenderManager {

@@ -82,25 +82,23 @@ export const providers: Provider[] = [
   provide({
     provide: commandLineListTokens.clear,
     multi: true,
-    useFactory: (deps) => {
+    useFactory: ({ store, router, renderMode }) => {
       return async function csrFirstNavigation() {
-        const currentRoute = deps.store.getState(RouterStore).currentRoute as NavigationRoute;
+        const currentRoute = store.getState(RouterStore).currentRoute as NavigationRoute;
 
         // in client-side rendering mode, if current route inconsistent with current location,
         // run navigation to current location.
         if (
-          deps.renderMode === 'client' &&
+          renderMode === 'client' &&
           (!currentRoute || (currentRoute && currentRoute.actualPath !== window.location.pathname))
         ) {
-          return deps.router.navigate(window.location.href);
+          return router.navigate(window.location.href);
         }
       };
     },
     deps: {
       store: STORE_TOKEN,
       router: ROUTER_TOKEN,
-      actionRegistry: ACTION_REGISTRY_TOKEN,
-      actionPageRunner: ACTION_PAGE_RUNNER_TOKEN,
       renderMode: TRAMVAI_RENDER_MODE,
     },
   }),

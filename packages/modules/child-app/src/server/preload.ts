@@ -104,8 +104,8 @@ export class PreloadManager implements ChildAppPreloadManager {
     await Promise.all(promises);
   }
 
-  getPreloadedList(): ChildAppRequestConfig[] {
-    return [...this.preloadMap.values()];
+  getPreloadedList(): ChildAppFinalConfig[] {
+    return Array.from(this.preloadMap.values());
   }
 
   private async run(status: string, config: ChildAppFinalConfig) {
