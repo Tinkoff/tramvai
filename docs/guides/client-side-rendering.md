@@ -37,6 +37,8 @@ createApp({
 });
 ```
 
+[@tramvai/module-page-render-mode documentation](references/modules/page-render-mode.md)
+
 After that, we need to provide default fallback.
 In this guide, it fill be empty white page.
 

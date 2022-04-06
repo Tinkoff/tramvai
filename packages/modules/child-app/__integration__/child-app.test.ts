@@ -146,7 +146,9 @@ describe('child-app', () => {
 
       const { page } = await getPageWrapper('/base-not-preloaded/');
 
-      await sleep(100);
+      await page.waitForSelector('#base-not-preloaded', {
+        visible: true,
+      });
 
       expect(
         await page.evaluate(() => document.querySelector('.application')?.innerHTML)

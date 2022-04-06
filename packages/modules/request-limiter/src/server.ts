@@ -20,7 +20,7 @@ export * from './tokens';
         if (featureEnable !== true) {
           return;
         }
-        return new RequestLimiter(options);
+        return new RequestLimiter(options ?? {});
       },
       deps: {
         options: { token: REQUESTS_LIMITER_OPTIONS_TOKEN, optional: true },

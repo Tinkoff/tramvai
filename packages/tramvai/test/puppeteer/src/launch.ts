@@ -23,7 +23,7 @@ const enableBrowserLogger = async ({
     });
   });
 
-  await page.goto(serverUrl);
+  await page.goto(serverUrl, { timeout: 0 });
 
   await page.evaluate(() => {
     localStorage.setItem(
@@ -69,6 +69,8 @@ export const initPuppeteer = async (
     browser,
     getPageWrapper: async (url?: string) => {
       const page = await browser.newPage();
+
+      await page.setDefaultNavigationTimeout(60000);
 
       const wrapper = wrapPuppeteerPage(page);
 

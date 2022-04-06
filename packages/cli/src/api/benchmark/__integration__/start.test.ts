@@ -29,6 +29,7 @@ describe('@tramvai/cli benchmark command', () => {
           port: 0,
           staticPort: 0,
         },
+        times: 2,
       });
 
       expect(result).toMatchObject({

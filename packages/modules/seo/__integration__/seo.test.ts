@@ -58,10 +58,9 @@ describe('seo', () => {
       const { page, router } = await getPageWrapper('/seo/dynamic/');
       expect(await page.title()).toBe('WoW, such dynamic!');
       await router.navigate('../common/');
-      await sleep(500);
       expect(await page.title()).toBe('common seo');
       await router.navigate('../dynamic/');
-      await sleep(500);
+      await sleep(1000);
       expect(await page.title()).toBe('WoW, such dynamic!');
     });
   });

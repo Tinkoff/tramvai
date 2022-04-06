@@ -190,7 +190,7 @@ describe('@tramvai/cli start command', () => {
       const { close } = startResult;
       const serverUrl = getServerUrl(startResult);
 
-      const { browser } = await initPuppeteer(serverUrl);
+      const { browser, close: closeBrowser } = await initPuppeteer(serverUrl);
 
       const page = await browser.newPage();
 
@@ -214,6 +214,7 @@ describe('@tramvai/cli start command', () => {
       ).toMatchInlineSnapshot(`"Cmp test: update"`);
 
       await close();
+      await closeBrowser();
     });
   });
 

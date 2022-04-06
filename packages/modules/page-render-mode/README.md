@@ -170,6 +170,8 @@ const providers = [
 
 With `client` rendering mode, all layout will be rendered in browser.
 
+`PAGE_RENDER_WRAPPER_TYPE` value will be passed to [default layout](references/modules/render.md#basic-layout), where the library [@tinkoff/layout-factory](references/libs/tinkoff-layout.md#wrappers) is used.
+
 ## Troubleshooting
 
 ### Fallback name conflicts
