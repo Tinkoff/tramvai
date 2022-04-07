@@ -45,16 +45,14 @@
     "@tramvai/test-helpers": "0.0.0-stub",
     "@tramvai/tokens-common": "0.0.0-stub",
     "@tramvai/tokens-router": "0.0.0-stub",
-    "@tramvai/tokens-server": "0.0.0-stub",
+    "@tramvai/tokens-server-private": "0.0.0-stub",
     "express": "^4.17.1",
     "prop-types": "^15.6.2",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0",
     "tslib": "^2.0.3"
   },
-  "devDependencies": {
-    "@types/express": "^4.17.9"
-  },
+  "devDependencies": {},
   "gitHead": "8e826a214c87b188fc4d254cdd8f2a2b2c55f3a8",
   "module": "lib/server.es.js",
   "es2017": "lib/browser.es2017.js",

@@ -14,6 +14,7 @@ import {
   CHILD_APP_LOADER_TOKEN,
 } from '@tramvai/tokens-child-app';
 import { LOGGER_TOKEN, STORE_TOKEN } from '@tramvai/tokens-common';
+import { ROUTER_TOKEN } from '@tramvai/tokens-router';
 
 import { BrowserLoader } from './loader';
 import { PreloadManager } from './preload';
@@ -78,6 +79,18 @@ export const browserProviders: Provider[] = [
     },
   }),
   provide({
+    provide: commandLineListTokens.customerStart,
+    multi: true,
+    useFactory: ({ router, preloader }) => {
+      router.registerHook('beforeNavigate', () => preloader.clearPreloaded());
+      router.registerHook('beforeUpdateCurrent', () => preloader.clearPreloaded());
+    },
+    deps: {
+      router: ROUTER_TOKEN,
+      preloader: CHILD_APP_PRELOAD_MANAGER_TOKEN,
+    },
+  }),
+  provide({
     provide: commandLineListTokens.spaTransition,
     multi: true,
     useFactory: ({ preloader, runner }) => {
@@ -104,8 +117,6 @@ export const browserProviders: Provider[] = [
           runner,
           status: 'afterSpa',
         });
-
-        await preloader.clearPreloaded();
       };
     },
     deps: {

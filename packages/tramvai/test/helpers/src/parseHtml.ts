@@ -15,8 +15,8 @@ export const parseHtml = (
 
   return {
     parsed,
-    head: parsed.querySelector('head').innerHTML,
-    body: parsed.querySelector('body').innerHTML,
+    body: parsed.querySelector('body')?.innerHTML,
+    head: parsed.querySelector('head')?.innerHTML,
     application: parsed.querySelector('.application')?.innerHTML,
   };
 };

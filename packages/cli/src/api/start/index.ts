@@ -15,6 +15,7 @@ export type Params = WithConfig<{
   staticPort?: number;
   staticHost?: string;
   debug?: boolean;
+  trace?: boolean;
   profile?: boolean;
   modern?: boolean;
   sourceMap?: boolean;

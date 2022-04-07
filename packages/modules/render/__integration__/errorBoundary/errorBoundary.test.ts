@@ -233,7 +233,7 @@ describe('errorBoundary', () => {
 
   it('SPA-navigations', async () => {
     const { page, router } = await getPageWrapper('/');
-    let pageContentTitle: string;
+    let pageContentTitle: string | undefined;
 
     // success-page
 

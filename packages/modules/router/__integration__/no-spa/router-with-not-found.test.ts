@@ -114,7 +114,7 @@ describe('router/no-spa-with-not-found', () => {
       const app = getApp();
 
       await Promise.all([
-        app.request('/status-204/').expect(204),
+        app.request('/status-202/').expect(202),
         app.request('/status-501/').expect(501),
       ]);
     });
@@ -223,7 +223,7 @@ describe('router/no-spa-with-not-found', () => {
           '/after/static/redirect/',
           '/inner/page/',
           '/redirect/',
-          '/status-204/',
+          '/status-202/',
           '/status-501/',
           '/test/',
         ]),

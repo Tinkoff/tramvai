@@ -180,9 +180,11 @@ export const serverRunner = ({
         return;
       }
 
-      await waitWorkerPort();
+      if (pool.state !== PoolState.CLOSED) {
+        await waitWorkerPort();
 
-      proxy.web(req, res as any, { target: `http://localhost:${workerPort}` });
+        proxy.web(req, res as any, { target: `http://localhost:${workerPort}` });
+      }
     });
 
     // задаём свой http-сервер который будет проксировать запросы к дочернему процессу

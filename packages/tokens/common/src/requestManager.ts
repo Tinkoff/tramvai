@@ -1,13 +1,25 @@
 import { createToken } from '@tinkoff/dippy';
 import type { Request } from 'express';
+import type { FastifyRequest as OriginalFastifyRequest } from 'fastify';
 
 // HACK: to prevent inlining of Request and providing internal express dependencies to outside
 type RequestExt = Request;
+type FastifyRequest = OriginalFastifyRequest & {
+  cookies: Record<string, string>;
+  query: Record<string, string>;
+};
 /**
+ * @deprecated use FASTIFY_REQUEST
  * @description
  * Direct reference to request object
  */
 export const REQUEST = createToken<RequestExt>('request');
+
+/**
+ * @description
+ * Direct reference to request object
+ */
+export const FASTIFY_REQUEST = createToken<FastifyRequest>('fastify request');
 
 /**
  * @description

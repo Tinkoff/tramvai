@@ -4,6 +4,7 @@ import {
   commandLineListTokens,
   COMMAND_LINE_RUNNER_TOKEN,
   APP_INFO_TOKEN,
+  provide,
 } from '@tramvai/core';
 import {
   SERVER_TOKEN,
@@ -13,11 +14,21 @@ import {
   WEB_APP_AFTER_INIT_TOKEN,
   WEB_APP_LIMITER_TOKEN,
 } from '@tramvai/tokens-server';
-import { ENV_MANAGER_TOKEN, ENV_USED_TOKEN, LOGGER_TOKEN } from '@tramvai/module-common';
+import {
+  WEB_FASTIFY_APP_TOKEN,
+  WEB_FASTIFY_APP_BEFORE_INIT_TOKEN,
+  WEB_FASTIFY_APP_AFTER_INIT_TOKEN,
+  WEB_FASTIFY_APP_INIT_TOKEN,
+  WEB_FASTIFY_APP_LIMITER_TOKEN,
+  WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN,
+  WEB_FASTIFY_APP_AFTER_ERROR_TOKEN,
+  WEB_FASTIFY_APP_PROCESS_ERROR_TOKEN,
+} from '@tramvai/tokens-server-private';
+import { ENV_MANAGER_TOKEN, ENV_USED_TOKEN, LOGGER_TOKEN } from '@tramvai/tokens-common';
 import { MetricsModule } from '@tramvai/module-metrics';
 import { CacheWarmupModule } from '@tramvai/module-cache-warmup';
 import { serverFactory, serverListenCommand } from './server/server';
-import { webAppFactory, webAppInitCommand } from './server/webApp';
+import { webAppExpressFactory, webAppFactory, webAppInitCommand } from './server/webApp';
 import { staticAppCommand } from './server/static';
 import { xHeadersFactory } from './server/xHeaders';
 import * as modules from './modules';
@@ -36,31 +47,48 @@ export * from '@tramvai/tokens-server';
     process.env.NODE_ENV !== 'production' && modules.DebugHttpRequestsModule,
   ].filter(Boolean),
   providers: [
-    {
+    provide({
+      provide: SERVER_TOKEN,
+      scope: Scope.SINGLETON,
+      useFactory: serverFactory,
+    }),
+    provide({
+      provide: WEB_FASTIFY_APP_TOKEN,
+      useFactory: webAppFactory,
+      scope: Scope.SINGLETON,
+      deps: {
+        server: SERVER_TOKEN,
+      },
+    }),
+    provide({
+      // BACKWARD: provide the express app as before
       provide: WEB_APP_TOKEN,
       scope: Scope.SINGLETON,
-      useFactory: webAppFactory,
-    },
+      useFactory: webAppExpressFactory,
+      deps: {
+        webApp: WEB_FASTIFY_APP_TOKEN,
+      },
+    }),
     {
       provide: commandLineListTokens.init,
       multi: true,
       useFactory: webAppInitCommand,
       deps: {
-        app: WEB_APP_TOKEN,
+        app: WEB_FASTIFY_APP_TOKEN,
+        expressApp: WEB_APP_TOKEN,
         logger: LOGGER_TOKEN,
         commandLineRunner: COMMAND_LINE_RUNNER_TOKEN,
-        beforeInit: { token: WEB_APP_BEFORE_INIT_TOKEN, optional: true },
-        init: { token: WEB_APP_INIT_TOKEN, optional: true },
-        afterInit: { token: WEB_APP_AFTER_INIT_TOKEN, optional: true },
-        limiterRequest: { token: WEB_APP_LIMITER_TOKEN, optional: true },
-      },
-    },
-    {
-      provide: SERVER_TOKEN,
-      scope: Scope.SINGLETON,
-      useFactory: serverFactory,
-      deps: {
-        webApp: WEB_APP_TOKEN,
+        beforeInit: { token: WEB_FASTIFY_APP_BEFORE_INIT_TOKEN, optional: true },
+        init: { token: WEB_FASTIFY_APP_INIT_TOKEN, optional: true },
+        afterInit: { token: WEB_FASTIFY_APP_AFTER_INIT_TOKEN, optional: true },
+        limiterRequest: { token: WEB_FASTIFY_APP_LIMITER_TOKEN, optional: true },
+        expressBeforeInit: { token: WEB_APP_BEFORE_INIT_TOKEN, optional: true },
+        expressInit: { token: WEB_APP_INIT_TOKEN, optional: true },
+        expressAfterInit: { token: WEB_APP_AFTER_INIT_TOKEN, optional: true },
+        expressLimiterRequest: { token: WEB_APP_LIMITER_TOKEN, optional: true },
+        beforeError: { token: WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN, optional: true },
+        processError: { token: WEB_FASTIFY_APP_PROCESS_ERROR_TOKEN, optional: true },
+        afterError: { token: WEB_FASTIFY_APP_AFTER_ERROR_TOKEN, optional: true },
       },
     },
     {

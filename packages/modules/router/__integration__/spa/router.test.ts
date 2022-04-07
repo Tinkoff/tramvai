@@ -115,7 +115,7 @@ describe('router/spa', () => {
     // eslint-disable-next-line jest/expect-expect
     it('should set custom httpStatus', async () => {
       await Promise.all([
-        getApp().request('/status-204/').expect(204),
+        getApp().request('/status-202/').expect(202),
         getApp().request('/status-501/').expect(501),
       ]);
     });
@@ -257,7 +257,7 @@ describe('router/spa', () => {
           '/after/static/redirect/',
           '/inner/page/',
           '/redirect/',
-          '/status-204/',
+          '/status-202/',
           '/status-501/',
           '/test/',
         ]),

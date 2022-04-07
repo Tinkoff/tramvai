@@ -35,10 +35,10 @@ export const routes: Route[] = [
     },
   },
   {
-    name: '204',
-    path: '/status-204/',
+    name: '202',
+    path: '/status-202/',
     config: {
-      httpStatus: 204,
+      httpStatus: 202,
     },
   },
   {

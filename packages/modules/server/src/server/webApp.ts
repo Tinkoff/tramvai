@@ -1,8 +1,12 @@
+import fastify from 'fastify';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
-import type { LOGGER_TOKEN } from '@tramvai/module-common';
-import { REQUEST, RESPONSE, RESPONSE_MANAGER_TOKEN } from '@tramvai/module-common';
+import { fastifyCookie } from 'fastify-cookie';
+import fastifyFormBody from 'fastify-formbody';
+import type { LOGGER_TOKEN } from '@tramvai/tokens-common';
+import { FASTIFY_REQUEST, FASTIFY_RESPONSE } from '@tramvai/tokens-common';
+import { REQUEST, RESPONSE, RESPONSE_MANAGER_TOKEN } from '@tramvai/tokens-common';
 import type { COMMAND_LINE_RUNNER_TOKEN } from '@tramvai/core';
 import { Scope } from '@tramvai/core';
 import type {
@@ -11,10 +15,40 @@ import type {
   WEB_APP_INIT_TOKEN,
   WEB_APP_AFTER_INIT_TOKEN,
   WEB_APP_LIMITER_TOKEN,
+  SERVER_TOKEN,
 } from '@tramvai/tokens-server';
-import { errorHandler, routerErrorHandler } from './error';
+import type {
+  WEB_FASTIFY_APP_TOKEN,
+  WEB_FASTIFY_APP_AFTER_INIT_TOKEN,
+  WEB_FASTIFY_APP_BEFORE_INIT_TOKEN,
+  WEB_FASTIFY_APP_INIT_TOKEN,
+  WEB_FASTIFY_APP_LIMITER_TOKEN,
+  WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN,
+  WEB_FASTIFY_APP_AFTER_ERROR_TOKEN,
+  WEB_FASTIFY_APP_PROCESS_ERROR_TOKEN,
+} from '@tramvai/tokens-server-private';
+import { fastifyExpressCompatibility } from './express-compatibility';
+import { errorHandler } from './error';
 
-export const webAppFactory = () => {
+export const webAppFactory = ({
+  server,
+  expressApp,
+}: {
+  server: typeof SERVER_TOKEN;
+  expressApp: typeof WEB_APP_TOKEN;
+}) => {
+  const app = fastify({
+    serverFactory: (handler) => {
+      server.on('request', handler);
+
+      return server;
+    },
+  });
+
+  return app;
+};
+
+export const webAppExpressFactory = ({ webApp }: { webApp: typeof WEB_FASTIFY_APP_TOKEN }) => {
   const app = express();
 
   app.disable('etag');
@@ -25,34 +59,65 @@ export const webAppFactory = () => {
 
 export const webAppInitCommand = ({
   app,
+  expressApp,
   logger,
   commandLineRunner,
   beforeInit,
   init,
   afterInit,
   limiterRequest,
+  expressBeforeInit,
+  expressInit,
+  expressAfterInit,
+  expressLimiterRequest,
+  beforeError,
+  processError,
+  afterError,
 }: {
-  app: typeof WEB_APP_TOKEN;
+  app: typeof WEB_FASTIFY_APP_TOKEN;
+  expressApp: typeof WEB_APP_TOKEN;
   logger: typeof LOGGER_TOKEN;
   commandLineRunner: typeof COMMAND_LINE_RUNNER_TOKEN;
-  beforeInit: typeof WEB_APP_BEFORE_INIT_TOKEN;
-  init: typeof WEB_APP_INIT_TOKEN;
-  afterInit: typeof WEB_APP_AFTER_INIT_TOKEN;
-  limiterRequest: typeof WEB_APP_LIMITER_TOKEN;
+  beforeInit: typeof WEB_FASTIFY_APP_BEFORE_INIT_TOKEN;
+  init: typeof WEB_FASTIFY_APP_INIT_TOKEN;
+  afterInit: typeof WEB_FASTIFY_APP_AFTER_INIT_TOKEN;
+  limiterRequest: typeof WEB_FASTIFY_APP_LIMITER_TOKEN;
+  expressBeforeInit: typeof WEB_APP_BEFORE_INIT_TOKEN;
+  expressInit: typeof WEB_APP_INIT_TOKEN;
+  expressAfterInit: typeof WEB_APP_AFTER_INIT_TOKEN;
+  expressLimiterRequest: typeof WEB_APP_LIMITER_TOKEN;
+  beforeError: typeof WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN;
+  processError: typeof WEB_FASTIFY_APP_PROCESS_ERROR_TOKEN;
+  afterError: typeof WEB_FASTIFY_APP_AFTER_ERROR_TOKEN;
 }) => {
   const log = logger('server:webapp');
 
-  const runHandlers = (handlers: typeof WEB_APP_INIT_TOKEN) => {
-    if (handlers) {
-      return Promise.all(handlers.map((handler) => handler(app)));
-    }
+  const runHandlers = (
+    handlers: typeof WEB_FASTIFY_APP_INIT_TOKEN,
+    expressHandlers: typeof WEB_APP_INIT_TOKEN
+  ) => {
+    return Promise.all([
+      handlers && Promise.all(handlers.map((handler) => handler(app))),
+      expressHandlers && Promise.all(expressHandlers.map((handler) => handler(expressApp))),
+    ]);
   };
 
   return async function webAppInit() {
-    await runHandlers(beforeInit);
-    await runHandlers(limiterRequest);
+    errorHandler(app, { log, beforeError, processError, afterError });
 
-    app.use(
+    await app.register(fastifyExpressCompatibility, {
+      express: {
+        instance: expressApp,
+      },
+    });
+
+    await runHandlers(beforeInit, expressBeforeInit);
+    await runHandlers(limiterRequest, expressLimiterRequest);
+
+    await app.register(fastifyCookie);
+    await app.register(fastifyFormBody);
+
+    expressApp.use(
       bodyParser.urlencoded({
         limit: '2mb',
         extended: false,
@@ -60,40 +125,57 @@ export const webAppInitCommand = ({
       cookieParser()
     );
 
-    await runHandlers(init);
+    await runHandlers(init, expressInit);
 
-    app.use(async (req, res, next) => {
+    // force express to execute to update server's request and response instances
+    app.use((req, res, next) => {
+      next();
+    });
+
+    app.all('*', async (request, reply) => {
       try {
         log.debug({
           event: 'start:request',
           message: 'Клиент зашел на страницу',
-          url: req.url,
+          url: request.url,
         });
 
         const di = await commandLineRunner.run('server', 'customer', [
           {
             provide: REQUEST,
             scope: Scope.REQUEST,
-            useValue: req,
+            useValue: request.raw,
           },
           {
             provide: RESPONSE,
             scope: Scope.REQUEST,
-            useValue: res,
+            useValue: reply.raw,
+          },
+          // TODO: перевести использование на новые
+          // TODO: добавить для papi
+          {
+            provide: FASTIFY_REQUEST,
+            scope: Scope.REQUEST,
+            useValue: request,
+          },
+          {
+            provide: FASTIFY_RESPONSE,
+            scope: Scope.REQUEST,
+            useValue: reply,
           },
         ]);
         const responseManager = di.get(RESPONSE_MANAGER_TOKEN);
 
-        if (res.writableEnded) {
+        if (reply.sent) {
           log.debug({
             event: 'response-ended',
             message: 'Response was already ended.',
-            url: req.url,
+            url: request.url,
           });
         } else {
-          res
-            .set('content-type', 'text/html')
-            .set(responseManager.getHeaders())
+          reply
+            .header('content-type', 'text/html')
+            .headers(responseManager.getHeaders())
             .status(responseManager.getStatus())
             .send(responseManager.getBody());
         }
@@ -101,19 +183,17 @@ export const webAppInitCommand = ({
         if (err.di) {
           const responseManager: typeof RESPONSE_MANAGER_TOKEN = err.di.get(RESPONSE_MANAGER_TOKEN);
 
-          if (responseManager && !res.writableEnded) {
-            res.set(responseManager.getHeaders());
+          if (responseManager && !reply.sent) {
+            reply.headers(responseManager.getHeaders());
           }
         }
 
-        next(err);
+        throw err;
       }
     });
 
-    routerErrorHandler(app);
+    await runHandlers(afterInit, expressAfterInit);
 
-    await runHandlers(afterInit);
-
-    errorHandler(app, { log });
+    await app.ready();
   };
 };

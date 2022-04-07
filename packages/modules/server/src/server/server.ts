@@ -1,13 +1,10 @@
 import http from 'http';
-import type { SERVER_TOKEN, WEB_APP_TOKEN } from '@tramvai/tokens-server';
+import type { SERVER_TOKEN } from '@tramvai/tokens-server';
 import type { LOGGER_TOKEN } from '@tramvai/tokens-common';
 import type { ENV_MANAGER_TOKEN } from '@tramvai/module-environment';
 
-export const serverFactory = ({ webApp }: { webApp: typeof WEB_APP_TOKEN }) => {
-  const server = http.createServer();
-  server.on('request', webApp);
-
-  return server;
+export const serverFactory = () => {
+  return http.createServer();
 };
 
 export const serverListenCommand = ({

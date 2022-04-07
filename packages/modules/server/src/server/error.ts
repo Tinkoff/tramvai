@@ -1,49 +1,86 @@
-import type express from 'express';
-import type { Request, Response } from 'express';
-import finalhandler from 'finalhandler';
+import isNil from '@tinkoff/utils/is/nil';
+import type { FastifyInstance } from 'fastify';
 import { isNotFoundError, isRedirectFoundError, isHttpError } from '@tinkoff/errors';
 import type { LOGGER_TOKEN } from '@tramvai/module-common';
-
-export const routerErrorHandler = (app: express.Application) => {
-  app.use((err, req: Request, res: Response, next) => {
-    if (isRedirectFoundError(err)) {
-      res.setHeader('cache-control', 'no-cache, no-store, must-revalidate');
-      return res.redirect(err.httpStatus || 307, err.nextUrl);
-    }
-
-    if (isNotFoundError(err)) {
-      return res.status(404).end();
-    }
-
-    next(err);
-  });
-};
+import type {
+  WEB_FASTIFY_APP_AFTER_ERROR_TOKEN,
+  WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN,
+  WEB_FASTIFY_APP_PROCESS_ERROR_TOKEN,
+} from '@tramvai/tokens-server-private';
 
 export const errorHandler = (
-  app: express.Application,
+  app: FastifyInstance,
   {
     log,
+    beforeError,
+    processError,
+    afterError,
   }: {
     log: ReturnType<typeof LOGGER_TOKEN>;
+    beforeError: typeof WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN;
+    processError: typeof WEB_FASTIFY_APP_PROCESS_ERROR_TOKEN;
+    afterError: typeof WEB_FASTIFY_APP_AFTER_ERROR_TOKEN;
   }
 ) => {
-  app.use(async (err, req: Request, res: Response, next) => {
-    const requestInfo = {
-      ip: req.ip,
-      requestId: req.headers['x-request-id'],
-      url: req.url,
+  app.setErrorHandler(async (error, request, reply) => {
+    const runHandlers = async (handlers: typeof WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN) => {
+      if (handlers) {
+        for (const handler of handlers) {
+          const result = await handler(error, request, reply);
+
+          if (result) {
+            return result;
+          }
+        }
+      }
     };
 
-    if (isHttpError(err)) {
-      if (err.httpStatus >= 500) {
-        log.error({ event: 'send-server-error', error: err, requestInfo });
-      }
+    const requestInfo = {
+      ip: request.ip,
+      requestId: request.headers['x-request-id'],
+      url: request.url,
+    };
 
-      return res.status(err.httpStatus).end();
+    const beforeErrorResult = await runHandlers(beforeError);
+
+    if (!isNil(beforeErrorResult)) {
+      return beforeErrorResult;
     }
 
-    log.error({ event: 'send-server-error', error: err, requestInfo });
+    if (isRedirectFoundError(error)) {
+      reply.header('cache-control', 'no-cache, no-store, must-revalidate');
+      reply.redirect(error.httpStatus || 307, error.nextUrl);
+      return;
+    }
 
-    finalhandler(req, res)(err);
+    if (isNotFoundError(error)) {
+      reply.status(404);
+      return '';
+    }
+
+    const processErrorResult = await runHandlers(processError);
+
+    if (!isNil(processErrorResult)) {
+      return processErrorResult;
+    }
+
+    if (isHttpError(error)) {
+      if (error.httpStatus >= 500) {
+        log.error({ event: 'send-server-error', error, requestInfo });
+      }
+
+      reply.status(error.httpStatus);
+      return '';
+    }
+
+    log.error({ event: 'send-server-error', error, requestInfo });
+
+    const afterErrorResult = await runHandlers(afterError);
+
+    if (!isNil(afterErrorResult)) {
+      return afterErrorResult;
+    }
+
+    throw error;
   });
 };

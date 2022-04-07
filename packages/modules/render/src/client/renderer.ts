@@ -10,12 +10,19 @@ const ExecuteRenderCallback: FC<{ callback: () => void }> = ({ children, callbac
   return children as any;
 };
 
-const renderer: Renderer = ({ element, container, callback }) => {
+const renderer: Renderer = ({ element, container, callback, log }) => {
   if (process.env.__TRAMVAI_CONCURRENT_FEATURES) {
     const wrappedElement = createElement(ExecuteRenderCallback, { callback }, element);
     // eslint-disable-next-line import/no-unresolved, import/extensions
     const { hydrateRoot } = require('react-dom/client');
-    return hydrateRoot(container, wrappedElement);
+    return hydrateRoot(container, wrappedElement, {
+      onRecoverableError: (error) => {
+        log.error({
+          error,
+          event: 'hydrate:recover-after-error',
+        });
+      },
+    });
   }
   const { hydrate } = require('react-dom');
   return hydrate(element, container, callback);

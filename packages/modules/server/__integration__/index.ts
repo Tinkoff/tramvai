@@ -13,7 +13,7 @@ createApp({
       scope: Scope.SINGLETON,
       useValue: {
         context: '/from/',
-        target: `http://localhost:${process.env.EXTERNAL_WEBSITE_PORT}/to/`,
+        target: `http://localhost:${process.env.EXTERNAL_WEBSITE_PORT ?? 3000}/to/`,
       },
       multi: true,
     },

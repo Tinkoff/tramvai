@@ -1,11 +1,15 @@
 import { createToken } from '@tinkoff/dippy';
 import type { Response } from 'express';
+import type { FastifyReply } from 'fastify';
 
 /**
+ * @deprecated Use FASTIFY_RESPONSE
  * @description
  * Direct reference to Response instance
  */
 export const RESPONSE = createToken<Response>('response');
+
+export const FASTIFY_RESPONSE = createToken<FastifyReply>('fastify response');
 
 /**
  * @description

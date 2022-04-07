@@ -1,7 +1,8 @@
 import type { PromiseType } from 'utility-types';
 import type { App } from '@tramvai/core';
 import { getModuleParameters } from '@tramvai/core';
-import { WEB_APP_TOKEN, SERVER_TOKEN } from '@tramvai/tokens-server';
+import { SERVER_TOKEN } from '@tramvai/tokens-server';
+import { WEB_FASTIFY_APP_TOKEN } from '@tramvai/tokens-server-private';
 import { MockerModule, MOCKER } from '@tramvai/module-mocker';
 import { renderFactory, requestFactory } from '@tramvai/test-helpers';
 
@@ -11,7 +12,7 @@ import { renderFactory, requestFactory } from '@tramvai/test-helpers';
  */
 export const testApp = async (appOrAppPromise: App | Promise<App>) => {
   const app = await appOrAppPromise;
-  const request = requestFactory(app.di.get(WEB_APP_TOKEN));
+  const request = requestFactory(app.di.get(WEB_FASTIFY_APP_TOKEN));
 
   const mockerModule = getModuleParameters(MockerModule);
 

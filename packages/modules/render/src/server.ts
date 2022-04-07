@@ -1,6 +1,5 @@
 import { createElement } from 'react';
 import { renderToString } from 'react-dom/server';
-import type { Request, Response } from 'express';
 import { Module, commandLineListTokens, DI_TOKEN, provide } from '@tramvai/core';
 import {
   LOGGER_TOKEN,
@@ -22,7 +21,7 @@ import {
   ResourceType,
 } from '@tramvai/tokens-render';
 import { Scope } from '@tinkoff/dippy';
-import { WEB_APP_AFTER_INIT_TOKEN } from '@tramvai/tokens-server';
+import { WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN } from '@tramvai/tokens-server-private';
 import { ROOT_ERROR_BOUNDARY_COMPONENT_TOKEN } from '@tramvai/react';
 import { parse } from '@tinkoff/url';
 import { satisfies } from '@tinkoff/user-agent';
@@ -193,39 +192,38 @@ export const DEFAULT_POLYFILL_CONDITION =
       },
     }),
     provide({
-      provide: WEB_APP_AFTER_INIT_TOKEN,
+      provide: WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN,
       multi: true,
-      useFactory: ({ RootErrorBoundary, logger }) => {
+      useFactory: ({
+        RootErrorBoundary,
+        logger,
+      }): typeof WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN[number] => {
         const log = logger('module-render:error-handler');
 
-        return (app) => {
-          app.use((err, req: Request, res: Response, next) => {
-            if (!RootErrorBoundary) {
-              return next(err);
-            }
+        return (error: any, request, reply) => {
+          if (!RootErrorBoundary) {
+            return;
+          }
 
-            let body: string;
+          let body: string;
 
-            try {
-              log.info({ event: 'render-root-boundary' });
+          try {
+            log.info({ event: 'render-root-boundary' });
 
-              body = renderToString(
-                createElement(RootErrorBoundary, { error: err, url: parse(req.url) })
-              );
+            body = renderToString(
+              createElement(RootErrorBoundary, { error, url: parse(request.url) })
+            );
 
-              res.status(err.httpStatus || err.status || 500);
+            reply.status(error.httpStatus || error.status || 500);
 
-              res.setHeader('Content-Type', 'text/html; charset=utf-8');
-              res.setHeader('Content-Length', Buffer.byteLength(body, 'utf8'));
-              res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+            reply.header('Content-Type', 'text/html; charset=utf-8');
+            reply.header('Content-Length', Buffer.byteLength(body, 'utf8'));
+            reply.header('Cache-Control', 'no-cache, no-store, must-revalidate');
 
-              return res.send(body);
-            } catch (e) {
-              log.warn({ event: 'render-root-boundary-error', error: e });
-
-              return next(err);
-            }
-          });
+            return body;
+          } catch (e) {
+            log.warn({ event: 'render-root-boundary-error', error: e });
+          }
         };
       },
       deps: {

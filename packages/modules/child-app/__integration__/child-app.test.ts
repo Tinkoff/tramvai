@@ -144,7 +144,10 @@ describe('child-app', () => {
 
       expect(application).not.toContain('Child App');
 
-      const { page } = await getPageWrapper('/base-not-preloaded/');
+      const { page, router } = await getPageWrapper('/base-not-preloaded/');
+
+      const getActionCount = () =>
+        page.evaluate(() => window.TRAMVAI_TEST_CHILD_APP_NOT_PRELOADED_ACTION_CALL_NUMBER);
 
       await page.waitForSelector('#base-not-preloaded', {
         visible: true,
@@ -153,6 +156,12 @@ describe('child-app', () => {
       expect(
         await page.evaluate(() => document.querySelector('.application')?.innerHTML)
       ).toContain('Child App');
+
+      expect(await getActionCount()).toBe(1);
+
+      router.navigate('/base/');
+
+      expect(await getActionCount()).toBe(1);
     });
   });
 

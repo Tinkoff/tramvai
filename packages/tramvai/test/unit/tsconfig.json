@@ -52,6 +52,9 @@
         },
         {
             "path": "../../../modules/metrics"
+        },
+        {
+            "path": "../../../tokens/server-private"
         }
     ]
 }

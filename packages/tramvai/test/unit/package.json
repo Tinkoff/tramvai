@@ -32,6 +32,7 @@
     "@tramvai/test-mocks": "0.0.0-stub",
     "@tramvai/tokens-common": "0.0.0-stub",
     "@tramvai/tokens-server": "0.0.0-stub",
+    "@tramvai/tokens-server-private": "0.0.0-stub",
     "utility-types": "^3.10.0"
   },
   "peerDependencies": {

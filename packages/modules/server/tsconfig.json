@@ -54,7 +54,10 @@
             "path": "../../cli"
         },
         {
-            "path": "../../libs/express-terminus"
+            "path": "../../tokens/server-private"
+        },
+        {
+            "path": "../../libs/terminus"
         }
     ]
 }

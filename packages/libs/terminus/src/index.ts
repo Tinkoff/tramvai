@@ -1,7 +1,8 @@
-import type { Server } from 'http';
+import type { Server, ServerResponse } from 'http';
 import type { Application, Request, Response } from 'express';
 import stoppable from 'stoppable';
 import { promisify } from 'es6-promisify';
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 
 type PromiseOrFn<T = void> = () => Promise<T> | T;
 
@@ -34,7 +35,7 @@ function noopResolves() {
   return Promise.resolve();
 }
 
-async function sendSuccess(res: Response, options) {
+async function sendSuccess(res: ServerResponse, options) {
   const { info, verbatim } = options;
 
   res.statusCode = 200;
@@ -50,7 +51,7 @@ async function sendSuccess(res: Response, options) {
   res.end(SUCCESS_RESPONSE);
 }
 
-async function sendFailure(res: Response, options) {
+async function sendFailure(res: ServerResponse, options) {
   const { error, onSendFailureDuringShutdown } = options;
 
   if (onSendFailureDuringShutdown) {
@@ -76,27 +77,45 @@ const intialState: TerminusState = {
 
 function noop() {}
 
-function decorateWithHealthCheck(app: Application, state: TerminusState, options: TerminusOptions) {
+function getRawResponse(res: Response | FastifyReply): ServerResponse {
+  if ('raw' in res) {
+    return res.raw;
+  }
+
+  return res;
+}
+
+function decorateWithHealthCheck(
+  app: Application | FastifyInstance,
+  state: TerminusState,
+  options: TerminusOptions
+) {
   const { healthChecks, logger, onSendFailureDuringShutdown } = options;
 
   const createHandler = (healthCheck: string) => {
-    return async (req: Request, res: Response) => {
+    return (request: Request | FastifyRequest, response: Response | FastifyReply) => {
+      const res = getRawResponse(response);
+
       if (state.isShuttingDown) {
-        return sendFailure(res, { onSendFailureDuringShutdown });
+        sendFailure(res, { onSendFailureDuringShutdown });
+        return;
       }
-      let info;
-      try {
-        info = await healthChecks[healthCheck]();
-      } catch (error) {
-        logger('healthcheck failed', error);
-        return sendFailure(res, { error: error.causes });
-      }
-      return sendSuccess(res, { info, verbatim: healthChecks.verbatim });
+
+      Promise.resolve()
+        .then(() => healthChecks[healthCheck]())
+        .then((info) => {
+          sendSuccess(res, { info, verbatim: healthChecks.verbatim });
+        })
+        .catch((error) => {
+          logger('healthcheck failed', error);
+          sendFailure(res, { error: error.causes });
+        });
     };
   };
 
   for (const key in options.healthChecks) {
-    app.get(key, createHandler(key));
+    // @ts-ignore
+    app.all(key, createHandler(key));
   }
 }
 
@@ -126,7 +145,11 @@ function decorateWithSignalHandler(server: Server, state: TerminusState, options
   signals.forEach((sig) => process.on(sig, cleanup));
 }
 
-export function createTerminus(server: Server, app: Application, options: TerminusOptions = {}) {
+export function createTerminus(
+  server: Server,
+  app: Application | FastifyInstance,
+  options: TerminusOptions = {}
+) {
   const {
     signal = 'SIGTERM',
     signals = [],

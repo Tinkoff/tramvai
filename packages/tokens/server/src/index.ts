@@ -63,6 +63,7 @@ export const SERVER_MODULE_STATICS_OPTIONS = createToken<ServerModuleStaticsOpti
 export const SERVER_TOKEN = createToken<Server>('server');
 
 /**
+ * @deprecated Prefer not to use such low-level entity as it may change in the future or will be dropped.
  * @description
  * Instance of the current server app. By default it is an `express` app.
  * Can be used to setup custom request handler and add custom routes
@@ -86,6 +87,7 @@ export const SERVER_TOKEN = createToken<Server>('server');
 export const WEB_APP_TOKEN = createToken<Application>('webApp');
 
 /**
+ * @deprecated Prefer not to use such low-level entity as it may change in the future or will be dropped.
  * @description
  * Subscription to before web-app initialization. It is called before any standard handlers.
  *
@@ -105,6 +107,7 @@ export const WEB_APP_BEFORE_INIT_TOKEN = createToken<APP_INIT_HANDLER>('webAppBe
 });
 
 /**
+ * @deprecated Prefer not to use such low-level entity as it may change in the future or will be dropped.
  * @description
  * Subscription to web-app initialization.
  * It is called after global request handlers but before handlers for page rendering
@@ -124,6 +127,7 @@ export const WEB_APP_BEFORE_INIT_TOKEN = createToken<APP_INIT_HANDLER>('webAppBe
 export const WEB_APP_INIT_TOKEN = createToken<APP_INIT_HANDLER>('webAppInit', { multi: true });
 
 /**
+ * @deprecated Prefer not to use such low-level entity as it may change in the future or will be dropped.
  * @description
  * You can limit requests of application.
  *
@@ -143,6 +147,7 @@ export const WEB_APP_LIMITER_TOKEN = createToken<APP_INIT_HANDLER>('webAppLimitt
 });
 
 /**
+ * @deprecated Prefer not to use such low-level entity as it may change in the future or will be dropped.
  * @description
  * Subscription to after web-app initialization.
  * It is called after any other handlers

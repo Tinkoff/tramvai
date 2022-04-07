@@ -1,4 +1,4 @@
-# @tinkoff/express-terminus
+# @tinkoff/terminus
 
 Fork of the library [@godaddy/terminus](https://github.com/godaddy/terminus).
 

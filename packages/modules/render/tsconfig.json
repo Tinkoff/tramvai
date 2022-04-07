@@ -64,10 +64,10 @@
             "path": "../../tramvai/experiments"
         },
         {
-            "path": "../../tokens/server"
+            "path": "../../libs/react-hooks"
         },
         {
-            "path": "../../libs/react-hooks"
+            "path": "../../tokens/server-private"
         }
     ]
 }

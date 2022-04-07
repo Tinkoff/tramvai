@@ -1,9 +1,9 @@
 import { commandLineListTokens, DI_TOKEN, Module, provide, Scope } from '@tramvai/core';
 import {
   CREATE_CACHE_TOKEN,
+  FASTIFY_RESPONSE,
   LOGGER_TOKEN,
   REQUEST_MANAGER_TOKEN,
-  RESPONSE,
   RESPONSE_MANAGER_TOKEN,
 } from '@tramvai/tokens-common';
 import { WEB_APP_AFTER_INIT_TOKEN } from '@tramvai/tokens-server';
@@ -79,9 +79,9 @@ export * from './tokens';
                       });
 
                       response
-                        .set('content-type', 'text/html')
-                        .set('X-Tramvai-Response-Cache', 'true')
-                        .set(headers)
+                        .header('content-type', 'text/html')
+                        .header('X-Tramvai-Response-Cache', 'true')
+                        .headers(headers)
                         .status(status)
                         .send(body);
 
@@ -112,7 +112,7 @@ export * from './tokens';
               deps: {
                 logger: LOGGER_TOKEN,
                 requestManager: REQUEST_MANAGER_TOKEN,
-                response: RESPONSE,
+                response: FASTIFY_RESPONSE,
                 shouldUseCache: RESPONSE_CACHE_SHOULD_USE_CACHE,
                 getCacheKey: RESPONSE_CACHE_GET_CACHE_KEY,
                 cache: RESPONSE_CACHE_INSTANCE,
