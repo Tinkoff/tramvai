@@ -8,7 +8,7 @@ import { useStoreSelector, createReducer, createEvent } from '@tramvai/state';
 
 const increment = createEvent('increment');
 
-const createMockStore = (storeName) => {
+const createMockStore = (storeName: string) => {
   return createReducer(storeName, { id: 1 }).on(increment, ({ id }) => {
     return { id: id + 1 };
   });
@@ -40,7 +40,7 @@ describe('hooks/useStoreSelector', () => {
       await waitRaf();
     });
 
-    expect(selector).toHaveBeenCalledTimes(3);
+    expect(selector).toHaveBeenCalledTimes(2);
     expect(selector).toHaveBeenLastCalledWith({ id: 2 });
     expect(render.getByText('value=2')).toBeDefined();
   });

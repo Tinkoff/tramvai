@@ -44,7 +44,7 @@ const executeCheck = async (
 
   expect(selector).toHaveBeenCalledWith({ test: { id: 2 } });
   expect(render.getByText('value=2')).toBeDefined();
-  expect(selector).toHaveBeenCalledTimes(3);
+  expect(selector).toHaveBeenCalledTimes(2);
 };
 
 describe('hooks/useSelector', () => {
@@ -79,5 +79,35 @@ describe('hooks/useSelector', () => {
     };
 
     expect(() => testComponent(<Cmp />, { stores: [store] })).not.toThrow();
+  });
+
+  // eslint-disable-next-line jest/expect-expect
+  it('test store updates', async () => {
+    const store = createMockStore();
+    const Cmp = () => {
+      const state = useSelector(store, selector);
+
+      return <div>{state}</div>;
+    };
+
+    const { render, context } = testComponent(<Cmp />, { stores: [store] });
+
+    await act(async () => {
+      await context.getStore(store).inc();
+      await waitRaf();
+    });
+
+    await act(async () => {
+      await context.getStore(store).inc();
+      await waitRaf();
+    });
+
+    await act(async () => {
+      await context.getStore(store).inc();
+      await waitRaf();
+    });
+
+    expect(render.getByText('value=4')).toBeDefined();
+    expect(selector).toHaveBeenCalledTimes(4);
   });
 });

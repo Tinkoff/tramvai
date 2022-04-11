@@ -19,6 +19,7 @@ describe('connect integration tests', () => {
     process.env.NODE_ENV = nodeEnv;
   });
 
+  // TODO: test fails for the react@18 with createRoot
   it('test mapStateToProps calls in child component', async () => {
     class Store extends BaseStore<{ id: number }> {
       static storeName = 'test';
@@ -68,12 +69,15 @@ describe('connect integration tests', () => {
   });
 
   it('should buffer changes in store', async () => {
-    const reducer = createReducer<any>('test', {}).on('test', (state, [k, v]) => {
-      return {
-        ...state,
-        [k]: v,
-      };
-    });
+    const reducer = createReducer<Record<string, number>>('test', {}).on(
+      'test',
+      (state, [k, v]: [string, number]) => {
+        return {
+          ...state,
+          [k]: v,
+        };
+      }
+    );
 
     const mapState = jest.fn((state, arg) => state);
     @connect(['test'], mapState)
@@ -148,8 +152,8 @@ describe('connect integration tests', () => {
       static storeName = 'two';
     }
 
-    let calls = [];
-    const mapState = (name) => (state) => {
+    let calls: any[] = [];
+    const mapState = (name: string) => (state: any) => {
       calls.push({ name, state });
     };
 

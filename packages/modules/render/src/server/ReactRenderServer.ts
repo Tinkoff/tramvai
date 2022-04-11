@@ -27,7 +27,10 @@ export class ReactRenderServer {
   }
 
   render(extractor: ChunkExtractor): Promise<string> {
-    let renderResult = renderReact({ pageService: this.pageService, di: this.di }, this.context);
+    let renderResult = renderReact(
+      { pageService: this.pageService, di: this.di, initialState: null },
+      this.context
+    );
 
     each((render) => {
       renderResult = render(renderResult);

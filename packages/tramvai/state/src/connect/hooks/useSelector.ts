@@ -1,14 +1,16 @@
 import shallowEqual from '@tinkoff/utils/is/shallowEqual';
-import { useReducer, useRef, useMemo } from 'react';
+import { useRef, useMemo, useCallback, useContext } from 'react';
 import { useShallowEqual } from '@tinkoff/react-hooks';
 import invariant from 'invariant';
 import toArray from '@tinkoff/utils/array/toArray';
+import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/shim/with-selector';
 import { useConsumerContext } from './useConsumerContext';
 import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect';
 import { Subscription } from '../Subscription';
 import type { Reducer } from '../../createReducer/createReducer.h';
 import { scheduling } from '../scheduling';
 import type { BaseStoreConstructor } from '../../stores/BaseStore';
+import { ServerStateContext } from '../context';
 
 export type ArrayKeys = keyof any[];
 // Индексы элементов массива
@@ -85,7 +87,7 @@ export function useSelector<T, S extends StoreType | StoreType[]>(
   invariant(selector, `You must pass a selector to useSelectors`);
 
   const context = useConsumerContext();
-  const [, forceRender] = useReducer((s) => s + 1, 0);
+  const serverState = useContext(ServerStateContext);
   const renderIsScheduled = useRef(false);
 
   const storesRef = useShallowEqual(storesOrStore);
@@ -96,21 +98,37 @@ export function useSelector<T, S extends StoreType | StoreType[]>(
   );
 
   const latestSubscriptionCallbackError = useRef<Error>();
-  const latestSelector = useRef<Selector<T>>(selector);
-  const latestSelectedState = useRef<T>();
+
+  const subscribe = useCallback(
+    (reactUpdate: () => void) => {
+      subscription.setOnStateChange(() => {
+        if (!renderIsScheduled.current) {
+          renderIsScheduled.current = true;
+          schedule(() => {
+            reactUpdate();
+            renderIsScheduled.current = false;
+          });
+        }
+      });
+      subscription.trySubscribe();
+
+      return () => {
+        return subscription.tryUnsubscribe();
+      };
+    },
+    [subscription]
+  );
 
   let selectedState: T;
 
   try {
-    if (
-      !latestSelectedState.current ||
-      selector !== latestSelector.current ||
-      latestSubscriptionCallbackError.current
-    ) {
-      selectedState = selector(context.getState());
-    } else {
-      selectedState = latestSelectedState.current;
-    }
+    selectedState = useSyncExternalStoreWithSelector(
+      subscribe,
+      context.getState,
+      serverState ? () => serverState : context.getState,
+      selector,
+      equalityFn
+    );
   } catch (err) {
     let errorMessage = `An error occured while selecting the store state: ${err.message}.`;
 
@@ -122,56 +140,8 @@ export function useSelector<T, S extends StoreType | StoreType[]>(
   }
 
   useIsomorphicLayoutEffect(() => {
-    latestSelector.current = selector;
-    latestSelectedState.current = selectedState;
     latestSubscriptionCallbackError.current = undefined;
   });
-
-  useIsomorphicLayoutEffect(() => {
-    let didUnsubscribe = false;
-
-    function checkForUpdates() {
-      renderIsScheduled.current = false;
-
-      if (didUnsubscribe) {
-        return;
-      }
-
-      try {
-        const newSelectedState = latestSelector.current(context.getState());
-
-        if (equalityFn(newSelectedState, latestSelectedState.current)) {
-          return;
-        }
-
-        latestSelectedState.current = newSelectedState;
-      } catch (err) {
-        // we ignore all errors here, since when the component
-        // is re-rendered, the selectors are called again, and
-        // will throw again, if neither props nor store state
-        // changed
-        latestSubscriptionCallbackError.current = err;
-      }
-
-      forceRender();
-    }
-
-    subscription.setOnStateChange(() => {
-      if (!renderIsScheduled.current) {
-        renderIsScheduled.current = true;
-        schedule(checkForUpdates);
-      }
-    });
-    subscription.trySubscribe();
-
-    checkForUpdates();
-
-    return () => {
-      didUnsubscribe = true;
-
-      return subscription.tryUnsubscribe();
-    };
-  }, [subscription]);
 
   return selectedState;
 }

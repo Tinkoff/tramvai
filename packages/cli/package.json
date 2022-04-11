@@ -52,7 +52,7 @@
     "@babel/traverse": "^7.16.3",
     "@babel/types": "^7.16.0",
     "@discoveryjs/json-ext": "^0.5.6",
-    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.5",
     "@sentry/node": "^6.2.5",
     "@tinkoff/browserslist-config": "0.0.0-stub",
     "@tinkoff/dippy": "0.0.0-stub",
@@ -122,7 +122,7 @@
     "prettyoutput": "^1.2.0",
     "process": "^0.11.10",
     "promise-queue": "^2.2.5",
-    "react-refresh": "^0.10.0",
+    "react-refresh": "^0.12.0",
     "resolve": "^1.19.0",
     "rimraf": "^3.0.2",
     "semver": "^7.3.5",
@@ -168,7 +168,7 @@
     "@types/webpack-dev-middleware": "^5.0.2",
     "@types/webpack-stats-plugin": "^0.3.2",
     "babel-plugin-tester": "^10.1.0",
-    "react": "18.0.0-rc.2"
+    "react": "18.0.0"
   },
   "hiddenDependencies": {
     "@swc/core": "^1.2.124",

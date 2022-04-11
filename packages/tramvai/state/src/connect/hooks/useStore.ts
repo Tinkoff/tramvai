@@ -1,15 +1,14 @@
-import noop from '@tinkoff/utils/function/noop';
-import { useReducer, useRef } from 'react';
+import { useCallback, useRef, useContext } from 'react';
+import { useSyncExternalStore } from 'use-sync-external-store/shim';
 import type { Reducer } from '../../createReducer/createReducer.h';
-import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect';
+import { ServerStateContext } from '../context';
 import { useConsumerContext } from './useConsumerContext';
 
 export function useStore<S>(reducer: Reducer<S>): S {
   const context = useConsumerContext();
+  const serverState = useContext(ServerStateContext);
   const reducerRef = useRef(reducer);
   const addedReducerRef = useRef<string | null>(null);
-  const unsubscribeRef = useRef<Function>(noop);
-  const [, forceRender] = useReducer((s) => s + 1, 0);
 
   // если текущий редьюсер не зарегистрирован в диспетчере,
   // регистрируем его вручную, что бы гарантировать работоспособность `context.getState(reducer)`,
@@ -19,39 +18,32 @@ export function useStore<S>(reducer: Reducer<S>): S {
     addedReducerRef.current = reducer.storeName;
   }
 
-  const stateRef = useRef<S>(context.getState(reducer));
+  const subscribe = useCallback(
+    (reactUpdate: () => void) => {
+      const unsubscribe = context.subscribe(reducer, reactUpdate);
 
-  useIsomorphicLayoutEffect(() => {
-    const subscribe = (updatedState: S) => {
-      // если состояние текущего редьюсера изменилось,
-      // обновляем локальное состояние и ререндерим компонент
-      if (stateRef.current !== updatedState) {
-        stateRef.current = updatedState;
-        forceRender();
-      }
-    };
+      // заменяем текущий редьюсер
+      reducerRef.current = reducer;
 
-    // сразу обновляем состояние
-    subscribe(context.getState(reducer));
-    // и подписываемся на обновления редьюсера
-    unsubscribeRef.current = context.subscribe(reducer, subscribe);
+      return () => {
+        // гарантируем отписку от обновлений текущего редьюсера,
+        // при анмаунте компонента
+        unsubscribe();
 
-    // заменяем текущий редьюсер
-    reducerRef.current = reducer;
+        // если текущий редьюсер был зарегистрирован в диспетчере в этом хуке,
+        // удаляем его из диспетчера
+        if (addedReducerRef.current) {
+          context.unregisterStore(reducerRef.current);
+          addedReducerRef.current = null;
+        }
+      };
+    },
+    [reducer, context]
+  );
 
-    return () => {
-      // гарантируем отписку от обновлений текущего редьюсера,
-      // при анмаунте компонента
-      unsubscribeRef.current();
-
-      // если текущий редьюсер был зарегистрирован в диспетчере в этом хуке,
-      // удаляем его из диспетчера
-      if (addedReducerRef.current) {
-        context.unregisterStore(reducerRef.current);
-        addedReducerRef.current = null;
-      }
-    };
-  }, [reducer, context]);
-
-  return stateRef.current as S;
+  return useSyncExternalStore(
+    subscribe,
+    () => context.getState(reducer),
+    serverState ? () => serverState[reducer.storeName] : () => context.getState(reducer)
+  );
 }

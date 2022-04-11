@@ -18,8 +18,8 @@
     "build-for-publish": "true"
   },
   "dependencies": {
-    "@testing-library/react": "^11.2.6",
-    "@testing-library/react-hooks": "^5.1.2",
+    "@testing-library/react": "^12.1.4",
+    "@testing-library/react-hooks": "^7.0.2",
     "@tinkoff/router": "0.0.0-stub",
     "@tramvai/react": "0.0.0-stub",
     "@tramvai/state": "0.0.0-stub",

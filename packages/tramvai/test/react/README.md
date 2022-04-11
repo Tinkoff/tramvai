@@ -105,3 +105,24 @@ describe('test', () => {
 
 </details>
 </p>
+
+## Troubleshooting
+
+### Warning: ReactDOM.render is no longer supported in React 18
+
+`@tramvai/test-react` comes with support for react 16 and 17 so if you are using react@18 it will lead to the above warning as this backward-compatibility forces to use legacy render methods.
+
+You can manually specify not to use legacy rendering mode by settings option [`legacyRoot`](https://testing-library.com/docs/react-testing-library/api#legacyroot) to `false`
+
+```ts
+/**
+ * @jest-environment jsdom
+ */
+import { testComponent } from '@tramvai/test-react';
+
+describe('test', () => {
+  it('component', async () => {
+    const { render } = testComponent(<Cmp id={1} />, { legacyRoot: false });
+  });
+});
+```

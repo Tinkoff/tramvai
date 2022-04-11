@@ -17,7 +17,7 @@ const mockSubscription = jest.fn(() => mockSub);
 
 jest.mock('./Subscription', () => ({ Subscription: mockSubscription }));
 
-const mockSelector = jest.fn(() => ({}));
+const mockSelector = jest.fn(() => '');
 const selectorFactory = jest.fn(() => mockSelector);
 const context = {
   getStore: jest.fn(identity),

@@ -91,8 +91,16 @@ describe('useStore', () => {
   it('zombie children safe (React feature)', () => {
     const { reducer } = createMockStore();
     const removeEvent = createEvent('remove');
-    const listReducer = createReducer<any>('list', [{ id: 1 }, { id: 2 }, { id: 3 }]);
-    const mapReducer = createReducer<any>('map', { 1: 'first', 2: 'second', 3: 'third' });
+    const listReducer = createReducer<Array<{ id: number }>>('list', [
+      { id: 1 },
+      { id: 2 },
+      { id: 3 },
+    ]);
+    const mapReducer = createReducer<Record<number, string>>('map', {
+      1: 'first',
+      2: 'second',
+      3: 'third',
+    });
 
     listReducer.on(removeEvent, () => [{ id: 2 }, { id: 3 }]);
     mapReducer.on(removeEvent, () => ({ 2: 'second', 3: 'third' }));
@@ -100,7 +108,7 @@ describe('useStore', () => {
     const watchParentRender = jest.fn();
     const watchChildRender = jest.fn();
 
-    const ChildComponent = ({ id }) => {
+    const ChildComponent = ({ id }: { id: number }) => {
       const map = useStore(mapReducer);
       watchChildRender(id, map[id]);
       return null;
