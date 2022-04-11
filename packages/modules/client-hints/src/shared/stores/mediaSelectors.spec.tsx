@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import { createMockContext } from '@tramvai/test-mocks';
 import { testHook } from '@tramvai/test-react';
 import { createReducer } from '@tramvai/state';
