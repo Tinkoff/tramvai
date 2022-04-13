@@ -67,11 +67,7 @@ export function measure<T extends string = string>({
     labelNames,
   });
 
-  const excludePatterns = flatten(metricsExcludePaths).map((p) =>
-    pathToRegexp(p, {
-      strict: false,
-    })
-  );
+  const excludePatterns = flatten(metricsExcludePaths).map((p) => pathToRegexp(p));
 
   return (req: Request, res: Response, next: NextFunction) => {
     if (excludePatterns.some((p) => p.test(req.path))) {
