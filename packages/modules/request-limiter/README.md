@@ -57,6 +57,9 @@ const provider = {
 };
 ```
 
+The basic settings should work well for most applications, as there is a system built in to adapt and automatically change the parameters relative to the loads. As a result, change the settings after you have done a load test and know that the changes will definitely improve the situation
+
+
 ## Explanation
 
 After the server starts, request limiter can handle `options.limit` parallel connections.

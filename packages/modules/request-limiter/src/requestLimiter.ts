@@ -67,13 +67,11 @@ export class RequestLimiter {
     if (Number.isNaN(this.eventLoopDelay)) this.eventLoopDelay = Infinity;
     this.eventLoopHistogram.reset();
 
-    if (
-      this.currentActive >= this.activeRequestLimit &&
-      this.activeRequestLimit > this.minimalActiveRequestLimit
-    ) {
+    if (this.currentActive >= this.activeRequestLimit) {
       if (this.eventLoopDelay <= this.maxEventLoopDelay) {
         this.activeRequestLimit++;
-      } else {
+        // We need to have minimalActiveRequestLimit
+      } else if (this.activeRequestLimit >= this.minimalActiveRequestLimit) {
         this.activeRequestLimit--;
       }
     }

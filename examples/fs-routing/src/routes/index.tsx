@@ -1,4 +1,3 @@
-import React from 'react';
 import { useActions } from '@tramvai/state';
 import { Button } from '../components/shared/Button/Button';
 import { navigateAction } from '../actions/navigateAction';
