@@ -29,7 +29,7 @@
     "@tinkoff/dippy": "0.0.0-stub",
     "express": "^4.17.1",
     "fastify": "^3.27.4",
-    "react": "^17.0.0",
+    "react": ">=16.8",
     "tslib": "^2.0.3"
   },
   "es2017": "lib/index.es2017.js",
