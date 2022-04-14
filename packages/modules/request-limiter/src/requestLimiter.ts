@@ -50,7 +50,7 @@ export class RequestLimiter {
     } = options;
 
     this.activeRequestLimit = limit;
-    this.minimalActiveRequestLimit = Math.floor(limit / 2);
+    this.minimalActiveRequestLimit = Math.round(limit / 3);
     this.queueLimit = queue;
     this.error = error;
     this.maxEventLoopDelay = maxEventLoopDelay;
@@ -71,7 +71,7 @@ export class RequestLimiter {
       if (this.eventLoopDelay <= this.maxEventLoopDelay) {
         this.activeRequestLimit++;
         // We need to have minimalActiveRequestLimit
-      } else if (this.activeRequestLimit >= this.minimalActiveRequestLimit) {
+      } else if (this.activeRequestLimit > this.minimalActiveRequestLimit) {
         this.activeRequestLimit--;
       }
     }
