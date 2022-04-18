@@ -5,6 +5,7 @@ import net from 'net';
 import type { Socket } from 'net';
 import url from 'url';
 import type { LOGGER_TOKEN } from '@tramvai/tokens-common';
+import type { METRICS_MODULE_TOKEN } from '@tramvai/tokens-metrics';
 import { matchNoProxy } from './match-no-proxy';
 import { getHttpsProxy, getNoProxy } from '../utils/env';
 
@@ -37,10 +38,22 @@ export interface ConnectOptions {
 /**
  * Fork of https://github.com/mknj/node-keepalive-proxy-agent with monkeypatching and no_proxy support
  */
-export const addProxyToHttpsAgent = ({ logger }: { logger: ReturnType<typeof LOGGER_TOKEN> }) => {
+export const addProxyToHttpsAgent = ({
+  logger,
+  metrics,
+}: {
+  logger: ReturnType<typeof LOGGER_TOKEN>;
+  metrics: typeof METRICS_MODULE_TOKEN;
+}) => {
   const httpsProxyEnv = getHttpsProxy();
   const noProxyEnv = getNoProxy();
   const noProxyMatchResults = {};
+
+  const metricsConnectionCounter = metrics.counter({
+    name: 'http_proxy_connect_total',
+    help: 'Number of proxy connects',
+    labelNames: ['host'],
+  });
 
   if (!httpsProxyEnv) {
     return;
@@ -81,14 +94,21 @@ export const addProxyToHttpsAgent = ({ logger }: { logger: ReturnType<typeof LOG
 
   function createConnectionHttpsAfterHttp(options: ConnectOptions, cb) {
     const proxySocket = net.connect(+proxy.port, proxy.hostname);
+    const host = options.hostname || options.host;
 
     const errorListener = (error) => {
       proxySocket.destroy();
       cb(error);
     };
+    const successConnectionListener = () => {
+      metricsConnectionCounter.inc({ host });
+    };
+
     proxySocket.once('error', errorListener);
+    proxySocket.on('connect', successConnectionListener);
 
     let response = '';
+
     const dataListener = (data) => {
       response += data.toString();
       if (!response.endsWith('\r\n\r\n')) {
@@ -112,12 +132,6 @@ export const addProxyToHttpsAgent = ({ logger }: { logger: ReturnType<typeof LOG
       cb(null, originalCreateConnection.call(this, options));
     };
     proxySocket.on('data', dataListener);
-
-    let host = options.hostname;
-
-    if (!host) {
-      host = options.host;
-    }
 
     // https://datatracker.ietf.org/doc/html/rfc7231#section-4.3.6
     let cmd = `CONNECT ${host}:${options.port} HTTP/1.1\r\n`;

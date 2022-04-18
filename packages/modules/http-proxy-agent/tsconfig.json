@@ -17,6 +17,9 @@
         },
         {
             "path": "../../tokens/common"
+        },
+        {
+            "path": "../../tokens/metrics"
         }
     ]
 }
