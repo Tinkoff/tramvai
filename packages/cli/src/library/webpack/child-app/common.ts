@@ -13,9 +13,10 @@ import nodeClient from '../blocks/nodeClient';
 import type { ModuleFederationPluginOptions } from '../types/webpack';
 import { getSharedModules } from './moduleFederationShared';
 import { configToEnv } from '../blocks/configToEnv';
+import sourcemaps from '../blocks/sourcemaps';
 
 export default (configManager: ConfigManager<ModuleConfigEntry>) => (config: Config) => {
-  const { name, root } = configManager;
+  const { name, root, sourceMap } = configManager;
 
   const cssLocalIdentName =
     configManager.env === 'production'
@@ -47,6 +48,10 @@ export default (configManager: ConfigManager<ModuleConfigEntry>) => (config: Con
         localIdentName: cssLocalIdentName,
       })
     );
+
+  if (sourceMap) {
+    config.batch(sourcemaps(configManager));
+  }
 
   config.plugin('module-federation').use(container.ModuleFederationPlugin, [
     {
