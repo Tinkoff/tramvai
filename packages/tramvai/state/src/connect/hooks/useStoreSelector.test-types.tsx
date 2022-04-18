@@ -46,7 +46,7 @@ describe('check useStoreSelector type infer', () => {
       const selector = (a: { x: string }) => ({ hello: a.x });
       // @ts-expect-error
       const state = useStoreSelector(store, selector);
-      return <div>{state}</div>;
+      return <div>{JSON.stringify(state)}</div>;
     };
   });
   it('has type error with not correct using selector result', () => {

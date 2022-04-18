@@ -5,10 +5,10 @@ import { RouterContext, RouteContext, UrlContext } from './context';
 import type { AbstractRouter } from '../../router/abstract';
 import type { NavigationRoute } from '../../types';
 
-export const Provider: React.FunctionComponent<{ router: AbstractRouter }> = ({
-  router,
-  children,
-}) => {
+export const Provider: React.FunctionComponent<{
+  router: AbstractRouter;
+  children?: React.ReactNode;
+}> = ({ router, children }) => {
   const [state, setState] = useState<{ route: NavigationRoute; url: Url }>({
     route: router.getCurrentRoute(),
     url: router.getCurrentUrl(),

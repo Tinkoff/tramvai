@@ -23,6 +23,9 @@
         },
         {
             "path": "../../libs/cookies"
+        },
+        {
+            "path": "../../tokens/cookie"
         }
     ]
 }

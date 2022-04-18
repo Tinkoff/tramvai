@@ -40,7 +40,7 @@ export const testHook = <TProps, TResult>(
 
   const { result, rerender } = renderHook(hookCallback, {
     ...renderOptions,
-    wrapper: ({ children }) => {
+    wrapper: ({ children }: { children?: React.ReactNode }) => {
       return (
         <StateProvider context={context}>
           <DIContext.Provider value={context.di}>

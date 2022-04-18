@@ -16,6 +16,7 @@ interface Props {
   LayoutComponent: React.ComponentType<{
     Header: React.ComponentType;
     Footer: React.ComponentType;
+    children?: React.ReactNode;
   }>;
   PageComponent: React.ComponentType;
   HeaderComponent: React.ComponentType;

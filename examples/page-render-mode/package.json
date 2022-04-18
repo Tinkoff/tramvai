@@ -13,7 +13,7 @@
     "test:integration:watch": "jest --runInBand --watch --config ./jest.integration.config.js"
   },
   "devDependencies": {
-    "@types/react": "^17.0.0",
+    "@types/react": "^18.0.0",
     "@types/jest": "^26.0.23",
     "@tramvai/cli": "0.0.0-stub",
     "@tramvai/test-integration": "0.0.0-stub",

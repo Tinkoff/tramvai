@@ -19,6 +19,7 @@ export interface UniversalErrorBoundaryProps {
    * @deprecated
    */
   fallbackFromDi?: React.ReactElement | null;
+  children?: React.ReactNode;
 }
 
 interface State {

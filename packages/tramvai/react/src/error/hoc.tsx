@@ -7,7 +7,9 @@ import { ErrorBoundary } from './component';
  */
 export const withError = ({
   fallbackComponent,
-}: { fallbackComponent?: React.ReactElement } = {}) => <T extends React.ComponentType<any>>(
+}: { fallbackComponent?: React.ReactElement } = {}) => <
+  T extends React.ComponentType<{ children?: React.ReactNode }>
+>(
   WrappedComponent: T
 ) => {
   function WrapperWithError(props: any) {
@@ -19,5 +21,5 @@ export const withError = ({
     );
   }
 
-  return hoistStatics(WrapperWithError, WrappedComponent) as T;
+  return hoistStatics(WrapperWithError, WrappedComponent as any) as T;
 };

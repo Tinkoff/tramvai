@@ -7,6 +7,7 @@ interface Props {
   errorHandlers?: typeof ERROR_BOUNDARY_TOKEN | null;
   fallbackComponent?: React.ReactElement | null;
   fallbackComponentFromDi?: React.ReactElement | null;
+  children?: React.ReactNode;
 }
 
 interface State {

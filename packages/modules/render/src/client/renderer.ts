@@ -1,3 +1,4 @@
+import type React from 'react';
 import { createElement } from 'react';
 import { useIsomorphicLayoutEffect } from '@tinkoff/react-hooks';
 import type { FC } from 'react';
@@ -10,7 +11,10 @@ try {
   hydrateRoot = require('react-dom/client').hydrateRoot;
 } catch {}
 
-const ExecuteRenderCallback: FC<{ callback: () => void }> = ({ children, callback }) => {
+const ExecuteRenderCallback: FC<{ callback: () => void; children?: React.ReactNode }> = ({
+  children,
+  callback,
+}) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useIsomorphicLayoutEffect(callback, []);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

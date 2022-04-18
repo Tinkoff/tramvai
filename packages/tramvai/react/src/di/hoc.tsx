@@ -4,7 +4,7 @@ import type { ProviderDeps, ProvideDepsIterator } from '@tinkoff/dippy';
 import { useDi } from './hooks';
 
 export const withDi = <T extends ProviderDeps>(deps: T) => <
-  C extends React.ComponentType<Partial<ProvideDepsIterator<T>>>
+  C extends React.ComponentType<Partial<ProvideDepsIterator<T>> & { children?: React.ReactNode }>
 >(
   WrappedComponent: C
 ) => {
@@ -15,5 +15,5 @@ export const withDi = <T extends ProviderDeps>(deps: T) => <
     return <WrappedComponent {...props} {...depsInstance} />;
   }
 
-  return hoistStatics(WrapperWithPropsFromDi, WrappedComponent) as C;
+  return hoistStatics(WrapperWithPropsFromDi, WrappedComponent as any) as C;
 };

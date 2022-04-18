@@ -22,7 +22,7 @@
     "@tramvai/safe-strings": "0.0.0-stub",
     "@tramvai/tokens-child-app": "0.0.0-stub",
     "@tramvai/tokens-render": "0.0.0-stub",
-    "react-query": "^3.34.14"
+    "react-query": "^3.35.0"
   },
   "devDependencies": {},
   "peerDependencies": {
