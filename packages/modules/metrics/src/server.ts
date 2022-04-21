@@ -1,9 +1,9 @@
-import { Scope, Module, provide } from '@tramvai/core';
+import { Scope, Module, provide, commandLineListTokens } from '@tramvai/core';
+import { SPECIAL_SERVER_PATHS } from '@tramvai/tokens-server';
 import {
-  WEB_APP_TOKEN,
-  WEB_APP_BEFORE_INIT_TOKEN,
-  SPECIAL_SERVER_PATHS,
-} from '@tramvai/tokens-server';
+  WEB_FASTIFY_APP_TOKEN,
+  WEB_FASTIFY_APP_BEFORE_INIT_TOKEN,
+} from '@tramvai/tokens-server-private';
 import { METRICS_MODULE_TOKEN } from '@tramvai/tokens-metrics';
 import { measure } from '@tinkoff/measure-express-requests';
 import { Registry, Counter, Gauge, Histogram, Summary, collectDefaultMetrics } from 'prom-client';
@@ -44,48 +44,51 @@ import { METRICS_MODULE_CONFIG_TOKEN } from './tokens';
       },
     }),
     provide({
-      provide: WEB_APP_BEFORE_INIT_TOKEN,
+      provide: WEB_FASTIFY_APP_BEFORE_INIT_TOKEN,
       useFactory: ({
-        metrics,
         app,
+        metrics,
         additionalLabelNamesList,
         getAdditionalLabelValuesList,
         httpRequestsDurationBuckets,
         metricsExcludePaths,
         registry,
       }) => {
-        return () => {
-          app.use('/metrics', (req, res, next) => {
+        return async () => {
+          app.all('/metrics', async (_, res) => {
             res.type(registry.contentType);
-            res.send(registry.metrics());
+
+            return registry.metrics();
           });
 
-          app.use(
-            measure({
-              metrics,
-              metricsExcludePaths,
-              additionalLabelNames: flatten(additionalLabelNamesList || []) as string[],
-              getAdditionalLabelValues(req, res) {
-                if (!getAdditionalLabelValuesList) {
-                  return {};
-                }
+          const measured = measure({
+            metrics,
+            metricsExcludePaths,
+            additionalLabelNames: flatten(additionalLabelNamesList || []) as string[],
+            getAdditionalLabelValues(req, res) {
+              if (!getAdditionalLabelValuesList) {
+                return {};
+              }
 
-                return getAdditionalLabelValuesList.reduce(
-                  (labelValues, getLV) => ({
-                    ...labelValues,
-                    ...getLV(req, res),
-                  }),
-                  {}
-                );
-              },
-              httpRequestsDurationBuckets,
-            })
-          );
+              return getAdditionalLabelValuesList.reduce(
+                (labelValues, getLV) => ({
+                  ...labelValues,
+                  ...getLV(req, res),
+                }),
+                {}
+              );
+            },
+            httpRequestsDurationBuckets,
+          });
+
+          app.addHook('onRequest', (request, reply, next) => {
+            measured({ ...request.raw, path: request.url } as any, reply as any, next);
+          });
         };
       },
       deps: {
         metrics: METRICS_MODULE_TOKEN,
-        app: WEB_APP_TOKEN,
+        app: WEB_FASTIFY_APP_TOKEN,
         additionalLabelNamesList: {
           token: 'additionalLabelNames',
           multi: true,
@@ -106,7 +109,7 @@ import { METRICS_MODULE_CONFIG_TOKEN } from './tokens';
       multi: true,
     }),
     provide({
-      provide: WEB_APP_BEFORE_INIT_TOKEN,
+      provide: commandLineListTokens.listen,
       useFactory: ({ metrics }) => {
         return () => {
           eventLoopMetrics(metrics);

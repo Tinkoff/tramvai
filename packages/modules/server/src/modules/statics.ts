@@ -1,42 +1,45 @@
-import express from 'express';
-import { Module } from '@tramvai/core';
+import { resolve } from 'path';
+import FastifyStatic from 'fastify-static';
+import { Module, provide } from '@tramvai/core';
+import { SERVER_MODULE_STATICS_OPTIONS } from '@tramvai/tokens-server';
 import {
-  SERVER_MODULE_STATICS_OPTIONS,
-  WEB_APP_TOKEN,
-  WEB_APP_BEFORE_INIT_TOKEN,
-} from '@tramvai/tokens-server';
+  WEB_FASTIFY_APP_BEFORE_INIT_TOKEN,
+  WEB_FASTIFY_APP_TOKEN,
+} from '@tramvai/tokens-server-private';
 
 const ONE_YEAR = 365 * 24 * 60 * 60;
 
 @Module({
   providers: [
-    {
-      provide: WEB_APP_BEFORE_INIT_TOKEN,
+    provide({
+      provide: WEB_FASTIFY_APP_BEFORE_INIT_TOKEN,
       useFactory: ({ app, options }) => {
         const path = options?.path || 'public';
 
         return () => {
-          app.use(
-            express.static(path, {
-              setHeaders: (res) => {
-                const oneYearForward = new Date(Date.now() + ONE_YEAR * 1000);
+          app.register(FastifyStatic, {
+            decorateReply: false,
+            prefix: `/${path}`,
+            root: resolve(process.cwd(), path),
 
-                res.set('cache-control', `public, max-age=${ONE_YEAR}`);
-                res.set('expires', oneYearForward.toUTCString());
-              },
-            })
-          );
+            setHeaders: (res) => {
+              const oneYearForward = new Date(Date.now() + ONE_YEAR * 1000);
+
+              res.setHeader('cache-control', `public, max-age=${ONE_YEAR}`);
+              res.setHeader('expires', oneYearForward.toUTCString());
+            },
+          });
         };
       },
       deps: {
-        app: WEB_APP_TOKEN,
+        app: WEB_FASTIFY_APP_TOKEN,
         options: {
           token: SERVER_MODULE_STATICS_OPTIONS,
           optional: true,
         },
       },
       multi: true,
-    },
+    }),
   ],
 })
 export class ServerStaticsModule {}

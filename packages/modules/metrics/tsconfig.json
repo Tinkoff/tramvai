@@ -34,9 +34,6 @@
             "path": "../../tramvai/papi"
         },
         {
-            "path": "../../libs/measure-express-requests"
-        },
-        {
             "path": "../../tramvai/state"
         },
         {
@@ -47,6 +44,12 @@
         },
         {
             "path": "../../tokens/http-client"
+        },
+        {
+            "path": "../../tokens/server-private"
+        },
+        {
+            "path": "../../libs/measure-express-requests"
         }
     ]
 }

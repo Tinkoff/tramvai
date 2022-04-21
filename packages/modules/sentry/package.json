@@ -23,14 +23,14 @@
     "@sentry/types": "^6.17.2"
   },
   "peerDependencies": {
+    "@tinkoff/dippy": "0.0.0-stub",
     "@tinkoff/utils": "^2.1.2",
     "@tramvai/core": "0.0.0-stub",
     "@tramvai/module-common": "0.0.0-stub",
     "@tramvai/react": "0.0.0-stub",
     "@tramvai/tokens-metrics": "0.0.0-stub",
-    "@tramvai/tokens-server": "0.0.0-stub",
     "@tramvai/tokens-render": "0.0.0-stub",
-    "@tinkoff/dippy": "0.0.0-stub",
+    "@tramvai/tokens-server-private": "0.0.0-stub",
     "tslib": "^2.0.3"
   },
   "module": "lib/server.es.js",

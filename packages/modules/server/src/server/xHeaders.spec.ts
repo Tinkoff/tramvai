@@ -1,4 +1,4 @@
-import express from 'express';
+import fastify from 'fastify';
 import request from 'supertest';
 import { hostname as mockHostname } from 'os';
 import type { APP_INFO_TOKEN } from '@tramvai/core';
@@ -19,7 +19,7 @@ jest.mock('os', () => ({
 
 describe('server/xHeaders', () => {
   const initApp = async () => {
-    const app = express();
+    const app = fastify();
 
     const xHeaders = xHeadersFactory({
       app,
@@ -28,11 +28,13 @@ describe('server/xHeaders', () => {
     });
 
     await xHeaders();
-    app.get('/', (req, res) => {
-      res.end('OK');
+    app.get('/', async (req, res) => {
+      return 'OK';
     });
 
-    return app;
+    await app.ready();
+
+    return app.server;
   };
 
   it('should set xHeaders to response', async () => {

@@ -21,7 +21,7 @@
   "dependencies": {
     "@tinkoff/errors": "0.0.0-stub",
     "@tramvai/tokens-common": "0.0.0-stub",
-    "@tramvai/tokens-server": "0.0.0-stub"
+    "@tramvai/tokens-server-private": "0.0.0-stub"
   },
   "peerDependencies": {
     "@tinkoff/utils": "^2.1.2",

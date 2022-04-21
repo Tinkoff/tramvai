@@ -1,5 +1,5 @@
-import type { Request, Response, NextFunction } from 'express';
-import onFinished from 'on-finished';
+import type { FastifyRequest, FastifyReply, HookHandlerDoneFunction } from 'fastify';
+import fp from 'fastify-plugin';
 import { HttpError } from '@tinkoff/errors';
 import type { IntervalHistogram } from 'perf_hooks';
 import { monitorEventLoopDelay } from 'perf_hooks';
@@ -23,9 +23,9 @@ export interface RequestLimiterOptions {
 }
 
 export interface RequestLimiterRequest {
-  req: Request;
-  res: Response;
-  next: NextFunction;
+  req: FastifyRequest;
+  res: FastifyReply;
+  next: HookHandlerDoneFunction;
 }
 
 const resolution = 10;
@@ -61,7 +61,12 @@ export class RequestLimiter {
     timer.unref();
   }
 
-  // General idea is change limits ever second. Because if DDOS was happened we need some time to get problem with event loop. And better if we slowly adapt
+  onResponse() {
+    this.currentActive--;
+    this.loop();
+  }
+
+  // General idea is change limits every second. Because if DDOS was happened we need some time to get problem with event loop. And better if we slowly adapt
   private nextTick() {
     this.eventLoopDelay = Math.max(0, this.eventLoopHistogram.mean / 1e6 - resolution);
     if (Number.isNaN(this.eventLoopDelay)) this.eventLoopDelay = Infinity;
@@ -97,15 +102,21 @@ export class RequestLimiter {
     }
   }
 
-  private run({ req, res, next }: RequestLimiterRequest) {
+  private run({ next }: RequestLimiterRequest) {
     this.currentActive++;
-
-    // onFinished doesn't work OK in DEV mode. Just stuck with high load without any reasons
-    onFinished(res, () => {
-      this.currentActive--;
-      this.loop();
-    });
 
     next();
   }
 }
+
+export const fastifyRequestsLimiter = fp<{ requestsLimiter: RequestLimiter }>(
+  async (fastify, { requestsLimiter }) => {
+    fastify.addHook('onRequest', (req, res, next) => {
+      requestsLimiter.add({ req, res, next });
+    });
+
+    fastify.addHook('onResponse', async () => {
+      requestsLimiter.onResponse();
+    });
+  }
+);

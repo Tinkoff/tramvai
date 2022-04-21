@@ -24,13 +24,13 @@
             "path": "../../tokens/common"
         },
         {
-            "path": "../../tokens/server"
-        },
-        {
             "path": "../../libs/errors"
         },
         {
             "path": "../client-hints"
+        },
+        {
+            "path": "../../tokens/server-private"
         }
     ]
 }

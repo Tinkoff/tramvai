@@ -6,7 +6,7 @@ import {
   REQUEST_MANAGER_TOKEN,
   RESPONSE_MANAGER_TOKEN,
 } from '@tramvai/tokens-common';
-import { WEB_APP_AFTER_INIT_TOKEN } from '@tramvai/tokens-server';
+import { WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN } from '@tramvai/tokens-server-private';
 import { getCacheEntry } from './cache';
 import { defaultSettingsProviders } from './default';
 import { isStopCommandLineRunnerError, StopCommandLineRunnerError } from './error';
@@ -167,19 +167,6 @@ export * from './tokens';
         cache: RESPONSE_CACHE_INSTANCE,
       },
     }),
-    {
-      provide: WEB_APP_AFTER_INIT_TOKEN,
-      multi: true,
-      useValue: ((app) => {
-        app.use((err, req, res, next) => {
-          // ignore error if it is StopCommandLineError as that means we have already handled response
-          // and shouldn't do anything else
-          if (!isStopCommandLineRunnerError(err)) {
-            next(err);
-          }
-        });
-      }) as typeof WEB_APP_AFTER_INIT_TOKEN[number],
-    },
   ],
 })
 export class ServerResponseCacheModule {}

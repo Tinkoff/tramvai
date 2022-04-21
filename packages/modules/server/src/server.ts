@@ -132,11 +132,11 @@ export * from '@tramvai/tokens-server';
       ],
     },
     {
-      provide: WEB_APP_BEFORE_INIT_TOKEN,
+      provide: WEB_FASTIFY_APP_INIT_TOKEN,
       multi: true,
       useFactory: xHeadersFactory,
       deps: {
-        app: WEB_APP_TOKEN,
+        app: WEB_FASTIFY_APP_TOKEN,
         envManager: ENV_MANAGER_TOKEN,
         appInfo: APP_INFO_TOKEN,
       },

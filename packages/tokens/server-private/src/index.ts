@@ -80,5 +80,5 @@ export type FASTIFY_APP_ERROR_HANDLER = Array<
     error: FastifyError,
     request: FastifyRequest,
     reply: FastifyReply
-  ) => Promise<string | undefined> | string | undefined
+  ) => Promise<string | undefined | void> | string | undefined | void
 >;

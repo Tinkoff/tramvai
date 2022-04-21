@@ -2,6 +2,7 @@ import isUndefined from '@tinkoff/utils/is/undefined';
 import isEmpty from '@tinkoff/utils/is/empty';
 import type { PageResource, RESOURCE_INLINE_OPTIONS } from '@tramvai/tokens-render';
 import { ResourceType } from '@tramvai/tokens-render';
+import type { LOGGER_TOKEN } from '@tramvai/tokens-common';
 import { isAbsoluteUrl } from '@tinkoff/url';
 import { getFile, getFileContentLength } from './externalFilesHelper';
 import type { RESOURCES_REGISTRY_CACHE } from './tokens';
@@ -37,6 +38,7 @@ export interface ResourcesInlinerType {
 export class ResourcesInliner implements ResourcesInlinerType {
   private resourceInlineThreshold?: typeof RESOURCE_INLINE_OPTIONS;
   private resourcesRegistryCache: typeof RESOURCES_REGISTRY_CACHE;
+  private log: ReturnType<typeof LOGGER_TOKEN>;
 
   private scheduleFileLoad = (resource: PageResource, resourceInlineThreshold: number) => {
     const url = getResourceUrl(resource);
@@ -59,6 +61,13 @@ export class ResourcesInliner implements ResourcesInlinerType {
             this.resourcesRegistryCache.filesCache.set(url, processFile(resource, file));
           }
           this.resourcesRegistryCache.sizeCache.set(url, size);
+        })
+        .catch((error) => {
+          this.log.warn({
+            event: 'file-load-failed',
+            url,
+            error,
+          });
         })
         .finally(() => {
           this.resourcesRegistryCache.requestsCache.set(requestKey, undefined);
@@ -85,6 +94,13 @@ export class ResourcesInliner implements ResourcesInlinerType {
             this.scheduleFileLoad(resource, resourceInlineThreshold);
           }
         })
+        .catch((error) => {
+          this.log.warn({
+            event: 'file-content-length-load-failed',
+            url,
+            error,
+          });
+        })
         .finally(() => {
           this.resourcesRegistryCache.requestsCache.set(requestKey, undefined);
         });
@@ -92,9 +108,10 @@ export class ResourcesInliner implements ResourcesInlinerType {
     }
   };
 
-  constructor({ resourcesRegistryCache, resourceInlineThreshold }) {
+  constructor({ resourcesRegistryCache, resourceInlineThreshold, logger }) {
     this.resourcesRegistryCache = resourcesRegistryCache;
     this.resourceInlineThreshold = resourceInlineThreshold;
+    this.log = logger('resources-inliner');
   }
 
   // Метод проверки, стоит ли добавлять preload-ресурс

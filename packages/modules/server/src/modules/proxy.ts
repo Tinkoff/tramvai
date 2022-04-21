@@ -18,6 +18,8 @@ import { safeNodeRequire } from './utils/require';
 @Module({
   providers: [
     {
+      // TODO: tramvai@2 migrate to `fastify` and `fastify-http-proxy`
+      // interfaces for the proxies are not compatible so some migration from the app is needed
       provide: WEB_APP_BEFORE_INIT_TOKEN,
       useFactory: ({ app, defaultProxies }) => {
         return () => {

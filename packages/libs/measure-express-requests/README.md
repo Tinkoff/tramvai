@@ -1,26 +1,28 @@
 # @tinkoff/measure-express-requests
 
-Библиотека для замера RED метрик в express приложениях
+Library for measuring RED metrics in the express app
 
-## Пример использования
+## Example
 
-```
+```ts
 import express from 'express';
 import { measure } from '@tinkoff/measure-express-requests';
 import { Counter, Histogram } from 'prom-client';
 
 const app = express();
 
-app.use(measure({
-  metrics: {
-    counter: (opt) => new Counter(opt),
-    histogram: (opt) => new Histogram(opt),
-  }
-}))
+app.use(
+  measure({
+    metrics: {
+      counter: (opt) => new Counter(opt),
+      histogram: (opt) => new Histogram(opt),
+    },
+  })
+);
 ```
 
-В результате в registry из prom-client будут собираться метрики:
+In the prom-client registry new metrics will be available:
 
-- `http_requests_total` - счётчик входящих вопросов;
-- `http_requests_errors` - счётчик ошибок во входящих запросах;
-- `http_requests_execution_time` - гистограмма с измерениями времени выполнения входящих запросов.
+- `http_requests_total` - number of incoming requests;
+- `http_requests_errors` - number of errors in the incoming requests;
+- `http_requests_execution_time` - histogram with the request handler execution time.

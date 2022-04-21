@@ -74,6 +74,7 @@ export const DEFAULT_POLYFILL_CONDITION =
       deps: {
         resourcesRegistryCache: RESOURCES_REGISTRY_CACHE,
         resourceInlineThreshold: { token: RESOURCE_INLINE_OPTIONS, optional: true },
+        logger: LOGGER_TOKEN,
       },
     }),
     provide({

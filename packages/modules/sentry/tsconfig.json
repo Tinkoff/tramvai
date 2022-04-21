@@ -19,9 +19,6 @@
             "path": "../../libs/dippy"
         },
         {
-            "path": "../../tokens/server"
-        },
-        {
             "path": "../../tramvai/react"
         },
         {
@@ -29,6 +26,9 @@
         },
         {
             "path": "../../tokens/render"
+        },
+        {
+            "path": "../../tokens/server-private"
         }
     ]
 }

@@ -19,7 +19,7 @@
             "path": "../../libs/errors"
         },
         {
-            "path": "../../tokens/server"
+            "path": "../../tokens/server-private"
         }
     ]
 }
