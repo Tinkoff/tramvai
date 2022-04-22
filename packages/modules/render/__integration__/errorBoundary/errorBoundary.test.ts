@@ -10,7 +10,6 @@ describe('errorBoundary', () => {
       commands: {
         build: {
           options: {
-            vendor: 'vendor.ts',
             polyfill: 'polyfill.ts',
           },
         },

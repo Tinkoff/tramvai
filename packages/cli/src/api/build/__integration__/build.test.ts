@@ -29,6 +29,7 @@ describe('@tramvai/cli build command', () => {
 Array [
   "platform.css",
   "platform.js",
+  "react.js",
   "src_api_build___integration_____fixtures___app_bundles_first_ts.js",
   "src_api_build___integration_____fixtures___app_bundles_main_ts.js",
   "src_api_build___integration_____fixtures___app_bundles_second_ts.js",
@@ -80,6 +81,7 @@ Array [
 Array [
   "platform.css",
   "platform.js",
+  "react.js",
   "src_api_build___integration_____fixtures___app_bundles_first_ts.js",
   "src_api_build___integration_____fixtures___app_bundles_main_ts.js",
   "src_api_build___integration_____fixtures___app_bundles_second_ts.js",

@@ -24,8 +24,7 @@ import '@tinkoff/pack-polyfills';
 
 #### Set up @tramvai/cli
 
-After that, we need to tell `@tramvai/cli` that our project has polyfills.
-To do this, in `tramvai.json` we add for our project the line `"polyfill: "src/polyfill.ts"` in `projects[APP_ID].commands.build.options.polyfill` example:
+After that, we need to tell `@tramvai/cli` that our project has polyfills. To do this, in `tramvai.json` we add for our project the line `"polyfill: "src/polyfill.ts"` in `projects[APP_ID].commands.build.options.polyfill` example:
 
 ```json
 {
@@ -38,7 +37,6 @@ To do this, in `tramvai.json` we add for our project the line `"polyfill: "src/p
         "build": {
           "options": {
             "server": "src/index.ts",
-            "vendor": "src/vendor.ts",
             "polyfill": "src/polyfill.ts"
           }
         }
@@ -46,13 +44,11 @@ To do this, in `tramvai.json` we add for our project the line `"polyfill: "src/p
     }
   }
 }
-
 ```
 
 ## How polyfills loading works
 
-On the `@tramvai/cli` side, we have configured to build the polyfills into a separate file, so it doesn't mix with the main code.
-On every build we will have a file with polyfills.
+On the `@tramvai/cli` side, we have configured to build the polyfills into a separate file, so it doesn't mix with the main code. On every build we will have a file with polyfills.
 
 [module-render](references/modules/render.md) if it finds polyfills in the build, then for each client embeds inline code that checks the availability of features in the browser and if the browser does not support any of the features, then we consider the browser is legacy and load polyfills. An example of a check: `!window.Promise.prototype.finally || !window.URL || !window.URLSearchParams || !window.AbortController || !window.IntersectionObserver || !Object.fromEntries'`
 
@@ -60,8 +56,7 @@ On every build we will have a file with polyfills.
 
 ### Why would it be necessary?
 
-If you do not fit the standard check for supported features in the browser and polyfills do not load in browsers where they should.
-In this case, it is better to create issue and we will update the check, or you can replace the check with another.
+If you do not fit the standard check for supported features in the browser and polyfills do not load in browsers where they should. In this case, it is better to create issue and we will update the check, or you can replace the check with another.
 
 ### Important tips
 
@@ -73,8 +68,7 @@ In this case, it is better to create issue and we will update the check, or you 
 
 To do this, we need to set provider `POLYFILL_CONDITION`, which is in `import { POLYFILL_CONDITION } from '@tramvai/module-render'` and pass a new line.
 
-Example: This is a synthetic example, but suppose we want to additionally check for the presence of window.Promise in the browser, to do this we extend `DEFAULT_POLYFILL_CONDITION` string.
-The resulting expression should return true if the browsers do not support the feature.
+Example: This is a synthetic example, but suppose we want to additionally check for the presence of window.Promise in the browser, to do this we extend `DEFAULT_POLYFILL_CONDITION` string. The resulting expression should return true if the browsers do not support the feature.
 
 ```tsx
 import { POLYFILL_CONDITION, DEFAULT_POLYFILL_CONDITION } from '@tramvai/module-render';

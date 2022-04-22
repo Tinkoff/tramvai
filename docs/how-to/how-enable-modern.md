@@ -3,16 +3,13 @@ id: how-enable-modern
 title: How to enable modern mode for an application?
 ---
 
-Instructions on how to enable `modern' code assembly in the application.
-This is to ensure that new browsers get the code without the various transformations that are needed for legacy browsers.
-This way we reduce the amount of code and improve the performance of the application.
+Instructions on how to enable `modern' code assembly in the application. This is to ensure that new browsers get the code without the various transformations that are needed for legacy browsers. This way we reduce the amount of code and improve the performance of the application.
 
 [Read more about the modern bundle from smashingmagazine](https://www.smashingmagazine.com/2018/10/smart-bundling-legacy-code-browsers/)
 
 ## Configuring tramvai.json
 
-We need to enable building code for modern versions of browsers.
-To do this, add the `modern: true` parameter to tramvai.json:
+We need to enable building code for modern versions of browsers. To do this, add the `modern: true` parameter to tramvai.json:
 
 ```json
 {
@@ -24,7 +21,6 @@ To do this, add the `modern: true` parameter to tramvai.json:
       "commands": {
         "build": {
           "options": {
-            "vendor": "src/vendor.js",
             "polyfill": "src/polyfill.ts",
             "server": "src/index.ts"
           },

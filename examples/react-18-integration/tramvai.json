@@ -1,15 +1,14 @@
 {
   "$schema": "../../node_modules/@tramvai/cli/schema.json",
   "projects": {
-    "react-18-integration" : {
+    "react-18-integration": {
       "name": "react-18-integration",
       "root": "src",
       "type": "application",
       "commands": {
         "build": {
           "options": {
-            "server": "src/index.ts",
-            "vendor": "src/vendor.ts"
+            "server": "src/index.ts"
           },
           "configurations": {
             "sourceMap": true,

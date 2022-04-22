@@ -4,9 +4,7 @@ title: Project structure
 sidebar_position: 3
 ---
 
-A quick overview of the structure of the application that generates by tramvai `new` command.
-At the same time, we support both monorepositories and repositories with one application.
-Repository type, package manager and testing framework settings are selected when the command `new` executed.
+A quick overview of the structure of the application that generates by tramvai `new` command. At the same time, we support both monorepositories and repositories with one application. Repository type, package manager and testing framework settings are selected when the command `new` executed.
 
 We recommend follow [feature-sliced methodology](https://feature-sliced.design/) guidlines to structure application code.
 
@@ -47,9 +45,8 @@ root-directory
 ```bash
 app-directory
 ├── index.ts - application entry point, where all tramvai modules are connected
-├── vendor.ts - file with vendor dependencies, will be extracted into a separate js chunk
 ├── polyfill.ts - polyfills used by the application (absent by default)
-├── postcss.js - postcss configuration object 
+├── postcss.js - postcss configuration object
 ├── shared - reused modules of the application
 └── routes - application pages
 ```

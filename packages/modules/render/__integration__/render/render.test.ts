@@ -8,7 +8,6 @@ describe('render', () => {
       commands: {
         build: {
           options: {
-            vendor: 'vendor.ts',
             polyfill: 'polyfill.ts',
           },
         },
@@ -65,7 +64,6 @@ describe('render', () => {
 
     expect(scripts).toMatchInlineSnapshot(`
       Array [
-        "${staticUrl}/dist/client/vendor.js",
         "${staticUrl}/dist/client/root.chunk.js",
         "${staticUrl}/dist/client/platform.js",
       ]

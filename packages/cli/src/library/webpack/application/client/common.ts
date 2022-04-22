@@ -18,11 +18,10 @@ import nodeClient from '../../blocks/nodeClient';
 import { pagesResolve } from '../../blocks/pagesResolve';
 import { DEFAULT_STATS_OPTIONS, DEFAULT_STATS_FIELDS } from '../../constants/stats';
 import { configToEnv } from '../../blocks/configToEnv';
-import { extendEntry } from '../../utils/extendEntry';
 
 export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config: Config) => {
   const {
-    options: { polyfill = '', vendor = '' } = {},
+    options: { polyfill = '' } = {},
     configurations: {
       experiments: { fileSystemPages },
     },
@@ -61,15 +60,6 @@ export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config
 
   if (polyfill) {
     config.entry('polyfill').add(path.resolve(configManager.rootDir, polyfill));
-  }
-
-  if (vendor) {
-    config.entry('vendor').add(path.resolve(configManager.rootDir, vendor));
-
-    extendEntry(config.entry('platform'), {
-      // указываем что platform зависит от vendor, чтобы пакеты не дублировались
-      dependOn: 'vendor',
-    });
   }
 
   const statsFileName = configManager.modern ? 'stats.modern.json' : 'stats.json';

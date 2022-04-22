@@ -45,8 +45,7 @@
                         "type": "object",
                         "properties": {
                           "vendor": {
-                            "title": "Path to vendor file",
-                            "default": "",
+                            "title": "`@deprecated` Vendor is not used anymore",
                             "type": "string"
                           },
                           "polyfill": {

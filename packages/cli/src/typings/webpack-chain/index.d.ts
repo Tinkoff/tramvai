@@ -3,6 +3,7 @@
 declare module 'webpack-chain' {
   import type * as webpack from 'webpack';
   import type * as https from 'https';
+  import type { SplitChunksOptions } from '../../library/webpack/types/webpack';
 
   export = Config;
 
@@ -404,7 +405,7 @@ declare module 'webpack-chain' {
 
       sideEffects(value: boolean): this;
 
-      splitChunks(value: SplitChunksOptions | false): this;
+      splitChunks(value: SplitChunksOptions): this;
 
       usedExports(value: boolean): this;
     }
@@ -414,10 +415,6 @@ declare module 'webpack-chain' {
     }
 
     type RuntimeChunkFunction = (entryPoint: EntryPoint) => string;
-
-    interface SplitChunksOptions {
-      [name: string]: any;
-    }
 
     interface LoaderOptions {
       [name: string]: any;

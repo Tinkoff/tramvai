@@ -21,6 +21,7 @@ import type { UI_SHOW_PROGRESS_TOKEN } from '../../../../di/tokens';
 import sourcemaps from '../../blocks/sourcemaps';
 import FancyReporter from '../../plugins/WebpackBar/reporters/fancy';
 import { extendEntry } from '../../utils/extendEntry';
+import type { SplitChunksOptions } from '../../types/webpack';
 
 // eslint-disable-next-line max-statements
 export const webpackClientConfig = ({
@@ -138,7 +139,7 @@ export const webpackClientConfig = ({
   if (configManager.hotRefresh) {
     const { configurations: { hotRefreshOptions = {} } = {} } = configManager.serve;
 
-    const splitChunks = {
+    const splitChunks: SplitChunksOptions = {
       cacheGroups: {
         default: false,
         defaultVendors: false,

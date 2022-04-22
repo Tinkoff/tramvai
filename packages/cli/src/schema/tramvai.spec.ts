@@ -102,7 +102,6 @@ describe('JSON schema для tramvai.json', () => {
                 server: 'src/server',
                 serverApiDir: 'src/api',
                 polyfill: '',
-                vendor: '',
               },
               configurations: {
                 terserParallel: true,

@@ -1,4 +1,4 @@
-import type { container } from 'webpack';
+import type { container, Configuration } from 'webpack';
 
 export type ModuleFederationPluginOptions = ConstructorParameters<
   typeof container.ModuleFederationPlugin
@@ -8,3 +8,5 @@ export type ModuleFederationSharedObject = Record<
   string,
   Exclude<Exclude<ModuleFederationPluginOptions['shared'], any[]>[string], string>
 >;
+
+export type SplitChunksOptions = Configuration['optimization']['splitChunks'];

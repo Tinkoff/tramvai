@@ -11,7 +11,10 @@ export default (configManager: ConfigManager) => (config: Config) => {
   } = configManager.build.configurations;
 
   const postcssAssetsConfig = postcssAssetsConfigPath
-    ? safeRequire(path.resolve(configManager.rootDir, postcssAssetsConfigPath), true) ?? {
+    ? safeRequire(
+        path.resolve(configManager.rootDir, postcssAssetsConfigPath),
+        process.env.NODE_ENV === 'test'
+      ) ?? {
         plugins: [],
       }
     : { plugins: [] };

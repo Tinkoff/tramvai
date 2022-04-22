@@ -58,8 +58,7 @@ How to add schema to the **VSCode** you can find in the [official docs](https://
 "commands": {
   "build": {
     "options": {
-      "vendor": "", // path to the vendor file. If not provided vendor bundle will not be generated
-      "polyfill": "", // path to the polyfill file with all of the required polyfills. If not provided vendor bundle will not be generated
+      "polyfill": "", // path to the polyfill file with all of the required polyfills. If not provided polyfill bundle will not be generated
       "server": "src/server",  // path to the server entry point
       "outputServer": "dist/server", // folder to output server bundle
       "outputClient": "dist/client"  // folder to output client bundle

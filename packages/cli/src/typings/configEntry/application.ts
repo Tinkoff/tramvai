@@ -7,8 +7,8 @@ export interface ApplicationBuild {
    */
   options?: {
     /**
-     * @title Path to vendor file
-     * @default ""
+     * @title `@deprecated` Vendor is not used anymore
+     * @deprecated Vendor is not used anymore
      */
     vendor?: string;
     /**

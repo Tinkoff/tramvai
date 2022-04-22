@@ -1,6 +1,5 @@
 import webpack from 'webpack';
 import Config from 'webpack-chain';
-import crypto from 'crypto';
 import path from 'path';
 
 import isObject from '@tinkoff/utils/is/object';
@@ -18,6 +17,7 @@ import common from './common';
 import optimize from '../../blocks/optimize';
 import sourcemaps from '../../blocks/sourcemaps';
 import commonProd from '../../common/client/prod';
+import { splitChunksConfig } from './prod/optimization/splitChunks';
 
 // eslint-disable-next-line max-statements
 export const webpackClientConfig = ({
@@ -44,49 +44,9 @@ export const webpackClientConfig = ({
 
   config.output.set('chunkLoadingGlobal', 'wsp');
 
-  let splitChunks: any = false;
-
-  if (configurations.granularChunks) {
-    splitChunks = {
-      chunks: 'all',
-      maxInitialRequests: 10,
-      maxAsyncRequests: 20,
-      cacheGroups: {
-        default: false,
-        defaultVendors: false,
-        shared: {
-          chunks: 'async',
-          minChunks: configurations.granularChunksSplitNumber,
-          minSize: configurations.granularChunksMinSize,
-          reuseExistingChunk: true,
-          name(module, chunks) {
-            return crypto
-              .createHash('sha1')
-              .update(
-                chunks.reduce((acc: string, chunk: webpack.Chunk) => {
-                  return acc + chunk.name;
-                }, '')
-              )
-              .digest('hex');
-          },
-        },
-      },
-    };
-  } else if (configurations.commonChunk) {
-    splitChunks = {
-      cacheGroups: {
-        default: false,
-        defaultVendors: false,
-        commons: {
-          name: 'common-chunk',
-          minChunks: configurations.commonChunkSplitNumber,
-        },
-      },
-    };
-  }
+  config.batch(splitChunksConfig(configManager));
 
   config.optimization
-    .splitChunks(splitChunks)
     // namedChunks должно быть включено, чтобы webpack-flush-chunks смог определить имена чанков от которых зависит чанк бандла после обработчки через splitChunks
     .set('chunkIds', 'named');
 

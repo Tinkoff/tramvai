@@ -50,14 +50,10 @@ export const validate = (configManager: ConfigManager) => {
     } = configManager;
 
     if (buildType === 'client') {
-      const { vendor, polyfill } = options;
+      const { polyfill } = options;
 
       if (isMissing(root)) {
         throwErrorMissing('root', `${root}/index`);
-      }
-
-      if (vendor && isMissing(vendor)) {
-        throwErrorMissing('commands.build.options.vendor', vendor);
       }
 
       if (polyfill && isMissing(polyfill)) {

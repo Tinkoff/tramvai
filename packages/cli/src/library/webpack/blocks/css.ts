@@ -49,7 +49,10 @@ export default (configManager: ConfigManager, options: Options = {}) => (config:
   };
 
   const postcssCfg = postcssConfig
-    ? safeRequire(path.resolve(configManager.rootDir, postcssConfig), true) ?? {}
+    ? safeRequire(
+        path.resolve(configManager.rootDir, postcssConfig),
+        process.env.NODE_ENV === 'test'
+      ) ?? {}
     : {};
 
   config.module

@@ -178,6 +178,18 @@ Array [
     "type": "file",
   },
   Object {
+    "extension": ".js",
+    "name": "react.js",
+    "path": "dist/client/react.js",
+    "type": "file",
+  },
+  Object {
+    "extension": ".map",
+    "name": "react.js.map",
+    "path": "dist/client/react.js.map",
+    "type": "file",
+  },
+  Object {
     "extension": ".json",
     "name": "stats",
     "path": "dist/client/stats",
