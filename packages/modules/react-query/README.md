@@ -40,12 +40,6 @@ The browser additionally performs rehydration of the data preloaded on the serve
 
 The module basically provides the necessary things in DI for the library [@tramvai/react-query](references/tramvai/react-query.md) and itself may be needed only if there is a need to change the settings for QueryClient or use QueryClient directly (but better not to use directly)
 
-## How to
-
-### Enable devtools
-
-Use [@tramvai/module-react-query-devtools](references/modules/react-query-devtools.md) module.
-
 ## Exported tokens
 
 @inline src/tokens.ts
