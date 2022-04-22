@@ -1,5 +1,6 @@
 import { commandLineListTokens, Module, provide } from '@tramvai/core';
-import { CONTEXT_TOKEN, COOKIE_MANAGER_TOKEN, STORE_TOKEN } from '@tramvai/module-common';
+import { CONTEXT_TOKEN, STORE_TOKEN } from '@tramvai/tokens-common';
+import { COOKIE_MANAGER_TOKEN } from '@tramvai/tokens-cookie';
 import { USER_AGENT_TOKEN } from './tokens';
 import { matchMediaCommand } from './browser/matchMedia';
 import { providers } from './shared/providers';

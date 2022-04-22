@@ -19,9 +19,6 @@
             "path": "../../libs/dippy"
         },
         {
-            "path": "../common"
-        },
-        {
             "path": "../../tramvai/state"
         },
         {
@@ -29,6 +26,12 @@
         },
         {
             "path": "../../tokens/child-app"
+        },
+        {
+            "path": "../../tokens/common"
+        },
+        {
+            "path": "../../tokens/cookie"
         }
     ]
 }

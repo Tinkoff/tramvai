@@ -13,16 +13,10 @@
             "path": "../../tramvai/core"
         },
         {
-            "path": "../../libs/safe-strings"
+            "path": "../../../tinkoff-packages/modules/dev-tools"
         },
         {
-            "path": "../../tokens/render"
-        },
-        {
-            "path": "../../libs/dippy"
-        },
-        {
-            "path": "../../tokens/child-app"
+            "path": "../react-query"
         }
     ]
 }

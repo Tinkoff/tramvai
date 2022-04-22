@@ -1,5 +1,5 @@
 import type { Provider } from '@tramvai/core';
-import { COMBINE_REDUCERS } from '@tramvai/module-common';
+import { COMBINE_REDUCERS } from '@tramvai/tokens-common';
 import { UserAgentStore } from './stores/userAgent';
 import { MediaStore } from './stores/media';
 

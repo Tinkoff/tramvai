@@ -44,23 +44,7 @@ The module basically provides the necessary things in DI for the library [@tramv
 
 ### Enable devtools
 
-[React-query devtools](https://react-query.tanstack.com/devtools) are provided through `@tramvai/module-dev-tools` and to enable it both modules should be passed to modules list:
-
-```ts
-import { ReactQueryModule, ReactQueryDevtoolsModule } from '@tramvai/module-react-query';
-import { DevToolsModule } from '@tramvai/module-dev-tools';
-
-createApp({
-  name: 'app',
-  modules: [
-    ...modules,
-    ReactQueryModule,
-    ...(process.env.NODE_ENV === 'development' ? [DevToolsModule, ReactQueryDevtoolsModule] : []),
-  ],
-  bundles: {},
-  providers: [],
-});
-```
+Use [@tramvai/module-react-query-devtools](references/modules/react-query-devtools.md) module.
 
 ## Exported tokens
 

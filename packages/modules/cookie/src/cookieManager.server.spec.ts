@@ -1,4 +1,5 @@
 import { CookieManager } from './cookieManager.server';
+import * as utils from './utils';
 
 const cookies = {
   a: 'test',
@@ -11,6 +12,16 @@ const requestManager: any = {
   getHost() {
     return 'www.tinkoff.ru';
   },
+  getHeader(name: string) {
+    if (name === 'user-agent') {
+      return 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36';
+    }
+
+    throw new Error('Unsupported header for test. It is needed to specify header in mock.');
+  },
+  getUrl() {
+    return 'https://www.tinkoff.ru';
+  },
 };
 
 const responseManager: any = {
@@ -18,10 +29,10 @@ const responseManager: any = {
 };
 
 describe('CookieManager.server', () => {
-  let cookieManager;
+  let cookieManager: CookieManager;
 
   beforeEach(() => {
-    cookieManager = new CookieManager({ requestManager, responseManager });
+    cookieManager = new CookieManager({ requestManager, responseManager, userAgent: {} as any });
     responseManager.setCookie.mockClear();
   });
 
@@ -90,5 +101,13 @@ describe('CookieManager.server', () => {
   it('sameSite option', () => {
     cookieManager.set({ name: 'b', value: 'b', path: '/', sameSite: 'strict' });
     expect(responseManager.setCookie).toHaveBeenLastCalledWith('b', `b=b; Path=/; SameSite=Strict`);
+  });
+
+  it('prepareCookieOptions should be called', () => {
+    const prepareCookieOptionsSpy = jest.spyOn(utils, 'prepareCookieOptions');
+
+    cookieManager.set({ name: 'b', value: 'b' });
+
+    expect(prepareCookieOptionsSpy).toHaveBeenCalled();
   });
 });

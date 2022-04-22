@@ -23,11 +23,12 @@
     "@tinkoff/user-agent": "0.0.0-stub",
     "@tinkoff/utils": "^2.1.2",
     "@tramvai/safe-strings": "0.0.0-stub",
+    "@tramvai/tokens-common": "0.0.0-stub",
+    "@tramvai/tokens-cookie": "0.0.0-stub",
     "@tramvai/tokens-child-app": "0.0.0-stub"
   },
   "peerDependencies": {
     "@tramvai/core": "0.0.0-stub",
-    "@tramvai/module-common": "0.0.0-stub",
     "@tramvai/state": "0.0.0-stub",
     "@tinkoff/dippy": "0.0.0-stub",
     "react": ">=16.8.0",

@@ -25,6 +25,9 @@
             "path": "../../libs/cookies"
         },
         {
+            "path": "../client-hints"
+        },
+        {
             "path": "../../tokens/cookie"
         }
     ]

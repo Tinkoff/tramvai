@@ -38,6 +38,7 @@ describe('user-agent/userAgent', () => {
       browser: { browserEngine: 'firefox', name: 'firefox' },
       os: { name: 'Windows Phone' },
       mobileOS: 'winphone',
+      sameSiteNoneCompatible: true,
     });
   });
 
@@ -46,6 +47,7 @@ describe('user-agent/userAgent', () => {
       os: { name: 'Android' },
       browser: { name: 'Chrome' },
       engine: { name: 'Webkit' },
+      sameSiteNoneCompatible: true,
     };
 
     expect(parse(responseManager)).toEqual({
@@ -53,6 +55,7 @@ describe('user-agent/userAgent', () => {
       engine: { name: 'Webkit' },
       os: { name: 'Android' },
       mobileOS: 'android',
+      sameSiteNoneCompatible: true,
     });
   });
 
@@ -60,12 +63,14 @@ describe('user-agent/userAgent', () => {
     params = {
       os: { name: 'iOS' },
       browser: { name: 'Safari' },
+      sameSiteNoneCompatible: true,
     };
 
     expect(parse(responseManager)).toEqual({
       browser: { browserEngine: 'safari', name: 'safari' },
       os: { name: 'iOS' },
       mobileOS: 'ios',
+      sameSiteNoneCompatible: true,
     });
   });
 
@@ -73,12 +78,14 @@ describe('user-agent/userAgent', () => {
     params = {
       os: { name: 'BlackBerry' },
       browser: { name: 'amigo' },
+      sameSiteNoneCompatible: true,
     };
 
     expect(parse(responseManager)).toEqual({
       browser: { browserEngine: 'other', name: 'amigo' },
       os: { name: 'BlackBerry' },
       mobileOS: 'blackberry',
+      sameSiteNoneCompatible: true,
     });
   });
 
@@ -86,6 +93,7 @@ describe('user-agent/userAgent', () => {
     params = {
       os: { name: 'BlackBerry' },
       browser: { name: 'Opera Mobi' },
+      sameSiteNoneCompatible: true,
       device: {
         type: undefined,
       },

@@ -3,9 +3,9 @@ import {
   REQUEST_MANAGER_TOKEN,
   STORE_TOKEN,
   CONTEXT_TOKEN,
-  COOKIE_MANAGER_TOKEN,
   CREATE_CACHE_TOKEN,
-} from '@tramvai/module-common';
+} from '@tramvai/tokens-common';
+import { COOKIE_MANAGER_TOKEN } from '@tramvai/tokens-cookie';
 import type { UserAgent } from '@tinkoff/user-agent';
 import { parse } from '@tinkoff/user-agent';
 import { setUserAgent } from './shared/stores/userAgent';

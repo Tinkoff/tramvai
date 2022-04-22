@@ -1,13 +1,12 @@
 {
-  "name": "@tramvai/module-react-query",
+  "name": "@tramvai/module-react-query-devtools",
   "version": "0.0.0-stub",
-  "description": "Интеграция с react-query",
-  "browser": "lib/browser.js",
-  "main": "lib/server.js",
-  "typings": "src/server.ts",
+  "description": "Интеграция с react-query devtools",
+  "main": "lib/index.js",
+  "module": "lib/index.es.js",
+  "typings": "src/index.ts",
   "files": [
-    "lib",
-    "__migrations__"
+    "lib"
   ],
   "sideEffects": false,
   "repository": {
@@ -20,19 +19,15 @@
     "build-for-publish": "true"
   },
   "dependencies": {
-    "@tramvai/safe-strings": "0.0.0-stub",
-    "@tramvai/tokens-child-app": "0.0.0-stub",
-    "@tramvai/tokens-render": "0.0.0-stub",
+    "@tramvai/module-react-query": "0.0.0-stub",
+    "@tramvai/module-dev-tools": "0.0.0-stub",
     "react-query": "^3.35.0"
   },
   "devDependencies": {},
   "peerDependencies": {
-    "@tinkoff/dippy": "0.0.0-stub",
     "@tramvai/core": "0.0.0-stub",
     "react": ">=16.8.0",
     "tslib": "^2.0.3"
   },
-  "module": "lib/server.es.js",
-  "es2017": "lib/browser.es2017.js",
   "license": "Apache-2.0"
 }

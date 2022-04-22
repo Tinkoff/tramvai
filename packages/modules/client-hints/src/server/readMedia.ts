@@ -1,6 +1,6 @@
 import pathOr from '@tinkoff/utils/object/pathOr';
-
-import type { CONTEXT_TOKEN, COOKIE_MANAGER_TOKEN } from '@tramvai/module-common';
+import type { CONTEXT_TOKEN } from '@tramvai/tokens-common';
+import type { COOKIE_MANAGER_TOKEN } from '@tramvai/tokens-cookie';
 import { safeParseJSON } from '@tramvai/safe-strings';
 import { COOKIE_NAME_MEDIA_INFO } from '../shared/constants';
 import { setMedia } from '../shared/stores/media';

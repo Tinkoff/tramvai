@@ -1,7 +1,8 @@
 import type { CookieOptions, ICookies } from '@tinkoff/browser-cookies';
 import { Cookies } from '@tinkoff/browser-cookies';
+import type { USER_AGENT_TOKEN } from '@tramvai/module-client-hints';
 import type { CookieManager as Interface, CookieSetOptions } from './tokens';
-import { calculateExpires, trimSubdomains } from './utils';
+import { prepareCookieOptions } from './utils';
 
 const checkCookieEnabled = () => {
   const testCookieName = 'testcookiesenabled';
@@ -42,16 +43,26 @@ class CookiesFallback implements ICookies {
 export class CookieManager implements Interface {
   private cookies: ICookies;
 
-  constructor({ cookieOptions = {} }: { cookieOptions?: CookieOptions } = {}) {
+  private userAgent: typeof USER_AGENT_TOKEN;
+
+  constructor({
+    cookieOptions = {},
+    userAgent,
+  }: {
+    cookieOptions?: CookieOptions;
+    userAgent: typeof USER_AGENT_TOKEN;
+  }) {
     const isSecure = window.location.protocol === 'https:';
 
     this.cookies = checkCookieEnabled()
       ? new Cookies({
-          sameSite: isSecure ? 'none' : 'lax',
+          sameSite: userAgent.sameSiteNoneCompatible && isSecure ? 'none' : 'lax',
           secure: isSecure,
           ...cookieOptions,
         })
       : new CookiesFallback();
+
+    this.userAgent = userAgent;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -60,14 +71,19 @@ export class CookieManager implements Interface {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  set({ name, value, noSubdomains, ...options }: CookieSetOptions) {
-    this.cookies.set(name, value, {
-      ...options,
-      expires: calculateExpires(options.expires),
-      domain: noSubdomains
-        ? trimSubdomains(options.domain || window.location.hostname)
-        : options.domain,
-    });
+  set({ name, value, ...options }: CookieSetOptions) {
+    this.cookies.set(
+      name,
+      value,
+      prepareCookieOptions(
+        {
+          userAgent: this.userAgent,
+          defaultHost: window.location.hostname,
+          secureProtocol: window.location.protocol === 'https:',
+        },
+        options
+      )
+    );
   }
 
   // eslint-disable-next-line class-methods-use-this

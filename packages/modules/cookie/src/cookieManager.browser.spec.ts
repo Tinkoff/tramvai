@@ -2,6 +2,7 @@
  * @jest-environment jsdom
  */
 import { CookieManager } from './cookieManager.browser';
+import * as utils from './utils';
 
 document.cookie = 'a=test';
 
@@ -9,7 +10,7 @@ describe('CookieManager.browser', () => {
   let cookieManager: CookieManager;
 
   beforeEach(() => {
-    cookieManager = new CookieManager();
+    cookieManager = new CookieManager({ userAgent: {} as any });
     cookieManager.remove('b');
     cookieManager.remove('c');
   });
@@ -75,5 +76,13 @@ describe('CookieManager.browser', () => {
   it('sameSite option', () => {
     cookieManager.set({ name: 'b', value: 'b', path: '/', sameSite: 'strict' });
     expect(document.cookie).toContain('b=b');
+  });
+
+  it('prepareCookieOptions should be called', () => {
+    const prepareCookieOptionsSpy = jest.spyOn(utils, 'prepareCookieOptions');
+
+    cookieManager.set({ name: 'b', value: 'b' });
+
+    expect(prepareCookieOptionsSpy).toHaveBeenCalled();
   });
 });

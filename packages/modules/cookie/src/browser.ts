@@ -1,10 +1,12 @@
 import { Module, Scope } from '@tramvai/core';
+import { ClientHintsModule, USER_AGENT_TOKEN } from '@tramvai/module-client-hints';
 import { CookieManager } from './cookieManager.browser';
 import { COOKIE_MANAGER_TOKEN } from './tokens';
 
 export { COOKIE_MANAGER_TOKEN };
 
 @Module({
+  imports: [ClientHintsModule],
   providers: [
     {
       // Управление куками в приложении
@@ -19,6 +21,7 @@ export { COOKIE_MANAGER_TOKEN };
           token: 'temporary cookieOptions',
           optional: true,
         },
+        userAgent: USER_AGENT_TOKEN,
       },
     },
   ],

@@ -4,6 +4,7 @@ import toLower from '@tinkoff/utils/string/toLower';
 
 import { UAParser } from 'ua-parser-js';
 import type { UserAgent } from './types';
+import { isSameSiteNoneCompatible } from './isSameSiteNoneCompatible';
 
 const toLowerName = compose(toLower, propOr('name', ''));
 
@@ -30,11 +31,11 @@ const uaParserExtensions = [
 
 export const parse = (userAgent: string): UserAgent => {
   const uaParser = new UAParser('', { browser: uaParserExtensions });
-
   const { ua, ...result } = uaParser.setUA(userAgent).getResult();
   const { browser, os, engine } = result;
   const browserName = toLowerName(browser);
   const engineName = toLowerName(engine);
+  const sameSiteNoneCompatible = isSameSiteNoneCompatible(result);
 
   let mobileOS;
 
@@ -77,6 +78,7 @@ export const parse = (userAgent: string): UserAgent => {
   return {
     ...result,
     mobileOS,
+    sameSiteNoneCompatible,
     browser: {
       ...browser,
       browserEngine,
