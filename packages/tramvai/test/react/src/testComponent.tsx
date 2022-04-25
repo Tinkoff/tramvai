@@ -39,7 +39,7 @@ export const testComponent = (
   }: Options = {}
 ) => {
   const Wrapper: FC<{ children?: React.ReactNode }> = ({ children }) => (
-    <StateProvider context={context}>
+    <StateProvider context={context} serverState={initialState}>
       <DIContext.Provider value={context.di}>
         <RouterProvider router={router}>{children}</RouterProvider>
       </DIContext.Provider>

@@ -205,4 +205,33 @@ child также в этом апдейте получает обновлени�
     ]);
     //
   });
+
+  it('should get fresh state after hydration', async () => {
+    const reducer = createReducer('test', { id: 1 }).on('inc', (state) => {
+      return { id: state.id + 1 };
+    });
+
+    const mapState = jest.fn((state) => ({ id: state.test.id }));
+
+    const Child = connect(['test'], mapState)((props: any) => <div />);
+    @connect(['test'], ({ test }) => test)
+    class Root extends React.Component<any, any> {
+      render() {
+        return <>{this.props.id > 1 && <Child />}</>;
+      }
+    }
+
+    const { context } = testComponent(<Root />, {
+      stores: [reducer],
+      initialState: { test: { id: 1 } },
+    });
+
+    expect(mapState).not.toHaveBeenCalled();
+
+    await context.dispatch('inc');
+    await waitRaf();
+
+    expect(mapState).toHaveBeenCalledTimes(1);
+    expect(mapState).toHaveBeenCalledWith({ test: { id: 2 } }, undefined);
+  });
 });

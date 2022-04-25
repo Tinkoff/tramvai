@@ -164,7 +164,7 @@ export function connectAdvanced(
       const actualChildProps = useSyncExternalStore(
         subscribe,
         actualChildPropsSelector,
-        serverState ? childPropsSelector(serverState, wrapperProps) : actualChildPropsSelector
+        serverState ? () => childPropsSelector(serverState, wrapperProps) : actualChildPropsSelector
       );
 
       // Now that all that's done, we can finally try to actually render the child component.
