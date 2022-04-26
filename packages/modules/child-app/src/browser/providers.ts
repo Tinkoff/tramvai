@@ -82,8 +82,10 @@ export const browserProviders: Provider[] = [
     provide: commandLineListTokens.customerStart,
     multi: true,
     useFactory: ({ router, preloader }) => {
-      router.registerHook('beforeNavigate', () => preloader.clearPreloaded());
-      router.registerHook('beforeUpdateCurrent', () => preloader.clearPreloaded());
+      return function childAppRegisterClear() {
+        router.registerHook('beforeNavigate', () => preloader.clearPreloaded());
+        router.registerHook('beforeUpdateCurrent', () => preloader.clearPreloaded());
+      };
     },
     deps: {
       router: ROUTER_TOKEN,
