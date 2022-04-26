@@ -12,6 +12,18 @@ import type { BuildCommand } from './build';
 import type { BenchmarkCommand } from './benchmark';
 import type { AnalyzeCommand } from './analyze';
 
+export { ConfigManager } from '../config/configManager';
+export { ConfigManager as ConfigManagerValidator } from '../models/config';
+export { getTramvaiConfig } from '../utils/getTramvaiConfig';
+export { syncJsonFile } from '../utils/syncJsonFile';
+export { babelConfigFactory } from '../library/babel';
+export { filesClientWebackRulesFactory } from '../library/webpack/blocks/filesClient';
+export { cssWebpackRulesFactory } from '../library/webpack/blocks/css';
+export { lessWebpackRulesFactory } from '../library/webpack/blocks/less';
+export { postcssAssetsWebpackRulesFactory } from '../library/webpack/blocks/postcssAssets';
+export { extractCssPluginFactory } from '../library/webpack/blocks/extractCssPlugin';
+export { configToEnv } from '../library/webpack/blocks/configToEnv';
+
 const app = createApp({
   commands: {
     start: () => import('./start'),

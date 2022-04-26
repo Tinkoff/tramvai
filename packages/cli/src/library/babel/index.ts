@@ -47,8 +47,7 @@ function hasJsxRuntime() {
   }
 }
 
-// eslint-disable-next-line import/no-default-export
-export default ({
+export const babelConfigFactory = ({
   env = 'development',
   target,
   modern,
@@ -178,3 +177,5 @@ export default ({
     ...loaderConfig,
   };
 };
+
+export default babelConfigFactory;

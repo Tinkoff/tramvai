@@ -5,11 +5,9 @@ import type { Counter, Histogram } from 'prom-client';
 import type {
   METRICS_MODULE_TOKEN,
   METRICS_SERVICES_REGISTRY_TOKEN,
+  ModuleConfig,
 } from '@tramvai/tokens-metrics';
 
-export type ModuleConfig = {
-  enableConnectionResolveMetrics: boolean;
-};
 export type MetricsModule = typeof METRICS_MODULE_TOKEN;
 export type HttpModule = typeof httpType;
 export type HttpsModule = typeof httpsType;

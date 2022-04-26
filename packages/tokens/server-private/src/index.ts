@@ -1,5 +1,20 @@
+import type { Server } from 'http';
 import type { FastifyError, FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { createToken } from '@tinkoff/dippy';
+
+/**
+ * @description
+ * Creates new server instance
+ */
+export const SERVER_FACTORY_TOKEN = createToken<() => Server>('server serverFactory');
+
+/**
+ * @description
+ * Creates web-app instance
+ */
+export const WEB_FASTIFY_APP_FACTORY_TOKEN = createToken<
+  (options: { server: Server }) => FastifyInstance
+>('webApp fastifyFactory');
 
 /**
  * @description

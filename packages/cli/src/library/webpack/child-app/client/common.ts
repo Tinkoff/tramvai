@@ -1,5 +1,4 @@
 import type Config from 'webpack-chain';
-import ExtractCssPlugin from 'mini-css-extract-plugin';
 
 import { StatsWriterPlugin } from 'webpack-stats-plugin';
 import type { ConfigManager } from '../../../../config/configManager';
@@ -12,6 +11,7 @@ import postcssAssets from '../../blocks/postcssAssets';
 import type { LazyLibraryOptions } from '../../plugins/LazyLibraryInitialization';
 import { LazyLibraryInitialization } from '../../plugins/LazyLibraryInitialization';
 import { DEFAULT_STATS_FIELDS, DEFAULT_STATS_OPTIONS } from '../../constants/stats';
+import { extractCssPluginFactory } from '../../blocks/extractCssPlugin';
 
 export default (configManager: ConfigManager<ModuleConfigEntry>) => (config: Config) => {
   const { name, version } = configManager;
@@ -28,14 +28,12 @@ export default (configManager: ConfigManager<ModuleConfigEntry>) => (config: Con
     .filename(`[name]_client@${version}.js`)
     .chunkFilename('[name]_client.chunk.[hash].js');
 
-  config.plugin('extract-css').use(ExtractCssPlugin, [
-    {
+  config.batch(
+    extractCssPluginFactory(configManager, {
       filename: `[name]@${version}.css`,
       chunkFilename: '[name].chunk.[hash].css',
-      ignoreOrder: true,
-      experimentalUseImportModule: !!configManager.experiments.minicss?.useImportModule,
-    },
-  ]);
+    })
+  );
 
   config.batch(postcssAssets(configManager));
 

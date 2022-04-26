@@ -5,7 +5,9 @@ import type { ConfigManager } from '../../../config/configManager';
 
 import { safeRequire } from '../../../utils/safeRequire';
 
-export default (configManager: ConfigManager) => (config: Config) => {
+export const postcssAssetsWebpackRulesFactory = (configManager: ConfigManager) => (
+  config: Config
+) => {
   const {
     postcss: { assetsConfig: postcssAssetsConfigPath = '' } = {},
   } = configManager.build.configurations;
@@ -29,3 +31,5 @@ export default (configManager: ConfigManager) => (config: Config) => {
     ]);
   }
 };
+
+export default postcssAssetsWebpackRulesFactory;

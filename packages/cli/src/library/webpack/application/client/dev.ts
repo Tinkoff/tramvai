@@ -2,7 +2,6 @@ import webpack from 'webpack';
 import Config from 'webpack-chain';
 import path from 'path';
 
-import ExtractCssPlugin from 'mini-css-extract-plugin';
 import WebpackBar from 'webpackbar';
 import ReactRefreshPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 // eslint-disable-next-line no-restricted-imports
@@ -21,6 +20,7 @@ import type { UI_SHOW_PROGRESS_TOKEN } from '../../../../di/tokens';
 import sourcemaps from '../../blocks/sourcemaps';
 import FancyReporter from '../../plugins/WebpackBar/reporters/fancy';
 import { extendEntry } from '../../utils/extendEntry';
+import { extractCssPluginFactory } from '../../blocks/extractCssPlugin';
 import type { SplitChunksOptions } from '../../types/webpack';
 
 // eslint-disable-next-line max-statements
@@ -71,14 +71,7 @@ export const webpackClientConfig = ({
 
   config.optimization.set('emitOnErrors', false);
 
-  config.plugin('extract-css').use(ExtractCssPlugin, [
-    {
-      filename: '[name].css',
-      chunkFilename: '[name].chunk.css',
-      ignoreOrder: true,
-      experimentalUseImportModule: !!configManager.experiments.minicss?.useImportModule,
-    },
-  ]);
+  config.batch(extractCssPluginFactory(configManager));
 
   if (showProgress) {
     config.plugin('progress').use(WebpackBar, [

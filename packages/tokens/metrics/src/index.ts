@@ -17,6 +17,11 @@ interface Metrics {
   summary<T extends string = string>(opt: SummaryConfiguration<T>): Summary<T>;
 }
 
+export type ModuleConfig = {
+  enableConnectionResolveMetrics: boolean;
+  port?: number;
+};
+
 export { Counter, Gauge, Histogram, Summary, Metrics };
 
 /**
@@ -46,3 +51,9 @@ export const METRICS_SERVICES_REGISTRY_TOKEN = createToken<MetricsServicesRegist
 export const REGISTER_INSTANT_METRIC_TOKEN = createToken<[string, Counter<string>]>(
   'registerInstantMetric'
 );
+
+/**
+ * @description
+ * Configuration for the metrics
+ */
+export const METRICS_MODULE_CONFIG_TOKEN = createToken<ModuleConfig>('metrics-module-config');

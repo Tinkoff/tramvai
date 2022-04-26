@@ -6,6 +6,8 @@ import { Counter, Gauge, Histogram, Summary } from '@tinkoff/metrics-noop';
 import { InstantMetricsModule } from './instantMetrics/browser';
 import { PerfGauge, PerfSummary, PerfHistogram } from './performance-devtools/PerfMetrics';
 
+export * from '@tramvai/tokens-metrics';
+
 @Module({
   imports: [InstantMetricsModule],
   providers: [

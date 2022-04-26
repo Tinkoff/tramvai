@@ -1,17 +1,26 @@
-import { Scope, Module, provide, commandLineListTokens } from '@tramvai/core';
+import { Scope, Module, provide, commandLineListTokens, createToken } from '@tramvai/core';
+import { SERVER_TOKEN } from '@tramvai/tokens-server';
 import { SPECIAL_SERVER_PATHS } from '@tramvai/tokens-server';
 import {
   WEB_FASTIFY_APP_TOKEN,
   WEB_FASTIFY_APP_BEFORE_INIT_TOKEN,
+  SERVER_FACTORY_TOKEN,
+  WEB_FASTIFY_APP_FACTORY_TOKEN,
 } from '@tramvai/tokens-server-private';
-import { METRICS_MODULE_TOKEN } from '@tramvai/tokens-metrics';
+import { METRICS_MODULE_TOKEN, METRICS_MODULE_CONFIG_TOKEN } from '@tramvai/tokens-metrics';
 import { measure } from '@tinkoff/measure-express-requests';
 import { Registry, Counter, Gauge, Histogram, Summary, collectDefaultMetrics } from 'prom-client';
 import flatten from '@tinkoff/utils/array/flatten';
+import { ENV_MANAGER_TOKEN, LOGGER_TOKEN } from '@tramvai/tokens-common';
 import { RequestModule } from './request';
 import { InstantMetricsModule } from './instantMetrics/server';
 import { eventLoopMetrics } from './metrics/eventLoop';
-import { METRICS_MODULE_CONFIG_TOKEN } from './tokens';
+
+export * from '@tramvai/tokens-metrics';
+
+const METRICS_IS_CUSTOM_SERVER_TOKEN = createToken<boolean>('metrics isCustomServer');
+const METRICS_SERVER_TOKEN = createToken<typeof SERVER_TOKEN>('metrics server');
+const METRICS_WEB_APP_TOKEN = createToken<typeof WEB_FASTIFY_APP_TOKEN>('metrics webApp');
 
 @Module({
   imports: [RequestModule, InstantMetricsModule],
@@ -41,6 +50,83 @@ import { METRICS_MODULE_CONFIG_TOKEN } from './tokens';
       scope: Scope.SINGLETON,
       deps: {
         registry: 'metricsDefaultRegistry',
+      },
+    }),
+    provide({
+      provide: METRICS_IS_CUSTOM_SERVER_TOKEN,
+      useFactory: ({ config, envManager }) => {
+        return config.port && +envManager.get('PORT') !== config.port;
+      },
+      deps: {
+        envManager: ENV_MANAGER_TOKEN,
+        config: METRICS_MODULE_CONFIG_TOKEN,
+      },
+    }),
+    provide({
+      provide: METRICS_SERVER_TOKEN,
+      scope: Scope.SINGLETON,
+      useFactory: ({ isCustomServer, serverFactory, server }) => {
+        return isCustomServer ? serverFactory() : server;
+      },
+      deps: {
+        isCustomServer: METRICS_IS_CUSTOM_SERVER_TOKEN,
+        server: SERVER_TOKEN,
+        serverFactory: SERVER_FACTORY_TOKEN,
+      },
+    }),
+    provide({
+      provide: METRICS_WEB_APP_TOKEN,
+      scope: Scope.SINGLETON,
+      useFactory: ({ isCustomServer, app, appFactory, server }) => {
+        return isCustomServer ? appFactory({ server }) : app;
+      },
+      deps: {
+        isCustomServer: METRICS_IS_CUSTOM_SERVER_TOKEN,
+        app: WEB_FASTIFY_APP_TOKEN,
+        appFactory: WEB_FASTIFY_APP_FACTORY_TOKEN,
+        server: METRICS_SERVER_TOKEN,
+      },
+    }),
+    provide({
+      provide: commandLineListTokens.listen,
+      multi: true,
+      scope: Scope.SINGLETON,
+      useFactory: ({ logger, isCustomServer, config, app, server }) => {
+        return async function metricsServerListen() {
+          if (!isCustomServer) {
+            return;
+          }
+
+          const log = logger('metrics:server');
+          const { port = 3001 } = config;
+
+          await app.ready();
+
+          return new Promise<void>((resolve, reject) => {
+            server.once('error', (error) => {
+              log.error({ event: 'server-listen-port', error });
+              reject(error);
+            });
+
+            server.listen(
+              {
+                host: '',
+                port,
+              },
+              () => {
+                log.warn({ event: 'server-listen-port', message: `Server listen ${port} port` });
+                resolve();
+              }
+            );
+          });
+        };
+      },
+      deps: {
+        logger: LOGGER_TOKEN,
+        isCustomServer: METRICS_IS_CUSTOM_SERVER_TOKEN,
+        config: METRICS_MODULE_CONFIG_TOKEN,
+        app: METRICS_WEB_APP_TOKEN,
+        server: METRICS_SERVER_TOKEN,
       },
     }),
     provide({
@@ -88,7 +174,7 @@ import { METRICS_MODULE_CONFIG_TOKEN } from './tokens';
       },
       deps: {
         metrics: METRICS_MODULE_TOKEN,
-        app: WEB_FASTIFY_APP_TOKEN,
+        app: METRICS_WEB_APP_TOKEN,
         additionalLabelNamesList: {
           token: 'additionalLabelNames',
           multi: true,
@@ -123,5 +209,3 @@ import { METRICS_MODULE_CONFIG_TOKEN } from './tokens';
   ],
 })
 export class MetricsModule {}
-
-export { METRICS_MODULE_CONFIG_TOKEN };

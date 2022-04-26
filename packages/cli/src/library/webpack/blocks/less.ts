@@ -11,8 +11,7 @@ const mediaVars = {
   DESKTOP: 1024,
 };
 
-// eslint-disable-next-line import/no-default-export
-export default (configManager: ConfigManager) => (config: Config) => {
+export const lessWebpackRulesFactory = (configManager: ConfigManager) => (config: Config) => {
   const { sourceMap } = configManager;
 
   config.module
@@ -58,3 +57,5 @@ export default (configManager: ConfigManager) => (config: Config) => {
     })
     .end();
 };
+
+export default lessWebpackRulesFactory;

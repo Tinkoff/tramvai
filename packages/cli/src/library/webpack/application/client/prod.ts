@@ -5,7 +5,6 @@ import path from 'path';
 import isObject from '@tinkoff/utils/is/object';
 import isUndefined from '@tinkoff/utils/is/undefined';
 
-import ExtractCssPlugin from 'mini-css-extract-plugin';
 // eslint-disable-next-line no-restricted-imports
 import type { ForkTsCheckerWebpackPluginOptions } from 'fork-ts-checker-webpack-plugin/lib/ForkTsCheckerWebpackPluginOptions';
 import RuntimePathPlugin from '../../plugins/RuntimePathPlugin';
@@ -17,6 +16,7 @@ import common from './common';
 import optimize from '../../blocks/optimize';
 import sourcemaps from '../../blocks/sourcemaps';
 import commonProd from '../../common/client/prod';
+import { extractCssPluginFactory } from '../../blocks/extractCssPlugin';
 import { splitChunksConfig } from './prod/optimization/splitChunks';
 
 // eslint-disable-next-line max-statements
@@ -52,14 +52,12 @@ export const webpackClientConfig = ({
 
   config.stats('minimal');
 
-  config.plugin('extract-css').use(ExtractCssPlugin, [
-    {
+  config.batch(
+    extractCssPluginFactory(configManager, {
       filename: '[name].[contenthash].css',
       chunkFilename: '[name].[contenthash].chunk.css',
-      ignoreOrder: true,
-      experimentalUseImportModule: !!configManager.experiments.minicss?.useImportModule,
-    },
-  ]);
+    })
+  );
 
   config.plugin('runtime-path').use(RuntimePathPlugin, [
     {

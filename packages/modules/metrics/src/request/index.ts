@@ -1,5 +1,10 @@
 import { Scope, Module, commandLineListTokens } from '@tramvai/core';
-import { METRICS_MODULE_TOKEN, METRICS_SERVICES_REGISTRY_TOKEN } from '@tramvai/tokens-metrics';
+import type { ModuleConfig } from '@tramvai/tokens-metrics';
+import {
+  METRICS_MODULE_TOKEN,
+  METRICS_SERVICES_REGISTRY_TOKEN,
+  METRICS_MODULE_CONFIG_TOKEN,
+} from '@tramvai/tokens-metrics';
 import { ENV_MANAGER_TOKEN } from '@tramvai/module-common';
 import noop from '@tinkoff/utils/function/noop';
 import https from 'https';
@@ -7,8 +12,6 @@ import http from 'http';
 import { createRequestWithMetrics } from './createRequestWithMetrics';
 import { initRequestsMetrics } from './initRequestsMetrics';
 import { MetricsServicesRegistry } from './MetricsServicesRegistry';
-import { METRICS_MODULE_CONFIG_TOKEN } from '../tokens';
-import type { ModuleConfig } from './types';
 
 @Module({
   providers: [

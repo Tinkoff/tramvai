@@ -1,7 +1,6 @@
 import path from 'path';
 import webpack from 'webpack';
 import type Config from 'webpack-chain';
-import ExtractCssPlugin from 'mini-css-extract-plugin';
 
 import type { ConfigManager } from '../../../../config/configManager';
 import type { ApplicationConfigEntry } from '../../../../typings/configEntry/application';
@@ -17,6 +16,7 @@ import { serverInline } from '../../blocks/serverInline';
 import { browserslistConfigResolve } from '../../blocks/browserslistConfig';
 import { configToEnv } from '../../blocks/configToEnv';
 import { commonApplication } from '../common';
+import { extractCssPluginFactory } from '../../blocks/extractCssPlugin';
 
 // eslint-disable-next-line import/no-default-export
 export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config: Config) => {
@@ -74,13 +74,12 @@ export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config
     },
   ]);
 
-  config.plugin('extract-css').use(ExtractCssPlugin, [
-    {
+  config.batch(
+    extractCssPluginFactory(configManager, {
       filename: 'server.[contenthash].css',
-      ignoreOrder: true,
-      experimentalUseImportModule: !!configManager.experiments.minicss?.useImportModule,
-    },
-  ]);
+      chunkFilename: null,
+    })
+  );
 
   config.plugin('limit-chunk').use(webpack.optimize.LimitChunkCountPlugin, [
     {

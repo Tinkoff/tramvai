@@ -156,6 +156,25 @@ fetch(url).then(() => {
 });
 ```
 
+### Use custom port for metrics endpoint
+
+It can be done with token `METRICS_MODULE_CONFIG_TOKEN` and its property `port`:
+
+```ts
+import { provide } from '@tramvai/core';
+import { METRICS_MODULE_CONFIG_TOKEN } from '@tramvai/tokens-metrics';
+
+const providers = [
+  provide({
+    provide: METRICS_MODULE_CONFIG_TOKEN,
+    useValue: {
+      enableConnectionResolveMetrics: true,
+      port: 3001,
+    },
+  }),
+];
+```
+
 ## Debug
 
 The module uses loggers with the next ids: `metrics:perf`, `metrics:papi`

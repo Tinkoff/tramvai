@@ -50,6 +50,9 @@
         },
         {
             "path": "../../libs/measure-express-requests"
+        },
+        {
+            "path": "../../tokens/common"
         }
     ]
 }

@@ -13,8 +13,9 @@ interface Options {
   localIdentName?: string;
 }
 
-// eslint-disable-next-line import/no-default-export
-export default (configManager: ConfigManager, options: Options = {}) => (config: Config) => {
+export const cssWebpackRulesFactory = (configManager: ConfigManager, options: Options = {}) => (
+  config: Config
+) => {
   const {
     postcss: {
       config: postcssConfig = '',
@@ -76,3 +77,5 @@ export default (configManager: ConfigManager, options: Options = {}) => (config:
       }),
     });
 };
+
+export default cssWebpackRulesFactory;

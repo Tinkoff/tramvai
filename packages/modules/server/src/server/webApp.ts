@@ -30,13 +30,7 @@ import type {
 import { fastifyExpressCompatibility } from './express-compatibility';
 import { errorHandler } from './error';
 
-export const webAppFactory = ({
-  server,
-  expressApp,
-}: {
-  server: typeof SERVER_TOKEN;
-  expressApp: typeof WEB_APP_TOKEN;
-}) => {
+export const webAppFactory = ({ server }: { server: typeof SERVER_TOKEN }) => {
   const app = fastify({
     serverFactory: (handler) => {
       server.on('request', handler);

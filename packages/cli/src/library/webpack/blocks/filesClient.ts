@@ -2,7 +2,7 @@ import type Config from 'webpack-chain';
 import SparkMD5 from 'spark-md5';
 import type { ConfigManager } from '../../../config/configManager';
 
-export default (configManager: ConfigManager) => (config: Config) => {
+export const filesClientWebackRulesFactory = (configManager: ConfigManager) => (config: Config) => {
   config.module
     .rule('woff')
     .test(/\.woff2?$/)
@@ -53,3 +53,5 @@ export default (configManager: ConfigManager) => (config: Config) => {
       .enforce('pre');
   }
 };
+
+export default filesClientWebackRulesFactory;

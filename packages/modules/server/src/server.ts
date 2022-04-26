@@ -23,6 +23,8 @@ import {
   WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN,
   WEB_FASTIFY_APP_AFTER_ERROR_TOKEN,
   WEB_FASTIFY_APP_PROCESS_ERROR_TOKEN,
+  SERVER_FACTORY_TOKEN,
+  WEB_FASTIFY_APP_FACTORY_TOKEN,
 } from '@tramvai/tokens-server-private';
 import { ENV_MANAGER_TOKEN, ENV_USED_TOKEN, LOGGER_TOKEN } from '@tramvai/tokens-common';
 import { MetricsModule } from '@tramvai/module-metrics';
@@ -48,16 +50,30 @@ export * from '@tramvai/tokens-server';
   ].filter(Boolean),
   providers: [
     provide({
+      provide: SERVER_FACTORY_TOKEN,
+      scope: Scope.SINGLETON,
+      useValue: serverFactory,
+    }),
+    provide({
       provide: SERVER_TOKEN,
       scope: Scope.SINGLETON,
-      useFactory: serverFactory,
+      useFactory: ({ factory }) => factory(),
+      deps: {
+        factory: SERVER_FACTORY_TOKEN,
+      },
+    }),
+    provide({
+      provide: WEB_FASTIFY_APP_FACTORY_TOKEN,
+      scope: Scope.SINGLETON,
+      useValue: webAppFactory,
     }),
     provide({
       provide: WEB_FASTIFY_APP_TOKEN,
-      useFactory: webAppFactory,
+      useFactory: ({ factory, server }) => factory({ server }),
       scope: Scope.SINGLETON,
       deps: {
         server: SERVER_TOKEN,
+        factory: WEB_FASTIFY_APP_FACTORY_TOKEN,
       },
     }),
     provide({
