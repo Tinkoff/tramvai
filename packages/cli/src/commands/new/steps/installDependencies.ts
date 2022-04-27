@@ -13,9 +13,9 @@ const COMMON_JEST_DEPENDENCIES = [
   '@tramvai/test-integration',
   '@tramvai/test-unit-jest',
   '@tramvai/test-integration-jest',
-  '@types/jest',
-  'jest',
-  'jest-circus',
+  '@types/jest@^27.0.0',
+  'jest@^27.0.0',
+  'jest-circus@^27.0.0',
   'react-test-renderer',
 ];
 
