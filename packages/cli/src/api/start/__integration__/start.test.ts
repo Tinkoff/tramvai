@@ -2,6 +2,7 @@ import { resolve } from 'path';
 import supertest from 'supertest';
 import { outputFile } from 'fs-extra';
 import { start } from '@tramvai/cli';
+import type { PromiseType } from 'utility-types';
 import { getPort } from '@tramvai/internal-test-utils/utils/getPort';
 import { getServerUrl } from '@tramvai/test-integration';
 import { initPuppeteer } from '@tramvai/test-puppeteer';
@@ -33,41 +34,127 @@ export const Cmp = () => {
 describe('@tramvai/cli start command', () => {
   describe('application', () => {
     const REFRESH_CMP_PATH = resolve(FIXTURES_DIR, 'app', '__temp__', 'cmp.tsx');
+
     beforeAll(async () => {
       await outputFile(REFRESH_CMP_PATH, CMP_FILE_CONTENT_START);
     });
-    it('should start application by target', async () => {
-      const serverPort = await getPort();
-      const staticServerPort = await getPort();
 
-      const { server, staticServer, close } = await start({
-        rootDir: FIXTURES_DIR,
-        target: 'app',
-        resolveSymlinks: false,
-        port: serverPort,
-        staticPort: staticServerPort,
+    describe('by target', () => {
+      let serverPort: number;
+      let staticServerPort: number;
+      let startResult: PromiseType<ReturnType<typeof start>>;
+
+      beforeAll(async () => {
+        serverPort = await getPort();
+        staticServerPort = await getPort();
+
+        startResult = await start({
+          rootDir: FIXTURES_DIR,
+          target: 'app',
+          resolveSymlinks: false,
+          port: serverPort,
+          staticPort: staticServerPort,
+        });
       });
 
-      expect(server?.address()).toMatchObject({
-        port: serverPort,
-      });
-      expect(staticServer?.address()).toMatchObject({
-        port: staticServerPort,
+      afterAll(() => {
+        return startResult.close();
       });
 
-      const responseServer = await supertestByPort(serverPort).get('/').expect(200);
+      it('should start application by target', async () => {
+        const { server, staticServer } = startResult;
 
-      expect(responseServer.text)
-        .toMatch(`<link rel="stylesheet" href="http://localhost:${staticServerPort}/dist/client/platform.css">
+        expect(server?.address()).toMatchObject({
+          port: serverPort,
+        });
+        expect(staticServer?.address()).toMatchObject({
+          port: staticServerPort,
+        });
+
+        const responseServer = await supertestByPort(serverPort).get('/').expect(200);
+
+        expect(responseServer.text)
+          .toMatch(`<link rel="stylesheet" href="http://localhost:${staticServerPort}/dist/client/platform.css">
       <script src="http://localhost:${staticServerPort}/dist/client/hmr.js" defer></script>
       <script src="http://localhost:${staticServerPort}/dist/client/platform.js" defer></script>`);
-      expect(responseServer.text).toMatch(`this is App`);
+        expect(responseServer.text).toMatch(`this is App`);
 
-      const testStatic = supertestByPort(staticServerPort);
-      await testStatic.get('/dist/client/platform.js').expect(200);
-      await testStatic.get('/dist/server/server.js').expect(200);
+        const testStatic = supertestByPort(staticServerPort);
+        await testStatic.get('/dist/client/platform.js').expect(200);
+        await testStatic.get('/dist/server/server.js').expect(200);
+      });
 
-      return close();
+      it('should provide virtual modules from cli', async () => {
+        const request = await supertestByPort(serverPort);
+
+        const { body: appConfig } = await request.get('/virtual/app-config').expect(200);
+
+        expect(appConfig).toMatchObject({
+          port: serverPort,
+          staticPort: staticServerPort,
+          type: 'application',
+          configEntry: expect.objectContaining({
+            name: 'app',
+          }),
+        });
+
+        const { body: browserslistConfig } = await request
+          .get('/virtual/browserslist-config')
+          .expect(200);
+
+        expect(browserslistConfig).toMatchObject({
+          modern: ['chrome > 100'],
+          node: ['Node >= 12'],
+          defaults: expect.arrayContaining(['chrome > 27']),
+        });
+
+        const { body: apiConfig } = await request.get('/virtual/api').expect(200);
+
+        expect(apiConfig).toEqual({
+          hello: 'function',
+        });
+
+        const { body: pagesConfig } = await request.get('/virtual/pages').expect(200);
+
+        expect(pagesConfig).toEqual({
+          routes: {
+            '@/routes/about': {},
+            '@/routes/home': {},
+          },
+          pages: {},
+        });
+      });
+
+      it('react-refresh should work', async () => {
+        const serverUrl = getServerUrl(startResult);
+
+        const { browser, close: closeBrowser } = await initPuppeteer(serverUrl);
+
+        const page = await browser.newPage();
+
+        await page.goto(serverUrl);
+
+        console.log(await page.$eval('body', (node) => node.innerHTML));
+
+        expect(
+          await page.$eval('#cmp', (node) => (node as HTMLElement).innerText)
+        ).toMatchInlineSnapshot(`"Cmp test: start"`);
+
+        await outputFile(REFRESH_CMP_PATH, CMP_FILE_CONTENT_UPDATE);
+
+        await page.waitForFunction(
+          () => {
+            return document.getElementById('cmp')?.innerHTML !== 'Cmp test: start';
+          },
+          { polling: 2000, timeout: 10000 }
+        );
+
+        expect(
+          await page.$eval('#cmp', (node) => (node as HTMLElement).innerText)
+        ).toMatchInlineSnapshot(`"Cmp test: update"`);
+
+        await closeBrowser();
+      });
     });
 
     it('should start application from config', async () => {
@@ -177,44 +264,6 @@ describe('@tramvai/cli start command', () => {
       await testServer.get('/?bundle=third').expect(500);
 
       return close();
-    });
-
-    it('react-refresh should work', async () => {
-      const startResult = await start({
-        rootDir: FIXTURES_DIR,
-        target: 'app',
-        port: 0,
-        staticPort: 0,
-        resolveSymlinks: false,
-      });
-      const { close } = startResult;
-      const serverUrl = getServerUrl(startResult);
-
-      const { browser, close: closeBrowser } = await initPuppeteer(serverUrl);
-
-      const page = await browser.newPage();
-
-      await page.goto(serverUrl);
-
-      expect(
-        await page.$eval('#cmp', (node) => (node as HTMLElement).innerText)
-      ).toMatchInlineSnapshot(`"Cmp test: start"`);
-
-      await outputFile(REFRESH_CMP_PATH, CMP_FILE_CONTENT_UPDATE);
-
-      await page.waitForFunction(
-        () => {
-          return document.getElementById('cmp')?.innerHTML !== 'Cmp test: start';
-        },
-        { polling: 2000, timeout: 10000 }
-      );
-
-      expect(
-        await page.$eval('#cmp', (node) => (node as HTMLElement).innerText)
-      ).toMatchInlineSnapshot(`"Cmp test: update"`);
-
-      await close();
-      await closeBrowser();
     });
   });
 

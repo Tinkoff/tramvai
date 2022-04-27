@@ -1,12 +1,12 @@
 import * as path from 'path';
 import fetch from 'node-fetch';
+import type { appConfig as AppConfig } from '@tramvai/cli/lib/external/config';
 
 import { requireFunc } from './requireFunc';
 
-let appConfig;
+let appConfig: typeof AppConfig;
 
 try {
-  // eslint-disable-next-line import/no-extraneous-dependencies
   appConfig = require('@tramvai/cli/lib/external/config').appConfig;
 } catch (e) {}
 

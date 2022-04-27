@@ -8,7 +8,15 @@
       "commands": {
         "build": {
           "options": {
-            "server": "app/server.tsx"
+            "server": "app/server.tsx",
+            "serverApiDir": "app/api"
+          },
+          "configurations": {
+            "experiments": {
+              "fileSystemPages": {
+                "enable": true
+              }
+            }
           }
         },
         "serve": {

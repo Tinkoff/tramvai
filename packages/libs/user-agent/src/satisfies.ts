@@ -1,7 +1,6 @@
 import isString from '@tinkoff/utils/is/string';
 import browserslist from 'browserslist';
 import browserslistTinkoffConfig from '@tinkoff/browserslist-config';
-// eslint-disable-next-line no-restricted-imports
 import browserslistFileConfig from '@tramvai/cli/lib/external/browserslist-normalized-file-config';
 import { parse } from './userAgent';
 import type { UserAgent } from './types';

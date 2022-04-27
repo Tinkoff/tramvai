@@ -1,5 +1,17 @@
 {
   "name": "test-stub",
   "private": true,
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "browserslist": {
+    "modern": [
+      "chrome > 100"
+    ],
+    "node": [
+      "extends @tinkoff/browserslist-config"
+    ],
+    "defaults": [
+      "extends @tinkoff/browserslist-config",
+      "chrome > 27"
+    ]
+  }
 }

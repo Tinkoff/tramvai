@@ -1,10 +1,11 @@
-import React from 'react';
 // @ts-ignore
-import { Cmp } from './__temp__/cmp'
+import { Cmp } from './__temp__/cmp';
 
 export default () => {
-  return <div>
-    <div>this is App</div>
-    <Cmp/>
-  </div>;
+  return (
+    <div>
+      <div>this is App</div>
+      <Cmp />
+    </div>
+  );
 };

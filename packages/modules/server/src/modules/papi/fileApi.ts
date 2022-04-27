@@ -6,13 +6,9 @@ import { SERVER_MODULE_PAPI_PUBLIC_ROUTE } from '@tramvai/tokens-server';
 import { createPapiMethod, getPapiParameters } from '@tramvai/papi';
 // eslint-disable-next-line no-restricted-imports
 import type { Papi, PapiParameters } from '@tramvai/papi/lib/types';
+import type ApiType from '@tramvai/cli/lib/external/api';
 
-interface ApiHandler extends PapiParameters<any, any> {
-  default?: Papi | Function;
-  rootDeps?: Record<string, any>;
-  mapRootDeps?: (deps: Record<string, any>) => any;
-}
-let Api: Record<string, ApiHandler>;
+let Api: typeof ApiType;
 try {
   // eslint-disable-next-line import/no-extraneous-dependencies
   Api = require('@tramvai/cli/lib/external/api').default; // eslint-disable-line import/no-unresolved
