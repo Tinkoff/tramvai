@@ -38,8 +38,8 @@ const expressPlugin: FastifyPluginCallback<Options> = (fastify, options, next) =
   fastify.express.disable('x-powered-by');
 
   fastify
-    .addHook('onRequest', enhanceRequest)
-    .addHook('onRequest', runConnect)
+    .addHook('preHandler', enhanceRequest)
+    .addHook('preHandler', runConnect)
     .addHook('onRegister', onRegister);
 
   function use(path, fn) {
@@ -66,6 +66,13 @@ const expressPlugin: FastifyPluginCallback<Options> = (fastify, options, next) =
     req.raw.log = req.log;
     // eslint-disable-next-line no-param-reassign
     reply.raw.log = req.log;
+
+    if (req.body) {
+      req.raw.body = req.body;
+    }
+    if (req.cookies) {
+      req.raw.cookies = req.cookies;
+    }
 
     const originalProtocol = req.raw.protocol;
     // Make it lazy as it does a bit of work

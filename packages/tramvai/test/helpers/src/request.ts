@@ -11,7 +11,28 @@ export const requestFactory = (appOrUrl: Application | FastifyInstance | string)
   }
 
   const request = supertest(server);
-  return (path: string, { method = 'get' }: { method?: 'get' | 'post' | 'put' } = {}) => {
-    return request[method](path);
+  return (
+    path: string,
+    {
+      method = 'get',
+      body,
+      contentType,
+    }: {
+      method?: 'get' | 'post' | 'put';
+      body?: Record<string, any>;
+      contentType?: 'json' | 'form';
+    } = {}
+  ) => {
+    const instance = request[method](path);
+
+    if (contentType) {
+      instance.type(contentType);
+    }
+
+    if (body) {
+      return instance.send(body);
+    }
+
+    return instance;
   };
 };

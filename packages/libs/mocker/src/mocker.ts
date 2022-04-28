@@ -5,7 +5,6 @@ import { createServer } from 'http';
 import querystring from 'querystring';
 import type { Request, IRouterMatcher, Express, RequestHandler } from 'express';
 import express, { Router } from 'express';
-import bodyParser from 'body-parser';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import type { Mock, MockConfig, MockerOptions, Logger, ApiConfig } from './mocker.h';
 import type { MockRepository } from './repositories/repository.h';
@@ -284,9 +283,6 @@ function createRouter() {
 
 function createApp() {
   const app = express();
-
-  app.use(bodyParser.json());
-
   return app;
 }
 

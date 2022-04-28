@@ -1,7 +1,5 @@
 import fastify from 'fastify';
 import express from 'express';
-import cookieParser from 'cookie-parser';
-import bodyParser from 'body-parser';
 import { fastifyCookie } from 'fastify-cookie';
 import fastifyFormBody from 'fastify-formbody';
 import type { LOGGER_TOKEN } from '@tramvai/tokens-common';
@@ -109,15 +107,7 @@ export const webAppInitCommand = ({
     await runHandlers(limiterRequest, expressLimiterRequest);
 
     await app.register(fastifyCookie);
-    await app.register(fastifyFormBody);
-
-    expressApp.use(
-      bodyParser.urlencoded({
-        limit: '2mb',
-        extended: false,
-      }),
-      cookieParser()
-    );
+    await app.register(fastifyFormBody, { bodyLimit: 2097152 }); // 2mb
 
     await runHandlers(init, expressInit);
 

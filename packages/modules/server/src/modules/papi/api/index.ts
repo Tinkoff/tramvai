@@ -14,7 +14,6 @@ export interface CreateOptions {
 export function createApi(papiList: Papi[], { di, logger }: CreateOptions): express.RequestHandler {
   return create(papiList, [
     middlewares.timeout(),
-    middlewares.body(),
     middlewares.cookie(),
     middlewares.validate(),
     middlewares.fillPapiState({
