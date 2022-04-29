@@ -49,10 +49,10 @@
             "path": "../../tokens/server-private"
         },
         {
-            "path": "../../libs/measure-express-requests"
+            "path": "../../tokens/common"
         },
         {
-            "path": "../../tokens/common"
+            "path": "../../libs/measure-fastify-requests"
         }
     ]
 }

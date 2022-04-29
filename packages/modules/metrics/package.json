@@ -28,7 +28,7 @@
     "@tramvai/tokens-http-client": "0.0.0-stub",
     "@tramvai/state": "0.0.0-stub",
     "@tramvai/papi": "0.0.0-stub",
-    "@tinkoff/measure-express-requests": "0.0.0-stub",
+    "@tinkoff/measure-fastify-requests": "0.0.0-stub",
     "@tinkoff/monkeypatch": "0.0.0-stub",
     "@tinkoff/url": "0.0.0-stub",
     "@tinkoff/utils": "^2.1.2",

@@ -8,7 +8,7 @@ import {
   WEB_FASTIFY_APP_FACTORY_TOKEN,
 } from '@tramvai/tokens-server-private';
 import { METRICS_MODULE_TOKEN, METRICS_MODULE_CONFIG_TOKEN } from '@tramvai/tokens-metrics';
-import { measure } from '@tinkoff/measure-express-requests';
+import { fastifyMeasureRequests } from '@tinkoff/measure-fastify-requests';
 import { Registry, Counter, Gauge, Histogram, Summary, collectDefaultMetrics } from 'prom-client';
 import flatten from '@tinkoff/utils/array/flatten';
 import { ENV_MANAGER_TOKEN, LOGGER_TOKEN } from '@tramvai/tokens-common';
@@ -147,7 +147,7 @@ const METRICS_WEB_APP_TOKEN = createToken<typeof WEB_FASTIFY_APP_TOKEN>('metrics
             return registry.metrics();
           });
 
-          const measured = measure({
+          await app.register(fastifyMeasureRequests, {
             metrics,
             metricsExcludePaths,
             additionalLabelNames: flatten(additionalLabelNamesList || []) as string[],
@@ -165,10 +165,6 @@ const METRICS_WEB_APP_TOKEN = createToken<typeof WEB_FASTIFY_APP_TOKEN>('metrics
               );
             },
             httpRequestsDurationBuckets,
-          });
-
-          app.addHook('onRequest', (request, reply, next) => {
-            measured({ ...request.raw, path: request.url } as any, reply as any, next);
           });
         };
       },
