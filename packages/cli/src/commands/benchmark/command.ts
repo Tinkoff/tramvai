@@ -12,7 +12,7 @@ export type Params = StartParams & {
 export class BenchmarkCommand extends CLICommand<Params> {
   name = 'benchmark';
 
-  description = 'Команда для запуска бенчмарка работы @tramvai/cli';
+  description = 'Command to run benchmark of the @tramvai/cli';
 
   command = 'benchmark <command> <target>';
 
@@ -22,24 +22,24 @@ export class BenchmarkCommand extends CLICommand<Params> {
       value: '[resolveSymlinks]',
       transformer: (value) => value !== 'false',
       description:
-        'Передает значение в `resolve.symlinks` в webpack (https://webpack.js.org/configuration/resolve/#resolve-symlinks)`',
+        'Pass value to `resolve.symlinks` in webpack (https://webpack.js.org/configuration/resolve/#resolve-symlinks)`',
     },
     {
       name: '--showConfig',
       value: '[showConfig]',
-      description: 'Показать конфиг с которым был запущен cli',
+      description: 'Show config with which cli was launched',
     },
     {
       name: '--onlyBundles',
       value: '[onlyBundles]',
       transformer: (value: string) => value.split(','),
       description:
-        'Указать имена бандлов которые нужно собирать, другие бандлы собираться не будут и их запрос будет падать с ошибкой',
+        'Specify the names of the bundles that need to be collected, other bundles will not be collected and their request will fail with an error',
     },
     {
       name: '--times',
       value: '[times]',
-      description: 'Количество прогонов для бенчмарка',
+      description: 'How many times to run single type of benchmark',
     },
   ];
 

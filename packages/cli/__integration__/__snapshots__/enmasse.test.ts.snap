@@ -11,8 +11,8 @@ Commands:
   build|b [options] <target>                    Command to build platform entities - applications, modules, libraries
   start-prod|sp [options] <target>              Command to run in production mode
   start|s [options] <target>                    Command to run in development mode
-  lint|l <target>                               Команда для запуска линтинга
-  task|t <name> [options]                       Запуск команд
+  lint|l <target>                               Command to run lint
+  task|t <name> [options]                       Run task
   analyze|a [options] <target>                  Command for analyzing application
   generate|g [target] [generator]               Command for code generation
     [target] - application name
@@ -22,7 +22,7 @@ Commands:
     [to] - target version <latest|X.X.X|^X.X.X> (default: latest)
   add [options] <packageName>                   Tramvai package install command
   static|st [options] <target>                  Command to export application routes to HTML pages
-  benchmark|bench [options] <command> <target>  Команда для запуска бенчмарка работы @tramvai/cli
+  benchmark|bench [options] <command> <target>  Command to run benchmark of the @tramvai/cli
 
   Run tramvai <command> --help
  for detailed usage of given command.
@@ -75,8 +75,8 @@ Commands:
   build|b [options] <target>                    Command to build platform entities - applications, modules, libraries
   start-prod|sp [options] <target>              Command to run in production mode
   start|s [options] <target>                    Command to run in development mode
-  lint|l <target>                               Команда для запуска линтинга
-  task|t <name> [options]                       Запуск команд
+  lint|l <target>                               Command to run lint
+  task|t <name> [options]                       Run task
   analyze|a [options] <target>                  Command for analyzing application
   generate|g [target] [generator]               Command for code generation
     [target] - application name
@@ -86,7 +86,7 @@ Commands:
     [to] - target version <latest|X.X.X|^X.X.X> (default: latest)
   add [options] <packageName>                   Tramvai package install command
   static|st [options] <target>                  Command to export application routes to HTML pages
-  benchmark|bench [options] <command> <target>  Команда для запуска бенчмарка работы @tramvai/cli
+  benchmark|bench [options] <command> <target>  Command to run benchmark of the @tramvai/cli
 
   Run tramvai <command> --help
  for detailed usage of given command.
@@ -139,8 +139,8 @@ Commands:
   build|b [options] <target>                    Command to build platform entities - applications, modules, libraries
   start-prod|sp [options] <target>              Command to run in production mode
   start|s [options] <target>                    Command to run in development mode
-  lint|l <target>                               Команда для запуска линтинга
-  task|t <name> [options]                       Запуск команд
+  lint|l <target>                               Command to run lint
+  task|t <name> [options]                       Run task
   analyze|a [options] <target>                  Command for analyzing application
   generate|g [target] [generator]               Command for code generation
     [target] - application name
@@ -150,7 +150,7 @@ Commands:
     [to] - target version <latest|X.X.X|^X.X.X> (default: latest)
   add [options] <packageName>                   Tramvai package install command
   static|st [options] <target>                  Command to export application routes to HTML pages
-  benchmark|bench [options] <command> <target>  Команда для запуска бенчмарка работы @tramvai/cli
+  benchmark|bench [options] <command> <target>  Command to run benchmark of the @tramvai/cli
 
   Run tramvai <command> --help
  for detailed usage of given command.

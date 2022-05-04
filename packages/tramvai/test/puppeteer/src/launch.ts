@@ -27,7 +27,7 @@ const enableBrowserLogger = async ({
 
   await page.evaluate(() => {
     localStorage.setItem(
-      '_tinkoff_logger',
+      '_t_logger',
       '{"level":10,"enabledName":["command:*"],"enabledLevel":[50]}'
     );
   });

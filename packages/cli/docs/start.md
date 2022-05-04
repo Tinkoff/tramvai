@@ -2,6 +2,18 @@
 sidebar_position: 3
 ---
 
+> Command to start development build in watch mode
+
+## Options
+
+### `-p`, `--port`
+
+Allows to specify port on which app server will listen requests
+
+```sh
+tramvai start -p 8080 <app>
+```
+
 ## React hot refresh
 
 It is possible to refresh react components without page similar to the way in works in [React Native](https://reactnative.dev/docs/fast-refresh).

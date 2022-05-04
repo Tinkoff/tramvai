@@ -3,7 +3,7 @@ import { CLICommand } from '../../models/command';
 class LintCommand extends CLICommand {
   name = 'task';
 
-  description = 'Запуск команд';
+  description = 'Run task';
 
   command = 'task <name> [options]';
 
@@ -12,10 +12,10 @@ class LintCommand extends CLICommand {
   alias = 't';
 
   help() {
-    const result = ['Список зарегистрированных команд'];
+    const result = ['List of the registered tasks'];
 
     this.context.getTasks().forEach((task) => {
-      result.push(`Название: ${task.name}, Описание: ${task.description}`);
+      result.push(`Name: ${task.name}, Description: ${task.description}`);
     });
 
     return result;

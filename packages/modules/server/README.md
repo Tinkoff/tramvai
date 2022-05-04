@@ -178,10 +178,10 @@ Module uses loggers with identifiers: `server`, `server:static`, `server:webapp`
 
 ### Specify server port
 
-By default server starts at `3000` port. You can change this value by specifying environment variable `PORT`:
+By default server starts at `3000` port. You have next options to override this value depending on your environment:
 
-- in dev environment it can be done by adding env `PORT` to file `env.development.json` e.g. `PORT: "8080"`
-- it can be specified explicitly as an environment variable `PORT` e.g. `PORT=8080`
+- **in dev environment** port in fully controlled by `@tramvai/cli` and should be specified by [`-p` option](references/cli/start.md#-p---port)
+- **in prod environment** it can be specified explicitly as an environment variable `PORT` e.g. `PORT=8080`
 
 ## Exportable tokens
 

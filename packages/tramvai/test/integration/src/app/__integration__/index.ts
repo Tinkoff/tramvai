@@ -1,10 +1,10 @@
 import { commandLineListTokens, createApp, createBundle, provide } from '@tramvai/core';
-import { CommonModule, ENV_USED_TOKEN } from '@tramvai/module-common';
+import { CommonModule, ENV_MANAGER_TOKEN, ENV_USED_TOKEN } from '@tramvai/module-common';
 import { NoSpaRouterModule, PAGE_SERVICE_TOKEN } from '@tramvai/module-router';
 import { LogModule } from '@tramvai/module-log';
 import { RenderModule } from '@tramvai/module-render';
 import { ServerModule } from '@tramvai/module-server';
-import { ADMIN_SERVICE, HttpClientModule, AdminClientsModule } from '@tramvai/module-api-clients';
+import { HTTP_CLIENT_FACTORY, HttpClientModule } from '@tramvai/module-http-client';
 import { MockerModule, MOCKER_CONFIGURATION } from '@tramvai/module-mocker';
 
 const bundle = createBundle({
@@ -40,7 +40,6 @@ export const app = createApp({
       },
     ]),
     HttpClientModule,
-    AdminClientsModule,
     MockerModule,
   ],
   providers: [
@@ -50,21 +49,40 @@ export const app = createApp({
       useValue: [{ key: 'CONFIG_API', value: 'test' }],
     }),
     provide({
+      provide: 'CONFIG_API_HTTP_CLIENT',
+      useFactory: ({
+        factory,
+        envManager,
+      }: {
+        factory: typeof HTTP_CLIENT_FACTORY;
+        envManager: typeof ENV_MANAGER_TOKEN;
+      }) => {
+        return factory({
+          name: 'config-api',
+          baseUrl: envManager.get('CONFIG_API'),
+        });
+      },
+      deps: {
+        factory: HTTP_CLIENT_FACTORY,
+        envManager: ENV_MANAGER_TOKEN,
+      },
+    }),
+    provide({
       provide: MOCKER_CONFIGURATION,
       useValue: async () => ({ apis: ['CONFIG_API'] }),
     }),
     provide({
       provide: commandLineListTokens.resolvePageDeps,
       multi: true,
-      useFactory: ({ adminService, pageService }) => {
+      useFactory: ({ configService, pageService }) => {
         return async function testApi() {
           if (pageService.getCurrentRoute().name === 'api') {
-            await adminService.get('/test/');
+            await configService.get('/test/');
           }
         };
       },
       deps: {
-        adminService: ADMIN_SERVICE,
+        configService: 'CONFIG_API_HTTP_CLIENT',
         pageService: PAGE_SERVICE_TOKEN,
       },
     }),

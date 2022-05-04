@@ -5,7 +5,7 @@ import type { SaveState } from './logger.h';
 import { LEVELS } from './constants';
 import { debugGetState } from './adapters/debug';
 
-const NAME = '_tinkoff_logger';
+const NAME = '_t_logger';
 const DEFAULT_STATE: SaveState = { level: LEVELS.error, enabledLevel: [], enabledName: [] };
 
 let ls: Storage;

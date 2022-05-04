@@ -4,7 +4,7 @@ import { checkApplication } from '../../validators/commands/checkBuild';
 class LintCommand extends CLICommand {
   name = 'lint';
 
-  description = 'Команда для запуска линтинга';
+  description = 'Command to run lint';
 
   command = 'lint <target>';
 
