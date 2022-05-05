@@ -5,7 +5,7 @@ import { PapiService } from './papi/papiService.browser';
 
 export { PapiService };
 
-@Module({
+export const PapiClientModule = /* @__PURE__ */ Module({
   providers: [
     provide({
       provide: PAPI_SERVICE,
@@ -17,5 +17,4 @@ export { PapiService };
       },
     }),
   ],
-})
-export class PapiClientModule {}
+})(class PapiClientModule {});

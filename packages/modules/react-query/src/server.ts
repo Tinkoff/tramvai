@@ -1,7 +1,6 @@
 import { commandLineListTokens, Module, provide } from '@tramvai/core';
-
 import { RENDER_SLOTS, ResourceType, ResourceSlot } from '@tramvai/tokens-render';
-import { dehydrate as queryDehydrate } from 'react-query';
+import { dehydrate as queryDehydrate, setLogger } from 'react-query';
 import { safeDehydrate } from '@tramvai/safe-strings';
 import {
   QUERY_CLIENT_DEHYDRATED_STATE_TOKEN,
@@ -9,8 +8,11 @@ import {
   QUERY_DEHYDRATE_STATE_NAME_TOKEN,
 } from './tokens';
 import { sharedQueryProviders } from './shared/providers';
+import { logger } from './shared/noopLogger';
 
 export * from './tokens';
+
+setLogger(logger);
 
 @Module({
   imports: [],

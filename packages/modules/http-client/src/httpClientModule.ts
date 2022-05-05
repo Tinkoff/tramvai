@@ -20,7 +20,7 @@ import { PapiClientModule } from './papiClientModule';
 
 const createCacheToken = createToken<typeof CREATE_CACHE_TOKEN>('httpClient createCache');
 
-@Module({
+export const HttpClientModule = /* @__PURE__ */ Module({
   imports: [PapiClientModule],
   providers: [
     provide({
@@ -111,5 +111,4 @@ const createCacheToken = createToken<typeof CREATE_CACHE_TOKEN>('httpClient crea
       useValue: ['x-request-id'],
     }),
   ],
-})
-export class HttpClientModule {}
+})(class HttpClientModule {});

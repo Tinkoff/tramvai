@@ -27,6 +27,7 @@
   },
   "devDependencies": {},
   "peerDependencies": {
+    "@tinkoff/utils": "^2.1.2",
     "@tinkoff/dippy": "0.0.0-stub",
     "@tramvai/core": "0.0.0-stub",
     "react": ">=16.8.0",

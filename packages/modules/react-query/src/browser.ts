@@ -1,8 +1,12 @@
 import { Module, provide } from '@tramvai/core';
+import { setLogger } from 'react-query';
 import { QUERY_CLIENT_DEHYDRATED_STATE_TOKEN, QUERY_DEHYDRATE_STATE_NAME_TOKEN } from './tokens';
 import { sharedQueryProviders } from './shared/providers';
+import { logger } from './shared/noopLogger';
 
 export * from './tokens';
+
+setLogger(logger);
 
 @Module({
   imports: [],
