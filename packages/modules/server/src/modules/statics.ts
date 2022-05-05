@@ -2,10 +2,7 @@ import { resolve } from 'path';
 import FastifyStatic from 'fastify-static';
 import { Module, provide } from '@tramvai/core';
 import { SERVER_MODULE_STATICS_OPTIONS } from '@tramvai/tokens-server';
-import {
-  WEB_FASTIFY_APP_BEFORE_INIT_TOKEN,
-  WEB_FASTIFY_APP_TOKEN,
-} from '@tramvai/tokens-server-private';
+import { WEB_FASTIFY_APP_BEFORE_INIT_TOKEN } from '@tramvai/tokens-server-private';
 
 const ONE_YEAR = 365 * 24 * 60 * 60;
 
@@ -13,11 +10,11 @@ const ONE_YEAR = 365 * 24 * 60 * 60;
   providers: [
     provide({
       provide: WEB_FASTIFY_APP_BEFORE_INIT_TOKEN,
-      useFactory: ({ app, options }) => {
+      useFactory: ({ options }): typeof WEB_FASTIFY_APP_BEFORE_INIT_TOKEN[number] => {
         const path = options?.path || 'public';
 
-        return () => {
-          app.register(FastifyStatic, {
+        return (instance) => {
+          instance.register(FastifyStatic, {
             decorateReply: false,
             prefix: `/${path}`,
             root: resolve(process.cwd(), path),
@@ -32,7 +29,6 @@ const ONE_YEAR = 365 * 24 * 60 * 60;
         };
       },
       deps: {
-        app: WEB_FASTIFY_APP_TOKEN,
         options: {
           token: SERVER_MODULE_STATICS_OPTIONS,
           optional: true,

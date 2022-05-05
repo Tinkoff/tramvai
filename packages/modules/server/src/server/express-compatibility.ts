@@ -102,7 +102,7 @@ const expressPlugin: FastifyPluginCallback<Options> = (fastify, options, next) =
     const middlewares = instance[kMiddlewares].slice();
     // eslint-disable-next-line no-param-reassign
     instance[kMiddlewares] = [];
-    instance.decorate('express', express());
+    instance.decorate('express', options.express?.instance ?? express());
     instance.express.disable('x-powered-by');
     instance.decorate('use', use);
     for (const middleware of middlewares) {

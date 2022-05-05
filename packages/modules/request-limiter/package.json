@@ -25,7 +25,8 @@
   },
   "dependencies": {
     "@tinkoff/errors": "0.0.0-stub",
-    "fastify-plugin": "^3.0.1"
+    "fastify-plugin": "^3.0.1",
+    "on-finished": "^2.3.0"
   },
   "devDependencies": {},
   "peerDependencies": {

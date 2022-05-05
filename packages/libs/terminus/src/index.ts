@@ -101,7 +101,7 @@ function decorateWithHealthCheck(
         return;
       }
 
-      Promise.resolve()
+      return Promise.resolve()
         .then(() => healthChecks[healthCheck]())
         .then((info) => {
           sendSuccess(res, { info, verbatim: healthChecks.verbatim });

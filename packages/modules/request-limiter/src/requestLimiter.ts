@@ -1,6 +1,7 @@
 import type { FastifyRequest, FastifyReply, HookHandlerDoneFunction } from 'fastify';
 import fp from 'fastify-plugin';
 import { HttpError } from '@tinkoff/errors';
+import onFinished from 'on-finished';
 import type { IntervalHistogram } from 'perf_hooks';
 import { monitorEventLoopDelay } from 'perf_hooks';
 import { DoubleLinkedList } from './utils/doubleLinkedList';
@@ -102,8 +103,16 @@ export class RequestLimiter {
     }
   }
 
-  private run({ next }: RequestLimiterRequest) {
+  private run({ next, res }: RequestLimiterRequest) {
     this.currentActive++;
+
+    // onFinished doesn't work OK in DEV mode. Just stuck with high load without any reasons
+    // fastify: it only works this way with on-finished, as using hook `onRequest` is not enough to handle all of the requests
+    // and some of the failed requests are getting disappeared
+    // and other hooks useless as well. [related issue](https://github.com/fastify/fastify/issues/1352)
+    onFinished(res.raw, () => {
+      this.onResponse();
+    });
 
     next();
   }
@@ -113,10 +122,6 @@ export const fastifyRequestsLimiter = fp<{ requestsLimiter: RequestLimiter }>(
   async (fastify, { requestsLimiter }) => {
     fastify.addHook('onRequest', (req, res, next) => {
       requestsLimiter.add({ req, res, next });
-    });
-
-    fastify.addHook('onResponse', async () => {
-      requestsLimiter.onResponse();
     });
   }
 );

@@ -1,8 +1,5 @@
 import { Module, Scope, provide } from '@tramvai/core';
-import {
-  WEB_FASTIFY_APP_LIMITER_TOKEN,
-  WEB_FASTIFY_APP_TOKEN,
-} from '@tramvai/tokens-server-private';
+import { WEB_FASTIFY_APP_LIMITER_TOKEN } from '@tramvai/tokens-server-private';
 import { fastifyRequestsLimiter, RequestLimiter } from './requestLimiter';
 import {
   REQUESTS_LIMITER_TOKEN,
@@ -32,17 +29,19 @@ export * from './tokens';
     provide({
       provide: WEB_FASTIFY_APP_LIMITER_TOKEN,
       multi: true,
-      useFactory: ({ app, requestsLimiter, featureEnable }) => {
-        return async () => {
+      useFactory: ({
+        requestsLimiter,
+        featureEnable,
+      }): typeof WEB_FASTIFY_APP_LIMITER_TOKEN[number] => {
+        return async (app) => {
           if (featureEnable !== true) {
             return;
           }
 
-          await app.register(fastifyRequestsLimiter, { requestsLimiter });
+          await fastifyRequestsLimiter(app, { requestsLimiter });
         };
       },
       deps: {
-        app: WEB_FASTIFY_APP_TOKEN,
         requestsLimiter: REQUESTS_LIMITER_TOKEN,
         featureEnable: { token: REQUESTS_LIMITER_ACTIVATE_TOKEN, optional: true },
       },

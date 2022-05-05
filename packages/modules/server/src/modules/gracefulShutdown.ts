@@ -5,10 +5,7 @@ import {
   READINESS_PROBE_TOKEN,
   LIVENESS_PROBE_TOKEN,
 } from '@tramvai/tokens-server';
-import {
-  WEB_FASTIFY_APP_BEFORE_INIT_TOKEN,
-  WEB_FASTIFY_APP_TOKEN,
-} from '@tramvai/tokens-server-private';
+import { WEB_FASTIFY_APP_BEFORE_INIT_TOKEN } from '@tramvai/tokens-server-private';
 import { LOGGER_TOKEN } from '@tramvai/tokens-common';
 import { Module, COMMAND_LINE_RUNNER_TOKEN } from '@tramvai/core';
 
@@ -17,7 +14,6 @@ const GRACEFUL_READINESS_TIMEOUT = 5000;
 
 interface Deps {
   server: typeof SERVER_TOKEN;
-  app: typeof WEB_FASTIFY_APP_TOKEN;
   logger: typeof LOGGER_TOKEN;
   commandLineRunner: typeof COMMAND_LINE_RUNNER_TOKEN;
   readinessProbe?: typeof READINESS_PROBE_TOKEN;
@@ -34,17 +30,16 @@ const noopCheck = () => {};
       provide: WEB_FASTIFY_APP_BEFORE_INIT_TOKEN,
       multi: true,
       useFactory: ({
-        app,
         server,
         logger,
         commandLineRunner,
         livenessProbe,
         readinessProbe,
-      }: Deps) => {
+      }: Deps): typeof WEB_FASTIFY_APP_BEFORE_INIT_TOKEN[number] => {
         const log = logger('server');
 
-        return function serverListen() {
-          createTerminus(server, app, {
+        return function serverListen(instance) {
+          createTerminus(server, instance, {
             signal: 'SIGTERM',
             timeout: GRACEFUL_SHUTDOWN_TIMEOUT,
             logger: (msg, error) => {
@@ -87,7 +82,6 @@ const noopCheck = () => {};
         };
       },
       deps: {
-        app: WEB_FASTIFY_APP_TOKEN,
         server: SERVER_TOKEN,
         logger: LOGGER_TOKEN,
         commandLineRunner: COMMAND_LINE_RUNNER_TOKEN,
