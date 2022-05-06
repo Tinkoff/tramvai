@@ -55,6 +55,9 @@ export const babelConfigFactory = ({
   modules = false,
   generateDataQaTag = true,
   enableFillActionNamePlugin = false,
+  // for testing only!
+  // @ts-expect-error
+  markCreateTokenAsPure = true,
   typescript = false,
   useESModules = !(isServer && env === 'development'), // на сервере в режиме дев node_modules не компилятся поэтому отключаем ESModules,
   loader = true,
@@ -128,6 +131,7 @@ export const babelConfigFactory = ({
       path.resolve(__dirname, './plugins/lazy-component/lazy-component'),
       generateDataQaTag && path.resolve(__dirname, './plugins/react-element-info-unique'), // Собственный плагин. Необходимо удалить в будущем
       enableFillActionNamePlugin && path.resolve(__dirname, './plugins/fill-action-name'), // Собственный плагин. Необходимо удалить в будущем
+      markCreateTokenAsPure && path.resolve(__dirname, './plugins/create-token-pure'),
       ['lodash', { id: ['ramda'] }],
       [
         'module-resolver',

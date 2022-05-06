@@ -1,0 +1,64 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`create-token-pure add pure annotation when createToken from @tinkoff/dippy: add pure annotation when createToken from @tinkoff/dippy 1`] = `
+
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved
+import { createToken } from '@tinkoff/dippy';
+
+export const TOKEN = createToken('token');
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved
+import { createToken } from '@tinkoff/dippy';
+export var TOKEN = /*#__PURE__*/ createToken('token');
+
+
+`;
+
+exports[`create-token-pure add pure annotation when createToken from @tramvai/core: add pure annotation when createToken from @tramvai/core 1`] = `
+
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved
+import { createToken } from '@tramvai/core';
+
+export const TOKEN = createToken('token');
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved
+import { createToken } from '@tramvai/core';
+export var TOKEN = /*#__PURE__*/ createToken('token');
+
+
+`;
+
+exports[`create-token-pure do nothing: do nothing 1`] = `
+
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved
+import { createApp } from '@tramvai/core';
+import { Container } from '@tinkoff/dippy';
+
+const di = new Container();
+
+createApp({
+  name: 'test'
+});
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved
+import { createApp } from '@tramvai/core';
+import { Container } from '@tinkoff/dippy';
+var di = new Container();
+createApp({
+  name: 'test',
+});
+
+
+`;
