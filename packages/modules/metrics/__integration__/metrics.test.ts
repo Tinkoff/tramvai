@@ -3,6 +3,7 @@ import fetch from 'node-fetch';
 import { testApp } from '@tramvai/internal-test-utils/testApp';
 import { testAppInBrowser } from '@tramvai/internal-test-utils/browser';
 import { getPort } from '@tramvai/internal-test-utils/utils/getPort';
+import { sleep } from '@tramvai/test-integration';
 
 describe('modules/metrics/instantMetrics', () => {
   describe('default app port', () => {
@@ -58,7 +59,10 @@ describe('modules/metrics/instantMetrics', () => {
     it('Возвращает метрики по урлу /metrics', async () => {
       const { request } = getApp();
 
-      await request('/metrics').expect(200, /# TYPE http_requests_total counter/);
+      await request('/metrics').expect(
+        200,
+        /# TYPE http_requests_total counter\nhttp_requests_total{method="\w+",status="\d+"} \d+/
+      );
     });
   });
 
@@ -69,7 +73,7 @@ describe('modules/metrics/instantMetrics', () => {
       metricsPort = await getPort();
     });
 
-    testApp({
+    const { getApp } = testApp({
       name: 'metrics',
       config: {
         commands: {
@@ -90,11 +94,15 @@ describe('modules/metrics/instantMetrics', () => {
     });
 
     it('Возвращает метрики по урлу /metrics', async () => {
+      await getApp().request('/').expect(200);
+
       const response = await fetch(`http://localhost:${metricsPort}/metrics`);
 
       expect(response.status).toBe(200);
 
-      expect(await response.text()).toMatch(/# TYPE http_requests_total counter/);
+      expect(await response.text()).toMatch(
+        /# TYPE http_requests_total counter\nhttp_requests_total{method="\w+",status="\d+"} \d+/
+      );
     });
   });
 });

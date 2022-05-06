@@ -74,7 +74,7 @@ export interface PageService {
 
   resolveComponentFromConfig(
     property: 'page' | 'layout' | 'header' | 'footer' | 'errorBoundary'
-  ): Component;
+  ): Component | undefined;
 }
 
 export type RouteResolve = (navigation: Navigation) => Promise<Route | void>;

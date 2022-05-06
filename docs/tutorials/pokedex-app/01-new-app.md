@@ -19,8 +19,6 @@ For development, build and code generation there is a special CLI [@tramvai/cli]
 
 ```bash
 npm init @tramvai pokedex # or npx @tramvai/create pokedex
-# or for yarn
-yarn create @tramvai pokedex
 ```
 
 During the execution of the command you will need to select a base template, a package manager and a test framework. The command will create a new `pokedex` directory, and generate an application skeleton in it, then install the dependencies.

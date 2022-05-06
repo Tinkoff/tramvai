@@ -6,7 +6,7 @@ import type {
   UpdateCurrentRouteOptions,
   HistoryOptions,
 } from '@tinkoff/router';
-import type { COMPONENT_REGISTRY_TOKEN } from '@tramvai/tokens-common';
+import type { COMPONENT_REGISTRY_TOKEN, Component } from '@tramvai/tokens-common';
 import type { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
 import { isFileSystemPageComponent } from '@tramvai/experiments';
 
@@ -61,12 +61,12 @@ export class PageService implements PageServiceInterface {
     return this.router.go(to, options);
   }
 
-  addComponent(name: string, component: any): void {
+  addComponent(name: string, component: Component): void {
     const group = this.getComponentsGroupName();
     return this.componentRegistry.add(name, component, group);
   }
 
-  getComponent(name: string): any {
+  getComponent(name: string): Component | undefined {
     const group = this.getComponentsGroupName();
     return this.componentRegistry.get(name, group);
   }

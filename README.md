@@ -48,8 +48,6 @@ Modular framework for universal React applications
 
    ```sh
    npm init @tramvai my-awesome-app # or npx @tramvai/create my-awesome-app
-   # or for yarn
-   yarn create @tramvai my-awesome-app
    ```
 
 2. Run development server

@@ -12,18 +12,18 @@ import { mergeOptions } from './mergeOptions';
 
 export class HttpClientAdapter extends BaseHttpClient implements HttpClient {
   private options: HttpClientBaseOptions;
-  private tinkoffRequest: MakeRequest;
+  private makeRequest: MakeRequest;
 
   constructor({
     options,
-    tinkoffRequest,
+    makeRequest,
   }: {
     options: HttpClientBaseOptions;
-    tinkoffRequest: MakeRequest;
+    makeRequest: MakeRequest;
   }) {
     super();
     this.options = options;
-    this.tinkoffRequest = tinkoffRequest;
+    this.makeRequest = makeRequest;
   }
 
   async request<R = any>(req: HttpClientRequest): Promise<HttpClientResponse<R>> {
@@ -46,7 +46,7 @@ export class HttpClientAdapter extends BaseHttpClient implements HttpClient {
       adaptedReq.type = requestType;
     }
 
-    const res = this.tinkoffRequest<R>(adaptedReq);
+    const res = this.makeRequest<R>(adaptedReq);
 
     try {
       const payload = await res;
@@ -72,7 +72,7 @@ export class HttpClientAdapter extends BaseHttpClient implements HttpClient {
   fork(forkOptions: HttpClientRequest = {}, mergeOptionsConfig: { replace?: boolean } = {}) {
     return new HttpClientAdapter({
       options: mergeOptions(this.options, forkOptions, mergeOptionsConfig),
-      tinkoffRequest: this.tinkoffRequest,
+      makeRequest: this.makeRequest,
     });
   }
 }

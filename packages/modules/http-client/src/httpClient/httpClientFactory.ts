@@ -43,7 +43,7 @@ export const httpClientFactory = ({
   requestManager,
   headersList,
   createCache,
-  tinkoffRequestRegistry,
+  makeRequestRegistry,
   agent,
   disableCircuitBreaker = false,
 }: {
@@ -53,7 +53,7 @@ export const httpClientFactory = ({
   requestManager?: typeof REQUEST_MANAGER_TOKEN;
   headersList?: typeof API_CLIENT_PASS_HEADERS;
   createCache?: typeof CREATE_CACHE_TOKEN;
-  tinkoffRequestRegistry: Map<string, MakeRequest>;
+  makeRequestRegistry: Map<string, MakeRequest>;
   agent?: typeof HTTP_CLIENT_AGENT;
   disableCircuitBreaker: typeof DISABLE_CIRCUIT_BREAKER;
 }): typeof HTTP_CLIENT_FACTORY => {
@@ -112,15 +112,15 @@ export const httpClientFactory = ({
     }
 
     // кэшируем инстанс @tinkoff/request
-    if (!tinkoffRequestRegistry.has(adapterOptions.name)) {
-      tinkoffRequestRegistry.set(adapterOptions.name, createTinkoffRequest(adapterOptions));
+    if (!makeRequestRegistry.has(adapterOptions.name)) {
+      makeRequestRegistry.set(adapterOptions.name, createTinkoffRequest(adapterOptions));
     }
 
-    const tinkoffRequest = tinkoffRequestRegistry.get(adapterOptions.name);
+    const makeRequest = makeRequestRegistry.get(adapterOptions.name);
 
     const httpClientAdapter = new HttpClientAdapter({
       options: adapterOptions as HttpClientBaseOptions,
-      tinkoffRequest,
+      makeRequest,
     });
 
     return httpClientAdapter;

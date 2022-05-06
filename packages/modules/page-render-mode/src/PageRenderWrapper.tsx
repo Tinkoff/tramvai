@@ -22,7 +22,7 @@ export const PageRenderWrapper = ({ children }: PropsWithChildren<{}>) => {
     optional: true,
   });
   const { pageComponent, pageRenderMode } = config;
-  const { renderMode } = pageService.getComponent(pageComponent) as any;
+  const { renderMode } = (pageService.getComponent(pageComponent) as any) ?? { renderMode: false };
   const FallbackComponent: ComponentType<any> =
     pageService.resolveComponentFromConfig(fallbackKey as any) || DefaultFallbackComponent;
 

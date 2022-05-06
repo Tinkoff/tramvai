@@ -6,6 +6,7 @@ import {
   WEB_FASTIFY_APP_BEFORE_INIT_TOKEN,
   SERVER_FACTORY_TOKEN,
   WEB_FASTIFY_APP_FACTORY_TOKEN,
+  WEB_FASTIFY_APP_INIT_TOKEN,
 } from '@tramvai/tokens-server-private';
 import { METRICS_MODULE_TOKEN, METRICS_MODULE_CONFIG_TOKEN } from '@tramvai/tokens-metrics';
 import { fastifyMeasureRequests } from '@tinkoff/measure-fastify-requests';
@@ -131,6 +132,23 @@ const METRICS_WEB_APP_TOKEN = createToken<typeof WEB_FASTIFY_APP_TOKEN>('metrics
     }),
     provide({
       provide: WEB_FASTIFY_APP_BEFORE_INIT_TOKEN,
+      useFactory: ({ app, registry }) => {
+        return async () => {
+          app.all('/metrics', async (_, res) => {
+            res.type(registry.contentType);
+
+            return registry.metrics();
+          });
+        };
+      },
+      deps: {
+        app: METRICS_WEB_APP_TOKEN,
+        registry: 'metricsDefaultRegistry',
+      },
+      multi: true,
+    }),
+    provide({
+      provide: WEB_FASTIFY_APP_INIT_TOKEN,
       useFactory: ({
         app,
         metrics,
@@ -138,15 +156,8 @@ const METRICS_WEB_APP_TOKEN = createToken<typeof WEB_FASTIFY_APP_TOKEN>('metrics
         getAdditionalLabelValuesList,
         httpRequestsDurationBuckets,
         metricsExcludePaths,
-        registry,
       }) => {
         return async () => {
-          app.all('/metrics', async (_, res) => {
-            res.type(registry.contentType);
-
-            return registry.metrics();
-          });
-
           await app.register(fastifyMeasureRequests, {
             metrics,
             metricsExcludePaths,
@@ -170,7 +181,7 @@ const METRICS_WEB_APP_TOKEN = createToken<typeof WEB_FASTIFY_APP_TOKEN>('metrics
       },
       deps: {
         metrics: METRICS_MODULE_TOKEN,
-        app: METRICS_WEB_APP_TOKEN,
+        app: WEB_FASTIFY_APP_TOKEN,
         additionalLabelNamesList: {
           token: 'additionalLabelNames',
           multi: true,
@@ -186,7 +197,6 @@ const METRICS_WEB_APP_TOKEN = createToken<typeof WEB_FASTIFY_APP_TOKEN>('metrics
           optional: true,
         },
         metricsExcludePaths: SPECIAL_SERVER_PATHS,
-        registry: 'metricsDefaultRegistry',
       },
       multi: true,
     }),

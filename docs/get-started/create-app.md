@@ -20,8 +20,6 @@ Now we need to generate the application with `tramvai`
 
 ```sh
 npm init @tramvai new-app # or npx @tramvai/create new-app
-# or for yarn
-yarn create @tramvai new-app
 ```
 
 After starting, you need to select settings - project template, CI settings and package manager. For a quick start, the default settings are fine.

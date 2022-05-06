@@ -31,7 +31,7 @@ export const HttpClientModule = /* @__PURE__ */ Module({
         envManager: ENV_MANAGER_TOKEN,
         appInfo: APP_INFO_TOKEN,
         createCache: createCacheToken,
-        tinkoffRequestRegistry: 'tinkoffRequestRegistry',
+        makeRequestRegistry: 'makeRequestRegistry',
         requestManager: {
           token: REQUEST_MANAGER_TOKEN,
           optional: true,
@@ -79,7 +79,7 @@ export const HttpClientModule = /* @__PURE__ */ Module({
      * если создавать новые экземпляры на Scope.REQUEST
      */
     provide({
-      provide: 'tinkoffRequestRegistry',
+      provide: 'makeRequestRegistry',
       scope: Scope.SINGLETON,
       useFactory: () => new Map<string, MakeRequest>(),
     }),
@@ -91,7 +91,7 @@ export const HttpClientModule = /* @__PURE__ */ Module({
      * инстансов кэши было бы неограниченное количество.
      *
      * HTTP клиенты создаются со Scope.REQUEST, но инстансы @tinkoff/request
-     * (и соответственно кэшей) создаются только один раз, благодаря `tinkoffRequestRegistry`.
+     * (и соответственно кэшей) создаются только один раз, благодаря `makeRequestRegistry`.
      * это гарантирует отсутствие утечек памяти, поэтому мы обходим проверку
      * на Scope.SINGLETON c помощью обертки `createCacheToken`
      */

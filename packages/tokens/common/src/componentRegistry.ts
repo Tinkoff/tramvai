@@ -22,7 +22,7 @@ export interface ComponentRegistry {
 
   add(name: string, component: Component, group?: string): void;
 
-  get(name: string, group?: string): Component;
+  get(name: string, group?: string): Component | undefined;
 
   getComponentParam<T>(param: string, defaultValue: T, component: string, group?: string): T;
 }

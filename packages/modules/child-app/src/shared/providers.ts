@@ -174,8 +174,8 @@ export const sharedProviders: Provider[] = [
         ]);
 
         await Promise.all([
-          ...(layoutComponent.childApps?.map((request) => preloadManager.preload(request)) ?? []),
-          ...(pageComponent.childApps?.map((request) => preloadManager.preload(request)) ?? []),
+          ...(layoutComponent?.childApps?.map((request) => preloadManager.preload(request)) ?? []),
+          ...(pageComponent?.childApps?.map((request) => preloadManager.preload(request)) ?? []),
         ]);
       };
     },
@@ -213,7 +213,7 @@ export const sharedProviders: Provider[] = [
     provide: REGISTER_CLEAR_CACHE_TOKEN,
     multi: true,
     useFactory: ({ diManager }) => {
-      return (type?: string) => {
+      return (type: string) => {
         diManager.forEachChildDi((di) => {
           const clearCache = di.get({ token: CLEAR_CACHE_TOKEN, optional: true });
 
