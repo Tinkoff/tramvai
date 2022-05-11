@@ -21,6 +21,8 @@ import { onlyBrowser } from './conditions/onlyBrowser';
 import { pageServer } from './conditions/pageServer';
 import { pageBrowser } from './conditions/pageBrowser';
 
+export { alwaysCondition, onlyServer, onlyBrowser, pageServer, pageBrowser };
+
 @Module({
   providers: [
     {

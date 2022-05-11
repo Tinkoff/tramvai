@@ -13,7 +13,7 @@ const METRICS_FASTIFY_TIMER = '_metrics_execution_timer';
 declare module 'fastify' {
   interface FastifyRequest {
     [METRICS_FASTIFY_HANDLED]: boolean;
-    [METRICS_FASTIFY_TIMER]: () => void;
+    [METRICS_FASTIFY_TIMER]: (labels?: Record<string, any>) => void;
   }
 }
 
@@ -97,7 +97,7 @@ export const fastifyMeasureRequests = fp<MeasureOptions<any>>(
     });
 
     fastify.addHook('onResponse', async (req, res) => {
-      if (!excludePatterns.some((p) => p.test(req.url))) {
+      if (req[METRICS_FASTIFY_HANDLED]) {
         const labels = {
           method: req.method,
           status: res.statusCode,
@@ -109,7 +109,7 @@ export const fastifyMeasureRequests = fp<MeasureOptions<any>>(
         }
 
         request.inc(labels);
-        (req[METRICS_FASTIFY_TIMER] as any)(labels);
+        req[METRICS_FASTIFY_TIMER](labels);
       }
     });
   }

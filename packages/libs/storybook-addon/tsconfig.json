@@ -1,0 +1,41 @@
+{
+    "extends": "../../../tsconfig.lib.json",
+    "include": [
+        "./src"
+    ],
+    "compilerOptions": {
+        "module": "CommonJS",
+        "declarationDir": "./lib",
+        "outDir": "./lib",
+        "rootDir": "./src"
+    },
+    "references": [
+        {
+            "path": "../../cli"
+        },
+        {
+            "path": "../../tramvai/state"
+        },
+        {
+            "path": "../../tramvai/react"
+        },
+        {
+            "path": "../../tramvai/test/mocks"
+        },
+        {
+            "path": "../../tokens/common"
+        },
+        {
+            "path": "../router"
+        },
+        {
+            "path": "../../tramvai/core"
+        },
+        {
+            "path": "../dippy"
+        },
+        {
+            "path": "../url"
+        }
+    ]
+}
