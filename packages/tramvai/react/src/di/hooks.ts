@@ -9,12 +9,12 @@ export const useDiContainer = () => {
 
   if (!di) {
     if (process.env.NODE_ENV !== 'production') {
-      throw new Error(`DI-контейнер не найден, убедитесь что в приложении используется 'DIContext.Provider' из '@tramvai/react'
-(в tramvai-приложении это обычно делает '@tramvai/module-render', иначе где-то явно должен определяться 'DIContext.Provider' из '@tramvai/react')
-Если выше верно, убедитесь, что модуль '@tramvai/react' не дублируется в зависимостях приложения, т.к. в этом случае версии di будут несовместимы`);
+      throw new Error(`DI container not found, make sure that the application uses 'DIContext.Provider' from '@tramvai/react'
+      (in a tramvai application this is usually done by '@tramvai/module-render', otherwise 'DIContext.Provider' from '@tramvai/react' must be explicitly defined somewhere)
+      If the above is correct, make sure that the '@tramvai/react' module is not duplicated in the application dependencies, because then the di versions would be incompatible`);
     }
 
-    throw new Error('DI-контейнер не найден');
+    throw new Error('DI container not found');
   }
 
   return di;

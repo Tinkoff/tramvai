@@ -59,7 +59,7 @@ export const httpClientFactory = ({
 }): typeof HTTP_CLIENT_FACTORY => {
   return (options: HttpClientFactoryOptions): HttpClient => {
     if (!options.name) {
-      throw Error(`Необходимо передать уникальное поле "name" для экземпляра HTTP клиента!`);
+      throw Error(`You need to pass a unique field "name" for the HTTP client instance`);
     }
 
     const forceDisableCache = envManager.get('HTTP_CLIENT_CACHE_DISABLED');

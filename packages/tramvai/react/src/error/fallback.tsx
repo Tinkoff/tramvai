@@ -14,7 +14,7 @@ export const FallbackError = () => {
           fontWeight: 200,
         }}
       >
-        Возникла ошибка :(
+        An error occurred :(
       </div>
       <div
         style={{
@@ -25,9 +25,9 @@ export const FallbackError = () => {
           lineHeight: '24px',
         }}
       >
-        Попробуйте{' '}
+        Try{' '}
         <a href="" onClick={() => window.location.reload()}>
-          перезагрузить страницу
+          reloading the page
         </a>
       </div>
     </div>

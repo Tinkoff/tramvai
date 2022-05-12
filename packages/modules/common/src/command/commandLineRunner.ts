@@ -117,8 +117,8 @@ export class CommandLineRunner implements CommandLine {
 
   private instanceExecute(instance: any, line: any, di: Container) {
     if (!(instance instanceof Function)) {
-      const error = new TypeError(`Ожидалась функция в обработке линии "commandLineListTokens.${line.toString()}", получено "${instance}".
-      Проверьте, что все подписчики на commandLineListTokens возвращают функции`);
+      const error = new TypeError(`Expected function in line processing "commandLineListTokens.${line.toString()}", received "${instance}".
+      Check that all commandLineListTokens subscribers return functions`);
 
       if (process.env.NODE_ENV !== 'production') {
         const instances = di.get(line);

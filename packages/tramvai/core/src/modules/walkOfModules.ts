@@ -2,7 +2,7 @@ import type { ExtendedModule, ModuleType } from './module.h';
 import { isValidModule } from './isValidModule';
 import { getModuleParameters } from './getModuleParameters';
 
-export const INVALID_MODULE_ERROR = 'В списке модулей приложения передан некорректный модуль';
+export const INVALID_MODULE_ERROR = 'An invalid module was passed in the list of modules';
 
 export const walkOfModules = (modules: Array<ModuleType | ExtendedModule>) => {
   const result: typeof modules = [];
@@ -21,7 +21,7 @@ export const walkOfModules = (modules: Array<ModuleType | ExtendedModule>) => {
         if (modulesNameInitialized.has(moduleParameters.name)) {
           // eslint-disable-next-line no-console
           console.error(
-            `Модуль ${moduleParameters.id} уже был проинициализирован. Скорее всего в проекте есть дубликаты зависимостей:`,
+            `Module ${moduleParameters.id} has already been initialized. Most likely there are duplicate dependencies in the project:`,
             module,
             moduleParameters
           );
