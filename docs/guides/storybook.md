@@ -36,7 +36,7 @@ npx sb init --type webpack_react --builder webpack5
 
 :hourglass: Install `postcss` inside this directory (required package):
 
-```bash npm2yarn
+```bash
 npm install --save-dev postcss
 ```
 
@@ -110,6 +110,7 @@ cd storybook && npm run storybook
 ```
 
 And you can see a Main page story at `http://localhost:6006/?path=/story/pages-main--main-page`:
+
 ![Main page story](/img/guides/storybook/storybook-1.png)
 
 You can find more examples in [@tramvai/storybook-addon documentation](references/libs/storybook-addon.md#how-to).

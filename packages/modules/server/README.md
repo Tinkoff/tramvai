@@ -183,6 +183,31 @@ By default server starts at `3000` port. You have next options to override this 
 - **in dev environment** port in fully controlled by `@tramvai/cli` and should be specified by [`-p` option](references/cli/start.md#-p---port)
 - **in prod environment** it can be specified explicitly as an environment variable `PORT` e.g. `PORT=8080`
 
+### Specify port for utility paths
+
+It includes: health checks, liveness checks, metrics.
+
+By default port for utility paths equals [base server port](#specify-server-port) and they will use the same http server.
+
+If you want to change this and run utility routes on different server with different port, use token `UTILITY_SERVER_PORT_TOKEN`:
+
+```ts
+import { UTILITY_SERVER_PORT_TOKEN } from '@tramvai/tokens-server';
+
+const providers = [
+  {
+    provide: UTILITY_SERVER_PORT_TOKEN,
+    useValue: 6532,
+  },
+];
+```
+
+Or use env variable `UTILITY_SERVER_PORT` with defined value.
+
+```sh
+env UTILITY_SERVER_PORT=6532 tramvai start app
+```
+
 ## Exportable tokens
 
 [Link](references/tokens/server.md)

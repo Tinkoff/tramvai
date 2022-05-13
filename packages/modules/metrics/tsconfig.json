@@ -49,9 +49,6 @@
             "path": "../../tokens/server-private"
         },
         {
-            "path": "../../tokens/common"
-        },
-        {
             "path": "../../libs/measure-fastify-requests"
         }
     ]

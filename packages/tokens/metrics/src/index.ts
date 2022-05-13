@@ -19,7 +19,6 @@ interface Metrics {
 
 export type ModuleConfig = {
   enableConnectionResolveMetrics: boolean;
-  port?: number;
 };
 
 export { Counter, Gauge, Histogram, Summary, Metrics };

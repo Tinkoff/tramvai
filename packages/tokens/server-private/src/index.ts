@@ -88,6 +88,18 @@ export const WEB_FASTIFY_APP_AFTER_ERROR_TOKEN = createToken<FASTIFY_APP_ERROR_H
   { multi: true }
 );
 
+/**
+ * @description
+ * Http server for utility routes
+ */
+export const UTILITY_SERVER_TOKEN = createToken<Server>('server utilityServer');
+
+/**
+ * @description
+ * Web app for utility routes
+ */
+export const UTILITY_WEB_FASTIFY_APP_TOKEN = createToken<FastifyInstance>('webApp utilityServer');
+
 export type FASTIFY_APP_INIT_HANDLER = Array<(app: FastifyInstance) => Promise<void> | void>;
 
 export type FASTIFY_APP_ERROR_HANDLER = Array<

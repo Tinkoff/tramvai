@@ -185,10 +185,16 @@ export const DEPENDENCIES_VERSION_FILTER_TOKEN = createToken<DepsFilter>(
 
 /**
  * @description
- * List of the special URLs on server (e.g. healthz and readyz)
+ * List of the utility URLs on server (e.g. healthz and readyz)
  * Url matching is happens with a library `path-to-regexp`.
  */
-export const SPECIAL_SERVER_PATHS = createToken<string>('specialServerPaths', { multi: true });
+export const UTILITY_SERVER_PATHS = createToken<string>('server utility paths', { multi: true });
+
+/**
+ * @description
+ * Defines port to listen for utility routes
+ */
+export const UTILITY_SERVER_PORT_TOKEN = createToken<number>('server utility server port');
 
 /**
  * @description

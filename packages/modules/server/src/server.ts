@@ -46,6 +46,7 @@ export * from '@tramvai/tokens-server';
     modules.ServerGracefulShutdownModule,
     modules.ServerProxyModule,
     modules.DependenciesVersionModule,
+    modules.UtilityServerModule,
     process.env.NODE_ENV !== 'production' && modules.DebugHttpRequestsModule,
   ].filter(Boolean),
   providers: [

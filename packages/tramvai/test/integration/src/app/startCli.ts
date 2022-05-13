@@ -4,7 +4,7 @@ import type { PromiseType } from 'utility-types';
 import waitOn from 'wait-on';
 import { requestFactory, renderFactory } from '@tramvai/test-helpers';
 import type { StartOptions } from './types';
-import { getServerUrl, getStaticUrl } from './utils';
+import { getServerUrl, getUtilityServerUrl, getStaticUrl } from './utils';
 import { wrapPapi } from './papi';
 import { wrapMocker } from './mocker';
 
@@ -53,11 +53,12 @@ export const startCli = async (
 
   const serverUrl = getServerUrl(cliResult);
   const staticUrl = getStaticUrl(cliResult);
+  const utilityServerUrl = getUtilityServerUrl(env, cliResult);
   const appName = typeof targetOrConfig === 'string' ? targetOrConfig : targetOrConfig.name;
 
   try {
     await waitOn({
-      resources: [`${serverUrl}/readyz`],
+      resources: [`${utilityServerUrl}/readyz`],
     });
   } catch (e) {
     logger.error('[@tramvai/cli] /readyz wait failed:', e);
