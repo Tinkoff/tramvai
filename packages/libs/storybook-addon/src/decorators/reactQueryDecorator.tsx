@@ -2,7 +2,9 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import type { DefaultOptions } from 'react-query';
 
 export interface ReactQueryDecoratorParameters {
-  reactQueryDefaultOptions?: DefaultOptions;
+  tramvai?: {
+    reactQueryDefaultOptions?: DefaultOptions;
+  };
 }
 
 export const ReactQueryDecorator = (
@@ -10,7 +12,7 @@ export const ReactQueryDecorator = (
   { parameters }: { parameters: ReactQueryDecoratorParameters }
 ) => {
   const queryClient = new QueryClient({
-    defaultOptions: parameters.reactQueryDefaultOptions ?? {
+    defaultOptions: parameters.tramvai?.reactQueryDefaultOptions ?? {
       queries: {
         refetchOnMount: false,
         refetchOnReconnect: false,

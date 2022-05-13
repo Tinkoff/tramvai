@@ -4,8 +4,10 @@ import type { Url } from '@tinkoff/url';
 import { createMockRouter } from '@tramvai/test-mocks';
 
 export interface RouterDecoratorParameters {
-  currentRoute?: Route;
-  currentUrl?: Url;
+  tramvai?: {
+    currentRoute?: Route;
+    currentUrl?: Url;
+  };
 }
 
 export const RouterDecorator = (
@@ -13,8 +15,8 @@ export const RouterDecorator = (
   { parameters }: { parameters: RouterDecoratorParameters }
 ) => {
   const routerMock = createMockRouter({
-    currentRoute: parameters.currentRoute,
-    currentUrl: parameters.currentUrl,
+    currentRoute: parameters.tramvai?.currentRoute,
+    currentUrl: parameters.tramvai?.currentUrl,
   });
 
   return (

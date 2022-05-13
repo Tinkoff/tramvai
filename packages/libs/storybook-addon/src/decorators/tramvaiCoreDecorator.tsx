@@ -22,10 +22,12 @@ import {
 } from '@tramvai/test-mocks';
 
 export interface TramvaiCoreDecoratorParameters {
-  stores?: StoreClass[];
-  initialState?: Record<string, any>;
-  providers?: DiProvider[];
-  modules?: Array<ModuleType | ExtendedModule>;
+  tramvai?: {
+    stores?: StoreClass[];
+    initialState?: Record<string, any>;
+    providers?: DiProvider[];
+    modules?: Array<ModuleType | ExtendedModule>;
+  };
 }
 
 export const TramvaiCoreDecorator = (
@@ -33,11 +35,11 @@ export const TramvaiCoreDecorator = (
   { parameters }: { parameters: TramvaiCoreDecoratorParameters }
 ) => {
   const storeMock = createMockStore({
-    stores: parameters.stores,
-    initialState: parameters.initialState,
+    stores: parameters.tramvai?.stores,
+    initialState: parameters.tramvai?.initialState,
   });
   const diMock = createMockDi({
-    modules: [...(parameters.modules ?? [])],
+    modules: [...(parameters.tramvai?.modules ?? [])],
     providers: [
       {
         provide: LOGGER_TOKEN,
@@ -59,7 +61,7 @@ export const TramvaiCoreDecorator = (
         provide: CREATE_CACHE_TOKEN,
         useValue: () => createMockCache(),
       },
-      ...(parameters.providers ?? []),
+      ...(parameters.tramvai?.providers ?? []),
     ],
   });
   const contextMock = createMockContext({
@@ -69,7 +71,7 @@ export const TramvaiCoreDecorator = (
   });
 
   return (
-    <Provider context={contextMock} serverState={parameters.initialState}>
+    <Provider context={contextMock} serverState={parameters.tramvai?.initialState}>
       <DIContext.Provider value={diMock}>
         <Story />
       </DIContext.Provider>
