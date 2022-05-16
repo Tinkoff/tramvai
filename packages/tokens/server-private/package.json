@@ -21,7 +21,7 @@
   "dependencies": {},
   "peerDependencies": {
     "@tinkoff/dippy": "0.0.0-stub",
-    "fastify": "^3.27.4",
+    "fastify": "^3.29.0",
     "tslib": "^2.0.3"
   },
   "es2017": "lib/index.es2017.js",

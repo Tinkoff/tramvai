@@ -14,6 +14,14 @@ export const HTTP_CLIENT_FACTORY = createToken<(options: HttpClientFactoryOption
 
 /**
  * @description
+ * Default options for factory of HTTP clients
+ */
+export const DEFAULT_HTTP_CLIENT_FACTORY_OPTIONS = createToken<Partial<HttpClientFactoryOptions>>(
+  'DEFAULT_HTTP_CLIENT_FACTORY_OPTIONS'
+);
+
+/**
+ * @description
  * Universal HTTP client for arbitrary requests
  */
 export const HTTP_CLIENT = createToken<HttpClient>('HTTP_CLIENT');

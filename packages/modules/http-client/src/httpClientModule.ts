@@ -7,6 +7,7 @@ import {
   API_CLIENT_PASS_HEADERS,
   HTTP_CLIENT_AGENT,
   DISABLE_CIRCUIT_BREAKER,
+  DEFAULT_HTTP_CLIENT_FACTORY_OPTIONS,
 } from '@tramvai/tokens-http-client';
 import {
   LOGGER_TOKEN,
@@ -46,6 +47,10 @@ export const HttpClientModule = /* @__PURE__ */ Module({
         },
         disableCircuitBreaker: {
           token: DISABLE_CIRCUIT_BREAKER,
+          optional: true,
+        },
+        defaultOptions: {
+          token: DEFAULT_HTTP_CLIENT_FACTORY_OPTIONS,
           optional: true,
         },
       },

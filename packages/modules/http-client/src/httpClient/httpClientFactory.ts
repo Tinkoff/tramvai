@@ -24,7 +24,7 @@ import type {
   ENV_MANAGER_TOKEN,
   REQUEST_MANAGER_TOKEN,
 } from '@tramvai/tokens-common';
-import { fillHeaderIp, fillHeaders, formatError } from '../utils';
+import { fillHeaderIp, fillHeaders } from '../utils';
 import { createUserAgent } from './createUserAgent';
 
 const environmentDependentOptions =
@@ -46,6 +46,7 @@ export const httpClientFactory = ({
   makeRequestRegistry,
   agent,
   disableCircuitBreaker = false,
+  defaultOptions,
 }: {
   logger: typeof LOGGER_TOKEN;
   envManager: typeof ENV_MANAGER_TOKEN;
@@ -56,6 +57,7 @@ export const httpClientFactory = ({
   makeRequestRegistry: Map<string, MakeRequest>;
   agent?: typeof HTTP_CLIENT_AGENT;
   disableCircuitBreaker: typeof DISABLE_CIRCUIT_BREAKER;
+  defaultOptions?: Partial<HttpClientFactoryOptions>;
 }): typeof HTTP_CLIENT_FACTORY => {
   return (options: HttpClientFactoryOptions): HttpClient => {
     if (!options.name) {
@@ -66,24 +68,26 @@ export const httpClientFactory = ({
     const forceDisabledCircuitBreaker = envManager.get('HTTP_CLIENT_CIRCUIT_BREAKER_DISABLED');
 
     const adapterOptions: TinkoffRequestOptions = mergeOptions(
-      {
-        logger,
-        agent,
-        method: 'GET',
-        createCache: createCache
-          ? (cacheOptions: any): Cache => createCache('memory', cacheOptions)
-          : undefined,
-        modifyRequest: compose(
-          fillHeaderIp({ requestManager }),
-          fillHeaders({ requestManager, headersList })
-        ),
-        modifyError: formatError,
-        circuitBreakerOptions: {
-          failureThreshold: 75,
-          minimumFailureCount: 10,
+      mergeOptions(
+        {
+          logger,
+          agent,
+          method: 'GET',
+          createCache: createCache
+            ? (cacheOptions: any): Cache => createCache('memory', cacheOptions)
+            : undefined,
+          modifyRequest: compose(
+            fillHeaderIp({ requestManager }),
+            fillHeaders({ requestManager, headersList })
+          ),
+          circuitBreakerOptions: {
+            failureThreshold: 75,
+            minimumFailureCount: 10,
+          },
+          ...environmentDependentOptions,
         },
-        ...environmentDependentOptions,
-      },
+        defaultOptions ?? {}
+      ),
       options
     ) as TinkoffRequestOptions;
 

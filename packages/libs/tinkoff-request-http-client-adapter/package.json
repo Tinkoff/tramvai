@@ -28,6 +28,7 @@
     "@tinkoff/request-plugin-protocol-http": "^0.10.18",
     "@tinkoff/request-plugin-transform-url": "^0.8.8",
     "@tinkoff/request-plugin-validate": "^0.8.8",
+    "@tinkoff/request-plugin-retry": "^0.2.3",
     "@tinkoff/utils": "^2.1.2",
     "@tramvai/http-client": "0.0.0-stub",
     "@tramvai/tokens-common": "0.0.0-stub",

@@ -1,5 +1,5 @@
 import { resolve } from 'path';
-import FastifyStatic from 'fastify-static';
+import FastifyStatic from '@fastify/static';
 import { Module, provide } from '@tramvai/core';
 import { SERVER_MODULE_STATICS_OPTIONS } from '@tramvai/tokens-server';
 import { WEB_FASTIFY_APP_BEFORE_INIT_TOKEN } from '@tramvai/tokens-server-private';

@@ -30,6 +30,9 @@ _node_modules/
 # рекомендуемые настройки
 !.vscode/*.recommended
 
+# test
+/coverage
+
 # Compiled sources
 lib
 __migrations__

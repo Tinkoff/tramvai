@@ -17,6 +17,8 @@ export const addScript = (
     src,
   });
 
+  script.dataset.critical = 'true';
+
   if (cb) {
     cb(script);
   }

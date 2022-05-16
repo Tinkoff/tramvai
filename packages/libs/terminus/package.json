@@ -33,7 +33,7 @@
   },
   "peerDependencies": {
     "express": "^4.17.1",
-    "fastify": "^3.27.4"
+    "fastify": "^3.29.0"
   },
   "license": "Apache-2.0"
 }

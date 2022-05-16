@@ -12,6 +12,8 @@ export const addLink = (type: string, href: string, attrs = {}) => {
     href,
   });
 
+  link.dataset.critical = 'true';
+
   return new Promise((resolve, reject) => {
     link.onerror = () => reject(new Error(`could not load link ${href}`));
 

@@ -22,7 +22,7 @@
     "@tramvai/test-mocks": "0.0.0-stub",
     "@types/express": "^4.17.1",
     "@types/supertest": "^2.0.11",
-    "fastify": "^3.27.4",
+    "fastify": "^3.29.0",
     "node-html-parser": "^3.0.4",
     "supertest": "^6.1.3"
   },

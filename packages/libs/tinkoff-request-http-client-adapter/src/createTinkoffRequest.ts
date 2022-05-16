@@ -12,6 +12,7 @@ import type { Options as CircuitBreakerOptions } from '@tinkoff/request-plugin-c
 import circuitBreaker from '@tinkoff/request-plugin-circuit-breaker';
 import type { HttpClientBaseOptions } from '@tramvai/http-client';
 import type { LOGGER_TOKEN } from '@tramvai/tokens-common';
+import retry from '@tinkoff/request-plugin-retry';
 import { createAgent } from './agent/createAgent';
 import type { Agent } from './agent/createAgent';
 
@@ -37,6 +38,11 @@ export interface TinkoffRequestOptions extends HttpClientBaseOptions {
   circuitBreakerOptions?: CircuitBreakerOptions;
   getCacheKey?: (request: Request) => string;
   lruOptions?: { maxAge: number; max: number };
+  retryOptions?: {
+    retry?: number;
+    retryDelay?: number | ((attempt: number) => number);
+    maxTimeout?: number;
+  };
   agent?: {
     http: Agent;
     https: Agent;
@@ -59,6 +65,7 @@ export function createTinkoffRequest(options: TinkoffRequestOptions): MakeReques
     getCacheKey,
     lruOptions = { max: 1000, maxAge: cacheTime },
     agent,
+    retryOptions,
     ...defaults
   } = options;
 
@@ -169,6 +176,10 @@ export function createTinkoffRequest(options: TinkoffRequestOptions): MakeReques
   }
 
   plugins.push(http({ agent: agent || defaultAgent }));
+
+  if (retryOptions) {
+    plugins.push(retry(retryOptions));
+  }
 
   const makeRequest = request(plugins);
 

@@ -236,23 +236,14 @@ describe('PapiService, browser', () => {
       thirdError = e;
     }
 
-    expect(firstError.message).toMatchInlineSnapshot(
-      `"Что-то пошло не так. Мы уже решаем проблему. Попробуйте снова через несколько минут."`
-    );
+    expect(firstError.message).toMatchInlineSnapshot(`"{\\"payload\\":\\"payload\\"}"`);
     expect(firstError.url).toMatchInlineSnapshot(`"/testApp/papi/fake"`);
-    expect(firstError.originalMessage).toMatchInlineSnapshot(`"{\\"payload\\":\\"payload\\"}"`);
 
-    expect(secondError.message).toMatchInlineSnapshot(
-      `"Что-то пошло не так. Мы уже решаем проблему. Попробуйте снова через несколько минут."`
-    );
+    expect(secondError.message).toMatchInlineSnapshot(`"{\\"resultCode\\":\\"OK\\"}"`);
     expect(secondError.url).toMatchInlineSnapshot(`"/testApp/papi/fake"`);
-    expect(secondError.originalMessage).toMatchInlineSnapshot(`"{\\"resultCode\\":\\"OK\\"}"`);
 
-    expect(thirdError.message).toMatchInlineSnapshot(
-      `"Что-то пошло не так. Мы уже решаем проблему. Попробуйте снова через несколько минут."`
-    );
+    expect(thirdError.message).toMatchInlineSnapshot(`"Server error"`);
     expect(thirdError.url).toMatchInlineSnapshot(`"/testApp/papi/fake"`);
-    expect(thirdError.originalMessage).toMatchInlineSnapshot(`"Server error"`);
   });
 });
 /* eslint-enable import/first */

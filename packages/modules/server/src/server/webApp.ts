@@ -1,7 +1,7 @@
 import fastify from 'fastify';
 import express from 'express';
-import { fastifyCookie } from 'fastify-cookie';
-import fastifyFormBody from 'fastify-formbody';
+import { fastifyCookie } from '@fastify/cookie';
+import fastifyFormBody from '@fastify/formbody';
 import type { LOGGER_TOKEN } from '@tramvai/tokens-common';
 import { FASTIFY_REQUEST, FASTIFY_RESPONSE } from '@tramvai/tokens-common';
 import { REQUEST, RESPONSE, RESPONSE_MANAGER_TOKEN } from '@tramvai/tokens-common';
