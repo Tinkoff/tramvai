@@ -26,7 +26,7 @@ const isEmptyUnhandledRejection = (exception: Exception) => {
 // не отправляем ошибки загрузки статики из скрипта, который делает повторные запросы к статике,
 // т.к. информации о ошибке они не содержат, а всплески таких ошибок удобнее смотреть в Sage
 const isFileLoadException = (exception: Exception) => {
-  return exception.type === 'Error' && /Проблема с загрузкой файла/g.test(exception.value);
+  return exception.type === 'Error' && /Problem with the file loading/g.test(exception.value);
 };
 
 const isUselessException = (exception: Exception) => {
