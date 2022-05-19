@@ -11,6 +11,7 @@ import type { StartCommand } from './start';
 import type { BuildCommand } from './build';
 import type { BenchmarkCommand } from './benchmark';
 import type { AnalyzeCommand } from './analyze';
+import type { StartProdCommand } from './start-prod';
 
 export { ConfigManager } from '../config/configManager';
 export { ConfigManager as ConfigManagerValidator } from '../models/config';
@@ -30,6 +31,7 @@ const app = createApp({
     build: () => import('./build'),
     benchmark: () => import('./benchmark'),
     analyze: () => import('./analyze'),
+    'start-prod': () => import('./start-prod'),
   },
   providers: [
     {
@@ -71,4 +73,8 @@ export const benchmark: BenchmarkCommand = (parameters) => {
 
 export const analyze: AnalyzeCommand = (parameters) => {
   return app.run('analyze', parameters);
+};
+
+export const startProd: StartProdCommand = (parameters) => {
+  return app.run('start-prod', parameters);
 };

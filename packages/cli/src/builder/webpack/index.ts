@@ -27,7 +27,6 @@ import { buildClientModernProviders } from './providers/build/clientModern';
 import { buildServerProviders } from './providers/build/server';
 import { CONFIG_MANAGER_TOKEN } from '../../di/tokens';
 import { buildApplicationServerProviders } from './providers/build/application/server';
-import analyze from '../../commands/analyze/analyze';
 import { analyzeSharedProviders } from './providers/analyze/shared';
 
 const BUILDER_NAME = 'webpack';

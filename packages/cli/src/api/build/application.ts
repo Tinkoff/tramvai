@@ -10,10 +10,10 @@ import { registerProviders } from '../../utils/di';
 
 export const buildApplication = async (di: Container): Result => {
   const options = di.get(COMMAND_PARAMETERS_TOKEN as Params);
-  const { buildType } = options;
+  const { buildType = 'all' } = options;
 
-  const shouldBuildClient = buildType !== 'server';
-  const shouldBuildServer = buildType !== 'client';
+  const shouldBuildClient = buildType === 'client' || buildType === 'all';
+  const shouldBuildServer = buildType === 'server' || buildType === 'all';
 
   registerProviders(di, sharedProviders);
 

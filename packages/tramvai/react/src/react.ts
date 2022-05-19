@@ -15,4 +15,4 @@ export { withError } from './error/hoc';
 export * from './error/tokens';
 
 // lazy
-export { lazy } from './lazy/lazy';
+export { lazy, __lazyErrorHandler } from './lazy/lazy';

@@ -1,7 +1,13 @@
 import type { Provider } from '@tinkoff/dippy';
 import { provide } from '@tinkoff/dippy';
 import { EventEmitter } from 'events';
+import { CONFIG_MANAGER_TOKEN } from '../../../di/tokens';
 import {
+  closeWorkerPoolBabel,
+  closeWorkerPoolStyles,
+} from '../../../library/webpack/utils/workersPool';
+import {
+  CLOSE_HANDLER_TOKEN,
   EVENT_EMITTER_TOKEN,
   GET_BUILD_STATS_TOKEN,
   INIT_HANDLER_TOKEN,
@@ -53,6 +59,21 @@ export const sharedProviders: Provider[] = [
       clientCompiler: { token: WEBPACK_CLIENT_COMPILER_TOKEN, optional: true },
       clientModernCompiler: { token: WEBPACK_CLIENT_MODERN_COMPILER_TOKEN, optional: true },
       serverCompiler: { token: WEBPACK_SERVER_COMPILER_TOKEN, optional: true },
+    },
+  }),
+  provide({
+    provide: CLOSE_HANDLER_TOKEN,
+    multi: true,
+    useFactory: ({ configManager }) => {
+      return async () => {
+        await Promise.all([
+          closeWorkerPoolBabel(configManager),
+          closeWorkerPoolStyles(configManager),
+        ]);
+      };
+    },
+    deps: {
+      configManager: CONFIG_MANAGER_TOKEN,
     },
   }),
 ];

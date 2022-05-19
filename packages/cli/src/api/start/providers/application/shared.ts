@@ -11,10 +11,6 @@ import { stopServer } from '../../utils/stopServer';
 import type { ApplicationConfigEntry } from '../../../../typings/configEntry/application';
 import type { Params } from '../../index';
 import { ConfigManager } from '../../../../config/configManager';
-import {
-  closeWorkerPoolBabel,
-  closeWorkerPoolStyles,
-} from '../../../../library/webpack/utils/workersPool';
 import { createServer } from '../../utils/createServer';
 import { listenServer } from '../../utils/listenServer';
 import { getListeningPort } from '../../utils/getListeningPort';
@@ -93,21 +89,6 @@ export const sharedProviders: readonly Provider[] = [
     },
     deps: {
       staticServer: STATIC_SERVER_TOKEN,
-    },
-  },
-  {
-    provide: CLOSE_HANDLER_TOKEN,
-    multi: true,
-    useFactory: ({ configManager }: { configManager: typeof CONFIG_MANAGER_TOKEN }) => {
-      return async () => {
-        await Promise.all([
-          closeWorkerPoolBabel(configManager),
-          closeWorkerPoolStyles(configManager),
-        ]);
-      };
-    },
-    deps: {
-      configManager: CONFIG_MANAGER_TOKEN,
     },
   },
 ] as const;

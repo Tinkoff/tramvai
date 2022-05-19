@@ -7,6 +7,7 @@ export const app = createApp({
     build: () => import('../api/build'),
     benchmark: () => import('../api/benchmark'),
     analyze: () => import('../api/analyze'),
+    'start-prod': () => import('../api/start-prod'),
   },
   providers: [
     {

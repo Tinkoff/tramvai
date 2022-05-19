@@ -1,5 +1,6 @@
 import eachObj from '@tinkoff/utils/object/each';
 import { createBundle } from '@tramvai/core';
+import { __lazyErrorHandler } from '@tramvai/react';
 import type {
   BUNDLE_MANAGER_TOKEN,
   DISPATCHER_TOKEN,
@@ -143,6 +144,6 @@ export class BundleManager implements Interface {
       return Promise.reject(new Error(`Bundle "${name}" not found`));
     }
 
-    return this.bundles[name]();
+    return this.bundles[name]().catch((e) => __lazyErrorHandler(e, this.bundles[name]));
   }
 }

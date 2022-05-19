@@ -46,6 +46,7 @@
     "@tinkoff/utils": "^2.1.2",
     "@tramvai/cli": "0.0.0-stub",
     "@tramvai/core": "0.0.0-stub",
+    "@tramvai/react": "0.0.0-stub",
     "@tramvai/papi": "0.0.0-stub",
     "@tramvai/state": "0.0.0-stub",
     "@tramvai/tokens-metrics": "0.0.0-stub",
