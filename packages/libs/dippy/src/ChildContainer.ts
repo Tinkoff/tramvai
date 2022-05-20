@@ -4,7 +4,9 @@ import { Container, NOT_YET } from './Container';
 import { DI_TOKEN } from './tokens';
 import { Scope } from './constant';
 
-export const IS_DI_CHILD_CONTAINER_TOKEN = createToken<boolean>('isDiChildContainer');
+export const IS_DI_CHILD_CONTAINER_TOKEN = /* #__PURE__*/ createToken<boolean>(
+  'isDiChildContainer'
+);
 
 export class ChildContainer extends Container {
   /**

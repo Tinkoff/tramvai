@@ -8,7 +8,11 @@ export interface Logger {
   error: LogFunction;
 }
 
-export type RequestFunc = (options: { url: string; responseType?: string }) => Promise<any>;
+export type RequestFunc = (options: {
+  url: string;
+  responseType?: string;
+  timeout?: number;
+}) => Promise<any>;
 
 export interface Cache {
   get: (key: string) => any;
@@ -21,6 +25,7 @@ export interface LoaderDeps {
   cache?: Cache;
   externals?: Record<string, any>;
   debug?: string[];
+  timeout?: number;
 }
 
 export interface LoadOptions {

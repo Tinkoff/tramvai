@@ -2,7 +2,7 @@ import Module from 'module';
 import { runInThisContext } from 'vm';
 import ssri from 'ssri';
 import { makeRequest } from './request';
-import { DEFAULT_LOGGER } from './defaults';
+import { DEFAULT_LOGGER, DEFAULT_TIMEOUT } from './defaults';
 import type { Logger, RequestFunc, LoaderDeps, LoadOptions, Cache } from './types.h';
 
 // Высчитываем размер обёртки для модулей в которую оборачивается модуль, вычитая конечную часть `\n});`
@@ -39,12 +39,15 @@ export class ServerLoader {
 
   protected fetchRequests: Map<string, Promise<any>>;
 
+  protected timeout: number;
+
   constructor(deps: LoaderDeps = {}) {
     this.log = deps.log || DEFAULT_LOGGER;
     this.cache = deps.cache || createDefaultCache();
     this.request = deps.request || makeRequest();
     this.externals = deps.externals || {};
     this.fetchRequests = new Map();
+    this.timeout = deps.timeout || DEFAULT_TIMEOUT;
   }
 
   getByUrl<R = any>(url: string, options: LoadOptions = {}): R | void {
@@ -121,6 +124,7 @@ export class ServerLoader {
     return this.request({
       url,
       responseType: 'buffer',
+      timeout: this.timeout,
     }).then((response) => {
       this.log.debug(`${url} loaded`);
       return response;

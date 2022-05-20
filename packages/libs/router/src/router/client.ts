@@ -90,10 +90,16 @@ export abstract class ClientRouter extends AbstractRouter {
     await super.notfound(navigation);
     // in case we didn't find any matched route just force hard page navigation
 
-    if (navigation.replace) {
-      window.location.replace(navigation.url.href);
-    } else {
-      window.location.assign(navigation.url.href);
+    const prevUrl = navigation.fromUrl?.href ?? window.location.href;
+    const nextUrl = navigation.url.href;
+
+    // prevent redirect cycle on the same page
+    if (prevUrl !== nextUrl) {
+      if (navigation.replace) {
+        window.location.replace(nextUrl);
+      } else {
+        window.location.assign(nextUrl);
+      }
     }
 
     // prevent routing from any continues navigation returning promise which will be not resolved

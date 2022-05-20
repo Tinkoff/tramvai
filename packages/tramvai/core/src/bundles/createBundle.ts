@@ -13,7 +13,7 @@ const mergePlan = (x: any, y: any): any => {
 
   return y;
 };
-const mergeOptions = mergeWith(mergePlan);
+const mergeOptions = /* #__PURE__*/ mergeWith(mergePlan);
 
 const mergePresets = (presets?: BundlePreset[]): BundlePreset => {
   if (!presets || !presets.length) {

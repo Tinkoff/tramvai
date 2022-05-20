@@ -7,3 +7,5 @@ export const DEFAULT_LOGGER = {
   warn: noop,
   error: noop,
 };
+
+export const DEFAULT_TIMEOUT = 2000;

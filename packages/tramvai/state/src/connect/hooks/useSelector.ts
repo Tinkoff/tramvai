@@ -29,7 +29,7 @@ type StoreType<S extends any = any, N extends string = string> =
   | string
   | BaseStoreConstructor<S, N>;
 
-const schedule = scheduling();
+const schedule = /* #__PURE__*/ scheduling();
 
 export function useSelector<T, S extends string>(
   storesOrStore: S,
