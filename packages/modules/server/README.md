@@ -107,6 +107,12 @@ _For example, we want to distribute sw.js file from the project's root:_ for thi
 
 This function is also available in production. For this purpose, copy the folder `public` into the docker container
 
+:::caution
+
+Module will not serve the newly added file on the filesystem, works only for all defined files in the served folder at the time of the server startup.
+
+:::
+
 ### PAPI
 
 Papi - API routes for the `tramvai` application. More information is available in [Papi](features/papi/introduction.md)

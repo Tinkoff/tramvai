@@ -34,7 +34,7 @@ export async function warmUpCache(options: {
     const results = await queueRequests({
       makeRequest: sendWarmUpRequest,
       requestsOptions,
-      maxSimultaneous: 2,
+      maxSimultaneous: 1,
     });
 
     const failed = results.filter((result) => result.result === 'rejected');

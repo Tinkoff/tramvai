@@ -3,4 +3,5 @@ export type Options = {
   watchMode?: boolean;
   copyStaticAssets?: boolean;
   forPublish?: boolean;
+  preserveModules?: boolean;
 };

@@ -1,4 +1,4 @@
-import { resolve } from 'path';
+import { resolve, basename } from 'path';
 import type { OutputOptions, RollupOptions, ModuleFormat } from 'rollup';
 import type { ScriptTarget, CompilerOptions } from 'typescript';
 import { ModuleKind } from 'typescript';
@@ -13,8 +13,12 @@ import { getSourceFromOutput } from '../fileNames.ts';
 import type { BuildParams } from './build.h';
 import { logger } from '../logger';
 
-const checkExternal = (path: string): boolean => {
-  return rollupExternalModules(path) || !!path.match(/\.(css|svg)$/);
+const checkExternal = (path: string, parentId): boolean => {
+  return (
+    rollupExternalModules(path) ||
+    !!path.match(/\.(css|svg)$/) ||
+    !!path.match('./(tsconfig|package).json')
+  );
 };
 
 /**
@@ -127,6 +131,11 @@ export const createInputOptions = (
           );
         },
       }),
+      // this plugin is used for now to support commonjs require calls in order to use in conditional code to strip dev code in production build or to build external files like css
+      // and in theory it can be replaced by [rollup commonjs plugins](https://rollupjs.org/guide/en/#how-do-i-use-rollup-in-nodejs-with-commonjs-modules)
+      // and [css plugin](https://www.npmjs.com/package/rollup-plugin-import-css).
+      // Before, this plugin was required also to support conditional loading while building package in single file (dynamic chunks were built as separate files),
+      // but now we build with preserveModules and we get separate chunks any way
       addRequireChunkPlugin(),
     ].filter(Boolean),
   };
@@ -144,10 +153,13 @@ export const createOutputOptions = (
     exportsField: 'auto' | 'named';
   }
 ): OutputOptions => {
-  const dir = params.packageJSON.main.split('/')[0];
-  const entryFileNames = file.replace(RegExp(`^${dir}/`), '');
-  const postfix = entryFileNames.match(/(.es|.browser)?\.js$/)[0];
-  const entry = entryFileNames.replace(postfix, '');
+  const preserveModules = !!params.options.preserveModules;
+  const dir = params.packageJSON.main.replace(/^\.\//, '').split('/')[0];
+  const entryFileName = basename(file);
+  const postfix = entryFileName.match(/(.es|.browser)?\.js$/)[0];
+
+  const entry = entryFileName.replace(postfix, '');
+  const entryFileNames = `[name]${postfix}`;
   const chunkFileNames = `${entry}_[name]${postfix}`;
 
   return {
@@ -157,10 +169,14 @@ export const createOutputOptions = (
     format,
     exports: exportsField,
     freeze: false,
-    manualChunks(id) {
-      if (id.match(/\.inline\.\w+$/)) {
-        return 'inline.inline';
-      }
-    },
+    preserveModules,
+    preserveModulesRoot: preserveModules ? 'src' : undefined,
+    manualChunks: preserveModules
+      ? undefined
+      : (id) => {
+          if (id.match(/\.inline\.\w+$/)) {
+            return 'inline.inline';
+          }
+        },
   };
 };

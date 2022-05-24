@@ -75,6 +75,7 @@ const expressPlugin: FastifyPluginCallback<Options> = (fastify, options, next) =
     }
 
     const originalProtocol = req.raw.protocol;
+
     // Make it lazy as it does a bit of work
     Object.defineProperty(req.raw, 'protocol', {
       get() {

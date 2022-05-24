@@ -6,25 +6,28 @@ import { TramvaiBuild } from './index';
 const args = (yargs as Argv<Options>)
   .option('sourceDir', {
     type: 'string',
-    description: 'директория, из которой будут браться исходные файлы',
+    description: 'root source directory',
   })
   .option('watchMode', {
     alias: 'w',
     type: 'boolean',
-    description:
-      'режим пересборки файлов при изменениях https://rollupjs.org/guide/en/#rollupwatch',
+    description: 'watch mode for rebuilds on change https://rollupjs.org/guide/en/#rollupwatch',
   })
   .option('copyStaticAssets', {
     alias: 'cp',
     type: 'boolean',
-    description:
-      'копирование статики, например css файлов, шрифтов и изображений, с сохранением пути до файла',
+    description: 'copy static assets, e.g. css, fonts and images preserving file paths',
   })
   .option('forPublish', {
     alias: 'p',
     type: 'boolean',
     description:
-      'изменение параметров в package.json, для работоспособности библиотеки после публикации',
+      'flag indicating that package.json should be update to work properly after publish',
+  })
+  .option('preserveModules', {
+    type: 'boolean',
+    description:
+      'build package source code to many output file according to the module tree instead of building to single output file (many files generally are more tree-shakable)',
   })
   .help('-h').argv;
 

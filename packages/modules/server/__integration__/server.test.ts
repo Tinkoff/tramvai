@@ -80,6 +80,14 @@ describe('module-server', () => {
       expect(headers['x-tramvai-proxied-response']).toEqual('1');
     });
 
+    it('serve static files should work', async () => {
+      // file from test/public/test.json
+      const response = await getApp().request('/test.json');
+
+      expect(response.headers['content-type']).toEqual('application/json; charset=UTF-8');
+      expect(response.body).toEqual({ key: 'value' });
+    });
+
     // eslint-disable-next-line jest/expect-expect
     it('returns utility paths', async () => {
       const { request } = getApp();

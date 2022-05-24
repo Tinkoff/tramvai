@@ -82,10 +82,10 @@ export const addRequireChunkPlugin = (options: Options = {}): Plugin => {
       });
     },
 
-    resolveFileUrl({ referenceId, fileName }) {
+    resolveFileUrl({ referenceId, relativePath }) {
       if (referenceId) {
         // вместо плейсхолдера import.meta.ROLLUP_CHUNK_URL_ подставить имя сгенерированного файла
-        return `'./${fileName}'`;
+        return `'./${relativePath}'`;
       }
 
       return null;

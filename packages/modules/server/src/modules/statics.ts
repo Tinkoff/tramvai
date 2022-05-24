@@ -16,7 +16,12 @@ const ONE_YEAR = 365 * 24 * 60 * 60;
         return (instance) => {
           instance.register(FastifyStatic, {
             decorateReply: false,
-            prefix: `/${path}`,
+            // for backward compatibility, leaving default prefix.
+            // without `wildcard: false` property, this middleware has conflicts with express compatibility plugin
+            prefix: `/`,
+            // prevent errors by use FastifyStatic only for all defined files in the served folder,
+            // will not serve the newly added file on the filesystem - https://github.com/fastify/fastify-static#wildcard
+            wildcard: false,
             root: resolve(process.cwd(), path),
 
             setHeaders: (res) => {

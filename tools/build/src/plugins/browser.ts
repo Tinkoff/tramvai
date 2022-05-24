@@ -7,6 +7,8 @@ import type { Plugin } from 'rollup';
 // это например происходит для entry и для чанков подключенных через require
 const normalizePath = (name: string) => name.replace(/\\/g, '/');
 
+// Probably this plugin can be replaced by [node-resolve](https://www.npmjs.com/package/@rollup/plugin-node-resolve)
+// with proper mainFields configuration
 export const browserPlugin = (mapping: Record<string, string>): Plugin => {
   const regex = mapObj((entry, key) => new RegExp(`${escapeRegexp(key)}$`), mapping);
   const keys = Object.keys(mapping);
