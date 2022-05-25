@@ -1,0 +1,20 @@
+{
+  "name": "library-browser-string",
+  "version": "0.1.0",
+  "main": "lib/index.js",
+  "module": "lib/index.es.js",
+  "browser": "lib/index.browser.js",
+  "typings": "src/index.ts",
+  "scripts": {
+    "build": "tramvai-build --for-publish",
+    "watch": "tramvai-build --watch"
+  },
+  "dependencies": {
+    "tslib": "^2.0.3"
+  },
+  "devDependencies": {
+    "@tramvai/build": "file:./../../../../build"
+  },
+  "private": true,
+  "license": "Apache-2.0"
+}

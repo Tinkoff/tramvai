@@ -1,5 +1,5 @@
 import { resolve, basename } from 'path';
-import type { OutputOptions, RollupOptions, ModuleFormat } from 'rollup';
+import type { OutputOptions, RollupOptions, ModuleFormat, PreRenderedChunk } from 'rollup';
 import type { ScriptTarget, CompilerOptions } from 'typescript';
 import { ModuleKind } from 'typescript';
 import isObject from '@tinkoff/utils/is/object';
@@ -147,10 +147,12 @@ export const createOutputOptions = (
     file,
     format,
     exportsField,
+    postfixForEntry = true,
   }: {
     file: string;
     format: ModuleFormat;
     exportsField: 'auto' | 'named';
+    postfixForEntry?: boolean;
   }
 ): OutputOptions => {
   const preserveModules = !!params.options.preserveModules;
@@ -159,7 +161,11 @@ export const createOutputOptions = (
   const postfix = entryFileName.match(/(.es|.browser)?\.js$/)[0];
 
   const entry = entryFileName.replace(postfix, '');
-  const entryFileNames = `[name]${postfix}`;
+  const entryFileNames = (chunkInfo: PreRenderedChunk) => {
+    return `[name]${
+      !chunkInfo.isEntry || (chunkInfo.isEntry && postfixForEntry) ? postfix : '.js'
+    }`;
+  };
   const chunkFileNames = `${entry}_[name]${postfix}`;
 
   return {

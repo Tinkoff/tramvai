@@ -206,6 +206,7 @@ describe('tramvai-build', () => {
 
       expect(packageJson.typings).toBe('lib/server.d.ts');
       expect(packageJson.module).toBe('lib/server.es.js');
+      expect(packageJson.browser).toBe('lib/browser.js');
 
       expect(await readOutFile('server.js')).toMatchInlineSnapshot(`
       "'use strict';
@@ -229,6 +230,54 @@ describe('tramvai-build', () => {
       export { foo };
       "
     `);
+    });
+
+    it('browser field - string - index file', async () => {
+      const {
+        files,
+        packageJson,
+        readOutFile,
+      } = await buildLibAndReadOutput('library-browser-string-index', { args: ['-p'] });
+
+      expect(files).toContain('index.js');
+      expect(files).toContain('index.es.js');
+      expect(files).toContain('index.browser.js');
+
+      expect(packageJson.typings).toBe('lib/index.d.ts');
+      expect(packageJson.module).toBe('lib/index.es.js');
+      expect(packageJson.browser).toBe('lib/index.browser.js');
+
+      expect(await readOutFile('index.js')).toMatchInlineSnapshot(`
+"'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+const test = 'test';
+
+console.log(test);
+const foo = 'server';
+
+exports.foo = foo;
+"
+`);
+      expect(await readOutFile('index.es.js')).toMatchInlineSnapshot(`
+"const test = 'test';
+
+console.log(test);
+const foo = 'server';
+
+export { foo };
+"
+`);
+      expect(await readOutFile('index.browser.js')).toMatchInlineSnapshot(`
+"const test = 'test';
+
+console.log(test);
+const foo = 'browser';
+
+export { foo };
+"
+`);
     });
   });
 
@@ -505,6 +554,7 @@ describe('tramvai-build', () => {
 
       expect(packageJson.typings).toBe('lib/server.d.ts');
       expect(packageJson.module).toBe('lib/server.es.js');
+      expect(packageJson.browser).toBe('lib/browser.js');
 
       expect(await readOutFile('server.js')).toMatchInlineSnapshot(`
         "'use strict';
@@ -528,6 +578,58 @@ describe('tramvai-build', () => {
         export { foo };
         "
       `);
+    });
+
+    it('browser field - string - index', async () => {
+      const { files, packageJson, readOutFile } = await buildLibAndReadOutput(
+        'library-browser-string-index',
+        {
+          args: ['-p', '--preserve-modules'],
+        }
+      );
+
+      expect(files).toContain('index.js');
+      expect(files).toContain('index.es.js');
+      expect(files).toContain('index.browser.js');
+      expect(files).toContain('foo.js');
+      expect(files).toContain('foo.es.js');
+      expect(files).toContain('foo.browser.js');
+
+      expect(packageJson.typings).toBe('lib/index.d.ts');
+      expect(packageJson.module).toBe('lib/index.es.js');
+      expect(packageJson.browser).toBe('lib/index.browser.js');
+
+      expect(await readOutFile('index.js')).toMatchInlineSnapshot(`
+"'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+var foo$1 = require('./foo.js');
+
+console.log(foo$1.test);
+const foo = 'server';
+
+exports.foo = foo;
+"
+`);
+      expect(await readOutFile('index.es.js')).toMatchInlineSnapshot(`
+"import { test } from './foo.es.js';
+
+console.log(test);
+const foo = 'server';
+
+export { foo };
+"
+`);
+      expect(await readOutFile('index.browser.js')).toMatchInlineSnapshot(`
+"import { test } from './foo.browser.js';
+
+console.log(test);
+const foo = 'browser';
+
+export { foo };
+"
+`);
     });
   });
 });

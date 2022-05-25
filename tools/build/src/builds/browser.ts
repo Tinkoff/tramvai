@@ -19,6 +19,8 @@ export const build: Build = {
     return Boolean(packageJSON.main && packageJSON.browser);
   },
   async getOptions(params) {
+    const browserField = params.packageJSON.browser;
+
     const input = createInputOptions(params, {
       entry: getBrowserSourceFilename(params),
       target: 'ES2019',
@@ -29,6 +31,9 @@ export const build: Build = {
       file: buildFileName(params),
       format: 'esm',
       exportsField: 'auto',
+      // keep entry filename when browser field is string, e.g. `"browser": "lib/index.browser.js"`,
+      // otherwise output file `lib/index.browser.browser.js` will be created
+      postfixForEntry: !isString(browserField),
     });
 
     return {
