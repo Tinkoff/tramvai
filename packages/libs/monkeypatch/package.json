@@ -3,7 +3,7 @@
   "version": "0.0.0-stub",
   "description": "fork of https://github.com/robertklep/node-monkeypatch, designed to apply many patches",
   "main": "lib/index.js",
-  "typings": "src/index.ts",
+  "typings": "lib/index.d.ts",
   "files": [
     "lib"
   ],
@@ -18,6 +18,5 @@
   },
   "sideEffects": false,
   "module": "lib/index.es.js",
-  "es2017": "lib/index.es2017.js",
   "license": "Apache-2.0"
 }

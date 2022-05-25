@@ -3,10 +3,11 @@
   "version": "0.0.0-stub",
   "description": "router",
   "main": "lib/index.js",
-  "typings": "src/index.ts",
+  "typings": "lib/index.d.ts",
   "module": "lib/index.es.js",
   "browser": {
-    "./lib/router/server.js": "./lib/router/browser.js"
+    "./lib/router/server.js": "./lib/router/browser.js",
+    "./lib/index.es.js": "./lib/index.browser.js"
   },
   "files": [
     "lib"
@@ -30,7 +31,6 @@
     "tslib": "^2.0.3"
   },
   "sideEffects": false,
-  "es2017": "lib/index.es2017.js",
   "devDependencies": {
     "object-sizeof": "^1.6.1"
   },

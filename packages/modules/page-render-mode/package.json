@@ -4,7 +4,7 @@
   "description": "Enable different rendering modes for pages",
   "main": "lib/index.js",
   "module": "lib/index.es.js",
-  "typings": "src/index.ts",
+  "typings": "lib/index.d.ts",
   "files": [
     "lib"
   ],
@@ -22,8 +22,7 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "peerDependencies": {
     "@tinkoff/dippy": "0.0.0-stub",
     "@tramvai/core": "0.0.0-stub",

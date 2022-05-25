@@ -22,7 +22,6 @@
     "build-for-publish": "true"
   },
   "module": "./lib/index.es.js",
-  "es2017": "./lib/index.es2017.js",
   "dependencies": {
     "tslib": "^2.0.3"
   },

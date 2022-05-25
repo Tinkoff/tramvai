@@ -4,10 +4,11 @@
   "initialVersion": "0.58.99",
   "description": "",
   "main": "lib/index.js",
-  "typings": "src/index.ts",
+  "typings": "lib/index.d.ts",
   "browser": {
     "./lib/papiClientModule.js": "./lib/papiClientModule.browser.js",
-    "./lib/utils/fillHeaders.js": "./lib/utils/fillHeaders.browser.js"
+    "./lib/utils/fillHeaders.js": "./lib/utils/fillHeaders.browser.js",
+    "./lib/index.es.js": "./lib/index.browser.js"
   },
   "files": [
     "lib"
@@ -43,5 +44,6 @@
     "node-fetch": "^2.6.1",
     "tslib": "^2.0.3"
   },
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "module": "lib/index.es.js"
 }

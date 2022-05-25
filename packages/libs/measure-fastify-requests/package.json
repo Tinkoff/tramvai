@@ -4,7 +4,7 @@
   "description": "Measure express requests",
   "main": "lib/index.js",
   "module": "lib/index.es.js",
-  "typings": "src/index.ts",
+  "typings": "lib/index.d.ts",
   "files": [
     "lib"
   ],

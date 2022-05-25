@@ -3,7 +3,7 @@
   "version": "0.0.0-stub",
   "description": "",
   "main": "lib/depscheck.js",
-  "typings": "src/depscheck.ts",
+  "typings": "lib/depscheck.d.ts",
   "repository": "git@github.com:Tinkoff/tramvai.git",
   "scripts": {
     "build": "tsc",

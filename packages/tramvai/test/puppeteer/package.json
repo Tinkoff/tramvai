@@ -3,7 +3,7 @@
   "version": "0.0.0-stub",
   "description": "",
   "main": "lib/index.js",
-  "typings": "src/index.ts",
+  "typings": "lib/index.d.ts",
   "files": [
     "lib"
   ],
@@ -31,5 +31,6 @@
     "@types/supports-color": "^8.1.1",
     "puppeteer": "10.0.0"
   },
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "module": "lib/index.es.js"
 }

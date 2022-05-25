@@ -96,7 +96,7 @@ export class TramvaiBuild {
     logger.info(`update package.json`);
     const path = resolve(this.cwd, 'package.json');
 
-    return promises.writeFile(path, JSON.stringify(this.packageJSON, null, 2));
+    return promises.writeFile(path, `${JSON.stringify(this.packageJSON, null, 2)}\n`);
   }
 
   private async copyStaticAssets() {

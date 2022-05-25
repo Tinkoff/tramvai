@@ -3,7 +3,7 @@
   "version": "0.0.0-stub",
   "description": "",
   "main": "lib/url.js",
-  "typings": "src/url.ts",
+  "typings": "lib/url.d.ts",
   "files": [
     "lib"
   ],
@@ -22,6 +22,5 @@
   },
   "sideEffects": false,
   "module": "lib/url.es.js",
-  "es2017": "lib/url.es2017.js",
   "license": "Apache-2.0"
 }

@@ -4,8 +4,7 @@
   "description": "",
   "main": "lib/index.js",
   "module": "lib/index.es.js",
-  "es2017": "lib/index.es2017.js",
-  "typings": "src/index.ts",
+  "typings": "lib/index.d.ts",
   "sideEffects": false,
   "files": [
     "lib"

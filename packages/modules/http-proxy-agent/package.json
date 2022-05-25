@@ -5,7 +5,7 @@
   "browser": "lib/browser.js",
   "main": "lib/server.js",
   "module": "lib/server.es.js",
-  "typings": "src/server.ts",
+  "typings": "lib/server.d.ts",
   "files": [
     "lib"
   ],
@@ -26,8 +26,7 @@
   "dependencies": {
     "@tramvai/tokens-common": "0.0.0-stub"
   },
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "peerDependencies": {
     "@tramvai/core": "0.0.0-stub",
     "@tinkoff/dippy": "0.0.0-stub",

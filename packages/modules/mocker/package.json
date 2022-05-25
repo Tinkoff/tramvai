@@ -4,9 +4,8 @@
   "description": "",
   "main": "./lib/server.js",
   "browser": "./lib/browser.js",
-  "typings": "./src/server.ts",
+  "typings": "./lib/server.d.ts",
   "module": "./lib/server.es.js",
-  "es2017": "./lib/browser.es2017.js",
   "sideEffects": false,
   "files": [
     "lib"

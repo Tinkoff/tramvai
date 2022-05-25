@@ -5,10 +5,11 @@
   "browser": {
     "./lib/server.js": "./lib/browser.js",
     "./lib/server/child/singletonProviders.js": "./lib/browser/child/singletonProviders.js",
-    "./lib/server/child/providers.js": "./lib/browser/child/providers.js"
+    "./lib/server/child/providers.js": "./lib/browser/child/providers.js",
+    "./lib/server.es.js": "./lib/server.browser.js"
   },
   "main": "lib/server.js",
-  "typings": "src/server.ts",
+  "typings": "lib/server.d.ts",
   "files": [
     "lib"
   ],
@@ -49,6 +50,5 @@
     "object-assign": "^4.1.1",
     "tslib": "^2.0.3"
   },
-  "module": "lib/server.es.js",
-  "es2017": "lib/browser.es2017.js"
+  "module": "lib/server.es.js"
 }

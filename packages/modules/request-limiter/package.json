@@ -5,7 +5,7 @@
   "main": "lib/server.js",
   "module": "lib/server.es.js",
   "browser": "lib/browser.js",
-  "typings": "src/server.ts",
+  "typings": "lib/server.d.ts",
   "files": [
     "lib"
   ],

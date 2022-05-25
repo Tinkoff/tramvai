@@ -25,6 +25,5 @@
   },
   "gitHead": "8e826a214c87b188fc4d254cdd8f2a2b2c55f3a8",
   "module": "./lib/index.es.js",
-  "es2017": "./lib/index.es2017.js",
   "license": "Apache-2.0"
 }

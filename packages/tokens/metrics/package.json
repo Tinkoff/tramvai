@@ -4,7 +4,7 @@
   "description": "Tramvai tokens for @tramvai/module-metrics",
   "main": "lib/index.js",
   "module": "lib/index.es.js",
-  "typings": "src/index.ts",
+  "typings": "lib/index.d.ts",
   "files": [
     "lib"
   ],
@@ -25,6 +25,5 @@
     "@tinkoff/dippy": "0.0.0-stub",
     "tslib": "^2.0.3"
   },
-  "es2017": "lib/index.es2017.js",
   "license": "Apache-2.0"
 }

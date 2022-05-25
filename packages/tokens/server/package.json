@@ -4,7 +4,7 @@
   "description": "Tramvai tokens for @tramvai/module-server",
   "main": "lib/index.js",
   "module": "lib/index.es.js",
-  "typings": "src/index.ts",
+  "typings": "lib/index.d.ts",
   "files": [
     "lib"
   ],
@@ -27,7 +27,6 @@
     "fastify": "^3.29.0",
     "tslib": "^2.0.3"
   },
-  "es2017": "lib/index.es2017.js",
   "devDependencies": {
     "@types/express": "^4.17.9"
   },

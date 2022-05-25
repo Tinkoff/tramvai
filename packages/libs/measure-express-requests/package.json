@@ -3,7 +3,7 @@
   "version": "0.0.0-stub",
   "description": "Measure express requests",
   "main": "lib/index.js",
-  "typings": "src/index.ts",
+  "typings": "lib/index.d.ts",
   "files": [
     "lib"
   ],
@@ -27,7 +27,6 @@
   },
   "sideEffects": false,
   "module": "lib/index.es.js",
-  "es2017": "lib/index.es2017.js",
   "devDependencies": {
     "@types/on-finished": "*",
     "express": "*"

@@ -3,7 +3,7 @@
   "version": "0.0.0-stub",
   "description": "",
   "main": "lib/index.js",
-  "typings": "src/index.ts",
+  "typings": "lib/index.d.ts",
   "files": [
     "lib"
   ],
@@ -31,6 +31,5 @@
     "tslib": "^2.0.3"
   },
   "module": "lib/index.es.js",
-  "es2017": "lib/index.es2017.js",
   "license": "Apache-2.0"
 }

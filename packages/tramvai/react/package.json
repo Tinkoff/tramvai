@@ -3,7 +3,7 @@
   "version": "0.0.0-stub",
   "description": "",
   "main": "lib/react.js",
-  "typings": "src/react.ts",
+  "typings": "lib/react.d.ts",
   "files": [
     "lib"
   ],
@@ -32,6 +32,5 @@
     "tslib": "^2.0.3"
   },
   "module": "lib/react.es.js",
-  "es2017": "lib/react.es2017.js",
   "license": "Apache-2.0"
 }

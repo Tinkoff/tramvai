@@ -3,7 +3,7 @@
   "version": "0.0.0-stub",
   "description": "Helper utils for loading js/css resources in browser",
   "main": "lib/index.js",
-  "typings": "src/index.ts",
+  "typings": "lib/index.d.ts",
   "module": "lib/index.es.js",
   "files": [
     "lib"
@@ -22,6 +22,5 @@
     "tslib": "^2.0.3"
   },
   "sideEffects": false,
-  "es2017": "lib/index.es2017.js",
   "license": "Apache-2.0"
 }

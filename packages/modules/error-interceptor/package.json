@@ -4,7 +4,7 @@
   "description": "",
   "browser": "lib/browser.js",
   "main": "lib/server.js",
-  "typings": "src/server.ts",
+  "typings": "lib/server.d.ts",
   "files": [
     "lib"
   ],
@@ -29,6 +29,5 @@
     "tslib": "^2.0.3"
   },
   "module": "lib/server.es.js",
-  "es2017": "lib/browser.es2017.js",
   "license": "Apache-2.0"
 }

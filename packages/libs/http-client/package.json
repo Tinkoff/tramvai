@@ -25,6 +25,5 @@
   },
   "sideEffects": false,
   "module": "./lib/index.es.js",
-  "es2017": "./lib/index.es2017.js",
   "license": "Apache-2.0"
 }
