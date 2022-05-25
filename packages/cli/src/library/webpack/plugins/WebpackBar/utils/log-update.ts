@@ -8,12 +8,14 @@ const originalWrite = Symbol('webpackbarWrite');
 export default class LogUpdate {
   private prevLineCount: any;
   private listening: any;
+  private finished: any;
   private extraLines: any;
   private _streams: any;
 
   constructor() {
     this.prevLineCount = 0;
     this.listening = false;
+    this.finished = false;
     this.extraLines = '';
     this._onData = this._onData.bind(this);
     this._streams = [process.stdout, process.stderr];
@@ -33,6 +35,7 @@ export default class LogUpdate {
   }
 
   start() {
+    this.finished = false;
     this.listen();
   }
 
@@ -42,7 +45,7 @@ export default class LogUpdate {
 
   done() {
     this.stopListen();
-
+    this.finished = true;
     this.prevLineCount = 0;
   }
 
@@ -94,6 +97,12 @@ export default class LogUpdate {
   }
 
   render(lines) {
+    if (this.finished) {
+      // ignore render calls after done call, they are called by the ProgressPlugin,
+      // after webpack "done" hook trigger webpackbar done callback
+      return;
+    }
+
     const wrappedLines = wrapAnsi(lines, this.columns, {
       trim: false,
       hard: true,

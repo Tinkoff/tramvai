@@ -58,7 +58,6 @@ logger.enable('tramvai-migrate');
   }
 
   log.debug('Migrations found');
-  log.debug(files);
 
   const appliedFilename = resolve(cwd, APPLIED_FILENAME);
   await ensureFile(appliedFilename);

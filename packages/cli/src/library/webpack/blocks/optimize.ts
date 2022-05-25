@@ -18,6 +18,7 @@ export default (configManager: ConfigManager) => (config: Config) => {
           ecma: 6,
           mangle: false,
           output: {
+            comments: true,
             semicolons: false,
             preserve_annotations: true,
             indent_start: 2,

@@ -59,7 +59,7 @@ export class BundleManager implements Interface {
           default: componentsDefaultBundle,
         });
 
-      log.info({
+      log.debug({
         event: 'create default bundle with file-system pages',
         components: Object.keys(components),
       });

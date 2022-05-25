@@ -17,7 +17,7 @@ export const providers = [
         const pagesNames = Object.keys(getStaticFileSystemPages());
         const routes = pagesNames.map(fileSystemPageToRoute);
 
-        log.info({
+        log.debug({
           event: 'create static routes from file-system pages',
           routes,
         });

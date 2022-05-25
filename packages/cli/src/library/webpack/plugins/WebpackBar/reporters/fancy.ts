@@ -10,11 +10,13 @@ import { BULLET, TICK, CROSS, CIRCLE_OPEN } from '../utils/consts';
 import LogUpdate from '../utils/log-update';
 
 const logUpdate = new LogUpdate();
-
+// cache webpackbar states, because otherwise message for first finished build will be lost
+let finishedCache = new Map();
 let lastRender = Date.now();
 
 export default class FancyReporter implements Reporter {
   start() {
+    finishedCache = new Map();
     logUpdate.start();
   }
 
@@ -63,18 +65,26 @@ export default class FancyReporter implements Reporter {
         ? ` ${chalk.grey(ellipsisLeft(formatRequest(state.request), logUpdate.columns))}`
         : '';
     } else {
+      let currentState = state;
+
+      if (finishedCache.has(state.name)) {
+        currentState = finishedCache.get(state.name);
+      } else if (!state.hasErrors && state.progress === 100) {
+        finishedCache.set(state.name, { ...state });
+      }
+
       let icon = ' ';
 
-      if (state.hasErrors) {
+      if (currentState.hasErrors) {
         icon = CROSS;
-      } else if (state.progress === 100) {
+      } else if (currentState.progress === 100) {
         icon = TICK;
-      } else if (state.progress === -1) {
+      } else if (currentState.progress === -1) {
         icon = CIRCLE_OPEN;
       }
 
-      line1 = color(`${icon} ${state.name}`);
-      line2 = chalk.grey(`  ${state.message}`);
+      line1 = color(`${icon} ${currentState.name}`);
+      line2 = chalk.grey(`  ${currentState.message}`);
     }
 
     return `${line1}\n${line2}`;

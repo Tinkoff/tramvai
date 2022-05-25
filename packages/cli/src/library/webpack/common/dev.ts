@@ -5,7 +5,11 @@ import { ignoreWarnings } from '../utils/warningsFilter';
 export default () => (config: Config) => {
   config.plugin('case-sensitive-path').use(CaseSensitivePathsPlugin);
 
-  config.stats('errors-warnings');
+  config.stats({
+    preset: 'errors-warnings',
+    // отключает уведомление об успешной компиляции, его уже выводит webpackbar
+    warningsCount: false,
+  });
 
   config.set('ignoreWarnings', ignoreWarnings);
 
