@@ -6,7 +6,7 @@
     "./lib/server.js": "./lib/browser.js",
     "./lib/server/child/singletonProviders.js": "./lib/browser/child/singletonProviders.js",
     "./lib/server/child/providers.js": "./lib/browser/child/providers.js",
-    "./lib/server.es.js": "./lib/server.browser.js"
+    "./lib/server.es.js": "./lib/browser.js"
   },
   "main": "lib/server.js",
   "typings": "lib/server.d.ts",

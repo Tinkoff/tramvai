@@ -23,6 +23,7 @@ export const build: Build = {
       file: buildFileName(params),
       format: 'cjs',
       exportsField: 'named',
+      postfix: '.js',
     });
 
     return {

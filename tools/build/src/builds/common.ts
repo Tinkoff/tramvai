@@ -1,4 +1,4 @@
-import { resolve, basename } from 'path';
+import { resolve, basename, relative } from 'path';
 import type { OutputOptions, RollupOptions, ModuleFormat, PreRenderedChunk } from 'rollup';
 import type { ScriptTarget, CompilerOptions } from 'typescript';
 import { ModuleKind } from 'typescript';
@@ -10,7 +10,7 @@ import tsPlugin from 'rollup-plugin-ts';
 import { browserPlugin } from '../plugins/browser';
 import { addRequireChunkPlugin } from '../plugins/require';
 import { getSourceFromOutput } from '../fileNames.ts';
-import type { BuildParams } from './build.h';
+import type { BuildParams, Postfix } from './build.h';
 import { logger } from '../logger';
 
 const checkExternal = (path: string, parentId): boolean => {
@@ -147,24 +147,23 @@ export const createOutputOptions = (
     file,
     format,
     exportsField,
-    postfixForEntry = true,
+    postfix,
+    postfixForEntry = () => true,
   }: {
     file: string;
     format: ModuleFormat;
     exportsField: 'auto' | 'named';
-    postfixForEntry?: boolean;
+    postfix: Postfix;
+    postfixForEntry?: (chunkInfo: PreRenderedChunk) => boolean;
   }
 ): OutputOptions => {
   const preserveModules = !!params.options.preserveModules;
   const dir = params.packageJSON.main.replace(/^\.\//, '').split('/')[0];
   const entryFileName = basename(file);
-  const postfix = entryFileName.match(/(.es|.browser)?\.js$/)[0];
 
   const entry = entryFileName.replace(postfix, '');
   const entryFileNames = (chunkInfo: PreRenderedChunk) => {
-    return `[name]${
-      !chunkInfo.isEntry || (chunkInfo.isEntry && postfixForEntry) ? postfix : '.js'
-    }`;
+    return `[name]${postfixForEntry(chunkInfo) ? postfix : '.js'}`;
   };
   const chunkFileNames = `${entry}_[name]${postfix}`;
 

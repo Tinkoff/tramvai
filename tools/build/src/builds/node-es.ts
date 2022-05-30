@@ -23,6 +23,7 @@ export const build: Build = {
       file: buildFileName(params),
       format: 'esm',
       exportsField: 'auto',
+      postfix: '.es.js',
     });
 
     return {

@@ -24,6 +24,7 @@ export const testsBuild: Build = {
       file: 'tests.js',
       format: 'cjs',
       exportsField: 'named',
+      postfix: '.js',
     });
 
     return {

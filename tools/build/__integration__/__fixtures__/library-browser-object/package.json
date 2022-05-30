@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "main": "lib/index.js",
   "browser": {
-    "./lib/external.js": "./lib/external.browser.js"
+    "./lib/external.js": "./lib/external.browser.js",
+    "./lib/nested/foo.server.js": "./lib/nested/foo.browser.js"
   },
   "typings": "src/index.ts",
   "scripts": {

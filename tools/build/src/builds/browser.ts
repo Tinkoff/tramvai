@@ -2,7 +2,11 @@ import isString from '@tinkoff/utils/is/string';
 import isObject from '@tinkoff/utils/is/object';
 import type { Build, BuildParams } from './build.h';
 import { createInputOptions, createOutputOptions } from './common';
-import { getBrowserSourceFilename } from '../fileNames.ts';
+import {
+  browserObjectHasChunkInfoName,
+  getBrowserObjectSourceFilename,
+  getBrowserSourceFilename,
+} from '../fileNames.ts';
 import { normalizeFilenameForBrowserObjectField } from '../packageJson';
 import { buildFileName as buildModuleFileName } from './node-es';
 
@@ -10,6 +14,13 @@ const buildFileName = (params: BuildParams) => {
   const mainFileName = params.packageJSON.main;
   const browserField = params.packageJSON.browser;
 
+  if (isObject(browserField)) {
+    const browserEntry = getBrowserObjectSourceFilename(params);
+
+    if (browserEntry) {
+      return browserEntry;
+    }
+  }
   return isString(browserField) ? browserField : mainFileName.replace(/\.js$/, '.browser.js');
 };
 
@@ -31,9 +42,14 @@ export const build: Build = {
       file: buildFileName(params),
       format: 'esm',
       exportsField: 'auto',
-      // keep entry filename when browser field is string, e.g. `"browser": "lib/index.browser.js"`,
-      // otherwise output file `lib/index.browser.browser.js` will be created
-      postfixForEntry: !isString(browserField),
+      postfix: '.browser.js',
+      // keep filenames for all files, used in browser field, and for created browser entry point
+      postfixForEntry: (chunkInfo) => {
+        if (isObject(browserField)) {
+          return !browserObjectHasChunkInfoName(chunkInfo, params);
+        }
+        return !chunkInfo.isEntry;
+      },
     });
 
     return {

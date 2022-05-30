@@ -1,4 +1,4 @@
-import { resolve } from 'path';
+import { resolve, join } from 'path';
 import { node } from 'execa';
 import { promises } from 'fs';
 
@@ -160,37 +160,56 @@ describe('tramvai-build', () => {
 
       expect(packageJson.browser).toMatchObject({
         './lib/external.js': './lib/external.browser.js',
+        './lib/nested/foo.server.js': './lib/nested/foo.browser.js',
         './lib/index.es.js': './lib/index.browser.js',
       });
 
       expect(await readOutFile('index.js')).toMatchInlineSnapshot(`
-      "'use strict';
+"'use strict';
 
-      Object.defineProperty(exports, '__esModule', { value: true });
+Object.defineProperty(exports, '__esModule', { value: true });
 
-      const external = 'external server';
+const test = 'test';
 
-      const foo = \`bar \${external}\`;
+console.log(test);
+const external = 'external server';
 
-      exports.foo = foo;
-      "
-    `);
+const testNested = 'server test nested';
+
+console.log(testNested);
+const foo = \`bar \${external}\`;
+
+exports.foo = foo;
+"
+`);
       expect(await readOutFile('index.es.js')).toMatchInlineSnapshot(`
-      "const external = 'external server';
+"const test = 'test';
 
-      const foo = \`bar \${external}\`;
+console.log(test);
+const external = 'external server';
 
-      export { foo };
-      "
-    `);
+const testNested = 'server test nested';
+
+console.log(testNested);
+const foo = \`bar \${external}\`;
+
+export { foo };
+"
+`);
       expect(await readOutFile('index.browser.js')).toMatchInlineSnapshot(`
-      "const external = 'external browser';
+"const test = 'test';
 
-      const foo = \`bar \${external}\`;
+console.log(test);
+const external = 'external browser';
 
-      export { foo };
-      "
-    `);
+const testNested = 'browser test nested';
+
+console.log(testNested);
+const foo = \`bar \${external}\`;
+
+export { foo };
+"
+`);
     });
 
     it('browser field - string', async () => {
@@ -209,27 +228,36 @@ describe('tramvai-build', () => {
       expect(packageJson.browser).toBe('lib/browser.js');
 
       expect(await readOutFile('server.js')).toMatchInlineSnapshot(`
-      "'use strict';
+"'use strict';
 
-      Object.defineProperty(exports, '__esModule', { value: true });
+Object.defineProperty(exports, '__esModule', { value: true });
 
-      const foo = 'server';
+const test = 'test';
 
-      exports.foo = foo;
-      "
-    `);
+console.log(test);
+const foo = 'server';
+
+exports.foo = foo;
+"
+`);
       expect(await readOutFile('server.es.js')).toMatchInlineSnapshot(`
-      "const foo = 'server';
+"const test = 'test';
 
-      export { foo };
-      "
-    `);
+console.log(test);
+const foo = 'server';
+
+export { foo };
+"
+`);
       expect(await readOutFile('browser.js')).toMatchInlineSnapshot(`
-      "const foo = 'browser';
+"const test = 'test';
 
-      export { foo };
-      "
-    `);
+console.log(test);
+const foo = 'browser';
+
+export { foo };
+"
+`);
     });
 
     it('browser field - string - index file', async () => {
@@ -481,63 +509,136 @@ export { foo };
         }
       );
 
+      expect(files).toContain('index.js');
+      expect(files).toContain('index.es.js');
       expect(files).toContain('index.browser.js');
+      expect(files).toContain('external.js');
+      expect(files).toContain('external.es.js');
+      expect(files).toContain('external.browser.js');
+      expect(files).toContain('foo.js');
+      expect(files).toContain('foo.es.js');
+      expect(files).toContain('foo.browser.js');
+      expect(files).toContain('nested/foo.server.js');
+      expect(files).toContain('nested/foo.server.es.js');
+      expect(files).toContain('nested/foo.browser.js');
 
       expect(packageJson.browser).toMatchObject({
         './lib/external.js': './lib/external.browser.js',
+        './lib/nested/foo.server.js': './lib/nested/foo.browser.js',
         './lib/index.es.js': './lib/index.browser.js',
       });
 
       expect(await readOutFile('index.js')).toMatchInlineSnapshot(`
-  "'use strict';
+"'use strict';
 
-  Object.defineProperty(exports, '__esModule', { value: true });
+Object.defineProperty(exports, '__esModule', { value: true });
 
-  var external = require('./external.js');
+var external = require('./external.js');
+var foo_server = require('./nested/foo.server.js');
 
-  const foo = \`bar \${external.external}\`;
+console.log(foo_server.testNested);
+const foo = \`bar \${external.external}\`;
 
-  exports.foo = foo;
-  "
-  `);
+exports.foo = foo;
+"
+`);
       expect(await readOutFile('external.js')).toMatchInlineSnapshot(`
-  "'use strict';
+"'use strict';
 
-  Object.defineProperty(exports, '__esModule', { value: true });
+Object.defineProperty(exports, '__esModule', { value: true });
 
-  const external = 'external server';
+var foo = require('./foo.js');
 
-  exports.external = external;
-  "
-  `);
+console.log(foo.test);
+const external = 'external server';
+
+exports.external = external;
+"
+`);
       expect(await readOutFile('index.es.js')).toMatchInlineSnapshot(`
-  "import { external } from './external.es.js';
+"import { external } from './external.es.js';
+import { testNested } from './nested/foo.server.es.js';
 
-  const foo = \`bar \${external}\`;
+console.log(testNested);
+const foo = \`bar \${external}\`;
 
-  export { foo };
-  "
-  `);
+export { foo };
+"
+`);
       expect(await readOutFile('external.es.js')).toMatchInlineSnapshot(`
-  "const external = 'external server';
+"import { test } from './foo.es.js';
 
-  export { external };
-  "
-  `);
+console.log(test);
+const external = 'external server';
+
+export { external };
+"
+`);
       expect(await readOutFile('index.browser.js')).toMatchInlineSnapshot(`
-  "import { external } from './external.browser.browser.js';
+"import { external } from './external.browser.js';
+import { testNested } from './nested/foo.browser.js';
 
-  const foo = \`bar \${external}\`;
+console.log(testNested);
+const foo = \`bar \${external}\`;
 
-  export { foo };
-  "
-  `);
-      expect(await readOutFile('external.browser.browser.js')).toMatchInlineSnapshot(`
-  "const external = 'external browser';
+export { foo };
+"
+`);
+      expect(await readOutFile('external.browser.js')).toMatchInlineSnapshot(`
+"import { test } from './foo.browser.js';
 
-  export { external };
-  "
-  `);
+console.log(test);
+const external = 'external browser';
+
+export { external };
+"
+`);
+
+      expect(await readOutFile('foo.js')).toMatchInlineSnapshot(`
+"'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+const test = 'test';
+
+exports.test = test;
+"
+`);
+      expect(await readOutFile('foo.es.js')).toMatchInlineSnapshot(`
+"const test = 'test';
+
+export { test };
+"
+`);
+      expect(await readOutFile('foo.browser.js')).toMatchInlineSnapshot(`
+"const test = 'test';
+
+export { test };
+"
+`);
+
+      expect(await readOutFile('nested/foo.server.js')).toMatchInlineSnapshot(`
+"'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+const testNested = 'server test nested';
+
+exports.testNested = testNested;
+"
+`);
+      expect(await readOutFile('nested/foo.server.es.js')).toMatchInlineSnapshot(`
+"const testNested = 'server test nested';
+
+export { testNested };
+"
+`);
+      expect(await readOutFile('nested/foo.browser.js')).toMatchInlineSnapshot(`
+"const testNested = 'browser test nested';
+
+export { testNested };
+"
+`);
     });
 
     it('browser field - string', async () => {
@@ -551,33 +652,68 @@ export { foo };
       expect(files).toContain('server.js');
       expect(files).toContain('server.es.js');
       expect(files).toContain('browser.js');
+      expect(files).toContain('foo.js');
+      expect(files).toContain('foo.es.js');
+      expect(files).toContain('foo.browser.js');
 
       expect(packageJson.typings).toBe('lib/server.d.ts');
       expect(packageJson.module).toBe('lib/server.es.js');
       expect(packageJson.browser).toBe('lib/browser.js');
 
       expect(await readOutFile('server.js')).toMatchInlineSnapshot(`
-        "'use strict';
+"'use strict';
 
-        Object.defineProperty(exports, '__esModule', { value: true });
+Object.defineProperty(exports, '__esModule', { value: true });
 
-        const foo = 'server';
+var foo$1 = require('./foo.js');
 
-        exports.foo = foo;
-        "
-      `);
+console.log(foo$1.test);
+const foo = 'server';
+
+exports.foo = foo;
+"
+`);
       expect(await readOutFile('server.es.js')).toMatchInlineSnapshot(`
-        "const foo = 'server';
+"import { test } from './foo.es.js';
 
-        export { foo };
-        "
-      `);
+console.log(test);
+const foo = 'server';
+
+export { foo };
+"
+`);
       expect(await readOutFile('browser.js')).toMatchInlineSnapshot(`
-        "const foo = 'browser';
+"import { test } from './foo.browser.js';
 
-        export { foo };
-        "
-      `);
+console.log(test);
+const foo = 'browser';
+
+export { foo };
+"
+`);
+
+      expect(await readOutFile('foo.js')).toMatchInlineSnapshot(`
+"'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+const test = 'test';
+
+exports.test = test;
+"
+`);
+      expect(await readOutFile('foo.es.js')).toMatchInlineSnapshot(`
+"const test = 'test';
+
+export { test };
+"
+`);
+      expect(await readOutFile('foo.browser.js')).toMatchInlineSnapshot(`
+"const test = 'test';
+
+export { test };
+"
+`);
     });
 
     it('browser field - string - index', async () => {
@@ -630,6 +766,29 @@ const foo = 'browser';
 export { foo };
 "
 `);
+
+      expect(await readOutFile('foo.js')).toMatchInlineSnapshot(`
+"'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+const test = 'test';
+
+exports.test = test;
+"
+`);
+      expect(await readOutFile('foo.es.js')).toMatchInlineSnapshot(`
+"const test = 'test';
+
+export { test };
+"
+`);
+      expect(await readOutFile('foo.browser.js')).toMatchInlineSnapshot(`
+"const test = 'test';
+
+export { test };
+"
+`);
     });
   });
 });
@@ -647,7 +806,7 @@ async function buildLibAndReadOutput(name: string, { args = [] }: { args?: strin
   });
 
   const [files, migrationFiles, packageJson] = await Promise.all([
-    promises.readdir(outDir),
+    traverseDir(outDir),
     promises.readdir(migrationsDir).catch(() => []),
     promises.readFile(packageJsonPath, 'utf-8').then(JSON.parse),
   ]);
@@ -664,4 +823,24 @@ async function buildLibAndReadOutput(name: string, { args = [] }: { args?: strin
     readMigrationFile: (fileName: string) =>
       promises.readFile(resolve(migrationsDir, fileName), 'utf-8'),
   };
+}
+
+async function traverseDir(
+  dir: string,
+  result: string[] = [],
+  relativeDir = ''
+): Promise<string[]> {
+  const files = await promises.readdir(dir);
+
+  for (const file of files) {
+    const fullPath = join(dir, file);
+
+    if ((await promises.lstat(fullPath)).isDirectory()) {
+      await traverseDir(fullPath, result, file);
+    } else {
+      result.push(join(relativeDir, file));
+    }
+  }
+
+  return result;
 }

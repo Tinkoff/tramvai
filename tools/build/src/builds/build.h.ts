@@ -11,3 +11,5 @@ export type Build = {
   getOptions(params: BuildParams): Promise<{ input: RollupOptions; output: OutputOptions }>;
   modifyPackageJSON?(params: BuildParams): Promise<PackageJSON>;
 };
+
+export type Postfix = '.js' | '.es.js' | '.browser.js';
