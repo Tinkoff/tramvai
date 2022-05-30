@@ -146,3 +146,56 @@ But building packages into bundles before publishing, for example via `rollup` o
 - you can make a separate bundle for the browser build, separate for the server one - top for libraries with SSR support
 
 Detailed documentation on using `@tramvai/build` is available in [documentation](references/tools/build.md)
+
+#### Tree-shaking
+
+Some of useful articles about tree-shaking:
+- [Webpack guide](https://webpack.js.org/guides/tree-shaking/)
+- ["How To Make Tree Shakeable Libraries" article](https://blog.theodo.com/2021/04/library-tree-shaking/)
+
+Summarizing all the optimizations needed to create tree-shakable libraries:
+
+- Prevent `TypeScript` **decorators** usage
+
+  Explanation: `Terser` can't remove unused exports in transpiled code with decorators, both `Babel` or `tsc` add utility functions, potentially with side-effects for `Terser`
+
+- Prevent **static properties** usage for `React` functional components
+
+  Explanation: `Terser` can't remove unused components in transpiled code when more than one static properties are used
+
+- Use **ES modules** for server and browser build, **CJS** only for backward compatibility
+
+- Split the library logic into **small modules**
+
+- **Preserve file structure** of this modules during the bundling
+
+  Explanation: `Webpack` can remove unused code from modules graph, and we don't have to worry about removing this code with `Terser`
+
+- Add `"sideEffects": false` field to `package.json` (or specify an array of files that cannot be cut - `"sideEffects": ["some-global.css"]`)
+
+- Always **test tree-shaking** of your packages on the default webpack production build, add the magic comment `/* @__PURE__ */` if necessary
+
+  Explanation: `/* @__PURE__ */` helps `Terser` to understand that the called function has no side effects
+
+#### Modern ES code
+
+Reference articles:
+- ["Serve modern code to modern browsers"](https://web.dev/codelab-serve-modern-code/)
+- ["Bringing Modern JavaScript to Libraries"](https://dev.to/garylchew/bringing-modern-javascript-to-libraries-432c)
+
+Transpiling the source code into **ES2019** for the browser build will help deliver significantly less code to the client.
+For backward compatibility with older browsers, you need to transpile `node_modules` with modern code via `Babel`, when building your application to production.
+`@tramvai/cli` will do this transpilation automatically for `tramvai` applications.
+
+#### @tramvai/build
+
+The `@tramvai/build` tool out of the box gives you some of this optimizations:
+
+- **CJS** and **ES modules** builds
+- **Modern JS code**
+- **File structure preservation**
+- Support for separate **browser build**
+
+So, this tool is recommended by `tramvai` team for building any packages used by any SSR applications.
+
+[Get started with @tramvai/build](https://tramvai.dev/docs/references/tools/build/#get-started)

@@ -14,56 +14,13 @@ Tramvai applications have a number of features - a single entry point (`platform
 
 The CLI offers three strategies for splitting code - one common chunk, many granular shared chunks, and disabling the SplitChunksPlugin.
 
-### Disabling SplitChunksPlugin
-
-For applications that have only one tramvai bundle for all pages, or separate the bundle for the desktop and mobile versions, in most cases, code separation is not required, and it is worth setting the option `"commonChunk": false`:
-
-```json
-{
-  "projects": {
-    "{appName}": {
-      "commands": {
-        "build": {
-          "configurations": {
-            "commonChunk": false
-          }
-        }
-      }
-    }
-  }
-}
-```
-
-**Why not leave the common chunk if it doesn't interfere?** The problem is in third-party libraries that can use dynamic `import` under the hood, while the application may not use this code, but it may end up in the common chunk, which will be loaded on every page.
-
-Also, if your application is serving multiple pages and separating the code at the page component level via [@tramvai/react lazy](how-to/how-create-async-component.md), it makes sense to consider other strategies, since duplicates will appear in dynamic chunks of pages.
-
-### Common Chunk
-
-The strategy is included in the CLI by default, all common code from bundles and dynamic chunks is moved to common-chunk.js. The `commonChunkSplitNumber` parameter allows you to specify the minimum number of chunks this code should use in order to move it to common.
-
-For applications with a lot of bundles, `common-chunk.js` can include a huge amount of code that is not needed on every single page, and it is worth either increasing the `commonChunkSplitNumber` or using the Granular Chunks strategy. Example configuration to increase the minimum number of chunks using shared code:
-
-
-```json
-{
-  "projects": {
-    "{appName}": {
-      "commands": {
-        "build": {
-          "configurations": {
-            "commonChunkSplitNumber": 5
-          }
-        }
-      }
-    }
-  }
-}
-```
-
-**How to choose a suitable number of `commonChunkSplitNumber`?** Alternatively, the number can be calculated using the formulas `commonChunkSplitNumber = bundles / 3` or `commonChunkSplitNumber = bundles / 2`, where bundles is the number of tramvai bundles that are connected to a specific application, but most likely each application will be better viewed separately.
-
 ### Granular Chunks
+
+:::tip
+
+Recommended default configuration
+
+:::
 
 [A detailed description of using the strategy in Next.js and Gatsby.js](https://web.dev/granular-chunking-nextjs/)
 
@@ -89,3 +46,64 @@ The `granularChunksSplitNumber` parameter allows you to override the default num
   }
 }
 ```
+
+### Common Chunk
+
+:::tip
+
+Configuration good for applications with only one or few pages
+
+:::
+
+The strategy is included in the CLI by default, all common code from bundles and dynamic chunks is moved to common-chunk.js. The `commonChunkSplitNumber` parameter allows you to specify the minimum number of chunks this code should use in order to move it to common.
+
+For applications with a lot of bundles, `common-chunk.js` can include a huge amount of code that is not needed on every single page, and it is worth either increasing the `commonChunkSplitNumber` or using the Granular Chunks strategy. Example configuration to increase the minimum number of chunks using shared code:
+
+
+```json
+{
+  "projects": {
+    "{appName}": {
+      "commands": {
+        "build": {
+          "configurations": {
+            "commonChunkSplitNumber": 5
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+**How to choose a suitable number of `commonChunkSplitNumber`?** Alternatively, the number can be calculated using the formulas `commonChunkSplitNumber = bundles / 3` or `commonChunkSplitNumber = bundles / 2`, where bundles is the number of tramvai bundles that are connected to a specific application, but most likely each application will be better viewed separately.
+
+### Disabling SplitChunksPlugin
+
+:::tip
+
+Not recommended configuration
+
+:::
+
+For applications that have only one tramvai bundle for all pages, or separate the bundle for the desktop and mobile versions, in most cases, code separation is not required, and it is worth setting the option `"commonChunk": false`:
+
+```json
+{
+  "projects": {
+    "{appName}": {
+      "commands": {
+        "build": {
+          "configurations": {
+            "commonChunk": false
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+**Why not leave the common chunk if it doesn't interfere?** The problem is in third-party libraries that can use dynamic `import` under the hood, while the application may not use this code, but it may end up in the common chunk, which will be loaded on every page.
+
+Also, if your application is serving multiple pages and separating the code at the page component level via [@tramvai/react lazy](how-to/how-create-async-component.md), it makes sense to consider other strategies, since duplicates will appear in dynamic chunks of pages.

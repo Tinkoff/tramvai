@@ -10,55 +10,82 @@ Library for building `production` ready bundles for packages written in TypeScri
 
 Install `@tramvai/build` first:
 
-```bash
-yarn add @tramvai/build
+```bash npm2yarn
+npm install --save-dev @tramvai/build
 ```
+
+## Get started
 
 Add necessary fields to `package.json`:
 
 ```json
 {
   "main": "lib/index.js",
-  "typings": "src/index.ts"
+  "module": "lib/index.es.js",
+  "typings": "lib/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "lib"
+  ]
 }
 ```
 
 > `"main": "lib/index.js"` based on that field lib calculates entry point for the build and it will be `"src/index.ts"` in this case
 
-> `"typings": "src/index.ts"` desirable to specify that field to entry point as it is useful for the monorepo projects and allows to use current package in other packages without build. After build package for publication this filed will be replaced to point to the built typedef file, in this case - `"typings": "lib/index.d.ts"`
-
-And to `tsconfig.json`:
+Create `tsconfig.json`:
 
 ```json
 {
   "compilerOptions": {
     "moduleResolution": "node",
-    "target": "ES5",
-    "module": "CommonJS",
+    "module": "ESNext",
+    "target": "ES2015",
+    "allowJs": true,
     "declaration": true,
+    "sourceMap": true,
     "importHelpers": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "skipLibCheck": true,
+    "jsx": "react-jsx",
     "rootDir": "./src",
     "outDir": "./lib",
-    "declarationDir": "./lib"
+    "declarationDir": "./lib",
+    "types": ["node"],
+    "lib": [
+      "es2015",
+      "es2016",
+      "es2017",
+      "es2018",
+      "dom"
+    ]
   },
-  "include": ["./src"]
+  "include": ["./src"],
+  "exclude": [
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "**/*.test.ts",
+    "**/*.test.tsx"
+  ]
 }
 ```
 
 Add to `dependencies` library [tslib](https://www.npmjs.com/package/tslib):
 
-```bash
-yarn add tslib
+```bash npm2yarn
+npm install tslib
 ```
 
 Build package with command `tramvai-build`:
 
 ```bash
-tramvai-build --forPublish
+tramvai-build --preserveModules --forPublish
 ```
 
-> with flag `--forPublish` tramvai-build replaces some fields in `package.json` in order to make built package usable in the end apps, for example `"typings": "src/index.ts"` replaces by `"typings": "lib/index.d.ts"`
+> with flag `--preserveModules` tramvai-build wil preserve file structure of library modules for better tree-shaking
+
+> with flag `--forPublish` tramvai-build replaces some fields in `package.json` in order to make built package usable in the end apps, for example `"browser"` field with object value can be updated`
 
 ## Explanation
 
