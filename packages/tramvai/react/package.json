@@ -27,8 +27,8 @@
     "@tinkoff/utils": "^2.1.2",
     "@tinkoff/url": "0.0.0-stub",
     "@tramvai/core": "0.0.0-stub",
-    "react": ">=16.8.0",
-    "react-dom": ">=16.8.0",
+    "react": ">=16.14.0",
+    "react-dom": ">=16.14.0",
     "tslib": "^2.0.3"
   },
   "module": "lib/react.es.js",

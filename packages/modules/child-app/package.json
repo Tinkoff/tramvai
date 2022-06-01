@@ -45,8 +45,8 @@
     "@tramvai/tokens-common": "0.0.0-stub",
     "@tramvai/tokens-render": "0.0.0-stub",
     "@tramvai/tokens-router": "0.0.0-stub",
-    "react": ">=16.8.0",
-    "react-dom": ">=16.8.0",
+    "react": ">=16.14.0",
+    "react-dom": ">=16.14.0",
     "object-assign": "^4.1.1",
     "tslib": "^2.0.3"
   },

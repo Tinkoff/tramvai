@@ -30,7 +30,7 @@
     "@tinkoff/utils": "^2.1.2",
     "@tinkoff/dippy": "0.0.0-stub",
     "@tramvai/core": "0.0.0-stub",
-    "react": ">=16.8.0",
+    "react": ">=16.14.0",
     "tslib": "^2.0.3"
   },
   "module": "lib/server.es.js",

@@ -39,6 +39,6 @@
     "@tinkoff/dippy": "0.0.0-stub",
     "@tinkoff/router": "0.0.0-stub",
     "@tinkoff/url": "0.0.0-stub",
-    "react": ">=16.8.0"
+    "react": ">=16.14.0"
   }
 }

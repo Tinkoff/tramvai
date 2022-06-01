@@ -41,7 +41,7 @@ export const createApi = ({
     }
   >;
 }): Api => {
-  const jsCodeShiftApi = createJsCodeShiftApi();
+  const jsCodeShiftApi = createJsCodeShiftApi('tsx');
 
   let resolveWaitTransformers: (transformers: TransformInterface) => void;
   const waitForTransformers: Promise<TransformInterface> = new Promise((resolve) => {

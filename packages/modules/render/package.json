@@ -48,8 +48,8 @@
     "@tramvai/tokens-server-private": "0.0.0-stub",
     "express": "^4.17.1",
     "prop-types": "^15.6.2",
-    "react": ">=16.8.0",
-    "react-dom": ">=16.8.0",
+    "react": ">=16.14.0",
+    "react-dom": ">=16.14.0",
     "tslib": "^2.0.3"
   },
   "devDependencies": {},

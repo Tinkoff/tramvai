@@ -4,7 +4,7 @@ import isEqual from '@tinkoff/utils/is/equal';
 import clone from '@tinkoff/utils/clone';
 
 import { cpus } from 'os';
-import { resolve } from 'path';
+import { resolve, extname } from 'path';
 import { readJSON, writeJSON, readFile, writeFile, pathExists, remove } from 'fs-extra';
 import glob from 'fast-glob';
 import pMap from 'p-map';
@@ -37,8 +37,8 @@ export const getTramvaiJSONPath = async (cwd: string) => {
   }
 };
 
-export const createJsCodeShiftApi = (): JsCodeShiftApi => {
-  const jscodeshift = withParser('tsx');
+export const createJsCodeShiftApi = (parser: string): JsCodeShiftApi => {
+  const jscodeshift = withParser(parser);
 
   return {
     jscodeshift,
@@ -110,7 +110,8 @@ export const createApi = async (cwd: string) => {
     '**/compiled/**',
     '**/.storybook/**',
     '**/.tmp/**',
-    '**/.cache/**'
+    '**/.cache/**',
+    '**/*.d.ts'
   );
 
   log.debug('sourcePattern:', srcGlob);
@@ -122,7 +123,8 @@ export const createApi = async (cwd: string) => {
   });
   const filesInfo: SourceFilesInfo = {};
   const jsonFilesInfo: JsonFilesInfo = {};
-  const codeShiftApi = createJsCodeShiftApi();
+  const codeShiftApiTs = createJsCodeShiftApi('ts');
+  const codeShiftApiTsx = createJsCodeShiftApi('tsx');
 
   const api: Api = {
     packageJSON,
@@ -131,6 +133,8 @@ export const createApi = async (cwd: string) => {
       for (const filename of files) {
         // eslint-disable-next-line no-await-in-loop
         const fileInfo = filesInfo[filename] ?? (await createFileInfo(cwd, filename));
+        const extension = extname(fileInfo.path);
+        const codeShiftApi = extension === '.ts' ? codeShiftApiTs : codeShiftApiTsx;
 
         try {
           const transformedSource = transformer(fileInfo, codeShiftApi, {

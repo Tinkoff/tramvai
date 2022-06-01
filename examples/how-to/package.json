@@ -27,8 +27,8 @@
     "@types/react": "^18.0.0"
   },
   "peerDependencies": {
-    "react": ">=16.8.0",
-    "react-dom": ">=16.8.0",
+    "react": ">=16.14.0",
+    "react-dom": ">=16.14.0",
     "@tramvai/module-dev-tools": "0.0.0-stub"
   },
   "private": true,

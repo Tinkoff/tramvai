@@ -30,8 +30,8 @@
   "peerDependencies": {
     "hoist-non-react-statics": "^3.3.1",
     "prop-types": "^15.6.2",
-    "react": ">=16.8.0",
-    "react-dom": ">=16.8.0"
+    "react": ">=16.14.0",
+    "react-dom": ">=16.14.0"
   },
   "devDependencies": {
     "@reatom/core": "^1.1.5",
