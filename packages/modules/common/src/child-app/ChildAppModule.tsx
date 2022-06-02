@@ -20,7 +20,7 @@ import { actionsProviders } from './actions';
       useFactory: ({ context, initialState }) => {
         return (render) => {
           return (
-            <Provider context={context} serverState={initialState?.stores}>
+            <Provider context={context} serverState={initialState && context.getState()}>
               {render}
             </Provider>
           );
