@@ -21,8 +21,9 @@ export interface BaseQuery<Options, TCreateQuery, TQuery, TUseQuery> {
   fork(options: TUseQuery): TQuery;
   raw(context: ActionContext, options?: Options): TUseQuery;
 
-  prefetchAction(options?: Options): Action<void, void, { queryClient: typeof QUERY_CLIENT_TOKEN }>;
-  fetchAction(options?: Options): Action<void, void, { queryClient: typeof QUERY_CLIENT_TOKEN }>;
+  prefetchAction(
+    options?: Options
+  ): Action<void, Promise<void>, { queryClient: typeof QUERY_CLIENT_TOKEN }>;
 }
 
 export const isQuery = <Options, Result, TCreateQuery, TQuery, TUseQuery>(

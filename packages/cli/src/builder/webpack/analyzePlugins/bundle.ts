@@ -22,8 +22,6 @@ export class BundleAnalyzePlugin extends AnalyzePlugin {
       config.output.libraryTarget('commonjs');
     }
 
-    config.optimization.set('concatenateModules', false);
-
     return config;
   }
 
