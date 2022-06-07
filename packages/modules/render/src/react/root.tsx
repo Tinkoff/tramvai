@@ -1,16 +1,7 @@
-import React, { PureComponent, useMemo } from 'react';
-import type { ComponentType, PropsWithChildren } from 'react';
-import type { UniversalErrorBoundaryFallbackProps } from '@tramvai/react';
-import {
-  useDi,
-  UniversalErrorBoundary,
-  ERROR_BOUNDARY_TOKEN,
-  ERROR_BOUNDARY_FALLBACK_COMPONENT_TOKEN,
-} from '@tramvai/react';
+import React, { PureComponent } from 'react';
+import type { ComponentType } from 'react';
 import type { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
-import { useRoute, useUrl } from '@tramvai/module-router';
-import { useStore } from '@tramvai/state';
-import { deserializeError, PageErrorStore } from '../shared/pageErrorStore';
+import { useRoute } from '@tramvai/module-router';
 
 interface Props {
   LayoutComponent: React.ComponentType<{
@@ -21,51 +12,15 @@ interface Props {
   PageComponent: React.ComponentType;
   HeaderComponent: React.ComponentType;
   FooterComponent: React.ComponentType;
-  ErrorBoundaryComponent?: React.ComponentType<UniversalErrorBoundaryFallbackProps>;
 }
-
-const PageErrorBoundary = (
-  props: PropsWithChildren<{
-    fallback?: React.ComponentType<UniversalErrorBoundaryFallbackProps>;
-  }>
-) => {
-  const { children, fallback } = props;
-  const url = useUrl();
-  const serializedError = useStore(PageErrorStore);
-  const error = useMemo(() => {
-    return serializedError && deserializeError(serializedError);
-  }, [serializedError]);
-  const errorHandlers = useDi({ token: ERROR_BOUNDARY_TOKEN, optional: true });
-  const fallbackFromDi = useDi({ token: ERROR_BOUNDARY_FALLBACK_COMPONENT_TOKEN, optional: true });
-
-  return (
-    <UniversalErrorBoundary
-      url={url}
-      error={error}
-      errorHandlers={errorHandlers}
-      fallback={fallback}
-      fallbackFromDi={fallbackFromDi}
-    >
-      {children}
-    </UniversalErrorBoundary>
-  );
-};
 
 class RootComponent extends PureComponent<Props> {
   render() {
-    const {
-      LayoutComponent,
-      PageComponent,
-      HeaderComponent,
-      FooterComponent,
-      ErrorBoundaryComponent,
-    } = this.props;
+    const { LayoutComponent, PageComponent, HeaderComponent, FooterComponent } = this.props;
 
     return (
       <LayoutComponent Header={HeaderComponent} Footer={FooterComponent}>
-        <PageErrorBoundary fallback={ErrorBoundaryComponent}>
-          <PageComponent />
-        </PageErrorBoundary>
+        <PageComponent />
       </LayoutComponent>
     );
   }
@@ -87,9 +42,6 @@ export const Root = ({ pageService }: { pageService: typeof PAGE_SERVICE_TOKEN }
   const LayoutComponent: ComponentType<any> = pageService.resolveComponentFromConfig('layout');
   const HeaderComponent = pageService.resolveComponentFromConfig('header');
   const FooterComponent = pageService.resolveComponentFromConfig('footer');
-  const ErrorBoundaryComponent: ComponentType<any> = pageService.resolveComponentFromConfig(
-    'errorBoundary'
-  );
 
   return (
     <RootComponent
@@ -97,7 +49,6 @@ export const Root = ({ pageService }: { pageService: typeof PAGE_SERVICE_TOKEN }
       FooterComponent={FooterComponent}
       LayoutComponent={LayoutComponent}
       PageComponent={PageComponent}
-      ErrorBoundaryComponent={ErrorBoundaryComponent}
     />
   );
 };
