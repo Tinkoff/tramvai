@@ -1,10 +1,5 @@
 import { Module, commandLineListTokens, DI_TOKEN, provide } from '@tramvai/core';
-import {
-  LOGGER_TOKEN,
-  CONTEXT_TOKEN,
-  STORE_TOKEN,
-  INITIAL_APP_STATE_TOKEN,
-} from '@tramvai/tokens-common';
+import { LOGGER_TOKEN, CONTEXT_TOKEN, STORE_TOKEN } from '@tramvai/tokens-common';
 import {
   EXTEND_RENDER,
   CUSTOM_RENDER,
@@ -82,7 +77,6 @@ const throwErrorInDev = (logger: typeof LOGGER_TOKEN) => {
         consumerContext: CONTEXT_TOKEN,
         di: DI_TOKEN,
         useStrictMode: USE_REACT_STRICT_MODE,
-        initialState: INITIAL_APP_STATE_TOKEN,
       },
       multi: true,
     }),

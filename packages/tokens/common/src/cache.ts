@@ -1,8 +1,11 @@
 import { createToken } from '@tinkoff/dippy';
+import type { Options } from '@tinkoff/lru-cache-nano';
 
 /**
  * @description
  * Function for creating a new cache
+ *
+ * *Note*: currently only memory cache with `@tinkoff/lru-cache-nano` is supported
  */
 export const CREATE_CACHE_TOKEN = createToken<CacheFactory>('createCache');
 
@@ -28,4 +31,13 @@ export interface Cache<T = any> {
   clear(): void;
 }
 
-export type CacheFactory = <T>(type?: string, ...args: unknown[]) => Cache<T>;
+export type CacheType = 'memory';
+
+export interface CacheOptionsByType<T> {
+  memory: [Options<string, T>] | [];
+}
+
+export type CacheFactory = <T, Type extends CacheType = 'memory'>(
+  type?: Type,
+  ...args: CacheOptionsByType<T>[Type]
+) => Cache<T>;

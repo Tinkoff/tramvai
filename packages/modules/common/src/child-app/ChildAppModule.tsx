@@ -1,7 +1,6 @@
-import React from 'react';
 import { Module, provide } from '@tramvai/core';
 import { Provider } from '@tramvai/state';
-import { CONTEXT_TOKEN, INITIAL_APP_STATE_TOKEN } from '@tramvai/tokens-common';
+import { CONTEXT_TOKEN } from '@tramvai/tokens-common';
 import { EXTEND_RENDER } from '@tramvai/tokens-render';
 import { providers } from './serverProviders';
 import { stateProviders } from './state';
@@ -17,10 +16,12 @@ import { actionsProviders } from './actions';
     provide({
       provide: EXTEND_RENDER,
       multi: true,
-      useFactory: ({ context, initialState }) => {
+      useFactory: ({ context }) => {
+        const serverState = typeof window !== 'undefined' ? context.getState() : undefined;
+
         return (render) => {
           return (
-            <Provider context={context} serverState={initialState && context.getState()}>
+            <Provider context={context} serverState={serverState}>
               {render}
             </Provider>
           );
@@ -28,7 +29,6 @@ import { actionsProviders } from './actions';
       },
       deps: {
         context: CONTEXT_TOKEN,
-        initialState: { token: INITIAL_APP_STATE_TOKEN, optional: true },
       },
     }),
   ],

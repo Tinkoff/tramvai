@@ -1,10 +1,6 @@
-import type { Options } from 'lru-cache';
-import LRU from 'lru-cache';
-import type { Cache } from '@tramvai/tokens-common';
+import LRU from '@tinkoff/lru-cache-nano';
+import type { CacheFactory } from '@tramvai/tokens-common';
 
-// @ts-ignore
-LRU.prototype.clear = LRU.prototype.reset;
-
-export const cacheFactory = (type?: string, ...args: Options<unknown, undefined>[]): Cache => {
-  return new LRU(...args) as any;
+export const cacheFactory: CacheFactory = (type?, options = { max: 100 }) => {
+  return new LRU(options);
 };

@@ -1,5 +1,4 @@
 import isNil from '@tinkoff/utils/is/nil';
-import omit from '@tinkoff/utils/object/omit';
 import compose from '@tinkoff/utils/function/compose';
 import type { MakeRequest } from '@tinkoff/request-core';
 import type { HttpClient, HttpClientBaseOptions } from '@tramvai/http-client';
@@ -23,6 +22,7 @@ import type {
   Cache,
   ENV_MANAGER_TOKEN,
   REQUEST_MANAGER_TOKEN,
+  CacheOptionsByType,
 } from '@tramvai/tokens-common';
 import { fillHeaderIp, fillHeaders } from '../utils';
 import { createUserAgent } from './createUserAgent';
@@ -74,7 +74,8 @@ export const httpClientFactory = ({
           agent,
           method: 'GET',
           createCache: createCache
-            ? (cacheOptions: any): Cache => createCache('memory', cacheOptions)
+            ? (cacheOptions: CacheOptionsByType<any>['memory'][0]): Cache =>
+                createCache('memory', cacheOptions)
             : undefined,
           modifyRequest: compose(
             fillHeaderIp({ requestManager }),

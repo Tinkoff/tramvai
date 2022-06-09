@@ -88,7 +88,6 @@ import { CacheModule } from './cache/CacheModule';
         componentRegistry: COMPONENT_REGISTRY_TOKEN,
         actionRegistry: ACTION_REGISTRY_TOKEN,
         dispatcher: DISPATCHER_TOKEN,
-        dispatcherContext: DISPATCHER_CONTEXT_TOKEN,
         logger: LOGGER_TOKEN,
       },
     }),

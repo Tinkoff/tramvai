@@ -6,7 +6,6 @@ import type {
   USE_REACT_STRICT_MODE,
 } from '@tramvai/tokens-render';
 import type { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
-import type { INITIAL_APP_STATE_TOKEN } from '@tramvai/tokens-common';
 import { renderReact } from '../react';
 import { renderer } from './renderer';
 
@@ -19,7 +18,6 @@ export function rendering({
   di,
   useStrictMode,
   rendererCallback,
-  initialState,
 }: {
   pageService: typeof PAGE_SERVICE_TOKEN;
   log: any;
@@ -29,10 +27,9 @@ export function rendering({
   di: any;
   useStrictMode: typeof USE_REACT_STRICT_MODE;
   rendererCallback?: typeof RENDERER_CALLBACK;
-  initialState?: typeof INITIAL_APP_STATE_TOKEN;
 }) {
   return new Promise<void>((resolve, reject) => {
-    let renderResult = renderReact({ pageService, di, initialState }, consumerContext);
+    let renderResult = renderReact({ pageService, di }, consumerContext);
 
     if (extendRender) {
       each((render) => {

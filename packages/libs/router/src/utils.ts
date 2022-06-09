@@ -25,7 +25,7 @@ export const normalizeManySlashes = (hrefOrPath: string) => {
 export const isSameHost =
   typeof window === 'undefined'
     ? T
-    : (url: Url) => {
+    : (url: Url | URL) => {
         return !url.host || url.host === window.location.host;
       };
 

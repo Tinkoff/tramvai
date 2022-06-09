@@ -42,6 +42,9 @@ const backupTimeout = global.setTimeout;
 global.setTimeout = ((fn: Function) => fn()) as any;
 
 let currentLocation = 'http://localhost:3000/';
+
+window.location.host = 'localhost:3000';
+
 Object.defineProperty(window.location, 'href', {
   get: () => currentLocation,
   set: (href) => {
@@ -178,10 +181,31 @@ describe('router/noSpa', () => {
     });
 
     describe('history implementation', () => {});
-    describe('not-found', () => {});
+    describe('not found', () => {
+      beforeEach(async () => {
+        window.location.href = 'http://localhost:3000/';
+        mockHref.mockClear();
+
+        await router.rehydrate({
+          type: 'navigate',
+          to: { name: 'root', path: '/', actualPath: '/', params: {} },
+          url: parse('http://localhost:3000/'),
+        });
+        router.start();
+      });
+
+      it('should navigate to external page without forcing slashes', async () => {
+        // non-blocking as router will block resolving for external navigations
+        await wrapNotResolved(router.navigate('http://test.example/test/'));
+
+        expect(mockHref).toHaveBeenCalledWith('http://test.example/test/');
+      });
+    });
+
     describe('updateCurrentRoute', () => {
       beforeEach(async () => {
         window.location.href = 'http://localhost:3000/dynamic/1/';
+        mockHref.mockClear();
 
         await router.rehydrate({
           type: 'navigate',
@@ -221,6 +245,7 @@ describe('router/noSpa', () => {
     describe('navigate', () => {
       beforeEach(async () => {
         window.location.href = 'http://localhost:3000/';
+        mockHref.mockClear();
 
         await router.rehydrate({
           type: 'navigate',
@@ -259,7 +284,28 @@ describe('router/noSpa', () => {
     });
 
     describe('history implementation', () => {});
-    describe('not-found', () => {});
+
+    describe('not found', () => {
+      beforeEach(async () => {
+        window.location.href = 'http://localhost:3000/';
+        mockHref.mockClear();
+
+        await router.rehydrate({
+          type: 'navigate',
+          to: { name: 'root', path: '/', actualPath: '/', params: {} },
+          url: parse('http://localhost:3000/'),
+        });
+        router.start();
+      });
+
+      it('should navigate to external page without forcing slashes', async () => {
+        // non-blocking as router will block resolving for external navigations
+        await wrapNotResolved(router.navigate('http://test.example/test'));
+
+        expect(mockHref).toHaveBeenCalledWith('http://test.example/test');
+      });
+    });
+
     describe('updateCurrentRoute', () => {
       beforeEach(async () => {
         window.location.href = 'http://localhost:3000/dynamic/1/';

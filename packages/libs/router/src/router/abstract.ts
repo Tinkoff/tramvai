@@ -24,6 +24,7 @@ import {
   registerHook,
   normalizeTrailingSlash,
   normalizeManySlashes,
+  isSameHost,
 } from '../utils';
 
 export interface Options {
@@ -387,7 +388,9 @@ export abstract class AbstractRouter {
       }
     }
 
-    pathname = this.normalizePathname(pathname);
+    if (isSameHost(resultUrl)) {
+      pathname = this.normalizePathname(pathname);
+    }
 
     return convertRawUrl(
       rawAssignUrl(resultUrl, {

@@ -58,10 +58,10 @@ export const DEFAULT_POLYFILL_CONDITION =
       useFactory: ({ createCache }) => {
         const thirtyMinutes = 1000 * 60 * 30;
         return {
-          filesCache: createCache('memory', { max: 50, maxAge: thirtyMinutes }),
-          sizeCache: createCache('memory', { max: 100, maxAge: thirtyMinutes }),
-          requestsCache: createCache('memory', { max: 150, maxAge: 1000 * 60 * 5 }),
-          disabledUrlsCache: createCache('memory', { max: 150, maxAge: 1000 * 60 * 5 }),
+          filesCache: createCache('memory', { max: 50, ttl: thirtyMinutes }),
+          sizeCache: createCache('memory', { max: 100, ttl: thirtyMinutes }),
+          requestsCache: createCache('memory', { max: 150, ttl: 1000 * 60 * 5 }),
+          disabledUrlsCache: createCache('memory', { max: 150, ttl: 1000 * 60 * 5 }),
         };
       },
       deps: {
@@ -253,7 +253,7 @@ export const DEFAULT_POLYFILL_CONDITION =
       provide: 'modernSatisfiesLruCache',
       scope: Scope.SINGLETON,
       useFactory: ({ createCache }) => {
-        return createCache('modernSatisfies', { max: 50 });
+        return createCache('memory', { max: 50 });
       },
       deps: {
         createCache: CREATE_CACHE_TOKEN,

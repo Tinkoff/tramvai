@@ -16,6 +16,21 @@ import {
 describe('router/spa', () => {
   const { getApp } = testApp({
     name: 'router-spa',
+    config: {
+      commands: {
+        build: {
+          configurations: {
+            experiments: {
+              fileSystemPages: {
+                enable: true,
+                pagesDir: '../shared/pages',
+                routesDir: false,
+              },
+            },
+          },
+        },
+      },
+    },
   });
   const { getPageWrapper } = testAppInBrowser(getApp);
 
@@ -448,6 +463,24 @@ describe('router/spa', () => {
 
       expect(routerState.url.href).toBe('https://www-test.tinkoff.ru/');
       expect(routerStoreState.currentUrl.href).toBe('https://www-test.tinkoff.ru/');
+    });
+  });
+
+  describe('@tramvai/state', () => {
+    it('should use bundle scoped reducer on first render as well', async () => {
+      const app = getApp();
+
+      const { parsed } = await app.render('/bundle-reducer/');
+
+      expect(parsed.querySelector('#test-reducer-state').innerText).toEqual('updated-from-initial');
+    });
+
+    it('should use fs-page scoped reducer on first render as well', async () => {
+      const app = getApp();
+
+      const { parsed } = await app.render('/page-reducer/');
+
+      expect(parsed.querySelector('#test-reducer-state').innerText).toEqual('updated-from-initial');
     });
   });
 });

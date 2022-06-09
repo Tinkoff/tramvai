@@ -4,7 +4,6 @@ import { __lazyErrorHandler } from '@tramvai/react';
 import type {
   BUNDLE_MANAGER_TOKEN,
   DISPATCHER_TOKEN,
-  DISPATCHER_CONTEXT_TOKEN,
   ActionsRegistry,
 } from '@tramvai/tokens-common';
 import type { Bundle } from '@tramvai/core';
@@ -29,21 +28,11 @@ export class BundleManager implements Interface {
 
   dispatcher: typeof DISPATCHER_TOKEN;
 
-  dispatcherContext: typeof DISPATCHER_CONTEXT_TOKEN;
-
-  constructor({
-    bundleList,
-    componentRegistry,
-    actionRegistry,
-    dispatcher,
-    dispatcherContext,
-    logger,
-  }) {
+  constructor({ bundleList, componentRegistry, actionRegistry, dispatcher, logger }) {
     this.bundles = bundleList;
     this.componentRegistry = componentRegistry;
     this.actionRegistry = actionRegistry;
     this.dispatcher = dispatcher;
-    this.dispatcherContext = dispatcherContext;
 
     if (fileSystemPagesEnabled()) {
       const log = logger('file-system-pages:bundle-manager');
@@ -116,7 +105,6 @@ export class BundleManager implements Interface {
       if (component.reducers) {
         component.reducers.forEach((reducer) => {
           this.dispatcher.registerStore(reducer);
-          this.dispatcherContext.getStore(reducer);
         });
       }
     }
@@ -132,7 +120,6 @@ export class BundleManager implements Interface {
     if (bundle.reducers) {
       bundle.reducers.forEach((reducer) => {
         this.dispatcher.registerStore(reducer);
-        this.dispatcherContext.getStore(reducer);
       });
     }
 

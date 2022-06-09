@@ -1,4 +1,4 @@
-import { Module, commandLineListTokens, Scope } from '@tramvai/core';
+import { Module, commandLineListTokens, Scope, provide } from '@tramvai/core';
 import {
   REQUEST_MANAGER_TOKEN,
   STORE_TOKEN,
@@ -24,16 +24,16 @@ export { ClientHintsChildAppModule } from './child-app/module';
 @Module({
   providers: [
     ...providers,
-    {
+    provide({
       provide: 'userAgentLruCache',
       scope: Scope.SINGLETON,
       useFactory: ({ createCache }) => {
-        return createCache('userAgent', { max: 50 });
+        return createCache('memory', { max: 50 });
       },
       deps: {
         createCache: CREATE_CACHE_TOKEN,
       },
-    },
+    }),
     {
       provide: USER_AGENT_TOKEN,
       useFactory: ({ requestManager, cache }) => {

@@ -19,9 +19,9 @@
     "build-for-publish": "true"
   },
   "dependencies": {
-    "@tinkoff/request-core": "^0.8.9",
-    "@tinkoff/request-plugin-cache-deduplicate": "^0.8.9",
-    "@tinkoff/request-plugin-protocol-http": "^0.10.18",
+    "@tinkoff/request-core": "^0.9.2",
+    "@tinkoff/request-plugin-cache-deduplicate": "^0.9.2",
+    "@tinkoff/request-plugin-protocol-http": "^0.11.4",
     "@tinkoff/utils": "^2.1.2",
     "ssri": "^7.1.0",
     "tslib": "^2.0.3"

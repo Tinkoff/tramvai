@@ -21,7 +21,7 @@ export class ServerLoader extends Loader {
   }) {
     super();
     const cache = createCache('memory', {
-      maxAge: 1000 * 60 * 60 * 24 * 5,
+      ttl: 1000 * 60 * 60 * 24 * 5,
       max: 20,
     });
 

@@ -23,6 +23,13 @@ describe('router/no-spa-with-not-found', () => {
                 'process.env.TEST_NOT_FOUND': true,
               },
             },
+            experiments: {
+              fileSystemPages: {
+                enable: true,
+                pagesDir: '../shared/pages',
+                routesDir: false,
+              },
+            },
           },
         },
       },
@@ -390,6 +397,24 @@ describe('router/no-spa-with-not-found', () => {
 
       expect(routerState.url.href).toBe('https://www-test.tinkoff.ru/');
       expect(routerStoreState.currentUrl.href).toBe('https://www-test.tinkoff.ru/');
+    });
+  });
+
+  describe('@tramvai/state', () => {
+    it('should use bundle scoped reducer on first render as well', async () => {
+      const app = getApp();
+
+      const { parsed } = await app.render('/bundle-reducer/');
+
+      expect(parsed.querySelector('#test-reducer-state').innerText).toEqual('updated-from-initial');
+    });
+
+    it('should use fs-page scoped reducer on first render as well', async () => {
+      const app = getApp();
+
+      const { parsed } = await app.render('/page-reducer/');
+
+      expect(parsed.querySelector('#test-reducer-state').innerText).toEqual('updated-from-initial');
     });
   });
 });

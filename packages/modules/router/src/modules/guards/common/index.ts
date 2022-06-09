@@ -4,6 +4,7 @@ import {
   ACTION_REGISTRY_TOKEN,
   LOGGER_TOKEN,
   RESPONSE_MANAGER_TOKEN,
+  DISPATCHER_CONTEXT_TOKEN,
 } from '@tramvai/tokens-common';
 import { ROUTER_GUARD_TOKEN } from '@tramvai/tokens-router';
 
@@ -20,6 +21,7 @@ export const commonGuards: Provider[] = [
       bundleManager: BUNDLE_MANAGER_TOKEN,
       actionRegistry: ACTION_REGISTRY_TOKEN,
       responseManager: RESPONSE_MANAGER_TOKEN,
+      dispatcherContext: DISPATCHER_CONTEXT_TOKEN,
     },
   },
   {

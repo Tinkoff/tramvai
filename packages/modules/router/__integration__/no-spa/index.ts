@@ -21,5 +21,7 @@ createApp({
     history: () => import(/* webpackChunkName: "history" */ '../shared/bundles/history'),
     'dom-navigate': () =>
       import(/* webpackChunkName: "dom-navigate" */ '../shared/bundles/dom-navigate'),
+    'bundle-reducer': () =>
+      import(/* webpackChunkName: "bundle-reducer" */ '../shared/bundles/bundle-reducer'),
   },
 });

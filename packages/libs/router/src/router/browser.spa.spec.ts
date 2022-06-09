@@ -911,6 +911,32 @@ describe('router/browser-spa', () => {
       });
     });
 
+    describe('not found', () => {
+      beforeEach(async () => {
+        window.location.href = 'http://localhost/';
+        mockHref.mockClear();
+
+        await router.rehydrate({
+          type: 'navigate',
+          to: { name: 'root', path: '/', actualPath: '/', params: {} },
+          url: parse('http://localhost/'),
+        });
+        router.start();
+      });
+
+      it('should navigate to external page without forcing slashes', async () => {
+        // non-blocking as router will block resolving for external navigations
+        router.navigate('http://test.example/test');
+
+        // give code some time to execute async tasks
+        await new Promise((resolve) => {
+          setTimeout(resolve, 30);
+        });
+
+        expect(mockHref).toHaveBeenCalledWith('http://test.example/test');
+      });
+    });
+
     describe('hooks', () => {
       beforeEach(async () => {
         window.location.href = 'http://localhost/';
@@ -1238,6 +1264,32 @@ describe('router/browser-spa', () => {
         expect(router.getCurrentUrl()).toMatchObject({ path: '/child1' });
         expect(mockPush).not.toHaveBeenCalledWith();
         expect(mockReplace).toHaveBeenCalledWith(expect.anything(), '', '/child1');
+      });
+    });
+
+    describe('not found', () => {
+      beforeEach(async () => {
+        window.location.href = 'http://localhost/';
+        mockHref.mockClear();
+
+        await router.rehydrate({
+          type: 'navigate',
+          to: { name: 'root', path: '/', actualPath: '/', params: {} },
+          url: parse('http://localhost/'),
+        });
+        router.start();
+      });
+
+      it('should navigate to external page without forcing slashes', async () => {
+        // non-blocking as router will block resolving for external navigations
+        router.navigate('http://test.example/test/');
+
+        // give code some time to execute async tasks
+        await new Promise((resolve) => {
+          setTimeout(resolve, 30);
+        });
+
+        expect(mockHref).toHaveBeenCalledWith('http://test.example/test/');
       });
     });
 

@@ -1,12 +1,11 @@
 import { createToken } from '@tinkoff/dippy';
 import { Module, Scope, IS_DI_CHILD_CONTAINER_TOKEN } from '@tramvai/core';
-import type { Cache } from '@tramvai/tokens-common';
+import type { Cache, CacheFactory } from '@tramvai/tokens-common';
 import {
   CLEAR_CACHE_TOKEN,
   CREATE_CACHE_TOKEN,
   REGISTER_CLEAR_CACHE_TOKEN,
 } from '@tramvai/tokens-common';
-import type { Options } from 'lru-cache';
 import { cacheFactory } from './cacheFactory';
 import { providers } from './serverProviders';
 
@@ -22,12 +21,12 @@ export const cachesToken = createToken<Cache[]>('_cachesList');
     },
     {
       provide: CREATE_CACHE_TOKEN,
-      useFactory: ({ caches, isChildDi }) => {
+      useFactory: ({ caches, isChildDi }): CacheFactory => {
         if (isChildDi) {
           return cacheFactory;
         }
 
-        return (type?: string, ...args: Options<unknown, undefined>[]) => {
+        return (type?, ...args) => {
           const cache = cacheFactory(type, ...args);
 
           caches.push(cache);

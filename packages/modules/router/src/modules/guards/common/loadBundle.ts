@@ -1,10 +1,10 @@
 import type { NavigationGuard } from '@tinkoff/router';
 import type {
   BUNDLE_MANAGER_TOKEN,
-  COMPONENT_REGISTRY_TOKEN,
   ACTION_REGISTRY_TOKEN,
   LOGGER_TOKEN,
   RESPONSE_MANAGER_TOKEN,
+  DISPATCHER_CONTEXT_TOKEN,
 } from '@tramvai/tokens-common';
 
 export const loadBundle = ({
@@ -12,11 +12,13 @@ export const loadBundle = ({
   logger,
   actionRegistry,
   responseManager,
+  dispatcherContext,
 }: {
   bundleManager: typeof BUNDLE_MANAGER_TOKEN;
   logger: typeof LOGGER_TOKEN;
   actionRegistry: typeof ACTION_REGISTRY_TOKEN;
   responseManager: typeof RESPONSE_MANAGER_TOKEN;
+  dispatcherContext: typeof DISPATCHER_CONTEXT_TOKEN;
 }): NavigationGuard => {
   const log = logger('route:load-bundles');
 
@@ -43,7 +45,15 @@ export const loadBundle = ({
     // несмотря на наличие бандла в разметке, все равно мы должны дождаться
     // его загрузки перед рендером
     try {
-      await bundleManager.get(bundle, pageComponent);
+      const { components, reducers } = await bundleManager.get(bundle, pageComponent);
+
+      const component = components[pageComponent];
+
+      // pageComponent should have required fields even if it is lazy,
+      // thanks to `git log 9466cb32bfb71ba49144ef839d3d5bce246e213c -L90,103:packages/modules/common/src/bundleManager/bundleManager.ts`
+      component?.reducers?.forEach((reducer) => dispatcherContext.getStore(reducer));
+
+      reducers?.forEach((reducer) => dispatcherContext.getStore(reducer));
     } catch (error) {
       log.error({
         event: 'load-bundle-failed',

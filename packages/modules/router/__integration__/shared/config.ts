@@ -182,6 +182,20 @@ export const routes: Route[] = [
       pageComponent: 'DomNavigateHash',
     },
   },
+  {
+    name: 'bundle-reducer',
+    path: '/bundle-reducer/',
+    config: {
+      bundle: 'bundle-reducer',
+    },
+  },
+  {
+    name: 'page-reducer',
+    path: '/page-reducer/',
+    config: {
+      pageComponent: '@/../shared/pages/page-reducer',
+    },
+  },
   ...(process.env.TEST_NOT_FOUND
     ? [
         {
