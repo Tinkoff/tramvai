@@ -92,9 +92,12 @@ export abstract class ClientRouter extends AbstractRouter {
 
     const prevUrl = navigation.fromUrl?.href ?? window.location.href;
     const nextUrl = navigation.url.href;
+    const isNoSpaNavigation = navigation.from && !navigation.to;
 
-    // prevent redirect cycle on the same page
-    if (prevUrl !== nextUrl) {
+    // prevent redirect cycle on the same page,
+    // except cases when we run no-spa navigations,
+    // because we need hard reload in this cases
+    if (isNoSpaNavigation ? true : prevUrl !== nextUrl) {
       if (navigation.replace) {
         window.location.replace(nextUrl);
       } else {
