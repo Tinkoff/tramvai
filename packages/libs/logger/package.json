@@ -14,7 +14,9 @@
     "lib",
     "plugins.js"
   ],
-  "sideEffects": false,
+  "sideEffects": [
+    "./lib/browser.js"
+  ],
   "repository": {
     "type": "git",
     "url": "git@github.com:Tinkoff/tramvai.git"

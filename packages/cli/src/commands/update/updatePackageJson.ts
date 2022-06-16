@@ -7,12 +7,19 @@ import { packageHasVersion } from '../../utils/commands/dependencies/packageHasV
 // Список пакетов, не начинающихся с @tramvai,
 // которые мы также хотим обновить
 const packagesToUpdate = [
-  'browser-timings',
-  'dippy',
-  'dynamic-components',
-  'hook-runner',
-  'htmlpagebuilder',
-  'meta-tags-generate',
+  '@tinkoff/logger',
+  '@tinkoff/dippy',
+  '@tinkoff/router',
+  '@tinkoff/url',
+  '@tinkoff/errors',
+  '@tinkoff/roles',
+  '@tinkoff/pubsub',
+  '@tinkoff/hook-runner',
+  '@tinkoff/htmlpagebuilder',
+  '@tinkoff/browser-timings',
+  '@tinkoff/meta-tags-generate',
+  '@tinkoff/pack-polyfills',
+  '@tinkoff/browserslist-config',
 ];
 
 const shouldUpdateDependency = (name: string) => {

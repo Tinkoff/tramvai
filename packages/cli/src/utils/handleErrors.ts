@@ -1,4 +1,6 @@
 export function handleErrors() {
+  Error.stackTraceLimit = 50;
+
   process.on('uncaughtException', (err) => {
     console.error('Global error was not caught');
     console.error(err, err.stack);
