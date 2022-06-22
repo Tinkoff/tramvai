@@ -3,6 +3,7 @@ import { LOGGER_TOKEN } from '@tramvai/module-common';
 import { METRICS_MODULE_TOKEN } from '@tramvai/tokens-metrics';
 import { browserTimings } from '@tinkoff/browser-timings';
 import { Counter, Gauge, Histogram, Summary } from '@tinkoff/metrics-noop';
+import { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
 import { InstantMetricsModule } from './instantMetrics/browser';
 import { PerfGauge, PerfSummary, PerfHistogram } from './performance-devtools/PerfMetrics';
 
@@ -34,7 +35,7 @@ export * from '@tramvai/tokens-metrics';
     },
     {
       provide: commandLineListTokens.init,
-      useFactory: ({ logger }) => () => {
+      useFactory: ({ logger, pageService }) => () => {
         window.addEventListener('load', () => {
           setTimeout(() => {
             const timings = browserTimings();
@@ -53,6 +54,8 @@ export * from '@tramvai/tokens-metrics';
             log.info({
               ...timings,
               event: 'perf-timings',
+              deviceType: navigator.userAgent?.indexOf('Mobi') !== -1 ? 'mobile' : 'desktop',
+              urlMask: pageService.getCurrentRoute()?.path,
             });
           }, 0);
         });
@@ -60,6 +63,7 @@ export * from '@tramvai/tokens-metrics';
       multi: true,
       deps: {
         logger: LOGGER_TOKEN,
+        pageService: PAGE_SERVICE_TOKEN,
       },
     },
   ],

@@ -70,6 +70,7 @@ export const sharedProviders: readonly Provider[] = [
 
         app.addHook('onRequest', async (_, reply) => {
           reply.header('Access-Control-Allow-Origin', '*');
+          reply.header('Timing-Allow-Origin', '*');
         });
 
         if (isApplication(configManager)) {

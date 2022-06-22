@@ -42,6 +42,7 @@ export const staticAppCommand = ({
     appStatic.use((_, res, next) => {
       res.set({
         'Access-Control-Allow-Origin': '*',
+        'Timing-Allow-Origin': '*',
         'X-App-Id': appInfo.appName,
         'X-App-Version': appVersion,
         'X-Host': os.hostname(),

@@ -26,10 +26,11 @@ const renderer: Renderer = ({ element, container, callback, log }) => {
     const wrappedElement = createElement(ExecuteRenderCallback, { callback }, element);
 
     return hydrateRoot(container, wrappedElement, {
-      onRecoverableError: (error) => {
+      onRecoverableError: (error, errorInfo) => {
         log.error({
-          error,
           event: 'hydrate:recover-after-error',
+          error,
+          errorInfo,
         });
       },
     });

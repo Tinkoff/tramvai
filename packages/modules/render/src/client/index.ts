@@ -11,7 +11,7 @@ import { renderer } from './renderer';
 
 export function rendering({
   pageService,
-  log,
+  logger,
   consumerContext,
   customRender,
   extendRender,
@@ -20,7 +20,7 @@ export function rendering({
   rendererCallback,
 }: {
   pageService: typeof PAGE_SERVICE_TOKEN;
-  log: any;
+  logger: any;
   consumerContext: any;
   extendRender?: typeof EXTEND_RENDER;
   customRender?: any;
@@ -28,6 +28,8 @@ export function rendering({
   useStrictMode: typeof USE_REACT_STRICT_MODE;
   rendererCallback?: typeof RENDERER_CALLBACK;
 }) {
+  const log = logger('module-render');
+
   return new Promise<void>((resolve, reject) => {
     let renderResult = renderReact({ pageService, di }, consumerContext);
 

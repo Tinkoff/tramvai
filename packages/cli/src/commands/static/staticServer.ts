@@ -17,6 +17,7 @@ export const startStaticServer = (configManager: ConfigManager): Promise<Server>
 
   app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
+    res.header('Timing-Allow-Origin', '*');
 
     next();
   });

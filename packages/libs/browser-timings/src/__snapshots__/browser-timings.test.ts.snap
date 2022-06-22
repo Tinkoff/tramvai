@@ -10,6 +10,7 @@ Object {
   "domInteractive": 0.73,
   "download": Object {
     "css": Object {
+      "count": 1,
       "duration": 0.005,
       "encodedBodySize": 38422,
       "transferSize": 0,
@@ -20,6 +21,7 @@ Object {
       "transferSize": 87483,
     },
     "js": Object {
+      "count": 1,
       "duration": 0,
       "encodedBodySize": 239719,
       "transferSize": 0,

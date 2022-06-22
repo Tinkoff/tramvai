@@ -70,7 +70,7 @@ const throwErrorInDev = (logger: typeof LOGGER_TOKEN) => {
       },
       deps: {
         pageService: PAGE_SERVICE_TOKEN,
-        log: LOGGER_TOKEN,
+        logger: LOGGER_TOKEN,
         customRender: { token: CUSTOM_RENDER, optional: true },
         extendRender: { token: EXTEND_RENDER, optional: true },
         rendererCallback: { token: RENDERER_CALLBACK, optional: true },

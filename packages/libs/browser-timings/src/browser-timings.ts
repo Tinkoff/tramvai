@@ -65,11 +65,19 @@ const getResourceMetrics = (performance: Performance) => {
 
   const entries = getEntriesByType(performance, 'resource') as PerformanceResourceTiming[];
   if (entries && entries.length > 0) {
+    const countByType: Partial<Record<resourceType, number>> = {};
+
     entries.forEach((entry) => {
       const name = getType(entry.name.split('?', 1)[0]);
 
       if (resourceType[name]) {
+        if (!countByType[name]) {
+          countByType[name] = 0;
+        }
+        countByType[name]!++;
+
         result[name] = calculateMetric(result[name], entry);
+        result[name].count = countByType[name];
       }
     });
   }

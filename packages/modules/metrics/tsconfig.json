@@ -50,6 +50,9 @@
         },
         {
             "path": "../../libs/measure-fastify-requests"
+        },
+        {
+            "path": "../../tokens/router"
         }
     ]
 }
