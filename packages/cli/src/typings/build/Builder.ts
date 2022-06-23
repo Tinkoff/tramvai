@@ -33,6 +33,7 @@ interface BuilderBuildOptions {
 }
 
 interface BuilderAnalyzeOptions {
+  modern?: boolean;
   plugin?: string;
 }
 

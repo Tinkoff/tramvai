@@ -20,6 +20,7 @@ const IS_CUSTOM_SERVER_TOKEN = createToken<boolean>('server utility isCustomServ
     }),
     provide({
       provide: UTILITY_SERVER_PORT_TOKEN,
+      scope: Scope.SINGLETON,
       useFactory: ({ envManager }) => {
         return +(envManager.get('UTILITY_SERVER_PORT') || envManager.get('PORT'));
       },
@@ -29,6 +30,7 @@ const IS_CUSTOM_SERVER_TOKEN = createToken<boolean>('server utility isCustomServ
     }),
     provide({
       provide: IS_CUSTOM_SERVER_TOKEN,
+      scope: Scope.SINGLETON,
       useFactory: ({ port, envManager }) => {
         return +envManager.get('PORT') !== port;
       },

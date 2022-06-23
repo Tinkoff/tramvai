@@ -57,7 +57,6 @@ export const analyzeSharedProviders: Provider[] = [
     useFactory: ({ configManager }) => {
       return configManager.withSettings({
         buildType: 'client',
-        modern: false,
       });
     },
     deps: {

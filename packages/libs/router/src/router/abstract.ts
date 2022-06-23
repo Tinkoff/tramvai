@@ -53,6 +53,7 @@ export interface Options {
 
 interface InternalOptions {
   history?: boolean;
+  redirect?: boolean;
 }
 
 export abstract class AbstractRouter {
@@ -196,15 +197,17 @@ export abstract class AbstractRouter {
   }
 
   async navigate(navigateOptions: NavigateOptions | string) {
-    return this.internalNavigate(
-      typeof navigateOptions === 'string' ? { url: navigateOptions } : navigateOptions,
-      {}
-    );
+    return this.internalNavigate(makeNavigateOptions(navigateOptions), {});
   }
 
-  protected async internalNavigate(navigateOptions: NavigateOptions, { history }: InternalOptions) {
+  protected async internalNavigate(
+    navigateOptions: NavigateOptions,
+    { history, redirect }: InternalOptions
+  ) {
     const { url, replace, params, navigateState, code } = navigateOptions;
-    const prevNavigation = this.currentNavigation ?? this.lastNavigation;
+    const prevNavigation = redirect
+      ? this.lastNavigation
+      : this.currentNavigation ?? this.lastNavigation;
 
     if (!url && !prevNavigation) {
       throw new Error(
@@ -214,6 +217,7 @@ export abstract class AbstractRouter {
 
     const resolvedUrl = this.resolveUrl(navigateOptions);
     const { to: from, url: fromUrl } = prevNavigation ?? {};
+    const redirectFrom = redirect ? this.currentNavigation.to : undefined;
 
     let navigation: Navigation = {
       type: 'navigate',
@@ -224,6 +228,8 @@ export abstract class AbstractRouter {
       history,
       navigateState,
       code,
+      redirect,
+      redirectFrom,
     };
 
     await this.runHooks('beforeResolve', navigation);

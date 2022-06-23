@@ -26,6 +26,7 @@ export * from '@tramvai/tokens-metrics';
     }),
     provide({
       provide: 'metricsDefaultRegistry',
+      scope: Scope.SINGLETON,
       useClass: Registry,
     }),
     provide({

@@ -6,6 +6,7 @@ import { sharedProviders } from './providers/shared';
 export interface Params {
   target: string;
   plugin?: 'bundle' | 'whybundled' | 'statoscope';
+  modern?: boolean;
   showConfig?: boolean;
 }
 
@@ -14,7 +15,7 @@ export type AnalyzeCommand = (params: Params) => Promise<void>;
 export default createCommand({
   name: 'analyze',
   command: async (di): Promise<void> => {
-    const { plugin } = di.get(COMMAND_PARAMETERS_TOKEN);
+    const { plugin, modern } = di.get(COMMAND_PARAMETERS_TOKEN) as Params;
 
     registerProviders(di, sharedProviders);
 
@@ -26,6 +27,6 @@ export default createCommand({
       },
     });
 
-    await builder.analyze({ plugin });
+    await builder.analyze({ plugin, modern });
   },
 });

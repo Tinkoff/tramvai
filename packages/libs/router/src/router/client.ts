@@ -116,6 +116,14 @@ export abstract class ClientRouter extends AbstractRouter {
   protected async redirect(navigation: Navigation, target: NavigateOptions) {
     await super.redirect(navigation, target);
 
-    return this.navigate({ ...target, replace: target.replace || navigation.replace });
+    return this.internalNavigate(
+      {
+        ...target,
+        replace: target.replace || navigation.replace,
+      },
+      {
+        redirect: true,
+      }
+    );
   }
 }

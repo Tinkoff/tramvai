@@ -354,11 +354,30 @@ describe('router/browser-spa', () => {
           redirect: '/test/',
         });
 
+        const mockGuard = jest.fn();
+
+        router.registerGuard(mockGuard);
+
         await router.navigate('/redirect/');
 
         expect(router.getCurrentRoute()).toMatchObject({
           name: 'test',
         });
+
+        expect(mockGuard).toHaveBeenCalledTimes(1);
+        expect(mockGuard).toHaveBeenCalledWith(
+          expect.objectContaining({
+            from: expect.objectContaining({
+              path: '/',
+            }),
+            to: expect.objectContaining({
+              path: '/test/',
+            }),
+            redirectFrom: expect.objectContaining({
+              path: '/redirect/',
+            }),
+          })
+        );
 
         expect(mockPush).toHaveBeenCalledTimes(1);
         expect(mockPush).toHaveBeenLastCalledWith(expect.anything(), '', '/test/');
@@ -379,6 +398,54 @@ describe('router/browser-spa', () => {
 
         expect(mockPush).toHaveBeenCalledTimes(1);
         expect(mockPush).toHaveBeenLastCalledWith(expect.anything(), '', '/test/?a=1&b=2');
+      });
+
+      it('should redirect subsequently by route many times', async () => {
+        router.addRoute({
+          name: 'redirect1',
+          path: '/redirect1/',
+          redirect: '/redirect2/',
+        });
+
+        router.addRoute({
+          name: 'redirect2',
+          path: '/redirect2/',
+          redirect: '/redirect3/',
+        });
+
+        router.addRoute({
+          name: 'redirect3',
+          path: '/redirect3/',
+          redirect: '/test/',
+        });
+
+        const mockGuard = jest.fn();
+
+        router.registerGuard(mockGuard);
+
+        await router.navigate('/redirect1/');
+
+        expect(router.getCurrentRoute()).toMatchObject({
+          name: 'test',
+        });
+
+        expect(mockGuard).toHaveBeenCalledTimes(1);
+        expect(mockGuard).toHaveBeenCalledWith(
+          expect.objectContaining({
+            from: expect.objectContaining({
+              path: '/',
+            }),
+            to: expect.objectContaining({
+              path: '/test/',
+            }),
+            redirectFrom: expect.objectContaining({
+              path: '/redirect3/',
+            }),
+          })
+        );
+
+        expect(mockPush).toHaveBeenCalledTimes(1);
+        expect(mockPush).toHaveBeenLastCalledWith(expect.anything(), '', '/test/');
       });
     });
 

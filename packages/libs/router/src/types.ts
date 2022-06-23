@@ -49,6 +49,10 @@ export interface Navigation {
   history?: boolean;
   cancelled?: boolean;
   code?: number;
+
+  redirect?: boolean;
+
+  redirectFrom?: NavigationRoute;
 }
 
 export type NavigationGuard = (
