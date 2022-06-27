@@ -25,6 +25,12 @@ Migrations are also triggered.
 tramvai update
 ```
 
+## Upgrading to a prerelease version
+
+```bash
+tramvai update prerelease
+```
+
 ## Upgrading to a specific version
 
 Third argument allows you to specify the version range or exact version:

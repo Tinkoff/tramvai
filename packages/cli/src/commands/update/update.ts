@@ -16,7 +16,9 @@ export default async (
   { to: version = 'latest' }: Params
 ): Promise<CommandResult> => {
   const versionNumber =
-    version === 'latest' ? await getLatestPackageVersion('@tramvai/core') : version;
+    version === 'latest' || version === 'prerelease'
+      ? await getLatestPackageVersion('@tramvai/core', version)
+      : version;
 
   await updatePackageJson(versionNumber);
 

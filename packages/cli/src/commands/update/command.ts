@@ -6,7 +6,7 @@ class UpdateCommand extends CLICommand {
   name = 'update';
 
   description = `All tramvai packages update command
-  [to] - target version <latest|X.X.X|^X.X.X> (default: latest)`;
+  [to] - target version <latest|prerelease|X.X.X|^X.X.X> (default: latest)`;
 
   command = `update [to]`;
 

@@ -19,7 +19,7 @@ Commands:
     [generator] - action|reducer|bundle|component|page|module
   new|n [options] <name>                        Command for generating a new application
   update|u [to]                                 All tramvai packages update command
-    [to] - target version <latest|X.X.X|^X.X.X> (default: latest)
+    [to] - target version <latest|prerelease|X.X.X|^X.X.X> (default: latest)
   add [options] <packageName>                   Tramvai package install command
   static|st [options] <target>                  Command to export application routes to HTML pages
   benchmark|bench [options] <command> <target>  Command to run benchmark of the @tramvai/cli
@@ -83,7 +83,7 @@ Commands:
     [generator] - action|reducer|bundle|component|page|module
   new|n [options] <name>                        Command for generating a new application
   update|u [to]                                 All tramvai packages update command
-    [to] - target version <latest|X.X.X|^X.X.X> (default: latest)
+    [to] - target version <latest|prerelease|X.X.X|^X.X.X> (default: latest)
   add [options] <packageName>                   Tramvai package install command
   static|st [options] <target>                  Command to export application routes to HTML pages
   benchmark|bench [options] <command> <target>  Command to run benchmark of the @tramvai/cli
@@ -147,7 +147,7 @@ Commands:
     [generator] - action|reducer|bundle|component|page|module
   new|n [options] <name>                        Command for generating a new application
   update|u [to]                                 All tramvai packages update command
-    [to] - target version <latest|X.X.X|^X.X.X> (default: latest)
+    [to] - target version <latest|prerelease|X.X.X|^X.X.X> (default: latest)
   add [options] <packageName>                   Tramvai package install command
   static|st [options] <target>                  Command to export application routes to HTML pages
   benchmark|bench [options] <command> <target>  Command to run benchmark of the @tramvai/cli
