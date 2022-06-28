@@ -1,0 +1,6 @@
+{
+  "name": "fs-pages",
+  "sourceRoot": "examples/fs-pages/src",
+  "projectType": "library",
+  "targets": {}
+}

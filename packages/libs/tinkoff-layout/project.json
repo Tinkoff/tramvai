@@ -1,0 +1,15 @@
+{
+  "name": "@tinkoff/layout-factory",
+  "sourceRoot": "packages/libs/tinkoff-layout/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/libs/tinkoff-layout/lib",
+        "packages/libs/tinkoff-layout/__migrations__",
+        "packages/libs/tinkoff-layout/package.json"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

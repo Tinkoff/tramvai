@@ -1,0 +1,15 @@
+{
+  "name": "@tramvai/types-actions-state-context",
+  "sourceRoot": "packages/tramvai/types-actions-state-context/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/tramvai/types-actions-state-context/lib",
+        "packages/tramvai/types-actions-state-context/__migrations__",
+        "packages/tramvai/types-actions-state-context/package.json"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

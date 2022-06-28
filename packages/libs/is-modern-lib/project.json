@@ -1,0 +1,6 @@
+{
+  "name": "@tinkoff/is-modern-lib",
+  "sourceRoot": "packages/libs/is-modern-lib/src",
+  "projectType": "library",
+  "targets": {}
+}

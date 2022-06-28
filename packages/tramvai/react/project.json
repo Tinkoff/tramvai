@@ -1,0 +1,15 @@
+{
+  "name": "@tramvai/react",
+  "sourceRoot": "packages/tramvai/react/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/tramvai/react/lib",
+        "packages/tramvai/react/__migrations__",
+        "packages/tramvai/react/package.json"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

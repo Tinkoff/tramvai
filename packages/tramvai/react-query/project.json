@@ -1,0 +1,15 @@
+{
+  "name": "@tramvai/react-query",
+  "sourceRoot": "packages/tramvai/react-query/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/tramvai/react-query/lib",
+        "packages/tramvai/react-query/__migrations__",
+        "packages/tramvai/react-query/package.json"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

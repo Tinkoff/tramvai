@@ -1,0 +1,15 @@
+{
+  "name": "@tramvai/test-unit",
+  "sourceRoot": "packages/tramvai/test/unit/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/tramvai/test/unit/lib",
+        "packages/tramvai/test/unit/__migrations__",
+        "packages/tramvai/test/unit/package.json"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

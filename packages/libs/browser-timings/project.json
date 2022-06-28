@@ -1,0 +1,15 @@
+{
+  "name": "@tinkoff/browser-timings",
+  "sourceRoot": "packages/libs/browser-timings/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/libs/browser-timings/lib",
+        "packages/libs/browser-timings/__migrations__",
+        "packages/libs/browser-timings/package.json"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "@tinkoff/meta-tags-generate",
+  "sourceRoot": "packages/libs/meta-tags-generate/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/libs/meta-tags-generate/lib",
+        "packages/libs/meta-tags-generate/__migrations__",
+        "packages/libs/meta-tags-generate/package.json"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

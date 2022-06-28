@@ -1,0 +1,6 @@
+{
+  "name": "@tramvai/cli",
+  "sourceRoot": "packages/cli/src",
+  "projectType": "library",
+  "targets": {}
+}

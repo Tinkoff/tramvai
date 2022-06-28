@@ -1,0 +1,15 @@
+{
+  "name": "@tramvai/module-child-app",
+  "sourceRoot": "packages/modules/child-app/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/modules/child-app/lib",
+        "packages/modules/child-app/__migrations__",
+        "packages/modules/child-app/package.json"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "@tramvai/create",
+  "sourceRoot": "tools/create/src",
+  "projectType": "library",
+  "targets": {}
+}

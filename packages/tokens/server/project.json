@@ -1,0 +1,15 @@
+{
+  "name": "@tramvai/tokens-server",
+  "sourceRoot": "packages/tokens/server/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/tokens/server/lib",
+        "packages/tokens/server/__migrations__",
+        "packages/tokens/server/package.json"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "@tinkoff/package-manager-wrapper",
+  "sourceRoot": "packages/libs/package-manager-wrapper/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/libs/package-manager-wrapper/lib",
+        "packages/libs/package-manager-wrapper/__migrations__",
+        "packages/libs/package-manager-wrapper/package.json"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "@tramvai/tokens-common",
+  "sourceRoot": "packages/tokens/common/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/tokens/common/lib",
+        "packages/tokens/common/__migrations__",
+        "packages/tokens/common/package.json"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

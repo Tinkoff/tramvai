@@ -1,0 +1,15 @@
+{
+  "name": "@tramvai/papi",
+  "sourceRoot": "packages/tramvai/papi/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/tramvai/papi/lib",
+        "packages/tramvai/papi/__migrations__",
+        "packages/tramvai/papi/package.json"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

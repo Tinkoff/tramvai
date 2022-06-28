@@ -1,0 +1,6 @@
+{
+  "name": "prettier-config-tinkoff",
+  "sourceRoot": "packages/libs/prettier/src",
+  "projectType": "library",
+  "targets": {}
+}

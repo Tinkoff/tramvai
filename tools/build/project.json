@@ -1,0 +1,6 @@
+{
+  "name": "@tramvai/build",
+  "sourceRoot": "tools/build/src",
+  "projectType": "library",
+  "targets": {}
+}

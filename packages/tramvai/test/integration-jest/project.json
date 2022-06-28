@@ -1,0 +1,6 @@
+{
+  "name": "@tramvai/test-integration-jest",
+  "sourceRoot": "packages/tramvai/test/integration-jest/src",
+  "projectType": "library",
+  "targets": {}
+}

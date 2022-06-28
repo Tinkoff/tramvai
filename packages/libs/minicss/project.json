@@ -1,0 +1,6 @@
+{
+  "name": "@tinkoff/minicss-class-generator",
+  "sourceRoot": "packages/libs/minicss/src",
+  "projectType": "library",
+  "targets": {}
+}

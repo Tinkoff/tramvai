@@ -1,0 +1,15 @@
+{
+  "name": "@tinkoff/router",
+  "sourceRoot": "packages/libs/router/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/libs/router/lib",
+        "packages/libs/router/__migrations__",
+        "packages/libs/router/package.json"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

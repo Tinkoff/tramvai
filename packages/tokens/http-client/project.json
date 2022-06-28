@@ -1,0 +1,15 @@
+{
+  "name": "@tramvai/tokens-http-client",
+  "sourceRoot": "packages/tokens/http-client/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/tokens/http-client/lib",
+        "packages/tokens/http-client/__migrations__",
+        "packages/tokens/http-client/package.json"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

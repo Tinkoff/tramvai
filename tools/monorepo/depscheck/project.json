@@ -1,0 +1,6 @@
+{
+  "name": "@tinkoff-monorepo/depscheck",
+  "sourceRoot": "tools/monorepo/depscheck/src",
+  "projectType": "library",
+  "targets": {}
+}

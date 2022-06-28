@@ -1,0 +1,6 @@
+{
+  "name": "@tinkoff-monorepo/pkgs-collector",
+  "sourceRoot": "tools/monorepo/pkgs-collector/src",
+  "projectType": "library",
+  "targets": {}
+}

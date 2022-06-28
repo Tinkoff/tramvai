@@ -1,0 +1,6 @@
+{
+  "name": "@tramvai/tools-migrate",
+  "sourceRoot": "tools/migrate/src",
+  "projectType": "library",
+  "targets": {}
+}

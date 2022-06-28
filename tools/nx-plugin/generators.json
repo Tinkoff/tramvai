@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "name": "@tramvai/nx-plugin",
+  "version": "0.0.1",
+  "generators": {
+    "project": {
+      "factory": "./src/generators/project/generator",
+      "schema": "./src/generators/project/schema.json",
+      "description": "project generator"
+    }
+  }
+}

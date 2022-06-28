@@ -1,0 +1,15 @@
+{
+  "name": "@tramvai/react-lazy-hydration-render",
+  "sourceRoot": "packages/libs/lazy-render/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/libs/lazy-render/lib",
+        "packages/libs/lazy-render/__migrations__",
+        "packages/libs/lazy-render/package.json"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

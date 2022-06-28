@@ -1,0 +1,6 @@
+{
+  "name": "@tinkoff-monorepo/fix-ts-references",
+  "sourceRoot": "tools/monorepo/fix-ts-references/src",
+  "projectType": "library",
+  "targets": {}
+}

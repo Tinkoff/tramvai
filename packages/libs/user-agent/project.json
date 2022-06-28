@@ -1,0 +1,15 @@
+{
+  "name": "@tinkoff/user-agent",
+  "sourceRoot": "packages/libs/user-agent/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/libs/user-agent/lib",
+        "packages/libs/user-agent/__migrations__",
+        "packages/libs/user-agent/package.json"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

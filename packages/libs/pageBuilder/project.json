@@ -1,0 +1,15 @@
+{
+  "name": "@tinkoff/htmlpagebuilder",
+  "sourceRoot": "packages/libs/pageBuilder/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/libs/pageBuilder/lib",
+        "packages/libs/pageBuilder/__migrations__",
+        "packages/libs/pageBuilder/package.json"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "react-18-integration",
+  "sourceRoot": "examples/react-18-integration/src",
+  "projectType": "library",
+  "targets": {}
+}

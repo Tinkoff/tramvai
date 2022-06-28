@@ -1,0 +1,15 @@
+{
+  "name": "@tinkoff/measure-express-requests",
+  "sourceRoot": "packages/libs/measure-express-requests/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/libs/measure-express-requests/lib",
+        "packages/libs/measure-express-requests/__migrations__",
+        "packages/libs/measure-express-requests/package.json"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

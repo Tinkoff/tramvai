@@ -1,0 +1,6 @@
+{
+  "name": "@tramvai/storybook-addon",
+  "sourceRoot": "packages/libs/storybook-addon/src",
+  "projectType": "library",
+  "targets": {}
+}

@@ -1,0 +1,15 @@
+{
+  "name": "@tinkoff/module-loader-client",
+  "sourceRoot": "packages/libs/module-loader-client/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/libs/module-loader-client/lib",
+        "packages/libs/module-loader-client/__migrations__",
+        "packages/libs/module-loader-client/package.json"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

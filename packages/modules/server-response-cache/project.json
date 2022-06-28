@@ -1,0 +1,15 @@
+{
+  "name": "@tramvai/module-server-response-cache",
+  "sourceRoot": "packages/modules/server-response-cache/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/modules/server-response-cache/lib",
+        "packages/modules/server-response-cache/__migrations__",
+        "packages/modules/server-response-cache/package.json"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

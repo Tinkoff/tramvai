@@ -1,0 +1,6 @@
+{
+  "name": "@tramvai/tools-public-packages",
+  "sourceRoot": "tools/public-packages",
+  "projectType": "library",
+  "targets": {}
+}

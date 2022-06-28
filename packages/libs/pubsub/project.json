@@ -1,0 +1,15 @@
+{
+  "name": "@tinkoff/pubsub",
+  "sourceRoot": "packages/libs/pubsub/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/libs/pubsub/lib",
+        "packages/libs/pubsub/__migrations__",
+        "packages/libs/pubsub/package.json"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

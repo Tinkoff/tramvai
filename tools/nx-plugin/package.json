@@ -1,0 +1,11 @@
+{
+  "name": "@tramvai/nx-plugin",
+  "version": "0.0.1",
+  "main": "src/index.js",
+  "private": true,
+  "generators": "./generators.json",
+  "executors": "./executors.json",
+  "peerDependencies": {
+    "@nrwl/devkit": "*"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "@tramvai/tools-generate-schema",
+  "sourceRoot": "tools/generate-schema",
+  "projectType": "library",
+  "targets": {}
+}

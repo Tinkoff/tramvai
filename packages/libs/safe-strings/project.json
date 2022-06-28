@@ -1,0 +1,15 @@
+{
+  "name": "@tramvai/safe-strings",
+  "sourceRoot": "packages/libs/safe-strings/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/libs/safe-strings/lib",
+        "packages/libs/safe-strings/__migrations__",
+        "packages/libs/safe-strings/package.json"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

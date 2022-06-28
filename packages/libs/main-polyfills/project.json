@@ -1,0 +1,15 @@
+{
+  "name": "@tinkoff/pack-polyfills",
+  "sourceRoot": "packages/libs/main-polyfills/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/libs/main-polyfills/lib",
+        "packages/libs/main-polyfills/__migrations__",
+        "packages/libs/main-polyfills/package.json"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

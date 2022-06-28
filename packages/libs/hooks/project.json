@@ -1,0 +1,15 @@
+{
+  "name": "@tinkoff/hook-runner",
+  "sourceRoot": "packages/libs/hooks/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/libs/hooks/lib",
+        "packages/libs/hooks/__migrations__",
+        "packages/libs/hooks/package.json"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

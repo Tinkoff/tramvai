@@ -1,0 +1,6 @@
+{
+  "name": "page-render-mode",
+  "sourceRoot": "examples/page-render-mode/src",
+  "projectType": "library",
+  "targets": {}
+}

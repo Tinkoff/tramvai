@@ -1,0 +1,6 @@
+{
+  "name": "@tinkoff/eslint-plugin-tramvai",
+  "sourceRoot": "packages/libs/eslint-plugin-tramvai/src",
+  "projectType": "library",
+  "targets": {}
+}

@@ -1,0 +1,6 @@
+{
+  "name": "fs-routing",
+  "sourceRoot": "examples/fs-routing/src",
+  "projectType": "library",
+  "targets": {}
+}

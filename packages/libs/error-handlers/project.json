@@ -1,0 +1,15 @@
+{
+  "name": "@tinkoff/error-handlers",
+  "sourceRoot": "packages/libs/error-handlers/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/libs/error-handlers/lib",
+        "packages/libs/error-handlers/__migrations__",
+        "packages/libs/error-handlers/package.json"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

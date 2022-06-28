@@ -1,0 +1,15 @@
+{
+  "name": "@tinkoff/measure-fastify-requests",
+  "sourceRoot": "packages/libs/measure-fastify-requests/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/libs/measure-fastify-requests/lib",
+        "packages/libs/measure-fastify-requests/__migrations__",
+        "packages/libs/measure-fastify-requests/package.json"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

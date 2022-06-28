@@ -1,0 +1,6 @@
+{
+  "name": "@tramvai/tools-check-versions",
+  "sourceRoot": "tools/check-versions/src",
+  "projectType": "library",
+  "targets": {}
+}

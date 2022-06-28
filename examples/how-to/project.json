@@ -1,0 +1,6 @@
+{
+  "name": "@tinkoff-test-app/tramvai-how-to",
+  "sourceRoot": "examples/how-to",
+  "projectType": "library",
+  "targets": {}
+}

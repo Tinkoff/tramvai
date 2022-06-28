@@ -1,0 +1,6 @@
+{
+  "name": "@tinkoff/browserslist-config",
+  "sourceRoot": "packages/libs/browserslist-config",
+  "projectType": "library",
+  "targets": {}
+}

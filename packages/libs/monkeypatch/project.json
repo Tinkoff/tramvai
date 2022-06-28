@@ -1,0 +1,15 @@
+{
+  "name": "@tinkoff/monkeypatch",
+  "sourceRoot": "packages/libs/monkeypatch/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/libs/monkeypatch/lib",
+        "packages/libs/monkeypatch/__migrations__",
+        "packages/libs/monkeypatch/package.json"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

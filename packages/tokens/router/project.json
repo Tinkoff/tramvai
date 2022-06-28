@@ -1,0 +1,15 @@
+{
+  "name": "@tramvai/tokens-router",
+  "sourceRoot": "packages/tokens/router/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/tokens/router/lib",
+        "packages/tokens/router/__migrations__",
+        "packages/tokens/router/package.json"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

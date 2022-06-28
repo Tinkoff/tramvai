@@ -1,0 +1,15 @@
+{
+  "name": "@tramvai/tokens-metrics",
+  "sourceRoot": "packages/tokens/metrics/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/tokens/metrics/lib",
+        "packages/tokens/metrics/__migrations__",
+        "packages/tokens/metrics/package.json"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}
