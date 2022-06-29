@@ -7,6 +7,7 @@ const args = (yargs as Argv<Options>)
   .option('sourceDir', {
     type: 'string',
     description: 'root source directory',
+    default: 'src',
   })
   .option('watchMode', {
     alias: 'w',
@@ -16,7 +17,9 @@ const args = (yargs as Argv<Options>)
   .option('copyStaticAssets', {
     alias: 'cp',
     type: 'boolean',
-    description: 'copy static assets, e.g. css, fonts and images preserving file paths',
+    description:
+      'copy static assets, e.g. css, fonts and images preserving file paths (use --no-copy-static-assets to disable)',
+    default: true,
   })
   .option('forPublish', {
     alias: 'p',
@@ -29,7 +32,8 @@ const args = (yargs as Argv<Options>)
     description:
       'build package source code to many output file according to the module tree instead of building to single output file (many files generally are more tree-shakable)',
   })
-  .help('-h').argv;
+  .alias('h', 'help')
+  .help().argv;
 
 export const start = () => {
   return new TramvaiBuild(args)

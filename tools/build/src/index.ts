@@ -14,8 +14,8 @@ import { clearOutput } from './clearOutput';
 import { copyStaticAssets } from './copyStaticAssets';
 import { changeTypings } from './changeTypings';
 import type { PackageJSON } from './packageJson';
-import { defaultSourceDir } from './fileNames.ts';
 import { logger } from './logger';
+import { defaultSourceDir } from './fileNames.ts';
 
 export class TramvaiBuild {
   private cwd: string;
@@ -25,15 +25,14 @@ export class TramvaiBuild {
   private rollupCache: Record<string, RollupBuild> = {};
 
   constructor(
-    options: Options = {},
+    options: Partial<Options>,
     // список конфигураций rollup, на основе которых будут выполнены сборки
     builds: Build[] = [createMigrationsBuild(), nodeCjsBuild, nodeEsBuild, browserBuild, testsBuild]
   ) {
     this.cwd = process.cwd();
-    this.options = options;
+    this.options = this.normalizeOptions(options);
     this.builds = builds;
 
-    this.applyDefaultOptions();
     this.readPackageJson();
   }
 
@@ -83,13 +82,12 @@ export class TramvaiBuild {
     }
   }
 
-  private applyDefaultOptions() {
-    if (typeof this.options.sourceDir !== 'string') {
-      this.options.sourceDir = defaultSourceDir;
-    }
-    if (!('copyStaticAssets' in this.options)) {
-      this.options.copyStaticAssets = true;
-    }
+  private normalizeOptions(options: Partial<Options>): Options {
+    return {
+      sourceDir: defaultSourceDir,
+      copyStaticAssets: true,
+      ...options,
+    };
   }
 
   private writePackageJson() {

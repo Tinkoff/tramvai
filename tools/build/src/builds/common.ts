@@ -148,13 +148,13 @@ export const createOutputOptions = (
     format,
     exportsField,
     postfix,
-    postfixForEntry = () => true,
+    postfixForEntry = true,
   }: {
     file: string;
     format: ModuleFormat;
     exportsField: 'auto' | 'named';
     postfix: Postfix;
-    postfixForEntry?: (chunkInfo: PreRenderedChunk) => boolean;
+    postfixForEntry?: boolean;
   }
 ): OutputOptions => {
   const preserveModules = !!params.options.preserveModules;
@@ -163,7 +163,9 @@ export const createOutputOptions = (
 
   const entry = entryFileName.replace(postfix, '');
   const entryFileNames = (chunkInfo: PreRenderedChunk) => {
-    return `[name]${postfixForEntry(chunkInfo) ? postfix : '.js'}`;
+    return `[name]${
+      !chunkInfo.isEntry || (chunkInfo.isEntry && postfixForEntry) ? postfix : '.js'
+    }`;
   };
   const chunkFileNames = `${entry}_[name]${postfix}`;
 
@@ -175,7 +177,7 @@ export const createOutputOptions = (
     exports: exportsField,
     freeze: false,
     preserveModules,
-    preserveModulesRoot: preserveModules ? 'src' : undefined,
+    preserveModulesRoot: preserveModules ? params.options.sourceDir : undefined,
     manualChunks: preserveModules
       ? undefined
       : (id) => {

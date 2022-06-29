@@ -514,13 +514,13 @@ export { foo };
       expect(files).toContain('index.browser.js');
       expect(files).toContain('external.js');
       expect(files).toContain('external.es.js');
-      expect(files).toContain('external.browser.js');
+      expect(files).toContain('external.browser.browser.js');
       expect(files).toContain('foo.js');
       expect(files).toContain('foo.es.js');
       expect(files).toContain('foo.browser.js');
       expect(files).toContain('nested/foo.server.js');
       expect(files).toContain('nested/foo.server.es.js');
-      expect(files).toContain('nested/foo.browser.js');
+      expect(files).toContain('nested/foo.browser.browser.js');
 
       expect(packageJson.browser).toMatchObject({
         './lib/external.js': './lib/external.browser.js',
@@ -575,8 +575,8 @@ export { external };
 "
 `);
       expect(await readOutFile('index.browser.js')).toMatchInlineSnapshot(`
-"import { external } from './external.browser.js';
-import { testNested } from './nested/foo.browser.js';
+"import { external } from './external.browser.browser.js';
+import { testNested } from './nested/foo.browser.browser.js';
 
 console.log(testNested);
 const foo = \`bar \${external}\`;
@@ -584,7 +584,7 @@ const foo = \`bar \${external}\`;
 export { foo };
 "
 `);
-      expect(await readOutFile('external.browser.js')).toMatchInlineSnapshot(`
+      expect(await readOutFile('external.browser.browser.js')).toMatchInlineSnapshot(`
 "import { test } from './foo.browser.js';
 
 console.log(test);
@@ -633,7 +633,7 @@ exports.testNested = testNested;
 export { testNested };
 "
 `);
-      expect(await readOutFile('nested/foo.browser.js')).toMatchInlineSnapshot(`
+      expect(await readOutFile('nested/foo.browser.browser.js')).toMatchInlineSnapshot(`
 "const testNested = 'browser test nested';
 
 export { testNested };

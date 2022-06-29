@@ -1,7 +1,7 @@
 export type Options = {
-  sourceDir?: string;
+  sourceDir: string;
+  copyStaticAssets: boolean;
   watchMode?: boolean;
-  copyStaticAssets?: boolean;
   forPublish?: boolean;
   preserveModules?: boolean;
 };
