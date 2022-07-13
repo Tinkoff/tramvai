@@ -23,6 +23,7 @@ export const ThreadWorkerBridge: WorkerBridgeFactory<Worker> = (di) => {
           configManager.trace ? TRACE_ARGV : []
         ),
         env: {
+          ...process.env,
           ...env,
           NODE_ENV: 'development',
           // port=0 позволяет запустить сервер на случайном доступном порту

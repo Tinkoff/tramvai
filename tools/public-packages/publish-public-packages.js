@@ -15,9 +15,12 @@ async function publishPublicPackages() {
     let channel;
 
     try {
-      channel = await exec(`npm publish --access public --registry https://registry.npmjs.org/`, {
-        cwd: pkgPath,
-      });
+      channel = await exec(
+        `npm publish --access public --tag prerelease --registry https://registry.npmjs.org/`,
+        {
+          cwd: pkgPath,
+        }
+      );
     } catch (e) {
       console.log('npm publish error', e);
     }

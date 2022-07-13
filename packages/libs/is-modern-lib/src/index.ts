@@ -43,6 +43,7 @@ export const modernLibs = [
   'prom-client',
   'parse5',
   'async-mutex',
+  'xlsx',
 ];
 
 const regexStringFactory = ({ except }: { except?: boolean } = {}) =>
