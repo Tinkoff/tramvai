@@ -195,10 +195,7 @@ export const DEFAULT_POLYFILL_CONDITION =
     provide({
       provide: WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN,
       multi: true,
-      useFactory: ({
-        RootErrorBoundary,
-        logger,
-      }): typeof WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN[number] => {
+      useFactory: ({ RootErrorBoundary, logger }) => {
         const log = logger('module-render:error-handler');
 
         return (error: any, request, reply) => {

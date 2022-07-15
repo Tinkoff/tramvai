@@ -213,7 +213,7 @@ export interface ServerModuleStaticsOptions {
   path: string;
 }
 
-export type APP_INIT_HANDLER = Array<(app?: Application) => Promise<never> | never>;
+export type APP_INIT_HANDLER = (app?: Application) => Promise<void> | void;
 
 export type ProxyConfig =
   | {

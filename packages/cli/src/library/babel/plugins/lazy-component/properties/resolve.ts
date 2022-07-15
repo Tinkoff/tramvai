@@ -1,4 +1,4 @@
-import { PropertyFactory } from './types';
+import type { PropertyFactory } from './types';
 
 // позволяет получить в рантайме id модуля, который нужно загрузить. В деве это обычно путь к файлу и в @loadable
 // это свойство используется преимущественно для логов

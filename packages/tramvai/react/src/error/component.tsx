@@ -1,10 +1,11 @@
+import type { ExtractDependencyType } from '@tinkoff/dippy';
 import React, { Component } from 'react';
 import { withDi } from '../di/hoc';
 import { FallbackError } from './fallback';
 import { ERROR_BOUNDARY_TOKEN, ERROR_BOUNDARY_FALLBACK_COMPONENT_TOKEN } from './tokens';
 
 interface Props {
-  errorHandlers?: typeof ERROR_BOUNDARY_TOKEN | null;
+  errorHandlers?: ExtractDependencyType<typeof ERROR_BOUNDARY_TOKEN> | null;
   fallbackComponent?: React.ReactElement | null;
   fallbackComponentFromDi?: React.ReactElement | null;
   children?: React.ReactNode;

@@ -1,3 +1,4 @@
+import type { ExtractTokenType } from '@tinkoff/dippy';
 import type {
   ChildAppDiManager,
   ChildAppStateManager,
@@ -14,7 +15,7 @@ export const executeRootStateSubscriptions = ({
 }: {
   store: typeof STORE_TOKEN;
   diManager: ChildAppDiManager;
-}): typeof EXTEND_RENDER[number] => {
+}): ExtractTokenType<typeof EXTEND_RENDER> => {
   return (render) => {
     const state = store.getState();
 

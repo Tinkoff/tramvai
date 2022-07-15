@@ -6,6 +6,7 @@ import type {
   USE_REACT_STRICT_MODE,
 } from '@tramvai/tokens-render';
 import type { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
+import type { ExtractDependencyType } from '@tinkoff/dippy';
 import { renderReact } from '../react';
 import { renderer } from './renderer';
 
@@ -19,14 +20,14 @@ export function rendering({
   useStrictMode,
   rendererCallback,
 }: {
-  pageService: typeof PAGE_SERVICE_TOKEN;
+  pageService: ExtractDependencyType<typeof PAGE_SERVICE_TOKEN>;
   logger: any;
   consumerContext: any;
-  extendRender?: typeof EXTEND_RENDER;
+  extendRender?: ExtractDependencyType<typeof EXTEND_RENDER>;
   customRender?: any;
   di: any;
-  useStrictMode: typeof USE_REACT_STRICT_MODE;
-  rendererCallback?: typeof RENDERER_CALLBACK;
+  useStrictMode: ExtractDependencyType<typeof USE_REACT_STRICT_MODE>;
+  rendererCallback?: ExtractDependencyType<typeof RENDERER_CALLBACK>;
 }) {
   const log = logger('module-render');
 

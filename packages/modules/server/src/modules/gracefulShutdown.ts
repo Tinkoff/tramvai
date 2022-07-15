@@ -24,14 +24,7 @@ const noopCheck = () => {};
     provide({
       provide: WEB_FASTIFY_APP_BEFORE_INIT_TOKEN,
       multi: true,
-      useFactory: ({
-        app,
-        server,
-        logger,
-        commandLineRunner,
-        livenessProbe,
-        readinessProbe,
-      }): typeof WEB_FASTIFY_APP_BEFORE_INIT_TOKEN[number] => {
+      useFactory: ({ app, server, logger, commandLineRunner, livenessProbe, readinessProbe }) => {
         const log = logger('server');
 
         return function serverListen() {

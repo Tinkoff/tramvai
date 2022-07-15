@@ -23,9 +23,12 @@ export const ACTION_PAGE_RUNNER_TOKEN = createToken<ActionPageRunner>('actionPag
  * @description
  * Conditions that specify should action be executing or not
  */
-export const ACTION_CONDITIONALS = createToken<ActionCondition[]>('actionConditionals', {
-  multi: true,
-});
+export const ACTION_CONDITIONALS = createToken<ActionCondition | ActionCondition[]>(
+  'actionConditionals',
+  {
+    multi: true,
+  }
+);
 
 export interface ActionsRegistry {
   add(type: string, actions: Action | Action[]): void;
@@ -37,7 +40,7 @@ export interface ActionsRegistry {
 }
 
 export interface ActionExecution {
-  execution: Map<string, any[]>;
+  execution: Map<string, any>;
 
   run(action: Action, payload: any): Promise<any>;
 }

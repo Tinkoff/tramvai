@@ -1,3 +1,4 @@
+import type { ExtractTokenType } from '@tinkoff/dippy';
 import { Module, provide } from '@tramvai/core';
 import { REQUEST, STORE_TOKEN } from '@tramvai/tokens-common';
 import { RequestManagerStore } from './RequestManagerStore';
@@ -18,7 +19,7 @@ import { sharedProviders } from './sharedProviders';
             'user-agent': navigator.userAgent,
             cookie: document.cookie,
           },
-        };
+        } as ExtractTokenType<typeof REQUEST>;
       },
       deps: {
         store: STORE_TOKEN,

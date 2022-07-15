@@ -7,16 +7,21 @@ import type {
   CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN,
   ResolutionConfig,
 } from '@tramvai/tokens-child-app';
+import type { ExtractDependencyType, ExtractTokenType } from '@tinkoff/dippy';
 
-type Interface = typeof CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN;
+type Interface = ExtractTokenType<typeof CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN>;
 
 export class ChildAppResolutionConfigManager implements Interface {
-  private rawConfigs: typeof CHILD_APP_RESOLUTION_CONFIGS_TOKEN;
+  private rawConfigs: ExtractDependencyType<typeof CHILD_APP_RESOLUTION_CONFIGS_TOKEN>;
   private mapping: Map<string, ChildAppResolutionConfig>;
 
   private hasInitialized = false;
   private initPromise: Promise<void>;
-  constructor({ configs }: { configs: typeof CHILD_APP_RESOLUTION_CONFIGS_TOKEN | null }) {
+  constructor({
+    configs,
+  }: {
+    configs: ExtractDependencyType<typeof CHILD_APP_RESOLUTION_CONFIGS_TOKEN> | null;
+  }) {
     this.rawConfigs = configs ?? [];
     this.mapping = new Map();
   }

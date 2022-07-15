@@ -7,7 +7,7 @@ export interface MockerOptions {
 
 export const MOCKER = createToken<Mocker>('MOCKER');
 
-export const MOCKER_REPOSITORY = createToken<MockRepository[]>('MOCKER_REPOSITORY', {
+export const MOCKER_REPOSITORY = createToken<MockRepository>('MOCKER_REPOSITORY', {
   multi: true,
 });
 

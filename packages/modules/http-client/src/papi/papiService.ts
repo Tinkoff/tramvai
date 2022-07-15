@@ -45,11 +45,11 @@ export class PapiService extends BaseHttpClient {
 
     childDI.register({
       provide: REQUEST,
-      useValue: req,
+      useValue: req as typeof REQUEST,
     });
     childDI.register({
       provide: RESPONSE,
-      useValue: res,
+      useValue: res as typeof RESPONSE,
     });
 
     const payload = await getPapiParameters(papiRoute).handler({

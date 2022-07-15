@@ -7,6 +7,7 @@ import type {
   WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN,
   WEB_FASTIFY_APP_PROCESS_ERROR_TOKEN,
 } from '@tramvai/tokens-server-private';
+import type { ExtractDependencyType } from '@tinkoff/dippy';
 
 export const errorHandler = (
   app: FastifyInstance,
@@ -17,13 +18,15 @@ export const errorHandler = (
     afterError,
   }: {
     log: ReturnType<typeof LOGGER_TOKEN>;
-    beforeError: typeof WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN;
-    processError: typeof WEB_FASTIFY_APP_PROCESS_ERROR_TOKEN;
-    afterError: typeof WEB_FASTIFY_APP_AFTER_ERROR_TOKEN;
+    beforeError: ExtractDependencyType<typeof WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN>;
+    processError: ExtractDependencyType<typeof WEB_FASTIFY_APP_PROCESS_ERROR_TOKEN>;
+    afterError: ExtractDependencyType<typeof WEB_FASTIFY_APP_AFTER_ERROR_TOKEN>;
   }
 ) => {
   app.setErrorHandler(async (error, request, reply) => {
-    const runHandlers = async (handlers: typeof WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN) => {
+    const runHandlers = async (
+      handlers: ExtractDependencyType<typeof WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN>
+    ) => {
       if (handlers) {
         for (const handler of handlers) {
           const result = await handler(error, request, reply);

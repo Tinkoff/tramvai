@@ -4,7 +4,7 @@ import type { UniversalErrorBoundaryFallbackProps } from './UniversalErrorBounda
 
 type ErrorBoundaryHandler = (error: Error, errorInfo: React.ErrorInfo) => void;
 
-export const ERROR_BOUNDARY_TOKEN = createToken<ErrorBoundaryHandler[]>(
+export const ERROR_BOUNDARY_TOKEN = createToken<ErrorBoundaryHandler>(
   'reactErrorBoundaryHandlers',
   {
     multi: true,

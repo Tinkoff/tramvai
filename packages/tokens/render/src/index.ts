@@ -42,7 +42,7 @@ export const HTML_ATTRS = createToken<HtmlAttrs>('HTML_ATTRS', { multi: true });
  * Add node-style callback on render event in browser.
  * Passes error instance as first argument if there was an error
  */
-export const RENDERER_CALLBACK = createToken<((e?: Error) => void)[]>('RENDERER_CALLBACK', {
+export const RENDERER_CALLBACK = createToken<(e?: Error) => void>('RENDERER_CALLBACK', {
   multi: true,
 });
 
@@ -87,12 +87,9 @@ export const USE_REACT_STRICT_MODE = createToken<boolean>('useReactStrictMode');
  * A wrapper for app render.
  * Through that token is possible to specify for example React.Context.Provider for the app
  */
-export const EXTEND_RENDER = createToken<Array<(current: ReactElement) => ReactElement>>(
-  'EXTEND_RENDER',
-  {
-    multi: true,
-  }
-);
+export const EXTEND_RENDER = createToken<(current: ReactElement) => ReactElement>('EXTEND_RENDER', {
+  multi: true,
+});
 
 /**
  * @description
@@ -116,7 +113,9 @@ export const DEFAULT_FOOTER_COMPONENT = createToken('defaultFooterComponent');
  * @description
  * Token for passing parameters for page layout
  */
-export const LAYOUT_OPTIONS = createToken<LayoutOptions[]>('layoutOptions', { multi: true });
+export const LAYOUT_OPTIONS = createToken<LayoutOptions | LayoutOptions[]>('layoutOptions', {
+  multi: true,
+});
 
 type ReactComponent = ComponentType<any>;
 

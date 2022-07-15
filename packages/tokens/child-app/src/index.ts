@@ -20,7 +20,7 @@ import type {
 
 export * from './types';
 
-const multiOptions = { multi: true };
+const multiOptions = { multi: true } as const;
 
 /**
  * @public
@@ -47,11 +47,9 @@ export const commandLineListTokens = {
  * @description Contains child app configs that was used to figure out how to load child apps
  */
 export const CHILD_APP_RESOLUTION_CONFIGS_TOKEN = createToken<
-  Array<
-    | ChildAppResolutionConfig
-    | ChildAppResolutionConfig[]
-    | (() => ChildAppResolutionConfig | ChildAppResolutionConfig[])
-  >
+  | ChildAppResolutionConfig
+  | ChildAppResolutionConfig[]
+  | (() => ChildAppResolutionConfig | ChildAppResolutionConfig[])
 >('child-app resolve configs', multiOptions);
 
 /**
@@ -99,7 +97,7 @@ export const CHILD_APP_INTERNAL_CONFIG_TOKEN = createToken<ChildAppFinalConfig>(
  * @public
  * @description Actions of child app
  */
-export const CHILD_APP_INTERNAL_ACTION_TOKEN = createToken<Action>(
+export const CHILD_APP_INTERNAL_ACTION_TOKEN = createToken<Action | Action[]>(
   'child-app action',
   multiOptions
 );

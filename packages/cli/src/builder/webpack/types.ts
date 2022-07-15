@@ -19,7 +19,7 @@ export abstract class AnalyzePlugin {
   };
 
   // eslint-disable-next-line sort-class-members/sort-class-members
-  afterBuild = (): PromiseLike<any> => {
+  afterBuild = (): Promise<any> => {
     return Promise.resolve();
   };
 

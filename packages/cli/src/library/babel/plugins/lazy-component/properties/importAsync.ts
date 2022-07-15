@@ -1,4 +1,4 @@
-import { PropertyFactory } from './types';
+import type { PropertyFactory } from './types';
 
 // просто оставляет импорт как есть + добавляет автоматически указание имени чанка для вебпака
 export const importAsyncMethod: PropertyFactory = ({ types: t }) => {

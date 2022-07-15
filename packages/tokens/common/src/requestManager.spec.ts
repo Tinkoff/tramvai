@@ -7,7 +7,9 @@ describe('requestManager', () => {
       path.join(__dirname, '..', 'lib', 'requestManager.d.ts'),
       'utf-8'
     );
-    expect(compilationResult).toContain('export declare const REQUEST: RequestExt');
+    expect(compilationResult).toContain(
+      'export declare const REQUEST: import("@tinkoff/dippy/lib/createToken/createToken").BaseTokenInterface<RequestExt>'
+    );
     expect(compilationResult).toContain("import type { Request } from 'express'");
   });
 });

@@ -9,6 +9,11 @@ import type {
 import { Scope, Errors } from './constant';
 import { createError } from './createError';
 import { DI_TOKEN } from './tokens';
+import type {
+  ExtractDependencyType,
+  OptionalTokenDependency,
+  TokenInterface,
+} from './createToken/createToken';
 
 /**
  * Маркер, который указывает, что значение еще не создано. Для проверки по ссылке.
@@ -47,7 +52,7 @@ function checkIfProviderMatchToken(provider: Provider) {
 
   const tokenOptions = provider.provide.options;
 
-  if (tokenOptions && tokenOptions.multi && !provider.multi) {
+  if (!provider.provide.isModernToken && tokenOptions && tokenOptions.multi && !provider.multi) {
     throw createError(`Token ${provider.provide.toString()} require multi providers`, {
       type: Errors.REQUIRE_MULTI,
       stack: (provider as any).__stack,
@@ -168,6 +173,8 @@ export class Container {
     this.register({ provide: DI_TOKEN, useValue: this });
   }
 
+  get<T extends TokenInterface<unknown>>(token: T): ExtractDependencyType<T>;
+  get<T extends OptionalTokenDependency<unknown>>(obj: T): ExtractDependencyType<T['token']> | null;
   get<T extends any>(obj: { token: T; optional: true; multi?: false }): T | null;
   get<T extends any>(obj: { token: T; optional?: false; multi?: false }): T;
   get<T extends any>(obj: { token: T; optional: true; multi: true }): T[] | null;
@@ -240,7 +247,7 @@ export class Container {
     return this.recordValues.get(record);
   }
 
-  register<Deps>(provider: Provider<Deps>) {
+  register<Deps, P = any>(provider: Provider<Deps, P>) {
     if (process.env.NODE_ENV !== 'production') {
       checkValidateInterfaceProvider(provider);
     }
@@ -257,7 +264,7 @@ export class Container {
     const record = providerToRecord(provider);
     const value = providerToValue(provider);
 
-    if (provider.multi) {
+    if ((provider.provide.isModernToken && provider.provide.options?.multi) || provider.multi) {
       // Сначала идем за multiRecord, так как он может быть уже создан
       let multiRecord = this.getRecord(token) as RecordProvide<unknown>;
 

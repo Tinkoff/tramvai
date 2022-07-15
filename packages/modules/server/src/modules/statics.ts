@@ -10,7 +10,7 @@ const ONE_YEAR = 365 * 24 * 60 * 60;
   providers: [
     provide({
       provide: WEB_FASTIFY_APP_BEFORE_INIT_TOKEN,
-      useFactory: ({ options }): typeof WEB_FASTIFY_APP_BEFORE_INIT_TOKEN[number] => {
+      useFactory: ({ options }) => {
         const path = options?.path || 'public';
 
         return (instance) => {

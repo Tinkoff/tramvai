@@ -1,7 +1,14 @@
 import { useContext, useMemo } from 'react';
 import mapObj from '@tinkoff/utils/object/map';
-
-import type { ProviderDeps, ProviderDep, ProvideDepsIterator, OptionsType } from '@tinkoff/dippy';
+import type {
+  ProviderDeps,
+  ProviderDep,
+  ProvideDepsIterator,
+  OptionalTokenDependency,
+  TokenInterface,
+  ExtractDependencyType,
+  OptionsType,
+} from '@tinkoff/dippy';
 import { DIContext } from './context';
 
 export const useDiContainer = () => {
@@ -29,6 +36,11 @@ const isTokenObject = <T>(token: any): token is { token: T } => {
   );
 };
 
+function useDi<Token extends TokenInterface<unknown>>(token: Token): ExtractDependencyType<Token>;
+function useDi<Dep extends OptionalTokenDependency<unknown>>(
+  dep: Dep
+): ExtractDependencyType<Dep['token']> | null;
+function useDi<T extends ProviderDeps>(deps: T): ProvideDepsIterator<T>;
 function useDi<T extends ProviderDep>(
   dep: T
 ): T extends string
@@ -41,8 +53,7 @@ function useDi<T extends ProviderDep>(
   ? OptionsType<OptionsToken, OptionsMulti, OptionsOptional>
   : T;
 function useDi<T extends ProviderDep>(dep: T): T extends string ? any : T;
-function useDi<T extends ProviderDeps>(deps: T): ProvideDepsIterator<T>;
-function useDi(deps: ProviderDep | ProviderDeps) {
+function useDi(deps: ProviderDep | ProviderDeps): any {
   const di = useDiContainer();
 
   return useMemo(() => {

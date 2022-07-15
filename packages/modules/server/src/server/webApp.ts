@@ -25,6 +25,7 @@ import type {
   WEB_FASTIFY_APP_AFTER_ERROR_TOKEN,
   WEB_FASTIFY_APP_PROCESS_ERROR_TOKEN,
 } from '@tramvai/tokens-server-private';
+import type { ExtractDependencyType } from '@tinkoff/dippy';
 import { fastifyExpressCompatibility } from './express-compatibility';
 import { errorHandler } from './error';
 
@@ -66,28 +67,28 @@ export const webAppInitCommand = ({
   processError,
   afterError,
 }: {
-  app: typeof WEB_FASTIFY_APP_TOKEN;
-  expressApp: typeof WEB_APP_TOKEN;
-  logger: typeof LOGGER_TOKEN;
-  commandLineRunner: typeof COMMAND_LINE_RUNNER_TOKEN;
-  beforeInit: typeof WEB_FASTIFY_APP_BEFORE_INIT_TOKEN;
-  limiterRequest: typeof WEB_FASTIFY_APP_LIMITER_TOKEN;
-  init: typeof WEB_FASTIFY_APP_INIT_TOKEN;
-  afterInit: typeof WEB_FASTIFY_APP_AFTER_INIT_TOKEN;
-  expressBeforeInit: typeof WEB_APP_BEFORE_INIT_TOKEN;
-  expressInit: typeof WEB_APP_INIT_TOKEN;
-  expressAfterInit: typeof WEB_APP_AFTER_INIT_TOKEN;
-  expressLimiterRequest: typeof WEB_APP_LIMITER_TOKEN;
-  beforeError: typeof WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN;
-  processError: typeof WEB_FASTIFY_APP_PROCESS_ERROR_TOKEN;
-  afterError: typeof WEB_FASTIFY_APP_AFTER_ERROR_TOKEN;
+  app: ExtractDependencyType<typeof WEB_FASTIFY_APP_TOKEN>;
+  expressApp: ExtractDependencyType<typeof WEB_APP_TOKEN>;
+  logger: ExtractDependencyType<typeof LOGGER_TOKEN>;
+  commandLineRunner: ExtractDependencyType<typeof COMMAND_LINE_RUNNER_TOKEN>;
+  beforeInit: ExtractDependencyType<typeof WEB_FASTIFY_APP_BEFORE_INIT_TOKEN>;
+  limiterRequest: ExtractDependencyType<typeof WEB_FASTIFY_APP_LIMITER_TOKEN>;
+  init: ExtractDependencyType<typeof WEB_FASTIFY_APP_INIT_TOKEN>;
+  afterInit: ExtractDependencyType<typeof WEB_FASTIFY_APP_AFTER_INIT_TOKEN>;
+  expressBeforeInit: ExtractDependencyType<typeof WEB_APP_BEFORE_INIT_TOKEN>;
+  expressInit: ExtractDependencyType<typeof WEB_APP_INIT_TOKEN>;
+  expressAfterInit: ExtractDependencyType<typeof WEB_APP_AFTER_INIT_TOKEN>;
+  expressLimiterRequest: ExtractDependencyType<typeof WEB_APP_LIMITER_TOKEN>;
+  beforeError: ExtractDependencyType<typeof WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN>;
+  processError: ExtractDependencyType<typeof WEB_FASTIFY_APP_PROCESS_ERROR_TOKEN>;
+  afterError: ExtractDependencyType<typeof WEB_FASTIFY_APP_AFTER_ERROR_TOKEN>;
 }) => {
   const log = logger('server:webapp');
 
   const runHandlers = (
-    instance: typeof WEB_FASTIFY_APP_TOKEN,
-    handlers: typeof WEB_FASTIFY_APP_INIT_TOKEN,
-    expressHandlers: typeof WEB_APP_INIT_TOKEN
+    instance: ExtractDependencyType<typeof WEB_FASTIFY_APP_TOKEN>,
+    handlers: ExtractDependencyType<typeof WEB_FASTIFY_APP_INIT_TOKEN>,
+    expressHandlers: ExtractDependencyType<typeof WEB_APP_INIT_TOKEN>
   ) => {
     return Promise.all([
       handlers && Promise.all(handlers.map((handler) => handler(instance))),

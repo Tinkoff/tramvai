@@ -84,7 +84,7 @@ export * from './tokens';
           provide({
             provide: MOCKER_CONFIGURATION,
             scope: Scope.SINGLETON,
-            useFactory: ({ repositories }): typeof MOCKER_CONFIGURATION => {
+            useFactory: ({ repositories }) => {
               return async () => {
                 const mocks = await Promise.all(repositories.map((repo) => repo.getAll()));
 

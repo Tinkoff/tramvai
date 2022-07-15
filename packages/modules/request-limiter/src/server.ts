@@ -29,10 +29,7 @@ export * from './tokens';
     provide({
       provide: WEB_FASTIFY_APP_LIMITER_TOKEN,
       multi: true,
-      useFactory: ({
-        requestsLimiter,
-        featureEnable,
-      }): typeof WEB_FASTIFY_APP_LIMITER_TOKEN[number] => {
+      useFactory: ({ requestsLimiter, featureEnable }) => {
         return async (app) => {
           if (featureEnable !== true) {
             return;

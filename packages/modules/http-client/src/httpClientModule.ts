@@ -73,7 +73,6 @@ export const HttpClientModule = /* @__PURE__ */ Module({
         { key: 'HTTP_CLIENT_CACHE_DISABLED', optional: true, dehydrate: false },
         { key: 'HTTP_CLIENT_CIRCUIT_BREAKER_DISABLED', optional: true, dehydrate: false },
       ],
-      multi: true,
     }),
     /**
      * хранилище для экземпляров @tinkoff/request
@@ -112,7 +111,6 @@ export const HttpClientModule = /* @__PURE__ */ Module({
     }),
     provide({
       provide: API_CLIENT_PASS_HEADERS,
-      multi: true,
       useValue: ['x-request-id'],
     }),
   ],

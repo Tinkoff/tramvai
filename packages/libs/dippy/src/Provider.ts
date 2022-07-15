@@ -1,13 +1,16 @@
-/*
- * @TODO Типизировать проверку соотношения типов между provide и useValue/useClass/useFactory
- */
+import type {
+  TokenInterface,
+  ExtractTokenType,
+  OptionalTokenDependency,
+  ExtractDependencyType,
+} from './createToken/createToken';
 
-type Provide = string | any;
+type Provide = TokenInterface<unknown> | string | any;
 
 export type ScopeVariants = 'request' | 'singleton';
 
 type ProviderOptions = { token: Provide; optional?: boolean; multi?: boolean };
-export type ProviderDep = Provide | ProviderOptions;
+export type ProviderDep = Provide | OptionalTokenDependency<unknown> | ProviderOptions;
 export type ProviderDeps = Record<string, ProviderDep>;
 
 // если есть multi параметр, то это массив данных
@@ -22,22 +25,40 @@ export type OptionsType<OptionsToken, OptionsMulti, OptionsOptional> = OptionsTo
 
 // prettier-ignore
 export type ProvideDepsIterator<T> = {
-  [P in keyof T]: T[P] extends string
-    ? any // строковые токены = any
-    : T[P] extends { token: infer OptionsToken; optional?: infer OptionsOptional, multi?: infer OptionsMulti  }
-      ? OptionsType<OptionsToken, OptionsMulti, OptionsOptional>
-    : T[P]; // Обычный токен
+  [P in keyof T]: T[P] extends OptionalTokenDependency<unknown>
+  ? (ExtractDependencyType<T[P]['token']> | null)
+  : T[P] extends TokenInterface<unknown>
+    ? ExtractDependencyType<T[P]>
+    : T[P] extends string
+      ? any // строковые токены = any
+      : T[P] extends { token: infer OptionsToken; optional?: infer OptionsOptional, multi?: infer OptionsMulti  }
+        ? OptionsType<OptionsToken, OptionsMulti, OptionsOptional>
+        : T[P]; // Обычный токен
 };
 
-type ClassCreator<Deps, P extends Provide = any> = new (deps: ProvideDepsIterator<Deps>) => P;
+// prettier-ignore
+type ClassCreator<Deps, P extends Provide = any> = new (
+  deps: ProvideDepsIterator<Deps>
+) => P extends TokenInterface<unknown>
+  ? ExtractTokenType<P>
+  : P extends string
+    ? any
+    : P;
 
-type FactoryCreator<Deps, P extends Provide = any> = (deps: ProvideDepsIterator<Deps>) => P;
+// prettier-ignore
+type FactoryCreator<Deps, P extends Provide = any> = (
+  deps: ProvideDepsIterator<Deps>
+) => P extends TokenInterface<unknown>
+  ? ExtractTokenType<P>
+  : P extends string
+    ? any
+    : P;
 
 export interface FactoryProvider<Deps, P extends Provide = any> {
   /**
    * Идентификатор токена
    */
-  provide: Provide;
+  provide: P extends TokenInterface<unknown> ? P : Provide;
   /**
    * Тип регистрации провайдера, будет ли глобальный синглтон или инстанс для клиента
    */
@@ -61,7 +82,7 @@ export interface ClassProvider<Deps, P extends Provide = any> {
   /**
    * Идентификатор токена
    */
-  provide: Provide;
+  provide: P extends TokenInterface<unknown> ? P : Provide;
   /**
    * Тип регистрации провайдера, будет ли глобальный синглтон или инстанс для клиента
    */
@@ -85,7 +106,7 @@ export interface ValueProvider<P extends Provide = any> {
   /**
    * Идентификатор токена
    */
-  provide: P;
+  provide: P extends TokenInterface<unknown> ? P : Provide;
   /**
    * Тип регистрации провайдера, будет ли глобальный синглтон или инстанс для клиента
    */
@@ -97,7 +118,12 @@ export interface ValueProvider<P extends Provide = any> {
   /**
    * Простое значение, которое будет доступно
    */
-  useValue: P;
+  // prettier-ignore
+  useValue: P extends TokenInterface<unknown>
+    ? ExtractTokenType<P>
+    : P extends string
+      ? any
+      : P;
 }
 
 export type Provider<Deps = any, P extends Provide = any> =

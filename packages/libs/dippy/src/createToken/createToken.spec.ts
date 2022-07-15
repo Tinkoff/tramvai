@@ -4,7 +4,7 @@ describe('createToken', () => {
   it('Создание токена', () => {
     const token = createToken('tok');
 
-    expect(token).toEqual({ name: 'tok', isToken: true, options: {} });
+    expect(token).toEqual({ name: 'tok', isToken: true, isModernToken: true, options: {} });
     expect(token.toString()).toBe('tok');
   });
 
@@ -20,7 +20,12 @@ describe('createToken', () => {
   it('Создание тока с опцияим', () => {
     const token = createToken('tuk', { multi: true });
 
-    expect(token).toEqual({ name: 'tuk', isToken: true, options: { multi: true } });
+    expect(token).toEqual({
+      name: 'tuk',
+      isToken: true,
+      isModernToken: true,
+      options: { multi: true },
+    });
     expect(token.toString()).toBe('tuk');
   });
 });

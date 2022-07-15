@@ -1,5 +1,5 @@
-import { NodePath } from '@babel/core';
-import {
+import type { NodePath } from '@babel/core';
+import type {
   BinaryExpression,
   CallExpression,
   Expression,
@@ -7,12 +7,9 @@ import {
   TemplateElement,
   TemplateLiteral,
 } from '@babel/types';
-import { ImportPath, PropertyFactory } from './types';
-import {
-  generateWebpackComments,
-  parseWebpackComments,
-  WebpackComments,
-} from '../../utils/webpackComments';
+import type { ImportPath, PropertyFactory } from './types';
+import type { WebpackComments } from '../../utils/webpackComments';
+import { generateWebpackComments, parseWebpackComments } from '../../utils/webpackComments';
 
 const JS_PATH_REGEXP = /^[./]+|(\.js$)/g;
 const MATCH_LEFT_HYPHENS_REPLACE_REGEX = /^-/g;

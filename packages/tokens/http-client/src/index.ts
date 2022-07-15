@@ -1,5 +1,5 @@
 import { createToken } from '@tinkoff/dippy';
-import type { ApiService, HttpClient } from '@tramvai/http-client';
+import type { BaseHttpClient, HttpClient } from '@tramvai/http-client';
 import type { TinkoffRequestOptions, Agent } from '@tramvai/tinkoff-request-http-client-adapter';
 
 export type HttpClientFactoryOptions = TinkoffRequestOptions & { name: string };
@@ -40,7 +40,7 @@ export const HTTP_CLIENT_AGENT = createToken<{
  * @description
  * List of HTTP headers that are proxied from app request to all of the backend API
  */
-export const API_CLIENT_PASS_HEADERS = createToken<string[]>('apiClientPassHeaders', {
+export const API_CLIENT_PASS_HEADERS = createToken<string | string[]>('apiClientPassHeaders', {
   multi: true,
 });
 
@@ -49,7 +49,7 @@ export const API_CLIENT_PASS_HEADERS = createToken<string[]>('apiClientPassHeade
  * Internal api for app server.
  * Uses the value of `APP_INFO_TOKEN` from di for constructing the request address
  */
-export const PAPI_SERVICE = createToken<ApiService>('papi service');
+export const PAPI_SERVICE = createToken<BaseHttpClient>('papi service');
 
 /**
  * @description

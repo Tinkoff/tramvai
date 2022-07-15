@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import type { Url } from '@tinkoff/url';
+import type { ExtractDependencyType } from '@tinkoff/dippy';
 import { FallbackError } from './fallback';
 import type { ERROR_BOUNDARY_TOKEN } from './tokens';
 
@@ -14,7 +15,7 @@ export interface UniversalErrorBoundaryProps {
   url: Url;
   error?: AnyError | null;
   fallback?: React.ComponentType<UniversalErrorBoundaryFallbackProps>;
-  errorHandlers?: typeof ERROR_BOUNDARY_TOKEN | null;
+  errorHandlers?: ExtractDependencyType<typeof ERROR_BOUNDARY_TOKEN> | null;
   /**
    * @deprecated
    */

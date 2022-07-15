@@ -100,12 +100,10 @@ export const UTILITY_SERVER_TOKEN = createToken<Server>('server utilityServer');
  */
 export const UTILITY_WEB_FASTIFY_APP_TOKEN = createToken<FastifyInstance>('webApp utilityServer');
 
-export type FASTIFY_APP_INIT_HANDLER = Array<(app: FastifyInstance) => Promise<void> | void>;
+export type FASTIFY_APP_INIT_HANDLER = (app: FastifyInstance) => Promise<void> | void;
 
-export type FASTIFY_APP_ERROR_HANDLER = Array<
-  (
-    error: FastifyError,
-    request: FastifyRequest,
-    reply: FastifyReply
-  ) => Promise<string | undefined | void> | string | undefined | void
->;
+export type FASTIFY_APP_ERROR_HANDLER = (
+  error: FastifyError,
+  request: FastifyRequest,
+  reply: FastifyReply
+) => Promise<string | undefined | void> | string | undefined | void;

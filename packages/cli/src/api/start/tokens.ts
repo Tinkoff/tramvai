@@ -1,16 +1,16 @@
 import { createToken } from '@tinkoff/dippy';
 
-export const INIT_HANDLER_TOKEN = createToken<Array<() => Promise<void>>>('start initHandler', {
+export const INIT_HANDLER_TOKEN = createToken<() => Promise<void> | void>('start initHandler', {
   multi: true,
 });
 
-export const PROCESS_HANDLER_TOKEN = createToken<Array<() => Promise<void>>>(
+export const PROCESS_HANDLER_TOKEN = createToken<() => Promise<void> | void>(
   'start processHandler',
   {
     multi: true,
   }
 );
-export const CLOSE_HANDLER_TOKEN = createToken<Array<() => Promise<void>>>('start closeHandler', {
+export const CLOSE_HANDLER_TOKEN = createToken<() => Promise<void> | void>('start closeHandler', {
   multi: true,
 });
 

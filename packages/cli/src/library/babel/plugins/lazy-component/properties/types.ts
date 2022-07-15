@@ -1,5 +1,5 @@
-import { types, template, NodePath } from '@babel/core';
-import {
+import type { types, template, NodePath } from '@babel/core';
+import type {
   FunctionExpression,
   CallExpression,
   ObjectMember,

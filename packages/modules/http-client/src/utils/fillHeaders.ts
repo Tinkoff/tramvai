@@ -4,11 +4,12 @@ import pick from '@tinkoff/utils/object/pick';
 import type { REQUEST_MANAGER_TOKEN } from '@tramvai/module-common';
 import type { API_CLIENT_PASS_HEADERS } from '@tramvai/tokens-http-client';
 import type { HttpClientRequest } from '@tramvai/http-client';
+import type { ExtractDependencyType } from '@tinkoff/dippy';
 
 export const fillHeaderIp = ({
   requestManager,
 }: {
-  requestManager?: typeof REQUEST_MANAGER_TOKEN;
+  requestManager?: ExtractDependencyType<typeof REQUEST_MANAGER_TOKEN>;
 }) => {
   if (!requestManager) {
     return identity;
@@ -29,8 +30,8 @@ export const fillHeaders = ({
   requestManager,
   headersList,
 }: {
-  requestManager?: typeof REQUEST_MANAGER_TOKEN;
-  headersList: typeof API_CLIENT_PASS_HEADERS;
+  requestManager?: ExtractDependencyType<typeof REQUEST_MANAGER_TOKEN>;
+  headersList: ExtractDependencyType<typeof API_CLIENT_PASS_HEADERS>;
 }) => {
   if (!requestManager) {
     return identity;

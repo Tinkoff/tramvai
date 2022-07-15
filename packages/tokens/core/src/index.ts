@@ -33,7 +33,7 @@ export type CommandLines = {
 export const COMMAND_LINE_RUNNER_TOKEN = createToken<CommandLine>('commandLineRunner');
 export const COMMAND_LINES_TOKEN = createToken<CommandLines>('commandLines');
 
-const multiOptions = { multi: true };
+const multiOptions = { multi: true } as const;
 export const commandLineListTokens = {
   // Block: Initializing
   init: createToken<Command>('init', multiOptions),

@@ -51,15 +51,18 @@ export const WEBPACK_ANALYZE_PLUGIN_TOKEN = createToken<AnalyzePlugin>(
   'builder-webpack analyzePlugin'
 );
 
-export const INIT_HANDLER_TOKEN = createToken<() => Promise<void>>('builder-webpack initHandler', {
-  multi: true,
-});
-export const PROCESS_HANDLER_TOKEN = createToken<() => Promise<void>>(
+export const INIT_HANDLER_TOKEN = createToken<() => Promise<void> | void>(
+  'builder-webpack initHandler',
+  {
+    multi: true,
+  }
+);
+export const PROCESS_HANDLER_TOKEN = createToken<() => Promise<void> | void>(
   'builder-webpack processHandler',
   { multi: true }
 );
 
-export const CLOSE_HANDLER_TOKEN = createToken<() => Promise<void>>(
+export const CLOSE_HANDLER_TOKEN = createToken<() => Promise<void> | void>(
   'builder-webpack closeHandler',
   { multi: true }
 );

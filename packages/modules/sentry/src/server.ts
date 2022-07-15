@@ -4,6 +4,7 @@ import { RENDER_SLOTS, ResourceType, ResourceSlot } from '@tramvai/tokens-render
 import { ENV_MANAGER_TOKEN, ENV_USED_TOKEN, REQUEST_MANAGER_TOKEN } from '@tramvai/module-common';
 import { WEB_FASTIFY_APP_AFTER_ERROR_TOKEN } from '@tramvai/tokens-server-private';
 import { REGISTER_INSTANT_METRIC_TOKEN, METRICS_MODULE_TOKEN } from '@tramvai/tokens-metrics';
+import type { ExtractTokenType } from '@tinkoff/dippy';
 import { createSentry } from './server/sentry';
 import { sharedProviders } from './shared/providers';
 import { createErrorInterceptor } from './browser/inlineErrorInterceptor.inline';
@@ -44,13 +45,14 @@ const composeOptions = (multiOptions, defaultOptions?) =>
     provide({
       provide: REGISTER_INSTANT_METRIC_TOKEN,
       multi: true,
-      useFactory: ({ metrics }: { metrics?: typeof METRICS_MODULE_TOKEN }) => [
-        'global-errors',
-        metrics?.counter({
-          name: 'client_system_globalErrors_total',
-          help: 'Shows count of unhandled errors and unhandled rejections',
-        }),
-      ],
+      useFactory: ({ metrics }) =>
+        [
+          'global-errors',
+          metrics?.counter({
+            name: 'client_system_globalErrors_total',
+            help: 'Shows count of unhandled errors and unhandled rejections',
+          }),
+        ] as ExtractTokenType<typeof REGISTER_INSTANT_METRIC_TOKEN>,
       deps: {
         metrics: {
           token: METRICS_MODULE_TOKEN,
@@ -62,7 +64,7 @@ const composeOptions = (multiOptions, defaultOptions?) =>
       provide: WEB_FASTIFY_APP_AFTER_ERROR_TOKEN,
       multi: true,
       useFactory: ({ sentry, requestOptions, enableDefaultHandlers }) => {
-        return ((error, request, reply) => {
+        return (error, request, reply) => {
           if (enableDefaultHandlers) {
             const options = composeOptions(requestOptions, {
               // code from https://github.com/getsentry/sentry-javascript/blob/4e722eb8778e27d7910e96ccb1aac108bcbea146/packages/node/src/handlers.ts#L309
@@ -94,7 +96,7 @@ const composeOptions = (multiOptions, defaultOptions?) =>
               sentry.captureException(error);
             });
           }
-        }) as typeof WEB_FASTIFY_APP_AFTER_ERROR_TOKEN[number];
+        };
       },
       deps: {
         sentry: SENTRY_TOKEN,

@@ -4,6 +4,7 @@ import type { Action, ActionParameters, DI_TOKEN } from '@tramvai/core';
 import { ACTION_PARAMETERS } from '@tramvai/core';
 import type { CONTEXT_TOKEN, ActionCondition, STORE_TOKEN } from '@tramvai/tokens-common';
 import objectMap from '@tinkoff/utils/object/map';
+import type { ExtractDependencyType } from '@tinkoff/dippy';
 import { ActionChecker } from './actionChecker';
 import type { ActionType } from './constants';
 import { actionType } from './constants';
@@ -26,9 +27,9 @@ export class ActionExecution {
 
   execution: Map<string, ExecutionState>;
 
-  context: typeof CONTEXT_TOKEN;
+  context: ExtractDependencyType<typeof CONTEXT_TOKEN>;
 
-  di: typeof DI_TOKEN;
+  di: ExtractDependencyType<typeof DI_TOKEN>;
 
   transformAction: TransformAction;
 
@@ -39,10 +40,10 @@ export class ActionExecution {
     di,
     transformAction,
   }: {
-    actionConditionals: ActionCondition[] | null;
-    store?: typeof STORE_TOKEN;
-    context?: typeof CONTEXT_TOKEN;
-    di?: typeof DI_TOKEN;
+    actionConditionals: ActionCondition[] | ActionCondition[][] | null;
+    store?: ExtractDependencyType<typeof STORE_TOKEN>;
+    context?: ExtractDependencyType<typeof CONTEXT_TOKEN>;
+    di?: ExtractDependencyType<typeof DI_TOKEN>;
     transformAction?: TransformAction;
   }) {
     this.actionConditionals = flatten(actionConditionals ?? []);

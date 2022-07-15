@@ -1,6 +1,6 @@
 /* eslint-disable jest/no-try-expect */
 import { Container } from './Container';
-import { createToken } from './createToken/createToken';
+import { createToken, optional } from './createToken/createToken';
 
 describe('DI Container', () => {
   it('Использование useValue провайдеров', () => {
@@ -166,6 +166,28 @@ describe('DI Container', () => {
     expect(result).toEqual([9, null]);
   });
 
+  it('Опциональные зависимости - получение null если нет, хэлпер optional', () => {
+    const container = new Container();
+    const result: any[] = [];
+
+    container.register({
+      provide: 'A',
+      useValue: 9,
+    });
+
+    container.register({
+      provide: 'B',
+      useFactory: ({ a, b }) => {
+        result.push(a, b);
+      },
+      deps: { a: 'A', b: optional('K' as any) },
+    });
+
+    container.get('B');
+
+    expect(result).toEqual([9, null]);
+  });
+
   it('Опциональные зависимости - получение значения если есть', () => {
     const container = new Container();
     const result: any[] = [];
@@ -233,6 +255,41 @@ describe('DI Container', () => {
     expect(container.get('A')).toEqual([{ a: 1 }, { b: 2 }]);
   });
 
+  it('Мульти провайдер, берем multi из токена', () => {
+    const container = new Container();
+
+    const A = createToken('A', { multi: true });
+    const B = createToken('B', { multi: true });
+
+    container.register({ provide: B, useValue: 2 });
+    container.register({ provide: A, useValue: { a: 1 } });
+    container.register({
+      provide: A,
+      useFactory: ({ B }) => ({ b: B[0] }),
+      deps: { B },
+    });
+
+    expect(container.get(A)).toEqual([{ a: 1 }, { b: 2 }]);
+  });
+
+  it('Мульти провайдер, берем multi из провайдера (backward compatibility)', () => {
+    const container = new Container();
+
+    const A = createToken('A');
+    const B = createToken('B');
+
+    container.register({ provide: B, useValue: 2, multi: true });
+    container.register({ provide: A, useValue: { a: 1 }, multi: true });
+    container.register({
+      provide: A,
+      useFactory: ({ B }) => ({ b: B[0] }),
+      deps: { B },
+      multi: true,
+    });
+
+    expect(container.get(A)).toEqual([{ a: 1 }, { b: 2 }]);
+  });
+
   describe('Ошибки', () => {
     it('смешивание multi true/false', () => {
       const container = new Container();
@@ -251,26 +308,6 @@ describe('DI Container', () => {
         container.register({ provide: 'B', __stack: new Error().stack, useValue: 1, multi: false });
         // @ts-ignore
         container.register({ provide: 'B', __stack: new Error().stack, useValue: 2, multi: true });
-      } catch (e) {
-        expect(e.stack).toMatch(/---- caused by: ----[\s\S]+Container.spec.ts/);
-      }
-    });
-
-    it('Ошибки, если мы смешиваем token multi с не мульти проваейдером', () => {
-      const container = new Container();
-      const token = createToken('tadam', { multi: true });
-
-      try {
-        container.register({ provide: token, useValue: { a: 1 } });
-        expect(true).toBe(false);
-      } catch (e) {
-        expect(e.message).toBe('Token tadam require multi providers');
-        expect(e.type).toBe('RequireMulti');
-      }
-
-      try {
-        // @ts-ignore
-        container.register({ provide: token, __stack: new Error().stack, useValue: { a: 1 } });
       } catch (e) {
         expect(e.stack).toMatch(/---- caused by: ----[\s\S]+Container.spec.ts/);
       }

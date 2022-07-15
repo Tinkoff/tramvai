@@ -24,6 +24,7 @@ import type {
   REQUEST_MANAGER_TOKEN,
   CacheOptionsByType,
 } from '@tramvai/tokens-common';
+import type { ExtractDependencyType, ExtractTokenType } from '@tinkoff/dippy';
 import { fillHeaderIp, fillHeaders } from '../utils';
 import { createUserAgent } from './createUserAgent';
 
@@ -48,17 +49,17 @@ export const httpClientFactory = ({
   disableCircuitBreaker = false,
   defaultOptions,
 }: {
-  logger: typeof LOGGER_TOKEN;
-  envManager: typeof ENV_MANAGER_TOKEN;
-  appInfo: typeof APP_INFO_TOKEN;
-  requestManager?: typeof REQUEST_MANAGER_TOKEN;
-  headersList?: typeof API_CLIENT_PASS_HEADERS;
-  createCache?: typeof CREATE_CACHE_TOKEN;
+  logger: ExtractDependencyType<typeof LOGGER_TOKEN>;
+  envManager: ExtractDependencyType<typeof ENV_MANAGER_TOKEN>;
+  appInfo: ExtractDependencyType<typeof APP_INFO_TOKEN>;
+  requestManager?: ExtractDependencyType<typeof REQUEST_MANAGER_TOKEN>;
+  headersList?: ExtractDependencyType<typeof API_CLIENT_PASS_HEADERS>;
+  createCache?: ExtractDependencyType<typeof CREATE_CACHE_TOKEN>;
   makeRequestRegistry: Map<string, MakeRequest>;
-  agent?: typeof HTTP_CLIENT_AGENT;
-  disableCircuitBreaker: typeof DISABLE_CIRCUIT_BREAKER;
+  agent?: ExtractDependencyType<typeof HTTP_CLIENT_AGENT>;
+  disableCircuitBreaker: ExtractDependencyType<typeof DISABLE_CIRCUIT_BREAKER>;
   defaultOptions?: Partial<HttpClientFactoryOptions>;
-}): typeof HTTP_CLIENT_FACTORY => {
+}): ExtractTokenType<typeof HTTP_CLIENT_FACTORY> => {
   return (options: HttpClientFactoryOptions): HttpClient => {
     if (!options.name) {
       throw Error(`You need to pass a unique field "name" for the HTTP client instance`);

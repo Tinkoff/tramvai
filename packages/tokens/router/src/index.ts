@@ -21,7 +21,7 @@ export const ROUTER_TOKEN = createToken<AbstractRouter>('router router');
  * @description
  * Token for defining static routes
  */
-export const ROUTES_TOKEN = createToken<Route>('router routes', { multi: true });
+export const ROUTES_TOKEN = createToken<Route | Route[]>('router routes', { multi: true });
 /**
  * @description
  * Token for providing guard handlers for page transitions

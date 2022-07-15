@@ -139,8 +139,15 @@ const foo = container.get(FOO_TOKEN);
 Optional dependency:
 
 ```ts
+import { optional } from '@tinkoff/dippy';
+
+// with special `optional` utility
 // string | null
-const foo = container.get({ token: FOO_TOKEN, optional: true });
+const foo1 = container.get(optional(FOO_TOKEN));
+
+// without `optional` utility
+// string | null
+const foo2 = container.get({ token: FOO_TOKEN, optional: true });
 ```
 
 Multi token:

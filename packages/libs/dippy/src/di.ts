@@ -6,7 +6,14 @@ export { createChildContainer } from './createChildContainer/createChildContaine
 
 export { Provider, ProviderDep, ProviderDeps, ProvideDepsIterator, OptionsType } from './Provider';
 
-export { createToken } from './createToken/createToken';
+export {
+  createToken,
+  optional,
+  OptionalTokenDependency,
+  TokenInterface,
+  ExtractTokenType,
+  ExtractDependencyType,
+} from './createToken/createToken';
 export { TokenType } from './createToken/createToken.h';
 
 export { Scope } from './constant';

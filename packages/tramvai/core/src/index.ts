@@ -15,4 +15,7 @@ export {
   Provider,
   createToken,
   provide,
+  optional,
+  ExtractTokenType,
+  ExtractDependencyType,
 } from '@tinkoff/dippy';
