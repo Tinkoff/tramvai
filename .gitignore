@@ -61,6 +61,7 @@ debug-path
 
 .copybara
 copy.bara.sky
+install.env
 
 examples-standalone/**/package-lock.json
 examples-standalone/**/yarn.lock
