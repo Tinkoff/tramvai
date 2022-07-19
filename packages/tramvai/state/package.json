@@ -25,7 +25,7 @@
     "invariant": "^2.2.4",
     "react-is": ">=17",
     "tslib": "^2.0.3",
-    "use-sync-external-store": "^1.0.0"
+    "use-sync-external-store": "^1.2.0"
   },
   "peerDependencies": {
     "hoist-non-react-statics": "^3.3.1",

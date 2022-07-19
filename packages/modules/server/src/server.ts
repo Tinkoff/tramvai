@@ -1,3 +1,4 @@
+import { setDefaultResultOrder } from 'dns';
 import {
   Module,
   Scope,
@@ -36,6 +37,10 @@ import { xHeadersFactory } from './server/xHeaders';
 import * as modules from './modules';
 
 export * from '@tramvai/tokens-server';
+
+if (typeof setDefaultResultOrder === 'function') {
+  setDefaultResultOrder('ipv4first');
+}
 
 @Module({
   imports: [

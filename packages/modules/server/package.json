@@ -8,7 +8,10 @@
   "files": [
     "lib"
   ],
-  "sideEffects": false,
+  "sideEffects": [
+    "lib/server.js",
+    "lib/server.es.js"
+  ],
   "repository": {
     "type": "git",
     "url": "git@github.com:Tinkoff/tramvai.git"

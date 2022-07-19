@@ -42,9 +42,9 @@ export const testHook = <TProps, TResult>(
     ...renderOptions,
     wrapper: ({ children }: { children?: React.ReactNode }) => {
       return (
-        <StateProvider context={context}>
+        <StateProvider context={context} serverState={initialState}>
           <DIContext.Provider value={context.di}>
-            <RouterProvider router={router}>
+            <RouterProvider router={router} serverState={initialState?.router}>
               <Wrapper>{children}</Wrapper>
             </RouterProvider>
           </DIContext.Provider>

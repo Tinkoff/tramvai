@@ -35,6 +35,14 @@ export const createMockRouter = ({
       return url;
     }
 
+    getLastRoute() {
+      return route;
+    }
+
+    getLastUrl() {
+      return url;
+    }
+
     resolveRoute() {
       return route;
     }

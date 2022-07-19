@@ -133,6 +133,14 @@ export abstract class AbstractRouter {
     return this.currentNavigation?.url ?? this.lastNavigation?.url;
   }
 
+  getLastRoute() {
+    return this.lastNavigation?.to;
+  }
+
+  getLastUrl() {
+    return this.lastNavigation?.url;
+  }
+
   protected commitNavigation(navigation: Navigation) {
     logger.debug({
       event: 'commit-navigation',
@@ -144,10 +152,10 @@ export abstract class AbstractRouter {
       this.history.save(navigation);
     }
 
-    this.runSyncHooks('change', navigation);
-
     this.lastNavigation = navigation;
     this.currentNavigation = null;
+
+    this.runSyncHooks('change', navigation);
   }
 
   async updateCurrentRoute(updateRouteOptions: UpdateCurrentRouteOptions) {

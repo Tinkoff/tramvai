@@ -24,7 +24,8 @@
   "dependencies": {
     "@tinkoff/react-hooks": "0.0.0-stub",
     "@tinkoff/url": "0.0.0-stub",
-    "@tinkoff/utils": "^2.1.2"
+    "@tinkoff/utils": "^2.1.2",
+    "use-sync-external-store": "^1.2.0"
   },
   "peerDependencies": {
     "react": ">=16.14.0",
@@ -32,6 +33,7 @@
   },
   "sideEffects": false,
   "devDependencies": {
+    "@types/use-sync-external-store": "^0.0.3",
     "object-sizeof": "^1.6.1"
   },
   "license": "Apache-2.0"
