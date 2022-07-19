@@ -99,7 +99,7 @@ export const createRequestWithMetrics: CreateRequestWithMetrics = ({
     });
     req.on('error', (e: Error & { code?: string }) => {
       if (POSSIBLE_ERRORS.includes(e?.code)) {
-        labelsValues.status = e.code;
+        labelsValues.status = req.aborted ? 'aborted' : e.code;
       }
 
       requestsTotal.inc(labelsValues);
