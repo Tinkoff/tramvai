@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@tramvai/nx-plugin": [
+        "./tools/nx-plugin/src/index.ts"
+      ]
+    }
+  }
+}

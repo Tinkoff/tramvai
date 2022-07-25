@@ -5,3 +5,4 @@ export * from './debugRequests';
 export * from './proxy';
 export * from './dependenciesVersion';
 export * from './utilityServer';
+export * from './keepAlive';

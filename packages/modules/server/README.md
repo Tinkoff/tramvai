@@ -182,6 +182,10 @@ Module uses loggers with identifiers: `server`, `server:static`, `server:webapp`
 
 ## How to
 
+### Setting `keepAliveTimeout` for the server
+
+The default value for server's `keepAliveTimeout` is 5000. However, in case you want to set it manually just pass the environment variable `NODE_KEEPALIVE_TIMEOUT=[your_value]`. For further reading go to [NodeJs server.keepAliveTimeout page](https://nodejs.org/api/http.html#serverkeepalivetimeout).
+
 ### Specify server port
 
 By default server starts at `3000` port. You have next options to override this value depending on your environment:

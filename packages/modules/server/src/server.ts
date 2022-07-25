@@ -52,6 +52,7 @@ if (typeof setDefaultResultOrder === 'function') {
     modules.ServerProxyModule,
     modules.DependenciesVersionModule,
     modules.UtilityServerModule,
+    modules.KeepAliveModule,
     process.env.NODE_ENV !== 'production' && modules.DebugHttpRequestsModule,
   ].filter(Boolean),
   providers: [
