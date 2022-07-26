@@ -8,8 +8,8 @@ import {
   DISPATCHER_TOKEN,
   DISPATCHER_CONTEXT_TOKEN,
   STORE_TOKEN,
+  INITIAL_APP_STATE_TOKEN,
 } from '@tramvai/tokens-common';
-import { INITIAL_APP_STATE_TOKEN } from '../tokens';
 
 @Module({
   providers: [

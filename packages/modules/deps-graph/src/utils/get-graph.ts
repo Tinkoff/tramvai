@@ -58,7 +58,7 @@ export const getGraph = ({ di, searchValue }: Deps) => {
     token: string,
     recordOfMulti?: RecordProvide<any>
   ): RecordsGraph | null {
-    const record = recordOfMulti || container.getRecord(token);
+    const record = recordOfMulti || container.getRecord(Symbol.for(token));
 
     if (!record) {
       return null;

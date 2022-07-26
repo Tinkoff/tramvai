@@ -110,7 +110,7 @@ describe('enmasse', () => {
           output.original.forEach((f) => {
             expect(f.size).toBeGreaterThan(0);
           });
-        }, 120000);
+        }, 160000);
       });
     });
 });

@@ -14,6 +14,7 @@ import type {
   OptionalTokenDependency,
   TokenInterface,
 } from './createToken/createToken';
+import { tokenToString } from './createToken/createToken';
 
 /**
  * Маркер, который указывает, что значение еще не создано. Для проверки по ссылке.
@@ -28,13 +29,19 @@ export const NOT_YET = '__NOT_YET__MARKER';
  */
 const CIRCULAR = '__CIRCULAR__MARKER';
 
+function tokenToKey(token: any): symbol {
+  return token.isModernToken ? token.name : Symbol.for(token.toString());
+}
+
 /* eslint-disable no-underscore-dangle */
-function proxyHydrationError(token: string, e: Record<string, unknown>) {
+function proxyHydrationError(token: symbol, e: Record<string, unknown>) {
+  const name = tokenToString(token);
+
   if (!e.__extendedWithStack) {
     e.__extendedWithStack = true;
-    e.message = `${e.message} at "${token}"`;
+    e.message = `${e.message} at "${name}"`;
   } else {
-    e.message += ` < ${token}`;
+    e.message += ` < ${name}`;
   }
 
   if (Object.hasOwnProperty.call(e, 'stack') && typeof e.stack === 'string') {
@@ -86,17 +93,21 @@ function checkValidateInterfaceProvider(provider: Provider) {
   }
 }
 
-function checkFound(record: RecordProvide<any> | undefined, token: string) {
+function checkFound(record: RecordProvide<any> | undefined, token: symbol) {
   if (record === undefined) {
-    throw createError(`Token not found "${token}"`, {
+    const name = tokenToString(token);
+
+    throw createError(`Token not found "${name}"`, {
       type: Errors.NOT_FOUND,
     });
   }
 }
 
-function checkCircularDeps(record: RecordProvide<any>, token: string, value: any) {
+function checkCircularDeps(record: RecordProvide<any>, token: symbol, value: any) {
   if (value === CIRCULAR) {
-    throw createError(`Circular dep for "${token}"`, {
+    const name = tokenToString(token);
+
+    throw createError(`Circular dep for "${name}"`, {
       type: Errors.CIRCULAR_DEP,
       stack: record.stack,
     });
@@ -158,7 +169,7 @@ export class Container {
   /**
    * Список c записями инстансов провайдеров
    */
-  protected records = new Map<string, RecordProvide<any>>();
+  protected records = new Map<symbol, RecordProvide<any>>();
 
   protected recordValues = new Map<RecordProvide<any>, any>();
   private readonly fallback?: Container;
@@ -192,7 +203,7 @@ export class Container {
       token = tokenORObject;
     }
 
-    token = token.toString();
+    token = tokenToKey(token);
     const record = this.getRecord(token);
 
     if (!record && this.fallback?.getRecord(token)) {
@@ -220,24 +231,24 @@ export class Container {
     return result;
   }
 
-  getRecord<T>(token: string) {
+  getRecord<T>(token: symbol) {
     const record: RecordProvide<T> | undefined = this.records.get(token);
 
     return record;
   }
 
   has(token: any) {
-    return !!this.getRecord(token.toString());
+    return !!this.getRecord(tokenToKey(token));
   }
 
   borrowToken(from: Container, token: any) {
-    const tokenStr = token.toString();
+    const tokenKey = tokenToKey(token);
 
-    if (!this.getRecord(tokenStr)) {
-      const record = from.getRecord(tokenStr);
+    if (!this.getRecord(tokenKey)) {
+      const record = from.getRecord(tokenKey);
 
       if (record) {
-        this.records.set(tokenStr, record);
+        this.records.set(tokenKey, record);
         this.recordValues.set(record, NOT_YET);
       }
     }
@@ -260,7 +271,7 @@ export class Container {
    * Обработка различных видов провайдеров
    */
   processProvider(provider: Provider): void {
-    const token: any = provider.provide.toString();
+    const token = tokenToKey(provider.provide);
     const record = providerToRecord(provider);
     const value = providerToValue(provider);
 
@@ -271,7 +282,7 @@ export class Container {
       if (multiRecord) {
         // Смешанный провайдер
         if (multiRecord.multi === undefined) {
-          throw createError(`Mixed multi-provider for ${token}`, {
+          throw createError(`Mixed multi-provider for ${tokenToString(token)}`, {
             type: Errors.MIXED_MULTI,
             stack: (provider as any).__stack,
           });
@@ -300,7 +311,7 @@ export class Container {
     return this.getOfDeps(record.resolvedDeps);
   }
 
-  protected hydrate<T>(record: RecordProvide<T>, token: string, optional: boolean): T | null {
+  protected hydrate<T>(record: RecordProvide<T>, token: symbol, optional: boolean): T | null {
     let value: any = this.getValue(record);
 
     checkCircularDeps(record, token, value);

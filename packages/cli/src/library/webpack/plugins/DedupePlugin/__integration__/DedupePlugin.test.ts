@@ -5,7 +5,7 @@ import { readJSON, readFile } from 'fs-extra';
 const cwd = resolve(__dirname, '..', '__fixtures__', 'dedupe');
 const statsPath = resolve(cwd, 'dist', 'client', 'stats.json');
 
-jest.setTimeout(120000);
+jest.setTimeout(160000);
 
 const runScript = async (scriptName: string) => {
   const result = await command(`yarn ${scriptName}`, { cwd });

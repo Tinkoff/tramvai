@@ -1,10 +1,27 @@
 import { createToken } from './createToken';
 
 describe('createToken', () => {
+  it('Создание токена без названия', () => {
+    const token = createToken();
+
+    expect(token).toEqual({
+      name: expect.any(Symbol),
+      isToken: true,
+      isModernToken: true,
+      options: {},
+    });
+    expect(token.toString()).toBe('token');
+  });
+
   it('Создание токена', () => {
     const token = createToken('tok');
 
-    expect(token).toEqual({ name: 'tok', isToken: true, isModernToken: true, options: {} });
+    expect(token).toEqual({
+      name: expect.any(Symbol),
+      isToken: true,
+      isModernToken: true,
+      options: {},
+    });
     expect(token.toString()).toBe('tok');
   });
 
@@ -21,7 +38,7 @@ describe('createToken', () => {
     const token = createToken('tuk', { multi: true });
 
     expect(token).toEqual({
-      name: 'tuk',
+      name: expect.any(Symbol),
       isToken: true,
       isModernToken: true,
       options: { multi: true },

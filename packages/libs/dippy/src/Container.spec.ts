@@ -51,6 +51,19 @@ describe('DI Container', () => {
     expect(container.get(token)).toBe(result);
   });
 
+  it('Использование токенов, созданных без названия', () => {
+    const container = new Container();
+    const result = 'foo bar';
+    const factory = (deps) => `foo ${deps.bar}`;
+    const foo = createToken<string>();
+    const bar = createToken<string>();
+
+    container.register({ provide: bar, useValue: 'bar' });
+    container.register({ provide: foo, useFactory: factory, deps: { bar } });
+
+    expect(container.get(foo)).toBe(result);
+  });
+
   it('Динамическая инициализация при получении класса', () => {
     const container = new Container();
     let modA = 'PO';

@@ -1,5 +1,5 @@
 import { commandLineListTokens, Scope, COMMAND_LINE_RUNNER_TOKEN } from '@tramvai/core';
-import { INITIAL_APP_STATE_TOKEN } from '../tokens';
+import { INITIAL_APP_STATE_TOKEN } from '@tramvai/tokens-common';
 
 declare global {
   interface Window {

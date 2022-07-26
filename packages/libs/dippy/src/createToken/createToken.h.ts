@@ -1,5 +1,5 @@
 export interface TokenType<T> {
-  name: string;
+  name: symbol;
   options: TokenOptions;
   isToken: true;
   isModernToken: true;

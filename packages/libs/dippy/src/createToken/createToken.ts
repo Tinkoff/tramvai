@@ -1,10 +1,22 @@
 import type { TokenType, TokenOptions } from './createToken.h';
 
+/**
+ * @private
+ */
+export const TOKENS_SYMBOL_BY_STRING_NAME_REGISTRY = new Map<string, symbol>();
+
+/**
+ * @private
+ */
+export function tokenToString(token: symbol): string {
+  return token.toString().replace(/^Symbol\((.+)\)$/, '$1');
+}
+
 export class TokenClass<T> implements TokenType<T> {
   /**
    * Индетификатор токена
    */
-  name: string;
+  name: symbol;
 
   options: TokenOptions;
 
@@ -13,16 +25,26 @@ export class TokenClass<T> implements TokenType<T> {
   // for potential breaking changes, not very useful at this moment
   isModernToken: true = true;
 
-  constructor(name: string, options: TokenOptions = {}) {
-    this.name = name;
+  constructor(name?: string, options: TokenOptions = {}) {
+    this.name = name ? Symbol.for(name) : Symbol('token');
     this.options = options;
+
+    if (process.env.NODE_ENV === 'development') {
+      if (name) {
+        if (!TOKENS_SYMBOL_BY_STRING_NAME_REGISTRY.has(name)) {
+          TOKENS_SYMBOL_BY_STRING_NAME_REGISTRY.set(name, this.name);
+        } else {
+          console.error(`Token with name "${name}" already created!`);
+        }
+      }
+    }
   }
 
   /**
    * toString будет использоваться для получения индитификатора токена
    */
   toString() {
-    return this.name;
+    return tokenToString(this.name);
   }
 }
 
@@ -39,14 +61,14 @@ export type MultiTokenInterface<T = any> = T & {
 
 export type TokenInterface<T = any> = BaseTokenInterface<T> | MultiTokenInterface<T>;
 
-export function createToken<Type = any>(name: string): BaseTokenInterface<Type>;
+export function createToken<Type = any>(name?: string): BaseTokenInterface<Type>;
 
 export function createToken<Type = any>(
   name: string,
   options: { multi: true }
 ): MultiTokenInterface<Type>;
 
-export function createToken<T = any>(name: string, options?: TokenOptions): T {
+export function createToken<T = any>(name?: string, options?: TokenOptions): T {
   return (new TokenClass<T>(name, options) as any) as T;
 }
 

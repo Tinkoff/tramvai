@@ -27,7 +27,7 @@ export class ChildContainer extends Container {
    * При этом root провайдеры берет из корневого
    * @param token
    */
-  getRecord<T>(token: string) {
+  getRecord<T>(token: symbol) {
     const record = super.getRecord<T>(token);
 
     if (record) {
@@ -62,7 +62,7 @@ export class ChildContainer extends Container {
     return super.hydrateDeps.call(this.root, record);
   }
 
-  protected hydrate<T>(record: RecordProvide<T>, token: string, optional: boolean): T | null {
+  protected hydrate<T>(record: RecordProvide<T>, token: symbol, optional: boolean): T | null {
     if (record.scope === Scope.REQUEST) {
       return super.hydrate(record, token, optional);
     }
