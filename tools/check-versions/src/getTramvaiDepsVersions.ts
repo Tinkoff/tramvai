@@ -11,10 +11,12 @@ export const getTramvaiDepsVersions = async (): Promise<Map<string, SemVer>> => 
   const cwd = process.env.INIT_CWD || process.cwd();
   const depsVersions = new Map<string, SemVer>();
 
-  const { dependencies = {} } = await readJSON(resolve(cwd, 'package.json')).catch(() => ({}));
+  const { dependencies = {}, devDependencies = {} } = await readJSON(
+    resolve(cwd, 'package.json')
+  ).catch(() => ({}));
 
   await pMap(
-    Object.keys(dependencies),
+    Object.keys({ ...devDependencies, ...dependencies }),
     async (name) => {
       if (isTramvai(name)) {
         const { version } = await readJSON(

@@ -244,6 +244,14 @@ createBundle({
     myCustomLayout: CustomLayout,
   },
 });
+
+const route = {
+  name: 'main',
+  path: '/',
+  config: {
+    layoutComponent: 'myCustomLayout',
+  },
+};
 ```
 
 ##### Replace layoutDefault
