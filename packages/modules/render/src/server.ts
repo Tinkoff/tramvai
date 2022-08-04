@@ -39,7 +39,7 @@ export * from './shared/pageErrorStore';
 export * from '@tramvai/tokens-render';
 
 export const DEFAULT_POLYFILL_CONDITION =
-  '!window.Promise.prototype.finally || !window.URL || !window.URLSearchParams || !window.AbortController || !window.IntersectionObserver || !Object.fromEntries';
+  '!window.Promise.prototype.finally || !window.URL || !window.URLSearchParams || !window.AbortController || !window.IntersectionObserver || !Object.fromEntries || !window.ResizeObserver';
 
 @Module({
   imports: [ClientHintsModule, LayoutModule],

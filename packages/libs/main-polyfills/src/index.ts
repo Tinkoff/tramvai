@@ -26,4 +26,9 @@ cssVars();
 
 if (typeof window !== 'undefined') {
   require('whatwg-fetch');
+
+  // Polyfill doesn't add ResizeObserver to the window
+  if (!window.ResizeObserver) {
+    window.ResizeObserver = require('resize-observer-polyfill');
+  }
 }

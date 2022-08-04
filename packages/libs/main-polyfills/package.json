@@ -21,10 +21,11 @@
     "abort-controller": "^3.0.0",
     "core-js": "^3.0.0",
     "css-vars-ponyfill": "^2.3.2",
+    "element-closest-polyfill": "^1.0.4",
     "intersection-observer": "^0.7.0",
+    "resize-observer-polyfill": "^1.5.1",
     "tslib": "^2.0.3",
-    "whatwg-fetch": "^3.0.0",
-    "element-closest-polyfill": "^1.0.4"
+    "whatwg-fetch": "^3.0.0"
   },
   "module": "lib/index.es.js",
   "license": "Apache-2.0"

@@ -50,7 +50,7 @@ After that, we need to tell `@tramvai/cli` that our project has polyfills. To do
 
 On the `@tramvai/cli` side, we have configured to build the polyfills into a separate file, so it doesn't mix with the main code. On every build we will have a file with polyfills.
 
-[module-render](references/modules/render.md) if it finds polyfills in the build, then for each client embeds inline code that checks the availability of features in the browser and if the browser does not support any of the features, then we consider the browser is legacy and load polyfills. An example of a check: `!window.Promise.prototype.finally || !window.URL || !window.URLSearchParams || !window.AbortController || !window.IntersectionObserver || !Object.fromEntries'`
+[module-render](references/modules/render.md) if it finds polyfills in the build, then for each client embeds inline code that checks the availability of features in the browser and if the browser does not support any of the features, then we consider the browser is legacy and load polyfills. An example of a check: `'!window.Promise.prototype.finally || !window.URL || !window.URLSearchParams || !window.AbortController || !window.IntersectionObserver || !Object.fromEntries || !window.ResizeObserver'`
 
 ## Replacing the polyfills loading check
 
