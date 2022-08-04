@@ -2,6 +2,7 @@ import each from '@tinkoff/utils/array/each';
 import split from '@tinkoff/utils/string/split';
 import env from 'std-env';
 import { hostname } from 'os';
+import { LEVELS } from './constants';
 import { Logger } from './logger';
 import type { LogLevel } from './logger.h';
 import { createLoggerFactory } from './factory';
@@ -17,9 +18,13 @@ Logger.setLevel(level as LogLevel);
 
 if (enable) {
   each((val) => {
-    const [lvl, name] = val.split(':');
+    const [lvl, ...name] = val.split(':');
 
-    Logger.enable(lvl, name);
+    if (lvl in LEVELS) {
+      Logger.enable(lvl, name.join(':'));
+    } else {
+      Logger.enable(val);
+    }
   }, split(',', enable));
 }
 

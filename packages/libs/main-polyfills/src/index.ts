@@ -29,6 +29,6 @@ if (typeof window !== 'undefined') {
 
   // Polyfill doesn't add ResizeObserver to the window
   if (!window.ResizeObserver) {
-    window.ResizeObserver = require('resize-observer-polyfill');
+    window.ResizeObserver = require('resize-observer-polyfill').default;
   }
 }

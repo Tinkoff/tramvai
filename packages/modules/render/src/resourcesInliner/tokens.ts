@@ -12,8 +12,7 @@ export const RESOURCE_INLINER = createToken<ResourcesInlinerType>('resourceInlin
 export type ResourcesRegistryCache = {
   filesCache: Cache; // Кеш файлов ресурсов
   sizeCache: Cache; // Кеш размеров файлов ресурсов
-  requestsCache: Cache; // Кеш запросов файлов (для дедупликации)
-  disabledUrlsCache; // Кэш ссылок, заблокированных для запросов
+  disabledUrlsCache: Cache; // Кэш ссылок, заблокированных для запросов
 };
 
 /**

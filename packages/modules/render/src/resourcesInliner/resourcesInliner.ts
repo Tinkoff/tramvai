@@ -8,6 +8,14 @@ import { getFile, getFileContentLength } from './externalFilesHelper';
 import type { RESOURCES_REGISTRY_CACHE } from './tokens';
 import { processFile } from './fileProcessor';
 
+const INTERNAL_CACHE_SIZE = 50;
+
+const ASSETS_PREFIX =
+  process.env.NODE_ENV === 'development' &&
+  (process.env.ASSETS_PREFIX === 'static' || !process.env.ASSETS_PREFIX)
+    ? `http://localhost:${process.env.PORT_STATIC}/dist/`
+    : process.env.ASSETS_PREFIX;
+
 const getInlineType = (type: PageResource['type']) => {
   switch (type) {
     case ResourceType.style:
@@ -37,74 +45,87 @@ export interface ResourcesInlinerType {
 
 export class ResourcesInliner implements ResourcesInlinerType {
   private resourceInlineThreshold?: typeof RESOURCE_INLINE_OPTIONS;
+  private internalFilesCache = new Map<string, string>();
   private resourcesRegistryCache: typeof RESOURCES_REGISTRY_CACHE;
   private log: ReturnType<typeof LOGGER_TOKEN>;
+  private runningRequests = new Set<string>();
 
-  private scheduleFileLoad = (resource: PageResource, resourceInlineThreshold: number) => {
+  private scheduleFileLoad = async (resource: PageResource, resourceInlineThreshold: number) => {
     const url = getResourceUrl(resource);
     const requestKey = `file${url}`;
-    const urlIsDisabled = this.resourcesRegistryCache.disabledUrlsCache.get(url);
-    const requestIsInProgress = this.resourcesRegistryCache.requestsCache.get(requestKey);
-    if (!requestIsInProgress && !urlIsDisabled) {
-      const result = this.resourcesRegistryCache.filesCache.get(url);
-      if (result) {
-        return result;
-      }
-      const getFilePromise = getFile(url)
-        .then((file) => {
-          if (file === undefined) {
-            this.resourcesRegistryCache.disabledUrlsCache.set(url, true);
-            return;
-          }
-          const size = file.length;
-          if (size < resourceInlineThreshold) {
-            this.resourcesRegistryCache.filesCache.set(url, processFile(resource, file));
-          }
-          this.resourcesRegistryCache.sizeCache.set(url, size);
-        })
-        .catch((error) => {
-          this.log.warn({
-            event: 'file-load-failed',
-            url,
-            error,
-          });
-        })
-        .finally(() => {
-          this.resourcesRegistryCache.requestsCache.set(requestKey, undefined);
+
+    const filesCache = this.getFilesCache(url);
+    const result = filesCache.get(url);
+
+    if (result) {
+      return result;
+    }
+
+    if (!this.runningRequests.has(requestKey)) {
+      this.runningRequests.add(url);
+
+      try {
+        const file = await getFile(url);
+
+        if (file === undefined) {
+          this.resourcesRegistryCache.disabledUrlsCache.set(url, true);
+          return;
+        }
+
+        const size = file.length;
+        if (size < resourceInlineThreshold) {
+          filesCache.set(url, processFile(resource, file));
+        }
+
+        this.resourcesRegistryCache.sizeCache.set(url, size);
+      } catch (error) {
+        this.log.warn({
+          event: 'file-load-failed',
+          url,
+          error,
         });
-      this.resourcesRegistryCache.requestsCache.set(requestKey, getFilePromise);
+      } finally {
+        this.runningRequests.delete(requestKey);
+      }
     }
   };
 
-  private scheduleFileSizeLoad = (resource: PageResource, resourceInlineThreshold: number) => {
+  private scheduleFileSizeLoad = async (
+    resource: PageResource,
+    resourceInlineThreshold: number
+  ) => {
     const url = getResourceUrl(resource);
     const requestKey = `size${url}`;
-    if (!this.resourcesRegistryCache.requestsCache.has(requestKey)) {
-      const result = this.resourcesRegistryCache.sizeCache.get(url);
-      if (result) {
-        return result;
-      }
-      const getFileSizePromise = getFileContentLength(url)
-        .then((contentLength: string) => {
-          const size = isUndefined(contentLength) ? 0 : +contentLength;
-          if (size) {
-            this.resourcesRegistryCache.sizeCache.set(url, size);
-          }
-          if (size < resourceInlineThreshold) {
-            this.scheduleFileLoad(resource, resourceInlineThreshold);
-          }
-        })
-        .catch((error) => {
-          this.log.warn({
-            event: 'file-content-length-load-failed',
-            url,
-            error,
-          });
-        })
-        .finally(() => {
-          this.resourcesRegistryCache.requestsCache.set(requestKey, undefined);
+
+    const result = this.resourcesRegistryCache.sizeCache.get(url);
+
+    if (result) {
+      return result;
+    }
+
+    if (!this.runningRequests.has(requestKey)) {
+      this.runningRequests.add(requestKey);
+
+      try {
+        const contentLength = await getFileContentLength(url);
+
+        const size = isUndefined(contentLength) ? 0 : +contentLength;
+        if (size) {
+          this.resourcesRegistryCache.sizeCache.set(url, size);
+        }
+
+        if (size < resourceInlineThreshold) {
+          this.scheduleFileLoad(resource, resourceInlineThreshold);
+        }
+      } catch (error) {
+        this.log.warn({
+          event: 'file-content-length-load-failed',
+          url,
+          error,
         });
-      this.resourcesRegistryCache.requestsCache.set(requestKey, getFileSizePromise);
+      } finally {
+        this.runningRequests.delete(requestKey);
+      }
     }
   };
 
@@ -114,26 +135,36 @@ export class ResourcesInliner implements ResourcesInlinerType {
     this.log = logger('resources-inliner');
   }
 
-  // Метод проверки, стоит ли добавлять preload-ресурс
+  private getFilesCache(url: string) {
+    if (url.startsWith(ASSETS_PREFIX)) {
+      // internal resources are resources generated by the current app itself
+      // these kind of resources are pretty static and won't be changed while app is running
+      // so we can cache it with bare Map and do not care about how to cleanup cache from outdated entries
+      return this.internalFilesCache;
+    }
+
+    return this.resourcesRegistryCache.filesCache;
+  }
+
+  // check that resource's preload-link should be added to render
   shouldAddResource(resource: PageResource) {
     if (resource.type !== ResourceType.preloadLink) {
-      // Мы фильтруем только preloadLink, если это ресурс другого типа он должен
-      // попасть в итоговую выборку.
+      // only checking preload-links
       return true;
     }
 
     const url = getResourceUrl(resource);
 
     if (isUndefined(url)) {
-      // Если у ресурса нет URL'а, в кеше этого файла точно нет
+      // if url is undefined that file is not in cache
       return true;
     }
-    // Если файл лежит в кеше, значит он прошёл все проверки и будет инлайниться =>
-    // нам не нужно добавлять для него preload.
-    return !this.resourcesRegistryCache.filesCache.has(url);
+    // if file is residing in cache that means it will be inlined in page render
+    // therefore no need to have preload-link for the inlined resource
+    return !this.getFilesCache(url).has(url);
   }
 
-  // Метод проверки, должен ли быть заинлайнен в HTML-страницу ресурс.
+  // method for check is passed resource should be inlined in HTML-page
   shouldInline(resource: PageResource) {
     if (!(this.resourceInlineThreshold?.types || []).includes(resource.type)) {
       return false;
@@ -145,8 +176,21 @@ export class ResourcesInliner implements ResourcesInlinerType {
     }
 
     const url = getResourceUrl(resource);
+    const filesCache = this.getFilesCache(url);
 
-    if (isUndefined(url)) {
+    if (isUndefined(url) || this.resourcesRegistryCache.disabledUrlsCache.has(url)) {
+      return false;
+    }
+
+    if (filesCache.has(url)) {
+      return true;
+    }
+
+    if (
+      filesCache === this.internalFilesCache &&
+      this.internalFilesCache.size >= INTERNAL_CACHE_SIZE
+    ) {
+      // if we've exceeded limits for the internal resources cache ignore any new entries
       return false;
     }
 
@@ -161,28 +205,25 @@ export class ResourcesInliner implements ResourcesInlinerType {
       return false;
     }
 
-    if (!this.resourcesRegistryCache.filesCache.has(url)) {
-      this.scheduleFileLoad(resource, resourceInlineThreshold);
-      return false;
-    }
-
-    return true;
+    this.scheduleFileLoad(resource, resourceInlineThreshold);
+    return false;
   }
 
   inlineResource(resource: PageResource): PageResource[] {
     const url = getResourceUrl(resource);
     if (isUndefined(url)) {
-      // В теории, такого быть не должно, но добавим проверку на всякий случай
+      // usually, it should not happen but anyway check it for safety
       return [resource];
     }
-    const text = this.resourcesRegistryCache.filesCache.get(url);
+    const text = this.getFilesCache(url).get(url);
+
     if (isEmpty(text)) {
       return [resource];
     }
 
     const result = [];
     if (process.env.NODE_ENV === 'development') {
-      // Добавляем html комментарии для упрощения отладки инлайнинга в dev режиме
+      // html comment for debugging inlining in dev mode
       result.push({
         slot: resource.slot,
         type: ResourceType.asIs,
@@ -195,11 +236,10 @@ export class ResourcesInliner implements ResourcesInlinerType {
       payload: text,
     });
     if (resource.type === ResourceType.style) {
-      // Если не добавить data-href, extract-css-chunks-webpack-plugin
-      // добавит (https://github.com/faceyspacey/extract-css-chunks-webpack-plugin/blob/master/src/index.js#L346)
-      // в head ссылку на файл и инлайнинг будет бесполезен, т.к. браузер всё равно пойдёт скачивать этот файл.
-      // При этом в случае css-файлов он ищет тэг link, а при инлайнинге мы вставляем style => мы не можем
-      // использовать тэг выше, а приходится генерировать новый.
+      // If we don't add data-href then extract-css-chunks-webpack-plugin
+      // will add link to resources to the html head (https://github.com/faceyspacey/extract-css-chunks-webpack-plugin/blob/master/src/index.js#L346)
+      // wherein link in case of css files plugin will look for a link tag, but we add a style tag
+      // so we can't use tag from above and have to generate new one
       result.push({
         slot: resource.slot,
         type: ResourceType.style,

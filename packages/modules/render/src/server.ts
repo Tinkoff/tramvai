@@ -7,7 +7,8 @@ import {
   RESPONSE_MANAGER_TOKEN,
   CONTEXT_TOKEN,
   CREATE_CACHE_TOKEN,
-} from '@tramvai/module-common';
+  ENV_MANAGER_TOKEN,
+} from '@tramvai/tokens-common';
 import { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
 import { ClientHintsModule, USER_AGENT_TOKEN } from '@tramvai/module-client-hints';
 import {
@@ -38,6 +39,8 @@ import { PageErrorStore, setPageErrorEvent } from './shared/pageErrorStore';
 export * from './shared/pageErrorStore';
 export * from '@tramvai/tokens-render';
 
+const REQUEST_TTL = 5 * 60 * 1000;
+
 export const DEFAULT_POLYFILL_CONDITION =
   '!window.Promise.prototype.finally || !window.URL || !window.URLSearchParams || !window.AbortController || !window.IntersectionObserver || !Object.fromEntries || !window.ResizeObserver';
 
@@ -56,12 +59,10 @@ export const DEFAULT_POLYFILL_CONDITION =
       provide: RESOURCES_REGISTRY_CACHE,
       scope: Scope.SINGLETON,
       useFactory: ({ createCache }) => {
-        const thirtyMinutes = 1000 * 60 * 30;
         return {
-          filesCache: createCache('memory', { max: 50, ttl: thirtyMinutes }),
-          sizeCache: createCache('memory', { max: 100, ttl: thirtyMinutes }),
-          requestsCache: createCache('memory', { max: 150, ttl: 1000 * 60 * 5 }),
-          disabledUrlsCache: createCache('memory', { max: 150, ttl: 1000 * 60 * 5 }),
+          filesCache: createCache('memory', { max: 50 }),
+          sizeCache: createCache('memory', { max: 100 }),
+          disabledUrlsCache: createCache('memory', { max: 150, ttl: REQUEST_TTL }),
         };
       },
       deps: {
@@ -70,6 +71,7 @@ export const DEFAULT_POLYFILL_CONDITION =
     }),
     provide({
       provide: RESOURCE_INLINER,
+      scope: Scope.SINGLETON,
       useClass: ResourcesInliner,
       deps: {
         resourcesRegistryCache: RESOURCES_REGISTRY_CACHE,
@@ -185,7 +187,7 @@ export const DEFAULT_POLYFILL_CONDITION =
       useValue: DEFAULT_POLYFILL_CONDITION,
     }),
     provide({
-      // Включаем инлайнинг CSS-файлов размером до 40кб (до gzip) по умолчанию.
+      // by default, enable inlining for css files with size below 40kb before gzip
       provide: RESOURCE_INLINE_OPTIONS,
       useValue: {
         threshold: 40960, // 40kb before gzip, +-10kb after gzip

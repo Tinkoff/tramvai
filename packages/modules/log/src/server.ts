@@ -8,6 +8,7 @@ import { ENV_USED_TOKEN } from '@tramvai/module-environment';
 import {
   createLoggerFactory,
   JSONReporter,
+  LEVELS,
   NodeBasicReporter,
   NodeDevReporter,
 } from '@tinkoff/logger';
@@ -47,7 +48,11 @@ export function factory({ environmentManager, loggerInitHooks }) {
     each((val) => {
       const [lvl, ...name] = val.split(':');
 
-      logger.enable(lvl, name.join(':'));
+      if (lvl in LEVELS) {
+        logger.enable(lvl, name.join(':'));
+      } else {
+        logger.enable(val);
+      }
     }, split(',', enable));
   }
 
