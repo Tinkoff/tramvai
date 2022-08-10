@@ -1,29 +1,29 @@
-import { createAction } from '@tramvai/core';
+import { declareAction } from '@tramvai/core';
 import { set } from '../store';
 import { innerAction, innerBrowserAction, innerServerAction } from './inner';
 
-export const pageServerAction = createAction({
+export const pageServerAction = declareAction({
   name: 'pageServerAction',
-  fn: async (context) => {
+  async fn() {
     console.log('execute pageServerAction');
-    await context.executeAction(innerAction);
-    await context.executeAction(innerServerAction);
-    await context.executeAction(innerBrowserAction);
-    return context.dispatch(set('pageServerAction'));
+    await this.executeAction(innerAction);
+    await this.executeAction(innerServerAction);
+    await this.executeAction(innerBrowserAction);
+    return this.dispatch(set('pageServerAction'));
   },
   conditions: {
     pageServer: true,
   },
 });
 
-export const pageBrowserAction = createAction({
+export const pageBrowserAction = declareAction({
   name: 'pageBrowserAction',
-  fn: async (context) => {
+  async fn() {
     console.log('execute pageBrowserAction');
-    await context.executeAction(innerAction);
-    await context.executeAction(innerServerAction);
-    await context.executeAction(innerBrowserAction);
-    return context.dispatch(set('pageBrowserAction'));
+    await this.executeAction(innerAction);
+    await this.executeAction(innerServerAction);
+    await this.executeAction(innerBrowserAction);
+    return this.dispatch(set('pageBrowserAction'));
   },
   // this action can only be executed on the browser
   conditions: {
@@ -31,11 +31,11 @@ export const pageBrowserAction = createAction({
   },
 });
 
-export const pageAlwaysAction = createAction({
+export const pageAlwaysAction = declareAction({
   name: 'pageAlwaysAction',
-  fn: async (context) => {
+  async fn() {
     console.log('execute pageAlwaysAction');
-    return context.dispatch(set('pageAlwaysAction'));
+    return this.dispatch(set('pageAlwaysAction'));
   },
   conditions: {
     always: true,
@@ -43,11 +43,11 @@ export const pageAlwaysAction = createAction({
 });
 
 // this action is only executed in the browser, on page load and on every SPA transition
-export const pageBrowserAlwaysAction = createAction({
+export const pageBrowserAlwaysAction = declareAction({
   name: 'pageBrowserAlwaysAction',
-  fn: async (context) => {
+  async fn() {
     console.log('execute pageBrowserAlwaysAction');
-    return context.dispatch(set('pageBrowserAlwaysAction'));
+    return this.dispatch(set('pageBrowserAlwaysAction'));
   },
   conditions: {
     always: true,

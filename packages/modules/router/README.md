@@ -238,7 +238,7 @@ const providers = [
 In this case, it is best to use the [PAGE_SERVICE_TOKEN](#page_service_token)
 
 ```ts
-import { provide, createAction } from '@tramvai/core';
+import { provide, declareAction } from '@tramvai/core';
 import { PAGE_SERVICE_TOKEN } from '@tramvai/module-router';
 
 const provider = provide({
@@ -253,11 +253,11 @@ const provider = provide({
   },
 });
 
-const action = createAction({
+const action = declareAction({
   name: 'action',
-  fn: (_, __, { pageService }) => {
-    if (pageService.getConfig().pageComponent === 'pageComponent') {
-      return page.updateCurrentRoute({ query: { test: 'true' } });
+  fn() {
+    if (this.deps.pageService.getConfig().pageComponent === 'pageComponent') {
+      return this.deps.pageService.updateCurrentRoute({ query: { test: 'true' } });
     }
   },
   deps: {

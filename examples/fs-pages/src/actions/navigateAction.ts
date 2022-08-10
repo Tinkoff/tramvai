@@ -1,15 +1,11 @@
-import { createAction } from '@tramvai/core';
+import { declareAction } from '@tramvai/core';
 import { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
 
-export const navigateAction = createAction({
+export const navigateAction = declareAction({
   name: 'navigate-action',
-  fn: (
-    context,
-    url: string,
-    { pageService }: { pageService: typeof PAGE_SERVICE_TOKEN }
-  ) => {
+  fn(url: string) {
     // Используем pageService для перехода между страницами
-    return pageService.navigate({ url });
+    return this.deps.pageService.navigate({ url });
   },
   // deps позволяет использовать любую зависимость из DI в экшенах
   deps: {

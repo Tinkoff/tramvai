@@ -1,3 +1,4 @@
+import type { DispatcherContext as DispatcherContextInterface } from '@tramvai/types-actions-state-context';
 import type { Dispatcher } from './dispatcher';
 import type { StoreClass } from '../typings';
 import type { Middleware } from './dispatcher.h';
@@ -7,7 +8,7 @@ import { DispatcherContext } from './dispatcherContext';
 type InitialState = { stores: Record<string, any> };
 
 export class ChildDispatcherContext<TContext> extends DispatcherContext<TContext> {
-  private parentDispatcherContext: DispatcherContext<TContext>;
+  private parentDispatcherContext: DispatcherContextInterface<TContext>;
   private allowedParentStores = new Set<string>();
 
   /**
@@ -25,7 +26,7 @@ export class ChildDispatcherContext<TContext> extends DispatcherContext<TContext
     context: TContext;
     initialState: InitialState;
     middlewares?: Middleware[];
-    parentDispatcherContext: DispatcherContext<TContext>;
+    parentDispatcherContext: DispatcherContextInterface<TContext>;
     parentAllowedStores?: Array<
       StoreClass | string | { store: StoreClass | string; optional: true }
     >;

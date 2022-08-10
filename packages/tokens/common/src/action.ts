@@ -1,5 +1,7 @@
 import { createToken } from '@tinkoff/dippy';
 import type { Action } from '@tramvai/tokens-core';
+import type { TramvaiAction } from '@tramvai/types-actions-state-context';
+import type { ExecutionContext } from './execution';
 
 /**
  * @description
@@ -30,23 +32,59 @@ export const ACTION_CONDITIONALS = createToken<ActionCondition | ActionCondition
   }
 );
 
+type AnyAction = Action | TramvaiAction<any, any, any>;
+
 export interface ActionsRegistry {
-  add(type: string, actions: Action | Action[]): void;
+  add(
+    type: string,
+    actions:
+      | AnyAction
+      | TramvaiAction<any[], any, any>
+      | (AnyAction | TramvaiAction<any[], any, any>)[]
+  ): void;
 
-  get(type: string, addingActions?: Action[]): Action[];
-  getGlobal(): Action[];
+  get(
+    type: string,
+    addingActions?: (AnyAction | TramvaiAction<any[], any, any>)[]
+  ): (AnyAction | TramvaiAction<any[], any, any>)[];
+  getGlobal(): (AnyAction | TramvaiAction<any[], any, any>)[];
 
-  remove(type: string, actions?: Action | Action[]): void;
+  remove(
+    type: string,
+    actions?:
+      | AnyAction
+      | TramvaiAction<any[], any, any>
+      | (AnyAction | TramvaiAction<any[], any, any>)[]
+  ): void;
 }
 
 export interface ActionExecution {
-  execution: Map<string, any>;
+  run<Params extends any[], Result, Deps>(
+    action: TramvaiAction<Params, Result, Deps>,
+    ...params: Params
+  ): Result extends Promise<any> ? Result : Promise<Result>;
+  run<Payload, Result, Deps>(
+    action: Action<Payload, Result, Deps>,
+    payload: Payload
+  ): Result extends Promise<any> ? Result : Promise<Result>;
 
-  run(action: Action, payload: any): Promise<any>;
+  runInContext<Params extends any[], Result, Deps>(
+    context: ExecutionContext | null,
+    action: TramvaiAction<Params, Result, Deps>,
+    ...params: Params
+  ): Result extends Promise<any> ? Result : Promise<Result>;
+  runInContext<Payload, Result, Deps>(
+    context: ExecutionContext | null,
+    action: Action<Payload, Result, Deps>,
+    payload: Payload
+  ): Result extends Promise<any> ? Result : Promise<Result>;
 }
 
 export interface ActionPageRunner {
-  runActions(actions: Action[], stopRunAtError?: (error: Error) => boolean): Promise<any>;
+  runActions(
+    actions: (Action | TramvaiAction<any, any, any>)[],
+    stopRunAtError?: (error: Error) => boolean
+  ): Promise<any>;
 }
 
 export interface ActionConditionChecker<State = any> {

@@ -27,7 +27,12 @@ import {
   SERVER_FACTORY_TOKEN,
   WEB_FASTIFY_APP_FACTORY_TOKEN,
 } from '@tramvai/tokens-server-private';
-import { ENV_MANAGER_TOKEN, ENV_USED_TOKEN, LOGGER_TOKEN } from '@tramvai/tokens-common';
+import {
+  ENV_MANAGER_TOKEN,
+  ENV_USED_TOKEN,
+  EXECUTION_CONTEXT_MANAGER_TOKEN,
+  LOGGER_TOKEN,
+} from '@tramvai/tokens-common';
 import { MetricsModule } from '@tramvai/module-metrics';
 import { CacheWarmupModule } from '@tramvai/module-cache-warmup';
 import { serverFactory, serverListenCommand } from './server/server';
@@ -101,6 +106,7 @@ if (typeof setDefaultResultOrder === 'function') {
         expressApp: WEB_APP_TOKEN,
         logger: LOGGER_TOKEN,
         commandLineRunner: COMMAND_LINE_RUNNER_TOKEN,
+        executionContextManager: EXECUTION_CONTEXT_MANAGER_TOKEN,
         beforeInit: { token: WEB_FASTIFY_APP_BEFORE_INIT_TOKEN, optional: true },
         init: { token: WEB_FASTIFY_APP_INIT_TOKEN, optional: true },
         afterInit: { token: WEB_FASTIFY_APP_AFTER_INIT_TOKEN, optional: true },

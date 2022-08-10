@@ -83,31 +83,30 @@ class ModulePubSub {
 }
 ```
 
-### createAction
+### declareAction
 
-`createAction` - Method for creating asynchronous actions. It is used both for building chains of sagas and for performing global actions when building a response to a client
+`declareAction` - Method for creating asynchronous actions. It is used both for building chains of sagas and for performing global actions when building a response to a client
 
 [More about actions](concepts/action.md)
 
-#### createAction({ name, fn, deps, conditions })
+#### declareAction({ name, fn, deps, conditions })
 
 - `name` - The name of the action, a unique identifier is expected
-- `fn(context, payload, deps)` - Implementation of the action, this function will be called when the action is used, maybe `async`
-  - `context` - [ConsumerContext](references/tokens/common.md#context-tokens-list)
-  - `payload` - data passed to action
-  - `deps` - provider instances from `deps`
+- `fn(...params)` - Implementation of the action, this function will be called when the action is used, maybe `async`
+  - `this` - action execution context that contains some helper functions and resolved deps
+  - `params` - data passed to action
 - `deps` - List of providers that are needed for the action to work
 - `conditions` - List of restrictions for the execution of the action
 
 #### Usage example
 
 ```tsx
-import { createAction } from '@tramvai/core';
+import { declareAction } from '@tramvai/core';
 
-createAction({
+declareAction({
   name: 'action log error',
-  fn: (context, payload, deps) => {
-    deps.logger.error('ERROR');
+  fn(payload) {
+    this.deps.logger.error('ERROR');
   },
   deps: {
     logger: 'logger',

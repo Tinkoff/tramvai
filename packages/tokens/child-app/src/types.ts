@@ -5,13 +5,14 @@ import type {
   ModuleType,
   ExtendedModule,
   Action,
+  TramvaiAction,
 } from '@tramvai/core';
 
 export interface ChildApp {
   name: string;
 
   modules?: (ModuleType | ExtendedModule)[];
-  actions?: Action[];
+  actions?: Array<Action | TramvaiAction<any[], any, any>>;
   providers: Provider[];
 }
 

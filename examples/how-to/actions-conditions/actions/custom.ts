@@ -1,11 +1,11 @@
-import { createAction } from '@tramvai/core';
+import { declareAction } from '@tramvai/core';
 import { set } from '../store';
 
-export const customAction = createAction({
+export const customAction = declareAction({
   name: 'customAction',
-  fn: (context) => {
+  fn() {
     console.log('execute customAction');
-    return context.dispatch(set('customAction'));
+    return this.dispatch(set('customAction'));
   },
   // you can set your own options, which are then used in their conditions checks
   conditions: {

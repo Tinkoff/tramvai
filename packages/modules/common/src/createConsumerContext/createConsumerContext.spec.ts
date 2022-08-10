@@ -1,11 +1,16 @@
 import { createDispatcher, createEvent } from '@tramvai/state';
 import { createContainer } from '@tinkoff/dippy';
-import { createAction } from '@tramvai/core';
+import { createAction, declareAction, isTramvaiAction } from '@tramvai/core';
 import { ConsumerContext } from './createConsumerContext';
 
 const generateExecutProvider = () => ({
   provide: 'actionExecution',
-  useValue: { run: (action, payload) => Promise.resolve(action({}, payload)) },
+  useValue: {
+    run: (action, payload) =>
+      Promise.resolve(
+        isTramvaiAction(action) ? action.fn.call({} as any, payload) : action({}, payload)
+      ),
+  },
 });
 
 describe('createConsumerContext', () => {
@@ -55,10 +60,10 @@ describe('createConsumerContext', () => {
   it('executeAction - выполнение функции созданной через createAction с зависимостями', () => {
     const context = generateContext({ diProviders: [generateExecutProvider()] });
     let result = false;
-    const action = createAction({
+    const action = declareAction({
       name: 'testAction',
-      fn: (ct, payload) => {
-        expect(ct).toBeDefined();
+      fn(payload) {
+        expect(this).toBeDefined();
         result = payload;
         return Promise.resolve(result);
       },

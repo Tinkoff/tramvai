@@ -1,6 +1,6 @@
-import { createAction } from '@tramvai/core';
+import { createAction, declareAction } from '@tramvai/core';
 import { createEvent } from '@tramvai/state';
-import { createMockContext } from '@tramvai/test-mocks';
+import { createMockStore } from '@tramvai/test-mocks';
 import { testAction } from './testAction';
 
 describe('test/unit/state/testAction', () => {
@@ -23,19 +23,19 @@ describe('test/unit/state/testAction', () => {
   });
 
   it('should call action with custom context', async () => {
-    const context = createMockContext();
+    const store = createMockStore();
     const event = createEvent<string>('test');
 
-    const action = createAction({
+    const action = declareAction({
       name: 'dispatch',
-      fn: (ctx, payload: string) => {
-        return ctx.dispatch(event(`action${payload}`));
+      fn(payload: string) {
+        return this.dispatch(event(`action${payload}`));
       },
     });
 
-    const spyDispatch = jest.spyOn(context, 'dispatch');
+    const spyDispatch = jest.spyOn(store, 'dispatch');
 
-    const { run } = testAction(action, { context });
+    const { run } = testAction(action, { store });
 
     await run('ping');
 
@@ -47,9 +47,9 @@ describe('test/unit/state/testAction', () => {
   });
 
   it('should not require payload', async () => {
-    const action = createAction({
+    const action = declareAction({
       name: 'no-payload',
-      fn: () => {
+      fn() {
         return 'empty';
       },
     });

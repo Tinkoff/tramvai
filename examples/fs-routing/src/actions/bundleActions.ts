@@ -1,8 +1,8 @@
-import { createAction } from '@tramvai/core';
+import { declareAction } from '@tramvai/core';
 
-export const bundleServerOnlyAction = createAction({
+export const bundleServerOnlyAction = declareAction({
   name: 'bundle-server-action',
-  fn: async (context, payload) => {
+  fn: async () => {
     // Выполняется один раз на сервере
   },
   conditions: {
@@ -10,9 +10,9 @@ export const bundleServerOnlyAction = createAction({
   },
 });
 
-export const bundleClientOnlyAction = createAction({
+export const bundleClientOnlyAction = declareAction({
   name: 'bundle-client-action',
-  fn: (context, payload) => {
+  fn: () => {
     // Выполняется один раз на клиенте
   },
   conditions: {

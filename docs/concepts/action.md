@@ -6,17 +6,19 @@ sidebar_position: 6
 
 Actions are needed in the application to localize the execution of asynchronous actions, for example, make a request, update data in the store, and other actions that affect IO or state management.
 
-Detailed description of the interface [createAction](references/tramvai/core.md#createAction)
+Detailed description of the interface [declareAction](references/tramvai/core.md#declareAction)
 
 ## Example action
 
 ```tsx
-import { createAction } from '@tramvai/core';
+import { declareAction } from '@tramvai/core';
 
 // create an action
-const actionFetchData = createAction({
+const actionFetchData = declareAction({
   name: 'fetch-data',
-  fn: (context, payload) => fetch(payload.url),
+  fn(payload) {
+    return fetch(payload.url);
+  }
 });
 
 // execute the action
@@ -107,9 +109,11 @@ class PageComponent extends Copmponent {
 Not all actions can be executed under all circumstances, we can have actions that should be executed only on the server, others only in the browser, and having any other restrictions. There is a `conditions` property to solve this problem:
 
 ```tsx
-createAction({
+declareAction({
   name: 'fetch-data',
-  fn: (context, payload) => fetch(payload.url),
+  fn() {
+    return fetch(payload.url);
+  },
   conditions: {
     requiredCoreRoles: ['client'],
     onlyBrowser: true,

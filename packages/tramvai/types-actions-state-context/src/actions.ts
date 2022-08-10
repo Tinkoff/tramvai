@@ -1,5 +1,5 @@
 import type { ProvideDepsIterator } from '@tinkoff/dippy';
-import type { ConsumerContext } from './state';
+import type { ConsumerContext, Dispatch, GetState } from './state';
 
 export type ActionContext = ConsumerContext;
 
@@ -23,6 +23,7 @@ export interface ActionParameters<Payload, Result, Deps = {}> {
   deps?: Deps;
   /* Ограничения для исполнения. К примеру: авторизован ли пользователь */
   conditions?: ActionConditionsParameters;
+  conditionsFailResult?: 'reject' | 'empty';
 }
 
 export const ACTION_PARAMETERS = '__action_parameters__';
@@ -47,6 +48,41 @@ export interface PlatformAction<
   cancelable?: boolean;
   requiredRoles?: boolean;
   cancelOnUrlChange?: boolean;
+}
+
+export type TramvaiActionType = 'page' | 'standalone';
+
+export interface TramvaiActionContext<CurrentDeps> {
+  abortSignal: AbortSignal;
+  executeAction<Params extends any[], Result, Deps>(
+    action: TramvaiAction<Params, Result, Deps>,
+    ...params: Params
+  ): Result extends Promise<any> ? Result : Promise<Result>;
+
+  executeAction<Payload, Result, Deps>(
+    action: Action<Payload, Result, Deps>,
+    payload?: Payload
+  ): Result extends Promise<any> ? Result : Promise<Result>;
+  deps: ProvideDepsIterator<CurrentDeps>;
+  actionType: TramvaiActionType;
+  dispatch: Dispatch;
+  getState: GetState;
+}
+
+export interface TramvaiActionDefinition<Params extends any[], Result, Deps> {
+  // TODO: maybe generate name automatically?
+  name: string;
+  fn: (this: TramvaiActionContext<Deps>, ...params: Params) => Result;
+  deps?: Deps;
+  conditions?: ActionConditionsParameters;
+  // TODO: Add pending condition that will not resolve action execution
+  // might be used in react-query and should not block pageActions
+  conditionsFailResult?: 'reject' | 'empty';
+}
+
+export interface TramvaiAction<Params extends any[], Result, Deps>
+  extends TramvaiActionDefinition<Params, Result, Deps> {
+  tramvaiActionVersion: number;
 }
 
 export type UnknownAction<Result = any> = (...args: any[]) => Result;

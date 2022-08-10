@@ -11,6 +11,8 @@ export {
   optional,
   OptionalTokenDependency,
   TokenInterface,
+  BaseTokenInterface,
+  MultiTokenInterface,
   ExtractTokenType,
   ExtractDependencyType,
 } from './createToken/createToken';

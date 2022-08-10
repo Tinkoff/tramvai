@@ -20,6 +20,7 @@ import {
   DISPATCHER_CONTEXT_TOKEN,
   ADDITIONAL_BUNDLE_TOKEN,
   LOGGER_TOKEN,
+  EXECUTION_CONTEXT_MANAGER_TOKEN,
 } from '@tramvai/tokens-common';
 import { BundleManager } from './bundleManager/bundleManager';
 import { ComponentRegistry } from './componentRegistry/componentRegistry';
@@ -34,6 +35,7 @@ import { providers as serverProviders } from './providers/serverProviders';
 import { ActionModule } from './actions/ActionModule';
 import { StateModule } from './state/StateModule';
 import { CacheModule } from './cache/CacheModule';
+import { ExecutionContextManager } from './executionContext/executionContextManager';
 
 @Module({
   imports: [
@@ -102,6 +104,10 @@ import { CacheModule } from './cache/CacheModule';
         dispatcherContext: DISPATCHER_CONTEXT_TOKEN,
         store: STORE_TOKEN,
       },
+    }),
+    provide({
+      provide: EXECUTION_CONTEXT_MANAGER_TOKEN,
+      useClass: ExecutionContextManager,
     }),
     ...serverProviders,
   ],

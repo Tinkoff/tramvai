@@ -1,5 +1,5 @@
 import { createChildApp } from '@tramvai/child-app-core';
-import { createAction } from '@tramvai/core';
+import { declareAction } from '@tramvai/core';
 import { CommonChildAppModule } from '@tramvai/module-common';
 import { CHILD_APP_INTERNAL_ROOT_STATE_ALLOWED_STORE_TOKEN } from '@tramvai/tokens-child-app';
 import { StateCmp } from './component';
@@ -14,9 +14,9 @@ if (typeof window !== 'undefined') {
   window.TRAMVAI_TEST_CHILD_APP_ACTION_CALLED_TIMES = 0;
 }
 
-const action = createAction({
+const action = declareAction({
   name: 'state-action',
-  fn: () => {
+  fn() {
     window.TRAMVAI_TEST_CHILD_APP_ACTION_CALLED_TIMES++;
   },
   conditions: {

@@ -74,17 +74,17 @@ Uses `@sentry/node` and [Sentry express middleware](https://docs.sentry.io/platf
 ### Send custom error
 
 ```tsx
-import { createAction } from '@tramvai/core';
+import { declareAction } from '@tramvai/core';
 import { SENTRY_TOKEN } from '@tramvai/module-sentry';
 import { loadUsers } from './users';
 
-export default createAction({
+export default declareAction({
   name: 'loadUsers',
-  fn: async (context, _, { sentry }) => {
+  async fn() {
     try {
       await loadUsers();
     } catch (e) {
-      sentry.captureException(e);
+      this.deps.sentry.captureException(e);
       throw e;
     }
   },

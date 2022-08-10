@@ -1,5 +1,5 @@
 import React from 'react';
-import { createApp, createBundle, createAction } from '@tramvai/core';
+import { createApp, createBundle, declareAction } from '@tramvai/core';
 import { SpaRouterModule, useNavigate, useUrl } from '@tramvai/module-router';
 import { RESPONSE_MANAGER_TOKEN } from '@tramvai/tokens-common';
 import { NotFoundError } from '@tinkoff/errors';
@@ -14,9 +14,10 @@ const fetchSomeData = () =>
     }, 100);
   });
 
-const pageAction = createAction({
+const pageAction = declareAction({
   name: 'pageAction',
-  fn: async (_, __, { responseManager }) => {
+  async fn() {
+    const { responseManager } = this.deps;
     try {
       await fetchSomeData();
     } catch (e) {

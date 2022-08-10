@@ -1,4 +1,5 @@
 import { createContainer } from '@tinkoff/dippy';
+import { ExecutionContextManager } from '../executionContext/executionContextManager';
 import { CommandLineRunner } from './commandLineRunner';
 
 const lines = {
@@ -12,22 +13,22 @@ const lines = {
   },
 };
 
-function generateCommand(name, actual) {
+function generateCommand(name: string, actual: string[]) {
   return function command() {
     return Promise.resolve(name).then((k) => actual.push(k));
   };
 }
 
-function generateProvider(provide, value) {
+function generateProvider(provide: string, value: any) {
   return {
     provide,
     useValue: value,
   };
 }
 
-const factoryTestActions = (actual) => {
+const factoryTestActions = (actual: string[]) => {
   const di = createContainer();
-  const actions = [
+  const actions: Array<[string, any]> = [
     ['A', generateCommand('fable', actual)],
     ['B', [generateCommand('book', actual), generateCommand('magic', actual)]],
     ['C', generateCommand('elf', actual)],
@@ -48,17 +49,18 @@ const factoryTestActions = (actual) => {
 
 const LoggerMock: any = (name: any) => ({ log: () => {}, error: () => {}, debug: () => {} });
 
-function generateBaseIt(type, status, result) {
-  const actual = [];
+function generateBaseIt(type: string, status: string, result: string[]) {
+  const actual: string[] = [];
   const { di } = factoryTestActions(actual);
 
   const flow = new CommandLineRunner({
-    lines,
+    lines: lines as any,
     rootDi: di,
     logger: LoggerMock,
+    executionContextManager: new ExecutionContextManager(),
   });
 
-  return flow.run(type, status).then(() => {
+  return flow.run(type as any, status).then(() => {
     expect(actual).toEqual(result);
   });
 }
@@ -107,14 +109,17 @@ describe('CommandLineRunner', () => {
       });
 
       const flow = new CommandLineRunner({
-        lines,
+        lines: lines as any,
         rootDi: di,
         logger: LoggerMock,
+        executionContextManager: new ExecutionContextManager(),
       });
 
       expect.assertions(1);
 
-      await expect(flow.run('server', 'init')).rejects.toThrow('Token not found "fff" at "A"');
+      await expect(flow.run('server', 'init')).rejects.toMatchObject({
+        message: 'Token not found "fff" at "A"',
+      });
     });
   });
 });

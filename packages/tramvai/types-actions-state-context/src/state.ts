@@ -1,5 +1,5 @@
 import type { AnyEventCreator, EmptyEventCreator, EventCreator1, Event } from './events';
-import type { AnyAction } from './actions';
+import type { AnyAction, TramvaiAction } from './actions';
 
 export type EventHandler<State, Payload = void> = (state: State, payload: Payload) => State;
 
@@ -59,7 +59,20 @@ export interface Reducer<State, Name extends string = string> {
   };
 }
 
+export type StoreInstance = InstanceType<StoreClass>;
+
+export interface GetState {
+  (): Record<string, any>;
+  <S>(reducer: Reducer<S>): S;
+}
+
+export type Dispatch = <Payload>(event: Event<Payload>) => Payload;
+
 export interface ConsumerContext {
+  executeAction<Params extends any[], Result, Deps>(
+    action: TramvaiAction<Params, Result, Deps>,
+    ...params: Params
+  ): Result extends Promise<any> ? Result : Promise<Result>;
   executeAction<Payload extends any = any, Result = any, Deps extends Record<string, any> = any>(
     action: AnyAction<Payload, Result, Deps>,
     payload?: Payload
@@ -80,8 +93,7 @@ export interface ConsumerContext {
     options?: Options
   ) => <Result extends any = any>(...args: any[]) => Promise<Result>;
 
-  getState(): Record<string, any>;
-  getState<S>(reducer: Reducer<S>): S;
+  getState: GetState;
 
   /**
    * @deprecated используйте метод `context.getState(reducer)`
@@ -106,3 +118,35 @@ export interface ConsumerContext {
   registerStore(store: Reducer<any>): void;
   unregisterStore(store: Reducer<any>): void;
 }
+
+export interface StoreClass {
+  handlers: Record<string, Function | string>;
+  storeName: string;
+  // TODO: убрать после того отпадёт надобность связывать сторы router и application
+  dependencies?: Array<StoreClass | string | { store: StoreClass | string; optional: true }>;
+  new (dispatcher: DispatcherContext<any>['dispatcherInterface']): any;
+}
+
+export type DispatcherContext<TContext> = {
+  getStore<T extends StoreClass>(
+    storeClass: T | string | { store: T | string; optional: true }
+  ): InstanceType<T> | null;
+
+  subscribe(handler: () => void): () => void;
+  getState: GetState;
+
+  dispatcherInterface: {
+    // deprecated
+    getContext: () => TContext;
+    // deprecated
+    getStore: DispatcherContext<TContext>['getStore'];
+  };
+};
+
+export interface MiddlewareApi {
+  dispatch: Dispatch;
+  subscribe(handler: () => void): () => void;
+  getState: GetState;
+}
+
+export type Middleware = (api: MiddlewareApi) => (next: Dispatch) => (event: Event) => any;

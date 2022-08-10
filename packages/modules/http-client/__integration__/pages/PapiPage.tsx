@@ -1,17 +1,19 @@
 import React from 'react';
-import { createAction } from '@tramvai/core';
+import { declareAction } from '@tramvai/core';
 import { PAPI_SERVICE } from '@tramvai/tokens-http-client';
 import { useStore } from '@tramvai/state';
 import { testPapiReducer, updateTestPapiState } from '../reducers/testPapi';
 
-const serverAction = createAction({
-  fn: async (context, __, { papiService }) => {
+const serverAction = declareAction({
+  async fn() {
+    const { papiService } = this.deps;
+
     const testPapiState = await Promise.all([
       papiService.request({ path: 'async-papi-server' }).then(({ payload }) => payload),
       papiService.request({ path: 'sync-papi-server' }).then(({ payload }) => payload),
     ]);
 
-    context.dispatch(updateTestPapiState(testPapiState));
+    this.dispatch(updateTestPapiState(testPapiState));
   },
   name: 'serverAction',
   deps: {
@@ -22,14 +24,16 @@ const serverAction = createAction({
   },
 });
 
-const browserAction = createAction({
-  fn: async (context, __, { papiService }) => {
+const browserAction = declareAction({
+  async fn() {
+    const { papiService } = this.deps;
+
     const testPapiState = await Promise.all([
       papiService.request({ path: 'async-papi-browser' }).then(({ payload }) => payload),
       papiService.request({ path: 'sync-papi-browser' }).then(({ payload }) => payload),
     ]);
 
-    context.dispatch(updateTestPapiState(testPapiState));
+    this.dispatch(updateTestPapiState(testPapiState));
   },
   name: 'browserAction',
   deps: {

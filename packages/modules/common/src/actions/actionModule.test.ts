@@ -1,4 +1,4 @@
-import { createAction } from '@tramvai/core';
+import { createAction, declareAction } from '@tramvai/core';
 import { createContainer } from '@tinkoff/dippy';
 import noop from '@tinkoff/utils/function/noop';
 import type { LOGGER_TOKEN } from '@tramvai/tokens-common';
@@ -6,6 +6,7 @@ import { ActionExecution } from './actionExecution';
 import { ActionPageRunner as ActionPageRunnerServer } from './actionPageRunner';
 import { ActionPageRunner as ActionPageRunnerBrowser } from './actionPageRunner.browser';
 import { authConditionFactory } from './test-utils/authCondition.mock';
+import { ExecutionContextManager } from '../executionContext/executionContextManager';
 
 const contextMock = {};
 const logger = ((() => ({
@@ -19,13 +20,13 @@ describe('action module integration tests', () => {
       //
       // подготовка общих данных
       //
-      let result = [];
+      let result: any[] = [];
       const action1 = createAction({
         fn: (c, payload) => result.push(['action1', payload]),
         name: 'action1',
       });
-      const action2 = createAction({
-        fn: async (c, payload) => {
+      const action2 = declareAction({
+        fn(payload) {
           result.push(['action2', payload]);
         },
         name: 'action2',
@@ -37,38 +38,42 @@ describe('action module integration tests', () => {
       //
       const storeServer: any = {
         getState: (reducer?: any) => {
-          const state = {};
+          const state: any = {};
 
           if (reducer) {
             return state[reducer.storeName];
           }
           return state;
         },
-        dispatch: (event) => {
+        dispatch: (event: any) => {
           if (event.type === 'action state execution in server') {
             serverState = event.payload;
           }
         },
       };
+      const executionContextManager = new ExecutionContextManager();
       const instanceExecutionServer = new ActionExecution({
         di: createContainer(),
         store: storeServer,
         actionConditionals: [],
         // @ts-ignore
         context: contextMock,
+        executionContextManager,
       });
       const instanceServer = new ActionPageRunnerServer({
         logger,
         actionExecution: instanceExecutionServer,
         store: storeServer,
         limitTime: 500,
+        executionContextManager,
+        commandLineExecutionContext: () => null,
       });
 
       await instanceServer.runActions([action1, action2]);
 
       expect(result).toEqual([
         ['action1', {}],
-        ['action2', {}],
+        ['action2', undefined],
       ]);
 
       //
@@ -78,7 +83,7 @@ describe('action module integration tests', () => {
 
       const storeBrowser: any = {
         getState: (reducer?: any) => {
-          const state = { actionTramvai: { serverState } };
+          const state: any = { actionTramvai: { serverState } };
 
           if (reducer) {
             return state[reducer.storeName];
@@ -97,6 +102,8 @@ describe('action module integration tests', () => {
       const instanceBrowser = new ActionPageRunnerBrowser({
         logger,
         actionExecution: instanceExecutionBrowser,
+        executionContextManager,
+        commandLineExecutionContext: () => null,
       });
       await instanceBrowser.runActions([action1, action2]);
 
@@ -107,7 +114,7 @@ describe('action module integration tests', () => {
       //
       // подготовка общих данных
       //
-      let result = [];
+      let result: any[] = [];
       const action1 = createAction({
         fn: (c, payload) => result.push(['action1', payload]),
         name: 'action1',
@@ -115,8 +122,8 @@ describe('action module integration tests', () => {
           requiredCoreRoles: ['client'],
         },
       });
-      const action2 = createAction({
-        fn: async (c, payload) => {
+      const action2 = declareAction({
+        fn(payload) {
           result.push(['action2', payload]);
         },
         name: 'action2',
@@ -131,7 +138,7 @@ describe('action module integration tests', () => {
       //
       const storeServer: any = {
         getState: (reducer?: any) => {
-          const state = {
+          const state: any = {
             roles: {
               CORE: {
                 client: true,
@@ -145,32 +152,36 @@ describe('action module integration tests', () => {
           }
           return state;
         },
-        dispatch: (event) => {
+        dispatch: (event: any) => {
           if (event.type === 'action state execution in server') {
             serverState = event.payload;
           }
         },
       };
       const authCondServer = authConditionFactory({ context: storeServer });
+      const executionContextManager = new ExecutionContextManager();
       const instanceExecutionServer = new ActionExecution({
         di: createContainer(),
         store: storeServer,
         actionConditionals: [authCondServer],
         // @ts-ignore
         context: contextMock,
+        executionContextManager,
       });
       const instanceServer = new ActionPageRunnerServer({
         logger,
         actionExecution: instanceExecutionServer,
         store: storeServer,
         limitTime: 500,
+        executionContextManager,
+        commandLineExecutionContext: () => null,
       });
 
       await instanceServer.runActions([action1, action2]);
 
       expect(result).toEqual([
         ['action1', {}],
-        ['action2', {}],
+        ['action2', undefined],
       ]);
 
       //
@@ -180,7 +191,7 @@ describe('action module integration tests', () => {
 
       const storeBrowser: any = {
         getState: (reducer?: any) => {
-          const state = {
+          const state: any = {
             roles: {
               CORE: {
                 client: true,
@@ -208,6 +219,8 @@ describe('action module integration tests', () => {
       const instanceBrowser = new ActionPageRunnerBrowser({
         actionExecution: instanceExecutionBrowser,
         logger,
+        executionContextManager,
+        commandLineExecutionContext: () => null,
       });
       await instanceBrowser.runActions([action1, action2]);
 

@@ -82,13 +82,13 @@ More about the format [in the documentation](references/libs/meta-tags-generate.
 If you want to install seo in a page action or in one of the commandLineRunner steps, you can explicitly use the `MetaWalk` entity from the `@tinkoff/meta-tags-generate` lib.
 
 ```tsx
-import { createAction } from '@tramvai/core';
+import { declareAction } from '@tramvai/core';
 import { META_WALK_TOKEN, META_PRIORITY_APP } from '@tramvai/module-seo';
 
-createAction({
+declareAction({
   name: 'action',
-  fn: async (context, payload, { meta }) => {
-    meta.updateMeta(META_PRIORITY_APP, {
+  fn() {
+    this.deps.meta.updateMeta(META_PRIORITY_APP, {
       title: 'WoW, such dynamic!',
     });
   },

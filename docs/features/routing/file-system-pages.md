@@ -216,7 +216,7 @@ import { PAGE_SERVICE } from '@tramvai/tokens-router';
 const CommentsPage = () => {
   const pageService = useDi(PAGE_SERVICE);
   const ModalBox = pageService.getComponent('modal-box');
- 
+
   return (
     <>
       <h1>Comments</h1>
@@ -296,13 +296,13 @@ const Comment = () => {
 In actions, use `PAGE_SERVICE_TOKEN`:
 
 ```tsx
-import { createAction } from '@tramvai/core';
+import { declareAction } from '@tramvai/core';
 
-const someAction = createAction({
+const someAction = declareAction({
   name: 'someAction',
-  fn: (_, __, { pageService }) => {
-    const route = pageService.getCurrentRoute();
-    
+  fn() {
+    const route = this.deps.pageService.getCurrentRoute();
+
     console.log(`Current comment id: ${route.params.id}`);
   },
   deps: {
@@ -342,7 +342,7 @@ If you want to migrate from bundles to file-system pages, there is few steps:
       name: 'someBundle',
       components: {
         'pages/foo-page': lazy(() => import('../pages/Foo')),
-        'pages/bar-page': lazy(() => import('../pages/Bar')), 
+        'pages/bar-page': lazy(() => import('../pages/Bar')),
         'components/common': CommonComponent,
       },
       actions: [actionFoo, actionBar],

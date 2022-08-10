@@ -1,6 +1,7 @@
 export { CommonModule } from './CommonModule';
 export { CommandModule } from './command/CommandModule';
 export { ActionExecution } from './actions/actionExecution';
+export { ExecutionContextManager } from './executionContext/executionContextManager';
 export {
   alwaysCondition,
   onlyServer,

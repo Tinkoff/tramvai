@@ -1,14 +1,27 @@
 import flatten from '@tinkoff/utils/array/flatten';
 import identity from '@tinkoff/utils/function/identity';
 import type { Action, ActionParameters, DI_TOKEN } from '@tramvai/core';
+import { isTramvaiAction } from '@tramvai/core';
 import { ACTION_PARAMETERS } from '@tramvai/core';
-import type { CONTEXT_TOKEN, ActionCondition, STORE_TOKEN } from '@tramvai/tokens-common';
+import type {
+  CONTEXT_TOKEN,
+  ActionCondition,
+  STORE_TOKEN,
+  ActionExecution as Interface,
+  EXECUTION_CONTEXT_MANAGER_TOKEN,
+  ExecutionContext,
+} from '@tramvai/tokens-common';
 import objectMap from '@tinkoff/utils/object/map';
+import type { TramvaiAction, TramvaiActionContext } from '@tramvai/types-actions-state-context';
+import { ConditionFailError } from '@tinkoff/errors';
 import type { ExtractDependencyType } from '@tinkoff/dippy';
 import { ActionChecker } from './actionChecker';
 import type { ActionType } from './constants';
 import { actionType } from './constants';
 import { actionTramvaiReducer } from './actionTramvaiReducer';
+
+const EMPTY_DEPS = {};
+const DEFAULT_PAYLOAD = {};
 
 export const getParameters = (action: Action): ActionParameters<any, any> =>
   action[ACTION_PARAMETERS];
@@ -22,33 +35,40 @@ export interface ExecutionState {
 
 type TransformAction = <T>(action: T) => T;
 
-export class ActionExecution {
-  actionConditionals: ActionCondition[];
+type AnyActionParameters = ActionParameters<any, any> | TramvaiAction<any, any, any>;
 
+export class ActionExecution implements Interface {
   execution: Map<string, ExecutionState>;
+  private actionConditionals: ActionCondition[];
 
-  context: ExtractDependencyType<typeof CONTEXT_TOKEN>;
+  private context: ExtractDependencyType<typeof CONTEXT_TOKEN>;
+  private store: ExtractDependencyType<typeof STORE_TOKEN>;
+  private executionContextManager: ExtractDependencyType<typeof EXECUTION_CONTEXT_MANAGER_TOKEN>;
 
-  di: ExtractDependencyType<typeof DI_TOKEN>;
+  private di: ExtractDependencyType<typeof DI_TOKEN>;
 
-  transformAction: TransformAction;
+  private transformAction: TransformAction;
 
   constructor({
-    actionConditionals,
     store,
     context,
     di,
+    executionContextManager,
+    actionConditionals,
     transformAction,
   }: {
     actionConditionals: ActionCondition[] | ActionCondition[][] | null;
-    store?: ExtractDependencyType<typeof STORE_TOKEN>;
-    context?: ExtractDependencyType<typeof CONTEXT_TOKEN>;
-    di?: ExtractDependencyType<typeof DI_TOKEN>;
+    store: ExtractDependencyType<typeof STORE_TOKEN>;
+    context: ExtractDependencyType<typeof CONTEXT_TOKEN>;
+    di: ExtractDependencyType<typeof DI_TOKEN>;
+    executionContextManager: ExtractDependencyType<typeof EXECUTION_CONTEXT_MANAGER_TOKEN>;
     transformAction?: TransformAction;
   }) {
     this.actionConditionals = flatten(actionConditionals ?? []);
     this.context = context;
+    this.store = store;
     this.di = di;
+    this.executionContextManager = executionContextManager;
     this.execution = new Map();
     this.transformAction = transformAction || identity;
 
@@ -61,36 +81,83 @@ export class ActionExecution {
     }
   }
 
-  run(action: Action, payload: any, type: ActionType = actionType.local): Promise<any> {
-    // TODO выпилить после перевода всех экшенов к виду Action
-    this.transformAction(action);
-    const parameters = getParameters(action);
-    const executionState = this.getExecutionState(parameters);
+  async runInContext(
+    executionContext: ExecutionContext | null,
+    action: Action | TramvaiAction<any, any, any>,
+    ...params: any[]
+  ): Promise<any> {
+    let parameters: AnyActionParameters;
+    const payload = params[0] ?? DEFAULT_PAYLOAD;
+    // TODO: replace type with pure context usage
+    const type =
+      executionContext?.values.pageActions === true ? actionType.global : actionType.local;
 
-    if (!this.canExecuteAction(payload, parameters, executionState, type)) {
-      return Promise.resolve();
+    // TODO: remove else branch after migration to new declareAction
+    if (isTramvaiAction(action)) {
+      parameters = action;
+    } else {
+      this.transformAction(action);
+      parameters = getParameters(action);
     }
 
-    const deps = parameters.deps ? this.di.getOfDeps(parameters.deps) : {};
+    const executionState = this.getExecutionState(parameters.name);
+
+    if (!this.canExecuteAction(payload, parameters, executionState, type)) {
+      switch (parameters.conditionsFailResult) {
+        case 'reject':
+          // TODO: pass condition that has failed
+          return Promise.reject(new ConditionFailError());
+        default:
+          return Promise.resolve();
+      }
+    }
 
     executionState.status = 'pending';
-    return Promise.resolve()
-      .then(() => action(this.context, payload, deps))
-      .then((data) => {
-        executionState.status = 'success';
-        return data;
-      })
-      .catch((err) => {
-        executionState.status = 'failed';
-        throw err;
-      });
+
+    return this.executionContextManager.withContext(
+      executionContext,
+      {
+        name: parameters.name,
+        values: executionContext?.values.pageActions === true ? { pageActions: false } : undefined,
+      },
+      (executionActionContext) => {
+        const context = this.createActionContext(
+          executionContext,
+          executionActionContext,
+          parameters
+        );
+
+        return Promise.resolve()
+          .then(() => {
+            // TODO: do not execute action if context.abortSignal is aborted
+            if (isTramvaiAction(action)) {
+              return action.fn.apply(context, params);
+            }
+
+            return action(this.context, payload, context.deps);
+          })
+          .then((data) => {
+            executionState.status = 'success';
+            return data;
+          })
+          .catch((err) => {
+            executionState.status = 'failed';
+            throw err;
+          });
+      }
+    );
   }
 
-  private getExecutionState(parameters: ActionParameters<any, any>) {
-    let executionState = this.execution.get(parameters.name);
+  async run(action: Action | TramvaiAction<any, any, any>, ...params: any[]): Promise<any> {
+    return this.runInContext(null, action, ...params);
+  }
+
+  private getExecutionState(name: string) {
+    let executionState = this.execution.get(name);
+    // TODO: probably do not need to create executionState on client as it is not used
     if (!executionState) {
       executionState = { status: 'pending', state: {} };
-      this.execution.set(parameters.name, executionState);
+      this.execution.set(name, executionState);
     }
     return executionState;
   }
@@ -110,5 +177,20 @@ export class ActionExecution {
     );
 
     return actionChecker.check();
+  }
+
+  private createActionContext(
+    parentExecutionContext: ExecutionContext | null,
+    actionExecutionContext: ExecutionContext,
+    parameters: AnyActionParameters
+  ): TramvaiActionContext<any> {
+    return {
+      abortSignal: actionExecutionContext?.abortSignal,
+      executeAction: this.runInContext.bind(this, actionExecutionContext),
+      deps: parameters.deps ? this.di.getOfDeps(parameters.deps) : EMPTY_DEPS,
+      actionType: parentExecutionContext?.values.pageActions ? 'page' : 'standalone',
+      dispatch: this.store.dispatch,
+      getState: this.store.getState,
+    };
   }
 }

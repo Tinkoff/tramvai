@@ -6,7 +6,7 @@ sidebar_position: 2
 
 Tramvai is based on a `DI` system that contains information about dependencies, connections between them, and already created instances of dependencies.
 
-## Concepts 
+## Concepts
 
 - [Provider](concepts/provider.md) - Token implementation in DI
 - [Tokens](concepts/provider.md) - provider identifier in DI system and at the same time its interface
@@ -75,10 +75,10 @@ createApp({
 To get provider implementations, you can pass a `deps` object when creating an action:
 
 ```tsx
-createAction({
+declareAction({
   name: 'action',
-  fn: (context, payload, deps) => {
-    deps.logger.error('ERROR');
+  fn() {
+    this.deps.logger.error('ERROR');
   },
   deps: {
     logger: 'logger',

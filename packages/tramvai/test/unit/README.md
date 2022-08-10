@@ -153,13 +153,13 @@ Most of the helpers accepts option `providers` which allows to redefine already 
 For example, passing `providers` to helper `testAction` allows to access this provider inside action itself:
 
 ```tsx
-import { createAction } from '@tramvai/core';
+import { declareAction } from '@tramvai/core';
 import { testAction } from '@tramvai/test-unit';
 
-const action = createAction({
+const action = declareAction({
   name: 'action',
-  fn: (_, __, { test }) => {
-    console.log(test); // token value
+  fn() {
+    console.log(this.deps.test); // token value
   },
   deps: {
     test: 'token name',

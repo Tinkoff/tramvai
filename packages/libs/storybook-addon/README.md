@@ -193,9 +193,9 @@ export const PageStory = () => <Page />;
   <TabItem value="page" label="page.tsx" default>
 
 ```tsx
-import { createAction } from '@tramvai/core';
+import { declareAction } from '@tramvai/core';
 
-const serverAction = createAction({
+const serverAction = declareAction({
   name: 'server-action',
   fn() {
     console.log('server action');
@@ -205,7 +205,7 @@ const serverAction = createAction({
   },
 });
 
-const browserAction = createAction({
+const browserAction = declareAction({
   name: 'browser-action',
   fn() {
     console.log('browser action');
@@ -231,7 +231,7 @@ Page.actions = [serverAction, browserAction];
 import type { TramvaiStoriesParameters } from '@tramvai/storybook-addon';
 import { Page } from './page';
 
-// Actions with `onlyBrowser` condition will be executed 
+// Actions with `onlyBrowser` condition will be executed
 const parameters: TramvaiStoriesParameters = {
   tramvai: {
     actions: Page.actions,
@@ -256,12 +256,12 @@ export const PageStory = () => <Page />;
   <TabItem value="page" label="page.tsx" default>
 
 ```tsx
-import { createAction } from '@tramvai/core';
+import { declareAction } from '@tramvai/core';
 
-const httpRequestAction = createAction({
+const httpRequestAction = declareAction({
   name: 'http-request-action',
-  fn: async (_, __, { httpClient }) => {
-    return httpClient.get('/');
+  async fn() {
+    return this.deps.httpClient.get('/');
   },
   deps: {
     httpClient: HTTP_CLIENT,

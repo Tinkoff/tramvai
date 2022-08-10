@@ -1,6 +1,9 @@
 import type { ActionParameters, Action } from '@tramvai/tokens-core';
 import { ACTION_PARAMETERS } from '@tramvai/tokens-core';
 
+/**
+ * @deprecated: use `declareAction`
+ */
 export function createAction<Result = any, Payload = any, Deps = any>(
   action: ActionParameters<Payload, Result, Deps>
 ): Action<Payload, Result, Deps> {

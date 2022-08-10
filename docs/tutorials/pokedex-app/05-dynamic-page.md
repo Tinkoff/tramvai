@@ -30,18 +30,18 @@ The service `PAGE_SERVICE_TOKEN` will be used to get the dynamic parameters of t
 // highlight-next-line
 import { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
 
-export const fetchPokemonAction = createAction({
+export const fetchPokemonAction = declareAction({
   name: 'fetchPokemon',
-  fn: async (context, payload, deps) => {
+  async fn() {
     // access to the `:name` parameter of the current route via PAGE_SERVICE_TOKEN
     // highlight-next-line
-    const { name } = deps.pageService.getCurrentRoute().params;
+    const { name } = this.deps.pageService.getCurrentRoute().params;
 
     // loading information about the pokemon
-    const pokemonResponse = await deps.pokeapiHttpClient.get<Pokemon>(`/pokemon/${name}`);
+    const pokemonResponse = await this.deps.pokeapiHttpClient.get<Pokemon>(`/pokemon/${name}`);
 
     // save information about the pokemon in the store
-    context.dispatch(pokemonLoadedEvent(pokemonResponse.payload));
+    this.dispatch(pokemonLoadedEvent(pokemonResponse.payload));
   },
   deps: {
     pokeapiHttpClient: POKEAPI_HTTP_CLIENT,

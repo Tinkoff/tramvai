@@ -1,7 +1,7 @@
 import type { Container } from '@tinkoff/dippy';
 import type { DispatcherContext, Event, Reducer } from '@tramvai/state';
 import { convertAction } from '@tramvai/state';
-import type { Action } from '@tramvai/core';
+import type { Action, TramvaiAction } from '@tramvai/core';
 import type { STORE_TOKEN, PUBSUB_TOKEN, CONTEXT_TOKEN } from '@tramvai/tokens-common';
 import { ACTION_EXECUTION_TOKEN } from '@tramvai/tokens-common';
 import type { PlatformAction } from './typings';
@@ -18,10 +18,10 @@ export class ConsumerContext implements ContextType {
   private store: typeof STORE_TOKEN;
 
   /* Side Effects */
-  executeAction = <Payload extends any = any, Result = any, Deps extends Record<string, any> = any>(
-    action: PlatformAction<Payload, Result> | Action<Payload, Result, Deps>,
-    payload?: Payload
-  ): Promise<Result extends PromiseLike<infer U> ? U : Result> => {
+  executeAction = (
+    action: PlatformAction<any, any> | Action<any, any, any> | TramvaiAction<any[], any, any>,
+    payload?: any
+  ): Promise<any> => {
     return this.di.get(ACTION_EXECUTION_TOKEN).run(action as any, payload) as any;
   };
 
@@ -79,7 +79,7 @@ export class ConsumerContext implements ContextType {
   }
 }
 
-export function createConsumerContext({ di, dispatcherContext, pubsub, store }) {
+export function createConsumerContext({ di, dispatcherContext, pubsub, store }): ContextType {
   return new ConsumerContext({
     di,
     dispatcherContext,

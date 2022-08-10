@@ -1,4 +1,4 @@
-import { createAction } from '@tramvai/core';
+import { declareAction } from '@tramvai/core';
 import { createChildApp } from '@tramvai/child-app-core';
 import { CommonChildAppModule } from '@tramvai/module-common';
 import { BaseCmp } from './component';
@@ -13,9 +13,9 @@ if (typeof window !== 'undefined') {
   window.TRAMVAI_TEST_CHILD_APP_NOT_PRELOADED_ACTION_CALL_NUMBER = 0;
 }
 
-const action = createAction({
+const action = declareAction({
   name: 'action',
-  fn: () => {
+  fn() {
     window.TRAMVAI_TEST_CHILD_APP_NOT_PRELOADED_ACTION_CALL_NUMBER++;
   },
   conditions: {

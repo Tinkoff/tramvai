@@ -1,5 +1,10 @@
 import { createToken } from '@tinkoff/dippy';
-import type { DispatcherContext, Event, Middleware, Reducer } from '@tramvai/state';
+import type {
+  DispatcherContext,
+  Event,
+  Middleware,
+  Reducer,
+} from '@tramvai/types-actions-state-context';
 
 /**
  * @description

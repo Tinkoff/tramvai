@@ -1,6 +1,6 @@
 import type { ComponentType } from 'react';
 import { createToken } from '@tinkoff/dippy';
-import type { Action, Command } from '@tramvai/core';
+import type { Action, Command, TramvaiAction } from '@tramvai/core';
 import type { INITIAL_APP_STATE_TOKEN } from '@tramvai/tokens-common';
 import type { StoreClass } from '@tramvai/state';
 import type {
@@ -97,10 +97,9 @@ export const CHILD_APP_INTERNAL_CONFIG_TOKEN = createToken<ChildAppFinalConfig>(
  * @public
  * @description Actions of child app
  */
-export const CHILD_APP_INTERNAL_ACTION_TOKEN = createToken<Action | Action[]>(
-  'child-app action',
-  multiOptions
-);
+export const CHILD_APP_INTERNAL_ACTION_TOKEN = createToken<
+  Action | TramvaiAction<any[], any, any> | (Action | TramvaiAction<any[], any, any>)[]
+>('child-app action', multiOptions);
 
 /**
  * @deprecated use CHILD_APP_INTERNAL_ROOT_STATE_ALLOWED_STORE_TOKEN

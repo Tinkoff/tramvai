@@ -1,10 +1,10 @@
-import { createApp, createBundle, createAction, provide } from '@tramvai/core';
+import { createApp, createBundle, declareAction, provide } from '@tramvai/core';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { SeoModule, META_WALK_TOKEN } from '@tramvai/module-seo';
 import { ROUTES_TOKEN } from '@tramvai/tokens-router';
+import { RESOURCE_INLINE_OPTIONS, ResourceType } from '@tramvai/tokens-render';
 import { modules, bundles } from '../../../../test/shared/common';
 import { jsonLd } from './data/jsonLd';
-import { RESOURCE_INLINE_OPTIONS, ResourceType } from '@tramvai/tokens-render';
 
 const metaSpecial = (context, meta) => {
   meta.updateMeta(10, {
@@ -18,12 +18,12 @@ const metaSpecial = (context, meta) => {
   });
 };
 
-const dynamicAction = createAction({
+const dynamicAction = declareAction({
   name: 'dynamicMeta',
-  fn: async (ctx, payload, { meta }) => {
+  async fn() {
     await new Promise((res) => setTimeout(res, 200));
 
-    meta.updateMeta(20, {
+    this.deps.meta.updateMeta(20, {
       title: 'WoW, such dynamic!',
     });
   },

@@ -1,11 +1,11 @@
-import { createAction } from '@tramvai/core';
+import { declareAction } from '@tramvai/core';
 import { set } from '../store';
 
-export const innerAction = createAction({
+export const innerAction = declareAction({
   name: 'innerAction',
-  fn: (context) => {
+  fn() {
     console.log('execute innerAction');
-    return context.dispatch(set('innerAction'));
+    return this.dispatch(set('innerAction'));
   },
   // conditions not set - the action will be executed by default:
   // if the action is defined as global (in an application, bundle or page),
@@ -16,11 +16,11 @@ export const innerAction = createAction({
   // and the data may not always be available with ssr, but the action will always try to execute)
 });
 
-export const innerServerAction = createAction({
+export const innerServerAction = declareAction({
   name: 'innerServerAction',
-  fn: (context) => {
+  fn() {
     console.log('execute innerServerAction');
-    return context.dispatch(set('innerServerAction'));
+    return this.dispatch(set('innerServerAction'));
   },
   // this action can only be executed on the server
   conditions: {
@@ -28,11 +28,11 @@ export const innerServerAction = createAction({
   },
 });
 
-export const innerBrowserAction = createAction({
+export const innerBrowserAction = declareAction({
   name: 'innerBrowserAction',
-  fn: (context) => {
+  fn() {
     console.log('execute innerBrowserAction');
-    return context.dispatch(set('innerBrowserAction'));
+    return this.dispatch(set('innerBrowserAction'));
   },
   // this action can only be executed on the browser
   conditions: {

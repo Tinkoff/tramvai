@@ -1,4 +1,4 @@
-import type { Container, Provider } from '@tinkoff/dippy';
+import type { Container, Provider, MultiTokenInterface } from '@tinkoff/dippy';
 import { createToken } from '@tinkoff/dippy';
 import type { Command } from './command';
 import type { Action } from './action';
@@ -23,7 +23,7 @@ export interface CommandLine {
   ): Promise<Container>;
 }
 
-export type CommandLineDescription = Record<string, Command[]>;
+export type CommandLineDescription = Record<string, MultiTokenInterface<Command>[]>;
 
 export type CommandLines = {
   server: CommandLineDescription;

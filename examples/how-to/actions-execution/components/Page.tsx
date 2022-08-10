@@ -1,5 +1,4 @@
 import reduceObj from '@tinkoff/utils/object/reduce';
-import React from 'react';
 import { useSelector } from '@tramvai/state';
 import { store } from '../store';
 import { pageInLimit, pageOutLimit } from '../actions/page';

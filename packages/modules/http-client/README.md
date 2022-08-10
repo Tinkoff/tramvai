@@ -101,13 +101,13 @@ The `HTTP_CLIENT` token provides a basic client for sending requests to any URLs
 **Token use:**
 
 ```tsx
-import { createAction } from '@tramvai/core';
+import { declareAction } from '@tramvai/core';
 import { HTTP_CLIENT } from '@tramvai/tokens-http-client';
 
-export const fetchAction = createAction({
+export const fetchAction = declareAction({
   name: 'fetch',
-  fn: async (_, __, { httpClient }) => {
-    const { payload, headers, status } = await httpClient.get(
+  async fn() {
+    const { payload, headers, status } = await this.deps.httpClient.get(
       'https://www.domain.com/api/endpoint'
     );
     return payload;

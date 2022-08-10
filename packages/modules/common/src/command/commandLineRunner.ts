@@ -2,9 +2,17 @@ import noop from '@tinkoff/utils/function/noop';
 import { isSilentError } from '@tinkoff/errors';
 import type { CommandLineDescription, CommandLine, CommandLines, Command } from '@tramvai/core';
 import type { METRICS_MODULE_TOKEN } from '@tramvai/tokens-metrics';
-import type { Container, Provider } from '@tinkoff/dippy';
+import type { Container, MultiTokenInterface, Provider } from '@tinkoff/dippy';
 import { createChildContainer } from '@tinkoff/dippy';
-import type { LOGGER_TOKEN } from '@tramvai/tokens-common';
+import type {
+  ExecutionContext,
+  EXECUTION_CONTEXT_MANAGER_TOKEN,
+  LOGGER_TOKEN,
+} from '@tramvai/tokens-common';
+import {
+  COMMAND_LINE_EXECUTION_CONTEXT_TOKEN,
+  ROOT_EXECUTION_CONTEXT_TOKEN,
+} from '@tramvai/tokens-common';
 
 const DEFAULT_BUCKETS = [0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10, 20, 40, 60];
 
@@ -38,23 +46,28 @@ export class CommandLineRunner implements CommandLine {
 
   metrics: typeof METRICS_MODULE_TOKEN;
 
+  executionContextManager: typeof EXECUTION_CONTEXT_MANAGER_TOKEN;
   private metricsInstance: any;
+  private executionContextByDi = new WeakMap<Container, ExecutionContext>();
 
   constructor({
     lines,
     rootDi,
     logger,
     metrics,
+    executionContextManager,
   }: {
     lines: CommandLines;
     rootDi: Container;
     logger: typeof LOGGER_TOKEN;
     metrics?: typeof METRICS_MODULE_TOKEN;
+    executionContextManager: typeof EXECUTION_CONTEXT_MANAGER_TOKEN;
   }) {
     this.lines = lines;
     this.rootDi = rootDi;
     this.log = logger('command:command-line-runner');
     this.metrics = metrics;
+    this.executionContextManager = executionContextManager;
   }
 
   run(
@@ -64,6 +77,7 @@ export class CommandLineRunner implements CommandLine {
     customDi?: Container
   ) {
     const di = customDi ?? resolveDi(type, status, this.rootDi, providers);
+    const rootExecutionContext = di.get({ token: ROOT_EXECUTION_CONTEXT_TOKEN, optional: true });
 
     this.log.debug({
       event: 'command-run',
@@ -79,17 +93,34 @@ export class CommandLineRunner implements CommandLine {
 
             // eslint-disable-next-line promise/no-nesting
             return Promise.resolve()
-              .then(() => this.createLineChain(di, line))
+              .then(() => {
+                return this.executionContextManager.withContext(
+                  rootExecutionContext,
+                  `command-line:${line.toString()}`,
+                  async (executionContext) => {
+                    this.executionContextByDi.set(di, executionContext);
+
+                    await this.createLineChain(di, line);
+                  }
+                );
+              })
               .finally(() => doneMetric({ line: line.toString() }));
           });
         }, Promise.resolve())
         // После завершения цепочки отдаем context выполнения
+        .finally(() => {
+          this.executionContextByDi.delete(di);
+        })
         .then(() => di)
     );
   }
 
-  private createLineChain(di: Container, line: Command) {
-    let lineInstance: Command;
+  resolveExecutionContextFromDi(di: Container): ExecutionContext | null {
+    return this.executionContextByDi.get(di) ?? null;
+  }
+
+  private createLineChain(di: Container, line: MultiTokenInterface<Command>) {
+    let lineInstance: Command[];
     try {
       lineInstance = di.get({ token: line, optional: true });
 

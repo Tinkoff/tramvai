@@ -1,5 +1,5 @@
 import React from 'react';
-import { createApp, createBundle, createAction } from '@tramvai/core';
+import { createApp, createBundle, declareAction } from '@tramvai/core';
 import { createEvent, createReducer, useStoreSelector, connect, useActions } from '@tramvai/state';
 import { COMBINE_REDUCERS, CommonModule } from '@tramvai/module-common';
 import { SpaRouterModule } from '@tramvai/module-router';
@@ -18,11 +18,11 @@ const childStore = createReducer('childStore', { id: 0 }).on(childEvent, ({ id }
 });
 (rootStore as any).dependencies = [childStore];
 
-const action = createAction({
+const action = declareAction({
   name: 'action',
-  fn: (context) => {
-    context.dispatch(childEvent());
-    context.dispatch(rootEvent());
+  fn() {
+    this.dispatch(childEvent());
+    this.dispatch(rootEvent());
   },
 });
 

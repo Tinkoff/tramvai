@@ -35,6 +35,7 @@
   },
   "devDependencies": {
     "@reatom/core": "^1.1.5",
+    "@tramvai/core": "0.0.0-stub",
     "@types/invariant": "^2.2.31",
     "@types/react-is": "^17.0.0",
     "@types/use-sync-external-store": "^0.0.3",

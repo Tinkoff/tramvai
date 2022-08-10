@@ -79,7 +79,7 @@ export const pokemonLoadedEvent = createEvent<Pokemon>('pokemonLoaded');
 ```tsx title="entities/pokemon/model.ts"
 import { createEvent } from '@tramvai/state';
 // highlight-start
-import { createAction } from '@tramvai/core';
+import { declareAction } from '@tramvai/core';
 import { POKEAPI_HTTP_CLIENT } from '~shared/api';
 // highlight-end
 
@@ -94,14 +94,14 @@ export const pokemonListLoadedEvent = createEvent<Pokemon[]>('pokemonListLoaded'
 export const pokemonLoadedEvent = createEvent<Pokemon>('pokemonLoaded');
 
 // highlight-start
-export const fetchPokemonListAction = createAction({
+export const fetchPokemonListAction = declareAction({
   name: 'fetchPokemonList',
-  fn: async (context, payload, deps) => {
+  async fn() {
     const limit = 10;
     const offset = 0;
 
     // upload a list of the names of the first 10 pokemon https://pokeapi.co/api/v2/pokemon/?limit=10&offset=0
-    const pokemonsNamesResponse = await deps.pokeapiHttpClient.get<{ results: { name: string }[] }>(
+    const pokemonsNamesResponse = await this.deps.pokeapiHttpClient.get<{ results: { name: string }[] }>(
       '/pokemon',
       { query: { limit, offset } }
     );
@@ -110,13 +110,13 @@ export const fetchPokemonListAction = createAction({
     // download detailed information about each pokemon in parallel https://pokeapi.co/api/v2/pokemon/bulbasaur/
     const pokemonList = await Promise.all(
       pokemonsNames.map(async ({ name }) => {
-        const pokemonResponse = await deps.pokeapiHttpClient.get<Pokemon>(`/pokemon/${name}`);
+        const pokemonResponse = await this.deps.pokeapiHttpClient.get<Pokemon>(`/pokemon/${name}`);
         return pokemonResponse.payload;
       })
     );
 
     // save the final list to the reducer
-    context.dispatch(pokemonListLoadedEvent(pokemonList));
+    this.dispatch(pokemonListLoadedEvent(pokemonList));
   },
   deps: {
     pokeapiHttpClient: POKEAPI_HTTP_CLIENT,
@@ -130,7 +130,7 @@ export const fetchPokemonListAction = createAction({
 ```tsx title="entities/pokemon/model.ts"
 // highlight-next-line
 import { createEvent, createReducer } from '@tramvai/state';
-import { createAction } from '@tramvai/core';
+import { declareAction } from '@tramvai/core';
 
 export type Pokemon = {
   id: number;
@@ -144,13 +144,13 @@ const initialState: PokemonsState = {};
 export const pokemonListLoadedEvent = createEvent<Pokemon[]>('pokemonListLoaded');
 export const pokemonLoadedEvent = createEvent<Pokemon>('pokemonLoaded');
 
-export const fetchPokemonListAction = createAction({
+export const fetchPokemonListAction = declareAction({
   name: 'fetchPokemonList',
-  fn: async (context, payload, deps) => {
+  async fn() {
     const limit = 10;
     const offset = 0;
 
-    const pokemonsNamesResponse = await deps.pokeapiHttpClient.get<{ results: { name: string }[] }>(
+    const pokemonsNamesResponse = await this.deps.pokeapiHttpClient.get<{ results: { name: string }[] }>(
       '/pokemon',
       { query: { limit, offset } }
     );
@@ -158,12 +158,12 @@ export const fetchPokemonListAction = createAction({
 
     const pokemonList = await Promise.all(
       pokemonsNames.map(async ({ name }) => {
-        const pokemonResponse = await deps.pokeapiHttpClient.get<Pokemon>(`/pokemon/${name}`);
+        const pokemonResponse = await this.deps.pokeapiHttpClient.get<Pokemon>(`/pokemon/${name}`);
         return pokemonResponse.payload;
       })
     );
 
-    context.dispatch(pokemonListLoadedEvent(pokemonList));
+    this.dispatch(pokemonListLoadedEvent(pokemonList));
   },
   deps: {
     pokeapiHttpClient: POKEAPI_HTTP_CLIENT,

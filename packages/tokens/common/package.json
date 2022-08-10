@@ -26,7 +26,6 @@
   "peerDependencies": {
     "@tinkoff/dippy": "0.0.0-stub",
     "@tinkoff/logger": "0.0.0-stub",
-    "@tramvai/state": "0.0.0-stub",
     "@tramvai/types-actions-state-context": "0.0.0-stub",
     "express": "^4.17.1",
     "fastify": "^3.29.0",

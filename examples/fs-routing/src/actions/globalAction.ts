@@ -1,8 +1,8 @@
-import { createAction } from '@tramvai/core';
+import { declareAction } from '@tramvai/core';
 
-export const globalAction = createAction({
+export const globalAction = declareAction({
   name: 'global-action',
-  fn: (context, payload) => {
+  fn: () => {
     // Выполняется на каждый переход на сервере и на клиенте
   },
   conditions: {

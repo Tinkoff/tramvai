@@ -43,7 +43,7 @@ export const ErrorBoundaryFallback = ({ url, error }) => {
 :::tip
 
 Default response status for server-side Error Boundary - `500`.
-This status can be changed by adding `httpStatus` property to `Error` object. 
+This status can be changed by adding `httpStatus` property to `Error` object.
 
 :::
 
@@ -170,16 +170,16 @@ The exception is `NotFoundError` and `RedirectError` from `@tinkoff/errors` libr
 If the action failed to fetch critical data for page rendering, and you want to change response status code, and show error page for user, you need to dispath `setPageErrorEvent` action:
 
 ```ts
-import { createAction } from '@tramvai/core';
+import { declareAction } from '@tramvai/core';
 import { HttpError } from '@tinkoff/errors';
 import { setPageErrorEvent } from '@tramvai/module-render';
 
-const action = createAction({
+const action = declareAction({
   name: 'action',
-  fn: (context) => {
+  fn() {
     // set custom response status, `500` by default
     const error = new HttpError({ httpStatus: 410 });
-    context.dispatch(setPageErrorEvent(error));
+    this.dispatch(setPageErrorEvent(error));
   },
 });
 ```

@@ -15,17 +15,17 @@ We'll cover the following steps:
 
 ## Create an action
 
-Import `createAction` and write a function to load data from api and send data to store.
+Import `declareAction` and write a function to load data from api and send data to store.
 
 ```tsx
-import { createAction } from '@tramvai/core';
+import { declareAction } from '@tramvai/core';
 import { loadDepositConfig } from './deposit/reducer';
 
-export const loadDepositAction = createAction({
+export const loadDepositAction = declareAction({
   name: 'load-deposit-config',
-  fn: async (context, payload, deps) => {
-    const data = await deps.apiClient.request({ method: 'deposit_config ' });
-    return context.dispatch(loadDepositConfig(data));
+  async fn() {
+    const data = await this.deps.apiClient.request({ method: 'deposit_config ' });
+    return this.dispatch(loadDepositConfig(data));
   },
   deps: {
     apiClient: 'tinkoffApiClient',
@@ -60,5 +60,5 @@ After that, when the user opens the route, the server will automatically launch 
 
 ## What else is worth reading
 
-- [About createAction](references/tramvai/core.md#createAction)
+- [About declareAction](references/tramvai/core.md#declareAction)
 - [How do actions work](concepts/action.md)

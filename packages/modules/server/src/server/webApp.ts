@@ -2,7 +2,8 @@ import fastify from 'fastify';
 import express from 'express';
 import { fastifyCookie } from '@fastify/cookie';
 import fastifyFormBody from '@fastify/formbody';
-import type { LOGGER_TOKEN } from '@tramvai/tokens-common';
+import type { EXECUTION_CONTEXT_MANAGER_TOKEN, LOGGER_TOKEN } from '@tramvai/tokens-common';
+import { ROOT_EXECUTION_CONTEXT_TOKEN } from '@tramvai/tokens-common';
 import { FASTIFY_REQUEST, FASTIFY_RESPONSE } from '@tramvai/tokens-common';
 import { REQUEST, RESPONSE, RESPONSE_MANAGER_TOKEN } from '@tramvai/tokens-common';
 import type { COMMAND_LINE_RUNNER_TOKEN } from '@tramvai/core';
@@ -26,6 +27,7 @@ import type {
   WEB_FASTIFY_APP_PROCESS_ERROR_TOKEN,
 } from '@tramvai/tokens-server-private';
 import type { ExtractDependencyType } from '@tinkoff/dippy';
+import { provide } from '@tinkoff/dippy';
 import { fastifyExpressCompatibility } from './express-compatibility';
 import { errorHandler } from './error';
 
@@ -55,6 +57,7 @@ export const webAppInitCommand = ({
   expressApp,
   logger,
   commandLineRunner,
+  executionContextManager,
   beforeInit,
   limiterRequest,
   init,
@@ -71,6 +74,7 @@ export const webAppInitCommand = ({
   expressApp: ExtractDependencyType<typeof WEB_APP_TOKEN>;
   logger: ExtractDependencyType<typeof LOGGER_TOKEN>;
   commandLineRunner: ExtractDependencyType<typeof COMMAND_LINE_RUNNER_TOKEN>;
+  executionContextManager: ExtractDependencyType<typeof EXECUTION_CONTEXT_MANAGER_TOKEN>;
   beforeInit: ExtractDependencyType<typeof WEB_FASTIFY_APP_BEFORE_INIT_TOKEN>;
   limiterRequest: ExtractDependencyType<typeof WEB_FASTIFY_APP_LIMITER_TOKEN>;
   init: ExtractDependencyType<typeof WEB_FASTIFY_APP_INIT_TOKEN>;
@@ -130,45 +134,51 @@ export const webAppInitCommand = ({
             url: request.url,
           });
 
-          const di = await commandLineRunner.run('server', 'customer', [
-            {
-              provide: REQUEST,
-              scope: Scope.REQUEST,
-              useValue: request.raw,
-            },
-            {
-              provide: RESPONSE,
-              scope: Scope.REQUEST,
-              useValue: reply.raw,
-            },
-            // TODO: перевести использование на новые
-            // TODO: добавить для papi
-            {
-              provide: FASTIFY_REQUEST,
-              scope: Scope.REQUEST,
-              useValue: request,
-            },
-            {
-              provide: FASTIFY_RESPONSE,
-              scope: Scope.REQUEST,
-              useValue: reply,
-            },
-          ]);
-          const responseManager = di.get(RESPONSE_MANAGER_TOKEN);
+          await executionContextManager.withContext(null, 'root', async (rootExecutionContext) => {
+            const di = await commandLineRunner.run('server', 'customer', [
+              provide({
+                provide: ROOT_EXECUTION_CONTEXT_TOKEN,
+                useValue: rootExecutionContext,
+              }),
+              {
+                provide: REQUEST,
+                scope: Scope.REQUEST,
+                useValue: request.raw,
+              },
+              {
+                provide: RESPONSE,
+                scope: Scope.REQUEST,
+                useValue: reply.raw,
+              },
+              // TODO: перевести использование на новые
+              // TODO: добавить для papi
+              {
+                provide: FASTIFY_REQUEST,
+                scope: Scope.REQUEST,
+                useValue: request,
+              },
+              {
+                provide: FASTIFY_RESPONSE,
+                scope: Scope.REQUEST,
+                useValue: reply,
+              },
+            ]);
+            const responseManager = di.get(RESPONSE_MANAGER_TOKEN);
 
-          if (reply.sent) {
-            log.debug({
-              event: 'response-ended',
-              message: 'Response was already ended.',
-              url: request.url,
-            });
-          } else {
-            reply
-              .header('content-type', 'text/html')
-              .headers(responseManager.getHeaders())
-              .status(responseManager.getStatus())
-              .send(responseManager.getBody());
-          }
+            if (reply.sent) {
+              log.debug({
+                event: 'response-ended',
+                message: 'Response was already ended.',
+                url: request.url,
+              });
+            } else {
+              reply
+                .header('content-type', 'text/html')
+                .headers(responseManager.getHeaders())
+                .status(responseManager.getStatus())
+                .send(responseManager.getBody());
+            }
+          });
         } catch (err) {
           if (err.di) {
             const responseManager: typeof RESPONSE_MANAGER_TOKEN = err.di.get(

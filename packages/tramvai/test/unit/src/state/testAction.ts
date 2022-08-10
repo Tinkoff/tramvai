@@ -1,4 +1,4 @@
-import type { Action } from '@tramvai/core';
+import type { Action, TramvaiAction } from '@tramvai/core';
 import type { CONTEXT_TOKEN } from '@tramvai/tokens-common';
 import { createMockContext } from '@tramvai/test-mocks';
 
@@ -8,13 +8,25 @@ type Options = OptionsContext & {
   context?: typeof CONTEXT_TOKEN;
 };
 
+interface Runner<Params extends any[], Result> {
+  run: (...params: Params) => Result;
+}
+
 /**
  * Helper for testing actions
  * @param action action itself
  * @param params options for creation ConsumerContext or instance of context
  */
-export const testAction = <P>(
-  action: Action<P>,
+export function testAction<Params extends any[], Result, Deps>(
+  action: TramvaiAction<Params, Result, Deps>,
+  options?: Options
+): Runner<Params, Result>;
+export function testAction<Payload, Result, Deps>(
+  action: Action<Payload, Result, Deps>,
+  options?: Options
+): Runner<[Payload], Result>;
+export function testAction(
+  action: Action | TramvaiAction<any[], any, any>,
   {
     initialState,
     providers,
@@ -23,7 +35,7 @@ export const testAction = <P>(
     stores,
     context = createMockContext({ initialState, di, providers, store, stores }),
   }: Options = {}
-) => {
+) {
   return {
     /**
      * @description
@@ -31,8 +43,8 @@ export const testAction = <P>(
      * @param payload
      * @returns
      */
-    run: (payload?: P) => {
-      return context.executeAction(action, payload);
+    run: (payload?: any) => {
+      return context.executeAction(action as any, payload);
     },
   };
-};
+}

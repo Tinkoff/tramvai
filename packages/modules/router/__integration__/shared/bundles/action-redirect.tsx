@@ -1,9 +1,11 @@
-import { createBundle, createAction } from '@tramvai/core';
+import { createBundle, declareAction } from '@tramvai/core';
 import { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
 
-const redirectAction = createAction({
+const redirectAction = declareAction({
   name: 'redirect',
-  fn: (context, payload, { pageService }) => {
+  fn() {
+    const { pageService } = this.deps;
+
     return pageService.navigate({
       url: '/after/action/redirect/',
       replace: true,

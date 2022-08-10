@@ -1,32 +1,32 @@
-import { createAction } from '@tramvai/core';
+import { declareAction } from '@tramvai/core';
 import { setAction } from '../stores/actions';
 
 const payload = typeof window === 'undefined' ? 'server' : 'client';
 
-const bundleActionClient = createAction({
+const bundleActionClient = declareAction({
   name: 'bundleActionClient',
-  fn: (context) => {
-    return context.dispatch(setAction({ name: 'bundleActionsClient', payload }));
+  fn() {
+    return this.dispatch(setAction({ name: 'bundleActionsClient', payload }));
   },
   conditions: {
     onlyBrowser: true,
   },
 });
 
-const bundleActionServer = createAction({
+const bundleActionServer = declareAction({
   name: 'bundleActionServer',
-  fn: (context) => {
-    return context.dispatch(setAction({ name: 'bundleActionsServer', payload }));
+  fn() {
+    return this.dispatch(setAction({ name: 'bundleActionsServer', payload }));
   },
   conditions: {
     onlyServer: true,
   },
 });
 
-const bundleAction = createAction({
+const bundleAction = declareAction({
   name: 'bundleAction',
-  fn: (context) => {
-    return context.dispatch(setAction({ name: 'bundleActions', payload }));
+  fn() {
+    return this.dispatch(setAction({ name: 'bundleActions', payload }));
   },
 });
 

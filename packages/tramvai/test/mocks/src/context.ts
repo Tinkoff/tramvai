@@ -3,6 +3,7 @@ import {
   STORE_TOKEN,
   ACTION_EXECUTION_TOKEN,
   ACTION_CONDITIONALS,
+  EXECUTION_CONTEXT_MANAGER_TOKEN,
 } from '@tramvai/tokens-common';
 import {
   createConsumerContext,
@@ -12,6 +13,7 @@ import {
   onlyBrowser,
   pageServer,
   pageBrowser,
+  ExecutionContextManager,
 } from '@tramvai/module-common';
 import { PubSub } from '@tinkoff/pubsub';
 import type { Container } from '@tinkoff/dippy';
@@ -65,6 +67,11 @@ export const createMockContext = ({
     }
 
     di.register({
+      provide: EXECUTION_CONTEXT_MANAGER_TOKEN,
+      useClass: ExecutionContextManager,
+    });
+
+    di.register({
       provide: ACTION_EXECUTION_TOKEN,
       useClass: ActionExecution,
       deps: {
@@ -76,6 +83,7 @@ export const createMockContext = ({
           token: 'actionTransformAction',
           optional: true,
         },
+        executionContextManager: EXECUTION_CONTEXT_MANAGER_TOKEN,
       },
     });
   }

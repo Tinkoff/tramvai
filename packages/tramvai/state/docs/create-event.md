@@ -48,16 +48,16 @@ itemPrice('car', 3000);
 We create an action in which, after loading the information, we create an event and throw it into context.dispatch
 
 ```javascript
-import { createAction } from '@tramvai/core';
+import { declareAction } from '@tramvai/core';
 import { createEvent } from '@tramvai/state';
 
 const userInformation = createEvent < { age: number, name: string } > 'user information';
 
-const action = createAction({
+const action = declareAction({
   name: 'userLoadInformation',
-  fn: async (context) => {
+  async fn() {
     const result = await tinkoffRequest({ method: 'information' });
-    context.dispatch(userInformation(result));
+    this.dispatch(userInformation(result));
   },
 });
 ```

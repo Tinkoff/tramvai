@@ -50,10 +50,10 @@ Component.actions = [query.prefetchAction()];
 Return a tramvai action that can be used to fetch current query
 
 ```ts
-const action = createAction({
+const action = declareAction({
   name: 'action',
-  fn: async (context) => {
-    const result = await context.executeAction(query.fetchAction());
+  async fn() {
+    const result = await this.executeAction(query.fetchAction());
 
     console.log('__action__', result);
   },

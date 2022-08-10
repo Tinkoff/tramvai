@@ -166,7 +166,7 @@ type ConsumerContext = {
 An example of using context:
 
 ```tsx
-import { createAction } from '@tramvai/core';
+import { declareAction } from '@tramvai/core';
 import { createEvent, createReducer } from '@tramvai/state';
 
 const loadUser = createEvent('load user');
@@ -174,18 +174,18 @@ const userReducer = createReducer('user', { name: 'anonymus' });
 
 userReducer.on(loadUser, (state, payload) => payload);
 
-const fetchUserAction = createAction({
+const fetchUserAction = declareAction({
   name: 'fetchUser',
-  fn: async (context, payload, { httpClient }) => {
-    const { name } = context.getState(userReducer);
+  async fn() {
+    const { name } = this.getState(userReducer);
 
     if (name !== 'anonymus') {
       return;
     }
 
-    const response = await httpClient.get('/user');
+    const response = await this.deps.httpClient.get('/user');
 
-    context.dispatch(loadUser(response.payload));
+    this.dispatch(loadUser(response.payload));
   },
   deps: {
     httpClient: HTTP_CLIENT,

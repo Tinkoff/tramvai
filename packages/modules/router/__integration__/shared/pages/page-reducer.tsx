@@ -1,4 +1,4 @@
-import { createAction } from '@tramvai/core';
+import { declareAction } from '@tramvai/core';
 import { createEvent, createReducer, useStoreSelector } from '@tramvai/state';
 
 const updateState = createEvent<string>('page-reducer-test update');
@@ -14,12 +14,12 @@ reducer.on(updateState, (state, newState) => {
   };
 });
 
-const action = createAction({
+const action = declareAction({
   name: 'page-reducer-test-update',
-  fn: (context) => {
-    const state = context.getState(reducer);
+  fn() {
+    const state = this.getState(reducer);
 
-    return context.dispatch(updateState(`updated-from-${state?.state}`));
+    return this.dispatch(updateState(`updated-from-${state?.state}`));
   },
 });
 

@@ -1,11 +1,31 @@
 # Errors
 
-Основные классы ошибок для проектов Tinkoff
+Common errors classes
 
-## RedirectFoundError
+## Common
 
-Обозначает что был обнаружен редирект в рамках приложения
+### SilentError
 
-## NotFoundError
+Marks error as silent e.g. throwing such errors should not produce any error logs.
 
-Обозначает что страница не была найдена в приложении
+## HTTP
+
+### HttpError
+
+#### RedirectFoundError
+
+Current response should be redirected
+
+#### NotFoundError
+
+Current Page was not found in the app
+
+## Execution
+
+### ExecutionError
+
+Execution was failed due to error in execution callback
+
+### ExecutionAbortError
+
+Execution was aborted due to AbortSignal abortion

@@ -1,5 +1,5 @@
 import React from 'react';
-import { createAction, createBundle } from '@tramvai/core';
+import { declareAction, createBundle } from '@tramvai/core';
 import { HttpError } from '@tinkoff/errors';
 import { setPageErrorEvent } from '@tramvai/module-render';
 import { ErrorPageComponentSSR } from '../components/ErrorPageComponentSSR';
@@ -36,13 +36,13 @@ const PageActionErrorComponent = () => {
   );
 };
 
-const errorAction = createAction({
+const errorAction = declareAction({
   name: 'errorAction',
-  fn: (context) => {
+  fn() {
     const error = new HttpError({
       httpStatus: 410,
     });
-    context.dispatch(setPageErrorEvent(error));
+    this.dispatch(setPageErrorEvent(error));
   },
 });
 

@@ -4,6 +4,8 @@ import type { ExecutionState } from './actionExecution';
 import type { ActionType } from './constants';
 import { actionType } from './constants';
 
+const DEFAULT_CONDITIONS = {};
+
 export class ActionChecker implements ActionConditionChecker {
   conditions: ActionConditionsParameters;
 
@@ -26,7 +28,7 @@ export class ActionChecker implements ActionConditionChecker {
       // если экшен был уже выполнен, то считаем, что его не нужно больше выполнять
       this.status = executionState.status !== 'success';
     }
-    this.conditions = parameters.conditions;
+    this.conditions = parameters.conditions ?? DEFAULT_CONDITIONS;
   }
 
   check() {

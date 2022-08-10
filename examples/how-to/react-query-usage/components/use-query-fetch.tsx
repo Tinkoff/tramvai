@@ -1,5 +1,5 @@
 import React from 'react';
-import { createAction } from '@tramvai/core';
+import { declareAction } from '@tramvai/core';
 import { createQuery, useQuery } from '@tramvai/react-query';
 import { FAKE_API_CLIENT } from '../../fakeApiClient';
 
@@ -16,10 +16,10 @@ const query = createQuery({
   },
 });
 
-const action = createAction({
+const action = declareAction({
   name: 'action',
-  fn: async (context) => {
-    const result = await context.executeAction(query.fetchAction());
+  async fn() {
+    const result = await this.executeAction(query.fetchAction());
 
     console.log('__action__', result);
   },

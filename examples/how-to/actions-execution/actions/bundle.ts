@@ -1,23 +1,29 @@
-import { createAction } from '@tramvai/core';
+import { declareAction } from '@tramvai/core';
 import { ACTION_EXECUTION_LIMIT } from '../constants';
 import { set } from '../store';
 
-export const bundleInLimit = createAction({
+export const bundleInLimit = declareAction({
   name: 'bundleInLimit',
-  fn: async (context) => {
+  async fn() {
     console.log('execute bundleInLimit');
-    await context.dispatch(set({ name: 'bundleInLimit', value: false }));
+    await this.dispatch(set({ name: 'bundleInLimit', value: false }));
     await new Promise((res) => setTimeout(res, ACTION_EXECUTION_LIMIT / 2));
-    await context.dispatch(set({ name: 'bundleInLimit', value: true }));
+    await this.dispatch(set({ name: 'bundleInLimit', value: true }));
   },
 });
 
-export const bundleOutLimit = createAction({
+export const bundleOutLimit = declareAction({
   name: 'bundleOutLimit',
-  fn: async (context) => {
+  async fn() {
     console.log('execute bundleOutLimit');
-    await context.dispatch(set({ name: 'bundleOutLimit', value: false }));
+    await this.dispatch(set({ name: 'bundleOutLimit', value: false }));
     await new Promise((res) => setTimeout(res, ACTION_EXECUTION_LIMIT * 2));
-    await context.dispatch(set({ name: 'bundleOutLimit', value: true }));
+
+    if (this.abortSignal.aborted) {
+      console.log('ignore any actions as execution was aborted');
+      return;
+    }
+
+    await this.dispatch(set({ name: 'bundleOutLimit', value: true }));
   },
 });

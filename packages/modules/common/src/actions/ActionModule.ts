@@ -8,6 +8,8 @@ import {
   ACTION_CONDITIONALS,
   STORE_TOKEN,
   COMBINE_REDUCERS,
+  EXECUTION_CONTEXT_MANAGER_TOKEN,
+  COMMAND_LINE_EXECUTION_CONTEXT_TOKEN,
 } from '@tramvai/tokens-common';
 import { actionTramvaiReducer } from './actionTramvaiReducer';
 import { ActionExecution } from './actionExecution';
@@ -46,23 +48,26 @@ export { alwaysCondition, onlyServer, onlyBrowser, pageServer, pageBrowser };
         context: CONTEXT_TOKEN,
         store: STORE_TOKEN,
         di: DI_TOKEN,
+        executionContextManager: EXECUTION_CONTEXT_MANAGER_TOKEN,
         transformAction: {
           token: 'actionTransformAction',
           optional: true,
         },
       },
     }),
-    {
+    provide({
       provide: ACTION_PAGE_RUNNER_TOKEN,
       scope: Scope.REQUEST,
       useClass: ActionPageRunner,
       deps: {
         actionExecution: ACTION_EXECUTION_TOKEN,
+        executionContextManager: EXECUTION_CONTEXT_MANAGER_TOKEN,
+        commandLineExecutionContext: COMMAND_LINE_EXECUTION_CONTEXT_TOKEN,
         store: STORE_TOKEN,
         limitTime: 'limitActionGlobalTimeRun',
         logger: LOGGER_TOKEN,
       },
-    },
+    }),
     {
       provide: 'limitActionGlobalTimeRun',
       useValue: 500,

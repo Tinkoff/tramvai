@@ -8,7 +8,7 @@ describe('requestManager', () => {
       'utf-8'
     );
     expect(compilationResult).toContain(
-      'export declare const REQUEST: import("@tinkoff/dippy/lib/createToken/createToken").BaseTokenInterface<RequestExt>'
+      'export declare const REQUEST: import("@tinkoff/dippy").BaseTokenInterface<RequestExt>'
     );
     expect(compilationResult).toContain("import type { Request } from 'express'");
   });

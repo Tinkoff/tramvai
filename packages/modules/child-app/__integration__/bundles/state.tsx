@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { createAction, createBundle } from '@tramvai/core';
+import { declareAction, createBundle } from '@tramvai/core';
 import { ChildApp } from '@tramvai/module-child-app';
 import { useConsumerContext, useStore } from '@tramvai/state';
 import { createEvent, createReducer } from '@tramvai/state';
@@ -16,10 +16,10 @@ export const rootStore = createReducer('root', { value: 0 } as State).on(increas
   };
 });
 
-export const updateRootValueAction = createAction({
+export const updateRootValueAction = declareAction({
   name: 'root-app-store',
-  fn: async (context) => {
-    return context.dispatch(increaseValue());
+  fn() {
+    return this.dispatch(increaseValue());
   },
   conditions: {
     onlyServer: true,

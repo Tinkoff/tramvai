@@ -1,6 +1,6 @@
 import React from 'react';
 import { createReducer, createEvent } from '@tramvai/state';
-import { createApp, createBundle, createAction } from '@tramvai/core';
+import { createApp, createBundle, declareAction } from '@tramvai/core';
 import { SpaRouterModule, ROUTER_GUARD_TOKEN, useNavigate, useUrl } from '@tramvai/module-router';
 import { STORE_TOKEN, CONTEXT_TOKEN, COMBINE_REDUCERS } from '@tramvai/module-common';
 import { modules } from '../common';
@@ -39,12 +39,12 @@ const bundle = createBundle({
 const event = createEvent<boolean>('event');
 const store = createReducer<boolean | void>('store', undefined).on(event, (_, val) => val);
 
-const action = createAction({
+const action = declareAction({
   name: 'action',
-  fn: async (context) => {
+  async fn() {
     await new Promise<void>((res) => setTimeout(res, 1200));
 
-    return context.dispatch(event(true));
+    return this.dispatch(event(true));
   },
 });
 
