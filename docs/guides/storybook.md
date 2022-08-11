@@ -5,7 +5,7 @@ title: Storybook integration
 
 ## Introduction
 
-`tramvai` provides addon with deep Storybook integration - [@tramvai/storybook-addon](references/libs/storybook-addon.md).
+`tramvai` provides addon with deep Storybook integration - [@tramvai/storybook-addon](references/tramvai/storybook-addon.md).
 This integration includes build configuration as close as possible to the real `tramvai` behaviour and supports for all `tramvai` specific React providers.
 
 :::note
@@ -113,4 +113,4 @@ And you can see a Main page story at `http://localhost:6006/?path=/story/pages-m
 
 ![Main page story](/img/guides/storybook/storybook-1.png)
 
-You can find more examples in [@tramvai/storybook-addon documentation](references/libs/storybook-addon.md#how-to).
+You can find more examples in [@tramvai/storybook-addon documentation](references/tramvai/storybook-addon.md#how-to).

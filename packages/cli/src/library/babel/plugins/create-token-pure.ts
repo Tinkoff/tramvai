@@ -1,17 +1,22 @@
 import annotateAsPure from '@babel/helper-annotate-as-pure';
 import type { Plugin } from './types.h';
 
-export const createTokenPurePlugin: Plugin = ({ types: t }) => {
-  let hasCreateToken = false;
+interface InnerState {
+  hasCreateToken: boolean;
+}
 
+export const createTokenPurePlugin: Plugin<InnerState> = ({ types: t }) => {
   return {
+    pre() {
+      this.hasCreateToken = false;
+    },
     visitor: {
       ImportDeclaration(path) {
         const { node } = path;
         const sourceValue = node.source.value;
 
         if (sourceValue === '@tramvai/core' || sourceValue === '@tinkoff/dippy') {
-          hasCreateToken = node.specifiers.some(
+          this.hasCreateToken = node.specifiers.some(
             (s) => s.type === 'ImportSpecifier' && s.local?.name === 'createToken'
           );
         }
@@ -19,7 +24,7 @@ export const createTokenPurePlugin: Plugin = ({ types: t }) => {
       CallExpression(path) {
         const { node } = path;
 
-        if (!hasCreateToken) {
+        if (!this.hasCreateToken) {
           return;
         }
 

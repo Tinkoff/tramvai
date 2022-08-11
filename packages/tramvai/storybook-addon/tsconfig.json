@@ -26,16 +26,16 @@
             "path": "../../tokens/common"
         },
         {
-            "path": "../router"
-        },
-        {
             "path": "../../tramvai/core"
         },
         {
-            "path": "../dippy"
+            "path": "../../libs/dippy"
         },
         {
-            "path": "../url"
+            "path": "../../libs/router"
+        },
+        {
+            "path": "../../libs/url"
         }
     ]
 }

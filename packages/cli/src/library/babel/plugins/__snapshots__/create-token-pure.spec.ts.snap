@@ -36,6 +36,24 @@ export var TOKEN = /*#__PURE__*/ createToken('token');
 
 `;
 
+exports[`create-token-pure do not annotate more again: do not annotate more again 1`] = `
+
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved
+import { createToken } from '@tinkoff/dippy';
+
+export const TOKEN = /* #__PURE__*/ createToken('token');
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved
+import { createToken } from '@tinkoff/dippy';
+export var TOKEN = /* #__PURE__*/ createToken('token');
+
+
+`;
+
 exports[`create-token-pure do nothing: do nothing 1`] = `
 
 // @ts-ignore

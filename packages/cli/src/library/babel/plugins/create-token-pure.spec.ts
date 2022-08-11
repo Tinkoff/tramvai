@@ -27,5 +27,9 @@ pluginTester({
       fixture: 'from-dippy.ts',
       snapshot: true,
     },
+    'do not annotate more again': {
+      fixture: 'already-has-comment.ts',
+      snapshot: true,
+    },
   },
 });
