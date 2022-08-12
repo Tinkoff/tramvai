@@ -24,6 +24,7 @@ import type {
   REQUEST_MANAGER_TOKEN,
   CacheOptionsByType,
 } from '@tramvai/tokens-common';
+import type { QuerySerializer } from '@tinkoff/request-plugin-protocol-http';
 import type { ExtractDependencyType, ExtractTokenType } from '@tinkoff/dippy';
 import { fillHeaderIp, fillHeaders } from '../utils';
 import { createUserAgent } from './createUserAgent';
@@ -46,6 +47,7 @@ export const httpClientFactory = ({
   createCache,
   makeRequestRegistry,
   agent,
+  querySerializer,
   disableCircuitBreaker = false,
   defaultOptions,
 }: {
@@ -57,6 +59,7 @@ export const httpClientFactory = ({
   createCache?: ExtractDependencyType<typeof CREATE_CACHE_TOKEN>;
   makeRequestRegistry: Map<string, MakeRequest>;
   agent?: ExtractDependencyType<typeof HTTP_CLIENT_AGENT>;
+  querySerializer?: QuerySerializer;
   disableCircuitBreaker: ExtractDependencyType<typeof DISABLE_CIRCUIT_BREAKER>;
   defaultOptions?: Partial<HttpClientFactoryOptions>;
 }): ExtractTokenType<typeof HTTP_CLIENT_FACTORY> => {
@@ -73,6 +76,7 @@ export const httpClientFactory = ({
         {
           logger,
           agent,
+          querySerializer,
           method: 'GET',
           createCache: createCache
             ? (cacheOptions: CacheOptionsByType<any>['memory'][0]): Cache =>

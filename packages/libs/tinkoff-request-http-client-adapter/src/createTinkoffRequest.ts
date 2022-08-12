@@ -7,6 +7,7 @@ import deduplicateCache from '@tinkoff/request-plugin-cache-deduplicate';
 import memoryCache from '@tinkoff/request-plugin-cache-memory';
 import validate from '@tinkoff/request-plugin-validate';
 import http, { isNetworkFail, isServerError } from '@tinkoff/request-plugin-protocol-http';
+import type { QuerySerializer } from '@tinkoff/request-plugin-protocol-http';
 import transformUrl from '@tinkoff/request-plugin-transform-url';
 import type { Options as CircuitBreakerOptions } from '@tinkoff/request-plugin-circuit-breaker';
 import circuitBreaker from '@tinkoff/request-plugin-circuit-breaker';
@@ -47,6 +48,7 @@ export interface TinkoffRequestOptions extends HttpClientBaseOptions {
     http: Agent;
     https: Agent;
   };
+  querySerializer?: QuerySerializer;
 }
 
 export function createTinkoffRequest(options: TinkoffRequestOptions): MakeRequest {
@@ -65,6 +67,7 @@ export function createTinkoffRequest(options: TinkoffRequestOptions): MakeReques
     getCacheKey,
     lruOptions = { max: 1000, maxAge: cacheTime },
     agent,
+    querySerializer,
     retryOptions,
     ...defaults
   } = options;
@@ -175,7 +178,12 @@ export function createTinkoffRequest(options: TinkoffRequestOptions): MakeReques
     );
   }
 
-  plugins.push(http({ agent: agent || defaultAgent }));
+  plugins.push(
+    http({
+      agent: agent || defaultAgent,
+      querySerializer: querySerializer || undefined,
+    })
+  );
 
   if (retryOptions) {
     plugins.push(retry(retryOptions));
