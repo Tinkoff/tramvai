@@ -5,10 +5,10 @@ import semver from 'semver';
 export const shouldUseReactRoot = once(() => {
   // eslint-disable-next-line import/no-extraneous-dependencies
   const reactVersion = require('react').version;
-  const isReactExperimental = Boolean(reactVersion && /0\.0\.0-experimental/.test(reactVersion));
-  const hasReact18: boolean =
-    Boolean(reactVersion) &&
+  const isReactExperimental = reactVersion && /0\.0\.0-experimental/.test(reactVersion);
+  const hasReact18 =
+    reactVersion &&
     (semver.gte(reactVersion, '18.0.0') || semver.coerce(reactVersion)?.version === '18.0.0');
 
-  return hasReact18 || isReactExperimental;
+  return Boolean(hasReact18 || isReactExperimental);
 });

@@ -22,7 +22,7 @@ const ExecuteRenderCallback: FC<{ callback: () => void; children?: React.ReactNo
 };
 
 const renderer: Renderer = ({ element, container, callback, log }) => {
-  if (process.env.__TRAMVAI_CONCURRENT_FEATURES !== 'false' && typeof hydrateRoot === 'function') {
+  if (process.env.__TRAMVAI_CONCURRENT_FEATURES && typeof hydrateRoot === 'function') {
     const wrappedElement = createElement(ExecuteRenderCallback, { callback }, element);
 
     return hydrateRoot(container, wrappedElement, {
