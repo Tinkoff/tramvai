@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { createQuery, useQuery } from '@tramvai/react-query';
 import { FAKE_API_CLIENT } from '../../fakeApiClient';
 

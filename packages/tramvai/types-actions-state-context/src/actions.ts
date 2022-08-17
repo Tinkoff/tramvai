@@ -5,6 +5,7 @@ export type ActionContext = ConsumerContext;
 
 export type ActionConditionsParameters = {
   requiredCoreRoles?: string[];
+  requiredRoles?: string[];
   onlyBrowser?: boolean;
   onlyServer?: boolean;
   pageBrowser?: boolean;

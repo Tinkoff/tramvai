@@ -6,11 +6,11 @@ import {
   QUERY_CLIENT_DEHYDRATED_STATE_TOKEN,
   QUERY_CLIENT_TOKEN,
   QUERY_DEHYDRATE_STATE_NAME_TOKEN,
-} from './tokens';
+} from '@tramvai/tokens-react-query';
 import { sharedQueryProviders } from './shared/providers';
 import { logger } from './shared/noopLogger';
 
-export * from './tokens';
+export * from '@tramvai/tokens-react-query';
 
 setLogger(logger);
 

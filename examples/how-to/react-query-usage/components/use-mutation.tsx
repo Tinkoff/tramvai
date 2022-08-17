@@ -1,4 +1,3 @@
-import React from 'react';
 import { createMutation, useMutation } from '@tramvai/react-query';
 import { FAKE_API_CLIENT } from '../../fakeApiClient';
 

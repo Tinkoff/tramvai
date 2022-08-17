@@ -1,5 +1,6 @@
 import { createApp, createBundle } from '@tramvai/core';
-import { ReactQueryModule, ReactQueryDevtoolsModule } from '@tramvai/module-react-query';
+import { ReactQueryModule } from '@tramvai/module-react-query';
+import { ReactQueryDevtoolsModule } from '@tramvai/module-react-query-devtools';
 import { ROUTES_TOKEN } from '@tramvai/tokens-router';
 import { lazy } from '@tramvai/react';
 import { modules } from '../common';
@@ -11,7 +12,9 @@ const bundle = createBundle({
     'use-query-base': lazy(() => import('./components/use-query-base')),
     'use-query-prefetch': lazy(() => import('./components/use-query-prefetch')),
     'use-query-fetch': lazy(() => import('./components/use-query-fetch')),
-    'use-same-query-many-components': require('./components/use-same-query-many-components'),
+    'use-same-query-many-components': lazy(
+      () => import('./components/use-same-query-many-components')
+    ),
     'use-query-parameters': lazy(() => import('./components/use-query-parameters')),
     'use-query-options': lazy(() => import('./components/use-query-options')),
     'use-query-fail': lazy(() => import('./components/use-query-fail')),

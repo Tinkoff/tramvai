@@ -1,4 +1,3 @@
-import React from 'react';
 import { createInfiniteQuery, useInfiniteQuery } from '@tramvai/react-query';
 import { FAKE_API_CLIENT } from '../../fakeApiClient';
 

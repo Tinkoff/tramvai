@@ -30,6 +30,7 @@ type ExecutionStatus = 'success' | 'failed' | 'pending' | 'forbidden';
 
 export interface ExecutionState {
   status: ExecutionStatus;
+  forbiddenBy?: string;
   state: Record<string, any>;
 }
 
@@ -105,8 +106,12 @@ export class ActionExecution implements Interface {
     if (!this.canExecuteAction(payload, parameters, executionState, type)) {
       switch (parameters.conditionsFailResult) {
         case 'reject':
-          // TODO: pass condition that has failed
-          return Promise.reject(new ConditionFailError());
+          return Promise.reject(
+            new ConditionFailError({
+              conditionName: executionState.forbiddenBy ?? 'unknown',
+              targetName: parameters.name,
+            })
+          );
         default:
           return Promise.resolve();
       }

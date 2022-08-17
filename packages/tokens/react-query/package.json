@@ -1,8 +1,9 @@
 {
-  "name": "@tramvai/react-query",
+  "name": "@tramvai/tokens-react-query",
   "version": "0.0.0-stub",
-  "description": "",
+  "description": "Tramvai tokens for @tramvai/module-react-query",
   "main": "lib/index.js",
+  "module": "lib/index.es.js",
   "typings": "lib/index.d.ts",
   "files": [
     "lib"
@@ -18,19 +19,12 @@
     "build-for-publish": "true"
   },
   "dependencies": {
-    "@tinkoff/react-hooks": "0.0.0-stub",
-    "@tramvai/core": "0.0.0-stub",
-    "@tramvai/module-react-query": "0.0.0-stub",
-    "@tramvai/state": "0.0.0-stub",
-    "@tramvai/tokens-common": "0.0.0-stub"
+    "react-query": "^3.35.0"
   },
   "peerDependencies": {
     "@tinkoff/dippy": "0.0.0-stub",
-    "@tinkoff/utils": "^2.1.2",
-    "react": ">=16.14.0",
-    "react-query": "^3.35.0",
+    "@tramvai/core": "0.0.0-stub",
     "tslib": "^2.0.3"
   },
-  "module": "lib/index.es.js",
   "license": "Apache-2.0"
 }

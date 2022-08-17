@@ -16,6 +16,7 @@
     "@tramvai/papi": "0.0.0-stub",
     "@tramvai/react": "0.0.0-stub",
     "@tramvai/react-query": "0.0.0-stub",
+    "@tramvai/module-react-query-devtools": "0.0.0-stub",
     "@tramvai/state": "0.0.0-stub",
     "@tramvai/tokens-router": "0.0.0-stub",
     "@tramvai/tokens-common": "0.0.0-stub"

@@ -20,6 +20,12 @@ Current response should be redirected
 
 Current Page was not found in the app
 
+## Action
+
+### ConditionFailError
+
+Some of the conditions check were failed
+
 ## Execution
 
 ### ExecutionError

@@ -50,6 +50,7 @@ export class ActionChecker implements ActionConditionChecker {
 
   forbid() {
     this.executionState.status = 'forbidden';
+    this.executionState.forbiddenBy = this.key;
     this.forbiddenMarker = true;
   }
 

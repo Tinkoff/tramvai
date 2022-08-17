@@ -1,5 +1,4 @@
-import type { Action, ActionConditionsParameters, ActionContext } from '@tramvai/core';
-import type { QUERY_CLIENT_TOKEN } from '@tramvai/module-react-query';
+import type { ActionConditionsParameters, ActionContext, TramvaiAction } from '@tramvai/core';
 import type { QueryKey as ReactQueryKey, QueryOptions } from 'react-query';
 
 export const QUERY_PARAMETERS = '__query_parameters__';
@@ -21,9 +20,7 @@ export interface BaseQuery<Options, TCreateQuery, TQuery, TUseQuery> {
   fork(options: TUseQuery): TQuery;
   raw(context: ActionContext, options?: Options): TUseQuery;
 
-  prefetchAction(
-    options?: Options
-  ): Action<void, Promise<void>, { queryClient: typeof QUERY_CLIENT_TOKEN }>;
+  prefetchAction(options?: Options): TramvaiAction<[], Promise<void>, any>;
 }
 
 export const isQuery = <Options, Result, TCreateQuery, TQuery, TUseQuery>(

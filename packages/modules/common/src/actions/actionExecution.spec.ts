@@ -593,9 +593,11 @@ describe('action conditions', () => {
     });
 
     await instance.run(action1);
-    await expect(instance.run(action2)).rejects.toMatchInlineSnapshot(
-      `[ConditionFailError: Condition failed]`
-    );
+    await expect(instance.run(action2)).rejects.toMatchObject({
+      message: 'Condition failed',
+      conditionName: 'role',
+      targetName: 'action 2',
+    });
     await instance.run(action3);
     await instance.run(action4);
 

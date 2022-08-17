@@ -42,4 +42,4 @@ The module basically provides the necessary things in DI for the library [@tramv
 
 ## Exported tokens
 
-@inline src/tokens.ts
+[link](references/tokens/react-query.md)

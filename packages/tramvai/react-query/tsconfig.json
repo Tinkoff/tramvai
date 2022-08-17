@@ -24,6 +24,9 @@
         },
         {
             "path": "../../libs/react-hooks"
+        },
+        {
+            "path": "../../tokens/common"
         }
     ]
 }

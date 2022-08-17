@@ -1,8 +1,9 @@
 import applyOrReturn from '@tinkoff/utils/function/applyOrReturn';
 import type { UseInfiniteQueryOptions, QueryKey as ReactQueryKey } from 'react-query';
 import type { ActionContext } from '@tramvai/core';
-import { createAction } from '@tramvai/core';
+import { declareAction } from '@tramvai/core';
 import { QUERY_CLIENT_TOKEN } from '@tramvai/module-react-query';
+import { CONTEXT_TOKEN } from '@tramvai/tokens-common';
 import type { CreateInfiniteQueryOptions, InfiniteQuery } from './types';
 import { QUERY_PARAMETERS } from '../baseQuery/types';
 import { defaultKey } from '../defaultKey';
@@ -24,11 +25,12 @@ const convertToRawQuery = <Options, PageParam, Result, Deps>(
 
   const queryKey = applyOrReturn([options], key as unknown) as ReactQueryKey;
 
-  const actionWrapper = createAction({
+  const actionWrapper = declareAction({
     name: 'infiniteQueryExecution',
-    fn: async (_, pageParam: PageParam, resolvedDeps) => {
-      return fn(options, pageParam, resolvedDeps);
+    async fn(pageParam: PageParam) {
+      return fn(options, pageParam, this.deps);
     },
+    conditionsFailResult: 'reject',
     deps,
     conditions,
   });
@@ -38,6 +40,9 @@ const convertToRawQuery = <Options, PageParam, Result, Deps>(
     getNextPageParam,
     getPreviousPageParam,
     queryKey,
+    tramvaiOptions: {
+      conditions,
+    },
     queryFn: ({ pageParam }) => {
       return context.executeAction(actionWrapper, pageParam);
     },
@@ -68,24 +73,30 @@ export const createInfiniteQuery = <
       return convertToRawQuery(query, context, options);
     },
     prefetchAction: (options: Options) => {
-      return createAction({
+      return declareAction({
         name: 'infiniteQueryPrefetch',
-        fn: (context, __, { queryClient }) => {
-          return queryClient.prefetchInfiniteQuery(convertToRawQuery(query, context, options));
+        fn() {
+          return this.deps.queryClient.prefetchInfiniteQuery(
+            convertToRawQuery(query, this.deps.context, options)
+          );
         },
         deps: {
+          context: CONTEXT_TOKEN,
           queryClient: QUERY_CLIENT_TOKEN,
         },
         conditions,
       });
     },
     fetchAction: (options: Options) => {
-      return createAction({
+      return declareAction({
         name: 'infiniteQueryFetch',
-        fn: (context, __, { queryClient }) => {
-          return queryClient.fetchInfiniteQuery(convertToRawQuery(query, context, options));
+        fn() {
+          return this.deps.queryClient.fetchInfiniteQuery(
+            convertToRawQuery(query, this.deps.context, options)
+          );
         },
         deps: {
+          context: CONTEXT_TOKEN,
           queryClient: QUERY_CLIENT_TOKEN,
         },
         conditions,

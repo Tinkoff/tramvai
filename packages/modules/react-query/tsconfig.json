@@ -23,6 +23,12 @@
         },
         {
             "path": "../../tokens/child-app"
+        },
+        {
+            "path": "../../libs/errors"
+        },
+        {
+            "path": "../../tokens/react-query"
         }
     ]
 }

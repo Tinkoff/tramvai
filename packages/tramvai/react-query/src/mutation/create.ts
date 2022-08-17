@@ -1,7 +1,7 @@
 import applyOrReturn from '@tinkoff/utils/function/applyOrReturn';
 import type { UseMutationOptions, MutationKey as ReactMutationKey } from 'react-query';
 import type { ActionContext } from '@tramvai/core';
-import { createAction } from '@tramvai/core';
+import { declareAction } from '@tramvai/core';
 import type { CreateMutationOptions, Mutation, MutationKey } from './types';
 import { MUTATION_PARAMETERS } from './types';
 import { defaultKey } from '../defaultKey';
@@ -15,13 +15,14 @@ const convertToRawMutation = <Options, Variables, Result, Deps, Key extends Muta
 
   const mutationKey = applyOrReturn([options], key as unknown) as ReactMutationKey;
 
-  const actionWrapper = createAction({
+  const actionWrapper = declareAction({
     name: 'mutationExecution',
-    fn: async (_, variables, resolvedDeps) => {
-      return fn(options, variables, resolvedDeps);
+    async fn(variables) {
+      return fn(options, variables, this.deps);
     },
     deps,
     conditions,
+    conditionsFailResult: 'reject',
   });
 
   return {

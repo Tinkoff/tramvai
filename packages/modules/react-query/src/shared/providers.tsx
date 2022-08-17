@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import React from 'react';
+import { isConditionFailError } from '@tinkoff/errors';
 import type { Provider } from '@tramvai/core';
 import { APP_INFO_TOKEN } from '@tramvai/core';
 import { provide } from '@tramvai/core';
@@ -12,14 +12,33 @@ import {
   QUERY_CLIENT_DEHYDRATED_STATE_TOKEN,
   QUERY_CLIENT_DEFAULT_OPTIONS_TOKEN,
   QUERY_DEHYDRATE_STATE_NAME_TOKEN,
-} from '../tokens';
+} from '@tramvai/tokens-react-query';
 
 export const sharedQueryProviders: Provider[] = [
   provide({
     provide: QUERY_CLIENT_TOKEN,
     useFactory: ({ defaultOptions }) => {
+      const { queries = {} } = defaultOptions;
+
       return new QueryClient({
-        defaultOptions,
+        defaultOptions: {
+          ...defaultOptions,
+          queries: {
+            ...queries,
+            retry:
+              typeof queries.retry === 'function'
+                ? queries.retry
+                : (count, error) => {
+                    // we should ignore ConditionFailError as it has special meaning
+                    // and anyway action resolved with ConditionFailError won't be resolved successfully after retry
+                    if (error && isConditionFailError(error as Error)) {
+                      return false;
+                    }
+
+                    return count < (queries.retry ?? 3);
+                  },
+          },
+        },
       });
     },
     deps: {

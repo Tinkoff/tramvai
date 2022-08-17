@@ -20,7 +20,7 @@ module.exports = {
     },
     'GET /api/time': (req, res) => {
       res.status(200);
-      res.send(Date.now());
+      res.send(Date.now().toString());
     },
     'GET /api/auth': {
       status: 200,
