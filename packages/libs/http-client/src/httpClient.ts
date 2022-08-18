@@ -36,6 +36,7 @@ export type HttpClientRequest = {
   silent?: boolean;
   cache?: boolean;
   abortPromise?: Promise<void>;
+  signal?: AbortSignal;
   [key: string]: any;
 };
 

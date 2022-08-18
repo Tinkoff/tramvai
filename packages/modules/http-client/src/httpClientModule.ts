@@ -15,6 +15,7 @@ import {
   ENV_MANAGER_TOKEN,
   ENV_USED_TOKEN,
   REQUEST_MANAGER_TOKEN,
+  COMMAND_LINE_EXECUTION_CONTEXT_TOKEN,
 } from '@tramvai/tokens-common';
 import { httpClientFactory } from './httpClient/httpClientFactory';
 import { PapiClientModule } from './papiClientModule';
@@ -51,6 +52,10 @@ export const HttpClientModule = /* @__PURE__ */ Module({
         },
         defaultOptions: {
           token: DEFAULT_HTTP_CLIENT_FACTORY_OPTIONS,
+          optional: true,
+        },
+        commandLineExecutionContext: {
+          token: COMMAND_LINE_EXECUTION_CONTEXT_TOKEN,
           optional: true,
         },
       },

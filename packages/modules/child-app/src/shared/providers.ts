@@ -48,7 +48,7 @@ export const sharedProviders: Provider[] = [
   provide({
     provide: commandLineListTokens.init,
     multi: true,
-    useValue: initModuleFederation,
+    useValue: () => initModuleFederation(),
   }),
   provide({
     provide: CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN,

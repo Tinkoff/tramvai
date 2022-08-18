@@ -9,10 +9,7 @@ import type {
   EXECUTION_CONTEXT_MANAGER_TOKEN,
   LOGGER_TOKEN,
 } from '@tramvai/tokens-common';
-import {
-  COMMAND_LINE_EXECUTION_CONTEXT_TOKEN,
-  ROOT_EXECUTION_CONTEXT_TOKEN,
-} from '@tramvai/tokens-common';
+import { ROOT_EXECUTION_CONTEXT_TOKEN } from '@tramvai/tokens-common';
 
 const DEFAULT_BUCKETS = [0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10, 20, 40, 60];
 
@@ -49,6 +46,7 @@ export class CommandLineRunner implements CommandLine {
   executionContextManager: typeof EXECUTION_CONTEXT_MANAGER_TOKEN;
   private metricsInstance: any;
   private executionContextByDi = new WeakMap<Container, ExecutionContext>();
+  private abortControllerByDi = new WeakMap<Container, AbortController>();
 
   constructor({
     lines,
@@ -97,8 +95,9 @@ export class CommandLineRunner implements CommandLine {
                 return this.executionContextManager.withContext(
                   rootExecutionContext,
                   `command-line:${line.toString()}`,
-                  async (executionContext) => {
+                  async (executionContext, abortController) => {
                     this.executionContextByDi.set(di, executionContext);
+                    this.abortControllerByDi.set(di, abortController);
 
                     await this.createLineChain(di, line);
                   }
@@ -110,6 +109,7 @@ export class CommandLineRunner implements CommandLine {
         // После завершения цепочки отдаем context выполнения
         .finally(() => {
           this.executionContextByDi.delete(di);
+          this.abortControllerByDi.delete(di);
         })
         .then(() => di)
     );
@@ -189,6 +189,9 @@ export class CommandLineRunner implements CommandLine {
           line: line.toString(),
           command: name,
         });
+
+        // in case if any error happens during line execution results from other line handlers will not be used anyway
+        this.abortControllerByDi.get(di)?.abort();
 
         this.throwError(err, di);
       });

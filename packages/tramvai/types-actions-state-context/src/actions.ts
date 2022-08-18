@@ -54,6 +54,7 @@ export interface PlatformAction<
 export type TramvaiActionType = 'page' | 'standalone';
 
 export interface TramvaiActionContext<CurrentDeps> {
+  abortController: AbortController;
   abortSignal: AbortSignal;
   executeAction<Params extends any[], Result, Deps>(
     action: TramvaiAction<Params, Result, Deps>,

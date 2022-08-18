@@ -125,16 +125,16 @@ export class ActionExecution implements Interface {
         name: parameters.name,
         values: executionContext?.values.pageActions === true ? { pageActions: false } : undefined,
       },
-      (executionActionContext) => {
+      (executionActionContext, abortController) => {
         const context = this.createActionContext(
           executionContext,
           executionActionContext,
+          abortController,
           parameters
         );
 
         return Promise.resolve()
           .then(() => {
-            // TODO: do not execute action if context.abortSignal is aborted
             if (isTramvaiAction(action)) {
               return action.fn.apply(context, params);
             }
@@ -187,9 +187,11 @@ export class ActionExecution implements Interface {
   private createActionContext(
     parentExecutionContext: ExecutionContext | null,
     actionExecutionContext: ExecutionContext,
+    abortController: AbortController,
     parameters: AnyActionParameters
   ): TramvaiActionContext<any> {
     return {
+      abortController,
       abortSignal: actionExecutionContext?.abortSignal,
       executeAction: this.runInContext.bind(this, actionExecutionContext),
       deps: parameters.deps ? this.di.getOfDeps(parameters.deps) : EMPTY_DEPS,

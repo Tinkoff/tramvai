@@ -7,6 +7,8 @@ import { ExecutionContextManager } from '../executionContext/executionContextMan
 
 const contextMock = { isContext: true };
 
+const delay = (time: number) => new Promise((resolve) => setTimeout(resolve, time));
+
 const legacyActionNameFactory = (name: string, result: string[], conditions = {}) =>
   createAction({
     fn: (c, payload) => result.push(`action: ${name} with: ${payload}`),
@@ -607,5 +609,63 @@ describe('action conditions', () => {
         "action: action 4 with: undefined",
       ]
     `);
+  });
+});
+
+describe('cancelling actions', () => {
+  it('should cancel inner actions', async () => {
+    const executionContextManager = new ExecutionContextManager();
+    const instance = new ActionExecution({
+      di: createContainer(),
+      store: {
+        getState: () => {
+          return {};
+        },
+      } as any,
+      actionConditionals: [],
+      // @ts-ignore
+      context: contextMock,
+      executionContextManager,
+    });
+
+    const innerAction1 = declareAction({
+      name: 'inner-1',
+      async fn() {
+        await delay(2000);
+
+        return 'inner-1';
+      },
+    });
+    const innerAction2 = declareAction({
+      name: 'inner-2',
+      async fn() {
+        if (this.abortSignal.aborted) {
+          return 'aborted-2';
+        }
+
+        return 'inner-2';
+      },
+    });
+
+    const action = declareAction({
+      name: 'root',
+      async fn(abort: boolean) {
+        abort && this.abortController.abort();
+
+        const promise = this.executeAction(innerAction1).catch(() => 'error-1');
+
+        await Promise.resolve();
+        jest.runAllTimers();
+
+        const r1 = await promise;
+        const r2 = await this.executeAction(innerAction2).catch(() => 'error-2');
+
+        return `${r1}_${r2}`;
+      },
+    });
+
+    expect(await instance.run(action, true)).toBe('error-1_error-2');
+
+    expect(await instance.run(action, false)).toBe('inner-1_inner-2');
   });
 });

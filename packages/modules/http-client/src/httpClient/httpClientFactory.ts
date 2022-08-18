@@ -23,6 +23,7 @@ import type {
   ENV_MANAGER_TOKEN,
   REQUEST_MANAGER_TOKEN,
   CacheOptionsByType,
+  COMMAND_LINE_EXECUTION_CONTEXT_TOKEN,
 } from '@tramvai/tokens-common';
 import type { QuerySerializer } from '@tinkoff/request-plugin-protocol-http';
 import type { ExtractDependencyType, ExtractTokenType } from '@tinkoff/dippy';
@@ -50,6 +51,7 @@ export const httpClientFactory = ({
   querySerializer,
   disableCircuitBreaker = false,
   defaultOptions,
+  commandLineExecutionContext,
 }: {
   logger: ExtractDependencyType<typeof LOGGER_TOKEN>;
   envManager: ExtractDependencyType<typeof ENV_MANAGER_TOKEN>;
@@ -62,6 +64,7 @@ export const httpClientFactory = ({
   querySerializer?: QuerySerializer;
   disableCircuitBreaker: ExtractDependencyType<typeof DISABLE_CIRCUIT_BREAKER>;
   defaultOptions?: Partial<HttpClientFactoryOptions>;
+  commandLineExecutionContext?: ExtractDependencyType<typeof COMMAND_LINE_EXECUTION_CONTEXT_TOKEN>;
 }): ExtractTokenType<typeof HTTP_CLIENT_FACTORY> => {
   return (options: HttpClientFactoryOptions): HttpClient => {
     if (!options.name) {
@@ -90,6 +93,7 @@ export const httpClientFactory = ({
             failureThreshold: 75,
             minimumFailureCount: 10,
           },
+          signal: commandLineExecutionContext?.()?.abortSignal,
           ...environmentDependentOptions,
         },
         defaultOptions ?? {}

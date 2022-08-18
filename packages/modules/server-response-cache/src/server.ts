@@ -6,10 +6,9 @@ import {
   REQUEST_MANAGER_TOKEN,
   RESPONSE_MANAGER_TOKEN,
 } from '@tramvai/tokens-common';
-import { WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN } from '@tramvai/tokens-server-private';
 import { getCacheEntry } from './cache';
 import { defaultSettingsProviders } from './default';
-import { isStopCommandLineRunnerError, StopCommandLineRunnerError } from './error';
+import { StopCommandLineRunnerError } from './error';
 import {
   RESPONSE_CACHE_GET_CACHE_KEY,
   RESPONSE_CACHE_INSTANCE,
