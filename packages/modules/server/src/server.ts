@@ -1,4 +1,5 @@
 import { setDefaultResultOrder } from 'dns';
+import EventEmitter from 'events';
 import {
   Module,
   Scope,
@@ -46,6 +47,10 @@ export * from '@tramvai/tokens-server';
 if (typeof setDefaultResultOrder === 'function') {
   setDefaultResultOrder('ipv4first');
 }
+
+// tramvai add a lot of "abort" event listeners to AbortSignal, but we can't configure only AbortSignal max listeners,
+// because AbortSignal is not instance of EventEmitter - https://github.com/southpolesteve/node-abort-controller/blob/master/index.js
+EventEmitter.defaultMaxListeners = 50;
 
 @Module({
   imports: [
