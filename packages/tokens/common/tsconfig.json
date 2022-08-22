@@ -21,6 +21,9 @@
         },
         {
             "path": "../core"
+        },
+        {
+            "path": "../../tramvai/react"
         }
     ]
 }

@@ -260,11 +260,13 @@ You may preload using next ways:
 1. Add needed child-apps to the pageComponent or layoutComponent through field `childApps`
 
 ```ts
-const PageComponent = () => {
+import { PageComponent } from '@tramvai/react';
+
+const PageCmp: PageComponent = () => {
   return 'Page';
 };
 
-PageComponent.childApps = [{ name: '[name]' }];
+PageCmp.childApps = [{ name: '[name]' }];
 ```
 
 ### Debug child-app

@@ -93,3 +93,5 @@ export type AnyAction<Payload = any, Result = any, Deps = any> =
   | Action<Payload, Result, Deps>
   | PlatformAction<Payload, Result>
   | UnknownAction;
+
+export type PageAction = Action<void, void, any> | TramvaiAction<[], void, any>;

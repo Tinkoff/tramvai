@@ -1,4 +1,5 @@
-import type { TramvaiAction, Action } from '@tramvai/types-actions-state-context';
+import type { Reducer } from '@tramvai/types-actions-state-context';
+import type { PageAction } from './action';
 
 export interface BundleOptions {
   presets?: BundlePreset[];
@@ -6,8 +7,8 @@ export interface BundleOptions {
   components: {
     [key: string]: any;
   };
-  reducers?: any[];
-  actions?: (Action | TramvaiAction<any, any, any>)[];
+  reducers?: Reducer<any, any>[];
+  actions?: PageAction[];
 }
 export type BundlePreset = Partial<BundleOptions>;
 

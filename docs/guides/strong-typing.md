@@ -8,11 +8,11 @@ title: Strong typing
 `tramvai` has written on TypeScript, and we try to provide first-class developer experience with better typings and automatic type inference.
 Nonetheless, perfect typings requires some specific utilities and recipes.
 
-### Dependency Injection
+## Dependency Injection
 
 Complete information about `tramvai` DI system you can find in [Concepts section](concepts/di.md).
 
-#### Modules
+### Modules
 
 First place, when we need to have a good typings - is list of providers in `tramvai` modules.
 This possible when providers wrapped in the `provide` utility:
@@ -56,7 +56,7 @@ const NUMBER_TOKEN = createToken<number>('number');
 export class SomeModule {}
 ```
 
-#### Tokens
+### Tokens
 
 Always create tokens with specific type:
 
@@ -111,7 +111,7 @@ function someFn(deps: {
 }
 ```
 
-#### Providers
+### Providers
 
 Sometimes you need to write providers class or factories outside modules - for code maintainability and testing purposes.
 For these cases, you will need to manually type values and deps with `ExtractTokenType` and `ExtractDependencyType` utilities.
@@ -165,7 +165,7 @@ export class ApiService implements IApiService {
 }
 ```
 
-#### React components
+### React components
 
 For React components, you can use hook [useDi](references/tramvai/react.md#usedi).
 With this hook, all types will be inferred automatically:
@@ -188,4 +188,26 @@ const Component = () => {
 
     return null;
 }
+```
+
+## Page and Layout components
+
+PageComponent and LayoutComponent comparing to ordinary React components may specify additional options and should accept limited set of props.
+
+To provide better typings when defining these components use correspond types from [`@tramvai/react` library](references/tramvai/react.md)
+
+```tsx
+import { PageComponent, LayoutComponent } from '@tramvai/react';
+
+const Page: PageComponent = () => <h1>Page</h1>;
+
+// props now typed
+const Layout: LayoutComponent = ({ Header, Footer, children }) => <div>{children}</div>;
+
+// these properties are now typed
+Page.actions = [];
+Page.reducers = [];
+Page.components = {};
+
+Layout.childApps = [];
 ```

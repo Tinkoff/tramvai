@@ -1,5 +1,34 @@
+import hoistNonReactStatics from 'hoist-non-react-statics';
 import type { LoadableComponent, DefaultComponent } from '@loadable/component';
 import loadable from '@loadable/component';
+import type { TramvaiComponent, TramvaiComponentDecl } from '../typings/components';
+
+export const resolveLazyComponent = async (
+  componentOrLoader?: TramvaiComponentDecl
+): Promise<TramvaiComponent | undefined> => {
+  if (!componentOrLoader) {
+    return;
+  }
+
+  if ('load' in componentOrLoader && typeof componentOrLoader.load === 'function') {
+    const mod = await componentOrLoader.load();
+    let component: TramvaiComponent;
+
+    if ((mod as any).__esModule) {
+      component = mod.default;
+    } else {
+      component = mod.default || mod;
+    }
+
+    // manually hoist static properties from preloaded component to loadable wrapper,
+    // this open access to current page component static properties outside before rendering
+    hoistNonReactStatics(componentOrLoader, component);
+
+    return component;
+  }
+
+  return componentOrLoader;
+};
 
 interface Options {
   loading?: JSX.Element;
@@ -30,7 +59,7 @@ export const __lazyErrorHandler = (error: any, load: () => Promise<any>) => {
   throw error;
 };
 
-export const lazy = <Props, Component>(
+export const lazy = <Props>(
   load: (props?: Props) => Promise<DefaultComponent<Props>>,
   options: Options = {}
 ): LoadableComponent<Props> => {

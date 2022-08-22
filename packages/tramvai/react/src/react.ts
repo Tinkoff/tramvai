@@ -15,4 +15,7 @@ export { withError } from './error/hoc';
 export * from './error/tokens';
 
 // lazy
-export { lazy, __lazyErrorHandler } from './lazy/lazy';
+export { lazy, __lazyErrorHandler, resolveLazyComponent } from './lazy/lazy';
+
+// types
+export * from './typings/components';

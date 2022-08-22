@@ -88,8 +88,10 @@ Concrete fallback for any of application pages can be registered by a few ways:
 
     ```tsx title="pages/comments.tsx"
     import React from 'react';
+    import { PageComponent } from '@tramvai/react';
 
-    export const CommentsPage = () => null;
+
+    export const CommentsPage: PageComponent = () => null;
 
     CommentsPage.components = {
         // highlight-next-line

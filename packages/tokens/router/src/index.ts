@@ -9,7 +9,7 @@ import type {
   UpdateCurrentRouteOptions,
   HistoryOptions,
 } from '@tinkoff/router';
-import type { Component } from '@tramvai/tokens-common';
+import type { TramvaiComponent } from '@tramvai/react';
 
 /**
  * @description
@@ -69,12 +69,12 @@ export interface PageService {
   forward(): Promise<void>;
   go(to: number, options?: HistoryOptions): Promise<void>;
 
-  addComponent(name: string, component: Component): void;
-  getComponent(name: string): Component;
+  addComponent(name: string, component: TramvaiComponent): void;
+  getComponent(name: string): TramvaiComponent;
 
   resolveComponentFromConfig(
     property: 'page' | 'layout' | 'header' | 'footer' | 'errorBoundary'
-  ): Component | undefined;
+  ): TramvaiComponent | undefined;
 }
 
 export type RouteResolve = (navigation: Navigation) => Promise<Route | void>;

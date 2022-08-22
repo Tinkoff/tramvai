@@ -1,4 +1,4 @@
-import React from 'react';
+import { PageComponent } from '@tramvai/react';
 import { useActions } from '@tramvai/state';
 import { useUrl } from '@tramvai/module-router';
 import { Button } from '../../components/shared/Button/Button';
@@ -6,7 +6,7 @@ import { navigateAction } from '../../actions/navigateAction';
 import { bundleClientOnlyAction, bundleServerOnlyAction } from '../../actions/bundleActions';
 import { SecondModal } from '../../components/features/Modal/second';
 
-export const SecondPage = () => {
+export const SecondPage: PageComponent = () => {
   // Получаем текущий роут
   const currentPath = useUrl().path;
   // Привязываем экшен для навигации к стору

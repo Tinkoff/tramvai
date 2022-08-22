@@ -1,8 +1,8 @@
-import React from 'react';
+import type { PageComponent } from '@tramvai/react';
 import { createBundle } from '@tramvai/core';
 import { ChildApp } from '@tramvai/module-child-app';
 
-const Cmp = () => {
+const Cmp: PageComponent = () => {
   return (
     <>
       <div>Content from root</div>

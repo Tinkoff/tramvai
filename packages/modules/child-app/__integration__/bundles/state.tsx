@@ -1,4 +1,5 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
+import type { PageComponent } from '@tramvai/react';
 import { declareAction, createBundle } from '@tramvai/core';
 import { ChildApp } from '@tramvai/module-child-app';
 import { useConsumerContext, useStore } from '@tramvai/state';
@@ -26,7 +27,7 @@ export const updateRootValueAction = declareAction({
   },
 });
 
-const Cmp = () => {
+const Cmp: PageComponent = () => {
   const context = useConsumerContext();
   const state = useStore(rootStore);
 

@@ -110,15 +110,17 @@ For specific pages available few options:
 - add fallback to page component static property, use name `pageRenderFallbackDefault`:
 
   ```tsx
-  const PageComponent = () => <div>Page</div>;
+  import { PageComponent } from '@tramvai/react';
+
+  const Page: PageComponent = () => <div>Page</div>;
 
   const PageFallback = () => <div>Loading...</div>;
 
-  PageComponent.components = {
+  Page.components = {
     'pageRenderFallbackDefault': PageFallback,
   };
 
-  export default PageComponent;
+  export default Page;
   ```
 
 - add default fallback to bundle, use name `pageRenderFallbackDefault`:

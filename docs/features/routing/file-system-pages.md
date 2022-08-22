@@ -168,7 +168,9 @@ export default CommentsPage;
 Page components support [global actions](concepts/action.md#global-actions) in `actions` static property, these actions will work as bundles actions:
 
 ```tsx
-const CommentsPage = () => <h1>Comments</h1>;
+import { PageComponent } from '@tramvai/core';
+
+const CommentsPage: PageComponent = () => <h1>Comments</h1>;
 
 CommentsPage.actions = [fetchCommentsListAction];
 
@@ -182,7 +184,9 @@ This actions will be code-splitted with page component code.
 Page components support [reducers](references/tramvai/state/create-reducer.md) in `reducers` static property, these reducers will be registered in application store:
 
 ```tsx
-const CommentsPage = () => <h1>Comments</h1>;
+import { PageComponent } from '@tramvai/react';
+
+const CommentsPage: PageComponent = () => <h1>Comments</h1>;
 
 CommentsPage.reducers = [CommentsStore];
 
@@ -196,7 +200,9 @@ This reducers will be code-splitted with page component code.
 Page components support additional React components in `components` static property, this components will be registered in the application:
 
 ```tsx
-const CommentsPage = () => <h1>Comments</h1>;
+import { PageComponent } from '@tramvai/react';
+
+const CommentsPage: PageComponent = () => <h1>Comments</h1>;
 
 CommentsPage.components = {
   'modal-box': () => <dialog>Modal Box</dialog>,
@@ -233,7 +239,9 @@ const CommentsPage = () => {
 When use [File-System Pages](#file-system-pages), at first, add layout component to page `components`:
 
 ```tsx
-const CommentsPage = () => <h1>Comments</h1>;
+import { PageComponent } from '@tramvai/react';
+
+const CommentsPage: PageComponent = () => <h1>Comments</h1>;
 
 CommentsPage.components = {
   'comments-layout': CommentsLayout,
@@ -355,13 +363,13 @@ If you want to migrate from bundles to file-system pages, there is few steps:
     you need to create two page components, `src/new-fs-pages/foo.tsx` and `src/new-fs-pages/bar.tsx`, with this content:
 
     ```tsx
-    import { lazy } from '@tramvai/react';
+    import { lazy, PageComponent } from '@tramvai/react';
     import { actionFoo, actionBar } from '../actions';
     import { StoreFoo, StoreBar } from '../reducers';
     import { CommonComponent } from '../components';
 
     // the same for src/new-fs-pages/bar.tsx
-    const FooPage = () => {
+    const FooPage: PageComponent = () => {
       return <h1>Foo Page</h1>;
     }
 

@@ -1,14 +1,5 @@
-import type { ComponentType } from 'react';
 import { createToken } from '@tinkoff/dippy';
-import type { Action } from '@tramvai/tokens-core';
-
-export interface RegistryComponentExtend {
-  redirects?: any;
-  actions?: Action[];
-}
-
-export type Component = ComponentType & RegistryComponentExtend;
-
+import type { TramvaiComponentDecl } from '@tramvai/react';
 /**
  * @description
  * React components storage.
@@ -18,11 +9,11 @@ export type Component = ComponentType & RegistryComponentExtend;
 export const COMPONENT_REGISTRY_TOKEN = createToken<ComponentRegistry>('componentRegistry');
 
 export interface ComponentRegistry {
-  components: Record<string, Component>;
+  components: Record<string, TramvaiComponentDecl>;
 
-  add(name: string, component: Component, group?: string): void;
+  add(name: string, component: TramvaiComponentDecl, group?: string): void;
 
-  get(name: string, group?: string): Component | undefined;
+  get(name: string, group?: string): TramvaiComponentDecl | undefined;
 
   getComponentParam<T>(param: string, defaultValue: T, component: string, group?: string): T;
 }

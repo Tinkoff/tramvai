@@ -1,4 +1,4 @@
-import React from 'react';
+import type { PageComponent } from '@tramvai/react';
 import { useNavigate } from '@tramvai/module-router';
 import { Button } from '../components/shared/Button/Button';
 
@@ -6,7 +6,7 @@ import './index.module.css';
 
 export const MainPageRenderFallback = () => <div>Main Page loading...</div>;
 
-export const MainPage = () => {
+export const MainPage: PageComponent = () => {
   const navigate = useNavigate();
 
   return (

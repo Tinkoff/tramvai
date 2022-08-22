@@ -19,7 +19,7 @@ export const ADDITIONAL_BUNDLE_TOKEN = createToken<{ [key: string]: Bundle }>('a
 export interface BundleManager {
   bundles: Record<string, any>;
 
-  get(name: string, pageComponent: string): Promise<any>;
+  get(name: string, pageComponent: string): Promise<Bundle>;
 
   has(name: string, pageComponent: string): boolean;
 }

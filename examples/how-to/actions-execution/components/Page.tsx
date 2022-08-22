@@ -1,9 +1,10 @@
 import reduceObj from '@tinkoff/utils/object/reduce';
 import { useSelector } from '@tramvai/state';
+import type { PageComponent } from '@tramvai/react';
 import { store } from '../store';
 import { pageInLimit, pageOutLimit } from '../actions/page';
 
-export function Page() {
+export const Page: PageComponent = () => {
   const state = useSelector(store, (x) => x.actionTest);
 
   return (
@@ -21,7 +22,7 @@ export function Page() {
       )}
     </div>
   );
-}
+};
 
 // actions can be specified as a static property of a page component
 // in this case actions will be executed only on pages with this particular pageComponent

@@ -24,17 +24,21 @@ import {
 } from '@tramvai/tokens-common';
 import { EXTEND_RENDER } from '@tramvai/tokens-render';
 import { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
+import { resolveLazyComponent } from '@tramvai/react';
 import { SingletonDiManager } from './singletonDi';
 import { DiManager } from './di';
 import { CommandLineRunner } from './command';
 import { ChildAppStore } from './store';
 import { extendRender } from './render';
 import { initModuleFederation } from './webpack/moduleFederation';
-import { resolveComponent } from './utils/resolveComponent';
 import { ChildAppResolutionConfigManager } from './resolutionConfigManager';
 
-declare module '@tramvai/tokens-common' {
-  export interface RegistryComponentExtend {
+declare module '@tramvai/react' {
+  export interface PageComponentOptions {
+    childApps?: ChildAppRequestConfig[];
+  }
+
+  export interface LayoutComponentOptions {
     childApps?: ChildAppRequestConfig[];
   }
 }
@@ -169,8 +173,8 @@ export const sharedProviders: Provider[] = [
     useFactory: ({ pageService, preloadManager }) => {
       return async function preloadChildAppByComponent() {
         const [layoutComponent, pageComponent] = await Promise.all([
-          resolveComponent(pageService.resolveComponentFromConfig('layout')),
-          resolveComponent(pageService.resolveComponentFromConfig('page')),
+          resolveLazyComponent(pageService.resolveComponentFromConfig('layout')),
+          resolveLazyComponent(pageService.resolveComponentFromConfig('page')),
         ]);
 
         await Promise.all([

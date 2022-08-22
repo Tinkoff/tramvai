@@ -1,6 +1,6 @@
 import eachObj from '@tinkoff/utils/object/each';
 import { createBundle } from '@tramvai/core';
-import { __lazyErrorHandler } from '@tramvai/react';
+import { resolveLazyComponent, __lazyErrorHandler } from '@tramvai/react';
 import type {
   BUNDLE_MANAGER_TOKEN,
   DISPATCHER_TOKEN,
@@ -12,7 +12,6 @@ import {
   isFileSystemPageComponent,
   getAllFileSystemPages,
 } from '@tramvai/experiments';
-import hoistNonReactStatics from 'hoist-non-react-statics';
 import type { ComponentRegistry } from '../componentRegistry/componentRegistry';
 
 type Interface = typeof BUNDLE_MANAGER_TOKEN;
@@ -80,29 +79,20 @@ export class BundleManager implements Interface {
     if (pageComponent && bundle.components[pageComponent]) {
       const componentOrLoader = bundle.components[pageComponent];
 
-      const component =
-        typeof componentOrLoader.load === 'function'
-          ? (await componentOrLoader.load()).default
-          : componentOrLoader;
-
-      // manually hoist static properties from preloaded component to loadable wrapper,
-      // this open access to current page component static properties outside before rendering
-      if (componentOrLoader !== component) {
-        hoistNonReactStatics(componentOrLoader, component);
-      }
+      const component = await resolveLazyComponent(componentOrLoader);
 
       // allow page components to register any other components
-      if (component.components) {
+      if ('components' in component) {
         eachObj((cmp, name: string) => {
           this.componentRegistry.add(name, cmp, pageComponent);
         }, component.components);
       }
 
-      if (component.actions) {
+      if ('actions' in component) {
         this.actionRegistry.add(pageComponent, component.actions);
       }
 
-      if (component.reducers) {
+      if ('reducers' in component) {
         component.reducers.forEach((reducer) => {
           this.dispatcher.registerStore(reducer);
         });

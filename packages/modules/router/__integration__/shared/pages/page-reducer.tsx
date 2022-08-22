@@ -1,3 +1,4 @@
+import type { PageComponent } from '@tramvai/react';
 import { declareAction } from '@tramvai/core';
 import { createEvent, createReducer, useStoreSelector } from '@tramvai/state';
 
@@ -23,7 +24,7 @@ const action = declareAction({
   },
 });
 
-const PageReducer = () => {
+const PageReducer: PageComponent = () => {
   const reducerState = useStoreSelector(reducer, ({ state }) => state);
 
   return (

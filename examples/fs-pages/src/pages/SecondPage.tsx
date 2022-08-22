@@ -1,12 +1,12 @@
 import type { PropsWithChildren } from 'react';
-import React from 'react';
+import type { PageComponent } from '@tramvai/react';
 import { useActions } from '@tramvai/state';
 import { useUrl } from '@tramvai/module-router';
 import { Button } from '../components/shared/Button/Button';
 import { navigateAction } from '../actions/navigateAction';
 import { bundleClientOnlyAction, bundleServerOnlyAction } from '../actions/bundleActions';
 
-export const SecondPage = () => {
+export const SecondPage: PageComponent = () => {
   // Получаем текущий роут
   const currentPath = useUrl().path;
   // Привязываем экшен для навигации к стору

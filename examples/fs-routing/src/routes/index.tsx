@@ -1,10 +1,11 @@
 import { useActions } from '@tramvai/state';
+import type { PageComponent } from '@tramvai/react';
 import { Button } from '../components/shared/Button/Button';
 import { navigateAction } from '../actions/navigateAction';
 import { bundleClientOnlyAction, bundleServerOnlyAction } from '../actions/bundleActions';
 import { MainModal } from '../components/features/Modal/main';
 
-export const MainPage = () => {
+export const MainPage: PageComponent = () => {
   // Привязываем экшен для навигации к стору
   const navigate = useActions(navigateAction);
 

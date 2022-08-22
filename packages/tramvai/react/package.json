@@ -18,7 +18,7 @@
     "build-for-publish": "true"
   },
   "dependencies": {
-    "@loadable/component": "^5.15.0",
+    "@loadable/component": "^5.15.2",
     "@types/loadable__component": "^5.13.4",
     "hoist-non-react-statics": "^3.3.0"
   },
@@ -26,7 +26,6 @@
     "@tinkoff/dippy": "0.0.0-stub",
     "@tinkoff/utils": "^2.1.2",
     "@tinkoff/url": "0.0.0-stub",
-    "@tramvai/core": "0.0.0-stub",
     "react": ">=16.14.0",
     "react-dom": ">=16.14.0",
     "tslib": "^2.0.3"

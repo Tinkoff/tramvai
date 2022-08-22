@@ -39,6 +39,9 @@
         },
         {
             "path": "../../tools/build"
+        },
+        {
+            "path": "../tramvai/react"
         }
     ]
 }

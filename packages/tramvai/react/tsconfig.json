@@ -14,9 +14,6 @@
             "path": "../../libs/dippy"
         },
         {
-            "path": "../core"
-        },
-        {
             "path": "../../libs/url"
         }
     ]
