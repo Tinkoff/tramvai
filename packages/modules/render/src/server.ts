@@ -96,7 +96,12 @@ export const DEFAULT_POLYFILL_CONDITION =
               url: requestManager.getUrl(),
             };
 
-            log.error({ event: 'page-render-error', error, requestInfo });
+            log.error({
+              event: 'send-server-error',
+              message: 'Page render error, switch to fallback',
+              error,
+              requestInfo,
+            });
 
             // Assuming that there was an error when rendering the page, try to render again with ErrorBoundary
             context.dispatch(setPageErrorEvent(error));
