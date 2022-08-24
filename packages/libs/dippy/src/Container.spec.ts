@@ -44,7 +44,7 @@ describe('DI Container', () => {
     const container = new Container();
     const result = 'Oby';
     const factory = () => result;
-    const token = createToken<() => string>('tokenName');
+    const token = createToken<string>('tokenName');
 
     container.register({ provide: token, useFactory: factory });
 
@@ -54,7 +54,7 @@ describe('DI Container', () => {
   it('Использование токенов, созданных без названия', () => {
     const container = new Container();
     const result = 'foo bar';
-    const factory = (deps) => `foo ${deps.bar}`;
+    const factory = (deps: any) => `foo ${deps.bar}`;
     const foo = createToken<string>();
     const bar = createToken<string>();
 
@@ -380,7 +380,7 @@ describe('DI Container', () => {
       );
 
       expect(() =>
-        container.register({ provide: undefined, useValue: 1 })
+        container.register({ provide: undefined, useValue: 1 as any })
       ).toThrowErrorMatchingInlineSnapshot(
         `"Invalid provider. Check what is passed to the DI. Current value is not a provider: {\\"provide\\":\\"undefined\\",\\"useValue\\":1}"`
       );
