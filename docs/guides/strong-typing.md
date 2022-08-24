@@ -190,6 +190,38 @@ const Component = () => {
 }
 ```
 
+### Actions
+
+For declaring action use helper function [`declareAction`](references/tramvai/core.md#declareaction). It will infer deps types and function parameters automatically.
+
+```ts
+import { declareAction } from '@tramvai/core';
+import { LOGGER_TOKEN } from '@tramvai/tokens-common';
+
+const innerAction = declareAction({
+  name: 'inner-action',
+  fn(a: number, b = 5) {
+    // typeof LOGGER_TOKEN
+    this.deps.logger.info(`got a=${a}`);
+
+    return a + b;
+  },
+  deps: {
+    logger: LOGGER_TOKEN,
+  },
+});
+
+const action = declareAction({
+  name: 'action',
+  async fn() {
+    // number
+    const number1 = await this.executeAction(10);
+    // number
+    const number2 = await this.executeAction(5, 3);
+  },
+})
+```
+
 ## Page and Layout components
 
 PageComponent and LayoutComponent comparing to ordinary React components may specify additional options and should accept limited set of props.

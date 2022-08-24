@@ -166,7 +166,7 @@ export default CommentsPage;
 Page components support [global actions](concepts/action.md#global-actions) in `actions` static property, these actions will work as bundles actions:
 
 ```tsx
-import { PageComponent } from '@tramvai/core';
+import { PageComponent } from '@tramvai/react';
 
 const CommentsPage: PageComponent = () => <h1>Comments</h1>;
 

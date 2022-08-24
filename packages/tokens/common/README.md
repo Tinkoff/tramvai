@@ -45,3 +45,7 @@ Tramvai tokens for integration and extension `@tramvai/module-common`.
 ## State tokens
 
 @inline src/state.ts
+
+## Execution tokens
+
+@inline src/execution.ts

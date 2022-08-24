@@ -77,8 +77,6 @@ export interface TramvaiActionDefinition<Params extends any[], Result, Deps> {
   fn: (this: TramvaiActionContext<Deps>, ...params: Params) => Result;
   deps?: Deps;
   conditions?: ActionConditionsParameters;
-  // TODO: Add pending condition that will not resolve action execution
-  // might be used in react-query and should not block pageActions
   conditionsFailResult?: 'reject' | 'empty';
 }
 

@@ -131,6 +131,40 @@ Before closing the application, some modules may need to perform special actions
 
 _For what_: If you need to perform actions before closing the application. for example close connections, send logs and so on
 
+## Aborting Execution
+
+In some cases CommandLineRunner may try to abort execution of the lines. In such cases any actions that implement heavy logic must subscribe to the commandLineRunner's execution context to subscribe to the abort event in order to prevent doing needless actions.
+
+1. Use token [`COMMAND_LINE_EXECUTION_CONTEXT_TOKEN`](references/tokens/common.md) to get current execution context related to the CommandLineRunner line execution (if there is not line execution this token will be null)
+2. Use context's `abortSignal` to subscribe to events of aborting execution
+
+Example:
+```ts
+import { provide, commandLineListTokens } from '@tramvai/core';
+import { COMMAND_LINE_EXECUTION_CONTEXT_TOKEN } from '@tramvai/tokens-common';
+
+provide({
+  provide: commandLineListTokens.resolveUserDeps,
+  useFactory: ({ commandLineExecutionContext }) => {
+    return async function handler() {
+      const executionContext = commandLineExecutionContext();
+
+      // pass signal from execution context
+      await someLongAction({ signal: executionContext.abortSignal });
+
+      // check if execution was aborted while long action has been executing
+      if (!execution.abortSignal.aborted) {
+        await anotherAction();
+      }
+    }
+  },
+  deps: {
+    commandLineExecutionContext: COMMAND_LINE_EXECUTION_CONTEXT_TOKEN
+  }
+})
+
+```
+
 ## Errors in stages
 
 On the server side, you can intercept errors from `commandLineRunner` stages by adding `express` error middleware with a multi token `WEB_APP_AFTER_INIT_TOKEN`.

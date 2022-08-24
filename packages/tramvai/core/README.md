@@ -97,6 +97,30 @@ class ModulePubSub {
   - `params` - data passed to action
 - `deps` - List of providers that are needed for the action to work
 - `conditions` - List of restrictions for the execution of the action
+- `conditionsFailResult` - [see](#conditionsfailresult)
+
+#### Action Execution Context
+
+Action execution context that contains some helper functions and resolved deps
+
+Context has next fields:
+- `deps` - resolved deps that were specified when declaring action
+- `executeAction` - allows to execute another actions inside current one
+- `getState` - quick access to `STORE_TOKEN.getState`
+- `dispatch` - quick access to `STORE_TOKEN.dispatch`
+- `abortSignal` - instance of signal related to the current execution tree
+- `abortController` - instance of `AbortController` created exclusively for the current action execution
+
+#### conditionsFailResult
+
+Specifies the output of the action in case its `conditions` was not met during execution.
+
+> If `conditions` are not met for action, action's `fn` won't be executed in any way
+
+Possible values for the `conditionsFailResult`:
+- `empty` - (default) execution will be resolved with `undefined` as a result
+- `error` - execution will be rejected with [ConditionFailError](references/libs/errors.md#conditionfailerror)
+
 
 #### Usage example
 
@@ -113,6 +137,33 @@ declareAction({
   },
   conditions: {
     requiredCoreRoles: ['god'],
+  },
+});
+```
+
+abort execution:
+```ts
+const innerAction = declareAction(/** ... */);
+
+const action = declareAction({
+  name: 'root',
+  async fn() {
+    setTimeout(() => {
+      this.abortController.abort()
+    }, 4000);
+
+    const { payload } = await this.deps.httpClient.request({
+      url: 'https://www.domain.com/api/endpoint',
+      // pass signal to the request
+      signal: this.abortSignal,
+    });
+
+    // if innerAction1 will end after abortController.abort was called
+    // then calling innerAction2 will throw an instance of ExecutionAbortError
+    await this.executeAction(innerAction, payload);
+  },
+  deps: {
+    httpClient: HTTP_CLIENT,
   },
 });
 ```
