@@ -26,6 +26,7 @@ export type Params = WithConfig<{
   env?: Record<string, string>;
   onlyBundles?: string[];
   strictErrorHandle?: boolean;
+  fileCache?: boolean;
 }>;
 
 export type Result<T extends string = any> = Promise<

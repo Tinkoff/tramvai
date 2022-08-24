@@ -6,7 +6,7 @@ import type { ApplicationConfigEntry } from '../../../typings/configEntry/applic
 export const pagesResolve = (configManager: ConfigManager<ApplicationConfigEntry>) => (
   config: Config
 ) => {
-  const { fileSystemPages } = configManager.build.configurations.experiments;
+  const { fileSystemPages } = configManager.build.configurations;
 
   config.module
     .rule('file-system-pages')

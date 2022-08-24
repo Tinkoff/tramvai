@@ -18,6 +18,7 @@ export type Params = WithConfig<{
   disableProdOptimization?: boolean;
   showConfig?: boolean;
   env?: Record<string, string>;
+  fileCache?: boolean;
 
   // `package` target parameters
   watchMode?: boolean;

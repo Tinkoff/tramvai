@@ -22,9 +22,7 @@ import { configToEnv } from '../../blocks/configToEnv';
 export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config: Config) => {
   const {
     options: { polyfill = '' } = {},
-    configurations: {
-      experiments: { fileSystemPages },
-    },
+    configurations: { fileSystemPages },
   } = configManager.build;
 
   config.name('client');

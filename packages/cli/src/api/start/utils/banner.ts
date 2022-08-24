@@ -24,7 +24,7 @@ export function showBanner(di: Container) {
   titleLines.push(`${label('Modern')}           ${config.modern}`);
   titleLines.push(`${label('ReactRefresh')}     ${config.hotRefresh}`);
 
-  if (config.build.configurations.experiments.fileSystemPages.enable) {
+  if (config.build.configurations.fileSystemPages.enable) {
     titleLines.push(`${label('FileSystemPages')}  true`);
   }
 

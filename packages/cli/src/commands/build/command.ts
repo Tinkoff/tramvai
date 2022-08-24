@@ -50,6 +50,12 @@ class BuildCommand extends CLICommand<Params> {
       value: '[forPublish]',
       description: '<package> Prepare library package.json for publication',
     },
+    {
+      name: '--fileCache',
+      value: '[fileCache]',
+      transformer: (value) => value !== 'false',
+      description: 'Enable/disable persistent file cache for used cli builder',
+    },
   ];
 
   alias = 'b';

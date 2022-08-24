@@ -20,12 +20,10 @@ describe('router/spa', () => {
       commands: {
         build: {
           configurations: {
-            experiments: {
-              fileSystemPages: {
-                enable: true,
-                pagesDir: '../shared/pages',
-                routesDir: false,
-              },
+            fileSystemPages: {
+              enable: true,
+              pagesDir: '../shared/pages',
+              routesDir: false,
             },
           },
         },

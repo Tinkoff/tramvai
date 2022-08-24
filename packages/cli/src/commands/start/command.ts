@@ -98,6 +98,12 @@ export class StartCommand extends CLICommand<Params> {
       description:
         'Specify the names of the bundles that need to be collected, other bundles will not be collected and their request will fail with an error',
     },
+    {
+      name: '--fileCache',
+      value: '[fileCache]',
+      transformer: (value) => value !== 'false',
+      description: 'Enable/disable persistent file cache for used cli builder',
+    },
   ];
 
   alias = 's';

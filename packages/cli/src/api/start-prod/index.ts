@@ -19,6 +19,7 @@ export type Params = WithConfig<{
   resolveSymlinks?: boolean;
   showConfig?: boolean;
   env?: Record<string, string>;
+  fileCache?: boolean;
 }>;
 
 export type Result<T extends string = any> = Promise<

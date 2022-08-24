@@ -154,6 +154,18 @@ Option `commands.build.configurations.sourceMap` enables sourcemap generation fo
 
 Option `commands.build.configurations.sourceMapServer` enables sourcemap generation for the server bundle.
 
+## Configuration
+
+Configuration is provided through json-file with the name `tramvai.json` in the root of the single-application/monorepo
+
+### build or serve config?
+
+When you are deciding where to put specific settings in `tramvai.json` consider next statements:
+- `serve` config is only for development builds (using `tramvai start`)
+- `build` config mostly focused on production builds (`tramvai build`, `tramvai analyze`, `tramvai start-prod`) but may affect development builds as well (is this case this configs are merged)
+
+In conclusion: put most of the settings in the `build` config and put settings in the `serve` config only if they are specific to development builds or you need to override `build` settings to the development process.
+
 ## How to
 
 ### Code generation

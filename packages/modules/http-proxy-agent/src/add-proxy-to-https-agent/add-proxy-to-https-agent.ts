@@ -3,11 +3,11 @@ import https from 'https';
 import type { AgentOptions } from 'https';
 import net from 'net';
 import type { Socket } from 'net';
-import url from 'url';
 import type { LOGGER_TOKEN } from '@tramvai/tokens-common';
 import type { METRICS_MODULE_TOKEN } from '@tramvai/tokens-metrics';
 import { matchNoProxy } from './match-no-proxy';
 import { getHttpsProxy, getNoProxy } from '../utils/env';
+import { parseProxy } from './parse-proxy';
 
 type Proxy = {
   hostname: string;
@@ -59,8 +59,7 @@ export const addProxyToHttpsAgent = ({
     return;
   }
 
-  const parsedProxy = new url.URL(httpsProxyEnv);
-  const proxy = { hostname: parsedProxy.hostname, port: parsedProxy.port };
+  const proxy = parseProxy(httpsProxyEnv);
 
   logger.debug({
     event: 'parsed proxy',

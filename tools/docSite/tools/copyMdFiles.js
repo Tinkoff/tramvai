@@ -55,7 +55,6 @@ async function copyDocs({ from, to = docsDest, ignore = [] }) {
       '**/__integrations/**',
       '**/node_modules/**',
       'tools/docSite/**',
-      'router-way/**',
       '**/deprecated-*/**',
       ...ignore,
     ],

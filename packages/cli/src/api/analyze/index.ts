@@ -8,6 +8,7 @@ export interface Params {
   plugin?: 'bundle' | 'whybundled' | 'statoscope';
   modern?: boolean;
   showConfig?: boolean;
+  fileCache?: boolean;
 }
 
 export type AnalyzeCommand = (params: Params) => Promise<void>;

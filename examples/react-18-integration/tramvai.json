@@ -18,11 +18,9 @@
               "config": "src/postcss",
               "cssLocalIdentName": "[name]__[local]_[hash:base64:5]"
             },
-            "experiments": {
-              "fileSystemPages": {
-                "enable": true,
-                "pagesDir": false
-              }
+            "fileSystemPages": {
+              "enable": true,
+              "pagesDir": false
             }
           }
         },

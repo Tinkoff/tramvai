@@ -17,11 +17,9 @@
             "postcss": {
               "config": "src/postcss"
             },
-            "experiments": {
-              "fileSystemPages": {
-                "enable": true,
-                "pagesDir": false
-              }
+            "fileSystemPages": {
+              "enable": true,
+              "pagesDir": false
             }
           }
         },

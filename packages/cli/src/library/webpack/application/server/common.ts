@@ -22,9 +22,7 @@ import { extractCssPluginFactory } from '../../blocks/extractCssPlugin';
 export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config: Config) => {
   const {
     options: { server = '', outputServer = '' } = {},
-    configurations: {
-      experiments: { fileSystemPages },
-    },
+    configurations: { fileSystemPages },
   } = configManager.build;
 
   config.name('server');

@@ -67,12 +67,12 @@
                   "properties": {
                     "modern": {
                       "title": "Enable production build for modern browsers",
-                      "default": false,
+                      "default": true,
                       "type": "boolean"
                     },
                     "dedupe": {
                       "title": "Enable DedupePlugin",
-                      "default": false,
+                      "default": "equality",
                       "enum": [
                         "equality",
                         false,
@@ -212,6 +212,59 @@
                       "default": true,
                       "type": "boolean"
                     },
+                    "webpackResolveAlias": {
+                      "title": "Browser package resolve aliases. E.g. { \"stream\": \"stream-browserify\" }",
+                      "additionalProperties": true,
+                      "type": "object"
+                    },
+                    "webpackProvide": {
+                      "title": "Browser packages to provide with ProvidePlugin. E.g. { \"Buffer\": [\"buffer\", \"Buffer\"] }",
+                      "additionalProperties": true,
+                      "type": "object"
+                    },
+                    "fileSystemPages": {
+                      "title": "experimental settings for File-System Routing feature",
+                      "default": {},
+                      "type": "object",
+                      "properties": {
+                        "enable": {
+                          "title": "Read pages from file system",
+                          "default": false,
+                          "type": "boolean"
+                        },
+                        "routesDir": {
+                          "title": "Folder with pages from which static routers are generated",
+                          "default": "routes",
+                          "anyOf": [
+                            {
+                              "enum": [
+                                false
+                              ],
+                              "type": "boolean"
+                            },
+                            {
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "pagesDir": {
+                          "title": "Folder with components which can be manually added to static routers",
+                          "default": "pages",
+                          "anyOf": [
+                            {
+                              "enum": [
+                                false
+                              ],
+                              "type": "boolean"
+                            },
+                            {
+                              "type": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
                     "experiments": {
                       "title": "Experimental settings",
                       "default": {},
@@ -256,6 +309,25 @@
                             "topLevelAwait": {
                               "description": "Allow using top-level-await in EcmaScript Modules.",
                               "type": "boolean"
+                            },
+                            "css": {
+                              "description": "Enable css support.",
+                              "anyOf": [
+                                {
+                                  "description": "Options for css handling.",
+                                  "type": "object",
+                                  "properties": {
+                                    "exportsOnly": {
+                                      "description": "Avoid generating and loading a stylesheet and only embed exports from css into output javascript files.",
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "boolean"
+                                }
+                              ]
                             }
                           }
                         },
@@ -268,49 +340,6 @@
                               "title": "Use a new webpack API to execute modules instead of child compilers. This improves performance and memory usage a lot.",
                               "default": true,
                               "type": "boolean"
-                            }
-                          },
-                          "additionalProperties": false
-                        },
-                        "fileSystemPages": {
-                          "title": "experimental settings for File-System Routing feature",
-                          "default": {},
-                          "type": "object",
-                          "properties": {
-                            "enable": {
-                              "title": "Read pages from file system",
-                              "default": false,
-                              "type": "boolean"
-                            },
-                            "routesDir": {
-                              "title": "Folder with pages from which static routers are generated",
-                              "default": "routes",
-                              "anyOf": [
-                                {
-                                  "enum": [
-                                    false
-                                  ],
-                                  "type": "boolean"
-                                },
-                                {
-                                  "type": "string"
-                                }
-                              ]
-                            },
-                            "pagesDir": {
-                              "title": "Folder with components which can be manually added to static routers",
-                              "default": "pages",
-                              "anyOf": [
-                                {
-                                  "enum": [
-                                    false
-                                  ],
-                                  "type": "boolean"
-                                },
-                                {
-                                  "type": "string"
-                                }
-                              ]
                             }
                           },
                           "additionalProperties": false
@@ -334,16 +363,6 @@
                         }
                       },
                       "additionalProperties": false
-                    },
-                    "webpackResolveAlias": {
-                      "title": "Browser package resolve aliases. E.g. { \"stream\": \"stream-browserify\" }",
-                      "additionalProperties": true,
-                      "type": "object"
-                    },
-                    "webpackProvide": {
-                      "title": "Browser packages to provide with ProvidePlugin. E.g. { \"Buffer\": [\"buffer\", \"Buffer\"] }",
-                      "additionalProperties": true,
-                      "type": "object"
                     },
                     "granularChunks": {
                       "title": "Separate one common chunk to many small dynamic chunks",
@@ -1027,6 +1046,25 @@
                             "topLevelAwait": {
                               "description": "Allow using top-level-await in EcmaScript Modules.",
                               "type": "boolean"
+                            },
+                            "css": {
+                              "description": "Enable css support.",
+                              "anyOf": [
+                                {
+                                  "description": "Options for css handling.",
+                                  "type": "object",
+                                  "properties": {
+                                    "exportsOnly": {
+                                      "description": "Avoid generating and loading a stylesheet and only embed exports from css into output javascript files.",
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "boolean"
+                                }
+                              ]
                             }
                           }
                         },
@@ -1039,49 +1077,6 @@
                               "title": "Use a new webpack API to execute modules instead of child compilers. This improves performance and memory usage a lot.",
                               "default": true,
                               "type": "boolean"
-                            }
-                          },
-                          "additionalProperties": false
-                        },
-                        "fileSystemPages": {
-                          "title": "experimental settings for File-System Routing feature",
-                          "default": {},
-                          "type": "object",
-                          "properties": {
-                            "enable": {
-                              "title": "Read pages from file system",
-                              "default": false,
-                              "type": "boolean"
-                            },
-                            "routesDir": {
-                              "title": "Folder with pages from which static routers are generated",
-                              "default": "routes",
-                              "anyOf": [
-                                {
-                                  "enum": [
-                                    false
-                                  ],
-                                  "type": "boolean"
-                                },
-                                {
-                                  "type": "string"
-                                }
-                              ]
-                            },
-                            "pagesDir": {
-                              "title": "Folder with components which can be manually added to static routers",
-                              "default": "pages",
-                              "anyOf": [
-                                {
-                                  "enum": [
-                                    false
-                                  ],
-                                  "type": "boolean"
-                                },
-                                {
-                                  "type": "string"
-                                }
-                              ]
                             }
                           },
                           "additionalProperties": false
@@ -1188,12 +1183,12 @@
                   "properties": {
                     "modern": {
                       "title": "Enable production build for modern browsers",
-                      "default": false,
+                      "default": true,
                       "type": "boolean"
                     },
                     "dedupe": {
                       "title": "Enable DedupePlugin",
-                      "default": false,
+                      "default": "equality",
                       "enum": [
                         "equality",
                         false,
@@ -1334,6 +1329,59 @@
                       "default": true,
                       "type": "boolean"
                     },
+                    "webpackResolveAlias": {
+                      "title": "Browser package resolve aliases. E.g. { \"stream\": \"stream-browserify\" }",
+                      "additionalProperties": true,
+                      "type": "object"
+                    },
+                    "webpackProvide": {
+                      "title": "Browser packages to provide with ProvidePlugin. E.g. { \"Buffer\": [\"buffer\", \"Buffer\"] }",
+                      "additionalProperties": true,
+                      "type": "object"
+                    },
+                    "fileSystemPages": {
+                      "title": "experimental settings for File-System Routing feature",
+                      "default": {},
+                      "type": "object",
+                      "properties": {
+                        "enable": {
+                          "title": "Read pages from file system",
+                          "default": false,
+                          "type": "boolean"
+                        },
+                        "routesDir": {
+                          "title": "Folder with pages from which static routers are generated",
+                          "default": "routes",
+                          "anyOf": [
+                            {
+                              "enum": [
+                                false
+                              ],
+                              "type": "boolean"
+                            },
+                            {
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "pagesDir": {
+                          "title": "Folder with components which can be manually added to static routers",
+                          "default": "pages",
+                          "anyOf": [
+                            {
+                              "enum": [
+                                false
+                              ],
+                              "type": "boolean"
+                            },
+                            {
+                              "type": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
                     "experiments": {
                       "title": "Experimental settings",
                       "default": {},
@@ -1378,6 +1426,25 @@
                             "topLevelAwait": {
                               "description": "Allow using top-level-await in EcmaScript Modules.",
                               "type": "boolean"
+                            },
+                            "css": {
+                              "description": "Enable css support.",
+                              "anyOf": [
+                                {
+                                  "description": "Options for css handling.",
+                                  "type": "object",
+                                  "properties": {
+                                    "exportsOnly": {
+                                      "description": "Avoid generating and loading a stylesheet and only embed exports from css into output javascript files.",
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "boolean"
+                                }
+                              ]
                             }
                           }
                         },
@@ -1390,49 +1457,6 @@
                               "title": "Use a new webpack API to execute modules instead of child compilers. This improves performance and memory usage a lot.",
                               "default": true,
                               "type": "boolean"
-                            }
-                          },
-                          "additionalProperties": false
-                        },
-                        "fileSystemPages": {
-                          "title": "experimental settings for File-System Routing feature",
-                          "default": {},
-                          "type": "object",
-                          "properties": {
-                            "enable": {
-                              "title": "Read pages from file system",
-                              "default": false,
-                              "type": "boolean"
-                            },
-                            "routesDir": {
-                              "title": "Folder with pages from which static routers are generated",
-                              "default": "routes",
-                              "anyOf": [
-                                {
-                                  "enum": [
-                                    false
-                                  ],
-                                  "type": "boolean"
-                                },
-                                {
-                                  "type": "string"
-                                }
-                              ]
-                            },
-                            "pagesDir": {
-                              "title": "Folder with components which can be manually added to static routers",
-                              "default": "pages",
-                              "anyOf": [
-                                {
-                                  "enum": [
-                                    false
-                                  ],
-                                  "type": "boolean"
-                                },
-                                {
-                                  "type": "string"
-                                }
-                              ]
                             }
                           },
                           "additionalProperties": false
@@ -1456,16 +1480,6 @@
                         }
                       },
                       "additionalProperties": false
-                    },
-                    "webpackResolveAlias": {
-                      "title": "Browser package resolve aliases. E.g. { \"stream\": \"stream-browserify\" }",
-                      "additionalProperties": true,
-                      "type": "object"
-                    },
-                    "webpackProvide": {
-                      "title": "Browser packages to provide with ProvidePlugin. E.g. { \"Buffer\": [\"buffer\", \"Buffer\"] }",
-                      "additionalProperties": true,
-                      "type": "object"
                     }
                   }
                 }
@@ -1627,6 +1641,25 @@
                             "topLevelAwait": {
                               "description": "Allow using top-level-await in EcmaScript Modules.",
                               "type": "boolean"
+                            },
+                            "css": {
+                              "description": "Enable css support.",
+                              "anyOf": [
+                                {
+                                  "description": "Options for css handling.",
+                                  "type": "object",
+                                  "properties": {
+                                    "exportsOnly": {
+                                      "description": "Avoid generating and loading a stylesheet and only embed exports from css into output javascript files.",
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "boolean"
+                                }
+                              ]
                             }
                           }
                         },
@@ -1639,49 +1672,6 @@
                               "title": "Use a new webpack API to execute modules instead of child compilers. This improves performance and memory usage a lot.",
                               "default": true,
                               "type": "boolean"
-                            }
-                          },
-                          "additionalProperties": false
-                        },
-                        "fileSystemPages": {
-                          "title": "experimental settings for File-System Routing feature",
-                          "default": {},
-                          "type": "object",
-                          "properties": {
-                            "enable": {
-                              "title": "Read pages from file system",
-                              "default": false,
-                              "type": "boolean"
-                            },
-                            "routesDir": {
-                              "title": "Folder with pages from which static routers are generated",
-                              "default": "routes",
-                              "anyOf": [
-                                {
-                                  "enum": [
-                                    false
-                                  ],
-                                  "type": "boolean"
-                                },
-                                {
-                                  "type": "string"
-                                }
-                              ]
-                            },
-                            "pagesDir": {
-                              "title": "Folder with components which can be manually added to static routers",
-                              "default": "pages",
-                              "anyOf": [
-                                {
-                                  "enum": [
-                                    false
-                                  ],
-                                  "type": "boolean"
-                                },
-                                {
-                                  "type": "string"
-                                }
-                              ]
                             }
                           },
                           "additionalProperties": false
@@ -1768,12 +1758,12 @@
                   "properties": {
                     "modern": {
                       "title": "Enable production build for modern browsers",
-                      "default": false,
+                      "default": true,
                       "type": "boolean"
                     },
                     "dedupe": {
                       "title": "Enable DedupePlugin",
-                      "default": false,
+                      "default": "equality",
                       "enum": [
                         "equality",
                         false,
@@ -1914,6 +1904,59 @@
                       "default": true,
                       "type": "boolean"
                     },
+                    "webpackResolveAlias": {
+                      "title": "Browser package resolve aliases. E.g. { \"stream\": \"stream-browserify\" }",
+                      "additionalProperties": true,
+                      "type": "object"
+                    },
+                    "webpackProvide": {
+                      "title": "Browser packages to provide with ProvidePlugin. E.g. { \"Buffer\": [\"buffer\", \"Buffer\"] }",
+                      "additionalProperties": true,
+                      "type": "object"
+                    },
+                    "fileSystemPages": {
+                      "title": "experimental settings for File-System Routing feature",
+                      "default": {},
+                      "type": "object",
+                      "properties": {
+                        "enable": {
+                          "title": "Read pages from file system",
+                          "default": false,
+                          "type": "boolean"
+                        },
+                        "routesDir": {
+                          "title": "Folder with pages from which static routers are generated",
+                          "default": "routes",
+                          "anyOf": [
+                            {
+                              "enum": [
+                                false
+                              ],
+                              "type": "boolean"
+                            },
+                            {
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "pagesDir": {
+                          "title": "Folder with components which can be manually added to static routers",
+                          "default": "pages",
+                          "anyOf": [
+                            {
+                              "enum": [
+                                false
+                              ],
+                              "type": "boolean"
+                            },
+                            {
+                              "type": "string"
+                            }
+                          ]
+                        }
+                      },
+                      "additionalProperties": false
+                    },
                     "experiments": {
                       "title": "Experimental settings",
                       "default": {},
@@ -1958,6 +2001,25 @@
                             "topLevelAwait": {
                               "description": "Allow using top-level-await in EcmaScript Modules.",
                               "type": "boolean"
+                            },
+                            "css": {
+                              "description": "Enable css support.",
+                              "anyOf": [
+                                {
+                                  "description": "Options for css handling.",
+                                  "type": "object",
+                                  "properties": {
+                                    "exportsOnly": {
+                                      "description": "Avoid generating and loading a stylesheet and only embed exports from css into output javascript files.",
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "boolean"
+                                }
+                              ]
                             }
                           }
                         },
@@ -1970,49 +2032,6 @@
                               "title": "Use a new webpack API to execute modules instead of child compilers. This improves performance and memory usage a lot.",
                               "default": true,
                               "type": "boolean"
-                            }
-                          },
-                          "additionalProperties": false
-                        },
-                        "fileSystemPages": {
-                          "title": "experimental settings for File-System Routing feature",
-                          "default": {},
-                          "type": "object",
-                          "properties": {
-                            "enable": {
-                              "title": "Read pages from file system",
-                              "default": false,
-                              "type": "boolean"
-                            },
-                            "routesDir": {
-                              "title": "Folder with pages from which static routers are generated",
-                              "default": "routes",
-                              "anyOf": [
-                                {
-                                  "enum": [
-                                    false
-                                  ],
-                                  "type": "boolean"
-                                },
-                                {
-                                  "type": "string"
-                                }
-                              ]
-                            },
-                            "pagesDir": {
-                              "title": "Folder with components which can be manually added to static routers",
-                              "default": "pages",
-                              "anyOf": [
-                                {
-                                  "enum": [
-                                    false
-                                  ],
-                                  "type": "boolean"
-                                },
-                                {
-                                  "type": "string"
-                                }
-                              ]
                             }
                           },
                           "additionalProperties": false
@@ -2036,16 +2055,6 @@
                         }
                       },
                       "additionalProperties": false
-                    },
-                    "webpackResolveAlias": {
-                      "title": "Browser package resolve aliases. E.g. { \"stream\": \"stream-browserify\" }",
-                      "additionalProperties": true,
-                      "type": "object"
-                    },
-                    "webpackProvide": {
-                      "title": "Browser packages to provide with ProvidePlugin. E.g. { \"Buffer\": [\"buffer\", \"Buffer\"] }",
-                      "additionalProperties": true,
-                      "type": "object"
                     }
                   }
                 }
@@ -2207,6 +2216,25 @@
                             "topLevelAwait": {
                               "description": "Allow using top-level-await in EcmaScript Modules.",
                               "type": "boolean"
+                            },
+                            "css": {
+                              "description": "Enable css support.",
+                              "anyOf": [
+                                {
+                                  "description": "Options for css handling.",
+                                  "type": "object",
+                                  "properties": {
+                                    "exportsOnly": {
+                                      "description": "Avoid generating and loading a stylesheet and only embed exports from css into output javascript files.",
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "additionalProperties": false
+                                },
+                                {
+                                  "type": "boolean"
+                                }
+                              ]
                             }
                           }
                         },
@@ -2219,49 +2247,6 @@
                               "title": "Use a new webpack API to execute modules instead of child compilers. This improves performance and memory usage a lot.",
                               "default": true,
                               "type": "boolean"
-                            }
-                          },
-                          "additionalProperties": false
-                        },
-                        "fileSystemPages": {
-                          "title": "experimental settings for File-System Routing feature",
-                          "default": {},
-                          "type": "object",
-                          "properties": {
-                            "enable": {
-                              "title": "Read pages from file system",
-                              "default": false,
-                              "type": "boolean"
-                            },
-                            "routesDir": {
-                              "title": "Folder with pages from which static routers are generated",
-                              "default": "routes",
-                              "anyOf": [
-                                {
-                                  "enum": [
-                                    false
-                                  ],
-                                  "type": "boolean"
-                                },
-                                {
-                                  "type": "string"
-                                }
-                              ]
-                            },
-                            "pagesDir": {
-                              "title": "Folder with components which can be manually added to static routers",
-                              "default": "pages",
-                              "anyOf": [
-                                {
-                                  "enum": [
-                                    false
-                                  ],
-                                  "type": "boolean"
-                                },
-                                {
-                                  "type": "string"
-                                }
-                              ]
                             }
                           },
                           "additionalProperties": false

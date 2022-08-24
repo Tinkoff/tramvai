@@ -12,10 +12,8 @@
             "serverApiDir": "app/api"
           },
           "configurations": {
-            "experiments": {
-              "fileSystemPages": {
-                "enable": true
-              }
+            "fileSystemPages": {
+              "enable": true
             }
           }
         },

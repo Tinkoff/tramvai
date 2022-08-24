@@ -3,7 +3,7 @@ import prop from '@tinkoff/utils/object/prop';
 import { resolve } from 'path';
 import type { ProjectType, BuildType } from '../typings/projectType';
 import type { Env } from '../typings/Env';
-import type { ConfigEntry, Experiments } from '../typings/configEntry/common';
+import type { ConfigEntry } from '../typings/configEntry/common';
 import { validate } from './validate';
 import moduleVersion from '../utils/moduleVersion';
 import { packageVersion } from '../utils/packageVersion';
@@ -32,6 +32,7 @@ export interface Settings<E extends Env> {
   showConfig?: boolean;
   onlyBundles?: string[];
   disableProdOptimization?: boolean;
+  fileCache?: boolean;
 }
 
 const getOption = <T>(optionName: string, cfgs: any[], dflt?: T): T => {
@@ -108,6 +109,8 @@ export class ConfigManager<T extends ConfigEntry = ConfigEntry, E extends Env = 
 
   public target: Target;
 
+  public fileCache: boolean;
+
   public experiments: T['commands'][E extends 'development'
     ? 'serve'
     : 'build']['configurations']['experiments'];
@@ -120,7 +123,7 @@ export class ConfigManager<T extends ConfigEntry = ConfigEntry, E extends Env = 
     this.type = configEntry.type;
     this.root = configEntry.root;
     this.build = configEntry.commands.build || {};
-    this.serve = configEntry.commands.serve || configEntry.serve || {};
+    this.serve = configEntry.commands.serve || {};
 
     this.settings = settings;
     this.env = settings.env || ('development' as E);
@@ -156,7 +159,7 @@ export class ConfigManager<T extends ConfigEntry = ConfigEntry, E extends Env = 
         settings,
         this.env === 'development' ? this.serve.configurations : this.build.configurations,
       ],
-      false
+      true
     );
     this.dedupe = this.build.configurations?.dedupe;
     this.dedupeIgnore = this.build.configurations?.dedupeIgnore?.map(
@@ -168,6 +171,9 @@ export class ConfigManager<T extends ConfigEntry = ConfigEntry, E extends Env = 
     this.disableProdOptimization = settings.disableProdOptimization ?? false;
     this.onlyBundles = settings.onlyBundles;
     this.target = this.resolveTarget();
+    // according to measures fileCache in webpack doesn't affect
+    // performance much so enable it by default as it always was before
+    this.fileCache = settings.fileCache ?? true;
     this.experiments =
       (this.env === 'development'
         ? this.serve.configurations?.experiments

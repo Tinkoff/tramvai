@@ -23,12 +23,10 @@ describe('router/no-spa-with-not-found', () => {
                 'process.env.TEST_NOT_FOUND': true,
               },
             },
-            experiments: {
-              fileSystemPages: {
-                enable: true,
-                pagesDir: '../shared/pages',
-                routesDir: false,
-              },
+            fileSystemPages: {
+              enable: true,
+              pagesDir: '../shared/pages',
+              routesDir: false,
             },
           },
         },

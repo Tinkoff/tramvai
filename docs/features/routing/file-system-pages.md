@@ -132,12 +132,10 @@ Experimental feature File-System Pages hidden behind the flag `commands.build.co
       "commands": {
         "build": {
           "configurations": {
-            "experiments": {
-              "fileSystemPages": {
-                "enable": true,
-                "pagesDir": "pages",
-                "routesDir": "routes"
-              }
+            "fileSystemPages": {
+              "enable": true,
+              "pagesDir": "pages",
+              "routesDir": "routes"
             }
           }
         }

@@ -9,6 +9,9 @@
         "build": {
           "options": {
             "server": "app/server.tsx"
+          },
+          "configurations": {
+            "modern": false
           }
         }
       }

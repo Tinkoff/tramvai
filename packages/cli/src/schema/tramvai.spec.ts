@@ -87,168 +87,166 @@ describe('JSON schema для tramvai.json', () => {
     expect(valid).toBe(true);
     expect(config).not.toEqual(originalConfig);
 
-    expect(config).toEqual({
-      projects: {
-        app: {
-          name: 'test-app',
-          root: 'src/app',
-          type: 'application',
-          commands: {
-            build: {
-              options: {
-                outputClient: 'dist/client',
-                outputServer: 'dist/server',
-                outputStatic: 'dist/static',
-                server: 'src/server',
-                serverApiDir: 'src/api',
-                polyfill: '',
+    expect(config).toMatchInlineSnapshot(`
+      Object {
+        "projects": Object {
+          "app": Object {
+            "commands": Object {
+              "build": Object {
+                "configurations": Object {
+                  "checkAsyncTs": false,
+                  "commonChunk": true,
+                  "commonChunkSplitNumber": 3,
+                  "dedupe": "equality",
+                  "definePlugin": Object {
+                    "dev": Object {},
+                    "prod": Object {},
+                  },
+                  "enableFillActionNamePlugin": false,
+                  "experiments": Object {
+                    "minicss": Object {
+                      "useImportModule": true,
+                    },
+                    "transpilation": Object {
+                      "loader": "babel",
+                    },
+                    "webpack": Object {
+                      "backCompat": false,
+                      "cacheUnaffected": true,
+                    },
+                  },
+                  "externals": Array [],
+                  "fileSystemPages": Object {
+                    "enable": false,
+                    "pagesDir": "pages",
+                    "routesDir": "routes",
+                  },
+                  "generateDataQaTag": false,
+                  "granularChunks": false,
+                  "granularChunksMinSize": 20000,
+                  "granularChunksSplitNumber": 2,
+                  "modern": true,
+                  "postcss": Object {
+                    "config": "postcss.config",
+                  },
+                  "removeTypeofWindow": true,
+                  "sourceMap": false,
+                  "sourceMapServer": false,
+                  "terserParallel": true,
+                  "transpileOnlyModernLibs": true,
+                },
+                "options": Object {
+                  "outputClient": "dist/client",
+                  "outputServer": "dist/server",
+                  "outputStatic": "dist/static",
+                  "polyfill": "",
+                  "server": "src/server",
+                  "serverApiDir": "src/api",
+                },
               },
-              configurations: {
-                terserParallel: true,
-                checkAsyncTs: false,
-                commonChunk: true,
-                commonChunkSplitNumber: 3,
-                dedupe: false,
-                generateDataQaTag: false,
-                granularChunks: false,
-                granularChunksSplitNumber: 2,
-                granularChunksMinSize: 20000,
-                modern: false,
-                removeTypeofWindow: true,
-                sourceMap: false,
-                sourceMapServer: false,
-                definePlugin: {
-                  dev: {},
-                  prod: {},
+              "serve": Object {
+                "configurations": Object {
+                  "experiments": Object {
+                    "minicss": Object {
+                      "useImportModule": true,
+                    },
+                    "serverRunner": "process",
+                    "transpilation": Object {
+                      "loader": "babel",
+                    },
+                    "webpack": Object {
+                      "backCompat": false,
+                      "cacheUnaffected": true,
+                    },
+                  },
+                  "externals": Array [
+                    "react$",
+                    "react-dom",
+                    "prop-types",
+                    "express",
+                    "core-js",
+                  ],
+                  "hotRefresh": false,
+                  "modern": false,
+                  "sourceMap": false,
                 },
-                enableFillActionNamePlugin: false,
-                externals: [],
-                postcss: {
-                  config: 'postcss.config',
-                },
-                transpileOnlyModernLibs: true,
-                experiments: {
-                  webpack: {
-                    cacheUnaffected: true,
-                    backCompat: false,
-                  },
-                  minicss: {
-                    useImportModule: true,
-                  },
-                  fileSystemPages: {
-                    enable: false,
-                    routesDir: 'routes',
-                    pagesDir: 'pages',
-                  },
-                  transpilation: {
-                    loader: 'babel',
-                  },
-                },
+                "notifications": Object {},
               },
             },
-            serve: {
-              configurations: {
-                hotRefresh: false,
-                modern: false,
-                sourceMap: false,
-                externals: ['react$', 'react-dom', 'prop-types', 'express', 'core-js'],
-                experiments: {
-                  serverRunner: 'process',
-                  webpack: {
-                    cacheUnaffected: true,
-                    backCompat: false,
+            "name": "test-app",
+            "root": "src/app",
+            "type": "application",
+          },
+          "module": Object {
+            "commands": Object {
+              "build": Object {
+                "configurations": Object {
+                  "dedupe": "equality",
+                  "definePlugin": Object {
+                    "dev": Object {},
+                    "prod": Object {},
                   },
-                  minicss: {
-                    useImportModule: true,
+                  "enableFillActionNamePlugin": false,
+                  "experiments": Object {
+                    "minicss": Object {
+                      "useImportModule": true,
+                    },
+                    "transpilation": Object {
+                      "loader": "babel",
+                    },
+                    "webpack": Object {
+                      "backCompat": false,
+                      "cacheUnaffected": true,
+                    },
                   },
-                  fileSystemPages: {
-                    enable: false,
-                    routesDir: 'routes',
-                    pagesDir: 'pages',
+                  "fileSystemPages": Object {
+                    "enable": false,
+                    "pagesDir": "pages",
+                    "routesDir": "routes",
                   },
-                  transpilation: {
-                    loader: 'babel',
+                  "generateDataQaTag": false,
+                  "modern": true,
+                  "postcss": Object {
+                    "config": "postcss.config",
+                    "cssLocalIdentName": "[hash:base64:5]",
                   },
+                  "removeTypeofWindow": true,
+                  "sourceMap": false,
+                  "sourceMapServer": false,
+                  "terserParallel": true,
+                  "transpileOnlyModernLibs": true,
+                },
+                "options": Object {
+                  "output": "dist/modules",
                 },
               },
-              notifications: {},
+              "serve": Object {
+                "configurations": Object {
+                  "experiments": Object {
+                    "minicss": Object {
+                      "useImportModule": true,
+                    },
+                    "transpilation": Object {
+                      "loader": "babel",
+                    },
+                    "webpack": Object {
+                      "backCompat": false,
+                      "cacheUnaffected": true,
+                    },
+                  },
+                  "hotRefresh": false,
+                  "modern": false,
+                  "sourceMap": false,
+                },
+                "notifications": Object {},
+              },
             },
+            "name": "test-module",
+            "root": "src/module",
+            "type": "module",
           },
         },
-        module: {
-          name: 'test-module',
-          root: 'src/module',
-          type: 'module',
-          commands: {
-            build: {
-              configurations: {
-                terserParallel: true,
-                enableFillActionNamePlugin: false,
-                generateDataQaTag: false,
-                modern: false,
-                removeTypeofWindow: true,
-                sourceMap: false,
-                sourceMapServer: false,
-                dedupe: false,
-                definePlugin: {
-                  dev: {},
-                  prod: {},
-                },
-                postcss: {
-                  config: 'postcss.config',
-                  cssLocalIdentName: '[hash:base64:5]',
-                },
-                transpileOnlyModernLibs: true,
-                experiments: {
-                  webpack: {
-                    cacheUnaffected: true,
-                    backCompat: false,
-                  },
-                  minicss: {
-                    useImportModule: true,
-                  },
-                  fileSystemPages: {
-                    enable: false,
-                    routesDir: 'routes',
-                    pagesDir: 'pages',
-                  },
-                  transpilation: {
-                    loader: 'babel',
-                  },
-                },
-              },
-              options: {
-                output: 'dist/modules',
-              },
-            },
-            serve: {
-              configurations: {
-                hotRefresh: false,
-                modern: false,
-                sourceMap: false,
-                experiments: {
-                  webpack: {
-                    cacheUnaffected: true,
-                    backCompat: false,
-                  },
-                  minicss: {
-                    useImportModule: true,
-                  },
-                  fileSystemPages: {
-                    enable: false,
-                    routesDir: 'routes',
-                    pagesDir: 'pages',
-                  },
-                  transpilation: {
-                    loader: 'babel',
-                  },
-                },
-              },
-              notifications: {},
-            },
-          },
-        },
-      },
-    });
+      }
+    `);
   });
 });

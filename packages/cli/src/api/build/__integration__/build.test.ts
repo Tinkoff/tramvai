@@ -61,6 +61,7 @@ Array [
                 server: resolve(FIXTURES_DIR, 'app/server'),
               },
               configurations: {
+                modern: false,
                 definePlugin: {
                   dev: {
                     IS_REACT_APP: true,

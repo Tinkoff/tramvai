@@ -42,24 +42,25 @@ export default (configManager: ConfigManager) => (config: Config) => {
   // https://webpack.js.org/configuration/output/#outputhashfunction . When release webpack 6 would need to remove
   config.output.set('hashFunction', 'xxhash64');
 
-  // TODO: отключать в CI
-  config.cache({
-    type: 'filesystem',
-    name: `${env}-${configManager.type}-${configManager.buildType}-${configManager.name}${
-      configManager.buildType === 'client' && configManager.modern ? '-modern' : ''
-    }`,
-    cacheDirectory: findCacheDir({ cwd: configManager.rootDir, name: 'webpack' }),
-    buildDependencies: {
-      cli: ['@tramvai/cli'],
-      webpack: ['webpack/lib'],
-      // first check that config exists. If it is passed to webpack, but file is not exist the cache will not be created at all.
-      // It may be missing in cases when cli is running programmaticaly
-      config: filterNonExisted([path.resolve(configManager.rootDir, 'tramvai.json')]),
-      css: filterNonExisted([
-        postcssConfig && safeRequireResolve(path.resolve(configManager.rootDir, postcssConfig)),
-      ]),
-    },
-  });
+  if (configManager.fileCache) {
+    config.cache({
+      type: 'filesystem',
+      name: `${env}-${configManager.type}-${configManager.buildType}-${configManager.name}${
+        configManager.buildType === 'client' && configManager.modern ? '-modern' : ''
+      }`,
+      cacheDirectory: findCacheDir({ cwd: configManager.rootDir, name: 'webpack' }),
+      buildDependencies: {
+        cli: ['@tramvai/cli'],
+        webpack: ['webpack/lib'],
+        // first check that config exists. If it is passed to webpack, but file is not exist the cache will not be created at all.
+        // It may be missing in cases when cli is running programmaticaly
+        config: filterNonExisted([path.resolve(configManager.rootDir, 'tramvai.json')]),
+        css: filterNonExisted([
+          postcssConfig && safeRequireResolve(path.resolve(configManager.rootDir, postcssConfig)),
+        ]),
+      },
+    });
+  }
 
   config.set('snapshot', {
     // отключаем дефолты для managedPaths т.к. из-за них нельзя дебажить node_modules,
