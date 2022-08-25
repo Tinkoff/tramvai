@@ -25,6 +25,7 @@ import type {
   WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN,
   WEB_FASTIFY_APP_AFTER_ERROR_TOKEN,
   WEB_FASTIFY_APP_PROCESS_ERROR_TOKEN,
+  WEB_FASTIFY_APP_METRICS_TOKEN,
 } from '@tramvai/tokens-server-private';
 import type { ExtractDependencyType } from '@tinkoff/dippy';
 import { provide } from '@tinkoff/dippy';
@@ -59,6 +60,7 @@ export const webAppInitCommand = ({
   commandLineRunner,
   executionContextManager,
   beforeInit,
+  requestMetrics,
   limiterRequest,
   init,
   afterInit,
@@ -76,6 +78,7 @@ export const webAppInitCommand = ({
   commandLineRunner: ExtractDependencyType<typeof COMMAND_LINE_RUNNER_TOKEN>;
   executionContextManager: ExtractDependencyType<typeof EXECUTION_CONTEXT_MANAGER_TOKEN>;
   beforeInit: ExtractDependencyType<typeof WEB_FASTIFY_APP_BEFORE_INIT_TOKEN>;
+  requestMetrics: ExtractDependencyType<typeof WEB_FASTIFY_APP_METRICS_TOKEN>;
   limiterRequest: ExtractDependencyType<typeof WEB_FASTIFY_APP_LIMITER_TOKEN>;
   init: ExtractDependencyType<typeof WEB_FASTIFY_APP_INIT_TOKEN>;
   afterInit: ExtractDependencyType<typeof WEB_FASTIFY_APP_AFTER_INIT_TOKEN>;
@@ -114,6 +117,7 @@ export const webAppInitCommand = ({
     });
 
     await app.register(async (instance) => {
+      await runHandlers(instance, requestMetrics, []);
       await runHandlers(instance, limiterRequest, expressLimiterRequest);
 
       await app.register(fastifyCookie);

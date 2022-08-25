@@ -94,6 +94,8 @@ describe('modules/requestsLimiter', () => {
 
       clearInterval(interval);
 
+      const metricsResponse = await (await fetch(`${serverUrl}/metrics`)).text();
+
       expect(requests.average).toBeGreaterThan(1000);
 
       expect(Object.keys(statusCodeStats)).toHaveLength(3);
@@ -101,6 +103,10 @@ describe('modules/requestsLimiter', () => {
       expect(statusCodeStats['200'].count).toBeGreaterThan(100);
       expect(statusCodeStats['404'].count).toBeGreaterThan(100);
       expect(statusCodeStats['429'].count).toBeGreaterThan(50000);
+
+      expect(metricsResponse).toContain('http_requests_total{method="GET",status="200"}');
+      expect(metricsResponse).toContain('http_requests_total{method="GET",status="429"}');
+      expect(metricsResponse).toContain('http_requests_total{method="GET",status="404"}');
     },
     JEST_TIMEOUT
   );

@@ -44,6 +44,15 @@ export const WEB_FASTIFY_APP_INIT_TOKEN = createToken<FASTIFY_APP_INIT_HANDLER>(
 
 /**
  * @description
+ * You can measure application requests duration.
+ */
+export const WEB_FASTIFY_APP_METRICS_TOKEN = createToken<FASTIFY_APP_INIT_HANDLER>(
+  'webApp fastify metrics',
+  { multi: true }
+);
+
+/**
+ * @description
  * You can limit requests of application.
  */
 export const WEB_FASTIFY_APP_LIMITER_TOKEN = createToken<FASTIFY_APP_INIT_HANDLER>(

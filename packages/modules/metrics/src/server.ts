@@ -3,7 +3,7 @@ import { UTILITY_SERVER_PATHS } from '@tramvai/tokens-server';
 import {
   UTILITY_WEB_FASTIFY_APP_TOKEN,
   WEB_FASTIFY_APP_BEFORE_INIT_TOKEN,
-  WEB_FASTIFY_APP_INIT_TOKEN,
+  WEB_FASTIFY_APP_METRICS_TOKEN,
 } from '@tramvai/tokens-server-private';
 import { METRICS_MODULE_TOKEN, METRICS_MODULE_CONFIG_TOKEN } from '@tramvai/tokens-metrics';
 import { fastifyMeasureRequests } from '@tinkoff/measure-fastify-requests';
@@ -64,7 +64,7 @@ export * from '@tramvai/tokens-metrics';
       multi: true,
     }),
     provide({
-      provide: WEB_FASTIFY_APP_INIT_TOKEN,
+      provide: WEB_FASTIFY_APP_METRICS_TOKEN,
       useFactory: ({
         app,
         metrics,

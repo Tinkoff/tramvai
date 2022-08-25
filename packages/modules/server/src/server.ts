@@ -27,6 +27,7 @@ import {
   WEB_FASTIFY_APP_PROCESS_ERROR_TOKEN,
   SERVER_FACTORY_TOKEN,
   WEB_FASTIFY_APP_FACTORY_TOKEN,
+  WEB_FASTIFY_APP_METRICS_TOKEN,
 } from '@tramvai/tokens-server-private';
 import {
   ENV_MANAGER_TOKEN,
@@ -115,6 +116,7 @@ EventEmitter.defaultMaxListeners = 50;
         beforeInit: { token: WEB_FASTIFY_APP_BEFORE_INIT_TOKEN, optional: true },
         init: { token: WEB_FASTIFY_APP_INIT_TOKEN, optional: true },
         afterInit: { token: WEB_FASTIFY_APP_AFTER_INIT_TOKEN, optional: true },
+        requestMetrics: { token: WEB_FASTIFY_APP_METRICS_TOKEN, optional: true },
         limiterRequest: { token: WEB_FASTIFY_APP_LIMITER_TOKEN, optional: true },
         expressBeforeInit: { token: WEB_APP_BEFORE_INIT_TOKEN, optional: true },
         expressInit: { token: WEB_APP_INIT_TOKEN, optional: true },
