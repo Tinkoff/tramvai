@@ -125,7 +125,11 @@ export function applyTemplate(
   let warnings = 0;
   templateFiles.forEach((templateFile) => {
     if (processFileFromTemplate(templateFile, templateDir, projectDir, templateData)) {
-      console.log(chalk.green('CREATE'), transformOutputPath(replaceHbs(templateFile)));
+      console.log(
+        chalk.blue('[TEMPLATE]'),
+        chalk.green('CREATE'),
+        transformOutputPath(replaceHbs(templateFile))
+      );
       ++processed;
     } else {
       ++warnings;

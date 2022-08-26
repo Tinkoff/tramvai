@@ -3,7 +3,6 @@ import { provide } from '@tinkoff/dippy';
 import chalk from 'chalk';
 import rimraf from 'rimraf';
 import webpack from 'webpack';
-import { INIT_HANDLER_TOKEN } from '../../../../api/start/tokens';
 import {
   CLI_PACKAGE_MANAGER,
   CLI_ROOT_DIR_TOKEN,
@@ -16,6 +15,7 @@ import { StatoscopeAnalyzePlugin } from '../../analyzePlugins/statoscope';
 import { WhyBundledAnalyzePlugin } from '../../analyzePlugins/whyBundled';
 import {
   CLIENT_CONFIG_MANAGER_TOKEN,
+  INIT_HANDLER_TOKEN,
   CLOSE_HANDLER_TOKEN,
   PROCESS_HANDLER_TOKEN,
   WEBPACK_ANALYZE_PLUGIN_NAME_TOKEN,

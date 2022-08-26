@@ -1,16 +1,11 @@
-import util from 'util';
-import childProcess from 'child_process';
+import { command } from 'execa';
 import { isLockfileChanged } from '../../utils/lockfileHash';
 import type { Validator } from './validator.h';
 
-const exec = util.promisify(childProcess.exec);
-
 export const runMigrationsAndCheckVersions: Validator = async (context) => {
   if (isLockfileChanged(context)) {
-    const { stdout: migrateLog } = await exec(`npx tramvai-migrate`);
-    console.log(migrateLog);
-    const { stdout: checkLog } = await exec(`npx tramvai-check-versions`);
-    console.log(checkLog);
+    await command(`npx tramvai-migrate`, { stdio: 'inherit' });
+    await command(`npx tramvai-check-versions`, { stdio: 'inherit' });
   }
 
   return { name: 'runMigrationsAndCheckVersions', status: 'ok' };

@@ -40,6 +40,18 @@ async function runtimeInstallPackage({
   spinner.stop();
 }
 
+/**
+ * @deprecated Better do not use this function as it has some problems with npm@>=7
+ * This function only used by @tramvai/cli mostly to install optional dependencies during usage and meant to install
+ * single package in @tramvai/cli/node_modules dir. Before npm@7 it works just fine and there was only single package was installed.
+ * But starting with npm@7 it now installs all of the dependencies tree (see [issue](https://github.com/npm/cli/issues/3023)) that leads
+ * to very long installs and additional separate dependencies tree inside @tramvai/cli
+ *
+ * To mitigate this issue:
+ * - wait to [rfc](https://github.com/npm/rfcs/pull/364) be implemented
+ * - try [hack](https://github.com/npm/rfcs/pull/364#issuecomment-823637315) with internal workspace suggested in rfc from above
+ * - use specific npm version by calling explicitly `npx -q npm@^6`
+ */
 async function npmRequire({
   cliRootDir,
   packageManager,
@@ -107,6 +119,9 @@ async function npmRequire({
   return require(packageName);
 }
 
+/**
+ * @deprecated Better do not use it, see deprecation notes for the npmRequire
+ */
 function npmRequireList({
   cliRootDir,
   packageManager,

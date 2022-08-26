@@ -1,29 +1,11 @@
 import { parse, minVersion } from 'semver';
 import fs from 'fs';
 import pMap from 'p-map';
-import { getLatestPackageVersion } from '../../utils/commands/dependencies/getLatestPackageVersion';
 import { packageHasVersion } from '../../utils/commands/dependencies/packageHasVersion';
+import { getLibPackageVersion, isDependantLib } from './dependantLibs';
 
-// Список пакетов, не начинающихся с @tramvai,
-// которые мы также хотим обновить
-const packagesToUpdate = [
-  '@tinkoff/logger',
-  '@tinkoff/dippy',
-  '@tinkoff/router',
-  '@tinkoff/url',
-  '@tinkoff/errors',
-  '@tinkoff/roles',
-  '@tinkoff/pubsub',
-  '@tinkoff/hook-runner',
-  '@tinkoff/htmlpagebuilder',
-  '@tinkoff/browser-timings',
-  '@tinkoff/meta-tags-generate',
-  '@tinkoff/pack-polyfills',
-  '@tinkoff/browserslist-config',
-];
-
-const shouldUpdateDependency = (name: string) => {
-  return name.startsWith('@tramvai') || packagesToUpdate.includes(name);
+const isUnifiedVersion = (name: string) => {
+  return name.startsWith('@tramvai');
 };
 
 const getVersionFromDep = (dep) => parse(dep)?.version || minVersion(dep)?.version;
@@ -35,11 +17,11 @@ const updateEntry = async (
 ) => {
   let nextVersion: string;
 
-  if (dep.startsWith('@tramvai') && getVersionFromDep(deps[dep]) === currentVersion) {
+  if (isUnifiedVersion(dep) && getVersionFromDep(deps[dep]) === currentVersion) {
     nextVersion = version;
-  } else if (shouldUpdateDependency(dep)) {
-    const latestPackageVersion = await getLatestPackageVersion(dep);
-    nextVersion = latestPackageVersion;
+  } else if (isDependantLib(dep)) {
+    const libVersion = await getLibPackageVersion(dep, version);
+    nextVersion = libVersion;
   }
 
   if (nextVersion) {

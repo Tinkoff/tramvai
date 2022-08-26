@@ -70,6 +70,8 @@ export abstract class PackageManager {
     command: string,
     options: ExecOptions
   ): PromiseWithChild<{ stdout: string; stderr: string }> {
+    // TODO: maybe replace with execa in order to show output in console with stdio: 'inherit'
+    // as it easier to debug problems in that case
     return exec(command, {
       ...options,
       cwd: options.cwd || this.rootDir,

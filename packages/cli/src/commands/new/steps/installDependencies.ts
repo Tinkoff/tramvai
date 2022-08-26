@@ -1,6 +1,6 @@
+import type { Options } from 'execa';
 import execa from 'execa';
 import chalk from 'chalk';
-import ora from 'ora';
 import type { PackageManagers } from '../questions/packageManager';
 import type { TestingFrameworks } from '../questions/testingFramework';
 import type { Type } from '../questions/type';
@@ -92,23 +92,30 @@ export async function installDependencies({
   packageManager: PackageManagers;
   testingFramework: TestingFrameworks;
 }) {
-  const spinner = ora({
-    prefixText: `${chalk.blue('[START]')} Install dependencies`,
-  }).start();
-
   const installCommands = packagesInstallCommands[packageManager];
-  const options = { cwd: localDir, env: { SKIP_TRAMVAI_MIGRATIONS: 'true' } };
+  const options: Options = {
+    cwd: localDir,
+    env: {
+      SKIP_TRAMVAI_MIGRATIONS: 'true',
+    },
+    stdio: 'inherit',
+  };
+
+  console.log(`${chalk.blue('[DEPENDENCIES]')} Installing app dependencies`);
 
   await execa(packageManager, [...installCommands.deps, ...DEPS[type].dependencies], options);
+
+  console.log(`${chalk.blue('[DEPENDENCIES]')} Installing dev dependencies`);
+
   await execa(packageManager, [...installCommands.devDeps, ...devDependencies], options);
 
   if (testingFramework === 'jest') {
+    console.log(`${chalk.blue('[DEPENDENCIES]')} Installing jest dependencies`);
+
     await execa(
       packageManager,
       [...installCommands.devDeps, ...DEPS[type].jestDevDependencies],
       options
     );
   }
-
-  spinner.stop();
 }
