@@ -7,7 +7,6 @@ import {
   RESPONSE_MANAGER_TOKEN,
   CONTEXT_TOKEN,
   CREATE_CACHE_TOKEN,
-  ENV_MANAGER_TOKEN,
 } from '@tramvai/tokens-common';
 import { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
 import { ClientHintsModule, USER_AGENT_TOKEN } from '@tramvai/module-client-hints';
@@ -20,6 +19,7 @@ import {
   HTML_ATTRS,
   RESOURCE_INLINE_OPTIONS,
   ResourceType,
+  RENDER_FLOW_AFTER_TOKEN,
 } from '@tramvai/tokens-render';
 import { Scope } from '@tinkoff/dippy';
 import { WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN } from '@tramvai/tokens-server-private';
@@ -146,6 +146,8 @@ export const DEFAULT_POLYFILL_CONDITION =
         polyfillCondition: POLYFILL_CONDITION,
         htmlAttrs: HTML_ATTRS,
         modern: 'modernSatisfies',
+        renderFlowAfter: { token: RENDER_FLOW_AFTER_TOKEN, optional: true },
+        logger: LOGGER_TOKEN,
       },
     }),
     provide({

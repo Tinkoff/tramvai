@@ -1,5 +1,6 @@
+/* eslint-disable sort-class-members/sort-class-members */
 import flatten from '@tinkoff/utils/array/flatten';
-import type { CONTEXT_TOKEN } from '@tramvai/module-common';
+import type { CONTEXT_TOKEN, LOGGER_TOKEN } from '@tramvai/module-common';
 import type { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
 import { buildPage } from '@tinkoff/htmlpagebuilder';
 import type {
@@ -7,10 +8,12 @@ import type {
   POLYFILL_CONDITION,
   RENDER_SLOTS,
   RESOURCES_REGISTRY,
+  RENDER_FLOW_AFTER_TOKEN,
 } from '@tramvai/tokens-render';
 import { ResourceSlot, ResourceType } from '@tramvai/tokens-render';
 import { safeDehydrate } from '@tramvai/safe-strings';
 import { ChunkExtractor } from '@loadable/server';
+import type { ExtractDependencyType } from '@tinkoff/dippy';
 import { bundleResource } from './blocks/bundleResource/bundleResource';
 import { polyfillResources } from './blocks/polyfill';
 import { addPreloadForCriticalJS } from './blocks/preload/preloadBlock';
@@ -46,6 +49,10 @@ export class PageBuilder {
 
   private modern: boolean;
 
+  private renderFlowAfter: ExtractDependencyType<typeof RENDER_FLOW_AFTER_TOKEN>;
+
+  private log: ReturnType<ExtractDependencyType<typeof LOGGER_TOKEN>>;
+
   constructor({
     renderSlots,
     pageService,
@@ -56,6 +63,8 @@ export class PageBuilder {
     polyfillCondition,
     htmlAttrs,
     modern,
+    renderFlowAfter,
+    logger,
   }) {
     this.htmlAttrs = htmlAttrs;
     this.renderSlots = flatten(renderSlots || []);
@@ -66,17 +75,32 @@ export class PageBuilder {
     this.htmlPageSchema = htmlPageSchema;
     this.polyfillCondition = polyfillCondition;
     this.modern = modern;
+    this.renderFlowAfter = renderFlowAfter || [];
+    this.log = logger('page-builder');
   }
 
   async flow(): Promise<string> {
     const stats = await fetchWebpackStats({ modern: this.modern });
     const extractor = new ChunkExtractor({ stats, entrypoints: [] });
+
     // самым первым рендерим приложение, так как нужно вытащить информацию о используемых данных компонентами
     await this.renderApp(extractor);
+
+    await Promise.all(
+      this.renderFlowAfter.map((callback) =>
+        callback().catch((error) => {
+          this.log.warn({ event: 'render-flow-after-error', callback, error });
+        })
+      )
+    );
+
     this.dehydrateState();
+
     // загружаем информацию и зависимость  для текущего бандла и странице
     await this.fetchChunksInfo(extractor);
+
     this.preloadBlock();
+
     return this.generateHtml();
   }
 
@@ -133,3 +157,4 @@ export class PageBuilder {
     });
   }
 }
+/* eslint-enable sort-class-members/sort-class-members */

@@ -173,3 +173,7 @@ export type TramvaiRenderMode = 'ssr' | 'client';
 
 export { ResourceSlot };
 export { StorageRecord as ResourceType };
+
+export const RENDER_FLOW_AFTER_TOKEN = createToken<() => Promise<void>>('render flow after', {
+  multi: true,
+});

@@ -80,7 +80,7 @@ Under the hood the [@testing-library/react-hooks](https://github.com/testing-lib
 /**
  * @jest-environment jsdom
  */
-import { testHooks } from '@tramvai/test-react';
+import { testHook } from '@tramvai/test-react';
 
 describe('test', () => {
   it('hook', async () => {

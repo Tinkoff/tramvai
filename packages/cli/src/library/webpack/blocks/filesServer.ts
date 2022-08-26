@@ -1,3 +1,4 @@
+import path from 'path';
 import type Config from 'webpack-chain';
 import type { ConfigManager } from '../../../config/configManager';
 
@@ -28,12 +29,14 @@ export default (configManager: ConfigManager) => (config: Config) => {
     });
 
   config.module
-    .rule('image')
+    .rule('tramvai-image')
     .test(/\.(png|jpe?g|gif|webp)$/)
-    .set('type', 'asset')
-    .set('generator', {
-      emit: false,
-    });
+    .use('file')
+    .loader(path.resolve(__dirname, '../loaders/image-loader'))
+    .options({
+      emitFile: false,
+    })
+    .end();
 
   config.module
     .rule('video')

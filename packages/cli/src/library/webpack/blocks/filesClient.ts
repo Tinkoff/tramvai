@@ -1,3 +1,4 @@
+import path from 'path';
 import type Config from 'webpack-chain';
 import SparkMD5 from 'spark-md5';
 import type { ConfigManager } from '../../../config/configManager';
@@ -33,9 +34,11 @@ export const filesClientWebackRulesFactory = (configManager: ConfigManager) => (
     });
 
   config.module
-    .rule('image')
+    .rule('tramvai-image')
     .test(/\.(png|jpe?g|gif|webp)$/)
-    .set('type', 'asset');
+    .use('file')
+    .loader(path.resolve(__dirname, '../loaders/image-loader'))
+    .end();
 
   config.module
     .rule('video')
