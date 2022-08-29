@@ -16,7 +16,6 @@
     "@tramvai/papi": "0.0.0-stub",
     "@tramvai/react": "0.0.0-stub",
     "@tramvai/react-query": "0.0.0-stub",
-    "@tramvai/module-react-query-devtools": "0.0.0-stub",
     "@tramvai/state": "0.0.0-stub",
     "@tramvai/tokens-router": "0.0.0-stub",
     "@tramvai/tokens-common": "0.0.0-stub"
@@ -30,7 +29,8 @@
   "peerDependencies": {
     "react": ">=16.14.0",
     "react-dom": ">=16.14.0",
-    "@tramvai/module-dev-tools": "0.0.0-stub"
+    "@tramvai/module-dev-tools": "0.0.0-stub",
+    "@tramvai/module-react-query-devtools": "0.0.0-stub"
   },
   "private": true,
   "license": "Apache-2.0"

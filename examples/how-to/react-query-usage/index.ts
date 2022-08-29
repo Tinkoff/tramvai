@@ -1,6 +1,5 @@
 import { createApp, createBundle } from '@tramvai/core';
 import { ReactQueryModule } from '@tramvai/module-react-query';
-import { ReactQueryDevtoolsModule } from '@tramvai/module-react-query-devtools';
 import { ROUTES_TOKEN } from '@tramvai/tokens-router';
 import { lazy } from '@tramvai/react';
 import { modules } from '../common';
@@ -31,12 +30,19 @@ try {
   DevToolsModule = require('@tramvai/module-dev-tools').DevToolsModule;
 } catch {}
 
+let ReactQueryDevtoolsModule: any;
+
+try {
+  ReactQueryDevtoolsModule = require('@tramvai/module-react-query-devtools')
+    .ReactQueryDevtoolsModule;
+} catch {}
+
 createApp({
   name: 'react-query-usage',
   modules: [
     ...modules,
     ReactQueryModule,
-    ...(process.env.NODE_ENV === 'development' && DevToolsModule
+    ...(process.env.NODE_ENV === 'development' && DevToolsModule && ReactQueryDevtoolsModule
       ? [DevToolsModule, ReactQueryDevtoolsModule]
       : []),
   ],
