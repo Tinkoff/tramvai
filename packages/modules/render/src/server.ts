@@ -34,7 +34,7 @@ import { ReactRenderServer } from './server/ReactRenderServer';
 import type { RenderModuleConfig } from './shared/types';
 import { LayoutModule } from './shared/LayoutModule';
 import { providers as sharedProviders } from './shared/providers';
-import { PageErrorStore, setPageErrorEvent } from './shared/pageErrorStore';
+import { PageErrorStore, setPageErrorEvent, deserializeError } from './shared/pageErrorStore';
 
 export * from './shared/pageErrorStore';
 export * from '@tramvai/tokens-render';
@@ -90,28 +90,44 @@ export const DEFAULT_POLYFILL_CONDITION =
           try {
             html = await htmlBuilder.flow();
           } catch (error) {
-            const requestInfo = {
-              ip: requestManager.getClientIp(),
-              requestId: requestManager.getHeader('x-request-id'),
-              url: requestManager.getUrl(),
-            };
+            // assuming that there was an error when rendering the page, try to render again with ErrorBoundary
+            try {
+              log.info({ event: 'render-page-boundary-start' });
 
-            log.error({
-              event: 'send-server-error',
-              message: 'Page render error, switch to fallback',
-              error,
-              requestInfo,
-            });
+              context.dispatch(setPageErrorEvent(error));
+              html = await htmlBuilder.flow();
 
-            // Assuming that there was an error when rendering the page, try to render again with ErrorBoundary
-            context.dispatch(setPageErrorEvent(error));
-            html = await htmlBuilder.flow();
+              log.info({ event: 'render-page-boundary-success' });
+            } catch (e) {
+              log.warn({ event: 'render-page-boundary-error', error: e });
+              // pass page render error to default error handler,
+              // send-server-error event will be logged with this error
+              throw error;
+            }
           }
 
           const pageRenderError = context.getState(PageErrorStore);
 
+          // log send-server-error only after successful Page Boundary render,
+          // otherwise this event will be logged in default error handler
           if (pageRenderError) {
             const status = pageRenderError.status || pageRenderError.httpStatus || 500;
+
+            if (status >= 500) {
+              const requestInfo = {
+                ip: requestManager.getClientIp(),
+                requestId: requestManager.getHeader('x-request-id'),
+                url: requestManager.getUrl(),
+              };
+
+              log.error({
+                event: 'send-server-error',
+                message: 'Page render error, switch to page boundary',
+                error: deserializeError(pageRenderError),
+                requestInfo,
+              });
+            }
+
             responseManager.setStatus(status);
           }
 
@@ -215,13 +231,34 @@ export const DEFAULT_POLYFILL_CONDITION =
           let body: string;
 
           try {
-            log.info({ event: 'render-root-boundary' });
+            log.info({ event: 'render-root-boundary-start' });
 
             body = renderToString(
               createElement(RootErrorBoundary, { error, url: parse(request.url) })
             );
 
-            reply.status(error.httpStatus || error.status || 500);
+            log.info({ event: 'render-root-boundary-success' });
+
+            const status = error.status || error.httpStatus || 500;
+
+            // log send-server-error only after successful Root Boundary render,
+            // otherwise this event will be logged in default error handler
+            if (status >= 500) {
+              const requestInfo = {
+                ip: request.headers['x-real-ip'],
+                requestId: request.headers['x-request-id'],
+                url: request.url,
+              };
+
+              log.error({
+                event: 'send-server-error',
+                message: 'Page render error, switch to root boundary',
+                error,
+                requestInfo,
+              });
+            }
+
+            reply.status(status);
 
             reply.header('Content-Type', 'text/html; charset=utf-8');
             reply.header('Content-Length', Buffer.byteLength(body, 'utf8'));
