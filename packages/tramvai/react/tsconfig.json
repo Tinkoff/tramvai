@@ -15,6 +15,9 @@
         },
         {
             "path": "../../libs/url"
+        },
+        {
+            "path": "../types-actions-state-context"
         }
     ]
 }
