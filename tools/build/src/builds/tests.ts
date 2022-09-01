@@ -8,7 +8,7 @@ import { mergeFiles } from '../packageJson';
 export const testsBuild: Build = {
   name: 'test',
   shouldExecute: async ({ cwd }) => {
-    return existsSync(resolve(cwd, 'test.ts'));
+    return existsSync(resolve(cwd, 'tests.ts'));
   },
   async getOptions(params) {
     const input = createInputOptions(params, {
