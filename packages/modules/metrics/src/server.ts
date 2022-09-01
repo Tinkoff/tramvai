@@ -4,6 +4,7 @@ import {
   UTILITY_WEB_FASTIFY_APP_TOKEN,
   WEB_FASTIFY_APP_BEFORE_INIT_TOKEN,
   WEB_FASTIFY_APP_METRICS_TOKEN,
+  WEB_FASTIFY_APP_TOKEN,
 } from '@tramvai/tokens-server-private';
 import { METRICS_MODULE_TOKEN, METRICS_MODULE_CONFIG_TOKEN } from '@tramvai/tokens-metrics';
 import { fastifyMeasureRequests } from '@tinkoff/measure-fastify-requests';
@@ -97,7 +98,7 @@ export * from '@tramvai/tokens-metrics';
       },
       deps: {
         metrics: METRICS_MODULE_TOKEN,
-        app: UTILITY_WEB_FASTIFY_APP_TOKEN,
+        app: WEB_FASTIFY_APP_TOKEN,
         additionalLabelNamesList: {
           token: 'additionalLabelNames',
           multi: true,
