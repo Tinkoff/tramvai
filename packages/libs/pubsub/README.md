@@ -4,7 +4,8 @@ Pubsub is a class implementing publisher/subscriber design pattern where message
 
 ### subscribe - event subscription
 
-`pubsub.subscribe('type', callback)` - subscribe to event with name `type`. `callback` accepts as arguments payload from `pubsub.publish`. `callback` can return promise which will can be awaited from call `pubsub.publish`.
+`pubsub.subscribe('type', callback)` - subscribe to event with name `type`. `callback` accepts as arguments payload from `pubsub.publish`. `callback` can return promise which will can be awaited from call `pubsub.publish`.  
+`pubsub.subscribe` returns the function to unsubscribe callback from the event.
 
 ### publish - event publish
 
