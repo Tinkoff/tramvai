@@ -1,7 +1,6 @@
 ---
 id: tramvai-library
 title: Creating a tramvai library
-sidebar_position: 1
 ---
 
 Adding a new library or module to the `tramvai` repository is detailed in the [Contribute section](contribute/contribute.md)

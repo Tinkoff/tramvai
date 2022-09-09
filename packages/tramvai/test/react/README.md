@@ -2,7 +2,7 @@
 
 Set of helpers for testing React-components
 
-Helpers are based on libraries [@testing-library/react](https://github.com/testing-library/react-testing-library) [@testing-library/react-hooks](https://github.com/testing-library/react-hooks-testing-library)
+Helpers are based on libraries [@testing-library/react](https://github.com/testing-library/react-testing-library)
 
 If you are using jest for testing, consider to add a library [@testing-library/jest-dom](https://github.com/testing-library/jest-dom)
 
@@ -74,7 +74,7 @@ describe('test', () => {
 
 ### Test React-hooks
 
-Under the hood the [@testing-library/react-hooks](https://github.com/testing-library/react-hooks-testing-library) is used.
+Under the hood the [@testing-library/react](https://github.com/testing-library/react-testing-library) is used.
 
 ```ts
 /**

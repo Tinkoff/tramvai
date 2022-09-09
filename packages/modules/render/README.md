@@ -52,6 +52,7 @@ Example:
 createApp({
   providers: [
     {
+      provide: RENDER_SLOTS,
       multi: true,
       useValue: [
         {

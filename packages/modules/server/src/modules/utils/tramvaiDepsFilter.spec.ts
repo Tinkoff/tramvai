@@ -22,7 +22,6 @@ describe('server/utils/tramvaiDepsFilter', () => {
         '@slack/web-api': '^5.6.0',
         '@testing-library/jest-dom': '^5.1.1',
         '@testing-library/react': '^10.0.1',
-        '@testing-library/react-hooks': '^3.2.1',
         '@types/hoist-non-react-statics': '^3.3.1',
         '@types/jest': '^25.1.4',
         '@types/lru-cache': '^5.1.0',

@@ -1,7 +1,6 @@
 ---
 id: universal
 title: Separating code for server and client
-sidebar_position: 3
 ---
 
 The tramvai framework and its core components are universal and work equally well in all environments. tramvai cli collects server and client code into separate assemblies. At the same time, it is required to manually control the execution of user code in the required environment. The main mechanisms for this are package.json, dependency injection and direct checks in the code against the environment.

@@ -7,7 +7,6 @@ import type { Type } from '../questions/type';
 
 const COMMON_JEST_DEPENDENCIES = [
   '@testing-library/react',
-  '@testing-library/react-hooks',
   '@tramvai/test-unit',
   '@tramvai/test-react',
   '@tramvai/test-integration',
