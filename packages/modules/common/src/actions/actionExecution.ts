@@ -58,7 +58,7 @@ export class ActionExecution implements Interface {
     actionConditionals,
     transformAction,
   }: {
-    actionConditionals: ActionCondition[] | ActionCondition[][] | null;
+    actionConditionals: (ActionCondition | ActionCondition[])[] | null;
     store: ExtractDependencyType<typeof STORE_TOKEN>;
     context: ExtractDependencyType<typeof CONTEXT_TOKEN>;
     di: ExtractDependencyType<typeof DI_TOKEN>;

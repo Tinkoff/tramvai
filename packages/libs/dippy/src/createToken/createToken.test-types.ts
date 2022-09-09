@@ -84,6 +84,11 @@ describe('createToken', () => {
     const extractWrongTypeFromStringToken_typeof: IsAny<typeof TOKEN['foo']> = 1;
   });
 
+  it('multi token should not act as distributive conditional types', () => {
+    const TOKEN = createToken<boolean>('', { multi: true });
+    const nonDistribytiveCheck: ExtractDependencyType<typeof TOKEN> = [false, true, false];
+  });
+
   describe('provide with base token', () => {
     const TOKEN = createToken<string>('');
 

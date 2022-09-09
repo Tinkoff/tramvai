@@ -77,7 +77,7 @@ export function createToken<T = any>(name?: string, options?: TokenOptions): T {
  */
 export function optional<Token extends TokenInterface<unknown>>(
   token: Token
-): OptionalTokenDependency<ExtractTokenType<Token>> {
+): { token: Token; optional: true } {
   return { token, optional: true };
 }
 
@@ -87,9 +87,9 @@ export type ExtractTokenType<Token extends TokenInterface<unknown>> = Token exte
   ? Type
   : unknown;
 
-export type ExtractDependencyType<
-  Token extends TokenInterface<unknown>
-> = Token extends MultiTokenInterface<infer Type>
+export type ExtractDependencyType<Token extends TokenInterface<unknown>> = [Token] extends [
+  MultiTokenInterface<infer Type>
+]
   ? Type[]
   : Token extends BaseTokenInterface<infer Type>
   ? Type
