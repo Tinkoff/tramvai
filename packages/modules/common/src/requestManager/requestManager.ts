@@ -1,5 +1,6 @@
 import pathOr from '@tinkoff/utils/object/pathOr';
-import { format } from '@tinkoff/url';
+import type { Url } from '@tinkoff/url';
+import { format, parse } from '@tinkoff/url';
 import type { REQUEST, REQUEST_MANAGER_TOKEN } from '@tramvai/tokens-common';
 
 type Interface = typeof REQUEST_MANAGER_TOKEN;
@@ -8,6 +9,8 @@ export class RequestManager implements Interface {
   private request: typeof REQUEST;
 
   private url: string;
+
+  private parsedUrl: Url;
 
   constructor({ request }: { request: typeof REQUEST }) {
     this.request = request || (({} as unknown) as typeof REQUEST);
@@ -29,6 +32,14 @@ export class RequestManager implements Interface {
 
   getUrl() {
     return this.url;
+  }
+
+  getParsedUrl() {
+    if (!this.parsedUrl) {
+      this.parsedUrl = parse(this.url);
+    }
+
+    return this.parsedUrl;
   }
 
   getMethod() {

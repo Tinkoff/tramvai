@@ -115,8 +115,8 @@ ${parsed.href || `${parsed.protocol}//${parsed.hostname}${parsed.path}`}
         return createPapiMethod({
           method: 'post',
           path: '/debug-http-request',
-          async handler({ req }) {
-            const { delay = 10000 } = req.body;
+          async handler({ body }) {
+            const { delay = 10000 } = body;
 
             if (delay) {
               interceptor.setDelay(delay);

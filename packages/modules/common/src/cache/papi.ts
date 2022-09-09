@@ -13,12 +13,12 @@ export const papiClearCache = ({
   return createPapiMethod({
     method: 'post',
     path: '/clear-cache',
-    async handler({ res }) {
+    async handler({ responseManager }) {
       await clearCache();
 
       // DEVOPS-1661
-      res.status(404);
-      res.header('X-Status', 'done');
+      responseManager.setStatus(404);
+      responseManager.setHeader('X-Status', 'done');
 
       log.info('SERVER:CLEAR:CACHE:INTERNAL');
     },

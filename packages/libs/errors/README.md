@@ -35,3 +35,7 @@ Execution was failed due to error in execution callback
 ### ExecutionAbortError
 
 Execution was aborted due to AbortSignal abortion
+
+### ExecutionTimeoutError
+
+Execution was aborted due to exceeding timeout execution time

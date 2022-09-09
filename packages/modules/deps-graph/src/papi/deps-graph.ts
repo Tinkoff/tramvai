@@ -10,16 +10,15 @@ export const depsGraph = ({ di }: Deps) => {
   return createPapiMethod({
     method: 'get',
     path: '/deps-graph',
-    async handler(req, res) {
-      const graphs = getGraph({ di, searchValue: (req.query.search as string) ?? '' });
+    async handler({ parsedUrl: { query }, responseManager }) {
+      const graphs = getGraph({ di, searchValue: (query.search as string) ?? '' });
 
       function isLineVisible(line, graph) {
-        return (
-          (!req.query.lines && graph) || ((req.query.lines ?? '') as string).search(line) !== -1
-        );
+        return (!query.lines && graph) || ((query.lines ?? '') as string).search(line) !== -1;
       }
 
-      res.send(`
+      responseManager.setHeader('content-type', 'text/html');
+      responseManager.setBody(`
 <script src="//d3js.org/d3.v6.min.js"></script>
 <script src="https://unpkg.com/@hpcc-js/wasm@1.4.1/dist/index.min.js"></script>
 <script src="https://unpkg.com/d3-graphviz@4.0.0/build/d3-graphviz.js"></script>
@@ -30,7 +29,7 @@ export const depsGraph = ({ di }: Deps) => {
 
 <h3>Search:</h3>
 <input placeholder="Search module and token names..." value="${
-        req.query.search || ''
+        query.search || ''
       }" style="padding: 10px 4px; width: 450px" onkeyup="event.keyCode === 13 && applySearch(this.value)" onblur="applySearch(this.value)"/><br/>
 
 <h3>Command Lines:</h3>
@@ -38,7 +37,7 @@ ${graphs
   .map(
     ([token, graph]) => `
   <input id="${token}" type="checkbox" ${
-      ((req.query.lines ?? '') as string).search(token) !== -1 ? 'checked' : ''
+      ((query.lines ?? '') as string).search(token) !== -1 ? 'checked' : ''
     } onchange="toggleLine('${token}')"/><label ${
       !graph ? 'style="color: gray"' : ''
     } for="${token}">${token}</label>

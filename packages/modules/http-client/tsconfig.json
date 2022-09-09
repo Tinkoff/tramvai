@@ -41,6 +41,9 @@
         },
         {
             "path": "../../tramvai/test/mocks"
+        },
+        {
+            "path": "../../tokens/server-private"
         }
     ]
 }

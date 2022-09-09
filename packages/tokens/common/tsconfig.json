@@ -24,6 +24,9 @@
         },
         {
             "path": "../../tramvai/react"
+        },
+        {
+            "path": "../../libs/url"
         }
     ]
 }

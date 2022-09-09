@@ -5,8 +5,9 @@ import type { HttpClientRequest, HttpClientResponse } from '@tramvai/http-client
 import { BaseHttpClient } from '@tramvai/http-client';
 import { createChildContainer } from '@tinkoff/dippy';
 import { getPapiParameters } from '@tramvai/papi';
-import { REQUEST, RESPONSE } from '@tramvai/module-common';
+import { FASTIFY_REQUEST, FASTIFY_RESPONSE, REQUEST, RESPONSE } from '@tramvai/module-common';
 import type { SERVER_MODULE_PAPI_PUBLIC_ROUTE } from '@tramvai/tokens-server';
+import { PAPI_EXECUTOR } from '@tramvai/tokens-server-private';
 
 export interface Deps {
   di: typeof DI_TOKEN;
@@ -31,33 +32,33 @@ export class PapiService extends BaseHttpClient {
     }
 
     const papi = getPapiParameters(papiRoute);
-    let rootDeps = {};
-
-    if ((papi as any).rootDeps) {
-      rootDeps = this.di.getOfDeps((papi as any).rootDeps);
-
-      rootDeps = (papi as any).mapRootDeps ? (papi as any).mapRootDeps(rootDeps) : rootDeps;
-    }
-
-    const childDI = createChildContainer(this.di);
     const req = { headers: { host: 'localhost' }, cookies: {}, query, body };
     const res = {};
+    const fastifyReq = { raw: req };
+    const fastifyRes = { raw: res };
 
-    childDI.register({
-      provide: REQUEST,
-      useValue: req as typeof REQUEST,
-    });
-    childDI.register({
-      provide: RESPONSE,
-      useValue: res as typeof RESPONSE,
-    });
+    const childDi = createChildContainer(this.di, [
+      {
+        provide: REQUEST,
+        useValue: req,
+      },
+      {
+        provide: RESPONSE,
+        useValue: res,
+      },
+      {
+        provide: FASTIFY_REQUEST,
+        useValue: fastifyReq,
+      },
+      {
+        provide: FASTIFY_RESPONSE,
+        useValue: fastifyRes,
+      },
+    ]);
 
-    const payload = await getPapiParameters(papiRoute).handler({
-      ...rootDeps,
-      ...childDI.getOfDeps(papi.deps ?? {}),
-      req,
-      res,
-    });
+    const papiExecutor = childDi.get(PAPI_EXECUTOR);
+
+    const payload = await papiExecutor(papiRoute);
 
     return { payload, status: 200, headers: {} };
   }

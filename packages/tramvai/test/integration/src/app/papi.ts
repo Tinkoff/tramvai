@@ -1,4 +1,4 @@
-import supertest from 'supertest';
+import { requestFactory } from '@tramvai/test-helpers';
 
 interface Options {
   serverUrl: string;
@@ -6,17 +6,17 @@ interface Options {
 }
 
 export const wrapPapi = ({ serverUrl, appName }: Options) => {
-  const publicPapi = supertest(`${serverUrl}/${appName}/papi/`);
-  const privatePapi = supertest(`${serverUrl}/${appName}/private/papi/`);
+  const publicPapi = requestFactory(`${serverUrl}/${appName}/papi/`);
+  const privatePapi = requestFactory(`${serverUrl}/${appName}/private/papi/`);
 
   return {
     publicPapi,
     privatePapi,
     clearCache: () => {
-      return privatePapi.post(`clear-cache`).expect(404).expect('X-Status', 'done');
+      return privatePapi(`clear-cache`, { method: 'post' }).expect(404).expect('X-Status', 'done');
     },
     bundleInfo: () => {
-      return publicPapi.get('bundleInfo').expect(200);
+      return publicPapi('bundleInfo').expect(200);
     },
   };
 };

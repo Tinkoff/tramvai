@@ -1,9 +1,9 @@
-export class ExecutionAbortError extends Error {
-  static errorName = 'ExecutionAbortError';
+export class ExecutionTimeoutError extends Error {
+  static errorName = 'ExecutionTimeoutError';
   contextName?: string;
 
   constructor({
-    message = 'Execution Abort',
+    message = 'Execution Timeout',
     contextName,
     ...additionalFields
   }: {
@@ -12,7 +12,7 @@ export class ExecutionAbortError extends Error {
     [key: string]: any;
   } = {}) {
     super(message);
-    this.name = ExecutionAbortError.errorName;
+    this.name = ExecutionTimeoutError.errorName;
     this.contextName = contextName;
     Object.assign(this, additionalFields);
   }

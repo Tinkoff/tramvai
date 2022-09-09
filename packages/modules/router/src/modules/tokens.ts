@@ -1,6 +1,6 @@
 import { createToken } from '@tinkoff/dippy';
 import type { NavigationHook, AbstractRouter, NavigationSyncHook, Route } from '@tinkoff/router';
-import type { ROUTE_TRANSFORM_TOKEN } from '@tramvai/tokens-router';
+import type { RouteTransform } from '@tramvai/tokens-router';
 
 export const routerClassToken = createToken<AbstractRouter>('router routerClassToken');
 export const additionalRouterParameters = createToken<Record<string, any>>(
@@ -28,9 +28,7 @@ export const afterUpdateCurrentHooksToken = createToken<NavigationHook>(
   { multi: true }
 );
 
-export const routeTransformToken = createToken<typeof ROUTE_TRANSFORM_TOKEN>(
-  'router finalRouteTransform'
-);
+export const routeTransformToken = createToken<RouteTransform>('router finalRouteTransform');
 
 export const routerBundleInfoAdditionalToken = createToken<() => Promise<Route[]>>(
   'router bundleInfoAdditional'

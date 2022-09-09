@@ -7,7 +7,7 @@ export const getCacheEntry = (
   return {
     status: responseManager.getStatus(),
     headers: responseManager.getHeaders(),
-    body: Buffer.from(responseManager.getBody(), 'utf-8'),
+    body: Buffer.from(responseManager.getBody() as string, 'utf-8'),
     updatedAt: Date.now(),
   };
 };

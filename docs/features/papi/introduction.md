@@ -5,25 +5,23 @@ title: Papi introducton
 
 # Papi
 
-Papi - API routes for the `tramvai` application. The functionality is included in the module [@tramvai/module-server](references/modules/server.md)
+Papi - API routes for the `tramvai` application. The functionality is included in the module [@tramvai/module-server](references/modules/server.md) with the help of [@tramvai/papi](references/tramvai/papi.md)
 
 ## Explanation
 
 Often, an application needs microservices that can process user requests and return JSON responses. It is to address these cases that PAPIs were developed. PAPi allows you to implement request handlers that clients can request and receive a response in an arbitrary format, for example, JSON. PAPI allows you to quickly and cheaply implement handlers without raising additional microservices.
 
-Papi related sections
-
-- [How to get data from papi](#How-to-get-data-from-papi)
-- [How can I get data from DI in papi routes](#How-can-I-get-data-from-DI-in-papi-routes)
-- [How to add a new papi route in the application](#-How-to-add-a-new-papi-route-in-the-application)
-
 ## How to
+
+### How to create papi
+
+See examples on [how to create papi](how-to/how-create-papi.md) and [@tramvai/papi](references/tramvai/papi.md)
 
 ### How to get data from papi
 
 `papi` is available at `/${appInfo.appName}/papi`. This url was chosen because it would divide many different papi services into 1 application domain.
 
-For the example above with adding a route, the resulting url will look like this: `/${appInfo.appName}/papi/test` where appName is the name passed to` createApp`
+For the example above with adding a route, the resulting url will look like this: `/${appInfo.appName}/papi/test` where appName is the name passed to `createApp`
 
 To make a request, you need to use `PAPI_SERVICE` from the module `@tramvai/module-http-client`, which automatically on the client will make an http request to papi and on the server will simply call the handler function
 
@@ -84,7 +82,7 @@ For example: we want to create a new papi handler that reads the body of the req
 
 <p>
 <details>
-<summary>содержимое getSum.ts</summary>
+<summary>getSum.ts content</summary>
 
 @inline ../../../examples/how-to/server-add-file-api/papi/getSum.ts
 
@@ -110,9 +108,9 @@ import { provide } from '@tramvai/core';
       useValue: createPapiMethod ({
         method: 'get', // method, can be post, all and so on
         path: '/test', // path where the route will be available
-        async handler(req, res): Promise<any> {
+        async handler() {
           // function that will be called if requests for url come
-          return new Promise({ test: true });
+          return { test: true };
         },
       }),
     }),

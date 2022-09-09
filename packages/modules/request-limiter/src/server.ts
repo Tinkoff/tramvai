@@ -16,7 +16,7 @@ export * from './tokens';
       provide: REQUESTS_LIMITER_TOKEN,
       scope: Scope.SINGLETON,
       useFactory: ({ options, featureEnable }) => {
-        if (featureEnable !== true) {
+        if (featureEnable === false) {
           return;
         }
         return new RequestLimiter(options ?? {});
@@ -31,7 +31,7 @@ export * from './tokens';
       multi: true,
       useFactory: ({ requestsLimiter, featureEnable }) => {
         return async (app) => {
-          if (featureEnable !== true) {
+          if (featureEnable === false) {
             return;
           }
 

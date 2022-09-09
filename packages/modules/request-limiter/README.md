@@ -22,19 +22,20 @@ createApp({
   modules: [ RequestLimiterModule ],
 });
 ```
+Request Limiter automatically starts working
 
 ## Usage
 
-### Activation
+### Turn off request limiter
 
-To activate the limiter, use token `REQUESTS_LIMITER_ACTIVATE_TOKEN` with `true` value:
+To turn off the limiter, use token `REQUESTS_LIMITER_ACTIVATE_TOKEN` with `false` value:
 
 ```ts
 import { REQUESTS_LIMITER_ACTIVATE_TOKEN } from '@tramvai/module-request-limiter';
 
 const provider = {
   provide: REQUESTS_LIMITER_ACTIVATE_TOKEN,
-  useValue: true,
+  useValue: false,
 };
 ```
 

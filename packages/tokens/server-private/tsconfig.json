@@ -11,6 +11,9 @@
     "references": [
         {
             "path": "../../libs/dippy"
+        },
+        {
+            "path": "../../tramvai/papi"
         }
     ]
 }

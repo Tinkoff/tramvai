@@ -9,6 +9,7 @@ import type { FastifyReply } from 'fastify';
  */
 export const RESPONSE = createToken<Response>('response');
 
+// TODO: move to tokens-server-private
 export const FASTIFY_RESPONSE = createToken<FastifyReply>('fastify response');
 
 /**
@@ -19,9 +20,9 @@ export const FASTIFY_RESPONSE = createToken<FastifyReply>('fastify response');
 export const RESPONSE_MANAGER_TOKEN = createToken<ResponseManager>('responseManager');
 
 export interface ResponseManager {
-  getBody(): string;
+  getBody(): unknown;
 
-  setBody(value: string): void;
+  setBody(value: unknown): void;
 
   getHeader(key: string): string | string[];
 

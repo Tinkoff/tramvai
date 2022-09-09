@@ -1,6 +1,7 @@
 import type { Server } from 'http';
 import type { FastifyError, FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { createToken } from '@tinkoff/dippy';
+import type { Papi } from '@tramvai/papi';
 
 /**
  * @description
@@ -116,3 +117,7 @@ export type FASTIFY_APP_ERROR_HANDLER = (
   request: FastifyRequest,
   reply: FastifyReply
 ) => Promise<string | undefined | void> | string | undefined | void;
+
+export type PapiExecutor = <Result>(papi: Papi<Result>) => Result;
+
+export const PAPI_EXECUTOR = createToken<PapiExecutor>('papi executor');

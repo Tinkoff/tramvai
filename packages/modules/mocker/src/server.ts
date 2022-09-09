@@ -1,6 +1,11 @@
 import { Module, commandLineListTokens, Scope, provide } from '@tramvai/core';
 import { createPapiMethod } from '@tramvai/papi';
-import { ENV_MANAGER_TOKEN, LOGGER_TOKEN } from '@tramvai/module-common';
+import {
+  ENV_MANAGER_TOKEN,
+  FASTIFY_REQUEST,
+  FASTIFY_RESPONSE,
+  LOGGER_TOKEN,
+} from '@tramvai/tokens-common';
 import {
   SERVER_MODULE_PAPI_PUBLIC_ROUTE,
   SERVER_MODULE_PAPI_PUBLIC_URL,
@@ -106,20 +111,21 @@ export * from './tokens';
           provide({
             provide: MOCKER,
             scope: Scope.SINGLETON,
-            useFactory: ({ repositories, logger }) => {
+            useFactory: ({ repositories, logger, papiUrl }) => {
               const log = logger('mocker');
 
               return new Mocker({
                 repositories,
                 logger: log,
-                appRoutePrefix: '/mocker',
-                apiRoutePrefix: '/mocker-api',
+                appRoutePrefix: `${papiUrl}/mocker`,
+                apiRoutePrefix: `${papiUrl}/mocker-api`,
                 passUnhandledRequests: true,
               });
             },
             deps: {
               repositories: MOCKER_REPOSITORY,
               logger: LOGGER_TOKEN,
+              papiUrl: SERVER_MODULE_PAPI_PUBLIC_URL,
             },
           }),
           {
@@ -129,11 +135,16 @@ export * from './tokens';
               return createPapiMethod({
                 method: 'all',
                 path: '/mocker/*',
-                options: {
-                  respond: false,
+                async handler() {
+                  const { req, res } = this.deps;
+
+                  res.hijack();
+                  // TODO: fix compatibility
+                  mocker.use(req.raw, res.raw);
                 },
-                async handler(req, res) {
-                  mocker.use(req, res);
+                deps: {
+                  req: FASTIFY_REQUEST,
+                  res: FASTIFY_RESPONSE,
                 },
               });
             },
@@ -148,11 +159,17 @@ export * from './tokens';
               return createPapiMethod({
                 method: 'all',
                 path: '/mocker-api/*',
-                options: {
-                  respond: false,
+                async handler() {
+                  const { req, res } = this.deps;
+
+                  // TODO: fix compatibility
+                  res.hijack();
+
+                  mocker.useApi(req.raw, res.raw);
                 },
-                async handler(req, res) {
-                  mocker.useApi(req, res);
+                deps: {
+                  req: FASTIFY_REQUEST,
+                  res: FASTIFY_RESPONSE,
                 },
               });
             },

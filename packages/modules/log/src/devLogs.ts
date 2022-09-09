@@ -111,8 +111,8 @@ export const serverProviders: Provider[] = [
       return createPapiMethod({
         method: 'get',
         path: '/logger',
-        async handler({ req }) {
-          const { mode, level, enable } = req.query;
+        async handler({ parsedUrl: { query } }) {
+          const { mode, level, enable } = query;
           const applyDefaultConfig = mode === 'default';
           const clearCurrentConfig = mode || level || enable;
 

@@ -1,50 +1,56 @@
-import type { RequestHandler, ErrorRequestHandler } from 'express';
-import { Request, Response } from 'express';
+import type { IncomingHttpHeaders } from 'http';
+
+import type { ProvideDepsIterator } from '@tinkoff/dippy';
+import type { Url } from '@tinkoff/url';
+import type { REQUEST_MANAGER_TOKEN, RESPONSE_MANAGER_TOKEN, Logger } from '@tramvai/tokens-common';
 import type { PAPI_PARAMETERS } from './createPapiMethod';
-
-declare module 'express-serve-static-core' {
-  export interface Response {
-    papiState: Record<string, any>;
-  }
-}
-
-export { Request, Response };
-
-export type Handler = ErrorRequestHandler | RequestHandler;
 
 export type Method = 'all' | 'get' | 'post' | 'put' | 'delete' | 'patch' | 'options' | 'head';
 
-export type Middleware = Handler | Array<Handler> | null;
-
 export interface Options {
   /**
-   * Если включить эту опцию, свойство `request.url` не будет содержать путь текущего papi обработчика
+   * Timeout in ms for handling request. If timeout is exceeded the response is resolved with 500 status.
+   * **Note**: handler will still continues its execution possibly leading to heavy resource consumption
+   *
+   * @default 10000
    */
-  trimPapiUrl?: boolean;
+  timeout?: number;
 }
 
-export type DepsWithDefaults<Deps> = Deps & { req: Request; res: Response };
+export interface PapiHandlerOptions {
+  headers: IncomingHttpHeaders;
+  cookies: Record<string, string>;
 
-export type NormalizedHandler<Deps, Result> = (deps: DepsWithDefaults<Deps>) => Result;
+  params: Record<string, string>;
+  body: any;
+  parsedUrl: Url;
+  requestManager: typeof REQUEST_MANAGER_TOKEN;
+  responseManager: typeof RESPONSE_MANAGER_TOKEN;
+}
 
-export interface PapiParameters<Deps, Result> {
-  path: string;
+export interface PapiHandlerContext<Deps> {
+  log: Logger;
+  deps: ProvideDepsIterator<Deps>;
+}
+
+export type NormalizedHandler<Result, Deps> = (
+  this: PapiHandlerContext<Deps>,
+  options: PapiHandlerOptions
+) => Result;
+
+export interface PapiParameters<Result, Deps> {
+  path?: string;
   method?: Method;
-  handler:
-    | NormalizedHandler<Deps, Result>
-    | ((req: Request, res: Response, deps: DepsWithDefaults<Deps>) => Result);
+  handler: NormalizedHandler<Result, Deps>;
   options?: Options;
   deps?: Deps;
 }
 
-export type NormalizedPapiParameters<Deps, Result> = Required<PapiParameters<Deps, Result>> & {
-  handler: NormalizedHandler<Deps, Result>;
+export type NormalizedPapiParameters<Result, Deps> = Required<PapiParameters<Result, Deps>> & {
+  handler: NormalizedHandler<Result, Deps>;
+  options: Required<Options>;
 };
 
-export type Papi<Deps = any, Result = any> = NormalizedHandler<Deps, Result> & {
+export type Papi<Result = any, Deps = any> = NormalizedHandler<Deps, Result> & {
   [PAPI_PARAMETERS]: NormalizedPapiParameters<Deps, Result>;
 };
-
-export type MiddlewareCreator = (papi: NormalizedPapiParameters<any, any>) => Middleware;
-
-export type Chain = Array<MiddlewareCreator>;

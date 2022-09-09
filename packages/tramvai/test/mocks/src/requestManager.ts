@@ -1,4 +1,5 @@
 import type { RequestManager } from '@tramvai/tokens-common';
+import { parse } from '@tinkoff/url';
 
 export const createMockRequestManager = ({
   body = null,
@@ -20,6 +21,7 @@ export const createMockRequestManager = ({
   return {
     getBody: () => body,
     getUrl: () => url,
+    getParsedUrl: () => parse(url),
     getMethod: () => method,
     getCookie: (name: string) => cookies[name],
     getCookies: () => cookies,

@@ -3,6 +3,18 @@ import type { Application } from 'express';
 import { createToken } from '@tinkoff/dippy';
 import type { Papi } from '@tramvai/papi';
 
+declare module '@tramvai/papi' {
+  export interface Options {
+    schema?: {
+      body?: unknown;
+      query?: unknown;
+      params?: unknown;
+      headers?: unknown;
+      response?: unknown;
+    };
+  }
+}
+
 /**
  * @description
  * Specifies base url for public papi handlers. By default equals to `/[appName]/papi`

@@ -1,20 +1,17 @@
 import type { PapiParameters, Papi } from './types';
 
+const DEFAULT_TIMEOUT = 10000;
+
 export const PAPI_PARAMETERS = '__papi_parameters__';
 
-export const createPapiMethod = <Deps = any, Result = any>(papi: PapiParameters<Deps, Result>) => {
-  const handler =
-    papi.handler.length > 1
-      ? (deps: any) => {
-          return papi.handler(deps?.req, deps?.res, deps);
-        }
-      : papi.handler;
-
-  const result = Object.assign(handler, {
+export const createPapiMethod = <Result = any, Deps = any>(papi: PapiParameters<Result, Deps>) => {
+  const result = Object.assign(papi.handler, {
     [PAPI_PARAMETERS]: {
       ...papi,
-      handler,
-      options: papi.options || {},
+      options: {
+        timeout: DEFAULT_TIMEOUT,
+        ...papi.options,
+      },
       method: papi.method || 'all',
     },
   }) as Papi;
@@ -22,6 +19,10 @@ export const createPapiMethod = <Deps = any, Result = any>(papi: PapiParameters<
   return result;
 };
 
-export const getPapiParameters = <Deps = any, Result = any>(papi: Papi<Deps, Result>) => {
+export const getPapiParameters = (papi: Papi<any, any>) => {
   return papi[PAPI_PARAMETERS];
+};
+
+export const isPapiMethod = (papi: any): papi is Papi => {
+  return papi && !!getPapiParameters(papi);
 };

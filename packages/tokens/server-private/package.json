@@ -18,7 +18,9 @@
     "watch": "tsc -w",
     "build-for-publish": "true"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@tramvai/papi": "0.0.0-stub"
+  },
   "peerDependencies": {
     "@tinkoff/dippy": "0.0.0-stub",
     "fastify": "^3.29.0",

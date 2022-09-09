@@ -1,4 +1,5 @@
 import { createToken } from '@tinkoff/dippy';
+import type { Url } from '@tinkoff/url';
 import type { Request } from 'express';
 import type { FastifyRequest as OriginalFastifyRequest } from 'fastify';
 
@@ -19,6 +20,7 @@ export const REQUEST = createToken<RequestExt>('request');
  * @description
  * Direct reference to request object
  */
+// TODO: move to tokens-server-private
 export const FASTIFY_REQUEST = createToken<FastifyRequest>('fastify request');
 
 /**
@@ -32,6 +34,8 @@ export interface RequestManager {
   getBody(): unknown;
 
   getUrl(): string;
+
+  getParsedUrl(): Url;
 
   getMethod(): string;
 

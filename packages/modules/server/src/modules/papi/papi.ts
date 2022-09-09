@@ -6,32 +6,27 @@ import { ENV_MANAGER_TOKEN, LOGGER_TOKEN } from '@tramvai/tokens-common';
 import {
   SERVER_MODULE_PAPI_PRIVATE_ROUTE,
   SERVER_MODULE_PAPI_PUBLIC_ROUTE,
-  WEB_APP_TOKEN,
-  WEB_APP_BEFORE_INIT_TOKEN,
   SERVER_MODULE_PAPI_PRIVATE_URL,
   SERVER_MODULE_PAPI_PUBLIC_URL,
 } from '@tramvai/tokens-server';
+import { WEB_FASTIFY_APP_BEFORE_INIT_TOKEN } from '@tramvai/tokens-server-private';
 import type { Papi } from '@tramvai/papi';
 import { createPapiMethod, getPapiParameters } from '@tramvai/papi';
 import { createApi } from './api';
-import { fileApiProvider } from './fileApi';
+import { fileApiProvider } from './server/fileApi';
 import { sharedProviders } from './shared';
+import { papiExecutorProvider } from './server/executor';
 
 @Module({
   providers: [
+    papiExecutorProvider,
     fileApiProvider,
     ...sharedProviders,
     provide({
-      provide: WEB_APP_BEFORE_INIT_TOKEN,
-      useFactory: ({
-        di,
-        app,
-        logger,
-        privateRoutes,
-        publicRoutes,
-        publicBaseUrl,
-        privateBaseUrl,
-      }) => () => {
+      provide: WEB_FASTIFY_APP_BEFORE_INIT_TOKEN,
+      useFactory: ({ di, logger, privateRoutes, publicRoutes, publicBaseUrl, privateBaseUrl }) => (
+        app
+      ) => {
         if (process.env.NODE_ENV === 'development') {
           const papiListRoute = createPapiMethod({
             method: 'get',
@@ -64,24 +59,24 @@ import { sharedProviders } from './shared';
             ? [...toArray(privateRoutes), papiListRoute]
             : [papiListRoute];
         }
+
         if (privateRoutes) {
-          const apiPrivate = createApi(flatten(privateRoutes), {
+          createApi(app, flatten(privateRoutes), {
+            baseUrl: privateBaseUrl,
             di,
             logger,
           });
-          app.use(privateBaseUrl, apiPrivate);
         }
 
         if (publicRoutes) {
-          const apiPublic = createApi(flatten(publicRoutes), {
+          createApi(app, flatten(publicRoutes), {
+            baseUrl: publicBaseUrl,
             di,
             logger,
           });
-          app.use(publicBaseUrl, apiPublic);
         }
       },
       deps: {
-        app: WEB_APP_TOKEN,
         di: DI_TOKEN,
         logger: LOGGER_TOKEN,
         privateRoutes: {
@@ -106,13 +101,13 @@ import { sharedProviders } from './shared';
       useValue: createPapiMethod({
         method: 'get',
         path: '/version',
+        async handler() {
+          return {
+            version: this.deps.envManager.get('APP_VERSION'),
+          };
+        },
         deps: {
           envManager: ENV_MANAGER_TOKEN,
-        },
-        async handler(req, res, { envManager }) {
-          return {
-            version: envManager.get('APP_VERSION'),
-          };
         },
       }),
     }),

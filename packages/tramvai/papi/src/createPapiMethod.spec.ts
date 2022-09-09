@@ -23,7 +23,9 @@ describe('papi/createPapiMethod', () => {
       handler,
       path: '/test',
       method: 'all',
-      options: {},
+      options: {
+        timeout: 10000,
+      },
     });
   });
 });

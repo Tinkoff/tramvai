@@ -5,7 +5,7 @@ import { RenderModule } from '@tramvai/module-render';
 import {
   PROXY_CONFIG_TOKEN,
   ServerModule,
-  SERVER_MODULE_PAPI_PUBLIC_ROUTE,
+  SERVER_MODULE_PAPI_PRIVATE_ROUTE,
 } from '@tramvai/module-server';
 import { LogModule } from '@tramvai/module-log';
 import { createPapiMethod } from '@tramvai/papi';
@@ -23,24 +23,66 @@ createApp({
       multi: true,
     },
     provide({
-      provide: SERVER_MODULE_PAPI_PUBLIC_ROUTE,
+      provide: SERVER_MODULE_PAPI_PRIVATE_ROUTE,
       multi: true,
       useValue: createPapiMethod({
         method: 'get',
-        path: '/get-response',
-        handler: async (req, res) => {
-          return { ok: true };
+        path: '/get-cookie',
+        async handler({ cookies }) {
+          return cookies.test ?? 'no-cookie';
         },
       }),
     }),
     provide({
-      provide: SERVER_MODULE_PAPI_PUBLIC_ROUTE,
+      provide: SERVER_MODULE_PAPI_PRIVATE_ROUTE,
       multi: true,
       useValue: createPapiMethod({
         method: 'post',
         path: '/post-response',
-        handler: async (req, res) => {
-          return req.body;
+        handler: async ({ body }) => {
+          return body ?? 'no-body';
+        },
+      }),
+    }),
+    provide({
+      provide: SERVER_MODULE_PAPI_PRIVATE_ROUTE,
+      multi: true,
+      useValue: createPapiMethod({
+        method: 'get',
+        path: '/long-response',
+        handler: async () => {
+          await new Promise((resolve) => setTimeout(resolve, 200));
+
+          return 'response';
+        },
+        options: {
+          timeout: 100,
+        },
+      }),
+    }),
+    provide({
+      provide: SERVER_MODULE_PAPI_PRIVATE_ROUTE,
+      multi: true,
+      useValue: createPapiMethod({
+        method: 'post',
+        path: '/schema-validation',
+        handler: async ({ body }) => {
+          return body.value;
+        },
+        options: {
+          schema: {
+            body: {
+              type: 'object',
+              properties: {
+                value: {
+                  type: 'number',
+                  minimum: 0,
+                },
+              },
+              required: ['value'],
+              additionalProperties: false,
+            },
+          },
         },
       }),
     }),

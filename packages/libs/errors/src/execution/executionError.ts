@@ -14,7 +14,7 @@ export class ExecutionError extends Error {
     contextName?: string;
     cause?: Error;
     [key: string]: any;
-  }) {
+  } = {}) {
     super(message);
     this.name = ExecutionError.errorName;
     this.cause = cause;
@@ -22,7 +22,3 @@ export class ExecutionError extends Error {
     Object.assign(this, additionalFields);
   }
 }
-
-export const isExecutionError = (err: Error): err is ExecutionError => {
-  return err.name === ExecutionError.errorName;
-};

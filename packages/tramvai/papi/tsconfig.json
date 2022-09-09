@@ -8,5 +8,10 @@
         "outDir": "./lib",
         "rootDir": "./src",
         "strict": true
-    }
+    },
+    "references": [
+        {
+            "path": "../../libs/url"
+        }
+    ]
 }

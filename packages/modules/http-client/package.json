@@ -28,7 +28,8 @@
     "@tramvai/tinkoff-request-http-client-adapter": "0.0.0-stub",
     "@tramvai/tokens-http-client": "0.0.0-stub",
     "@tramvai/tokens-common": "0.0.0-stub",
-    "@tramvai/tokens-server": "0.0.0-stub"
+    "@tramvai/tokens-server": "0.0.0-stub",
+    "@tramvai/tokens-server-private": "0.0.0-stub"
   },
   "devDependencies": {
     "@tinkoff/request-core": "^0.9.2",

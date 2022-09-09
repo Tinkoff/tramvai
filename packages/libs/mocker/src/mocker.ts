@@ -282,6 +282,7 @@ function createRouter() {
 }
 
 function createApp() {
+  // TODO: replace with fastify
   const app = express();
   return app;
 }

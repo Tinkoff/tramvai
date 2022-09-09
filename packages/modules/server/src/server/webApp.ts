@@ -34,6 +34,7 @@ import { errorHandler } from './error';
 
 export const webAppFactory = ({ server }: { server: typeof SERVER_TOKEN }) => {
   const app = fastify({
+    ignoreTrailingSlash: true,
     serverFactory: (handler) => {
       server.on('request', handler);
 

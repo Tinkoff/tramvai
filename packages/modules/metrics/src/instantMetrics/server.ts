@@ -1,4 +1,4 @@
-import { Module, commandLineListTokens, Scope } from '@tramvai/core';
+import { Module, commandLineListTokens } from '@tramvai/core';
 import { SERVER_MODULE_PAPI_PUBLIC_ROUTE } from '@tramvai/tokens-server';
 import { createPapiMethod } from '@tramvai/papi';
 import type { Counter } from '@tramvai/tokens-metrics';
@@ -43,13 +43,7 @@ import { setInstantMetrics } from './store';
               },
             },
           },
-          async handler({
-            req: {
-              params: { metric },
-              body,
-            },
-            res,
-          }) {
+          async handler({ params: { metric }, body, responseManager }) {
             if (!instantMetricsMap[metric]) {
               log.error({
                 event: 'client-instant-metric-mismatch',
@@ -57,8 +51,8 @@ import { setInstantMetrics } from './store';
                 error: new Error(`No instant metric instance found with name: ${metric}`),
               });
 
-              res.status(404);
-              res.json({
+              responseManager.setStatus(404);
+              responseManager.setBody({
                 resultCode: 'NOT_FOUND',
                 errorMessage: 'metric not found',
               });
