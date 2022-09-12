@@ -20,6 +20,7 @@ describe('connect integration tests', () => {
   });
 
   // TODO: test fails for the react@18 with createRoot
+  // TODO: fails after update to jest@>28
   it.skip('test mapStateToProps calls in child component', async () => {
     class Store extends BaseStore<{ id: number }> {
       static storeName = 'test';
@@ -191,7 +192,7 @@ describe('connect integration tests', () => {
      4. child первым начинает выполнять перерендер, и из-за того что при рассчете mapStateToProps берется самое актуальное состояние -
  child также в этом апдейте получает обновление стора one
      5. в итоге получаем что дочерний компонент получил обновление стора one раньше чем родительский
- 
+
      Проблема также актуальна если компоненты подписаны на одни и теже сторы, но у дочернего поменялись какие-то ownProps из-за
      другого родителя в дереве с подписками на другие сторы
       */

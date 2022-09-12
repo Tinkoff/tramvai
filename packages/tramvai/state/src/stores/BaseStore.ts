@@ -31,14 +31,14 @@ export abstract class BaseStore<State> extends SimpleEmitter implements BaseStor
   }
 
   protected writeHydrateKeys<K extends keyof State>(state: Pick<State, K> | State) {
-    Object.keys(state).forEach((key) => {
+    Object.keys(state as any).forEach((key) => {
       this.hydrateKeys[key as K] = true;
     });
   }
 
   // eslint-disable-next-line class-methods-use-this
   protected shouldStateUpdate<K extends keyof State>(nextState: Pick<State, K> | State): boolean {
-    return !!Object.keys(nextState).length;
+    return !!Object.keys(nextState as any).length;
   }
 
   protected setState<K extends keyof State>(state: Pick<State, K> | State, force = false) {

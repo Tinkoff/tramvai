@@ -18,12 +18,12 @@ export type Indices<T> = Exclude<keyof T, ArrayKeys>;
 
 type Selector<T> = (state: Record<string, any>) => T;
 
-type OptionalStoreType<S extends any = any, N extends string = string> = {
+type OptionalStoreType<S = any, N extends string = string> = {
   store: Reducer<S, N> | string;
   optional: true;
 };
 
-type StoreType<S extends any = any, N extends string = string> =
+type StoreType<S = any, N extends string = string> =
   | Reducer<S, N>
   | OptionalStoreType<S, N>
   | string
@@ -63,17 +63,15 @@ export function useSelector<T, R extends BaseStoreConstructor<any>>(
 
 export function useSelector<T, S extends ReadonlyArray<unknown>>(
   storesOrStore: S,
-  selector: (
-    state: {
-      [Key in Indices<S> as InferStoreNameFromUnknownStore<
-        S[Key]
-      >]: InferStoreStateFromUnknownStore<S[Key]>;
-    }
-  ) => T,
+  selector: (state: {
+    [Key in Indices<S> as InferStoreNameFromUnknownStore<S[Key]>]: InferStoreStateFromUnknownStore<
+      S[Key]
+    >;
+  }) => T,
   equalityFn?: typeof shallowEqual
 ): T;
 
-export function useSelector<T, S extends any>(
+export function useSelector<T, S>(
   storesOrStore: S,
   selector: (state: Record<string, any>) => T,
   equalityFn?: typeof shallowEqual
@@ -129,7 +127,7 @@ export function useSelector<T, S extends StoreType | StoreType[]>(
       selector,
       equalityFn
     );
-  } catch (err) {
+  } catch (err: any) {
     let errorMessage = `An error occured while selecting the store state: ${err.message}.`;
 
     if (latestSubscriptionCallbackError.current) {
@@ -150,15 +148,13 @@ type DEFAULT_STORE_NAME = string;
 
 type DEFAULT_STORE_STATE = any;
 
-type InferStoreNameFromOptionalStore<
-  Store extends OptionalStoreType
-> = Store['store'] extends Reducer<any, infer Name> ? Name : DEFAULT_STORE_NAME;
+type InferStoreNameFromOptionalStore<Store extends OptionalStoreType> =
+  Store['store'] extends Reducer<any, infer Name> ? Name : DEFAULT_STORE_NAME;
 
-type InferStoreStateFromOptionalStore<
-  Store extends OptionalStoreType
-> = Store['store'] extends Reducer<infer State> ? State : DEFAULT_STORE_STATE;
+type InferStoreStateFromOptionalStore<Store extends OptionalStoreType> =
+  Store['store'] extends Reducer<infer State> ? State : DEFAULT_STORE_STATE;
 
-type InferStoreNameFromUnknownStore<Store extends unknown> = Store extends string
+type InferStoreNameFromUnknownStore<Store> = Store extends string
   ? Store
   : Store extends OptionalStoreType
   ? InferStoreNameFromOptionalStore<Store>
@@ -176,11 +172,10 @@ type InferStoreStateFromReducer<Store extends Reducer<any>> = Store extends Redu
 
 type InferStoreNameFromLegacyStore<Store extends BaseStoreConstructor<any>> = Store['storeName'];
 
-type InferStoreStateFromLegacyStore<
-  Store extends BaseStoreConstructor<any>
-> = Store extends BaseStoreConstructor<infer State> ? State : DEFAULT_STORE_STATE;
+type InferStoreStateFromLegacyStore<Store extends BaseStoreConstructor<any>> =
+  Store extends BaseStoreConstructor<infer State> ? State : DEFAULT_STORE_STATE;
 
-type InferStoreStateFromUnknownStore<Store extends unknown> = Store extends string
+type InferStoreStateFromUnknownStore<Store> = Store extends string
   ? DEFAULT_STORE_STATE
   : Store extends OptionalStoreType
   ? InferStoreStateFromOptionalStore<Store>

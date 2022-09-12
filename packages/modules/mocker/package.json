@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@tinkoff/mocker": "0.0.0-stub",
-    "tslib": "^2.0.3"
+    "tslib": "^2.4.0"
   },
   "peerDependencies": {
     "@tramvai/core": "0.0.0-stub",

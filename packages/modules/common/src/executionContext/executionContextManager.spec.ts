@@ -1,3 +1,4 @@
+import type { AbortController } from 'node-abort-controller';
 import { ExecutionContextManager } from './executionContextManager';
 
 const createMockPromise = () => {
@@ -56,13 +57,16 @@ describe('ExecutionContextManager', () => {
         await executionManager.withContext(context, 'inner', async (context, ac) => {
           abortController = ac;
 
+          // eslint-disable-next-line jest/no-conditional-expect
           expect(context.abortSignal.aborted).toBeFalsy();
 
           await executionManager
             .withContext(context, 'inner-1', async (context) => {
               await promise1;
+              // eslint-disable-next-line jest/no-conditional-expect
               expect(context.abortSignal.aborted).toBeFalsy();
               await promise2;
+              // eslint-disable-next-line jest/no-conditional-expect
               expect(context.abortSignal.aborted).toBeTruthy();
             })
             .catch((error) => {

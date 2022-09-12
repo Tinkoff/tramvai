@@ -37,46 +37,52 @@ describe('createLayout', () => {
     const Layout = createLayout({
       wrappers: {
         footer: [
-          (Wrapped) => (props) => (
-            <div>
-              Footer
-              <Wrapped {...props} />
-            </div>
-          ),
+          (Wrapped) => (props) =>
+            (
+              <div>
+                Footer
+                <Wrapped {...props} />
+              </div>
+            ),
         ],
         header: [
-          (Wrapped) => (props) => (
-            <div>
-              Header
-              <Wrapped {...props} />
-            </div>
-          ),
-          (Wrapped) => (props) => (
-            <div className="header-wrapper">
-              <Wrapped {...props} />
-            </div>
-          ),
+          (Wrapped) => (props) =>
+            (
+              <div>
+                Header
+                <Wrapped {...props} />
+              </div>
+            ),
+          (Wrapped) => (props) =>
+            (
+              <div className="header-wrapper">
+                <Wrapped {...props} />
+              </div>
+            ),
         ],
         page: [
-          (Wrapped) => (props) => (
-            <div className="page-wrapper">
-              <Wrapped {...props} />
-            </div>
-          ),
+          (Wrapped) => (props) =>
+            (
+              <div className="page-wrapper">
+                <Wrapped {...props} />
+              </div>
+            ),
         ],
         layout: [
-          (Wrapped) => (props) => (
-            <div className="layout">
-              <Wrapped {...props} />
-            </div>
-          ),
+          (Wrapped) => (props) =>
+            (
+              <div className="layout">
+                <Wrapped {...props} />
+              </div>
+            ),
         ],
         content: [
-          (Wrapped) => (props) => (
-            <div className="page-wrapper">
-              <Wrapped {...props} />
-            </div>
-          ),
+          (Wrapped) => (props) =>
+            (
+              <div className="page-wrapper">
+                <Wrapped {...props} />
+              </div>
+            ),
         ],
       },
       components: {
@@ -102,11 +108,12 @@ describe('createLayout', () => {
       },
       wrappers: {
         layout: [
-          (Wrapped) => (props) => (
-            <div className="layout">
-              <Wrapped {...props} />
-            </div>
-          ),
+          (Wrapped) => (props) =>
+            (
+              <div className="layout">
+                <Wrapped {...props} />
+              </div>
+            ),
         ],
       },
     });
@@ -128,11 +135,12 @@ describe('createLayout', () => {
       },
       wrappers: {
         layout: [
-          (Wrapped) => (props) => (
-            <div className="layout">
-              <Wrapped {...props} />
-            </div>
-          ),
+          (Wrapped) => (props) =>
+            (
+              <div className="layout">
+                <Wrapped {...props} />
+              </div>
+            ),
         ],
       },
     });
@@ -188,25 +196,28 @@ describe('createLayout', () => {
     const Layout = createLayout({
       wrappers: {
         header: [
-          (Wrapped) => (props) => (
-            <div className="header">
-              <Wrapped {...props} />
-            </div>
-          ),
+          (Wrapped) => (props) =>
+            (
+              <div className="header">
+                <Wrapped {...props} />
+              </div>
+            ),
         ],
         footer: [
-          (Wrapped) => (props) => (
-            <div className="footer">
-              <Wrapped {...props} />
-            </div>
-          ),
+          (Wrapped) => (props) =>
+            (
+              <div className="footer">
+                <Wrapped {...props} />
+              </div>
+            ),
         ],
         layout: [
-          (Wrapped) => (props) => (
-            <div className="layout">
-              <Wrapped {...props} />
-            </div>
-          ),
+          (Wrapped) => (props) =>
+            (
+              <div className="layout">
+                <Wrapped {...props} />
+              </div>
+            ),
         ],
       },
     });
@@ -224,26 +235,29 @@ describe('createLayout', () => {
     const Layout = createLayout({
       wrappers: {
         header: [
-          (Wrapped) => (props) => (
-            <div className="header">
-              <Wrapped {...props} />
-            </div>
-          ),
+          (Wrapped) => (props) =>
+            (
+              <div className="header">
+                <Wrapped {...props} />
+              </div>
+            ),
           (Wrapped) => (props) => null,
         ],
         footer: [
-          (Wrapped) => (props) => (
-            <div className="footer">
-              <Wrapped {...props} />
-            </div>
-          ),
+          (Wrapped) => (props) =>
+            (
+              <div className="footer">
+                <Wrapped {...props} />
+              </div>
+            ),
         ],
         layout: [
-          (Wrapped) => (props) => (
-            <div className="layout">
-              <Wrapped {...props} />
-            </div>
-          ),
+          (Wrapped) => (props) =>
+            (
+              <div className="layout">
+                <Wrapped {...props} />
+              </div>
+            ),
         ],
       },
     });
@@ -261,26 +275,29 @@ describe('createLayout', () => {
     const Layout = createLayout({
       wrappers: {
         header: [
-          (Wrapped) => (props) => (
-            <div className="header">
-              <Wrapped {...props} />
-            </div>
-          ),
+          (Wrapped) => (props) =>
+            (
+              <div className="header">
+                <Wrapped {...props} />
+              </div>
+            ),
           (Wrapped) => (props) => <Wrapped {...props} prop="a" />,
         ],
         footer: [
-          (Wrapped) => (props) => (
-            <div className="footer">
-              <Wrapped {...props} prop="b" />
-            </div>
-          ),
+          (Wrapped) => (props) =>
+            (
+              <div className="footer">
+                <Wrapped {...props} prop="b" />
+              </div>
+            ),
         ],
         layout: [
-          (Wrapped) => (props) => (
-            <div className="layout">
-              <Wrapped {...props} />
-            </div>
-          ),
+          (Wrapped) => (props) =>
+            (
+              <div className="layout">
+                <Wrapped {...props} />
+              </div>
+            ),
         ],
       },
     });

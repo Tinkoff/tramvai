@@ -32,7 +32,6 @@ export const Root = ({ pageService }: { pageService: typeof PAGE_SERVICE_TOKEN }
   let PageComponent = pageService.getComponent(pageComponent);
 
   if (!PageComponent) {
-    // eslint-disable-next-line react-perf/jsx-no-new-function-as-prop
     PageComponent = () => {
       throw new Error(`Page component '${pageComponent}' not found`);
     };

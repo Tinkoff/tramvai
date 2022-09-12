@@ -24,58 +24,58 @@ import { papiExecutorProvider } from './server/executor';
     ...sharedProviders,
     provide({
       provide: WEB_FASTIFY_APP_BEFORE_INIT_TOKEN,
-      useFactory: ({ di, logger, privateRoutes, publicRoutes, publicBaseUrl, privateBaseUrl }) => (
-        app
-      ) => {
-        if (process.env.NODE_ENV === 'development') {
-          const papiListRoute = createPapiMethod({
-            method: 'get',
-            path: '/papi-list',
-            async handler() {
-              return [
-                ...flatten<Papi>(privateRoutes).map((papi) => {
-                  const params = getPapiParameters(papi);
-                  return {
-                    path: params.path,
-                    method: params.method,
-                    options: params.options,
-                    type: 'private',
-                  };
-                }),
-                ...flatten<Papi>(publicRoutes).map((papi) => {
-                  const params = getPapiParameters(papi);
-                  return {
-                    path: params.path,
-                    method: params.method,
-                    options: params.options,
-                    type: 'public',
-                  };
-                }),
-              ];
-            },
-          });
-          // eslint-disable-next-line no-param-reassign
-          privateRoutes = privateRoutes
-            ? [...toArray(privateRoutes), papiListRoute]
-            : [papiListRoute];
-        }
+      useFactory:
+        ({ di, logger, privateRoutes, publicRoutes, publicBaseUrl, privateBaseUrl }) =>
+        (app) => {
+          if (process.env.NODE_ENV === 'development') {
+            const papiListRoute = createPapiMethod({
+              method: 'get',
+              path: '/papi-list',
+              async handler() {
+                return [
+                  ...flatten<Papi>(privateRoutes).map((papi) => {
+                    const params = getPapiParameters(papi);
+                    return {
+                      path: params.path,
+                      method: params.method,
+                      options: params.options,
+                      type: 'private',
+                    };
+                  }),
+                  ...flatten<Papi>(publicRoutes).map((papi) => {
+                    const params = getPapiParameters(papi);
+                    return {
+                      path: params.path,
+                      method: params.method,
+                      options: params.options,
+                      type: 'public',
+                    };
+                  }),
+                ];
+              },
+            });
+            // eslint-disable-next-line no-param-reassign
+            privateRoutes = privateRoutes
+              ? [...toArray(privateRoutes), papiListRoute]
+              : [papiListRoute];
+          }
 
-        if (privateRoutes) {
-          createApi(app, flatten(privateRoutes), {
-            baseUrl: privateBaseUrl,
-            di,
-            logger,
-          });
-        }
+          if (privateRoutes) {
+            createApi(app, flatten(privateRoutes), {
+              baseUrl: privateBaseUrl,
+              di,
+              logger,
+            });
+          }
 
-        if (publicRoutes) {
-          createApi(app, flatten(publicRoutes), {
-            baseUrl: publicBaseUrl,
-            di,
-            logger,
-          });
-        }
-      },
+          if (publicRoutes) {
+            createApi(app, flatten(publicRoutes), {
+              baseUrl: publicBaseUrl,
+              di,
+              logger,
+            });
+          }
+        },
       deps: {
         di: DI_TOKEN,
         logger: LOGGER_TOKEN,

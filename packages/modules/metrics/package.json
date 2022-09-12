@@ -38,7 +38,7 @@
     "@tinkoff/browser-timings": "0.0.0-stub"
   },
   "peerDependencies": {
-    "tslib": "^2.0.3"
+    "tslib": "^2.4.0"
   },
   "module": "lib/server.es.js",
   "license": "Apache-2.0"

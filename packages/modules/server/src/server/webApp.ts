@@ -186,9 +186,8 @@ export const webAppInitCommand = ({
           });
         } catch (err) {
           if (err.di) {
-            const responseManager: typeof RESPONSE_MANAGER_TOKEN = err.di.get(
-              RESPONSE_MANAGER_TOKEN
-            );
+            const responseManager: typeof RESPONSE_MANAGER_TOKEN =
+              err.di.get(RESPONSE_MANAGER_TOKEN);
 
             if (responseManager && !reply.sent) {
               reply.headers(responseManager.getHeaders());

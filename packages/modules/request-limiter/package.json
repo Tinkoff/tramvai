@@ -34,6 +34,6 @@
     "@tramvai/core": "0.0.0-stub",
     "@tramvai/tokens-server-private": "0.0.0-stub",
     "fastify": "^3.0.0",
-    "tslib": "^2.0.3"
+    "tslib": "^2.4.0"
   }
 }

@@ -1,5 +1,18 @@
-import type { Container, Provider } from '@tinkoff/dippy';
-import { createContainer, Scope } from '@tinkoff/dippy';
+import type {
+  Container,
+  Provider,
+  ModuleType,
+  ExtendedModule,
+  ModuleParameters,
+} from '@tinkoff/dippy';
+import {
+  createContainer,
+  getModuleParameters,
+  isExtendedModule,
+  MODULE_PARAMETERS,
+  Scope,
+  walkOfModules,
+} from '@tinkoff/dippy';
 import type { Bundle } from '@tramvai/tokens-core';
 import {
   ACTIONS_LIST_TOKEN,
@@ -9,11 +22,6 @@ import {
   COMMAND_LINE_RUNNER_TOKEN,
 } from '@tramvai/tokens-core';
 import { LOGGER_TOKEN } from '@tramvai/tokens-common';
-import { MODULE_PARAMETERS } from './modules/module';
-import type { ModuleType, ExtendedModule, ModuleParameters } from './modules/module.h';
-import { walkOfModules } from './modules/walkOfModules';
-import { getModuleParameters } from './modules/getModuleParameters';
-import { isExtendedModule } from './modules/isExtendedModule';
 
 interface AppOptions {
   name: string;
@@ -67,13 +75,18 @@ export class App {
 
   constructor({ name, modules = [], bundles = {}, actions = [], providers }: AppOptions) {
     this.di = createContainer();
-    this.modulesToResolve = new Set();
-    // Закидываем в di пришедшшие данные в app
-    this.walkOfProviders(appProviders(name, bundles, actions, modules));
-    // Инициализуем провайдеры переданные в модули
-    this.walkOfModules(modules);
+    this.modulesToResolve = new Set<ModuleType>();
 
-    // Инициализируем провайдеры добавленные в приложении
+    this.walkOfProviders(appProviders(name, bundles, actions, modules));
+
+    walkOfModules(modules).forEach((mod) => {
+      const moduleParameters = getModuleParameters(mod);
+
+      this.modulesToResolve.add(isExtendedModule(mod) ? mod.mainModule : mod);
+
+      this.walkOfProviders(moduleParameters.providers);
+    });
+
     if (providers) {
       this.walkOfProviders(providers);
     }
@@ -112,6 +125,12 @@ export class App {
     return di;
   }
 
+  private walkOfProviders(providers: Provider[]) {
+    providers.forEach((provide) => {
+      this.di.register(provide);
+    });
+  }
+
   private resolveModules() {
     this.modulesToResolve.forEach((ModuleToResolve) => {
       // eslint-disable-next-line no-new
@@ -126,22 +145,6 @@ export class App {
       return this.di.getOfDeps(deps);
     }
   }
-
-  private walkOfProviders(providers: Provider[]) {
-    providers.forEach((provide) => {
-      this.di.register(provide);
-    });
-  }
-
-  private walkOfModules(modules: Array<ModuleType | ExtendedModule>) {
-    walkOfModules(modules).forEach((mod) => {
-      const moduleParameters = getModuleParameters(mod);
-
-      this.modulesToResolve.add(isExtendedModule(mod) ? mod.mainModule : mod);
-
-      this.walkOfProviders(moduleParameters.providers);
-    });
-  }
 }
 
 export function createApp(options: AppOptions) {
@@ -150,7 +153,7 @@ export function createApp(options: AppOptions) {
     app = new App(options);
   } catch (error) {
     // Флаг необходим чтобы среди логов найти те которые не дали трамваю стартануть
-    error.appCreationError = true;
+    (error as any).appCreationError = true;
 
     throw error;
   }

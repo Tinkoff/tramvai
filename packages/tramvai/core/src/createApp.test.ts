@@ -2,10 +2,9 @@
 /* eslint-disable max-classes-per-file */
 import { COMMAND_LINE_RUNNER_TOKEN } from '@tramvai/core';
 import { commandLineListTokens } from '@tramvai/tokens-core';
+import type { ModuleType } from '@tinkoff/dippy';
+import { INVALID_MODULE_ERROR, Module } from '@tinkoff/dippy';
 import { createApp } from './createApp';
-import { INVALID_MODULE_ERROR } from './modules/walkOfModules';
-import { Module } from './modules/module';
-import type { ModuleType } from './modules/module.h';
 import { createBundle } from './bundles/createBundle';
 
 describe('createApp', () => {
@@ -172,8 +171,10 @@ describe('createApp', () => {
           bundles: {},
         });
       return shoudThrow
-        ? expect(() => func()).toThrow(INVALID_MODULE_ERROR)
-        : expect(() => func()).not.toThrow(INVALID_MODULE_ERROR);
+        ? // eslint-disable-next-line jest/no-conditional-expect
+          expect(() => func()).toThrow(INVALID_MODULE_ERROR)
+        : // eslint-disable-next-line jest/no-conditional-expect
+          expect(() => func()).not.toThrow(INVALID_MODULE_ERROR);
     };
 
     mockWithModules([Module1, undefined, () => {}, null, {}, Object.create(null)], true);

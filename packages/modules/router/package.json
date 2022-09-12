@@ -9,7 +9,9 @@
   },
   "typings": "lib/index.d.ts",
   "files": [
-    "lib"
+    "lib",
+    "tests.js",
+    "tests.d.ts"
   ],
   "sideEffects": false,
   "repository": {
@@ -44,7 +46,7 @@
     "@tramvai/tokens-common": "0.0.0-stub",
     "@tinkoff/dippy": "0.0.0-stub",
     "react": "*",
-    "tslib": "^2.0.3"
+    "tslib": "^2.4.0"
   },
   "license": "Apache-2.0",
   "module": "lib/index.es.js"

@@ -7,13 +7,15 @@ interface Options {
   onlyBundles?: string[];
 }
 
-export const commonApplicationDev = ({ entry, onlyBundles }: Options) => (config: Config) => {
-  if (onlyBundles) {
-    config.plugin('only-bundles').use(IgnorePlugin, [
-      {
-        resourceRegExp: new RegExp(`bundles/(?!${onlyBundles.join('|')})`),
-        contextRegExp: new RegExp(`${dirname(entry)}$`),
-      },
-    ]);
-  }
-};
+export const commonApplicationDev =
+  ({ entry, onlyBundles }: Options) =>
+  (config: Config) => {
+    if (onlyBundles) {
+      config.plugin('only-bundles').use(IgnorePlugin, [
+        {
+          resourceRegExp: new RegExp(`bundles/(?!${onlyBundles.join('|')})`),
+          contextRegExp: new RegExp(`${dirname(entry)}$`),
+        },
+      ]);
+    }
+  };

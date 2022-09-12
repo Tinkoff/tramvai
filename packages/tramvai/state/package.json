@@ -24,7 +24,7 @@
     "@types/hoist-non-react-statics": "^3.3.1",
     "invariant": "^2.2.4",
     "react-is": ">=17",
-    "tslib": "^2.0.3",
+    "tslib": "^2.4.0",
     "use-sync-external-store": "^1.2.0"
   },
   "peerDependencies": {

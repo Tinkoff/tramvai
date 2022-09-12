@@ -4,9 +4,7 @@ import type { LoadableComponent } from '@loadable/component';
 
 export type LazyComponentWrapper<Component extends ComponentType<any>> = {
   // typings in loadable do not respect module with default export
-  load: (
-    props?: Component extends ComponentType<infer Props> ? Props : {}
-  ) => Promise<{
+  load: (props?: Component extends ComponentType<infer Props> ? Props : {}) => Promise<{
     default: Component;
   }>;
 } & LoadableComponent<Component extends ComponentType<infer Props> ? Props : {}>;

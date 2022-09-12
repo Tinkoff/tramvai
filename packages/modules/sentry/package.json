@@ -31,7 +31,7 @@
     "@tramvai/tokens-metrics": "0.0.0-stub",
     "@tramvai/tokens-render": "0.0.0-stub",
     "@tramvai/tokens-server-private": "0.0.0-stub",
-    "tslib": "^2.0.3"
+    "tslib": "^2.4.0"
   },
   "module": "lib/server.es.js",
   "license": "Apache-2.0"

@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useSelector } from './useSelector';
 import type { Reducer } from '../..';
 
-export const useStoreSelector = <TState extends any, TPayload extends any>(
+export const useStoreSelector = <TState, TPayload>(
   store: Reducer<TState>,
   selector: (state: TState) => TPayload
 ) => {

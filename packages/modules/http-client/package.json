@@ -44,7 +44,7 @@
     "@tramvai/test-mocks": "0.0.0-stub",
     "@tinkoff/dippy": "0.0.0-stub",
     "node-fetch": "^2.6.1",
-    "tslib": "^2.0.3"
+    "tslib": "^2.4.0"
   },
   "license": "Apache-2.0",
   "module": "lib/index.es.js"

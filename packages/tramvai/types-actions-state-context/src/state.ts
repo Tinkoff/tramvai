@@ -73,12 +73,12 @@ export interface ConsumerContext {
     action: TramvaiAction<Params, Result, Deps>,
     ...params: Params
   ): Result extends Promise<any> ? Result : Promise<Result>;
-  executeAction<Payload extends any = any, Result = any, Deps extends Record<string, any> = any>(
+  executeAction<Payload = any, Result = any, Deps extends Record<string, any> = any>(
     action: AnyAction<Payload, Result, Deps>,
     payload?: Payload
   ): Promise<Result extends PromiseLike<infer U> ? U : Result>;
 
-  dispatch: <Payload extends any = any>(
+  dispatch: <Payload = any>(
     actionOrNameEvent: string | Event<Payload>,
     payload?: Payload
   ) => Promise<Payload>;
@@ -91,7 +91,7 @@ export interface ConsumerContext {
   >(
     createActionOrType: CreateActionOrType,
     options?: Options
-  ) => <Result extends any = any>(...args: any[]) => Promise<Result>;
+  ) => <Result = any>(...args: any[]) => Promise<Result>;
 
   getState: GetState;
 
@@ -104,7 +104,7 @@ export interface ConsumerContext {
       | BaseStoreConstructor<State>
       | string
       | { store: Reducer<State> | BaseStoreConstructor<State> | string; optional: true },
-    State extends any = any
+    State = any
   >(
     store: Store
   ): Store extends Reducer<State> | BaseStoreConstructor<State>

@@ -2,11 +2,6 @@ export { createApp, App } from './createApp';
 export { createBundle } from './bundles/createBundle';
 export { createAction } from './actions/createActions';
 export * from './actions/declareAction';
-export { Module, deprecatedModule as module, MODULE_PARAMETERS } from './modules/module';
-export { getModuleParameters } from './modules/getModuleParameters';
-export { walkOfModules } from './modules/walkOfModules';
-export { isExtendedModule } from './modules/isExtendedModule';
-export { ModuleType, ExtendedModule } from './modules/module.h';
 export * from '@tramvai/tokens-core';
 
 export {
@@ -19,4 +14,11 @@ export {
   optional,
   ExtractTokenType,
   ExtractDependencyType,
+  Module,
+  MODULE_PARAMETERS,
+  getModuleParameters,
+  walkOfModules,
+  isExtendedModule,
+  ModuleType,
+  ExtendedModule,
 } from '@tinkoff/dippy';

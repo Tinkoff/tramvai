@@ -161,9 +161,8 @@ export const CHILD_APP_RENDER_MANAGER_TOKEN = createToken<ChildAppRenderManager>
  * @private
  * @description Manages state dehydration for child-app
  */
-export const CHILD_APP_STATE_MANAGER_TOKEN = createToken<ChildAppStateManager>(
-  'child-app state manager'
-);
+export const CHILD_APP_STATE_MANAGER_TOKEN =
+  createToken<ChildAppStateManager>('child-app state manager');
 
 /**
  * @private
@@ -191,6 +190,5 @@ export const CHILD_APP_COMMON_INITIAL_STATE_TOKEN = createToken<
  * @private
  * @description Used as render function for a child app. Usually implemented as a wrapper over child app render itself with an additional logic for di and connections to root app
  */
-export const CHILD_APP_INTERNAL_RENDER_TOKEN = createToken<ComponentType<WrapperProps<any>>>(
-  'child-app render'
-);
+export const CHILD_APP_INTERNAL_RENDER_TOKEN =
+  createToken<ComponentType<WrapperProps<any>>>('child-app render');

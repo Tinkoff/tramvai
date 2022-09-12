@@ -23,7 +23,7 @@ function testDatasets(datasetFiles = [], res, browsersListConfig?) {
         return;
       }
 
-      it(ua, () => {
+      it(`${ua}`, () => {
         try {
           expect(satisfies(ua, browsersListConfig)).toBe(res);
         } catch (e) {

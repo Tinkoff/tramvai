@@ -18,7 +18,7 @@ interface NavigateHandler {
 export const wrapHistory = <T>({ onNavigate }: { onNavigate: NavigateHandler }): Wrapper<T> => {
   if (!supportsHtml5History) {
     const navigate: History['pushState'] = (data, title, url) => {
-      window.location.href = url;
+      window.location.href = url.toString();
     };
 
     window.history.pushState = navigate;
@@ -64,7 +64,7 @@ export const wrapHistory = <T>({ onNavigate }: { onNavigate: NavigateHandler }):
 
   const browserNavigate = (replace = false): History['pushState'] => {
     return (navigateState, title, url) => {
-      onNavigate({ url, replace, navigateState });
+      onNavigate({ url: url.toString(), replace, navigateState });
     };
   };
 

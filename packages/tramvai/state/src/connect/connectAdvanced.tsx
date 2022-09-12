@@ -192,7 +192,7 @@ export function connectAdvanced(
 
       forwarded.displayName = displayName;
       (forwarded as any).WrappedComponent = WrappedComponent;
-      return (hoistStatics(forwarded, WrappedComponent) as any) as T;
+      return hoistStatics(forwarded, WrappedComponent) as any as T;
     }
 
     return hoistStatics(Connect, WrappedComponent) as T;

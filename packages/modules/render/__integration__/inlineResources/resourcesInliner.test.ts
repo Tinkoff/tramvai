@@ -46,13 +46,11 @@ describe('resources inliner', () => {
     });
 
     // Первый запуск, кеши ещё не прогреты, CSS не должен инлайниться.
-    expect(links).toMatchInlineSnapshot(`
-Array [
-  "${getApp().staticUrl}/dist/client/root.chunk.css",
-  "https://test.acdn.tinkoff.ru/123.css",
-]
-`);
-    expect(styles).toMatchInlineSnapshot(`Array []`);
+    expect(links).toEqual([
+      `${getApp().staticUrl}/dist/client/root.chunk.css`,
+      'https://test.acdn.tinkoff.ru/123.css',
+    ]);
+    expect(styles).toMatchInlineSnapshot(`[]`);
 
     await page.reload();
 

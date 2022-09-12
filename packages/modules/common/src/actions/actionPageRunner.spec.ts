@@ -101,10 +101,10 @@ describe('errors', () => {
 
     expect(result).toEqual([2]);
     expect(dispatcherPayload).toMatchInlineSnapshot(`
-      Object {
-        "payload": Object {
-          "action2": Object {
-            "state": Object {},
+      {
+        "payload": {
+          "action2": {
+            "state": {},
             "status": "success",
           },
         },
@@ -187,6 +187,7 @@ describe('errors', () => {
         stopRunAtError
       )
       .catch((error) => {
+        // eslint-disable-next-line jest/no-conditional-expect
         expect(error.name).toBe('RedirectFoundError');
       });
   });
@@ -239,10 +240,10 @@ describe('limits', () => {
 
     return prom.then(() => {
       expect(dispatcherPayload).toMatchInlineSnapshot(`
-        Object {
-          "payload": Object {
-            "action time 3": Object {
-              "state": Object {},
+        {
+          "payload": {
+            "action time 3": {
+              "state": {},
               "status": "success",
             },
           },
@@ -323,10 +324,10 @@ describe('limits', () => {
 
     return prom.then(() => {
       expect(dispatcherPayload).toMatchInlineSnapshot(`
-        Object {
-          "payload": Object {
-            "action 1": Object {
-              "state": Object {},
+        {
+          "payload": {
+            "action 1": {
+              "state": {},
               "status": "success",
             },
           },

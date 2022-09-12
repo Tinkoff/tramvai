@@ -13,6 +13,5 @@ interface BuilderModule<Name extends string> {
 
 export const BUILDER_MODULE_TOKEN = createToken<BuilderModule<any>>('builder module');
 
-export const ABSTRACT_BUILDER_FACTORY_TOKEN = createToken<AbstractBuilderFactory>(
-  'builder abstractFactory'
-);
+export const ABSTRACT_BUILDER_FACTORY_TOKEN =
+  createToken<AbstractBuilderFactory>('builder abstractFactory');

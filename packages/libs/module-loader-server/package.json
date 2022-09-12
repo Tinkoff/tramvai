@@ -24,7 +24,7 @@
     "@tinkoff/request-plugin-protocol-http": "^0.11.6",
     "@tinkoff/utils": "^2.1.2",
     "ssri": "^7.1.0",
-    "tslib": "^2.0.3"
+    "tslib": "^2.4.0"
   },
   "sideEffects": false,
   "devDependencies": {

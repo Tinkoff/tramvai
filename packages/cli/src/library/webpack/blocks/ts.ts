@@ -5,12 +5,8 @@ import type { ConfigManager } from '../../../config/configManager';
 import { getSwcOptions } from '../../swc';
 
 export default (configManager: ConfigManager) => (config: Config) => {
-  const {
-    generateDataQaTag,
-    alias,
-    removeTypeofWindow,
-    enableFillActionNamePlugin,
-  } = configManager.build.configurations;
+  const { generateDataQaTag, alias, removeTypeofWindow, enableFillActionNamePlugin } =
+    configManager.build.configurations;
   const { loader } = configManager.experiments.transpilation;
   const { env, modern } = configManager;
   const loaderConfig = {

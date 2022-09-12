@@ -13,7 +13,7 @@ export class RequestManager implements Interface {
   private parsedUrl: Url;
 
   constructor({ request }: { request: typeof REQUEST }) {
-    this.request = request || (({} as unknown) as typeof REQUEST);
+    this.request = request || ({} as unknown as typeof REQUEST);
 
     if (typeof window === 'undefined') {
       this.url = format({

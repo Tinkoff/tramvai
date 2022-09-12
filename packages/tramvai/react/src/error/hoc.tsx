@@ -5,21 +5,17 @@ import { ErrorBoundary } from './component';
 /**
  * @deprecated Use UniversalErrorBoundary component
  */
-export const withError = ({
-  fallbackComponent,
-}: { fallbackComponent?: React.ReactElement } = {}) => <
-  T extends React.ComponentType<{ children?: React.ReactNode }>
->(
-  WrappedComponent: T
-) => {
-  function WrapperWithError(props: any) {
-    return (
-      <ErrorBoundary fallbackComponent={fallbackComponent}>
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <WrappedComponent {...props} />
-      </ErrorBoundary>
-    );
-  }
+export const withError =
+  ({ fallbackComponent }: { fallbackComponent?: React.ReactElement } = {}) =>
+  <T extends React.ComponentType<{ children?: React.ReactNode }>>(WrappedComponent: T) => {
+    function WrapperWithError(props: any) {
+      return (
+        <ErrorBoundary fallbackComponent={fallbackComponent}>
+          {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+          <WrappedComponent {...props} />
+        </ErrorBoundary>
+      );
+    }
 
-  return hoistStatics(WrapperWithError, WrappedComponent as any) as T;
-};
+    return hoistStatics(WrapperWithError, WrappedComponent as any) as T;
+  };

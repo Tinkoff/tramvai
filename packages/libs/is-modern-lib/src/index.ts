@@ -5,7 +5,8 @@ import semver from 'semver';
 const slash = '[/\\\\]';
 
 // https://gist.github.com/developit/80a6926679ac33570f66ca8184a249d2#file-auto-babel-loader-js-L3
-const MODULE_DIR = /(.*(?:[\/\\]node_modules|\.\.)[\/\\](?:@[^\/\\]+[\/\\])?[^\/\\]+)(?:[\/\\].*)?$/;
+const MODULE_DIR =
+  /(.*(?:[\/\\]node_modules|\.\.)[\/\\](?:@[^\/\\]+[\/\\])?[^\/\\]+)(?:[\/\\].*)?$/;
 
 export const modernLibs = [
   // inner libs

@@ -1,7 +1,7 @@
 import flatten from '@tinkoff/utils/array/flatten';
 import type { ReactComponent, Wrapper, LayoutOptions } from './types.h';
 
-const toArray = <T extends any>(arr: T | T[]) => (Array.isArray(arr) ? arr : [arr]);
+const toArray = <T,>(arr: T | T[]) => (Array.isArray(arr) ? arr : [arr]);
 
 export const composeComponent = (
   Component: ReactComponent,

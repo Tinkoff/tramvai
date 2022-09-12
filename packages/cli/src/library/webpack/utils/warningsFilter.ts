@@ -1,7 +1,8 @@
 // возникает когда в либе require используется как выражение или сохраняется в переменной
 // в большинстве случаев ворнинг возникает на код вида:
 // const nodeRequire = typeof __non_webpack_require__ === 'undefined' ? require : __non_webpack_require__;
-export const REQUIRE_EXPRESSION = /Critical dependency: require function is used in a way in which dependencies cannot be statically extracted/;
+export const REQUIRE_EXPRESSION =
+  /Critical dependency: require function is used in a way in which dependencies cannot be statically extracted/;
 
 // возкникает когда невозможно статически проанализировать выражение, переданное в require и определить
 // какой код надо добавить в бандл

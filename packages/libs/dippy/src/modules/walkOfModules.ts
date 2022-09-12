@@ -31,7 +31,7 @@ export const walkOfModules = (modules: Array<ModuleType | ExtendedModule>) => {
       modulesIdInitialized.add(moduleParameters.id);
       modulesNameInitialized.add(moduleParameters.name);
 
-      // Если модуль импортирует другие модули, то инициализируем их провайдеры
+      // If the module imports other modules, then initialize their providers
       if (moduleParameters.imports) {
         moduleParameters.imports.forEach((item) => {
           innerWalkOfModules(item);

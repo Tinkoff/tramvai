@@ -37,9 +37,8 @@ import { MetricsServicesRegistry } from './MetricsServicesRegistry';
           const env = envManager.getAll();
           metricsServicesRegistry.registerEnv(env);
 
-          const getServiceName = metricsServicesRegistry.getServiceName.bind(
-            metricsServicesRegistry
-          );
+          const getServiceName =
+            metricsServicesRegistry.getServiceName.bind(metricsServicesRegistry);
 
           initRequestsMetrics({
             metrics,

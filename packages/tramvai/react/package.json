@@ -29,7 +29,7 @@
     "@tinkoff/url": "0.0.0-stub",
     "react": ">=16.14.0",
     "react-dom": ">=16.14.0",
-    "tslib": "^2.0.3"
+    "tslib": "^2.4.0"
   },
   "module": "lib/react.es.js",
   "license": "Apache-2.0"

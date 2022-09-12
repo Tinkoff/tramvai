@@ -33,7 +33,7 @@
     "@tinkoff/utils": "^2.1.2",
     "@tramvai/http-client": "0.0.0-stub",
     "@tramvai/tokens-common": "0.0.0-stub",
-    "tslib": "^2.0.3"
+    "tslib": "^2.4.0"
   },
   "sideEffects": false,
   "license": "Apache-2.0",

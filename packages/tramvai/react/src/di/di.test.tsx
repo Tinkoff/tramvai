@@ -43,7 +43,7 @@ const testFactory = (TestComponent: any) => {
   const { getByTestId, rerender } = render(testCase());
   expect(getByTestId('text')).toHaveTextContent('Di text');
   expect(result).toMatchInlineSnapshot(`
-    Array [
+    [
       "create logger",
       "create components",
       "run logger message hello",
@@ -54,7 +54,7 @@ const testFactory = (TestComponent: any) => {
   rerender(testCase());
 
   expect(result).toMatchInlineSnapshot(`
-    Array [
+    [
       "create logger",
       "create components",
       "run logger message hello",

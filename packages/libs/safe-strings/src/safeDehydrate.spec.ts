@@ -10,7 +10,7 @@ describe('utils/safeDehydrate', () => {
 
   it('should replace not allowed characters', () => {
     expect(safeDehydrate(sample)).toMatchInlineSnapshot(
-      `"{\\"s\\":{\\"test\\":\\"abc\\",\\"someString\\":\\"fawf \\\\'fasf\\\\' fawf\\"}}"`
+      `"{"s":{"test":"abc","someString":"fawf \\'fasf\\' fawf"}}"`
     );
   });
 });

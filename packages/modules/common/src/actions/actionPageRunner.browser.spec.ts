@@ -8,10 +8,10 @@ import { ActionExecution } from './actionExecution';
 import { ExecutionContextManager } from '../executionContext/executionContextManager';
 
 const contextMock = {};
-const logger: any = ((() => ({
+const logger: any = (() => ({
   warn: noop,
   error: noop,
-})) as any) as typeof LOGGER_TOKEN;
+})) as any as typeof LOGGER_TOKEN;
 
 describe('actionPageRunnerBrowser', () => {
   it('Базовое использование', async () => {
@@ -113,6 +113,7 @@ describe('actionPageRunnerBrowser', () => {
           stopRunAtError
         )
         .catch((error) => {
+          // eslint-disable-next-line jest/no-conditional-expect
           expect(error.name).toBe('RedirectFoundError');
         });
     });

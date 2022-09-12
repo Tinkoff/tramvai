@@ -30,7 +30,7 @@ describe('ProgressiveRenderer', () => {
     mockIntersectionObserver.clear();
   });
 
-  it('it render original markup', () => {
+  it('render original markup', () => {
     const root = document.getElementById('root');
 
     act(() => {
@@ -76,7 +76,7 @@ describe('ProgressiveRenderer', () => {
     );
   });
 
-  it('it hydrate client markup on static mode', () => {
+  it('hydrate client markup on static mode', () => {
     const root = document.getElementById('root');
     const mockOnClick = jest.fn();
 
@@ -96,7 +96,7 @@ describe('ProgressiveRenderer', () => {
     expect(mockOnClick.mock.calls.length).toBe(1);
   });
 
-  it('it hydrate client markup when block is visible', () => {
+  it('hydrate client markup when block is visible', () => {
     const root = document.getElementById('root');
     const mockOnClick = jest.fn();
 
@@ -120,7 +120,7 @@ describe('ProgressiveRenderer', () => {
     expect(mockOnClick.mock.calls.length).toBe(1);
   });
 
-  it('it prevent hydrate client markup when block is hidden', () => {
+  it('prevent hydrate client markup when block is hidden', () => {
     const root = document.getElementById('root');
     const mockOnClick = jest.fn();
 

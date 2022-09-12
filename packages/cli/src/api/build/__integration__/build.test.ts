@@ -26,20 +26,20 @@ describe('@tramvai/cli build command', () => {
       ]);
 
       expect(normalizeFiles(clientFiles)).toMatchInlineSnapshot(`
-Array [
-  "platform.css",
-  "platform.js",
-  "react.js",
-  "src_api_build___integration_____fixtures___app_bundles_first_ts.js",
-  "src_api_build___integration_____fixtures___app_bundles_main_ts.js",
-  "src_api_build___integration_____fixtures___app_bundles_second_ts.js",
-  "src_api_build___integration_____fixtures___app_bundles_third_ts.js",
-  "stats.json",
-]
-`);
+        [
+          "platform.css",
+          "platform.js",
+          "react.js",
+          "src_api_build___integration_____fixtures___app_bundles_first_ts.js",
+          "src_api_build___integration_____fixtures___app_bundles_main_ts.js",
+          "src_api_build___integration_____fixtures___app_bundles_second_ts.js",
+          "src_api_build___integration_____fixtures___app_bundles_third_ts.js",
+          "stats.json",
+        ]
+      `);
 
       expect(normalizeFiles(serverFiles)).toMatchInlineSnapshot(`
-        Array [
+        [
           "server.css",
           "server.js",
           "stats.json",
@@ -79,20 +79,20 @@ Array [
       ]);
 
       expect(normalizeFiles(clientFiles)).toMatchInlineSnapshot(`
-Array [
-  "platform.css",
-  "platform.js",
-  "react.js",
-  "src_api_build___integration_____fixtures___app_bundles_first_ts.js",
-  "src_api_build___integration_____fixtures___app_bundles_main_ts.js",
-  "src_api_build___integration_____fixtures___app_bundles_second_ts.js",
-  "src_api_build___integration_____fixtures___app_bundles_third_ts.js",
-  "stats.json",
-]
-`);
+        [
+          "platform.css",
+          "platform.js",
+          "react.js",
+          "src_api_build___integration_____fixtures___app_bundles_first_ts.js",
+          "src_api_build___integration_____fixtures___app_bundles_main_ts.js",
+          "src_api_build___integration_____fixtures___app_bundles_second_ts.js",
+          "src_api_build___integration_____fixtures___app_bundles_third_ts.js",
+          "stats.json",
+        ]
+      `);
 
       expect(normalizeFiles(serverFiles)).toMatchInlineSnapshot(`
-        Array [
+        [
           "server.css",
           "server.js",
           "stats.json",
@@ -112,14 +112,14 @@ Array [
       const files = await promises.readdir(resolve(FIXTURES_DIR, 'dist/modules/module/prerelease'));
 
       expect(normalizeFiles(files)).toMatchInlineSnapshot(`
-Array [
-  "module.css",
-  "module_client.js",
-  "module_server.css",
-  "module_server.js",
-  "stats.json",
-]
-`);
+        [
+          "module.css",
+          "module_client.js",
+          "module_server.css",
+          "module_server.js",
+          "stats.json",
+        ]
+      `);
     });
 
     it('should build module by specific config', async () => {
@@ -135,14 +135,14 @@ Array [
       const files = await promises.readdir(resolve(FIXTURES_DIR, 'dist/modules/module/prerelease'));
 
       expect(normalizeFiles(files)).toMatchInlineSnapshot(`
-Array [
-  "module.css",
-  "module_client.js",
-  "module_server.css",
-  "module_server.js",
-  "stats.json",
-]
-`);
+        [
+          "module.css",
+          "module_client.js",
+          "module_server.css",
+          "module_server.js",
+          "stats.json",
+        ]
+      `);
     });
   });
 
@@ -156,7 +156,7 @@ Array [
       const files = await promises.readdir(resolve(FIXTURES_DIR, 'package', 'dist'));
 
       expect(files).toMatchInlineSnapshot(`
-        Array [
+        [
           "browser.d.ts",
           "browser.js",
           "index.d.ts",
@@ -179,7 +179,7 @@ Array [
       const files = await promises.readdir(resolve(FIXTURES_DIR, 'package', 'dist'));
 
       expect(files).toMatchInlineSnapshot(`
-        Array [
+        [
           "browser.d.ts",
           "browser.js",
           "index.d.ts",

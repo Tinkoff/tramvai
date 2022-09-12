@@ -11,6 +11,5 @@ export const MOCKER_REPOSITORY = createToken<MockRepository>('MOCKER_REPOSITORY'
   multi: true,
 });
 
-export const MOCKER_CONFIGURATION = createToken<() => Promise<MockerOptions>>(
-  'MOCKER_CONFIGURATION'
-);
+export const MOCKER_CONFIGURATION =
+  createToken<() => Promise<MockerOptions>>('MOCKER_CONFIGURATION');

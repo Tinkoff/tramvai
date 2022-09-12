@@ -38,7 +38,7 @@ describe('server/utils/tramvaiDepsFilter', () => {
         'recursive-readdir': '^2.2.2',
       })
     ).toMatchInlineSnapshot(`
-      Object {
+      {
         "@tramvai-another-scope/module-bar": "^0.1.2",
         "@tramvai-another-scope/module-foo": "^0.2.1",
         "@tramvai/module-bar": "^0.3.3",

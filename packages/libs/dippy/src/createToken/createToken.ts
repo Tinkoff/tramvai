@@ -20,10 +20,10 @@ export class TokenClass<T> implements TokenType<T> {
 
   options: TokenOptions;
 
-  isToken: true = true;
+  isToken = true as const;
 
   // for potential breaking changes, not very useful at this moment
-  isModernToken: true = true;
+  isModernToken = true as const;
 
   constructor(name?: string, options: TokenOptions = {}) {
     this.name = name ? Symbol.for(name) : Symbol('token');
@@ -69,7 +69,7 @@ export function createToken<Type = any>(
 ): MultiTokenInterface<Type>;
 
 export function createToken<T = any>(name?: string, options?: TokenOptions): T {
-  return (new TokenClass<T>(name, options) as any) as T;
+  return new TokenClass<T>(name, options) as any as T;
 }
 
 /**
@@ -95,7 +95,7 @@ export type ExtractDependencyType<Token extends TokenInterface<unknown>> = [Toke
   ? Type
   : unknown;
 
-export type OptionalTokenDependency<Type extends unknown> = {
+export type OptionalTokenDependency<Type> = {
   token: TokenInterface<Type>;
   optional: boolean;
 };

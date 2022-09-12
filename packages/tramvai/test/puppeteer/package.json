@@ -22,7 +22,7 @@
     "@tramvai/tokens-router": "0.0.0-stub",
     "console-with-style": "^1.1.0",
     "supports-color": "8.1.1",
-    "tslib": "^2.0.3"
+    "tslib": "^2.4.0"
   },
   "peerDependencies": {
     "puppeteer": "10.0.0"

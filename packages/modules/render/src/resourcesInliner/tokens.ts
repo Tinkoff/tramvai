@@ -19,6 +19,5 @@ export type ResourcesRegistryCache = {
  * @description
  * Кэш загруженных ресурсов.
  */
-export const RESOURCES_REGISTRY_CACHE = createToken<ResourcesRegistryCache>(
-  'resourcesRegistryCache'
-);
+export const RESOURCES_REGISTRY_CACHE =
+  createToken<ResourcesRegistryCache>('resourcesRegistryCache');

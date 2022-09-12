@@ -33,11 +33,11 @@
     "examples/**"
   ],
   "devDependencies": {
-    "@types/jest": "^26.0.23",
+    "@types/jest": "^29.0.2",
     "@types/node": "^16.10.2",
     "@types/webpack-env": "^1.13.16",
     "expect-type": "^0.13.0",
-    "typescript": "4.2.4",
+    "typescript": "4.8.2",
     "json": "^9.0.6",
     "wsrun": "^5.2.0"
   },

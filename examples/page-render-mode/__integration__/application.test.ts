@@ -22,21 +22,21 @@ describe('page-render-mode', () => {
     const renderResult = await app.render('/', {});
 
     expect(getScripts(app, renderResult.parsed)).toMatchInlineSnapshot(`
-Array [
-  "STATIC_URL/dist/client/@_routes_index.chunk.js",
-  "STATIC_URL/dist/client/hmr.js",
-  "STATIC_URL/dist/client/platform.js",
-]
-`);
+      [
+        "STATIC_URL/dist/client/@_routes_index.chunk.js",
+        "STATIC_URL/dist/client/hmr.js",
+        "STATIC_URL/dist/client/platform.js",
+      ]
+    `);
     expect(getLinks(app, renderResult.parsed)).toMatchInlineSnapshot(`
-Array [
-  "STATIC_URL/dist/client/@_routes_index.chunk.css",
-  "STATIC_URL/dist/client/platform.css",
-]
-`);
+      [
+        "STATIC_URL/dist/client/@_routes_index.chunk.css",
+        "STATIC_URL/dist/client/platform.css",
+      ]
+    `);
 
     expect(renderResult.application).toMatchInlineSnapshot(
-      `"<div><h1>Tramvai <span role=\\"img\\" aria-label=\\"Salute\\">🥳</span></h1></div><div>Main Page loading...</div><div class=\\"Footer__footer_adktz\\"><div>this Footer in page-render-mode</div></div>"`
+      `"<div><h1>Tramvai <span role="img" aria-label="Salute">🥳</span></h1></div><div>Main Page loading...</div><div class="Footer__footer_adktz"><div>this Footer in page-render-mode</div></div>"`
     );
   });
 
@@ -44,20 +44,20 @@ Array [
     const renderResult = await app.render('/second/', {});
 
     expect(getScripts(app, renderResult.parsed)).toMatchInlineSnapshot(`
-Array [
-  "STATIC_URL/dist/client/@_routes_second_index.chunk.js",
-  "STATIC_URL/dist/client/hmr.js",
-  "STATIC_URL/dist/client/platform.js",
-]
-`);
+      [
+        "STATIC_URL/dist/client/@_routes_second_index.chunk.js",
+        "STATIC_URL/dist/client/hmr.js",
+        "STATIC_URL/dist/client/platform.js",
+      ]
+    `);
     expect(getLinks(app, renderResult.parsed)).toMatchInlineSnapshot(`
-Array [
-  "STATIC_URL/dist/client/platform.css",
-]
-`);
+      [
+        "STATIC_URL/dist/client/platform.css",
+      ]
+    `);
 
     expect(renderResult.application).toMatchInlineSnapshot(
-      `"<div><h1>Tramvai <span role=\\"img\\" aria-label=\\"Salute\\">🥳</span></h1></div><div>Loading...</div><div class=\\"Footer__footer_adktz\\"><div>this Footer in page-render-mode</div></div>"`
+      `"<div><h1>Tramvai <span role="img" aria-label="Salute">🥳</span></h1></div><div>Loading...</div><div class="Footer__footer_adktz"><div>this Footer in page-render-mode</div></div>"`
     );
   });
 

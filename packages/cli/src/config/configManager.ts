@@ -50,7 +50,8 @@ const getOption = <T>(optionName: string, cfgs: any[], dflt?: T): T => {
 };
 
 export class ConfigManager<T extends ConfigEntry = ConfigEntry, E extends Env = any>
-  implements Required<Settings<E>> {
+  implements Required<Settings<E>>
+{
   private configEntry: T;
 
   public name: string;

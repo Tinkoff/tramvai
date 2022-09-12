@@ -227,10 +227,10 @@ export const sharedProviders: Provider[] = [
           }
           // otherwise pick up any REGISTER_CLEAR_CACHE_TOKEN hooks and call it
           const registeredClearCache =
-            ((di.get({
+            (di.get({
               token: REGISTER_CLEAR_CACHE_TOKEN,
               optional: true,
-            }) as any) as typeof REGISTER_CLEAR_CACHE_TOKEN[]) ?? [];
+            }) as any as typeof REGISTER_CLEAR_CACHE_TOKEN[]) ?? [];
 
           return Promise.all(registeredClearCache.map((clear) => clear(type)));
         });

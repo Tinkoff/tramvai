@@ -7,7 +7,9 @@
   "typings": "lib/server.d.ts",
   "files": [
     "lib",
-    "__migrations__"
+    "__migrations__",
+    "tests.js",
+    "tests.d.ts"
   ],
   "sideEffects": false,
   "repository": {
@@ -50,7 +52,7 @@
     "prop-types": "^15.6.2",
     "react": ">=16.14.0",
     "react-dom": ">=16.14.0",
-    "tslib": "^2.0.3"
+    "tslib": "^2.4.0"
   },
   "devDependencies": {},
   "gitHead": "8e826a214c87b188fc4d254cdd8f2a2b2c55f3a8",

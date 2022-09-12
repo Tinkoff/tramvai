@@ -24,7 +24,7 @@
     "fast-glob": "^3.2.2",
     "http-proxy-middleware": "^2.0.2",
     "node-fetch": "^2.6.1",
-    "tslib": "^2.0.3"
+    "tslib": "^2.4.0"
   },
   "devDependencies": {
     "@types/http-proxy-middleware": "^0.19.3"

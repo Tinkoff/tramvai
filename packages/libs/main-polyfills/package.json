@@ -24,7 +24,7 @@
     "element-closest-polyfill": "^1.0.4",
     "intersection-observer": "^0.7.0",
     "resize-observer-polyfill": "^1.5.1",
-    "tslib": "^2.0.3",
+    "tslib": "^2.4.0",
     "whatwg-fetch": "^3.0.0"
   },
   "module": "lib/index.es.js",

@@ -49,9 +49,8 @@ export const build: Build = {
     if (isObject(params.packageJSON.browser)) {
       nextPackageJson.browser = {
         ...params.packageJSON.browser,
-        [normalizeFilenameForBrowserObjectField(
-          buildModuleFileName(params)
-        )]: normalizeFilenameForBrowserObjectField(outputFilename),
+        [normalizeFilenameForBrowserObjectField(buildModuleFileName(params))]:
+          normalizeFilenameForBrowserObjectField(outputFilename),
       };
     }
 

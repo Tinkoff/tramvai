@@ -60,7 +60,7 @@ describe('actionExecution in global page', () => {
       }
     );
     expect(result).toMatchInlineSnapshot(`
-      Array [
+      [
         "action: action1 with: @globalAction",
         "action: action2 with: @globalAction",
       ]
@@ -79,7 +79,7 @@ describe('actionExecution in global page', () => {
     );
 
     expect(result).toMatchInlineSnapshot(`
-      Array [
+      [
         "action: action1 with: @globalAction",
         "action: action2 with: @globalAction",
       ]
@@ -142,14 +142,14 @@ describe('actionExecution in global page', () => {
     );
 
     expect(result).toMatchInlineSnapshot(`
-      Array [
+      [
         "action: action1 with: @globalAction",
         "action: action4 with: @globalAction",
       ]
     `);
   });
 
-  it('Множественный запуск page actions с проверкой, что только измененые экшены запускаются ', async () => {
+  it('Множественный запуск page actions с проверкой, что только измененые экшены запускаются', async () => {
     const executionContextManager = new ExecutionContextManager();
     const instance = new ActionExecution({
       di: createContainer(),
@@ -181,7 +181,7 @@ describe('actionExecution in global page', () => {
     );
 
     expect(result).toMatchInlineSnapshot(`
-      Array [
+      [
         "action: action multi 1 with: @globalAction",
         "action: action multi 2 with: @globalAction",
       ]
@@ -200,7 +200,7 @@ describe('actionExecution in global page', () => {
     );
 
     expect(result).toMatchInlineSnapshot(`
-      Array [
+      [
         "action: action multi 1 with: @globalAction",
         "action: action multi 2 with: @globalAction",
         "action: action multi 2 with: @globalAction",
@@ -263,7 +263,7 @@ describe('actionExecution in global page', () => {
     );
 
     expect(result).toMatchInlineSnapshot(`
-      Array [
+      [
         "action: action resume 2 with: @globalAction",
       ]
     `);
@@ -376,7 +376,7 @@ describe('actionExecution in global page', () => {
     );
 
     expect(result).toMatchInlineSnapshot(`
-      Array [
+      [
         "action: action1 with: @globalAction",
         "@globalAction",
       ]
@@ -419,7 +419,7 @@ describe('actionExecution in actions', () => {
     await instance.run(action2, 2);
 
     expect(result).toMatchInlineSnapshot(`
-      Array [
+      [
         "action: action1 with: 1",
         "action: action2 with: 2",
       ]
@@ -430,7 +430,7 @@ describe('actionExecution in actions', () => {
     await instance.run(action2, 5);
 
     expect(result).toMatchInlineSnapshot(`
-      Array [
+      [
         "action: action1 with: 1",
         "action: action2 with: 2",
         "action: action1 with: 3",
@@ -481,7 +481,7 @@ describe('actionExecution in actions', () => {
     // Выполняем экшены по одному разу, дальше из-за одинакового conditions, скипаем
 
     expect(result).toMatchInlineSnapshot(`
-      Array [
+      [
         "action: action 2 with: 2",
         "action: action 2 with: 3",
       ]
@@ -540,7 +540,7 @@ describe('action conditions', () => {
     // Выполняем экшены по одному разу, дальше из-за одинакового conditions, скипаем
 
     expect(result).toMatchInlineSnapshot(`
-      Array [
+      [
         "action: action 1 with: @globalAction",
         "action: action 2 with: @globalAction",
       ]
@@ -604,7 +604,7 @@ describe('action conditions', () => {
     await instance.run(action4);
 
     expect(result).toMatchInlineSnapshot(`
-      Array [
+      [
         "action: action 3 with: undefined",
         "action: action 4 with: undefined",
       ]

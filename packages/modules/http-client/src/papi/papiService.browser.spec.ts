@@ -125,13 +125,13 @@ describe('PapiService, browser', () => {
     const request = (fetch as any).mock.calls[0];
 
     expect(request).toMatchInlineSnapshot(`
-      Array [
+      [
         "/testApp/papi/fake?foo=bar",
-        Object {
+        {
           "agent": undefined,
           "body": undefined,
           "credentials": "same-origin",
-          "headers": Object {
+          "headers": {
             "Content-type": "application/x-www-form-urlencoded",
             "X-real-ip": undefined,
           },
@@ -143,8 +143,8 @@ describe('PapiService, browser', () => {
     `);
 
     expect(response).toMatchInlineSnapshot(`
-      Object {
-        "headers": Object {
+      {
+        "headers": {
           "content-type": "application/json",
         },
         "payload": "payload",
@@ -169,13 +169,13 @@ describe('PapiService, browser', () => {
     const request = (fetch as any).mock.calls[0];
 
     expect(request).toMatchInlineSnapshot(`
-      Array [
+      [
         "/testApp/papi/fake",
-        Object {
+        {
           "agent": undefined,
           "body": "foo=bar",
           "credentials": "same-origin",
-          "headers": Object {
+          "headers": {
             "Content-type": "application/x-www-form-urlencoded",
             "X-real-ip": undefined,
           },
@@ -187,8 +187,8 @@ describe('PapiService, browser', () => {
     `);
 
     expect(response).toMatchInlineSnapshot(`
-      Object {
-        "headers": Object {
+      {
+        "headers": {
           "content-type": "application/json",
         },
         "payload": "payload",
@@ -236,10 +236,10 @@ describe('PapiService, browser', () => {
       thirdError = e;
     }
 
-    expect(firstError.message).toMatchInlineSnapshot(`"{\\"payload\\":\\"payload\\"}"`);
+    expect(firstError.message).toMatchInlineSnapshot(`"{"payload":"payload"}"`);
     expect(firstError.url).toMatchInlineSnapshot(`"/testApp/papi/fake"`);
 
-    expect(secondError.message).toMatchInlineSnapshot(`"{\\"resultCode\\":\\"OK\\"}"`);
+    expect(secondError.message).toMatchInlineSnapshot(`"{"resultCode":"OK"}"`);
     expect(secondError.url).toMatchInlineSnapshot(`"/testApp/papi/fake"`);
 
     expect(thirdError.message).toMatchInlineSnapshot(`"Server error"`);

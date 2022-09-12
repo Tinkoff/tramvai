@@ -22,7 +22,7 @@
   "peerDependencies": {
     "@tinkoff/router": "0.0.0-stub",
     "@tramvai/cli": "0.0.0-stub",
-    "tslib": "^2.0.3"
+    "tslib": "^2.4.0"
   },
   "license": "Apache-2.0"
 }

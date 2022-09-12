@@ -6,7 +6,7 @@
     "./lib/server.js": "./lib/browser.js",
     "./lib/server/child/singletonProviders.js": "./lib/browser/child/singletonProviders.js",
     "./lib/server/child/providers.js": "./lib/browser/child/providers.js",
-    "./lib/server.es.js": "./lib/browser.js"
+    "./lib/server.es.js": "./lib/server.browser.js"
   },
   "main": "lib/server.js",
   "typings": "lib/server.d.ts",
@@ -48,7 +48,7 @@
     "react": ">=16.14.0",
     "react-dom": ">=16.14.0",
     "object-assign": "^4.1.1",
-    "tslib": "^2.0.3"
+    "tslib": "^2.4.0"
   },
   "module": "lib/server.es.js"
 }

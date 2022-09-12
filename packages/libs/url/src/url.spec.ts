@@ -158,14 +158,14 @@ describe('url', () => {
 
     it('should return object if parse is success', () => {
       expect(fromPath('/')).toMatchInlineSnapshot(`
-        Object {
+        {
           "hash": "",
           "pathname": "/",
           "search": "",
         }
       `);
       expect(fromPath('/test/?a=1&b=2#hash')).toMatchInlineSnapshot(`
-        Object {
+        {
           "hash": "",
           "pathname": "/test/",
           "search": "?a=1&b=2#hash",

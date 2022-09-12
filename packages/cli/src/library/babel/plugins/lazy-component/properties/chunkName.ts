@@ -158,11 +158,8 @@ export const chunkNameMethod: PropertyFactory = ({ types: t }) => {
       return t.stringLiteral(webpackChunkName);
     }
 
-    let chunkNameNode:
-      | CallExpression
-      | TemplateLiteral
-      | StringLiteral
-      | BinaryExpression = generateChunkNameNode(importPath, getChunkNamePrefix(webpackChunkName));
+    let chunkNameNode: CallExpression | TemplateLiteral | StringLiteral | BinaryExpression =
+      generateChunkNameNode(importPath, getChunkNamePrefix(webpackChunkName));
 
     if (t.isTemplateLiteral(chunkNameNode)) {
       webpackChunkName = chunkNameFromTemplateLiteral(chunkNameNode);

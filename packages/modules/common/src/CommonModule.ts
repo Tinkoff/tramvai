@@ -71,7 +71,7 @@ import { ExecutionContextManager } from './executionContext/executionContextMana
       provide: BUNDLE_MANAGER_TOKEN,
       scope: Scope.SINGLETON,
       useFactory: ({ additionalBundleList, ...bundleManagerDeps }) => {
-        ((additionalBundleList as any) as Bundle[])?.forEach((bundles) => {
+        (additionalBundleList as any as Bundle[])?.forEach((bundles) => {
           each((bundle, name) => {
             const bundleAlreadyExists = name in bundleManagerDeps.bundleList;
 

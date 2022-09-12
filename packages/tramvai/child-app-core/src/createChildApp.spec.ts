@@ -1,3 +1,3 @@
 describe('child app core', () => {
-  it('should ', async () => {});
+  it('should', async () => {});
 });

@@ -61,7 +61,7 @@ export async function run() {
     fixGitRepo();
   }
 
-  const isValid = await depscheck((args as any) as Config);
+  const isValid = await depscheck(args as any as Config);
   if (!isValid) {
     logger.fatal('Deps check failed (see log)');
     throw new Error();

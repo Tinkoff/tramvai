@@ -213,7 +213,7 @@ describe('errorBoundary', () => {
       const documentContent = parsed.outerHTML;
 
       expect(documentContent).toMatchInlineSnapshot(
-        `"<html lang=\\"ru\\"><head><title>Error Global Error at /global-error/</title></head><body><h1>Root Error Boundary</h1></body></html>"`
+        `"<html lang="ru"><head><title>Error Global Error at /global-error/</title></head><body><h1>Root Error Boundary</h1></body></html>"`
       );
     });
 
@@ -225,7 +225,7 @@ describe('errorBoundary', () => {
       });
 
       expect(documentContent).toMatchInlineSnapshot(
-        `"<html lang=\\"ru\\"><head><title>Error &lt;!-- --&gt;Global Error&lt;!-- --&gt; at &lt;!-- --&gt;/global-error/</title></head><body><h1>Root Error Boundary</h1></body></html>"`
+        `"<html lang="ru"><head><title>Error &lt;!-- --&gt;Global Error&lt;!-- --&gt; at &lt;!-- --&gt;/global-error/</title></head><body><h1>Root Error Boundary</h1></body></html>"`
       );
     });
   });

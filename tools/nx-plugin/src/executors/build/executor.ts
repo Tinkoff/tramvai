@@ -37,6 +37,7 @@ export default async function runExecutor(options: BuildExecutorSchema, context:
     if (
       !channel.stderr.includes('Generated an empty chunk') &&
       !channel.stderr.includes('ROLLUP_CHUNK_URL_') &&
+      !channel.stderr.includes('DeprecationWarning') &&
       !channel.stderr.includes('but never used')
     ) {
       console.error(`failed ${projectName} log:\n`);

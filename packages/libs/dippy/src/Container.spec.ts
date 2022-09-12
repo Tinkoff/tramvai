@@ -1,4 +1,4 @@
-/* eslint-disable jest/no-try-expect */
+/* eslint-disable jest/no-conditional-expect */
 import { Container } from './Container';
 import { createToken, optional } from './createToken/createToken';
 
@@ -376,20 +376,20 @@ describe('DI Container', () => {
     it('не верный формат provider', () => {
       const container = new Container();
       expect(() => container.register(undefined as any)).toThrowErrorMatchingInlineSnapshot(
-        `"Invalid provider. Check what is passed to the DI. Current value is not a provider: \\"undefined\\""`
+        `"Invalid provider. Check what is passed to the DI. Current value is not a provider: "undefined""`
       );
 
       expect(() =>
         container.register({ provide: undefined, useValue: 1 as any })
       ).toThrowErrorMatchingInlineSnapshot(
-        `"Invalid provider. Check what is passed to the DI. Current value is not a provider: {\\"provide\\":\\"undefined\\",\\"useValue\\":1}"`
+        `"Invalid provider. Check what is passed to the DI. Current value is not a provider: {"provide":"undefined","useValue":1}"`
       );
 
       expect(() =>
         // @ts-ignore
         container.register({ provide: 'testio' })
       ).toThrowErrorMatchingInlineSnapshot(
-        `"Invalid provider. Check what is passed to the DI. Current value is not a provider: {\\"provide\\":\\"testio\\"}"`
+        `"Invalid provider. Check what is passed to the DI. Current value is not a provider: {"provide":"testio"}"`
       );
 
       try {
@@ -452,7 +452,7 @@ describe('DI Container', () => {
       expect(() =>
         // @ts-ignore
         container.get({ token: 'Token multi', optional: true })
-      ).toThrowErrorMatchingInlineSnapshot(`"Token not found \\"aa\\" at \\"Token multi\\""`);
+      ).toThrowErrorMatchingInlineSnapshot(`"Token not found "aa" at "Token multi""`);
     });
 
     it('optional with deep multi error deps', () => {
@@ -483,7 +483,7 @@ describe('DI Container', () => {
       expect(() =>
         container.get({ token: 'Multi first', optional: true })
       ).toThrowErrorMatchingInlineSnapshot(
-        `"Token not found \\"token not found\\" at \\"Multi error\\" < Multi second < Multi first"`
+        `"Token not found "token not found" at "Multi error" < Multi second < Multi first"`
       );
     });
 
@@ -583,4 +583,4 @@ describe('DI Container', () => {
     });
   });
 });
-/* eslint-enable jest/no-try-expect */
+/* eslint-enable jest/no-conditional-expect */

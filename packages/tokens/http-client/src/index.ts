@@ -8,9 +8,8 @@ export type HttpClientFactoryOptions = TinkoffRequestOptions & { name: string };
  * @description
  * Factory of HTTP clients with minimal base settings
  */
-export const HTTP_CLIENT_FACTORY = createToken<(options: HttpClientFactoryOptions) => HttpClient>(
-  'HTTP_CLIENT_FACTORY'
-);
+export const HTTP_CLIENT_FACTORY =
+  createToken<(options: HttpClientFactoryOptions) => HttpClient>('HTTP_CLIENT_FACTORY');
 
 /**
  * @description

@@ -29,7 +29,7 @@
     "@tramvai/module-common": "0.0.0-stub",
     "@tramvai/state": "0.0.0-stub",
     "@tramvai/tokens-http-client": "0.0.0-stub",
-    "tslib": "^2.0.3"
+    "tslib": "^2.4.0"
   },
   "module": "lib/server.es.js",
   "license": "Apache-2.0"

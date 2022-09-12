@@ -256,5 +256,5 @@ function applyApiMocks({
     (readFile as jest.Mock).mockReturnValueOnce(file.source);
   }
 
-  ((glob as any) as jest.Mock).mockReturnValueOnce(Promise.resolve(filenames));
+  (glob as any as jest.Mock).mockReturnValueOnce(Promise.resolve(filenames));
 }

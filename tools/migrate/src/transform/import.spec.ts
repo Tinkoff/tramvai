@@ -19,7 +19,7 @@ console.log('aaa')
 
     expect(parsed.toSource()).toMatchInlineSnapshot(`
       "
-      import { testComponent } from \\"@tramvai/test\\";
+      import { testComponent } from "@tramvai/test";
       console.log('aaa')
       "
     `);
@@ -103,7 +103,7 @@ import { bar } from "@tramvai/bar";`);
 
     removeImport.call(parsed, '@tramvai/bar');
 
-    expect(parsed.toSource()).toMatchInlineSnapshot(`"import { foo } from \\"@tramvai/foo\\";"`);
+    expect(parsed.toSource()).toMatchInlineSnapshot(`"import { foo } from "@tramvai/foo";"`);
   });
 
   it('should find import', async () => {
@@ -132,8 +132,8 @@ import { BAR } from '@tramvai/tokens';`);
     renameImportSource.call(parsed, '@tramvai/tokens', '@tramvai/tokens-common');
 
     expect(parsed.toSource()).toMatchInlineSnapshot(`
-      "import { FOO } from \\"@tramvai/tokens-common\\";
-      import { BAR } from \\"@tramvai/tokens-common\\";"
+      "import { FOO } from "@tramvai/tokens-common";
+      import { BAR } from "@tramvai/tokens-common";"
     `);
   });
 
@@ -144,8 +144,8 @@ import { BAR } from '@tramvai/tokens/lib/bar';`);
     renameImportSource.call(parsed, '@tramvai/tokens', '@tramvai/tokens-common');
 
     expect(parsed.toSource()).toMatchInlineSnapshot(`
-      "import { FOO } from \\"@tramvai/tokens-common/lib/foo\\";
-      import { BAR } from \\"@tramvai/tokens-common/lib/bar\\";"
+      "import { FOO } from "@tramvai/tokens-common/lib/foo";
+      import { BAR } from "@tramvai/tokens-common/lib/bar";"
     `);
   });
 });

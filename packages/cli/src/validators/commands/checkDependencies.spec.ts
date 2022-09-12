@@ -62,7 +62,7 @@ describe('validators/checkDependencies', () => {
     });
 
     expect(await checkDependencies(context)).toMatchInlineSnapshot(`
-      Object {
+      {
         "message": "
       Некоторые важные пакеты необходимые для работы @tramvai/cli дублируются,
       что может привести к неочевидным багам и проблемам из-за особенностей commonjs по поиску импортируемых модулей.
@@ -122,7 +122,7 @@ describe('validators/checkDependencies', () => {
     });
 
     expect(await checkDependencies(context)).toMatchInlineSnapshot(`
-      Object {
+      {
         "message": "
       Некоторые важные пакеты необходимые для работы @tramvai/cli дублируются,
       что может привести к неочевидным багам и проблемам из-за особенностей commonjs по поиску импортируемых модулей.

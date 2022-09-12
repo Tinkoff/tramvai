@@ -15,9 +15,7 @@ export type Package = {
 export interface CollectorInterface {
   name: string;
 
-  collect(
-    config?: Record<string, any>
-  ): Promise<{
+  collect(config?: Record<string, any>): Promise<{
     allPkgs: Package[];
     affectedPkgs: Package[];
   }>;

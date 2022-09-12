@@ -9,10 +9,10 @@ import { authConditionFactory } from './test-utils/authCondition.mock';
 import { ExecutionContextManager } from '../executionContext/executionContextManager';
 
 const contextMock = {};
-const logger = ((() => ({
+const logger = (() => ({
   warn: noop,
   error: noop,
-})) as any) as typeof LOGGER_TOKEN;
+})) as any as typeof LOGGER_TOKEN;
 
 describe('action module integration tests', () => {
   describe('Восстановление состояния между клиентом/сервером', () => {

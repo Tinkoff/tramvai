@@ -17,6 +17,8 @@ const config: Config.InitialOptions = {
     '\\.(css|CSS)$': require.resolve('identity-obj-proxy'),
     '\\.(svg|png)$': require.resolve('./emptyModule.js'),
   },
+
+  setupFiles: [require.resolve('./jsdom-fixes')],
 };
 
 module.exports = config;

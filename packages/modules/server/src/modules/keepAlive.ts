@@ -27,19 +27,21 @@ import { SERVER_TOKEN } from '@tramvai/tokens-server';
     }),
     provide({
       provide: commandLineListTokens.init,
-      useFactory: ({
-        server,
-        envManager,
-      }: {
-        server: ExtractDependencyType<typeof SERVER_TOKEN>;
-        envManager: ExtractDependencyType<typeof ENV_MANAGER_TOKEN>;
-      }) => () => {
-        const externalKeepAliveTimeout = envManager.get('NODE_KEEPALIVE_TIMEOUT');
-        if (externalKeepAliveTimeout !== 'undefined') {
-          // eslint-disable-next-line no-param-reassign
-          server.keepAliveTimeout = Number(externalKeepAliveTimeout);
-        }
-      },
+      useFactory:
+        ({
+          server,
+          envManager,
+        }: {
+          server: ExtractDependencyType<typeof SERVER_TOKEN>;
+          envManager: ExtractDependencyType<typeof ENV_MANAGER_TOKEN>;
+        }) =>
+        () => {
+          const externalKeepAliveTimeout = envManager.get('NODE_KEEPALIVE_TIMEOUT');
+          if (externalKeepAliveTimeout !== 'undefined') {
+            // eslint-disable-next-line no-param-reassign
+            server.keepAliveTimeout = Number(externalKeepAliveTimeout);
+          }
+        },
       multi: true,
       deps: { server: SERVER_TOKEN, envManager: ENV_MANAGER_TOKEN },
     }),

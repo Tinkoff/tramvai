@@ -1,7 +1,6 @@
 /**
  * @jest-environment jsdom
  */
-import React from 'react';
 import { testComponent } from '@tramvai/test-react';
 import { testChildApp } from './testChildApp';
 import BaseChildApp, { CHILD_APP_BASE_TOKEN } from './__fixtures__/base';

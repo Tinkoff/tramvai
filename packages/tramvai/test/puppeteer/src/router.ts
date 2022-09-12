@@ -10,14 +10,14 @@ export const wrapRouter = (page: Page) => {
   const navigate = async (options: NavigateOptions) => {
     return page.evaluate((navigateOptions: NavigateOptions) => {
       return (window as any).contextExternal.di.get('router pageService').navigate(navigateOptions);
-    }, (options as unknown) as Serializable);
+    }, options as unknown as Serializable);
   };
 
   const navigateThenWaitForReload = async (options: NavigateOptions) => {
     return Promise.all([
       page.evaluate((navigateOptions: NavigateOptions) => {
         (window as any).contextExternal.di.get('router pageService').navigate(navigateOptions);
-      }, (options as unknown) as Serializable),
+      }, options as unknown as Serializable),
 
       page.waitForNavigation(),
     ]);
@@ -28,7 +28,7 @@ export const wrapRouter = (page: Page) => {
       return (window as any).contextExternal.di
         .get('router pageService')
         .updateCurrentRoute(navigateOptions);
-    }, (options as unknown) as Serializable);
+    }, options as unknown as Serializable);
   };
 
   return {

@@ -1,15 +1,18 @@
-import { advanceTo } from 'jest-date-mock';
-import spyMatchers from 'expect/build/spyMatchers';
+import matchers from 'expect/build/matchers';
 import { Logger } from './logger';
 import { LEVELS } from './constants';
 
-advanceTo(0);
+jest.setSystemTime(0);
 
 expect.extend({
-  toMatchLog(received, arg, name = '') {
-    return spyMatchers.toHaveBeenLastCalledWith.call(
+  toMatchLog(received: jest.Mock, arg, name = '') {
+    const mockCalls = received.mock.calls;
+    const lastMockCalls = mockCalls[mockCalls.length - 1];
+
+    return matchers.toEqual.call(
+      // @ts-ignore
       this,
-      received,
+      lastMockCalls?.[0],
       expect.objectContaining({
         name,
         args: [arg],
@@ -22,7 +25,7 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace jest {
     interface Matchers<R> {
-      toMatchLog(arg, name?): R;
+      toMatchLog(arg: any, name?: string): R;
     }
   }
 }

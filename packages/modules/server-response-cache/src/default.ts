@@ -38,10 +38,12 @@ export const defaultSettingsProviders: Provider[] = [
   }),
   provide({
     provide: RESPONSE_CACHE_SHOULD_SET_TO_CACHE,
-    useFactory: ({ request }) => () => {
-      // use cookies from raw request instead of CookieManager to ignore any cookies that were set during request handling
-      return isEmpty(request.cookies);
-    },
+    useFactory:
+      ({ request }) =>
+      () => {
+        // use cookies from raw request instead of CookieManager to ignore any cookies that were set during request handling
+        return isEmpty(request.cookies);
+      },
     deps: {
       request: REQUEST,
     },

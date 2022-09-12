@@ -1,4 +1,5 @@
 import { renderToString } from 'react-dom/server';
+import type { ExtractDependencyType } from '@tinkoff/dippy';
 import type { DI_TOKEN } from '@tramvai/core';
 import type { CONTEXT_TOKEN } from '@tramvai/module-common';
 import type { EXTEND_RENDER, CUSTOM_RENDER } from '@tramvai/tokens-render';
@@ -10,7 +11,7 @@ import { renderReact } from '../react';
 export class ReactRenderServer {
   customRender: typeof CUSTOM_RENDER;
 
-  extendRender: typeof EXTEND_RENDER;
+  extendRender: ExtractDependencyType<typeof EXTEND_RENDER>;
 
   context: typeof CONTEXT_TOKEN;
 

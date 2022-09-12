@@ -1,3 +1,4 @@
+import type { AbortController } from 'node-abort-controller';
 import noop from '@tinkoff/utils/function/noop';
 import { isSilentError } from '@tinkoff/errors';
 import type { CommandLineDescription, CommandLine, CommandLines, Command } from '@tramvai/core';
@@ -148,7 +149,8 @@ export class CommandLineRunner implements CommandLine {
 
   private instanceExecute(instance: any, line: any, di: Container) {
     if (!(instance instanceof Function)) {
-      const error = new TypeError(`Expected function in line processing "commandLineListTokens.${line.toString()}", received "${instance}".
+      const error =
+        new TypeError(`Expected function in line processing "commandLineListTokens.${line.toString()}", received "${instance}".
       Check that all commandLineListTokens subscribers return functions`);
 
       if (process.env.NODE_ENV !== 'production') {

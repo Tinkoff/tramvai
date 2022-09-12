@@ -9,7 +9,7 @@ describe('isModernLib', () => {
   function testLibsMatching(target: 'find-modern-libs' | 'find-legacy-libs') {
     const { regexp, except } = rules[target];
 
-    describe(target, () => {
+    describe(`${target}`, () => {
       it('Match target packages', () => {
         modernLibs.forEach((lib) => {
           expect(

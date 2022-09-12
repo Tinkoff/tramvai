@@ -17,7 +17,6 @@ const config: Config.InitialOptions = {
   testEnvironment: require.resolve('./node-environment'),
   watchPlugins: [require.resolve('./watchPlugin')],
   setupFilesAfterEnv: [require.resolve('./setupCliMock')],
-  timers: 'real',
 };
 
 module.exports = config;

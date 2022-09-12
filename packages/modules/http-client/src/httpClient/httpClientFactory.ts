@@ -93,7 +93,8 @@ export const httpClientFactory = ({
             failureThreshold: 75,
             minimumFailureCount: 10,
           },
-          signal: commandLineExecutionContext?.()?.abortSignal,
+          // TODO: remove any after [resolving](https://github.com/southpolesteve/node-abort-controller/issues/31)
+          signal: commandLineExecutionContext?.()?.abortSignal as any,
           ...environmentDependentOptions,
         },
         defaultOptions ?? {}

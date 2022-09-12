@@ -35,31 +35,33 @@ export * from '@tramvai/tokens-metrics';
     },
     {
       provide: commandLineListTokens.init,
-      useFactory: ({ logger, pageService }) => () => {
-        window.addEventListener('load', () => {
-          setTimeout(() => {
-            const timings = browserTimings();
+      useFactory:
+        ({ logger, pageService }) =>
+        () => {
+          window.addEventListener('load', () => {
+            setTimeout(() => {
+              const timings = browserTimings();
 
-            const log = logger({
-              name: 'metrics:perf',
-              defaults: {
-                remote: {
-                  emitLevels: {
-                    info: true,
+              const log = logger({
+                name: 'metrics:perf',
+                defaults: {
+                  remote: {
+                    emitLevels: {
+                      info: true,
+                    },
                   },
                 },
-              },
-            });
+              });
 
-            log.info({
-              ...timings,
-              event: 'perf-timings',
-              deviceType: navigator.userAgent?.indexOf('Mobi') !== -1 ? 'mobile' : 'desktop',
-              urlMask: pageService.getCurrentRoute()?.path,
-            });
-          }, 0);
-        });
-      },
+              log.info({
+                ...timings,
+                event: 'perf-timings',
+                deviceType: navigator.userAgent?.indexOf('Mobi') !== -1 ? 'mobile' : 'desktop',
+                urlMask: pageService.getCurrentRoute()?.path,
+              });
+            }, 0);
+          });
+        },
       multi: true,
       deps: {
         logger: LOGGER_TOKEN,

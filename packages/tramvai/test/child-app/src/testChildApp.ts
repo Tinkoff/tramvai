@@ -1,14 +1,16 @@
-import { createTestApp, testApp } from '@tramvai/test-unit';
-import { provide } from '@tramvai/core';
 import type { ChildApp } from '@tramvai/child-app-core';
-import { CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN } from '@tramvai/child-app-core';
-import { CHILD_APP_RESOLVE_BASE_URL_TOKEN } from '@tramvai/child-app-core';
-import { CHILD_APP_RESOLUTION_CONFIGS_TOKEN } from '@tramvai/child-app-core';
-import { CHILD_APP_DI_MANAGER_TOKEN } from '@tramvai/child-app-core';
-import { CHILD_APP_RESOLVE_CONFIG_TOKEN } from '@tramvai/child-app-core';
-import { CHILD_APP_LOADER_TOKEN } from '@tramvai/child-app-core';
-import { CHILD_APP_INTERNAL_RENDER_TOKEN } from '@tramvai/child-app-core';
+import {
+  CHILD_APP_DI_MANAGER_TOKEN,
+  CHILD_APP_INTERNAL_RENDER_TOKEN,
+  CHILD_APP_LOADER_TOKEN,
+  CHILD_APP_RESOLUTION_CONFIGS_TOKEN,
+  CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN,
+  CHILD_APP_RESOLVE_BASE_URL_TOKEN,
+  CHILD_APP_RESOLVE_CONFIG_TOKEN,
+} from '@tramvai/child-app-core';
+import { provide } from '@tramvai/core';
 import { ChildAppModule } from '@tramvai/module-child-app';
+import { createTestApp, testApp } from '@tramvai/test-unit';
 
 // mock module federation internal stuff
 // @ts-ignore

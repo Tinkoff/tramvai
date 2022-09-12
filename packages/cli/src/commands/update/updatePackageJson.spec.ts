@@ -78,20 +78,20 @@ it('should update tramvai deps to latest versions', async () => {
   await updatePackageJson(LATEST_TRAMVAI_VERSION);
 
   expect(mockFsWrite.mock.calls[0]).toMatchInlineSnapshot(`
-    Array [
+    [
       "package.json",
       "{
-      \\"dependencies\\": {
-        \\"@tramvai/core\\": \\"1.115.6\\",
-        \\"@tramvai/module-common\\": \\"1.115.6\\",
-        \\"@tinkoff/router\\": \\"0.4.3\\",
-        \\"@tinkoff/url\\": \\"0.4.1\\"
+      "dependencies": {
+        "@tramvai/core": "1.115.6",
+        "@tramvai/module-common": "1.115.6",
+        "@tinkoff/router": "0.4.3",
+        "@tinkoff/url": "0.4.1"
       },
-      \\"devDependencies\\": {
-        \\"@tramvai/cli\\": \\"1.115.6\\"
+      "devDependencies": {
+        "@tramvai/cli": "1.115.6"
       },
-      \\"peerDependencies\\": {
-        \\"@tinkoff/dippy\\": \\"0.7.44\\"
+      "peerDependencies": {
+        "@tinkoff/dippy": "0.7.44"
       }
     }",
     ]

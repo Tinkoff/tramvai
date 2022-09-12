@@ -61,58 +61,66 @@ export const isFalse: Validator = (value: string) => {
   return 'value is not a false';
 };
 
-export const isOneOf = (values: string[] = []): Validator => (value: string) => {
-  if (!value) {
-    return 'value should not be empty';
-  }
-
-  if (values.indexOf(value) !== -1) {
-    return true;
-  }
-
-  return 'value is not in list';
-};
-
-export const startsWith = (prefix: string): Validator => (value: string) => {
-  if (!value) {
-    return 'value should not be empty';
-  }
-
-  if (value.startsWith(prefix)) {
-    return true;
-  }
-
-  return `value should starts with ${prefix}`;
-};
-
-export const endsWith = (postfix: string): Validator => (value: string) => {
-  if (!value) {
-    return 'value should not be empty';
-  }
-
-  if (value.endsWith(postfix)) {
-    return true;
-  }
-
-  return `value should ends with ${postfix}`;
-};
-
-export const combineValidators = (validators: Validator[]): Validator => (value) => {
-  const result = validators.reduce((acc: any, validator) => {
-    const currentValidatorResult = validator(value);
-
-    if (utilsIsString(currentValidatorResult)) {
-      // В текущем валидаторе вылезла ошибка
-      return utilsIsString(acc)
-        ? // В предыдущих валидаторах были ошибки, сохраним все тексты
-          `${acc}; ${currentValidatorResult}`
-        : // В предыдущих валидаторах не было ошибок, вернём текст текущей
-          currentValidatorResult;
+export const isOneOf =
+  (values: string[] = []): Validator =>
+  (value: string) => {
+    if (!value) {
+      return 'value should not be empty';
     }
 
-    // В текущем валидаторе нет ошибки
-    return utilsIsString(acc) ? acc : acc && currentValidatorResult;
-  }, true);
+    if (values.indexOf(value) !== -1) {
+      return true;
+    }
 
-  return result;
-};
+    return 'value is not in list';
+  };
+
+export const startsWith =
+  (prefix: string): Validator =>
+  (value: string) => {
+    if (!value) {
+      return 'value should not be empty';
+    }
+
+    if (value.startsWith(prefix)) {
+      return true;
+    }
+
+    return `value should starts with ${prefix}`;
+  };
+
+export const endsWith =
+  (postfix: string): Validator =>
+  (value: string) => {
+    if (!value) {
+      return 'value should not be empty';
+    }
+
+    if (value.endsWith(postfix)) {
+      return true;
+    }
+
+    return `value should ends with ${postfix}`;
+  };
+
+export const combineValidators =
+  (validators: Validator[]): Validator =>
+  (value) => {
+    const result = validators.reduce((acc: any, validator) => {
+      const currentValidatorResult = validator(value);
+
+      if (utilsIsString(currentValidatorResult)) {
+        // В текущем валидаторе вылезла ошибка
+        return utilsIsString(acc)
+          ? // В предыдущих валидаторах были ошибки, сохраним все тексты
+            `${acc}; ${currentValidatorResult}`
+          : // В предыдущих валидаторах не было ошибок, вернём текст текущей
+            currentValidatorResult;
+      }
+
+      // В текущем валидаторе нет ошибки
+      return utilsIsString(acc) ? acc : acc && currentValidatorResult;
+    }, true);
+
+    return result;
+  };

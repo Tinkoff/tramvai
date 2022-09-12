@@ -30,32 +30,32 @@ Commands:
 `;
 
 exports[`enmasse test module platform build module 1`] = `
-Array [
-  Object {
+[
+  {
     "extension": ".js",
     "name": "module_client.js",
     "path": "dist/modules/module/prerelease/module_client.js",
     "type": "file",
   },
-  Object {
+  {
     "extension": ".css",
     "name": "module_server.css",
     "path": "dist/modules/module/prerelease/module_server.css",
     "type": "file",
   },
-  Object {
+  {
     "extension": ".js",
     "name": "module_server.js",
     "path": "dist/modules/module/prerelease/module_server.js",
     "type": "file",
   },
-  Object {
+  {
     "extension": ".css",
     "name": "module.css",
     "path": "dist/modules/module/prerelease/module.css",
     "type": "file",
   },
-  Object {
+  {
     "extension": ".json",
     "name": "stats.json",
     "path": "dist/modules/module/prerelease/stats.json",
@@ -94,32 +94,32 @@ Commands:
 `;
 
 exports[`enmasse test package platform build package 1`] = `
-Array [
-  Object {
+[
+  {
     "extension": ".ts",
     "name": "browser.d.ts",
     "path": "dist/browser.d.ts",
     "type": "file",
   },
-  Object {
+  {
     "extension": ".js",
     "name": "browser.js",
     "path": "dist/browser.js",
     "type": "file",
   },
-  Object {
+  {
     "extension": ".ts",
     "name": "index.d.ts",
     "path": "dist/index.d.ts",
     "type": "file",
   },
-  Object {
+  {
     "extension": ".js",
     "name": "index.es.js",
     "path": "dist/index.es.js",
     "type": "file",
   },
-  Object {
+  {
     "extension": ".js",
     "name": "index.js",
     "path": "dist/index.js",
@@ -158,104 +158,104 @@ Commands:
 `;
 
 exports[`enmasse test react-app platform build react-app 1`] = `
-Array [
-  Object {
+[
+  {
     "extension": ".css",
     "name": "platform.css",
     "path": "dist/client/platform.css",
     "type": "file",
   },
-  Object {
+  {
     "extension": ".js",
     "name": "platform.js",
     "path": "dist/client/platform.js",
     "type": "file",
   },
-  Object {
+  {
     "extension": ".map",
     "name": "platform.js.map",
     "path": "dist/client/platform.js.map",
     "type": "file",
   },
-  Object {
+  {
     "extension": ".js",
     "name": "react.js",
     "path": "dist/client/react.js",
     "type": "file",
   },
-  Object {
+  {
     "extension": ".map",
     "name": "react.js.map",
     "path": "dist/client/react.js.map",
     "type": "file",
   },
-  Object {
+  {
     "extension": ".json",
     "name": "stats",
     "path": "dist/client/stats",
     "type": "file",
   },
-  Object {
+  {
     "extension": ".js",
     "name": "tinkoff-examples_react-app_src_bundles_first_ts.chunk.js",
     "path": "dist/client/tinkoff-examples_react-app_src_bundles_first_ts.chunk.js",
     "type": "file",
   },
-  Object {
+  {
     "extension": ".map",
     "name": "tinkoff-examples_react-app_src_bundles_first_ts.chunk.js.map",
     "path": "dist/client/tinkoff-examples_react-app_src_bundles_first_ts.chunk.js.map",
     "type": "file",
   },
-  Object {
+  {
     "extension": ".js",
     "name": "tinkoff-examples_react-app_src_bundles_main_ts.chunk.js",
     "path": "dist/client/tinkoff-examples_react-app_src_bundles_main_ts.chunk.js",
     "type": "file",
   },
-  Object {
+  {
     "extension": ".map",
     "name": "tinkoff-examples_react-app_src_bundles_main_ts.chunk.js.map",
     "path": "dist/client/tinkoff-examples_react-app_src_bundles_main_ts.chunk.js.map",
     "type": "file",
   },
-  Object {
+  {
     "extension": ".js",
     "name": "tinkoff-examples_react-app_src_bundles_second_ts.chunk.js",
     "path": "dist/client/tinkoff-examples_react-app_src_bundles_second_ts.chunk.js",
     "type": "file",
   },
-  Object {
+  {
     "extension": ".map",
     "name": "tinkoff-examples_react-app_src_bundles_second_ts.chunk.js.map",
     "path": "dist/client/tinkoff-examples_react-app_src_bundles_second_ts.chunk.js.map",
     "type": "file",
   },
-  Object {
+  {
     "extension": ".js",
     "name": "tinkoff-examples_react-app_src_bundles_third_ts.chunk.js",
     "path": "dist/client/tinkoff-examples_react-app_src_bundles_third_ts.chunk.js",
     "type": "file",
   },
-  Object {
+  {
     "extension": ".map",
     "name": "tinkoff-examples_react-app_src_bundles_third_ts.chunk.js.map",
     "path": "dist/client/tinkoff-examples_react-app_src_bundles_third_ts.chunk.js.map",
     "type": "file",
   },
-  Object {
+  {
     "extension": ".js",
     "name": "server",
     "path": "dist/server/server",
     "type": "file",
   },
-  Object {
+  {
     "extension": ".css",
     "name": "server.css",
     "path": "dist/server/server.css",
     "type": "file",
   },
-  Object {
+  {
     "extension": ".json",
     "name": "stats",
     "path": "dist/server/stats",

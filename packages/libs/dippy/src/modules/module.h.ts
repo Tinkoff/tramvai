@@ -1,4 +1,4 @@
-import type { Provider, ProviderDeps } from '@tinkoff/dippy';
+import type { Provider, ProviderDeps } from '../Provider';
 import type { MODULE_PARAMETERS } from './module';
 
 export interface ModuleOptions<Providers extends Provider[]> {
@@ -29,7 +29,7 @@ export interface ModuleClass {
   new (...args: any[]): any;
 }
 
-// ts не умеет мутировать тип для декораторов класса, поэтому добавляем Partial
+// ts can't mutate the type for class decorators, so we add Partial
 // https://github.com/microsoft/TypeScript/issues/4881
 export type ModuleType<Class extends ModuleClass = ModuleClass> = Class &
   Partial<ModuleSecretParameters>;

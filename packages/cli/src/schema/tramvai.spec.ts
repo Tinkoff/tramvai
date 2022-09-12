@@ -88,35 +88,35 @@ describe('JSON schema для tramvai.json', () => {
     expect(config).not.toEqual(originalConfig);
 
     expect(config).toMatchInlineSnapshot(`
-      Object {
-        "projects": Object {
-          "app": Object {
-            "commands": Object {
-              "build": Object {
-                "configurations": Object {
+      {
+        "projects": {
+          "app": {
+            "commands": {
+              "build": {
+                "configurations": {
                   "checkAsyncTs": false,
                   "commonChunk": true,
                   "commonChunkSplitNumber": 3,
                   "dedupe": "equality",
-                  "definePlugin": Object {
-                    "dev": Object {},
-                    "prod": Object {},
+                  "definePlugin": {
+                    "dev": {},
+                    "prod": {},
                   },
                   "enableFillActionNamePlugin": false,
-                  "experiments": Object {
-                    "minicss": Object {
+                  "experiments": {
+                    "minicss": {
                       "useImportModule": true,
                     },
-                    "transpilation": Object {
+                    "transpilation": {
                       "loader": "babel",
                     },
-                    "webpack": Object {
+                    "webpack": {
                       "backCompat": false,
                       "cacheUnaffected": true,
                     },
                   },
-                  "externals": Array [],
-                  "fileSystemPages": Object {
+                  "externals": [],
+                  "fileSystemPages": {
                     "enable": false,
                     "pagesDir": "pages",
                     "routesDir": "routes",
@@ -126,7 +126,7 @@ describe('JSON schema для tramvai.json', () => {
                   "granularChunksMinSize": 20000,
                   "granularChunksSplitNumber": 2,
                   "modern": true,
-                  "postcss": Object {
+                  "postcss": {
                     "config": "postcss.config",
                   },
                   "removeTypeofWindow": true,
@@ -135,7 +135,7 @@ describe('JSON schema для tramvai.json', () => {
                   "terserParallel": true,
                   "transpileOnlyModernLibs": true,
                 },
-                "options": Object {
+                "options": {
                   "outputClient": "dist/client",
                   "outputServer": "dist/server",
                   "outputStatic": "dist/static",
@@ -144,22 +144,22 @@ describe('JSON schema для tramvai.json', () => {
                   "serverApiDir": "src/api",
                 },
               },
-              "serve": Object {
-                "configurations": Object {
-                  "experiments": Object {
-                    "minicss": Object {
+              "serve": {
+                "configurations": {
+                  "experiments": {
+                    "minicss": {
                       "useImportModule": true,
                     },
                     "serverRunner": "process",
-                    "transpilation": Object {
+                    "transpilation": {
                       "loader": "babel",
                     },
-                    "webpack": Object {
+                    "webpack": {
                       "backCompat": false,
                       "cacheUnaffected": true,
                     },
                   },
-                  "externals": Array [
+                  "externals": [
                     "react$",
                     "react-dom",
                     "prop-types",
@@ -170,43 +170,43 @@ describe('JSON schema для tramvai.json', () => {
                   "modern": false,
                   "sourceMap": false,
                 },
-                "notifications": Object {},
+                "notifications": {},
               },
             },
             "name": "test-app",
             "root": "src/app",
             "type": "application",
           },
-          "module": Object {
-            "commands": Object {
-              "build": Object {
-                "configurations": Object {
+          "module": {
+            "commands": {
+              "build": {
+                "configurations": {
                   "dedupe": "equality",
-                  "definePlugin": Object {
-                    "dev": Object {},
-                    "prod": Object {},
+                  "definePlugin": {
+                    "dev": {},
+                    "prod": {},
                   },
                   "enableFillActionNamePlugin": false,
-                  "experiments": Object {
-                    "minicss": Object {
+                  "experiments": {
+                    "minicss": {
                       "useImportModule": true,
                     },
-                    "transpilation": Object {
+                    "transpilation": {
                       "loader": "babel",
                     },
-                    "webpack": Object {
+                    "webpack": {
                       "backCompat": false,
                       "cacheUnaffected": true,
                     },
                   },
-                  "fileSystemPages": Object {
+                  "fileSystemPages": {
                     "enable": false,
                     "pagesDir": "pages",
                     "routesDir": "routes",
                   },
                   "generateDataQaTag": false,
                   "modern": true,
-                  "postcss": Object {
+                  "postcss": {
                     "config": "postcss.config",
                     "cssLocalIdentName": "[hash:base64:5]",
                   },
@@ -216,20 +216,20 @@ describe('JSON schema для tramvai.json', () => {
                   "terserParallel": true,
                   "transpileOnlyModernLibs": true,
                 },
-                "options": Object {
+                "options": {
                   "output": "dist/modules",
                 },
               },
-              "serve": Object {
-                "configurations": Object {
-                  "experiments": Object {
-                    "minicss": Object {
+              "serve": {
+                "configurations": {
+                  "experiments": {
+                    "minicss": {
                       "useImportModule": true,
                     },
-                    "transpilation": Object {
+                    "transpilation": {
                       "loader": "babel",
                     },
-                    "webpack": Object {
+                    "webpack": {
                       "backCompat": false,
                       "cacheUnaffected": true,
                     },
@@ -238,7 +238,7 @@ describe('JSON schema для tramvai.json', () => {
                   "modern": false,
                   "sourceMap": false,
                 },
-                "notifications": Object {},
+                "notifications": {},
               },
             },
             "name": "test-module",

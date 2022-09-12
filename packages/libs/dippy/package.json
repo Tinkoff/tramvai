@@ -21,7 +21,7 @@
   },
   "gitHead": "8e826a214c87b188fc4d254cdd8f2a2b2c55f3a8",
   "dependencies": {
-    "tslib": "^2.0.3"
+    "tslib": "^2.4.0"
   },
   "module": "./lib/di.es.js",
   "license": "Apache-2.0"

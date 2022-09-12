@@ -186,11 +186,11 @@ export class Container {
 
   get<T extends TokenInterface<unknown>>(token: T): ExtractDependencyType<T>;
   get<T extends OptionalTokenDependency<unknown>>(obj: T): ExtractDependencyType<T['token']> | null;
-  get<T extends any>(obj: { token: T; optional: true; multi?: false }): T | null;
-  get<T extends any>(obj: { token: T; optional?: false; multi?: false }): T;
-  get<T extends any>(obj: { token: T; optional: true; multi: true }): T[] | null;
-  get<T extends any>(obj: { token: T; optional?: false; multi: true }): T[];
-  get<T extends any>(token: T): T;
+  get<T>(obj: { token: T; optional: true; multi?: false }): T | null;
+  get<T>(obj: { token: T; optional?: false; multi?: false }): T;
+  get<T>(obj: { token: T; optional: true; multi: true }): T[] | null;
+  get<T>(obj: { token: T; optional?: false; multi: true }): T[];
+  get<T>(token: T): T;
   get<T extends ProviderDep>(tokenORObject: T) {
     let token;
     let optional = false;

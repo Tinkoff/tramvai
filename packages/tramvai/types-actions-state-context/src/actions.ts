@@ -1,3 +1,4 @@
+import type { AbortController, AbortSignal } from 'node-abort-controller';
 import type { ProvideDepsIterator } from '@tinkoff/dippy';
 import type { ConsumerContext, Dispatch, GetState } from './state';
 
@@ -39,7 +40,7 @@ export type Action<Payload = any, Result = any, Deps = any> = ActionParameters<
  * @deprecated
  */
 export interface PlatformAction<
-  Payload extends any = any,
+  Payload = any,
   Result = any,
   Context extends ActionContext = ActionContext
 > {

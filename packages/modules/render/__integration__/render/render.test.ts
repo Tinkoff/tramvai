@@ -62,18 +62,12 @@ describe('render', () => {
 
     const { staticUrl } = getApp();
 
-    expect(scripts).toMatchInlineSnapshot(`
-      Array [
-        "${staticUrl}/dist/client/root.chunk.js",
-        "${staticUrl}/dist/client/platform.js",
-      ]
-    `);
-    expect(styles).toMatchInlineSnapshot(`
-Array [
-  "",
-]
-`);
-    expect(preload).toMatchInlineSnapshot(`Array []`);
+    expect(scripts).toEqual([
+      `${staticUrl}/dist/client/root.chunk.js`,
+      `${staticUrl}/dist/client/platform.js`,
+    ]);
+    expect(styles).toEqual(['']);
+    expect(preload).toEqual([]);
   });
 
   it('should render image on ssr', async () => {

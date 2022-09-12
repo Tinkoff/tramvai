@@ -5,7 +5,7 @@ describe('PrefixTree', () => {
     ['http://example.com/api/v1/test', 'API', 'get value by longest url'],
     ['http://example.com/foo/bar', 'SITE', 'get value by short url'],
   ].forEach(([key, res, title]) => {
-    it(title, () => {
+    it(`${title}`, () => {
       const prefixTree = new PrefixTree<string>({ delimiter: '/' });
       prefixTree.set('http://example.com/', 'SITE');
       prefixTree.set('http://example.com/api/', 'API');

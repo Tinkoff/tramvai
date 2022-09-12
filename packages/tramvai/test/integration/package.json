@@ -31,7 +31,7 @@
   "peerDependencies": {
     "@tinkoff/utils": "^2.1.2",
     "@tramvai/cli": "0.0.0-stub",
-    "tslib": "^2.0.3"
+    "tslib": "^2.4.0"
   },
   "license": "Apache-2.0",
   "module": "lib/index.es.js"

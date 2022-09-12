@@ -50,9 +50,8 @@ export const RENDERER_CALLBACK = createToken<(e?: Error) => void>('RENDERER_CALL
  * @description
  * Used as async function which overrides app render. This function may define render parameters or override render result.
  */
-export const CUSTOM_RENDER = createToken<(content: JSX.Element) => Promise<string>>(
-  'CUSTOM_RENDER'
-);
+export const CUSTOM_RENDER =
+  createToken<(content: JSX.Element) => Promise<string>>('CUSTOM_RENDER');
 
 /**
  * @description
@@ -159,9 +158,8 @@ type ResourceInlineOptions = {
  * * threshold Maximum value (in bytes) of the file which are getting inlined in HTML page
  * * types Types of resources which should be inlined
  */
-export const RESOURCE_INLINE_OPTIONS = createToken<ResourceInlineOptions>(
-  'resourceInlineThreshold'
-);
+export const RESOURCE_INLINE_OPTIONS =
+  createToken<ResourceInlineOptions>('resourceInlineThreshold');
 
 /**
  * @description

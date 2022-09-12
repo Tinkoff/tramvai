@@ -34,12 +34,12 @@ describe('testPageResources', () => {
     const { head } = render();
 
     expect(head).toMatchInlineSnapshot(`
-"
-<meta charset=\\"UTF-8\\">
-<link rel=\\"stylesheet\\" href=\\"https://some-public.style/style.css\\">
-<script>console.log(\\"Hello, World!\\")</script>
-"
-`);
+      "
+      <meta charset="UTF-8">
+      <link rel="stylesheet" href="https://some-public.style/style.css">
+      <script>console.log("Hello, World!")</script>
+      "
+    `);
   });
 
   it('should allow to fill resources through RESOURCES_REGISTRY', async () => {
@@ -71,18 +71,18 @@ describe('testPageResources', () => {
     });
 
     expect(render().body).toMatchInlineSnapshot(`
-"
-"
-`);
+      "
+      "
+    `);
 
     await runLine(commandLineListTokens.resolvePageDeps);
 
     expect(render().body).toMatchInlineSnapshot(`
-"
-<script defer=\\"defer\\" charset=\\"utf-8\\" crossorigin=\\"anonymous\\" src=\\"https://scripts.org/script.js\\"></script>
-<span>I\`m body!!!</span>
-"
-`);
+      "
+      <script defer="defer" charset="utf-8" crossorigin="anonymous" src="https://scripts.org/script.js"></script>
+      <span>I\`m body!!!</span>
+      "
+    `);
   });
 
   it('should allow to pass modules', async () => {
@@ -107,10 +107,10 @@ describe('testPageResources', () => {
     const { head } = render();
 
     expect(head).toMatchInlineSnapshot(`
-"
-<meta charset=\\"UTF-8\\">
-<script>console.log(\\"from module!\\")</script>
-"
-`);
+      "
+      <meta charset="UTF-8">
+      <script>console.log("from module!")</script>
+      "
+    `);
   });
 });

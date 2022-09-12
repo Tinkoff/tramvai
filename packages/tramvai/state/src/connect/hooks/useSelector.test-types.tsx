@@ -186,8 +186,6 @@ describe('useSelector type infer', () => {
     const isString4: IsString<typeof result4> = 1;
     // @ts-expect-error
     const isAny4: IsAny<typeof result4> = 1;
-
-    return null;
   });
 
   it('UNTYPED CASE! infer any result type from single array of optional stores names argument, with and without const', () => {
@@ -402,8 +400,6 @@ describe('useSelector type infer', () => {
     const isAny23: IsAny<typeof result2[3]> = 1;
     const isArray24: IsArray<typeof result2[4]> = 1;
     const isAny24: IsAny<typeof result2[4]> = 1;
-
-    return null;
   });
 
   it('infer right store name from single legacy BaseStore argument', () => {

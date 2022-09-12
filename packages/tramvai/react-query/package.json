@@ -29,7 +29,7 @@
     "@tinkoff/utils": "^2.1.2",
     "react": ">=16.14.0",
     "react-query": "^3.35.0",
-    "tslib": "^2.0.3"
+    "tslib": "^2.4.0"
   },
   "module": "lib/index.es.js",
   "license": "Apache-2.0"

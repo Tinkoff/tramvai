@@ -23,12 +23,17 @@ Token represents a dependency by unique key and typed interface
 
 Provider provides dependency implementation by token, and indicates connections between other dependencies
 
+### Module
+
+Module provides a list of providers and can connect other modules
+
 ## Features
 
 - Dynamic initialization
 - Replacing implementations
 - Multi tokens
 - Child containers
+- Modules
 - Lightweight
 - Does not use `reflect-metadata` and decorators
 - Circular dependency safe
@@ -123,6 +128,21 @@ Example:
 import { createContainer } from '@tinkoff/dippy';
 
 const container = createContainer([]);
+```
+
+##### initContainer({ modules, providers })
+
+`initContainer` method is a wrapper over `createContainer` method and used to create an instance of the container and walk over all modules.
+
+Example:
+
+```ts
+import { initContainer } from '@tinkoff/dippy';
+
+const di = initContainer({
+  modules: [],
+  providers: [],
+});
 ```
 
 ##### container.get(token)
@@ -300,4 +320,82 @@ container.register({
   scope: Scope.SINGLETON,
   useValue: { foo: 'bar' },
 });
+```
+
+### Module
+
+`Module` - Decorator for configuring and creating a module.
+
+[Read more about modules](concepts/module.md)
+
+#### @Module({ providers, deps, imports })(class)
+
+- `providers` - [Providers](concepts/provider.md), which will be added to the root DI container and become available in other modules
+- `deps` - List of dependencies from the DI container, necessary to initialize the module
+- `imports` - A list of modules from which providers will be obtained and added to the DI. Allows you to create modules that combine many other modules
+
+#### Usage
+
+```tsx
+import { Module, provide } from '@tinkoff/dippy';
+
+@Module({
+  providers: [
+    provide({
+      provide: 'token',
+      useValue: 'value-in-token',
+    }),
+  ],
+  deps: {
+    logger: 'logger',
+  },
+  imports: [ModuleLogger],
+})
+class ModulePubSub {
+  constructor({ logger }) {
+    logger.info('Module created');
+  }
+}
+```
+
+### declareModule
+
+`declareModule` - factory for configuring and creating a module.
+
+[Read more about modules](concepts/module.md)
+
+#### declareModule({ name, providers, imports, extend })
+
+- `name` - Unique module name
+- `providers` - [Providers](concepts/provider.md), which will be added to the root DI container and become available in other modules
+- `imports` - A list of modules from which providers will be obtained and added to the DI. Allows you to create modules that combine many other modules
+- `extend` - A list of module configuration methods
+
+#### Usage
+
+```tsx
+import { declareModule, provide } from '@tinkoff/dippy';
+
+const ModulePubSub = declareModule({
+  name: 'PubSub',
+  imports: [ModuleLogger],
+  providers: [
+    provide({
+      provide: 'token',
+      useValue: 'value-in-token',
+    }),
+  ],
+  extend: {
+    forRoot(tokenValue: string) {
+      return [
+        provide({
+          provide: 'token',
+          useValue: tokenValue,
+        }),
+      ];
+    },
+  },
+});
+
+// use ModulePubSub or ModulePubSub.forRoot('new value')
 ```

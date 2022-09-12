@@ -39,17 +39,15 @@ export interface MetricsServicesRegistryInterface {
  * @description
  * Utility for pointing out to metric module which service name to set for different requests
  */
-export const METRICS_SERVICES_REGISTRY_TOKEN = createToken<MetricsServicesRegistryInterface>(
-  'metricsServicesRegistry'
-);
+export const METRICS_SERVICES_REGISTRY_TOKEN =
+  createToken<MetricsServicesRegistryInterface>('metricsServicesRegistry');
 
 /**
  * @description
  * Token for registering counter metric which can be incremented with POST papi request
  */
-export const REGISTER_INSTANT_METRIC_TOKEN = createToken<[string, Counter<string>]>(
-  'registerInstantMetric'
-);
+export const REGISTER_INSTANT_METRIC_TOKEN =
+  createToken<[string, Counter<string>]>('registerInstantMetric');
 
 /**
  * @description

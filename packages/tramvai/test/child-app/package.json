@@ -21,7 +21,7 @@
     "@tramvai/child-app-core": "0.0.0-stub",
     "@tramvai/core": "0.0.0-stub",
     "@tramvai/test-unit": "0.0.0-stub",
-    "tslib": "^2.0.3"
+    "tslib": "^2.4.0"
   },
   "devDependencies": {
     "@tramvai/react": "0.0.0-stub",

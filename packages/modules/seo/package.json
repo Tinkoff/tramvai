@@ -7,7 +7,9 @@
   "typings": "lib/server.d.ts",
   "files": [
     "lib",
-    "__migrations__"
+    "__migrations__",
+    "tests.js",
+    "tests.d.ts"
   ],
   "sideEffects": false,
   "repository": {
@@ -31,7 +33,7 @@
     "@tramvai/tokens-render": "0.0.0-stub",
     "@tramvai/tokens-router": "0.0.0-stub",
     "@tinkoff/dippy": "0.0.0-stub",
-    "tslib": "^2.0.3"
+    "tslib": "^2.4.0"
   },
   "module": "lib/server.es.js",
   "license": "Apache-2.0"

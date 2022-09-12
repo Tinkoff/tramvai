@@ -53,16 +53,12 @@ export interface BuilderEvents {
 
 export interface Builder<Name extends string> {
   name: Name;
-  start(
-    options: BuilderStartOptions
-  ): Promise<{
+  start(options: BuilderStartOptions): Promise<{
     close: () => Promise<void>;
     invalidate: () => Promise<void>;
     getBuildStats: GetBuildStats;
   }>;
-  build(
-    options: BuilderBuildOptions
-  ): Promise<{
+  build(options: BuilderBuildOptions): Promise<{
     getBuildStats: GetBuildStats;
   }>;
 

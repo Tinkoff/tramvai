@@ -109,9 +109,10 @@ const converters = {
 };
 
 export const recordToTagConverters = mapObj(
-  (converter) => (...args: unknown[]) => {
-    const result = converter(...args);
-    return typeof result === 'string' ? result : format(result);
-  },
+  (converter) =>
+    (...args: unknown[]) => {
+      const result = converter(...args);
+      return typeof result === 'string' ? result : format(result);
+    },
   converters as any
 );

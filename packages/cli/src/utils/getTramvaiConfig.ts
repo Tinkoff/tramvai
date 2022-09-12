@@ -3,9 +3,7 @@ import { getRootFile } from './getRootFile';
 
 const tramvaiConfigNames = ['tramvai.json', 'platform.json'];
 
-export function getTramvaiConfig(
-  rootDir?: string
-): {
+export function getTramvaiConfig(rootDir?: string): {
   content: Config;
   isSuccessful: boolean;
   path?: string;

@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-conditional-expect */
 import { createJsCodeShiftApi } from './api';
 import type { Api, Transformer, PathTransformer, SourceFileInfo } from './types';
 import { PRINT_OPTIONS } from './constants';
@@ -50,7 +51,7 @@ export const createApi = ({
 
   describe('transform', () => {
     for (const testName in transformTests) {
-      it(testName, async () => {
+      it(`${testName}`, async () => {
         const { transformer, pathTransformer } = await waitForTransformers;
         const test = transformTests[testName];
 
@@ -94,3 +95,4 @@ export const createApi = ({
     },
   };
 };
+/* eslint-enable jest/no-conditional-expect */

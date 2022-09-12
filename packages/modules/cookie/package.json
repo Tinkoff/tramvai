@@ -30,7 +30,7 @@
     "@tramvai/state": "0.0.0-stub",
     "@tramvai/tokens-common": "0.0.0-stub",
     "@tinkoff/dippy": "0.0.0-stub",
-    "tslib": "^2.0.3"
+    "tslib": "^2.4.0"
   },
   "devDependencies": {
     "@types/cookie": "^0.3.2"

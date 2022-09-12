@@ -155,12 +155,12 @@ describe('httpClientFactory', () => {
     const fetchOptions = (fetch as any).mock.calls[0][1];
 
     expect(fetchOptions.headers).toMatchInlineSnapshot(`
-Object {
-  "Content-type": "application/x-www-form-urlencoded",
-  "User-Agent": "tramvai example",
-  "X-real-ip": "127.0.0.1",
-}
-`);
+      {
+        "Content-type": "application/x-www-form-urlencoded",
+        "User-Agent": "tramvai example",
+        "X-real-ip": "127.0.0.1",
+      }
+    `);
   });
 
   it('merge request and default headers', async () => {
@@ -180,13 +180,13 @@ Object {
     const fetchOptions = (fetch as any).mock.calls[0][1];
 
     expect(fetchOptions.headers).toMatchInlineSnapshot(`
-Object {
-  "Content-type": "application/x-www-form-urlencoded",
-  "User-Agent": "tramvai example",
-  "X-real-ip": "127.0.0.1",
-  "foo": "bar",
-}
-`);
+      {
+        "Content-type": "application/x-www-form-urlencoded",
+        "User-Agent": "tramvai example",
+        "X-real-ip": "127.0.0.1",
+        "foo": "bar",
+      }
+    `);
   });
 
   it('circuit breaker works', async () => {

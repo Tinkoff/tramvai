@@ -1,26 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`browser-timings performance объект пустой 1`] = `Object {}`;
+exports[`browser-timings performance объект пустой 1`] = `{}`;
 
 exports[`browser-timings Получение перфоманс метрик 1`] = `
-Object {
+{
   "backend": 0.244,
   "connection": 0.023,
   "domComplete": 1.662,
   "domInteractive": 0.73,
-  "download": Object {
-    "css": Object {
+  "download": {
+    "css": {
       "count": 1,
       "duration": 0.005,
       "encodedBodySize": 38422,
       "transferSize": 0,
     },
-    "html": Object {
+    "html": {
       "duration": 1.89,
       "encodedBodySize": 87128,
       "transferSize": 87483,
     },
-    "js": Object {
+    "js": {
       "count": 1,
       "duration": 0,
       "encodedBodySize": 239719,

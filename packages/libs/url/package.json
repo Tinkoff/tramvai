@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@tinkoff/utils": "^2.1.2",
-    "tslib": "^2.0.3"
+    "tslib": "^2.4.0"
   },
   "sideEffects": false,
   "module": "lib/url.es.js",

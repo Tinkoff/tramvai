@@ -24,7 +24,7 @@
     "@tramvai/tokens-server": "0.0.0-stub",
     "@tramvai/papi": "0.0.0-stub",
     "@tinkoff/dippy": "0.0.0-stub",
-    "tslib": "^2.0.3"
+    "tslib": "^2.4.0"
   },
   "module": "lib/server.es.js",
   "license": "Apache-2.0"

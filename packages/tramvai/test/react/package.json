@@ -25,7 +25,7 @@
     "@tramvai/test-jsdom": "0.0.0-stub",
     "@tramvai/test-mocks": "0.0.0-stub",
     "@tramvai/tokens-common": "0.0.0-stub",
-    "tslib": "^2.0.3"
+    "tslib": "^2.4.0"
   },
   "peerDependencies": {
     "react": "*"

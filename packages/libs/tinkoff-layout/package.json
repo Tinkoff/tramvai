@@ -17,7 +17,7 @@
     "build-for-publish": "true"
   },
   "dependencies": {
-    "tslib": "^2.0.3",
+    "tslib": "^2.4.0",
     "@tinkoff/utils": "^2.1.2"
   },
   "peerDependencies": {

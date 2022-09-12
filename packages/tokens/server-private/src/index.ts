@@ -13,9 +13,8 @@ export const SERVER_FACTORY_TOKEN = createToken<() => Server>('server serverFact
  * @description
  * Creates web-app instance
  */
-export const WEB_FASTIFY_APP_FACTORY_TOKEN = createToken<
-  (options: { server: Server }) => FastifyInstance
->('webApp fastifyFactory');
+export const WEB_FASTIFY_APP_FACTORY_TOKEN =
+  createToken<(options: { server: Server }) => FastifyInstance>('webApp fastifyFactory');
 
 /**
  * @description

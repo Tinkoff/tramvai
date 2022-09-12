@@ -101,8 +101,8 @@ describe('default utility port', () => {
         .expect(200);
 
       expect(body).toMatchInlineSnapshot(`
-        Object {
-          "payload": Object {
+        {
+          "payload": {
             "browserEngine": "chrome",
             "major": "104",
             "name": "chrome",

@@ -108,7 +108,7 @@ describe('child-app', () => {
       const { application } = await render('/base/');
 
       expect(application).toMatchInlineSnapshot(
-        `"<div>Content from root</div><div>Child App: I&#x27;m little child app</div><div id=\\"cmp\\">Cmp test: start</div>"`
+        `"<div>Content from root</div><div>Child App: I&#x27;m little child app</div><div id="cmp">Cmp test: start</div>"`
       );
     });
 
@@ -174,7 +174,7 @@ describe('child-app', () => {
       const { application } = await render('/state/');
 
       expect(application).toMatchInlineSnapshot(
-        `"<h2>Root</h2><div>Content from root, state: 1</div><button id=\\"button\\" type=\\"button\\">Update Root State</button><h3>Child</h3><div id=\\"child-state\\">Current Value from Root Store: 1</div>"`
+        `"<h2>Root</h2><div>Content from root, state: 1</div><button id="button" type="button">Update Root State</button><h3>Child</h3><div id="child-state">Current Value from Root Store: 1</div>"`
       );
     });
 

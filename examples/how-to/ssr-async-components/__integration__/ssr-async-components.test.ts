@@ -14,32 +14,30 @@ describe('ssr-async-components', () => {
 
     const { head } = await render('/');
 
-    expect(head).toMatchInlineSnapshot(`
-"
-<meta charset=\\"UTF-8\\">
+    expect(head).toEqual(`
+<meta charset="UTF-8">
 
 
 
 <script></script>
 
 
-<link data-critical=\\"true\\" onload=\\"__preloadJS()\\" rel=\\"stylesheet\\" href=\\"${staticUrl}/dist/client/pages-page.chunk.css\\">
-<link data-critical=\\"true\\" onload=\\"__preloadJS()\\" rel=\\"stylesheet\\" href=\\"${staticUrl}/dist/client/InnerPageInitial.chunk.css\\">
+<link data-critical="true" onload="__preloadJS()" rel="stylesheet" href="${staticUrl}/dist/client/pages-page.chunk.css">
+<link data-critical="true" onload="__preloadJS()" rel="stylesheet" href="${staticUrl}/dist/client/InnerPageInitial.chunk.css">
 
 
 
 
 
 
-<script defer=\\"defer\\" charset=\\"utf-8\\" crossorigin=\\"anonymous\\" data-critical=\\"true\\" src=\\"${staticUrl}/dist/client/pages-page.chunk.js\\"></script>
-<script defer=\\"defer\\" charset=\\"utf-8\\" crossorigin=\\"anonymous\\" data-critical=\\"true\\" src=\\"${staticUrl}/dist/client/InnerPageInitial.chunk.js\\"></script>
-<script defer=\\"defer\\" charset=\\"utf-8\\" crossorigin=\\"anonymous\\" data-critical=\\"true\\" src=\\"${staticUrl}/dist/client/platform.js\\"></script>
+<script defer="defer" charset="utf-8" crossorigin="anonymous" data-critical="true" src="${staticUrl}/dist/client/pages-page.chunk.js"></script>
+<script defer="defer" charset="utf-8" crossorigin="anonymous" data-critical="true" src="${staticUrl}/dist/client/InnerPageInitial.chunk.js"></script>
+<script defer="defer" charset="utf-8" crossorigin="anonymous" data-critical="true" src="${staticUrl}/dist/client/platform.js"></script>
 
 
 
 
 
-"
 `);
   });
 

@@ -25,26 +25,26 @@ exports[`meta - integrate tests Наполнение данными и обно�
 `;
 
 exports[`meta - integrate tests Наполнение данными и преобразование в строку 1`] = `
-Array [
-  Object {
+[
+  {
     "innerHtml": "g",
     "tag": "title",
   },
-  Object {
-    "attributes": Object {
+  {
+    "attributes": {
       "content": "d",
       "property": "og:title",
     },
     "tag": "meta",
   },
-  Object {
-    "attributes": Object {
+  {
+    "attributes": {
       "k": "s",
     },
     "tag": "meta",
   },
-  Object {
-    "attributes": Object {
+  {
+    "attributes": {
       "href": "l",
       "rel": "canonical",
     },
@@ -54,23 +54,23 @@ Array [
 `;
 
 exports[`meta - integrate tests Наполнение данными и преобразование в строку 2`] = `
-"<title data-meta-dynamic=\\"true\\">g</title>
-<meta property=\\"og:title\\" content=\\"d\\" data-meta-dynamic=\\"true\\">
-<meta k=\\"s\\" data-meta-dynamic=\\"true\\">
-<link rel=\\"canonical\\" href=\\"l\\" data-meta-dynamic=\\"true\\">"
+"<title data-meta-dynamic="true">g</title>
+<meta property="og:title" content="d" data-meta-dynamic="true">
+<meta k="s" data-meta-dynamic="true">
+<link rel="canonical" href="l" data-meta-dynamic="true">"
 `;
 
 exports[`meta - integrate tests Очистка дефолтных meta параметров 1`] = `
-Array [
-  Object {
-    "attributes": Object {
+[
+  {
+    "attributes": {
       "content": "d",
       "property": "og:title",
     },
     "tag": "meta",
   },
-  Object {
-    "attributes": Object {
+  {
+    "attributes": {
       "k": "s",
     },
     "tag": "meta",
@@ -79,8 +79,8 @@ Array [
 `;
 
 exports[`meta - integrate tests Очистка дефолтных meta параметров 2`] = `
-"<meta property=\\"og:title\\" content=\\"d\\" data-meta-dynamic=\\"true\\">
-<meta k=\\"s\\" data-meta-dynamic=\\"true\\">"
+"<meta property="og:title" content="d" data-meta-dynamic="true">
+<meta k="s" data-meta-dynamic="true">"
 `;
 
 exports[`meta - integrate tests Очистка дефолтных meta параметров 3`] = `
@@ -98,26 +98,26 @@ exports[`meta - integrate tests Очистка дефолтных meta пара�
 `;
 
 exports[`meta - integrate tests Преобразовываем значения с приоритетом выше дефолтного 1`] = `
-Array [
-  Object {
+[
+  {
     "innerHtml": "transform",
     "tag": "title",
   },
-  Object {
-    "attributes": Object {
+  {
+    "attributes": {
       "content": "d",
       "property": "og:title",
     },
     "tag": "meta",
   },
-  Object {
-    "attributes": Object {
+  {
+    "attributes": {
       "k": "s",
     },
     "tag": "meta",
   },
-  Object {
-    "attributes": Object {
+  {
+    "attributes": {
       "href": "transform",
       "rel": "canonical",
     },
@@ -127,8 +127,8 @@ Array [
 `;
 
 exports[`meta - integrate tests Преобразовываем значения с приоритетом выше дефолтного 2`] = `
-"<title data-meta-dynamic=\\"true\\">transform</title>
-<meta property=\\"og:title\\" content=\\"d\\" data-meta-dynamic=\\"true\\">
-<meta k=\\"s\\" data-meta-dynamic=\\"true\\">
-<link rel=\\"canonical\\" href=\\"transform\\" data-meta-dynamic=\\"true\\">"
+"<title data-meta-dynamic="true">transform</title>
+<meta property="og:title" content="d" data-meta-dynamic="true">
+<meta k="s" data-meta-dynamic="true">
+<link rel="canonical" href="transform" data-meta-dynamic="true">"
 `;

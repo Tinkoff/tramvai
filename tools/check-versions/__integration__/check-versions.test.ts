@@ -95,17 +95,17 @@ describe('[tools/check-versions] integration test', () => {
       'Checking the versions of tramvai modules in the application'
     );
     expect(mockError.mock.calls[0][0]).toMatchInlineSnapshot(`
-"The versions of the tramvai modules do not match!
+      "The versions of the tramvai modules do not match!
 
-  It is necessary to do the following:
-    1. Check package.json and set the package versions to a fixed version \\"0.5.3\\" for the packages listed below
-    2. Update the lock file with the command \\"npm i\\" or \\"yarn\\"
-    3. If after upgrading the error still occurs - check the lock file for incorrect versions and maybe rebuild the lock file
-    4. If there is no version of a package when you upgrade, it is probably an outdated package and you should look up for the replacement at https://tramvai.dev/docs/releases/migration.
+        It is necessary to do the following:
+          1. Check package.json and set the package versions to a fixed version "0.5.3" for the packages listed below
+          2. Update the lock file with the command "npm i" or "yarn"
+          3. If after upgrading the error still occurs - check the lock file for incorrect versions and maybe rebuild the lock file
+          4. If there is no version of a package when you upgrade, it is probably an outdated package and you should look up for the replacement at https://tramvai.dev/docs/releases/migration.
 
-  List of packages to update:
-"
-`);
+        List of packages to update:
+      "
+    `);
     expect(mockError).toHaveBeenCalledWith('\t\t@tramvai/module-common');
     expect(mockError).toHaveBeenCalledWith('\t\t@tramvai/module-router');
     expect(mockError).toHaveBeenCalledWith('\t\t@tramvai/state');
@@ -120,17 +120,17 @@ describe('[tools/check-versions] integration test', () => {
       'Checking the versions of tramvai modules in the application'
     );
     expect(mockError.mock.calls[0][0]).toMatchInlineSnapshot(`
-"The versions of the tramvai modules do not match!
+      "The versions of the tramvai modules do not match!
 
-  It is necessary to do the following:
-    1. Check package.json and set the package versions to a fixed version \\"0.8.0\\" for the packages listed below
-    2. Update the lock file with the command \\"npm i\\" or \\"yarn\\"
-    3. If after upgrading the error still occurs - check the lock file for incorrect versions and maybe rebuild the lock file
-    4. If there is no version of a package when you upgrade, it is probably an outdated package and you should look up for the replacement at https://tramvai.dev/docs/releases/migration.
+        It is necessary to do the following:
+          1. Check package.json and set the package versions to a fixed version "0.8.0" for the packages listed below
+          2. Update the lock file with the command "npm i" or "yarn"
+          3. If after upgrading the error still occurs - check the lock file for incorrect versions and maybe rebuild the lock file
+          4. If there is no version of a package when you upgrade, it is probably an outdated package and you should look up for the replacement at https://tramvai.dev/docs/releases/migration.
 
-  List of packages to update:
-"
-`);
+        List of packages to update:
+      "
+    `);
     expect(mockError).toHaveBeenCalledWith('\t\t@tramvai/core');
     expect(mockError).toHaveBeenCalledWith('\t\t@tramvai/module-common');
     expect(mockError).toHaveBeenCalledWith('\t\t@tramvai/module-router');
@@ -146,17 +146,17 @@ describe('[tools/check-versions] integration test', () => {
     );
 
     expect(mockError.mock.calls[0][0]).toMatchInlineSnapshot(`
-"The versions of the tramvai modules do not match!
+      "The versions of the tramvai modules do not match!
 
-  It is necessary to do the following:
-    1. Check package.json and set the package versions to a fixed version \\"0.4.2\\" for the packages listed below
-    2. Update the lock file with the command \\"npm i\\" or \\"yarn\\"
-    3. If after upgrading the error still occurs - check the lock file for incorrect versions and maybe rebuild the lock file
-    4. If there is no version of a package when you upgrade, it is probably an outdated package and you should look up for the replacement at https://tramvai.dev/docs/releases/migration.
+        It is necessary to do the following:
+          1. Check package.json and set the package versions to a fixed version "0.4.2" for the packages listed below
+          2. Update the lock file with the command "npm i" or "yarn"
+          3. If after upgrading the error still occurs - check the lock file for incorrect versions and maybe rebuild the lock file
+          4. If there is no version of a package when you upgrade, it is probably an outdated package and you should look up for the replacement at https://tramvai.dev/docs/releases/migration.
 
-  List of packages to update:
-"
-`);
+        List of packages to update:
+      "
+    `);
     expect(mockError).toHaveBeenCalledWith('\t\t@tramvai/state');
   });
 });

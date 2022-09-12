@@ -1,8 +1,7 @@
-import { advanceTo } from 'jest-date-mock';
 import { createLoggerFactory } from '../factory';
 import { JSONReporter } from './json';
 
-advanceTo(0);
+jest.setSystemTime(0);
 
 const mockStream = {
   write: jest.fn(),
@@ -36,41 +35,41 @@ describe('log/reporters/json', () => {
     log.error(1, 2, Object.assign(new Error('arg4'), { stack: 'mockStack' }));
 
     expect(mockStream.write.mock.calls).toMatchInlineSnapshot(`
-      Array [
-        Array [
-          "{\\"date\\":\\"1970-01-01T00:00:00.000Z\\",\\"name\\":\\"base test\\",\\"type\\":\\"trace\\",\\"level\\":50,\\"message\\":\\"trace 123\\"}
+      [
+        [
+          "{"date":"1970-01-01T00:00:00.000Z","name":"base test","type":"trace","level":50,"message":"trace 123"}
       ",
         ],
-        Array [
-          "{\\"date\\":\\"1970-01-01T00:00:00.000Z\\",\\"name\\":\\"base test\\",\\"type\\":\\"debug\\",\\"level\\":40,\\"event\\":\\"test\\",\\"a\\":{\\"b\\":1},\\"c\\":2}
+        [
+          "{"date":"1970-01-01T00:00:00.000Z","name":"base test","type":"debug","level":40,"event":"test","a":{"b":1},"c":2}
       ",
         ],
-        Array [
-          "{\\"date\\":\\"1970-01-01T00:00:00.000Z\\",\\"name\\":\\"base test\\",\\"type\\":\\"info\\",\\"level\\":30,\\"message\\":\\"info data\\"}
+        [
+          "{"date":"1970-01-01T00:00:00.000Z","name":"base test","type":"info","level":30,"message":"info data"}
       ",
         ],
-        Array [
-          "{\\"date\\":\\"1970-01-01T00:00:00.000Z\\",\\"name\\":\\"base test\\",\\"type\\":\\"info\\",\\"level\\":30,\\"event\\":\\"123\\",\\"a\\":1,\\"message\\":\\"my message\\"}
+        [
+          "{"date":"1970-01-01T00:00:00.000Z","name":"base test","type":"info","level":30,"event":"123","a":1,"message":"my message"}
       ",
         ],
-        Array [
-          "{\\"date\\":\\"1970-01-01T00:00:00.000Z\\",\\"name\\":\\"base test\\",\\"type\\":\\"warn\\",\\"level\\":20,\\"args\\":[1,2,[3,4]],\\"event\\":\\"args\\"}
+        [
+          "{"date":"1970-01-01T00:00:00.000Z","name":"base test","type":"warn","level":20,"args":[1,2,[3,4]],"event":"args"}
       ",
         ],
-        Array [
-          "{\\"date\\":\\"1970-01-01T00:00:00.000Z\\",\\"name\\":\\"base test\\",\\"type\\":\\"error\\",\\"level\\":10,\\"error\\":{\\"message\\":\\"arg1\\",\\"stack\\":\\"mockStack\\"},\\"message\\":\\"arg1\\"}
+        [
+          "{"date":"1970-01-01T00:00:00.000Z","name":"base test","type":"error","level":10,"error":{"message":"arg1","stack":"mockStack"},"message":"arg1"}
       ",
         ],
-        Array [
-          "{\\"date\\":\\"1970-01-01T00:00:00.000Z\\",\\"name\\":\\"base test\\",\\"type\\":\\"error\\",\\"level\\":10,\\"error\\":{\\"message\\":\\"arg2\\",\\"stack\\":\\"mockStack\\"},\\"message\\":\\"custom message\\"}
+        [
+          "{"date":"1970-01-01T00:00:00.000Z","name":"base test","type":"error","level":10,"error":{"message":"arg2","stack":"mockStack"},"message":"custom message"}
       ",
         ],
-        Array [
-          "{\\"date\\":\\"1970-01-01T00:00:00.000Z\\",\\"name\\":\\"base test\\",\\"type\\":\\"error\\",\\"level\\":10,\\"args\\":[[1,2],{\\"a\\":3}],\\"error\\":{\\"message\\":\\"arg3\\",\\"stack\\":\\"mockStack\\"},\\"message\\":\\"arg3\\"}
+        [
+          "{"date":"1970-01-01T00:00:00.000Z","name":"base test","type":"error","level":10,"args":[[1,2],{"a":3}],"error":{"message":"arg3","stack":"mockStack"},"message":"arg3"}
       ",
         ],
-        Array [
-          "{\\"date\\":\\"1970-01-01T00:00:00.000Z\\",\\"name\\":\\"base test\\",\\"type\\":\\"error\\",\\"level\\":10,\\"args\\":[2,{\\"error\\":{\\"message\\":\\"arg4\\",\\"stack\\":\\"mockStack\\"}}],\\"message\\":1}
+        [
+          "{"date":"1970-01-01T00:00:00.000Z","name":"base test","type":"error","level":10,"args":[2,{"error":{"message":"arg4","stack":"mockStack"}}],"message":1}
       ",
         ],
       ]

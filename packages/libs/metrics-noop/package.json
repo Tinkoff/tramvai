@@ -23,7 +23,7 @@
   },
   "module": "./lib/index.es.js",
   "dependencies": {
-    "tslib": "^2.0.3"
+    "tslib": "^2.4.0"
   },
   "license": "Apache-2.0"
 }
