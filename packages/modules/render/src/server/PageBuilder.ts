@@ -11,7 +11,7 @@ import type {
   RENDER_FLOW_AFTER_TOKEN,
 } from '@tramvai/tokens-render';
 import { ResourceSlot, ResourceType } from '@tramvai/tokens-render';
-import { safeDehydrate } from '@tramvai/safe-strings';
+import { safeStringify } from '@tramvai/safe-strings';
 import { ChunkExtractor } from '@loadable/server';
 import type { ExtractDependencyType } from '@tinkoff/dippy';
 import { bundleResource } from './blocks/bundleResource/bundleResource';
@@ -106,9 +106,12 @@ export class PageBuilder {
 
   dehydrateState() {
     this.resourcesRegistry.register({
-      type: ResourceType.inlineScript,
+      type: ResourceType.asIs,
       slot: ResourceSlot.BODY_END,
-      payload: `var initialState = '${safeDehydrate(this.context.dehydrate().dispatcher)}'`,
+      // String much better than big object, source https://v8.dev/blog/cost-of-javascript-2019#json
+      payload: `<script id="__TRAMVAI_STATE__" type="application/json">${safeStringify(
+        this.context.dehydrate().dispatcher
+      )}</script>`,
     });
   }
 

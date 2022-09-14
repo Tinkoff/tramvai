@@ -1,7 +1,7 @@
 import { commandLineListTokens, Module, provide } from '@tramvai/core';
 import { RENDER_SLOTS, ResourceType, ResourceSlot } from '@tramvai/tokens-render';
 import { dehydrate as queryDehydrate, setLogger } from 'react-query';
-import { safeDehydrate } from '@tramvai/safe-strings';
+import { safeStringify } from '@tramvai/safe-strings';
 import {
   QUERY_CLIENT_DEHYDRATED_STATE_TOKEN,
   QUERY_CLIENT_TOKEN,
@@ -32,9 +32,11 @@ setLogger(logger);
       multi: true,
       useFactory: ({ state, propKey }) => {
         return {
-          type: ResourceType.inlineScript,
+          type: ResourceType.asIs,
           slot: ResourceSlot.BODY_END,
-          payload: `window['${propKey}'] = '${safeDehydrate(state)}'`,
+          payload: `<script id="${propKey}" type="application/json">${safeStringify(
+            state
+          )}</script>`,
         };
       },
       deps: {

@@ -28,13 +28,14 @@ import {
   CHILD_APP_PRELOAD_MANAGER_TOKEN,
   CHILD_APP_RESOLVE_CONFIG_TOKEN,
 } from '@tramvai/tokens-child-app';
-import { safeDehydrate } from '@tramvai/safe-strings';
+import { safeStringify } from '@tramvai/safe-strings';
 import { ServerLoader } from './loader';
 import { PreloadManager } from './preload';
 import { executeRootStateSubscriptions, StateManager } from './stateManager';
 import { setPreloaded } from '../shared/store';
 import { RenderManager } from './render';
 import { registerChildAppRenderSlots } from './render-slots';
+import { GLOBAL_CHILD_STATE } from '../shared/constants';
 
 export const serverProviders: Provider[] = [
   provide({
@@ -84,9 +85,11 @@ export const serverProviders: Provider[] = [
       store.dispatch(setPreloaded(preloader.getPreloadedList()));
 
       return {
-        type: ResourceType.inlineScript,
+        type: ResourceType.asIs,
         slot: ResourceSlot.BODY_END,
-        payload: `var childAppInitialState = '${safeDehydrate(stateManager.getState())}'`,
+        payload: `<script id="${GLOBAL_CHILD_STATE}" type="application/json">${safeStringify(
+          stateManager.getState()
+        )}</script>`,
       };
     },
     deps: {

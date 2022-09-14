@@ -6,9 +6,10 @@ export const MODULE_PARAMETERS = '_module_parameters_';
 type ExtendType = Record<string, (...args: any[]) => Provider[]>;
 
 type ModuleExtendType<E extends ExtendType> = {
-  [key in keyof E]: (
-    ...args: Parameters<E[key]>
-  ) => { mainModule: ModuleType; providers: ReturnType<E[key]> };
+  [key in keyof E]: (...args: Parameters<E[key]>) => {
+    mainModule: ModuleType;
+    providers: ReturnType<E[key]>;
+  };
 };
 
 export function declareModule<Extend extends ExtendType>({

@@ -20,12 +20,7 @@ import { BrowserLoader } from './loader';
 import { PreloadManager } from './preload';
 import { RenderManager } from './render';
 import { runCommand } from './runCommand';
-
-declare global {
-  interface Window {
-    childAppInitialState: string;
-  }
-}
+import { GLOBAL_CHILD_STATE } from '../shared/constants';
 
 export const browserProviders: Provider[] = [
   provide({
@@ -49,7 +44,7 @@ export const browserProviders: Provider[] = [
   }),
   provide({
     provide: CHILD_APP_COMMON_INITIAL_STATE_TOKEN,
-    useFactory: () => JSON.parse(window.childAppInitialState || '{}'),
+    useFactory: () => JSON.parse(document.getElementById(GLOBAL_CHILD_STATE).textContent || '{}'),
   }),
   provide({
     provide: CHILD_APP_RENDER_MANAGER_TOKEN,

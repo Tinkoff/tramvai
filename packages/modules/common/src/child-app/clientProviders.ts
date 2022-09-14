@@ -6,12 +6,6 @@ import {
   CHILD_APP_INTERNAL_CONFIG_TOKEN,
 } from '@tramvai/tokens-child-app';
 
-declare global {
-  interface Window {
-    childInitialState: string;
-  }
-}
-
 export const providers: Provider[] = [
   provide({
     provide: INITIAL_APP_STATE_TOKEN,

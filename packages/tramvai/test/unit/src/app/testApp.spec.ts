@@ -64,10 +64,9 @@ describe('test/unit/app/testApp', () => {
       const { request } = testEnv;
 
       const response = await request('/').expect(200).expect('X-App-Id', 'unit-app');
-
       expect(response.text).toMatch('<html class="no-js" lang="ru">');
       expect(response.text).toMatch('<div class="application">rootPage</div>');
-      expect(response.text).toMatch('<script>var initialState =');
+      expect(response.text).toMatch('<script id="__TRAMVAI_STATE__"');
     });
 
     it('should return render of page', async () => {

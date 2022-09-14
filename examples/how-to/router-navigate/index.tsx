@@ -25,10 +25,10 @@ function Page() {
           <button type="button">Navigate By Link</button>
         </Link>
       </div>
-      {Navigation.map((p) => {
+      {Navigation.map((p, key) => {
         if (p !== pathname) {
           return (
-            <button type="button" onClick={() => navigate({ url: p })}>
+            <button type="button" key={key} onClick={() => navigate({ url: p })}>
               Navigate to {p}
             </button>
           );

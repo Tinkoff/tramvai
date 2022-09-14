@@ -29,22 +29,7 @@ export const renderFactory =
         if (!parsedWithScripts) {
           return;
         }
-
-        const scripts = parsedWithScripts.querySelectorAll('body > script');
-
-        for (const script of scripts) {
-          if (script.innerHTML.startsWith('var initialState')) {
-            return JSON.parse(
-              script.innerHTML
-                .replace("var initialState = '", '')
-                .replace(/'$/, '')
-                .replace(/'/g, "\\\\'")
-                .replace(/\\\\/g, '\\')
-            );
-          }
-        }
-
-        return null;
+        return JSON.parse(parsedWithScripts.querySelector('#__TRAMVAI_STATE__').textContent);
       },
     };
   };
