@@ -39,7 +39,7 @@ const modern = [
   'FirefoxAndroid >= 60',
 ];
 
-const node = ['Node >= 12'];
+const node = ['Node >= 14'];
 
 module.exports = {
   defaults,

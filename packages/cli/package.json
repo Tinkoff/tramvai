@@ -183,5 +183,8 @@
     "image-webpack-loader": "^6.0.0",
     "swc-loader": "^0.1.15"
   },
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=14.0.0"
+  }
 }

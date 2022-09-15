@@ -104,7 +104,7 @@ describe('@tramvai/cli start command', () => {
 
         expect(browserslistConfig).toMatchObject({
           modern: ['chrome > 100'],
-          node: ['Node >= 12'],
+          node: ['Node >= 14'],
           defaults: expect.arrayContaining(['chrome > 27']),
         });
 
