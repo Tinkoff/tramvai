@@ -10,9 +10,9 @@ import { Scope, Errors } from './constant';
 import { createError } from './createError';
 import { DI_TOKEN } from './tokens';
 import type {
-  ExtractDependencyType,
+  BaseTokenInterface,
+  MultiTokenInterface,
   OptionalTokenDependency,
-  TokenInterface,
 } from './createToken/createToken';
 import { tokenToString } from './createToken/createToken';
 
@@ -184,13 +184,19 @@ export class Container {
     this.register({ provide: DI_TOKEN, useValue: this });
   }
 
-  get<T extends TokenInterface<unknown>>(token: T): ExtractDependencyType<T>;
-  get<T extends OptionalTokenDependency<unknown>>(obj: T): ExtractDependencyType<T['token']> | null;
-  get<T>(obj: { token: T; optional: true; multi?: false }): T | null;
-  get<T>(obj: { token: T; optional?: false; multi?: false }): T;
-  get<T>(obj: { token: T; optional: true; multi: true }): T[] | null;
-  get<T>(obj: { token: T; optional?: false; multi: true }): T[];
+  get<T>(obj: { token: BaseTokenInterface<T>; optional: true; multi?: false }): T | null;
+  get<T>(obj: { token: BaseTokenInterface<T>; optional?: false; multi?: false }): T;
+
+  get<T>(obj: { token: MultiTokenInterface<T>; optional: true; multi?: true }): T[] | null;
+  get<T>(obj: { token: MultiTokenInterface<T>; optional?: false; multi?: true }): T[];
+
+  get<T>(token: BaseTokenInterface<T>): T;
+  get<T>(token: MultiTokenInterface<T>): T[];
+
+  get<T>(obj: OptionalTokenDependency<T>): T | null;
+
   get<T>(token: T): T;
+
   get<T extends ProviderDep>(tokenORObject: T) {
     let token;
     let optional = false;

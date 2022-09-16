@@ -87,9 +87,17 @@ export type ExtractTokenType<Token extends TokenInterface<unknown>> = Token exte
   ? Type
   : unknown;
 
-export type ExtractDependencyType<Token extends TokenInterface<unknown>> = [Token] extends [
-  MultiTokenInterface<infer Type>
-]
+// any type check from https://github.com/mmkal/expect-type/blob/main/src/index.ts
+const secret = Symbol('secret');
+type Secret = typeof secret;
+
+type Not<T extends boolean> = T extends true ? false : true;
+type IsNever<T> = [T] extends [never] ? true : false;
+type IsAny<T> = [T] extends [Secret] ? Not<IsNever<T>> : false;
+
+export type ExtractDependencyType<Token extends TokenInterface<unknown>> = IsAny<Token> extends true
+  ? any
+  : [Token] extends [MultiTokenInterface<infer Type>]
   ? Type[]
   : Token extends BaseTokenInterface<infer Type>
   ? Type
