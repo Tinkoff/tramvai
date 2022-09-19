@@ -27,7 +27,11 @@ export const mapResourcesToSlots = (resources) =>
   resources.reduce((acc, resource) => {
     const { slot } = resource;
 
-    acc[slot] = Array.isArray(acc[slot]) ? [...acc[slot], resource] : [resource];
+    if (Array.isArray(acc[slot])) {
+      acc[slot].push(resource);
+    } else {
+      acc[slot] = [resource];
+    }
     return acc;
   }, {});
 
@@ -83,7 +87,7 @@ export class PageBuilder {
     const stats = await fetchWebpackStats({ modern: this.modern });
     const extractor = new ChunkExtractor({ stats, entrypoints: [] });
 
-    // самым первым рендерим приложение, так как нужно вытащить информацию о используемых данных компонентами
+    // first we render the application, because we need to extract information about the data used by the components
     await this.renderApp(extractor);
 
     await Promise.all(
@@ -96,7 +100,7 @@ export class PageBuilder {
 
     this.dehydrateState();
 
-    // загружаем информацию и зависимость  для текущего бандла и странице
+    // load information and dependency for the current bundle and page
     await this.fetchChunksInfo(extractor);
 
     this.preloadBlock();

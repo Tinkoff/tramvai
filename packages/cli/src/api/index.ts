@@ -1,9 +1,10 @@
 import { writableNoopStream } from 'noop-stream';
+import type { Provider } from '@tinkoff/dippy';
 import {
   ANALYTICS_PACKAGE_INFO_TOKEN,
-  STDOUT_TOKEN,
-  STDERR_TOKEN,
   COMMAND_PARAMETERS_TOKEN,
+  STDERR_TOKEN,
+  STDOUT_TOKEN,
 } from '../di/tokens';
 import { createApp } from '../commands/createApp';
 
@@ -13,6 +14,7 @@ import type { BenchmarkCommand } from './benchmark';
 import type { AnalyzeCommand } from './analyze';
 import type { StartProdCommand } from './start-prod';
 
+export * from '../di/tokens';
 export { ConfigManager } from '../config/configManager';
 export { ConfigManager as ConfigManagerValidator } from '../models/config';
 export { getTramvaiConfig } from '../utils/getTramvaiConfig';
@@ -59,22 +61,22 @@ const app = createApp({
   ],
 });
 
-export const start: StartCommand = (parameters) => {
-  return app.run('start', parameters);
+export const start: StartCommand = (parameters, providers = []) => {
+  return app.run('start', parameters, providers);
 };
 
-export const build: BuildCommand = (parameters) => {
-  return app.run('build', parameters);
+export const build: BuildCommand = (parameters, providers = []) => {
+  return app.run('build', parameters, providers);
 };
 
-export const benchmark: BenchmarkCommand = (parameters) => {
-  return app.run('benchmark', parameters);
+export const benchmark: BenchmarkCommand = (parameters, providers = []) => {
+  return app.run('benchmark', parameters, providers);
 };
 
-export const analyze: AnalyzeCommand = (parameters) => {
-  return app.run('analyze', parameters);
+export const analyze: AnalyzeCommand = (parameters, providers = []) => {
+  return app.run('analyze', parameters, providers);
 };
 
-export const startProd: StartProdCommand = (parameters) => {
-  return app.run('start-prod', parameters);
+export const startProd: StartProdCommand = (parameters, providers = []) => {
+  return app.run('start-prod', parameters, providers);
 };

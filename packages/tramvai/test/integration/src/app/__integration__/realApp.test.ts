@@ -30,9 +30,17 @@ describe('test/integration/app/runFakeApp', () => {
 
   it('should run app', async () => {
     const { application } = await app.render('/');
-    expect(application).toMatchInlineSnapshot(
-      `"<div class="layout__layout_yfynK"><div><h1>Tramvai<span role="img" aria-label="dummy icon">🥳</span></h1></div><div>Main Page <button>click link</button></div><div class="Footer__footer_a6x7v"><div>this Footer in bootstrap</div></div></div>"`
-    );
+    expect(application).toMatchInlineSnapshot(`
+      "
+            <div class="layout__layout_yfynK">
+              <div>
+                <h1>Tramvai<span role="img" aria-label="dummy icon">🥳</span></h1>
+              </div>
+              <div>Main Page <button>click link</button></div>
+              <div class="Footer__footer_a6x7v"><div>this Footer in bootstrap</div></div>
+            </div>
+          "
+    `);
   });
 
   it('should work with puppeteer', async () => {

@@ -23,21 +23,30 @@ describe('page-render-mode', () => {
 
     expect(getScripts(app, renderResult.parsed)).toMatchInlineSnapshot(`
       [
-        "STATIC_URL/dist/client/@_routes_index.chunk.js",
-        "STATIC_URL/dist/client/hmr.js",
-        "STATIC_URL/dist/client/platform.js",
+        "\${STATIC_URL}/dist/client/@_routes_index.chunk.js",
+        "\${STATIC_URL}/dist/client/hmr.js",
+        "\${STATIC_URL}/dist/client/platform.js",
       ]
     `);
     expect(getLinks(app, renderResult.parsed)).toMatchInlineSnapshot(`
       [
-        "STATIC_URL/dist/client/@_routes_index.chunk.css",
-        "STATIC_URL/dist/client/platform.css",
+        "\${STATIC_URL}/dist/client/@_routes_index.chunk.css",
+        "\${STATIC_URL}/dist/client/platform.css",
       ]
     `);
 
-    expect(renderResult.application).toMatchInlineSnapshot(
-      `"<div><h1>Tramvai <span role="img" aria-label="Salute">🥳</span></h1></div><div>Main Page loading...</div><div class="Footer__footer_adktz"><div>this Footer in page-render-mode</div></div>"`
-    );
+    expect(renderResult.application).toMatchInlineSnapshot(`
+      "
+            <div>
+              <h1>
+                Tramvai
+                <span role="img" aria-label="Salute">🥳</span>
+              </h1>
+            </div>
+            <div>Main Page loading...</div>
+            <div class="Footer__footer_adktz"><div>this Footer in page-render-mode</div></div>
+          "
+    `);
   });
 
   it('request to second page render fallback and load page js/css', async () => {
@@ -45,20 +54,29 @@ describe('page-render-mode', () => {
 
     expect(getScripts(app, renderResult.parsed)).toMatchInlineSnapshot(`
       [
-        "STATIC_URL/dist/client/@_routes_second_index.chunk.js",
-        "STATIC_URL/dist/client/hmr.js",
-        "STATIC_URL/dist/client/platform.js",
+        "\${STATIC_URL}/dist/client/@_routes_second_index.chunk.js",
+        "\${STATIC_URL}/dist/client/hmr.js",
+        "\${STATIC_URL}/dist/client/platform.js",
       ]
     `);
     expect(getLinks(app, renderResult.parsed)).toMatchInlineSnapshot(`
       [
-        "STATIC_URL/dist/client/platform.css",
+        "\${STATIC_URL}/dist/client/platform.css",
       ]
     `);
 
-    expect(renderResult.application).toMatchInlineSnapshot(
-      `"<div><h1>Tramvai <span role="img" aria-label="Salute">🥳</span></h1></div><div>Loading...</div><div class="Footer__footer_adktz"><div>this Footer in page-render-mode</div></div>"`
-    );
+    expect(renderResult.application).toMatchInlineSnapshot(`
+      "
+            <div>
+              <h1>
+                Tramvai
+                <span role="img" aria-label="Salute">🥳</span>
+              </h1>
+            </div>
+            <div>Loading...</div>
+            <div class="Footer__footer_adktz"><div>this Footer in page-render-mode</div></div>
+          "
+    `);
   });
 
   it('main page render full content after hydration', async () => {
@@ -100,8 +118,7 @@ function getScripts(app: any, parsed: any) {
   return parsed
     .querySelectorAll('script')
     .map((script: any) => {
-      const src = script.attributes.src || script.attributes['data-src'];
-      return src && src.replace(app.staticUrl, 'STATIC_URL');
+      return script.attributes.src || script.attributes['data-src'];
     })
     .filter(Boolean);
 }
@@ -110,8 +127,7 @@ function getLinks(app: any, parsed: any) {
   return parsed
     .querySelectorAll('link')
     .map((link: any) => {
-      const href = link.attributes.href || link.attributes['data-href'];
-      return href && href.replace(app.staticUrl, 'STATIC_URL');
+      return link.attributes.href || link.attributes['data-href'];
     })
     .filter(Boolean);
 }

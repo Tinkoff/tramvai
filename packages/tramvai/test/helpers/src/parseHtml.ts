@@ -1,5 +1,6 @@
 import type { Options as ParserOptions } from 'node-html-parser';
 import { parse } from 'node-html-parser';
+import prettier from 'prettier';
 
 export type ParseOptions = Partial<ParserOptions>;
 
@@ -11,7 +12,8 @@ export const parseHtml = (
     return null;
   }
 
-  const parsed = parse(html, parserOptions);
+  const prettyHtml = prettier.format(html, { parser: 'html', printWidth: 120 });
+  const parsed = parse(prettyHtml, parserOptions);
 
   return {
     parsed,

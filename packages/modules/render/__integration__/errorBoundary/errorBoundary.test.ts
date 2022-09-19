@@ -212,9 +212,17 @@ describe('errorBoundary', () => {
       const { parsed } = await render('/global-error/');
       const documentContent = parsed.outerHTML;
 
-      expect(documentContent).toMatchInlineSnapshot(
-        `"<html lang="ru"><head><title>Error Global Error at /global-error/</title></head><body><h1>Root Error Boundary</h1></body></html>"`
-      );
+      expect(documentContent).toMatchInlineSnapshot(`
+        "<html lang="ru">
+          <head>
+            <title>Error Global Error at /global-error/</title>
+          </head>
+          <body>
+            <h1>Root Error Boundary</h1>
+          </body>
+        </html>
+        "
+      `);
     });
 
     it('SSR hydrate', async () => {

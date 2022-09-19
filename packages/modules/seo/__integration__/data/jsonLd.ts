@@ -70,8 +70,7 @@ export const jsonLd = {
           name: 'Тинькофф Банк',
           '@type': 'BankOrCreditUnion',
           image: {
-            url:
-              'https://static.tinkoff.ru/dist/portal-new/compiled/c5e2e251a557ad1e3a5f120d5516d00d.png',
+            url: 'https://static.tinkoff.ru/dist/portal-new/compiled/c5e2e251a557ad1e3a5f120d5516d00d.png',
             '@type': 'ImageObject',
           },
           address: {

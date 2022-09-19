@@ -31,14 +31,16 @@ describe('testPageResources', () => {
         }),
       ],
     });
-    const { head } = render();
+    const { head } = render()!;
 
     expect(head).toMatchInlineSnapshot(`
       "
-      <meta charset="UTF-8">
-      <link rel="stylesheet" href="https://some-public.style/style.css">
-      <script>console.log("Hello, World!")</script>
-      "
+          <meta charset="UTF-8" >
+          <link rel="stylesheet" href="https://some-public.style/style.css" >
+          <script>
+            console.log("Hello, World!");
+          </script>
+        "
     `);
   });
 
@@ -70,18 +72,15 @@ describe('testPageResources', () => {
       ],
     });
 
-    expect(render().body).toMatchInlineSnapshot(`
-      "
-      "
-    `);
+    expect(render()!.body).toMatchInlineSnapshot(`""`);
 
     await runLine(commandLineListTokens.resolvePageDeps);
 
-    expect(render().body).toMatchInlineSnapshot(`
+    expect(render()!.body).toMatchInlineSnapshot(`
       "
-      <script defer="defer" charset="utf-8" crossorigin="anonymous" src="https://scripts.org/script.js"></script>
-      <span>I\`m body!!!</span>
-      "
+          <script defer="defer" charset="utf-8" crossorigin="anonymous" src="https://scripts.org/script.js"></script>
+          <span>I\`m body!!!</span>
+        "
     `);
   });
 
@@ -104,13 +103,15 @@ describe('testPageResources', () => {
     const { render } = testPageResources({
       modules: [CustomModule],
     });
-    const { head } = render();
+    const { head } = render()!;
 
     expect(head).toMatchInlineSnapshot(`
       "
-      <meta charset="UTF-8">
-      <script>console.log("from module!")</script>
-      "
+          <meta charset="UTF-8" >
+          <script>
+            console.log("from module!");
+          </script>
+        "
     `);
   });
 });

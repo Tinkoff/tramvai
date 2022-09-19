@@ -66,7 +66,14 @@ export const startCli = async (
   }
 
   const request = requestFactory(serverUrl);
-  const render = renderFactory(request);
+  const render = renderFactory(request, {
+    replaceDynamicStrings: {
+      // eslint-disable-next-line no-template-curly-in-string
+      [serverUrl]: '${SERVER_URL}',
+      // eslint-disable-next-line no-template-curly-in-string
+      [staticUrl]: '${STATIC_URL}',
+    },
+  });
 
   const papi = wrapPapi({
     serverUrl,

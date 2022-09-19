@@ -1,8 +1,9 @@
+import type { Provider } from '@tinkoff/dippy';
 import { createToken } from '@tinkoff/dippy';
 import type { Command } from '../../typings/commands';
 
 export interface CommandRunner {
-  run(commandName: string, parameters: Record<string, any>): Promise<any>;
+  run(commandName: string, parameters: Record<string, any>, providers?: Provider[]): Promise<any>;
 }
 
 export const COMMAND_NAME_TOKEN = createToken<string>('command name');

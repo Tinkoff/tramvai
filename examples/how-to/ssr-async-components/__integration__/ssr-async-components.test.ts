@@ -10,35 +10,72 @@ describe('ssr-async-components', () => {
   const { getPageWrapper } = testAppInBrowser(getApp);
 
   it('ssr render', async () => {
-    const { staticUrl, render } = await getApp();
+    const { render } = await getApp();
 
     const { head } = await render('/');
 
-    expect(head).toEqual(`
-<meta charset="UTF-8">
+    expect(head).toMatchInlineSnapshot(`
+      "
+          <meta charset="UTF-8" >
+          
 
+          
 
+          
+          <script></script>
+          
 
-<script></script>
+          
+          <link data-critical="true"
+            onload="__preloadJS()"
+            rel="stylesheet"
+            href="\${STATIC_URL}/dist/client/pages-page.chunk.css"
+          >
+          <link data-critical="true"
+            onload="__preloadJS()"
+            rel="stylesheet"
+            href="\${STATIC_URL}/dist/client/InnerPageInitial.chunk.css"
+          >
+          
 
+          
 
-<link data-critical="true" onload="__preloadJS()" rel="stylesheet" href="${staticUrl}/dist/client/pages-page.chunk.css">
-<link data-critical="true" onload="__preloadJS()" rel="stylesheet" href="${staticUrl}/dist/client/InnerPageInitial.chunk.css">
+          
 
+          
 
+          
 
+          
+          <script defer="defer"
+            charset="utf-8"
+            crossorigin="anonymous"
+            data-critical="true"
+            src="\${STATIC_URL}/dist/client/pages-page.chunk.js"
+          ></script>
+          <script defer="defer"
+            charset="utf-8"
+            crossorigin="anonymous"
+            data-critical="true"
+            src="\${STATIC_URL}/dist/client/InnerPageInitial.chunk.js"
+          ></script>
+          <script defer="defer"
+            charset="utf-8"
+            crossorigin="anonymous"
+            data-critical="true"
+            src="\${STATIC_URL}/dist/client/platform.js"
+          ></script>
+          
 
+          
 
+          
 
-<script defer="defer" charset="utf-8" crossorigin="anonymous" data-critical="true" src="${staticUrl}/dist/client/pages-page.chunk.js"></script>
-<script defer="defer" charset="utf-8" crossorigin="anonymous" data-critical="true" src="${staticUrl}/dist/client/InnerPageInitial.chunk.js"></script>
-<script defer="defer" charset="utf-8" crossorigin="anonymous" data-critical="true" src="${staticUrl}/dist/client/platform.js"></script>
+          
 
-
-
-
-
-`);
+          
+        "
+    `);
   });
 
   it('should render components on render', async () => {
@@ -48,7 +85,7 @@ describe('ssr-async-components', () => {
 
     expect(rootTest).toBeDefined();
     expect(
-      await rootTest.evaluate((element) => {
+      await rootTest?.evaluate((element) => {
         const styles = window.getComputedStyle(element);
         return { color: styles.color, textAlign: styles.textAlign };
       })
@@ -59,8 +96,8 @@ describe('ssr-async-components', () => {
 
     expect(innerOnClick).toBeDefined();
     expect(
-      await innerOnClick.evaluate((element) => {
-        const styles = window.getComputedStyle(element.querySelector('h3'));
+      await innerOnClick?.evaluate((element) => {
+        const styles = window.getComputedStyle(element.querySelector('h3')!);
         return { color: styles.color, textAlign: styles.textAlign };
       })
     ).toEqual({
@@ -73,7 +110,7 @@ describe('ssr-async-components', () => {
     const { page } = await getPageWrapper('/');
     const showButton = await page.$('#root-button-show');
 
-    await showButton.click();
+    await showButton?.click();
 
     await page.waitForSelector('#inner-page-onclick');
 
@@ -81,7 +118,7 @@ describe('ssr-async-components', () => {
 
     expect(innerElement).toBeDefined();
     expect(
-      await innerElement.evaluate((element) => {
+      await innerElement?.evaluate((element) => {
         const styles = window.getComputedStyle(element);
         return { color: styles.color, textAlign: styles.textAlign };
       })

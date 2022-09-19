@@ -29,7 +29,7 @@ describe('render', () => {
     });
 
     expect(bodyAttrs).toEqual({
-      style: 'display: block; margin: 0;',
+      style: 'display: block; margin: 0',
     });
 
     expect(appAttrs).toEqual({

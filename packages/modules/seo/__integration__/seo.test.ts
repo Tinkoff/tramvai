@@ -1,7 +1,6 @@
 import { testApp } from '@tramvai/internal-test-utils/testApp';
 import { testAppInBrowser } from '@tramvai/internal-test-utils/browser';
 import { sleep } from '@tramvai/test-integration';
-import { jsonLd } from './data/jsonLd';
 
 describe('seo', () => {
   const { getApp } = testApp({
@@ -38,7 +37,7 @@ describe('seo', () => {
       });
       const jsonLdScript = parsed.querySelector('[type="application/ld+json"]');
 
-      expect(jsonLdScript.innerHTML).toBe(JSON.stringify(jsonLd));
+      expect(jsonLdScript.innerHTML).toMatchSnapshot();
     });
   });
 

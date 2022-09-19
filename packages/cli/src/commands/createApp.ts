@@ -1,14 +1,15 @@
 import type { Provider } from '@tinkoff/dippy';
+import { createChildContainer } from '@tinkoff/dippy';
 import { initRootContainer } from '../di/root';
 import {
   analyticsProviders,
-  stdProviders,
+  builderProviders,
   commandsProviders,
   configProviders,
   packageManagerProviders,
-  builderProviders,
+  stdProviders,
 } from '../di/providers';
-import { COMMAND_MAP_TOKEN, COMMAND_RUNNER_TOKEN, COMMAND_PARAMETERS_TOKEN } from '../di/tokens';
+import { COMMAND_MAP_TOKEN, COMMAND_PARAMETERS_TOKEN, COMMAND_RUNNER_TOKEN } from '../di/tokens';
 
 export const createApp = ({
   commands,
@@ -36,8 +37,10 @@ export const createApp = ({
   ]);
 
   return {
-    run(commandName, parameters) {
-      return rootContainer.get(COMMAND_RUNNER_TOKEN).run(commandName, parameters);
+    run(commandName, parameters, overridingProviders = []) {
+      return createChildContainer(rootContainer, overridingProviders)
+        .get(COMMAND_RUNNER_TOKEN)
+        .run(commandName, parameters, []);
     },
   };
 };

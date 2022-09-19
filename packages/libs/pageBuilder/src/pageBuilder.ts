@@ -17,6 +17,15 @@ type BuildPageParams = {
   options?: Options;
 };
 
+function transformArrayToString(array: string[]) {
+  let result = '';
+  for (const item of array) {
+    result += item;
+  }
+
+  return result;
+}
+
 export const buildPage = ({ description, slotHandlers, options = {} }: BuildPageParams): string => {
   const storage = new HtmlPageStorage();
 
@@ -26,7 +35,7 @@ export const buildPage = ({ description, slotHandlers, options = {} }: BuildPage
     slotHandlers
   );
 
-  const result = description.map((descriptor) => {
+  const renderedSlots = description.map((descriptor) => {
     if (isDynamic(descriptor)) {
       const { slot } = descriptor;
       storage.runSlotHandlers(slot, options);
@@ -36,11 +45,11 @@ export const buildPage = ({ description, slotHandlers, options = {} }: BuildPage
         return converter(record);
       });
       if (process.env.NODE_ENV === 'development') {
-        // Добавляем html комментарии для упрощения отладки слотов в dev режиме
+        // Add html comments for debug reasons
         return [
-          `<!-- START OF SLOT ${slot} -->`,
+          `\n<!-- START OF SLOT ${slot} -->\n`,
           ...convertedRecords,
-          `<!-- END OF SLOT ${slot} -->`,
+          `\n<!-- END OF SLOT ${slot} -->\n`,
         ];
       }
       return convertedRecords;
@@ -51,5 +60,6 @@ export const buildPage = ({ description, slotHandlers, options = {} }: BuildPage
 
     return null;
   });
-  return flatten(result).join('\n');
+
+  return transformArrayToString(flatten(renderedSlots));
 };

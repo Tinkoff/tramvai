@@ -8,6 +8,8 @@ type PageResource = {
   attrs?: Record<string, string | null>;
 };
 
+const VOID_TAGS = new Set(['link']);
+
 const formatAttr = reduceObj((acc, value: string | null, key) => {
   if (key && value) {
     return `${acc} ${key}="${value}"`;
@@ -30,6 +32,10 @@ const format = ({
   innerHtml?: string;
 }) => {
   const attr = `${formatAttr(attributes)}`;
+
+  if (VOID_TAGS.has(tag)) {
+    return `<${tag}${attr}>`;
+  }
 
   if (innerHtml) {
     return `<${tag}${attr}>${innerHtml}</${tag}>`;
