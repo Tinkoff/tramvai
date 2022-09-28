@@ -105,16 +105,18 @@ describe('child-app', () => {
 
       await request('/base/').expect(200);
 
-      const { application } = await render('/base/');
+      const { application } = await render('/base/', { parserOptions: { comment: true } });
 
       expect(application).toMatchInlineSnapshot(`
         "
               <div>Content from root</div>
+              <!--$-->
               <div>
                 Child App:
-                I&#x27;m little child app
+                <!-- -->I&#x27;m little child app
               </div>
               <div id="cmp">Cmp test: start</div>
+              <!--/$-->
             "
       `);
     });
@@ -178,21 +180,23 @@ describe('child-app', () => {
 
       await request('/state/').expect(200);
 
-      const { application } = await render('/state/');
+      const { application } = await render('/state/', { parserOptions: { comment: true } });
 
       expect(application).toMatchInlineSnapshot(`
         "
               <h2>Root</h2>
               <div>
                 Content from root, state:
-                1
+                <!-- -->1
               </div>
               <button id="button" type="button">Update Root State</button>
               <h3>Child</h3>
+              <!--$-->
               <div id="child-state">
                 Current Value from Root Store:
-                1
+                <!-- -->1
               </div>
+              <!--/$-->
             "
       `);
     });

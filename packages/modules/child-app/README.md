@@ -323,3 +323,18 @@ You may specify a full config to debug to a specific child-app:
    });
    ```
 2. Run root-app with `CHILD_APP_DEBUG` environment variable with value of child-app names needed to debug
+
+## Known issues
+
+### This Suspense boundary received an update before it finished hydrating
+
+When `React` >= `18` version is used, child-app will be wrapped in `Suspense` boundary for [Selective Hydration](https://github.com/reactwg/react-18/discussions/130).
+This optimization can significantly decrease Total Blocking Time metric of the page.
+
+There is one drawback of this optimization - if you will try rerender child-app during selective hydration, `React` will switch to deopt mode and made full client-rendering of the child-app component.
+Potential ways to fix this problem [described here](https://github.com/facebook/react/issues/24476#issuecomment-1127800350).
+`ChildApp` component already wrapped in `React.memo`.
+
+Few advices to avoid this problem:
+- Memoize object, passed to child-app `props` property
+- Prevent pass to child-app properties, which can be changed during hydration, for example at cliend-side in page actions

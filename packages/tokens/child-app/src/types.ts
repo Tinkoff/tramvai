@@ -1,3 +1,4 @@
+import type { ComponentType } from 'react';
 import type { Container, Provider } from '@tinkoff/dippy';
 import type {
   CommandLines,
@@ -39,6 +40,7 @@ export interface ChildAppExternalConfig {
 
 export interface ChildAppReactConfig extends ChildAppRequestConfig {
   props?: Record<string, any>;
+  fallback?: ComponentType<any>;
 }
 
 export interface ResolutionConfig extends Partial<ChildAppExternalConfig> {
