@@ -1,6 +1,5 @@
-import React from 'react';
-import { Button } from '../../components/shared/Button/Button';
 import { useNavigate } from '@tramvai/module-router';
+import { Button } from '../../components/shared/Button/Button';
 
 export const SecondPage = () => {
   const navigate = useNavigate();

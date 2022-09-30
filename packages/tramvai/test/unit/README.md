@@ -39,14 +39,18 @@ it('test', async () => {
 
 ### Testing actions
 
+Tramvai context and DI will be created automatically, otherwise you can directly pass it as an argument.
+
 ```ts
 import { testAction } from '@tramvai/test-unit';
 
 it('test', async () => {
-  const { run } = testAction(action);
+  const { run, context } = testAction(action, { initialState: { a: 1 } });
 
   expect(await run(true)).toBe('hello');
   expect(await run(false)).toBe('world');
+
+  context.getState(); // { a: 1 }
 });
 ```
 

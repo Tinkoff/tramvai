@@ -42,10 +42,10 @@ import { testComponent } from '@tramvai/test-react';
 
 describe('test', () => {
   it('render', async () => {
-    const { render, rerender, context, act, fireEvent, Wrapper } = testComponent(<Cmp id={1} />);
+    const { screen, rerender, context, act, fireEvent, Wrapper } = testComponent(<Cmp id={1} />);
 
     // test component render
-    expect(render.getByTestId('test').textContent).toBe('Content 1');
+    expect(screen.getByTestId('test').textContent).toBe('Content 1');
 
     // test render after store update
     act(() => {
@@ -53,12 +53,12 @@ describe('test', () => {
     });
 
     // interact with the component
-    fireEvent.click(render.getByText('Button'));
+    fireEvent.click(screen.getByText('Button'));
 
     // component rerender
     rerender(<Cmp id={2} />);
 
-    expect(render.getByTestId('test').textContent).toBe('Content 2');
+    expect(screen.getByTestId('test').textContent).toBe('Content 2');
   });
 });
 ```

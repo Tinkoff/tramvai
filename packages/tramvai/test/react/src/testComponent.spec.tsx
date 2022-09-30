@@ -19,9 +19,9 @@ describe('test/unit/react/testComponent', () => {
       );
     };
 
-    const { render } = testComponent(<Cmp />);
+    const { screen } = testComponent(<Cmp />);
 
-    expect(render.getByTestId('test').textContent).toBe('Content');
+    expect(screen.getByTestId('test').textContent).toBe('Content');
   });
 
   it('should rerender component on store updates', async () => {
@@ -38,14 +38,14 @@ describe('test/unit/react/testComponent', () => {
       );
     };
 
-    const { context, render, act } = testComponent(<Cmp />, { stores: [store] });
-    expect(render.getByTestId('content').textContent).toBe('Counter: 1');
+    const { context, screen, act } = testComponent(<Cmp />, { stores: [store] });
+    expect(screen.getByTestId('content').textContent).toBe('Counter: 1');
 
     await act(() => {
       context.dispatch(event());
     });
 
-    expect(render.getByTestId('content').textContent).toBe('Counter: 2');
+    expect(screen.getByTestId('content').textContent).toBe('Counter: 2');
   });
 
   it('should rerender component on store updates using storeSelector', async () => {
@@ -62,13 +62,13 @@ describe('test/unit/react/testComponent', () => {
       );
     };
 
-    const { context, render, act } = testComponent(<Cmp />, { stores: [store] });
-    expect(render.getByTestId('content').textContent).toBe('Counter: 1');
+    const { context, screen, act } = testComponent(<Cmp />, { stores: [store] });
+    expect(screen.getByTestId('content').textContent).toBe('Counter: 1');
     await act(() => {
       context.dispatch(event());
     });
 
-    expect(render.getByTestId('content').textContent).toBe('Counter: 2');
+    expect(screen.getByTestId('content').textContent).toBe('Counter: 2');
   });
 
   it('should work with di', async () => {

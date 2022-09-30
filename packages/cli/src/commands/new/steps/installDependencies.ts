@@ -15,7 +15,8 @@ const COMMON_JEST_DEPENDENCIES = [
   '@types/jest@^29.0.0',
   'jest@^29.0.0',
   'jest-circus@^29.0.0',
-  'react-test-renderer',
+  'jest-environment-jsdom@^29.0.0',
+  'ts-node',
 ];
 
 const DEPS: Record<Type, { dependencies: string[]; jestDevDependencies: string[] }> = {

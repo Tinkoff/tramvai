@@ -30,10 +30,11 @@ export function testAction(
   {
     initialState,
     providers,
+    modules,
     di,
     store,
     stores,
-    context = createMockContext({ initialState, di, providers, store, stores }),
+    context = createMockContext({ initialState, di, providers, modules, store, stores }),
   }: Options = {}
 ) {
   return {
@@ -46,5 +47,6 @@ export function testAction(
     run: (payload?: any) => {
       return context.executeAction(action as any, payload);
     },
+    context,
   };
 }

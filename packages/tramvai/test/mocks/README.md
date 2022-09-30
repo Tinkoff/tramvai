@@ -27,14 +27,41 @@ store.dispatch('event');
 
 #### Initial State
 
+Pass required stores, initial state will be applied automatically:
+
+```ts
+import { createMockStore } from '@tramvai/test-mocks';
+
+const reducer = createReducer('test', 'value');
+
+const store = createMockStore({ stores: [reducer] });
+
+const state = store.getState(); // { test: 'value' }
+```
+
+Or pass just initialState, fake reducers will be created under the hood:
+
 ```ts
 import { createMockStore } from '@tramvai/test-mocks';
 
 const initialState = { a: 1, b: 2 };
-const reducerC = createReducer('c', 3);
-const store = createMockStore({ stores: [reducerC], initialState });
 
-const state = store.getState();
+const store = createMockStore({ initialState });
+
+const state = store.getState(); // { a: 1, b: 2 }
+```
+
+Also you can change initial state of passed reducer:
+
+```ts
+import { createMockStore } from '@tramvai/test-mocks';
+
+const initialState = { test: 'modified' };
+const reducer = createReducer('test', 'default');
+
+const store = createMockStore({ stores: [reducer], initialState });
+
+const state = store.getState(); // { test: 'modified' }
 ```
 
 <p>

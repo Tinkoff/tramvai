@@ -2,8 +2,8 @@ import { declareAction } from '@tramvai/core';
 
 export const {{ camelCase name }}Action = declareAction({
   name: '{{ dashCase name }}-action',
-  fn(payload) {
-    return this.dispatch({ type: 'FAKE_ACTION', payload });
+  async fn(payload: string) {
+    return payload;
   },
   conditions: {},
 });

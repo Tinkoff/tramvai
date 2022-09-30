@@ -8,3 +8,4 @@ export { createMockRequestManager } from './requestManager';
 export { createMockAppInfo } from './appInfo';
 export { createMockCache } from './cache';
 export { createMockCookieManager } from './cookie';
+export { CommonTestModule } from './CommonTestModule';

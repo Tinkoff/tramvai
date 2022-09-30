@@ -84,6 +84,10 @@ const docusaurusConfig = {
       // eslint-disable-next-line import/no-extraneous-dependencies
       darkTheme: require('prism-react-renderer/themes/vsDark'),
     },
+    tableOfContents: {
+      minHeadingLevel: 2,
+      maxHeadingLevel: 4,
+    },
     navbar: {
       logo: {
         src: 'img/logo/tramvai-mono-full.svg',

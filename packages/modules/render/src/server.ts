@@ -20,6 +20,7 @@ import {
   RESOURCE_INLINE_OPTIONS,
   ResourceType,
   RENDER_FLOW_AFTER_TOKEN,
+  MODERN_SATISFIES_TOKEN,
 } from '@tramvai/tokens-render';
 import { Scope } from '@tinkoff/dippy';
 import { WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN } from '@tramvai/tokens-server-private';
@@ -161,7 +162,7 @@ export const DEFAULT_POLYFILL_CONDITION =
         renderSlots: { token: RENDER_SLOTS, optional: true },
         polyfillCondition: POLYFILL_CONDITION,
         htmlAttrs: HTML_ATTRS,
-        modern: 'modernSatisfies',
+        modern: MODERN_SATISFIES_TOKEN,
         renderFlowAfter: { token: RENDER_FLOW_AFTER_TOKEN, optional: true },
         logger: LOGGER_TOKEN,
       },
@@ -276,7 +277,7 @@ export const DEFAULT_POLYFILL_CONDITION =
       },
     }),
     provide({
-      provide: 'modernSatisfies',
+      provide: MODERN_SATISFIES_TOKEN,
       useFactory: ({ requestManager, userAgent, cache }) => {
         const reqUserAgent = requestManager.getHeader('user-agent') as string;
         if (cache.has(reqUserAgent)) {

@@ -1,12 +1,8 @@
 import type { Config } from '@jest/types';
-import baseConfig from './jest.config';
 
 const config: Config.InitialOptions = {
   preset: '@tramvai/test-unit-jest',
-  testPathIgnorePatterns: [
-    'node_modules/',
-    '__integration__',
-  ],
+  testPathIgnorePatterns: ['node_modules/', '__integration__'],
 };
 
 // eslint-disable-next-line import/no-default-export

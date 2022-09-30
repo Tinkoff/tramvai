@@ -8,5 +8,9 @@
     "declarationDir": "./lib",
     "outDir": "./lib",
     "rootDir": "./src"
-  }
+  },
+  "exclude": [
+    "**/*.spec.js",
+    "standalone-tests"
+  ]
 }

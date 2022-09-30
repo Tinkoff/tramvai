@@ -26,6 +26,30 @@
         },
         {
             "path": "../../tokens/router"
+        },
+        {
+            "path": "../../libs/errors"
+        },
+        {
+            "path": "../../libs/url"
+        },
+        {
+            "path": "../../tokens/common"
+        },
+        {
+            "path": "../client-hints"
+        },
+        {
+            "path": "../../tramvai/papi"
+        },
+        {
+            "path": "../../tokens/server"
+        },
+        {
+            "path": "../../tokens/metrics"
+        },
+        {
+            "path": "../../tokens/core"
         }
     ]
 }

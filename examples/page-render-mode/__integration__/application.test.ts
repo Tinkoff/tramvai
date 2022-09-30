@@ -1,9 +1,20 @@
 import type { StartCliResult } from '@tramvai/test-integration';
+import { sleep } from '@tramvai/test-integration';
 import { startCli } from '@tramvai/test-integration';
 import { initPuppeteer } from '@tramvai/test-puppeteer';
 import path from 'path';
+import fetch from 'node-fetch';
 
 jest.setTimeout(30000);
+
+const desktopModernUA =
+  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.3987.87 Safari/537.36';
+const desktopDefaultUA =
+  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.3987.87 Safari/537.36';
+const mobileModernUA =
+  'Mozilla/5.0 (Linux; Android 7.0; SM-G930V Build/NRD90M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.3071.125 Mobile Safari/537.36';
+const mobileDefaultUA =
+  'Mozilla/5.0 (Linux; Android 7.0; SM-G930V Build/NRD90M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.3071.125 Mobile Safari/537.36';
 
 describe('page-render-mode', () => {
   let app: StartCliResult;
@@ -89,7 +100,7 @@ describe('page-render-mode', () => {
     expect(await page.$eval('.application', (node) => (node as HTMLElement).innerText))
       .toMatchInlineSnapshot(`
       "Tramvai 🥳
-      Main Page to second page
+      Main Page to second page to static page
       this Footer in page-render-mode"
     `);
 
@@ -111,6 +122,189 @@ describe('page-render-mode', () => {
     `);
 
     await browser.close();
+  });
+
+  describe('static pages', () => {
+    afterEach(() => {
+      return fetch(`${app.serverUrl}/page-render-mode/private/papi/revalidate`, {
+        method: 'POST',
+      });
+    });
+
+    it('static page works', async () => {
+      const { browser } = await initPuppeteer(app.serverUrl);
+
+      const page = await browser.newPage();
+
+      await page.goto(`${app.serverUrl}/static/`);
+
+      expect(await page.$eval('.application', (node) => (node as HTMLElement).innerText))
+        .toMatchInlineSnapshot(`
+        "Tramvai 🥳
+        Static Page to main page
+        this Footer in page-render-mode"
+      `);
+
+      await browser.close();
+    });
+
+    it('cache pages by url, query are ignored', async () => {
+      // @TODO: перейти на app.request('/static/') после мержа MR с переработкой papi
+      const res1 = await fetch(`${app.serverUrl}/static/`, { headers: { cookie: 'foo=bar' } });
+      // time to background fetch unpersonalized page
+      await sleep(100);
+      const res2 = await fetch(`${app.serverUrl}/static/?a=1`, { headers: { cookie: 'foo=bar' } });
+      const res3 = await fetch(`${app.serverUrl}/static/?b=2`, { headers: { cookie: 'foo=bar' } });
+      const res4 = await fetch(`${app.serverUrl}/static-second/`, {
+        headers: { cookie: 'foo=bar' },
+      });
+      // time to background fetch unpersonalized page
+      await sleep(100);
+      const res5 = await fetch(`${app.serverUrl}/static-second/?a=1`, {
+        headers: { cookie: 'foo=bar' },
+      });
+      const res6 = await fetch(`${app.serverUrl}/static-second/?b=2`, {
+        headers: { cookie: 'foo=bar' },
+      });
+
+      expect(res1.headers.get('x-tramvai-static-page-from-cache')).toBe(null);
+      expect(res2.headers.get('x-tramvai-static-page-from-cache')).toBe('true');
+      expect(res3.headers.get('x-tramvai-static-page-from-cache')).toBe('true');
+      expect(res4.headers.get('x-tramvai-static-page-from-cache')).toBe(null);
+      expect(res5.headers.get('x-tramvai-static-page-from-cache')).toBe('true');
+      expect(res6.headers.get('x-tramvai-static-page-from-cache')).toBe('true');
+    });
+
+    it('cache pages by host', async () => {
+      const res1 = await fetch(`${app.serverUrl}/static/`, {
+        headers: { 'x-original-host': 'foo.com', cookie: 'foo=bar' },
+      });
+      // time to background fetch unpersonalized page
+      await sleep(100);
+      const res2 = await fetch(`${app.serverUrl}/static/`, {
+        headers: { 'x-original-host': 'foo.com', cookie: 'foo=bar' },
+      });
+      const res3 = await fetch(`${app.serverUrl}/static/`, {
+        headers: { 'x-original-host': 'bar.com', cookie: 'foo=bar' },
+      });
+      // time to background fetch unpersonalized page
+      await sleep(100);
+      const res4 = await fetch(`${app.serverUrl}/static/`, {
+        headers: { 'x-original-host': 'bar.com', cookie: 'foo=bar' },
+      });
+
+      expect(res1.headers.get('x-tramvai-static-page-from-cache')).toBe(null);
+      expect(res2.headers.get('x-tramvai-static-page-from-cache')).toBe('true');
+      expect(res3.headers.get('x-tramvai-static-page-from-cache')).toBe(null);
+      expect(res4.headers.get('x-tramvai-static-page-from-cache')).toBe('true');
+    });
+
+    it('cache pages by deviceType', async () => {
+      const res1 = await fetch(`${app.serverUrl}/static/`, {
+        headers: { 'User-Agent': desktopModernUA, cookie: 'foo=bar' },
+      });
+      // time to background fetch unpersonalized page
+      await sleep(100);
+      const res2 = await fetch(`${app.serverUrl}/static/`, {
+        headers: { 'User-Agent': desktopModernUA, cookie: 'foo=bar' },
+      });
+      const res3 = await fetch(`${app.serverUrl}/static/`, {
+        headers: { 'User-Agent': mobileModernUA, cookie: 'foo=bar' },
+      });
+      // time to background fetch unpersonalized page
+      await sleep(100);
+      const res4 = await fetch(`${app.serverUrl}/static/`, {
+        headers: { 'User-Agent': mobileModernUA, cookie: 'foo=bar' },
+      });
+
+      expect(res1.headers.get('x-tramvai-static-page-from-cache')).toBe(null);
+      expect(res2.headers.get('x-tramvai-static-page-from-cache')).toBe('true');
+      expect(res3.headers.get('x-tramvai-static-page-from-cache')).toBe(null);
+      expect(res4.headers.get('x-tramvai-static-page-from-cache')).toBe('true');
+    });
+
+    it('cache pages by modern', async () => {
+      const res1 = await fetch(`${app.serverUrl}/static/`, {
+        headers: { 'User-Agent': desktopModernUA, cookie: 'foo=bar' },
+      });
+      // time to background fetch unpersonalized page
+      await sleep(100);
+      const res2 = await fetch(`${app.serverUrl}/static/`, {
+        headers: { 'User-Agent': desktopModernUA, cookie: 'foo=bar' },
+      });
+      const res3 = await fetch(`${app.serverUrl}/static/`, {
+        headers: { 'User-Agent': desktopDefaultUA, cookie: 'foo=bar' },
+      });
+      // time to background fetch unpersonalized page
+      await sleep(100);
+      const res4 = await fetch(`${app.serverUrl}/static/`, {
+        headers: { 'User-Agent': desktopDefaultUA, cookie: 'foo=bar' },
+      });
+
+      expect(res1.headers.get('x-tramvai-static-page-from-cache')).toBe(null);
+      expect(res2.headers.get('x-tramvai-static-page-from-cache')).toBe('true');
+      expect(res3.headers.get('x-tramvai-static-page-from-cache')).toBe(null);
+      expect(res4.headers.get('x-tramvai-static-page-from-cache')).toBe('true');
+    });
+
+    it('Requests without cookies will be cached directly', async () => {
+      const res1 = await fetch(`${app.serverUrl}/static/`);
+      const res2 = await fetch(`${app.serverUrl}/static/`);
+      const res3 = await fetch(`${app.serverUrl}/static/`);
+
+      expect(res1.headers.get('x-tramvai-static-page-from-cache')).toBe(null);
+      expect(res2.headers.get('x-tramvai-static-page-from-cache')).toBe('true');
+      expect(res3.headers.get('x-tramvai-static-page-from-cache')).toBe('true');
+    });
+
+    it('/papi/revalidate by path', async () => {
+      const res1 = await fetch(`${app.serverUrl}/static/`);
+
+      await fetch(`${app.serverUrl}/page-render-mode/private/papi/revalidate`, {
+        method: 'POST',
+        body: JSON.stringify({ path: 'static' }),
+      });
+
+      const res2 = await fetch(`${app.serverUrl}/static/`);
+
+      expect(res1.headers.get('x-tramvai-static-page-from-cache')).toBe(null);
+      expect(res2.headers.get('x-tramvai-static-page-from-cache')).toBe(null);
+    });
+
+    // eslint-disable-next-line jest/expect-expect
+    it('Cache hit metrics', async () => {
+      await fetch(`${app.serverUrl}/static/`);
+      await fetch(`${app.serverUrl}/static/`);
+      await fetch(`${app.serverUrl}/static/`);
+
+      await app
+        .request('/metrics')
+        .expect(200, /# TYPE static_pages_cache_hit counter\nstatic_pages_cache_hit \d+/);
+    });
+
+    describe('5xx errors', () => {
+      it('Fetched cache disabled', async () => {
+        const res1 = await fetch(`${app.serverUrl}/static-error/`, {
+          headers: { cookie: 'foo=bar' },
+        });
+        await sleep(100);
+        const res2 = await fetch(`${app.serverUrl}/static-error/`, {
+          headers: { cookie: 'foo=bar' },
+        });
+
+        expect(res1.headers.get('x-tramvai-static-page-from-cache')).toBe(null);
+        expect(res2.headers.get('x-tramvai-static-page-from-cache')).toBe(null);
+      });
+
+      it('Direct cache disabled', async () => {
+        const res1 = await fetch(`${app.serverUrl}/static-error/`);
+        await sleep(100);
+        const res2 = await fetch(`${app.serverUrl}/static-error/`);
+
+        expect(res1.headers.get('x-tramvai-static-page-from-cache')).toBe(null);
+        expect(res2.headers.get('x-tramvai-static-page-from-cache')).toBe(null);
+      });
+    });
   });
 });
 

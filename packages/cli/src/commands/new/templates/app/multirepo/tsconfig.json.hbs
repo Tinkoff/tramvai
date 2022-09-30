@@ -25,5 +25,11 @@
       "~processes/*": ["processes/*"],
       "~app/*": ["app/*"]
     }
-  }
+  }{{#if isJest}},
+  "ts-node": {
+    "transpileOnly": true,
+    "compilerOptions": {
+      "allowJs": true,
+    }
+  }{{/if}}
 }

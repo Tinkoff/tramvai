@@ -2,8 +2,7 @@ import React from 'react';
 import { Code } from '../code';
 import { BaseLink } from '../base-link';
 
-const code = `$ npm install -g @tramvai/cli
-$ tramvai new new-app
+const code = `$ npx @tramvai/create new-app
 $ cd new-app && npm start`;
 
 export function QuickStart() {

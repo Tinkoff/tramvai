@@ -5,10 +5,8 @@ describe('{{name}}Action', () => {
   it('execution', async () => {
     const { run } = testAction({{ camelCase name }}Action);
 
-    await run('payload');
+    const result = await run('payload');
 
-    expect(dispatchMock.calls[0]).toEqual([
-      { type: 'FAKE_ACTION', payload: 'payload' },
-    ]);
+    expect(result).toEqual('payload');
   });
 });

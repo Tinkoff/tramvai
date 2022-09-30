@@ -1,20 +1,8 @@
 import fetch from 'node-fetch';
-import { APP_INFO_TOKEN, provide } from '@tramvai/core';
 import type { Cache } from '@tramvai/tokens-common';
-import {
-  CREATE_CACHE_TOKEN,
-  ENV_MANAGER_TOKEN,
-  LOGGER_TOKEN,
-  REQUEST_MANAGER_TOKEN,
-} from '@tramvai/tokens-common';
 import { getDiWrapper } from '@tramvai/test-helpers';
-import {
-  createMockAppInfo,
-  createMockEnvManager,
-  createMockLogger,
-  createMockRequestManager,
-  createMockCache,
-} from '@tramvai/test-mocks';
+import { CommonTestModule } from '@tramvai/test-mocks';
+import type { createMockEnvManager } from '@tramvai/test-mocks';
 import { HttpClientModule } from '../../httpClientModule';
 
 jest.mock('node-fetch');
@@ -30,36 +18,17 @@ export const testApi = (options: Options) => {
 
   const { di } = getDiWrapper({
     di: options.di,
-    modules: [HttpClientModule, ...modules],
-    providers: [
-      provide({
-        provide: ENV_MANAGER_TOKEN,
-        useValue: createMockEnvManager(env),
-      }),
-      provide({
-        provide: LOGGER_TOKEN,
-        useValue: createMockLogger(),
-      }),
-      provide({
-        provide: APP_INFO_TOKEN,
-        useValue: createMockAppInfo(),
-      }),
-      provide({
-        provide: REQUEST_MANAGER_TOKEN,
-        useValue: createMockRequestManager(),
-      }),
-      provide({
-        provide: CREATE_CACHE_TOKEN,
-        useValue: () => {
-          const cache = createMockCache();
-
+    modules: [
+      CommonTestModule.forRoot({
+        env,
+        onCacheCreated: (cache: Cache) => {
           caches.push(cache);
-
-          return cache;
         },
       }),
-      ...providers,
+      HttpClientModule,
+      ...modules,
     ],
+    providers: [...providers],
   });
 
   const fetchMock: jest.Mock<ReturnType<typeof fetch>, Parameters<typeof fetch>> = fetch as any;

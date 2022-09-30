@@ -22,7 +22,6 @@ Call of `app.render` resolves to the HTML render that is returned from server wh
 
 ```ts
 import { startCli } from '@tramvai/test-integration';
-import { initPuppeteer, wrapPuppeteerPage } from '@tramvai/test-puppeteer';
 
 beforeAll(async () => {
   app = await startCli('bootstrap', {

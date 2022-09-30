@@ -2,9 +2,10 @@
   "name": "@tramvai/module-page-render-mode",
   "version": "0.0.0-stub",
   "description": "Enable different rendering modes for pages",
-  "main": "lib/index.js",
-  "module": "lib/index.es.js",
-  "typings": "lib/index.d.ts",
+  "main": "./lib/server.js",
+  "module": "./lib/server.es.js",
+  "browser": "./lib/browser.js",
+  "typings": "./lib/server.d.ts",
   "files": [
     "lib"
   ],
@@ -22,14 +23,26 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
-  "dependencies": {},
+  "dependencies": {
+    "node-fetch": "^2.6.1",
+    "@tinkoff/errors": "0.0.0-stub",
+    "@tinkoff/url": "0.0.0-stub"
+  },
   "peerDependencies": {
+    "@tinkoff/utils": "^2.1.2",
     "@tinkoff/dippy": "0.0.0-stub",
     "@tramvai/core": "0.0.0-stub",
     "@tramvai/react": "0.0.0-stub",
+    "@tramvai/papi": "0.0.0-stub",
     "@tramvai/module-router": "0.0.0-stub",
+    "@tramvai/module-client-hints": "0.0.0-stub",
+    "@tramvai/tokens-common": "0.0.0-stub",
+    "@tramvai/tokens-core": "0.0.0-stub",
     "@tramvai/tokens-render": "0.0.0-stub",
     "@tramvai/tokens-router": "0.0.0-stub",
+    "@tramvai/tokens-server": "0.0.0-stub",
+    "@tramvai/tokens-metrics": "0.0.0-stub",
+    "prom-client": "^12.0.0",
     "react": ">=16.14.0",
     "tslib": "^2.4.0"
   }

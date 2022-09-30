@@ -1,7 +1,7 @@
 import React from 'react';
 import type { FC } from 'react';
 import type { RenderOptions } from '@testing-library/react';
-import { render, act, fireEvent } from '@testing-library/react';
+import { render, act, fireEvent, screen } from '@testing-library/react';
 import { Provider as StateProvider } from '@tramvai/state';
 import { DIContext } from '@tramvai/react';
 import type { CONTEXT_TOKEN } from '@tramvai/tokens-common';
@@ -27,11 +27,12 @@ export const testComponent = (
   element: React.ReactElement,
   {
     providers,
+    modules,
     initialState,
     store,
     stores,
     di,
-    context = createMockContext({ initialState, providers, di, store, stores }),
+    context = createMockContext({ initialState, providers, modules, di, store, stores }),
     currentRoute,
     currentUrl,
     router = createMockRouter({ currentRoute, currentUrl }),
@@ -63,6 +64,7 @@ export const testComponent = (
         }
       });
     },
+    screen,
     fireEvent,
     context,
     router,

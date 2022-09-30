@@ -25,11 +25,12 @@ export const testHook = <TProps, TResult>(
   hookCallback: (props: TProps) => TResult,
   {
     providers,
+    modules,
     initialState,
     store,
     stores,
     di,
-    context = createMockContext({ initialState, providers, di, store, stores }),
+    context = createMockContext({ initialState, providers, modules, di, store, stores }),
     currentRoute,
     currentUrl,
     router = createMockRouter({ currentRoute, currentUrl }),

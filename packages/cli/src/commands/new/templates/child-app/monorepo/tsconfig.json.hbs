@@ -16,5 +16,11 @@
     "importHelpers": true,
     "skipLibCheck": true,
     "baseUrl": "src"
-  }
+  }{{#if isJest}},
+  "ts-node": {
+    "transpileOnly": true,
+    "compilerOptions": {
+      "allowJs": true,
+    }
+  }{{/if}}
 }

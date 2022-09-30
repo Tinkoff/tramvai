@@ -11,7 +11,8 @@ export const MainPage: PageComponent = () => {
 
   return (
     <div>
-      Main Page <Button onClick={() => navigate('/second/')}>to second page</Button>
+      Main Page <Button onClick={() => navigate('/second/')}>to second page</Button>{' '}
+      <Button onClick={() => navigate('/static/')}>to static page</Button>
     </div>
   );
 };

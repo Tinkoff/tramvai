@@ -44,7 +44,7 @@ it('puppeteer', async () => {
     await page.$eval('.application', (node) => (node as HTMLElement).innerText)
   ).toMatchInlineSnapshot(`"Main Page click link"`);
 
-  await wrapper.router.navigateWithReload('./second');
+  await wrapper.router.navigate('./second');
 
   expect(
     await page.$eval('.application', (node) => (node as HTMLElement).innerText)

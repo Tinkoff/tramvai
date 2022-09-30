@@ -38,6 +38,7 @@ type Options = OptionsDi &
  * @param initialState - начальное состояние, которое будет передано в createMockStore если явно не передавать store
  * @param store - глобальный стор приложения, по умолчанию используется результат createMockStore
  * @param providers - список провайдеров, которые будут переданы в createMockDi если явно не передавать di
+ * @param modules - список модулей, провайдеры которых будут добавлены в создаваемый di-контейнер
  * @param stores - di-контейнер, по умолчанию используется результат createMockDi
  * @param useTramvaiActionsConditionals - добавляет встроенные в tramvai actions conditionals
  */
@@ -46,7 +47,8 @@ export const createMockContext = ({
   initialState,
   store = createMockStore({ stores, initialState }),
   providers,
-  di = createMockDi({ providers }),
+  modules,
+  di = createMockDi({ providers, modules }),
   useTramvaiActionsConditionals = false,
 }: Options = {}): typeof CONTEXT_TOKEN => {
   const { __dispatcherContext__: dispatcherContext } = store as any; // хак для получения уже созданного dispatcherContext в сторе

@@ -167,7 +167,7 @@ export const RESOURCE_INLINE_OPTIONS =
  */
 export const TRAMVAI_RENDER_MODE = createToken<TramvaiRenderMode>('tramvaiRenderMode');
 
-export type TramvaiRenderMode = 'ssr' | 'client';
+export type TramvaiRenderMode = 'ssr' | 'client' | 'static';
 
 export { ResourceSlot };
 export { StorageRecord as ResourceType };
@@ -175,3 +175,5 @@ export { StorageRecord as ResourceType };
 export const RENDER_FLOW_AFTER_TOKEN = createToken<() => Promise<void>>('render flow after', {
   multi: true,
 });
+
+export const MODERN_SATISFIES_TOKEN = createToken<boolean>('modernSatisfies');
