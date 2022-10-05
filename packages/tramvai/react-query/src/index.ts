@@ -4,4 +4,4 @@ export { createInfiniteQuery } from './infiniteQuery/create';
 export { useInfiniteQuery } from './infiniteQuery/use';
 export { createMutation } from './mutation/create';
 export { useMutation } from './mutation/use';
-export { useQueryClient } from 'react-query';
+export { useQueryClient } from '@tanstack/react-query';

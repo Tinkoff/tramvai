@@ -4,7 +4,7 @@ import type {
   MutationKey as ReactMutationKey,
   MutationOptions,
   UseMutationOptions,
-} from 'react-query';
+} from '@tanstack/react-query';
 
 export const MUTATION_PARAMETERS = '__mutations_parameters__';
 

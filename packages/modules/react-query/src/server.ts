@@ -1,6 +1,6 @@
-import { commandLineListTokens, Module, provide } from '@tramvai/core';
+import { Module, provide } from '@tramvai/core';
 import { RENDER_SLOTS, ResourceType, ResourceSlot } from '@tramvai/tokens-render';
-import { dehydrate as queryDehydrate, setLogger } from 'react-query';
+import { dehydrate as queryDehydrate } from '@tanstack/react-query';
 import { safeStringify } from '@tramvai/safe-strings';
 import {
   QUERY_CLIENT_DEHYDRATED_STATE_TOKEN,
@@ -8,11 +8,8 @@ import {
   QUERY_DEHYDRATE_STATE_NAME_TOKEN,
 } from '@tramvai/tokens-react-query';
 import { sharedQueryProviders } from './shared/providers';
-import { logger } from './shared/noopLogger';
 
 export * from '@tramvai/tokens-react-query';
-
-setLogger(logger);
 
 @Module({
   imports: [],
@@ -42,18 +39,6 @@ setLogger(logger);
       deps: {
         state: QUERY_CLIENT_DEHYDRATED_STATE_TOKEN,
         propKey: QUERY_DEHYDRATE_STATE_NAME_TOKEN,
-      },
-    }),
-    provide({
-      provide: commandLineListTokens.clear,
-      multi: true,
-      useFactory: ({ queryClient }) => {
-        return function clearReactQueryCache() {
-          queryClient.clear();
-        };
-      },
-      deps: {
-        queryClient: QUERY_CLIENT_TOKEN,
       },
     }),
   ],

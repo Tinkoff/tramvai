@@ -28,7 +28,7 @@
     "@tinkoff/dippy": "0.0.0-stub",
     "@tinkoff/utils": "^2.1.2",
     "react": ">=16.14.0",
-    "react-query": "^3.35.0",
+    "@tanstack/react-query": "^4.7.1",
     "tslib": "^2.4.0"
   },
   "module": "lib/index.es.js",

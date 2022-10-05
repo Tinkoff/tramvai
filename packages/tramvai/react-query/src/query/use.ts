@@ -1,6 +1,9 @@
 import { useMemo } from 'react';
-import type { UseQueryOptions, QueryObserverResult } from 'react-query';
-import { useQuery as useOriginalQuery, useQueries as useOriginalQueries } from 'react-query';
+import type { UseQueryOptions, QueryObserverResult } from '@tanstack/react-query';
+import {
+  useQuery as useOriginalQuery,
+  useQueries as useOriginalQueries,
+} from '@tanstack/react-query';
 import { useConsumerContext } from '@tramvai/state';
 import { useShallowEqual } from '@tinkoff/react-hooks';
 import type { Query } from './types';
@@ -44,7 +47,7 @@ function useQueries<Result, Deps>(
     });
   }, [memoQueries, context]);
 
-  return useOriginalQueries(resultQueries);
+  return useOriginalQueries({ queries: resultQueries });
 }
 
 export { useQuery, useQueries };

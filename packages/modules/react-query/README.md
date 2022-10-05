@@ -1,6 +1,6 @@
 # ReactQuery
 
-A module that adds integration with the [react-query](https://react-query.tanstack.com/) library and is required for [@tramvai/react-query](references/tramvai/react-query.md)
+A module that adds integration with the [react-query](https://tanstack.com/query/v4) library and is required for [@tramvai/react-query](references/tramvai/react-query.md)
 
 ## Installation
 
@@ -24,9 +24,9 @@ createApp({
 
 ## Explanation
 
-The module adds an instance [react-query QueryClient](https://react-query.tanstack.com/reference/QueryClient) to the DI и and allows specifying [options for creating it](https://react-query.tanstack.com/reference/QueryClient#queryclientsetdefaultoptions).
+The module adds an instance [react-query QueryClient](https://tanstack.com/query/v4/docs/reference/QueryClient) to the DI and allows specifying [options for creating it](https://tanstack.com/query/v4/docs/reference/QueryClient#queryclientsetdefaultoptions).
 
-The module also adds [React wrappers for react-query](https://react-query.tanstack.com/reference/QueryClientProvider) to the application renderer, which allow using functions for working with query inside components.
+The module also adds [React wrappers for react-query](https://tanstack.com/query/v4/docs/reference/QueryClientProvider) to the application renderer, which allow using functions for working with query inside components.
 
 ### Server
 

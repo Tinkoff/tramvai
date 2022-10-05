@@ -1,19 +1,21 @@
+import identity from '@tinkoff/utils/function/identity';
 import applyOrReturn from '@tinkoff/utils/function/applyOrReturn';
-import type { UseMutationOptions, MutationKey as ReactMutationKey } from 'react-query';
+import type { UseMutationOptions } from '@tanstack/react-query';
 import type { ActionContext } from '@tramvai/core';
 import { declareAction } from '@tramvai/core';
 import type { CreateMutationOptions, Mutation, MutationKey } from './types';
 import { MUTATION_PARAMETERS } from './types';
-import { defaultKey } from '../defaultKey';
+import { normalizeKey } from '../shared/normalizeKey';
+import type { ReactQueryKeyOrString } from '../baseQuery/types';
 
 const convertToRawMutation = <Options, Variables, Result, Deps, Key extends MutationKey<Options>>(
   mutation: Mutation<Options, Variables, Result, Deps, Key>,
   context: ActionContext,
   options?: Options
 ): UseMutationOptions<Result, any, Variables> => {
-  const { key = defaultKey, fn, deps, conditions, mutationOptions } = mutation[MUTATION_PARAMETERS];
+  const { key = identity, fn, deps, conditions, mutationOptions } = mutation[MUTATION_PARAMETERS];
 
-  const mutationKey = applyOrReturn([options], key as unknown) as ReactMutationKey;
+  const mutationKey = normalizeKey(applyOrReturn([options], key) as ReactQueryKeyOrString);
 
   const actionWrapper = declareAction({
     name: 'mutationExecution',

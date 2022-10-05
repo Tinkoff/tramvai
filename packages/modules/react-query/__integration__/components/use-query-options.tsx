@@ -1,5 +1,5 @@
 import { createQuery, useQuery } from '@tramvai/react-query';
-import { FAKE_API_CLIENT } from '../../fakeApiClient';
+import { FAKE_API_CLIENT } from '../fakeApiClient';
 
 const query = createQuery({
   key: 'time',
@@ -23,8 +23,8 @@ const query = createQuery({
 export default function Component() {
   const { data } = useQuery(
     query.fork({
-      refetchInterval: 2000,
-      refetchIntervalInBackground: false,
+      refetchInterval: 200,
+      refetchIntervalInBackground: true,
     })
   );
 

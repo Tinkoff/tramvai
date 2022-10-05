@@ -1,5 +1,5 @@
 import type { ProvideDepsIterator } from '@tinkoff/dippy';
-import type { UseInfiniteQueryOptions, InfiniteData } from 'react-query';
+import type { UseInfiniteQueryOptions, InfiniteData } from '@tanstack/react-query';
 import type { TramvaiAction } from '@tramvai/core';
 import type { BaseCreateQueryOptions, BaseQuery } from '../baseQuery/types';
 

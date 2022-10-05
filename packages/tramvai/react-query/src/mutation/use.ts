@@ -3,8 +3,8 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   MutationKey as ReactMutationKey,
-} from 'react-query';
-import { useMutation as useOriginalMutation } from 'react-query';
+} from '@tanstack/react-query';
+import { useMutation as useOriginalMutation } from '@tanstack/react-query';
 import { useConsumerContext } from '@tramvai/state';
 import type { Mutation, MutationKey } from './types';
 import { isMutation } from './types';

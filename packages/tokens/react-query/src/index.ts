@@ -1,9 +1,8 @@
 import { createToken } from '@tinkoff/dippy';
 import type { ActionConditionsParameters } from '@tramvai/core';
-import type { QueryClient, DefaultOptions } from 'react-query';
-import type { DehydratedState } from 'react-query/hydration';
+import type { QueryClient, DefaultOptions, DehydratedState } from '@tanstack/react-query';
 
-declare module 'react-query' {
+declare module '@tanstack/react-query' {
   interface QueryOptions {
     // settings custom options for the query that might be used later in the tramvai modules
     tramvaiOptions?: {
@@ -14,14 +13,14 @@ declare module 'react-query' {
 
 /**
  * @description
- * [react-query client](https://react-query.tanstack.com/reference/QueryClient)
+ * [react-query client](https://tanstack.com/query/v4/docs/reference/QueryClient)
  */
 
 export const QUERY_CLIENT_TOKEN = createToken<QueryClient>('reactQuery queryClient');
 
 /**
  * @description
- * [default options for the react-query](https://react-query.tanstack.com/guides/important-defaults)
+ * [default options for the react-query](https://tanstack.com/query/v4/docs/guides/important-defaults)
  */
 export const QUERY_CLIENT_DEFAULT_OPTIONS_TOKEN = createToken<DefaultOptions>(
   'reactQuery queryClientDefaultOptions'
@@ -29,7 +28,7 @@ export const QUERY_CLIENT_DEFAULT_OPTIONS_TOKEN = createToken<DefaultOptions>(
 
 /**
  * @description
- * [react-query state](https://react-query.tanstack.com/reference/hydration/dehydrate) that was initialized on the server
+ * [react-query state](https://tanstack.com/query/v4/docs/reference/hydration#dehydrate) that was initialized on the server
  */
 export const QUERY_CLIENT_DEHYDRATED_STATE_TOKEN = createToken<DehydratedState>(
   'reactQuery queryClientDehydratedState'

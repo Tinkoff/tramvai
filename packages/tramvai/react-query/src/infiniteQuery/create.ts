@@ -1,12 +1,14 @@
+import identity from '@tinkoff/utils/function/identity';
 import applyOrReturn from '@tinkoff/utils/function/applyOrReturn';
-import type { UseInfiniteQueryOptions, QueryKey as ReactQueryKey } from 'react-query';
+import type { UseInfiniteQueryOptions } from '@tanstack/react-query';
 import type { ActionContext } from '@tramvai/core';
 import { declareAction } from '@tramvai/core';
 import { QUERY_CLIENT_TOKEN } from '@tramvai/module-react-query';
 import { CONTEXT_TOKEN } from '@tramvai/tokens-common';
 import type { CreateInfiniteQueryOptions, InfiniteQuery } from './types';
+import type { ReactQueryKeyOrString } from '../baseQuery/types';
 import { QUERY_PARAMETERS } from '../baseQuery/types';
-import { defaultKey } from '../defaultKey';
+import { normalizeKey } from '../shared/normalizeKey';
 
 const convertToRawQuery = <Options, PageParam, Result, Deps>(
   query: InfiniteQuery<Options, PageParam, Result, Deps>,
@@ -14,7 +16,7 @@ const convertToRawQuery = <Options, PageParam, Result, Deps>(
   options: Options
 ): UseInfiniteQueryOptions<Result, Error> => {
   const {
-    key = defaultKey,
+    key = identity,
     fn,
     getNextPageParam,
     getPreviousPageParam,
@@ -23,7 +25,7 @@ const convertToRawQuery = <Options, PageParam, Result, Deps>(
     infiniteQueryOptions,
   } = query[QUERY_PARAMETERS];
 
-  const queryKey = applyOrReturn([options], key as unknown) as ReactQueryKey;
+  const queryKey = normalizeKey(applyOrReturn([options], key) as ReactQueryKeyOrString);
 
   const actionWrapper = declareAction({
     name: 'infiniteQueryExecution',

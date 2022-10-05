@@ -1,9 +1,13 @@
 import type { ActionConditionsParameters, ActionContext, TramvaiAction } from '@tramvai/core';
-import type { QueryKey as ReactQueryKey, QueryOptions } from 'react-query';
+import type { QueryKey as ReactQueryKey, QueryOptions } from '@tanstack/react-query';
 
 export const QUERY_PARAMETERS = '__query_parameters__';
 
-export type QueryKey<Options> = ((options: Options) => ReactQueryKey) | ReactQueryKey;
+export type ReactQueryKeyOrString = ReactQueryKey | string;
+
+export type QueryKey<Options> =
+  | ((options: Options) => ReactQueryKeyOrString)
+  | ReactQueryKeyOrString;
 
 export interface BaseCreateQueryOptions<Options, Deps> {
   key: QueryKey<Options>;

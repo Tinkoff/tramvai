@@ -5,7 +5,7 @@ sidebar_position: 5
 
 # React Query
 
-A library for handling requests in React components. Based on [react-query](https://react-query.tanstack.com/).
+A library for handling requests in React components. Based on [@tanstack/react-query](https://tanstack.com/query/v4/).
 
 ## Explanation
 
@@ -86,7 +86,7 @@ const query = createQuery({
 
 #### Unique query parameters
 
-To create a generic `query` that takes parameters for a query, you must return a unique `key`, you can read more about this in the official documentation section [Query Keys](https://react-query.tanstack.com/guides/query-keys)
+To create a generic `query` that takes parameters for a query, you must return a unique `key`, you can read more about this in the official documentation section [Query Keys](https://tanstack.com/query/v4/docs/guides/query-keys)
 
 As a parameter `key` you can use:
 
@@ -121,7 +121,7 @@ export function Component({ id }) {
 
 React hook for working with `Query` object
 
-[react-query docs](https://react-query.tanstack.com/reference/useQuery)
+[react-query docs](https://tanstack.com/query/v4/docs/reference/useQuery)
 
 ```ts
 import { useQuery } from '@tramvai/react-query';
@@ -137,7 +137,7 @@ export function Component() {
 
 React Hook for working with the list of `Query` objects
 
-[react-query docs](https://react-query.tanstack.com/reference/useQueries)
+[react-query docs](https://tanstack.com/query/v4/docs/reference/useQueries)
 
 ```ts
 import { useQueries } from '@tramvai/react-query';
@@ -189,7 +189,7 @@ const query = createInfiniteQuery({
 
 React hook for working with the `InfiniteQuery` object
 
-[react-query docs](https://react-query.tanstack.com/reference/useInfiniteQuery)
+[react-query docs](https://tanstack.com/query/v4/docs/reference/useInfiniteQuery)
 
 ```ts
 import { useInfiniteQuery } from '@tramvai/react-query';
@@ -248,7 +248,7 @@ const mutation = createMutation({
 
 React hook for working with the `Mutation` object
 
-[react-query docs](https://react-query.tanstack.com/reference/useMutation)
+[react-query docs](https://tanstack.com/query/v4/docs/reference/useMutation)
 
 ```ts
 import { useMutation } from '@tramvai/react-query';
@@ -276,6 +276,6 @@ export function Component() {
 
 :::warning Prefer to use methods from the `@tramvai/react-query` as it is can work both with the `Query` wrapper and the query options to `react-query` itself :::
 
-You can get [`QueryClient`](https://react-query.tanstack.com/reference/QueryClient) from di by token `QUERY_CLIENT_TOKEN` or using method `useQueryClient` in React-components.
+You can get [`QueryClient`](https://tanstack.com/query/v4/docs/reference/QueryClient) from di by token `QUERY_CLIENT_TOKEN` or using method `useQueryClient` in React-components.
 
 To convert wrapped `Query` object to object acceptable by `react-query` use method [raw](#raw) of the `Query` instance.

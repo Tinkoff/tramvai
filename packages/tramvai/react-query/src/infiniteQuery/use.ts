@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import type { InfiniteQueryObserverResult, UseInfiniteQueryOptions } from 'react-query';
-import { useInfiniteQuery as useOriginalInfiniteQuery } from 'react-query';
+import type { InfiniteQueryObserverResult, UseInfiniteQueryOptions } from '@tanstack/react-query';
+import { useInfiniteQuery as useOriginalInfiniteQuery } from '@tanstack/react-query';
 import { useConsumerContext } from '@tramvai/state';
 import type { InfiniteQuery } from './types';
 import { isQuery } from '../baseQuery/types';

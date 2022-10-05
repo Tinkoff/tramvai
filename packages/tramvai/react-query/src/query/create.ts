@@ -1,21 +1,23 @@
+import identity from '@tinkoff/utils/function/identity';
 import applyOrReturn from '@tinkoff/utils/function/applyOrReturn';
-import type { UseQueryOptions, QueryKey as ReactQueryKey } from 'react-query';
+import type { UseQueryOptions } from '@tanstack/react-query';
 import type { ActionContext } from '@tramvai/core';
 import { declareAction } from '@tramvai/core';
 import { QUERY_CLIENT_TOKEN } from '@tramvai/module-react-query';
 import { CONTEXT_TOKEN } from '@tramvai/tokens-common';
 import type { CreateQueryOptions, Query } from './types';
+import type { ReactQueryKeyOrString } from '../baseQuery/types';
 import { QUERY_PARAMETERS } from '../baseQuery/types';
-import { defaultKey } from '../defaultKey';
+import { normalizeKey } from '../shared/normalizeKey';
 
 const convertToRawQuery = <Options, Result, Deps>(
   query: Query<Options, Result, Deps>,
   context: ActionContext,
   options: Options
 ): UseQueryOptions<Result, Error> => {
-  const { key = defaultKey, fn, deps, conditions, queryOptions } = query[QUERY_PARAMETERS];
+  const { key = identity, fn, deps, conditions, queryOptions } = query[QUERY_PARAMETERS];
 
-  const queryKey = applyOrReturn([options], key as unknown) as ReactQueryKey;
+  const queryKey = normalizeKey(applyOrReturn([options], key) as ReactQueryKeyOrString);
 
   const actionWrapper = declareAction({
     name: 'queryExecution',

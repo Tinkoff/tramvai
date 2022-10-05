@@ -3,8 +3,7 @@ import { isConditionFailError } from '@tinkoff/errors';
 import type { Provider } from '@tramvai/core';
 import { APP_INFO_TOKEN } from '@tramvai/core';
 import { provide } from '@tramvai/core';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { Hydrate } from 'react-query/hydration';
+import { QueryClient, QueryClientProvider, Hydrate } from '@tanstack/react-query';
 import { CHILD_APP_INTERNAL_CONFIG_TOKEN } from '@tramvai/tokens-child-app';
 import { EXTEND_RENDER } from '@tramvai/tokens-render';
 import {
@@ -13,6 +12,7 @@ import {
   QUERY_CLIENT_DEFAULT_OPTIONS_TOKEN,
   QUERY_DEHYDRATE_STATE_NAME_TOKEN,
 } from '@tramvai/tokens-react-query';
+import { noopLogger } from './noopLogger';
 
 export const sharedQueryProviders: Provider[] = [
   provide({
@@ -21,6 +21,8 @@ export const sharedQueryProviders: Provider[] = [
       const { queries = {} } = defaultOptions;
 
       return new QueryClient({
+        // suppress any logs from react-query in production
+        logger: process.env.NODE_ENV === 'production' ? noopLogger : undefined,
         defaultOptions: {
           ...defaultOptions,
           queries: {
