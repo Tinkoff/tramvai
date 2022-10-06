@@ -1,27 +1,5 @@
 import { createToken } from '@tinkoff/dippy';
 import type { Url } from '@tinkoff/url';
-import type { Request } from 'express';
-import type { FastifyRequest as OriginalFastifyRequest } from 'fastify';
-
-// HACK: to prevent inlining of Request and providing internal express dependencies to outside
-type RequestExt = Request;
-type FastifyRequest = OriginalFastifyRequest & {
-  cookies: Record<string, string>;
-  query: Record<string, string>;
-};
-/**
- * @deprecated use FASTIFY_REQUEST
- * @description
- * Direct reference to request object
- */
-export const REQUEST = createToken<RequestExt>('request');
-
-/**
- * @description
- * Direct reference to request object
- */
-// TODO: move to tokens-server-private
-export const FASTIFY_REQUEST = createToken<FastifyRequest>('fastify request');
 
 /**
  * @description
@@ -43,7 +21,7 @@ export interface RequestManager {
 
   getCookies(): Record<string, string>;
 
-  getHeader(key: string): string | string[];
+  getHeader(key: string): string | string[] | undefined;
 
   getHeaders(): Record<string, string | string[]>;
 

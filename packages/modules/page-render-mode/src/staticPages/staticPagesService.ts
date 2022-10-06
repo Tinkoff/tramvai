@@ -2,11 +2,11 @@ import type { ExtractDependencyType } from '@tinkoff/dippy';
 import type { USER_AGENT_TOKEN } from '@tramvai/module-client-hints';
 import type {
   ENV_MANAGER_TOKEN,
-  FASTIFY_RESPONSE,
   LOGGER_TOKEN,
   REQUEST_MANAGER_TOKEN,
   RESPONSE_MANAGER_TOKEN,
 } from '@tramvai/tokens-common';
+import type { FASTIFY_RESPONSE } from '@tramvai/tokens-server-private';
 import type { MODERN_SATISFIES_TOKEN } from '@tramvai/tokens-render';
 import type {
   STATIC_PAGES_BACKGROUND_FETCH_SERVICE,

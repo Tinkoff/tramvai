@@ -1,7 +1,7 @@
 import isEmpty from '@tinkoff/utils/is/empty';
 import type { Provider } from '@tramvai/core';
 import { provide } from '@tramvai/core';
-import { REQUEST } from '@tramvai/tokens-common';
+import { REQUEST_MANAGER_TOKEN } from '@tramvai/tokens-common';
 import { USER_AGENT_TOKEN } from '@tramvai/module-client-hints';
 import {
   RESPONSE_CACHE_GET_CACHE_KEY,
@@ -20,16 +20,16 @@ export const defaultSettingsProviders: Provider[] = [
   }),
   provide({
     provide: RESPONSE_CACHE_GET_CACHE_KEY,
-    useFactory: ({ userAgent, request }) => {
+    useFactory: ({ userAgent, requestManager }) => {
       return () => {
         const deviceType = userAgent.mobileOS ? 'mobile' : 'desktop';
 
-        return `${request.method}_${request.path}_${deviceType}`;
+        return `${requestManager.getMethod()}_${requestManager.getParsedUrl().path}_${deviceType}`;
       };
     },
     deps: {
       userAgent: USER_AGENT_TOKEN,
-      request: REQUEST,
+      requestManager: REQUEST_MANAGER_TOKEN,
     },
   }),
   provide({
@@ -39,13 +39,13 @@ export const defaultSettingsProviders: Provider[] = [
   provide({
     provide: RESPONSE_CACHE_SHOULD_SET_TO_CACHE,
     useFactory:
-      ({ request }) =>
+      ({ requestManager }) =>
       () => {
-        // use cookies from raw request instead of CookieManager to ignore any cookies that were set during request handling
-        return isEmpty(request.cookies);
+        // use requestManager instead of CookieManager to ignore any cookies that were set during request handling
+        return isEmpty(requestManager.getCookies());
       },
     deps: {
-      request: REQUEST,
+      requestManager: REQUEST_MANAGER_TOKEN,
     },
   }),
 ];

@@ -7,22 +7,17 @@ import isObject from '@tinkoff/utils/is/object';
 import { resolve } from 'path';
 import { Module } from '@tramvai/core';
 import type { ProxyConfig } from '@tramvai/tokens-server';
-import {
-  WEB_APP_TOKEN,
-  WEB_APP_BEFORE_INIT_TOKEN,
-  PROXY_CONFIG_TOKEN,
-} from '@tramvai/tokens-server';
+import { PROXY_CONFIG_TOKEN } from '@tramvai/tokens-server';
 import { createProxyMiddleware } from 'http-proxy-middleware';
+import { WEB_FASTIFY_APP_INIT_TOKEN } from '@tramvai/tokens-server-private';
 import { safeNodeRequire } from './utils/require';
 
 @Module({
   providers: [
     {
-      // TODO: tramvai@2 migrate to `fastify` and `@fastify/http-proxy`
-      // interfaces for the proxies are not compatible so some migration from the app is needed
-      provide: WEB_APP_BEFORE_INIT_TOKEN,
-      useFactory: ({ app, defaultProxies }) => {
-        return () => {
+      provide: WEB_FASTIFY_APP_INIT_TOKEN,
+      useFactory: ({ defaultProxies }): typeof WEB_FASTIFY_APP_INIT_TOKEN => {
+        return (app) => {
           const proxyConfig = safeNodeRequire(resolve(process.cwd(), 'proxy.conf'));
           const proxies: ProxyConfig[] = defaultProxies ?? [];
 
@@ -43,21 +38,22 @@ import { safeNodeRequire } from './utils/require';
           }
 
           proxies.forEach((proxy) => {
-            app.use(
-              createProxyMiddleware(proxy.context, {
-                changeOrigin: true,
-                onProxyRes: (proxyRes: IncomingMessage) => {
-                  // eslint-disable-next-line no-param-reassign
-                  proxyRes.headers['x-tramvai-proxied-response'] = '1';
-                },
-                ...proxy,
-              })
-            );
+            const middleware = createProxyMiddleware(proxy.context, {
+              changeOrigin: true,
+              onProxyRes: (proxyRes: IncomingMessage) => {
+                // eslint-disable-next-line no-param-reassign
+                proxyRes.headers['x-tramvai-proxied-response'] = '1';
+              },
+              ...proxy,
+            });
+
+            app.addHook('onRequest', (req, res, next) => {
+              middleware(req.raw as any, res.raw as any, next);
+            });
           });
         };
       },
       deps: {
-        app: WEB_APP_TOKEN,
         defaultProxies: {
           token: PROXY_CONFIG_TOKEN,
           optional: true,

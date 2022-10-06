@@ -1,11 +1,7 @@
 import { Module, commandLineListTokens, Scope, provide } from '@tramvai/core';
 import { createPapiMethod } from '@tramvai/papi';
-import {
-  ENV_MANAGER_TOKEN,
-  FASTIFY_REQUEST,
-  FASTIFY_RESPONSE,
-  LOGGER_TOKEN,
-} from '@tramvai/tokens-common';
+import { ENV_MANAGER_TOKEN, LOGGER_TOKEN } from '@tramvai/tokens-common';
+import { FASTIFY_REQUEST, FASTIFY_RESPONSE } from '@tramvai/tokens-server-private';
 import {
   SERVER_MODULE_PAPI_PUBLIC_ROUTE,
   SERVER_MODULE_PAPI_PUBLIC_URL,
@@ -14,6 +10,15 @@ import { Mocker, FileSystemMockRepository } from '@tinkoff/mocker';
 import { MOCKER, MOCKER_REPOSITORY, MOCKER_CONFIGURATION } from './tokens';
 
 export * from './tokens';
+
+const compatibilityReq = (req: typeof FASTIFY_REQUEST) => {
+  const rawReq: any = req.raw;
+
+  rawReq.body = req.body;
+  rawReq.cookies = req.cookies;
+
+  return rawReq;
+};
 
 @Module({
   providers:
@@ -35,6 +40,14 @@ export * from './tokens';
                   const mockedPath = `${papiPublicUrl}/mocker/${api}/`;
                   const serverMockedUrl = `http://localhost:${envManager.get('PORT')}${mockedPath}`;
                   const clientMockedUrl = `${mockedPath}`;
+
+                  if (!target) {
+                    log.warn(
+                      `Mocks for "${api}" were specified, but linked env variable was not found, ignoring these mocks.`
+                    );
+
+                    return;
+                  }
 
                   apis[api] = { target };
 
@@ -138,9 +151,10 @@ export * from './tokens';
                 async handler() {
                   const { req, res } = this.deps;
 
-                  res.hijack();
                   // TODO: fix compatibility
-                  mocker.use(req.raw, res.raw);
+                  res.hijack();
+
+                  mocker.use(compatibilityReq(req), res.raw);
                 },
                 deps: {
                   req: FASTIFY_REQUEST,
@@ -165,7 +179,7 @@ export * from './tokens';
                   // TODO: fix compatibility
                   res.hijack();
 
-                  mocker.useApi(req.raw, res.raw);
+                  mocker.useApi(compatibilityReq(req), res.raw);
                 },
                 deps: {
                   req: FASTIFY_REQUEST,

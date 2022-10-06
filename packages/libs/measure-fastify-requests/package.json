@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@tinkoff/utils": "^2.1.3",
-    "fastify-plugin": "^3.0.1",
+    "fastify-plugin": "^4.2.1",
     "path-to-regexp": "0.1.7",
     "tslib": "^2.4.0"
   },

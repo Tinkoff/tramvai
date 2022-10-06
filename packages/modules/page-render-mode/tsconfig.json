@@ -50,6 +50,9 @@
         },
         {
             "path": "../../tokens/core"
+        },
+        {
+            "path": "../../tokens/server-private"
         }
     ]
 }

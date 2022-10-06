@@ -1,14 +1,12 @@
-import { DI_TOKEN } from '@tinkoff/dippy';
-import { provide, Scope } from '@tinkoff/dippy';
+import { DI_TOKEN, provide, Scope } from '@tinkoff/dippy';
 import type { PapiHandlerContext, PapiHandlerOptions } from '@tramvai/papi';
 import { getPapiParameters } from '@tramvai/papi';
 import {
-  FASTIFY_REQUEST,
   LOGGER_TOKEN,
   REQUEST_MANAGER_TOKEN,
   RESPONSE_MANAGER_TOKEN,
 } from '@tramvai/tokens-common';
-import { PAPI_EXECUTOR } from '@tramvai/tokens-server-private';
+import { FASTIFY_REQUEST, PAPI_EXECUTOR } from '@tramvai/tokens-server-private';
 
 export const papiExecutorProvider = provide({
   provide: PAPI_EXECUTOR,

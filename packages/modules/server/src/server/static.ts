@@ -1,6 +1,6 @@
-import zlib from 'zlib';
-import express from 'express';
-import compression from 'compression';
+import fastify from 'fastify';
+import fastifyCompress from '@fastify/compress';
+import { fastifyStatic } from '@fastify/static';
 import type { LOGGER_TOKEN, ENV_MANAGER_TOKEN } from '@tramvai/module-common';
 import type { APP_INFO_TOKEN } from '@tramvai/core';
 import os from 'os';
@@ -27,32 +27,25 @@ export const staticAppCommand = ({
   const port = +envManager.get('PORT_STATIC');
   const appVersion = envManager.get('APP_VERSION');
 
-  return function staticApp() {
-    const appStatic = express();
+  return async function staticApp() {
+    const appStatic = fastify();
 
-    appStatic.disable('x-powered-by');
+    await appStatic.register(fastifyCompress);
 
-    // WEB-389: Переключить на brotli после мержа https://github.com/expressjs/compression/pull/156
-    appStatic.use(
-      compression({
-        level: zlib.Z_DEFAULT_COMPRESSION,
-      })
-    );
-
-    appStatic.use((_, res, next) => {
-      res.set({
-        'Access-Control-Allow-Origin': '*',
-        'Timing-Allow-Origin': '*',
-        'X-App-Id': appInfo.appName,
-        'X-App-Version': appVersion,
-        'X-Host': os.hostname(),
-      });
-
-      next();
+    await appStatic.register(fastifyStatic, {
+      root: process.cwd(),
+      prefix: '/',
+      setHeaders: (res) => {
+        res.headers({
+          'Access-Control-Allow-Origin': '*',
+          'Timing-Allow-Origin': '*',
+          'X-App-Id': appInfo.appName,
+          'X-App-Version': appVersion,
+          'X-Host': os.hostname(),
+        });
+      },
     });
-
-    appStatic.use('/', express.static('./'));
-    appStatic.listen(port, () => log.info(`Running static server on port: ${port}`));
+    appStatic.listen({ port }, () => log.info(`Running static server on port: ${port}`));
 
     return appStatic;
   };

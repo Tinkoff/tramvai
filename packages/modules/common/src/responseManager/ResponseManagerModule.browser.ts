@@ -1,12 +1,12 @@
 import { Module } from '@tramvai/core';
-import { RESPONSE } from '@tramvai/tokens-common';
+import { FASTIFY_RESPONSE } from '@tramvai/tokens-server-private';
 import { sharedProviders } from './sharedProviders';
 
 @Module({
   providers: [
     ...sharedProviders,
     {
-      provide: RESPONSE,
+      provide: FASTIFY_RESPONSE,
       useValue: {},
     },
   ],

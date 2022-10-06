@@ -28,6 +28,7 @@
     "@tramvai/papi": "0.0.0-stub",
     "@tramvai/tokens-common": "0.0.0-stub",
     "@tramvai/tokens-server": "0.0.0-stub",
+    "@tramvai/tokens-server-private": "0.0.0-stub",
     "@tinkoff/dippy": "0.0.0-stub"
   },
   "license": "Apache-2.0"

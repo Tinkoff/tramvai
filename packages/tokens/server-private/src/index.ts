@@ -1,7 +1,28 @@
 import type { Server } from 'http';
-import type { FastifyError, FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import type {
+  FastifyError,
+  FastifyInstance,
+  FastifyReply,
+  FastifyRequest as OriginalFastifyRequest,
+} from 'fastify';
 import { createToken } from '@tinkoff/dippy';
 import type { Papi } from '@tramvai/papi';
+
+type FastifyRequest = OriginalFastifyRequest & {
+  cookies: Record<string, string>;
+};
+
+/**
+ * @description
+ * Direct reference to request object
+ */
+export const FASTIFY_REQUEST = createToken<FastifyRequest>('fastify request');
+
+/**
+ * @description
+ * Direct reference to response object
+ */
+export const FASTIFY_RESPONSE = createToken<FastifyReply>('fastify response');
 
 /**
  * @description

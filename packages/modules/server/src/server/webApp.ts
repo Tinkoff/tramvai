@@ -1,21 +1,13 @@
 import fastify from 'fastify';
-import express from 'express';
 import { fastifyCookie } from '@fastify/cookie';
 import fastifyFormBody from '@fastify/formbody';
 import type { EXECUTION_CONTEXT_MANAGER_TOKEN, LOGGER_TOKEN } from '@tramvai/tokens-common';
 import { ROOT_EXECUTION_CONTEXT_TOKEN } from '@tramvai/tokens-common';
-import { FASTIFY_REQUEST, FASTIFY_RESPONSE } from '@tramvai/tokens-common';
-import { REQUEST, RESPONSE, RESPONSE_MANAGER_TOKEN } from '@tramvai/tokens-common';
+import { RESPONSE_MANAGER_TOKEN } from '@tramvai/tokens-common';
 import type { COMMAND_LINE_RUNNER_TOKEN } from '@tramvai/core';
 import { Scope } from '@tramvai/core';
-import type {
-  WEB_APP_TOKEN,
-  WEB_APP_BEFORE_INIT_TOKEN,
-  WEB_APP_INIT_TOKEN,
-  WEB_APP_AFTER_INIT_TOKEN,
-  WEB_APP_LIMITER_TOKEN,
-  SERVER_TOKEN,
-} from '@tramvai/tokens-server';
+import type { SERVER_TOKEN } from '@tramvai/tokens-server';
+import { FASTIFY_REQUEST, FASTIFY_RESPONSE } from '@tramvai/tokens-server-private';
 import type {
   WEB_FASTIFY_APP_TOKEN,
   WEB_FASTIFY_APP_AFTER_INIT_TOKEN,
@@ -29,7 +21,6 @@ import type {
 } from '@tramvai/tokens-server-private';
 import type { ExtractDependencyType } from '@tinkoff/dippy';
 import { provide } from '@tinkoff/dippy';
-import { fastifyExpressCompatibility } from './express-compatibility';
 import { errorHandler } from './error';
 
 export const webAppFactory = ({ server }: { server: typeof SERVER_TOKEN }) => {
@@ -45,18 +36,8 @@ export const webAppFactory = ({ server }: { server: typeof SERVER_TOKEN }) => {
   return app;
 };
 
-export const webAppExpressFactory = ({ webApp }: { webApp: typeof WEB_FASTIFY_APP_TOKEN }) => {
-  const app = express();
-
-  app.disable('etag');
-  app.disable('x-powered-by');
-
-  return app;
-};
-
 export const webAppInitCommand = ({
   app,
-  expressApp,
   logger,
   commandLineRunner,
   executionContextManager,
@@ -65,16 +46,11 @@ export const webAppInitCommand = ({
   limiterRequest,
   init,
   afterInit,
-  expressBeforeInit,
-  expressInit,
-  expressAfterInit,
-  expressLimiterRequest,
   beforeError,
   processError,
   afterError,
 }: {
   app: ExtractDependencyType<typeof WEB_FASTIFY_APP_TOKEN>;
-  expressApp: ExtractDependencyType<typeof WEB_APP_TOKEN>;
   logger: ExtractDependencyType<typeof LOGGER_TOKEN>;
   commandLineRunner: ExtractDependencyType<typeof COMMAND_LINE_RUNNER_TOKEN>;
   executionContextManager: ExtractDependencyType<typeof EXECUTION_CONTEXT_MANAGER_TOKEN>;
@@ -83,10 +59,6 @@ export const webAppInitCommand = ({
   limiterRequest: ExtractDependencyType<typeof WEB_FASTIFY_APP_LIMITER_TOKEN>;
   init: ExtractDependencyType<typeof WEB_FASTIFY_APP_INIT_TOKEN>;
   afterInit: ExtractDependencyType<typeof WEB_FASTIFY_APP_AFTER_INIT_TOKEN>;
-  expressBeforeInit: ExtractDependencyType<typeof WEB_APP_BEFORE_INIT_TOKEN>;
-  expressInit: ExtractDependencyType<typeof WEB_APP_INIT_TOKEN>;
-  expressAfterInit: ExtractDependencyType<typeof WEB_APP_AFTER_INIT_TOKEN>;
-  expressLimiterRequest: ExtractDependencyType<typeof WEB_APP_LIMITER_TOKEN>;
   beforeError: ExtractDependencyType<typeof WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN>;
   processError: ExtractDependencyType<typeof WEB_FASTIFY_APP_PROCESS_ERROR_TOKEN>;
   afterError: ExtractDependencyType<typeof WEB_FASTIFY_APP_AFTER_ERROR_TOKEN>;
@@ -95,40 +67,33 @@ export const webAppInitCommand = ({
 
   const runHandlers = (
     instance: ExtractDependencyType<typeof WEB_FASTIFY_APP_TOKEN>,
-    handlers: ExtractDependencyType<typeof WEB_FASTIFY_APP_INIT_TOKEN>,
-    expressHandlers: ExtractDependencyType<typeof WEB_APP_INIT_TOKEN>
+    handlers: ExtractDependencyType<typeof WEB_FASTIFY_APP_INIT_TOKEN>
   ) => {
-    return Promise.all([
-      handlers && Promise.all(handlers.map((handler) => handler(instance))),
-      expressHandlers && Promise.all(expressHandlers.map((handler) => handler(expressApp))),
-    ]);
+    return Promise.all([handlers && Promise.all(handlers.map((handler) => handler(instance)))]);
   };
 
   return async function webAppInit() {
     errorHandler(app, { log, beforeError, processError, afterError });
 
-    await app.register(fastifyExpressCompatibility, {
-      express: {
-        instance: expressApp,
-      },
+    await app.register(async (instance) => {
+      await runHandlers(instance, beforeInit);
     });
 
     await app.register(async (instance) => {
-      await runHandlers(instance, beforeInit, expressBeforeInit);
-    });
-
-    await app.register(async (instance) => {
-      await runHandlers(instance, requestMetrics, []);
-      await runHandlers(instance, limiterRequest, expressLimiterRequest);
+      await runHandlers(instance, requestMetrics);
+      await runHandlers(instance, limiterRequest);
 
       await app.register(fastifyCookie);
       await app.register(fastifyFormBody, { bodyLimit: 2097152 }); // 2mb
 
-      await runHandlers(instance, init, expressInit);
+      await runHandlers(instance, init);
 
-      // force express to execute to update server's request and response instances
-      instance.use((req, res, next) => {
-        next();
+      // break the cycle of event loop to allow server to handle other requests
+      // while current on is in processing
+      // mainly to prevent problems and response hanging in case the response process
+      // uses only sync and microtask code
+      instance.addHook('preHandler', (req, res, next) => {
+        setImmediate(next);
       });
 
       instance.all('*', async (request, reply) => {
@@ -145,18 +110,6 @@ export const webAppInitCommand = ({
                 provide: ROOT_EXECUTION_CONTEXT_TOKEN,
                 useValue: rootExecutionContext,
               }),
-              {
-                provide: REQUEST,
-                scope: Scope.REQUEST,
-                useValue: request.raw,
-              },
-              {
-                provide: RESPONSE,
-                scope: Scope.REQUEST,
-                useValue: reply.raw,
-              },
-              // TODO: перевести использование на новые
-              // TODO: добавить для papi
               {
                 provide: FASTIFY_REQUEST,
                 scope: Scope.REQUEST,
@@ -200,7 +153,7 @@ export const webAppInitCommand = ({
     });
 
     await app.register(async (instance) => {
-      await runHandlers(app, afterInit, expressAfterInit);
+      await runHandlers(instance, afterInit);
     });
 
     await app.ready();

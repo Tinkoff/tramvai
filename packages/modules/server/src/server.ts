@@ -8,14 +8,7 @@ import {
   APP_INFO_TOKEN,
   provide,
 } from '@tramvai/core';
-import {
-  SERVER_TOKEN,
-  WEB_APP_TOKEN,
-  WEB_APP_INIT_TOKEN,
-  WEB_APP_BEFORE_INIT_TOKEN,
-  WEB_APP_AFTER_INIT_TOKEN,
-  WEB_APP_LIMITER_TOKEN,
-} from '@tramvai/tokens-server';
+import { SERVER_TOKEN } from '@tramvai/tokens-server';
 import {
   WEB_FASTIFY_APP_TOKEN,
   WEB_FASTIFY_APP_BEFORE_INIT_TOKEN,
@@ -38,7 +31,7 @@ import {
 import { MetricsModule } from '@tramvai/module-metrics';
 import { CacheWarmupModule } from '@tramvai/module-cache-warmup';
 import { serverFactory, serverListenCommand } from './server/server';
-import { webAppExpressFactory, webAppFactory, webAppInitCommand } from './server/webApp';
+import { webAppFactory, webAppInitCommand } from './server/webApp';
 import { staticAppCommand } from './server/static';
 import { xHeadersFactory } from './server/xHeaders';
 import * as modules from './modules';
@@ -94,22 +87,12 @@ EventEmitter.defaultMaxListeners = 50;
         factory: WEB_FASTIFY_APP_FACTORY_TOKEN,
       },
     }),
-    provide({
-      // BACKWARD: provide the express app as before
-      provide: WEB_APP_TOKEN,
-      scope: Scope.SINGLETON,
-      useFactory: webAppExpressFactory,
-      deps: {
-        webApp: WEB_FASTIFY_APP_TOKEN,
-      },
-    }),
     {
       provide: commandLineListTokens.init,
       multi: true,
       useFactory: webAppInitCommand,
       deps: {
         app: WEB_FASTIFY_APP_TOKEN,
-        expressApp: WEB_APP_TOKEN,
         logger: LOGGER_TOKEN,
         commandLineRunner: COMMAND_LINE_RUNNER_TOKEN,
         executionContextManager: EXECUTION_CONTEXT_MANAGER_TOKEN,
@@ -118,10 +101,6 @@ EventEmitter.defaultMaxListeners = 50;
         afterInit: { token: WEB_FASTIFY_APP_AFTER_INIT_TOKEN, optional: true },
         requestMetrics: { token: WEB_FASTIFY_APP_METRICS_TOKEN, optional: true },
         limiterRequest: { token: WEB_FASTIFY_APP_LIMITER_TOKEN, optional: true },
-        expressBeforeInit: { token: WEB_APP_BEFORE_INIT_TOKEN, optional: true },
-        expressInit: { token: WEB_APP_INIT_TOKEN, optional: true },
-        expressAfterInit: { token: WEB_APP_AFTER_INIT_TOKEN, optional: true },
-        expressLimiterRequest: { token: WEB_APP_LIMITER_TOKEN, optional: true },
         beforeError: { token: WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN, optional: true },
         processError: { token: WEB_FASTIFY_APP_PROCESS_ERROR_TOKEN, optional: true },
         afterError: { token: WEB_FASTIFY_APP_AFTER_ERROR_TOKEN, optional: true },

@@ -5,7 +5,7 @@ import type { HttpClientRequest, HttpClientResponse } from '@tramvai/http-client
 import { BaseHttpClient } from '@tramvai/http-client';
 import { createChildContainer } from '@tinkoff/dippy';
 import { getPapiParameters } from '@tramvai/papi';
-import { FASTIFY_REQUEST, FASTIFY_RESPONSE, REQUEST, RESPONSE } from '@tramvai/module-common';
+import { FASTIFY_REQUEST, FASTIFY_RESPONSE } from '@tramvai/tokens-server-private';
 import type { SERVER_MODULE_PAPI_PUBLIC_ROUTE } from '@tramvai/tokens-server';
 import { PAPI_EXECUTOR } from '@tramvai/tokens-server-private';
 
@@ -31,28 +31,17 @@ export class PapiService extends BaseHttpClient {
       throw new Error(`papi handler '${path}' not found`);
     }
 
-    const papi = getPapiParameters(papiRoute);
     const req = { headers: { host: 'localhost' }, cookies: {}, query, body };
     const res = {};
-    const fastifyReq = { raw: req };
-    const fastifyRes = { raw: res };
 
     const childDi = createChildContainer(this.di, [
       {
-        provide: REQUEST,
+        provide: FASTIFY_REQUEST,
         useValue: req,
       },
       {
-        provide: RESPONSE,
-        useValue: res,
-      },
-      {
-        provide: FASTIFY_REQUEST,
-        useValue: fastifyReq,
-      },
-      {
         provide: FASTIFY_RESPONSE,
-        useValue: fastifyRes,
+        useValue: res,
       },
     ]);
 

@@ -4,11 +4,11 @@ import { commandLineListTokens, createToken, DI_TOKEN, provide, Scope } from '@t
 import {
   CREATE_CACHE_TOKEN,
   ENV_MANAGER_TOKEN,
-  FASTIFY_RESPONSE,
   LOGGER_TOKEN,
   REQUEST_MANAGER_TOKEN,
   RESPONSE_MANAGER_TOKEN,
 } from '@tramvai/tokens-common';
+import { FASTIFY_RESPONSE } from '@tramvai/tokens-server-private';
 import { MODERN_SATISFIES_TOKEN } from '@tramvai/tokens-render';
 import { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
 import { USER_AGENT_TOKEN } from '@tramvai/module-client-hints';

@@ -40,6 +40,7 @@
     "@tramvai/tokens-child-app": "0.0.0-stub",
     "@tramvai/tokens-common": "0.0.0-stub",
     "@tramvai/tokens-render": "0.0.0-stub",
+    "@tramvai/tokens-server-private": "0.0.0-stub",
     "hoist-non-react-statics": "^3.3.1",
     "node-abort-controller": "^3.0.1"
   },

@@ -1,11 +1,11 @@
 import { commandLineListTokens, DI_TOKEN, Module, provide, Scope } from '@tramvai/core';
 import {
   CREATE_CACHE_TOKEN,
-  FASTIFY_RESPONSE,
   LOGGER_TOKEN,
   REQUEST_MANAGER_TOKEN,
   RESPONSE_MANAGER_TOKEN,
 } from '@tramvai/tokens-common';
+import { FASTIFY_RESPONSE } from '@tramvai/tokens-server-private';
 import { getCacheEntry } from './cache';
 import { defaultSettingsProviders } from './default';
 import { StopCommandLineRunnerError } from './error';

@@ -1,9 +1,8 @@
-import { createRequest } from 'node-mocks-http';
 import { RequestManager } from './requestManager';
 
-const createRequestManager = (request: Record<string, any>) => {
+const createRequestManager = (request: any) => {
   return new RequestManager({
-    request: createRequest(request),
+    request,
   });
 };
 
@@ -14,7 +13,7 @@ describe('requestManager', () => {
         headers: {
           'x-real-ip': '172.0.0.1',
         },
-        connection: {
+        socket: {
           remoteAddress: '192.168.0.1',
         },
       });
@@ -22,9 +21,9 @@ describe('requestManager', () => {
       expect(requestManager.getClientIp()).toBe('172.0.0.1');
     });
 
-    it('gets IP from connection.remoteAddress otherwise', () => {
+    it('gets IP from socket.remoteAddress otherwise', () => {
       const requestManager = createRequestManager({
-        connection: {
+        socket: {
           remoteAddress: '192.168.0.1',
         },
       });
@@ -60,7 +59,7 @@ describe('requestManager', () => {
   it('getUrl', () => {
     const requestManager = createRequestManager({
       protocol: 'https://',
-      originalUrl: '/abc/',
+      url: '/abc/',
       headers: {
         host: 'www.test.test',
       },
@@ -72,7 +71,7 @@ describe('requestManager', () => {
   it('getUrl with x-original-host', () => {
     const requestManager = createRequestManager({
       protocol: 'https://',
-      originalUrl: '/abc/',
+      url: '/abc/',
       headers: {
         host: 'www.test.test',
         'x-original-host': 'www.tinkoff.ru',

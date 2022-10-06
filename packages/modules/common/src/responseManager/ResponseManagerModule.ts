@@ -1,4 +1,4 @@
-import { Module, Scope } from '@tramvai/core';
+import { Module } from '@tramvai/core';
 import { sharedProviders } from './sharedProviders';
 
 @Module({

@@ -41,6 +41,7 @@
     "@tramvai/tokens-render": "0.0.0-stub",
     "@tramvai/tokens-router": "0.0.0-stub",
     "@tramvai/tokens-server": "0.0.0-stub",
+    "@tramvai/tokens-server-private": "0.0.0-stub",
     "@tramvai/tokens-metrics": "0.0.0-stub",
     "prom-client": "^12.0.0",
     "react": ">=16.14.0",

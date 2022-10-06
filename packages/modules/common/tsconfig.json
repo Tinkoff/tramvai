@@ -65,6 +65,9 @@
         },
         {
             "path": "../../tramvai/react"
+        },
+        {
+            "path": "../../tokens/server-private"
         }
     ]
 }

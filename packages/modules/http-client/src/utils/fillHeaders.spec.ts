@@ -1,15 +1,14 @@
-import { createRequest } from 'node-mocks-http';
 import { fillHeaderIp, fillHeaders } from './fillHeaders';
 import { RequestManager } from '../../../common/src/requestManager/requestManager';
 
 describe('http-client/utils/fillHeaders', () => {
   it('fillHeaderIp', () => {
     const ip = '348.348.348.348';
-    const request = createRequest({
+    const request: any = {
       headers: {
         'x-real-ip': ip,
       },
-    });
+    };
     const requestManager = new RequestManager({ request });
     const params = { a: 1, b: 2, headers: { myHeader: '123' } };
 
@@ -25,13 +24,13 @@ describe('http-client/utils/fillHeaders', () => {
 
   it('fillHeaders', () => {
     const headersList = ['a', 'c'];
-    const request = createRequest({
+    const request: any = {
       headers: {
         a: 'a',
         b: 'b',
         c: 'c',
       },
-    });
+    };
     const requestManager = new RequestManager({ request });
     const params = { a: 1, b: 2, headers: { myHeader: '123' } };
 

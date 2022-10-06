@@ -1,25 +1,25 @@
-import pathOr from '@tinkoff/utils/object/pathOr';
 import type { Url } from '@tinkoff/url';
 import { format, parse } from '@tinkoff/url';
-import type { REQUEST, REQUEST_MANAGER_TOKEN } from '@tramvai/tokens-common';
+import type { REQUEST_MANAGER_TOKEN } from '@tramvai/tokens-common';
+import type { FASTIFY_REQUEST } from '@tramvai/tokens-server-private';
 
 type Interface = typeof REQUEST_MANAGER_TOKEN;
 
 export class RequestManager implements Interface {
-  private request: typeof REQUEST;
+  private request: typeof FASTIFY_REQUEST;
 
   private url: string;
 
   private parsedUrl: Url;
 
-  constructor({ request }: { request: typeof REQUEST }) {
-    this.request = request || ({} as unknown as typeof REQUEST);
+  constructor({ request }: { request: typeof FASTIFY_REQUEST }) {
+    this.request = request || ({} as unknown as typeof FASTIFY_REQUEST);
 
     if (typeof window === 'undefined') {
       this.url = format({
         protocol: (this.getHeader('x-forwarded-proto') as string) || this.request.protocol,
         host: this.getHost(),
-        path: this.request.originalUrl,
+        path: this.request.url,
       });
     } else {
       this.url = window.location.href;
@@ -47,10 +47,10 @@ export class RequestManager implements Interface {
   }
 
   getHeader(key: string) {
-    return this.request.headers[key];
+    return this.request.headers?.[key];
   }
 
-  getHeaders() {
+  getHeaders(): Record<string, string | string[]> {
     return this.request.headers;
   }
 
@@ -63,7 +63,7 @@ export class RequestManager implements Interface {
   }
 
   getClientIp(): string {
-    return this.getHeader('x-real-ip') || pathOr(['connection', 'remoteAddress'], '', this.request);
+    return (this.getHeader('x-real-ip') as string) || this.request?.socket?.remoteAddress || '';
   }
 
   getHost(): string {

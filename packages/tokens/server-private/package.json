@@ -23,7 +23,7 @@
   },
   "peerDependencies": {
     "@tinkoff/dippy": "0.0.0-stub",
-    "fastify": "^3.29.0",
+    "fastify": "^4.6.0",
     "tslib": "^2.4.0"
   },
   "devDependencies": {},

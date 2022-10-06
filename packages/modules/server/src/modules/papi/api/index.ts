@@ -6,8 +6,8 @@ import type { Papi } from '@tramvai/papi';
 import { getPapiParameters } from '@tramvai/papi';
 import type { DI_TOKEN } from '@tramvai/core';
 import type { LOGGER_TOKEN } from '@tramvai/tokens-common';
-import { Logger, RESPONSE_MANAGER_TOKEN } from '@tramvai/tokens-common';
-import { FASTIFY_RESPONSE, FASTIFY_REQUEST, REQUEST, RESPONSE } from '@tramvai/tokens-common';
+import { RESPONSE_MANAGER_TOKEN } from '@tramvai/tokens-common';
+import { FASTIFY_REQUEST, FASTIFY_RESPONSE } from '@tramvai/tokens-server-private';
 import { Scope, createChildContainer } from '@tinkoff/dippy';
 import { HttpError } from '@tinkoff/errors';
 import { PAPI_EXECUTOR } from '@tramvai/tokens-server-private';
@@ -82,17 +82,6 @@ export function createApi(
                 provide: FASTIFY_RESPONSE,
                 scope: Scope.REQUEST,
                 useValue: res,
-              },
-              // TODO: remove deprecated after removing express compatibility layer
-              {
-                provide: REQUEST,
-                scope: Scope.REQUEST,
-                useValue: req.raw,
-              },
-              {
-                provide: RESPONSE,
-                scope: Scope.REQUEST,
-                useValue: res.raw,
               },
             ]);
 
