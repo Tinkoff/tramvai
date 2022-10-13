@@ -1,3 +1,4 @@
+import type { Provider } from '@tinkoff/dippy';
 import { LAYOUT_OPTIONS, TRAMVAI_RENDER_MODE } from '@tramvai/tokens-render';
 import { pageRenderHOC } from './PageRenderWrapper';
 import {
@@ -6,7 +7,7 @@ import {
   PAGE_RENDER_WRAPPER_TYPE,
 } from './tokens';
 
-export const sharedProviders = [
+export const sharedProviders: Provider[] = [
   {
     provide: LAYOUT_OPTIONS,
     multi: true,

@@ -1,58 +1,60 @@
 {
-    "extends": "../../../tsconfig.lib.json",
-    "include": [
-        "./src"
-    ],
-    "compilerOptions": {
-        "outDir": "./lib",
-        "declarationDir": "./lib",
-        "rootDir": "./src"
+  "extends": "../../../tsconfig.lib.json",
+  "include": [
+    "./src"
+  ],
+  "compilerOptions": {
+    "outDir": "./lib",
+    "declarationDir": "./lib",
+    "rootDir": "./src",
+    "strict": false,
+    "strictFunctionTypes": true
+  },
+  "references": [
+    {
+      "path": "../../libs/dippy"
     },
-    "references": [
-        {
-            "path": "../../libs/dippy"
-        },
-        {
-            "path": "../../tramvai/core"
-        },
-        {
-            "path": "../../tramvai/react"
-        },
-        {
-            "path": "../router"
-        },
-        {
-            "path": "../../tokens/render"
-        },
-        {
-            "path": "../../tokens/router"
-        },
-        {
-            "path": "../../libs/errors"
-        },
-        {
-            "path": "../../libs/url"
-        },
-        {
-            "path": "../../tokens/common"
-        },
-        {
-            "path": "../client-hints"
-        },
-        {
-            "path": "../../tramvai/papi"
-        },
-        {
-            "path": "../../tokens/server"
-        },
-        {
-            "path": "../../tokens/metrics"
-        },
-        {
-            "path": "../../tokens/core"
-        },
-        {
-            "path": "../../tokens/server-private"
-        }
-    ]
+    {
+      "path": "../../tramvai/core"
+    },
+    {
+      "path": "../../tramvai/react"
+    },
+    {
+      "path": "../router"
+    },
+    {
+      "path": "../../tokens/render"
+    },
+    {
+      "path": "../../tokens/router"
+    },
+    {
+      "path": "../../libs/errors"
+    },
+    {
+      "path": "../../libs/url"
+    },
+    {
+      "path": "../../tokens/common"
+    },
+    {
+      "path": "../client-hints"
+    },
+    {
+      "path": "../../tramvai/papi"
+    },
+    {
+      "path": "../../tokens/server"
+    },
+    {
+      "path": "../../tokens/metrics"
+    },
+    {
+      "path": "../../tokens/core"
+    },
+    {
+      "path": "../../tokens/server-private"
+    }
+  ]
 }

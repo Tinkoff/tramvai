@@ -133,12 +133,12 @@ function makeRecord<T>(
 
 function providerToRecord<T>(provider: Provider): RecordProvide<T> {
   let factory;
-  let resolvedDeps = {};
+  let resolvedDeps;
   let scope = Scope.REQUEST;
 
   if ('useFactory' in provider) {
     factory = (deps: ProvideDepsIterator<any>) => provider.useFactory(deps);
-    if (provider.deps) {
+    if ('deps' in provider) {
       resolvedDeps = provider.deps;
     }
     if (provider.scope) {
@@ -147,7 +147,7 @@ function providerToRecord<T>(provider: Provider): RecordProvide<T> {
   } else if ('useClass' in provider) {
     // eslint-disable-next-line new-cap
     factory = (deps: ProvideDepsIterator<any>) => new provider.useClass(deps);
-    if (provider.deps) {
+    if ('deps' in provider) {
       resolvedDeps = provider.deps;
     }
     if (provider.scope) {
