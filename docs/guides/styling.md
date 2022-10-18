@@ -62,6 +62,22 @@ Then just import this file in application:
 import './app.module.css';
 ```
 
+### Typings
+
+For prevent typescript issues with import `.css` files, update your custom types declaration:
+
+```ts title="typings.d.ts"
+declare module '*.css' {
+  interface IClassNames {
+    [className: string]: string;
+  }
+
+  const classNames: IClassNames;
+
+  export = classNames;
+}
+```
+
 ## PostCSS
 
 `tramvai` provides complete [PostCSS](https://github.com/postcss/postcss) integration.

@@ -1,0 +1,6 @@
+{
+  "name": "render-to-stream",
+  "sourceRoot": "examples/render-to-stream/src",
+  "projectType": "library",
+  "targets": {}
+}

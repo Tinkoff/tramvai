@@ -28,6 +28,7 @@
     "url": "git@github.com:Tinkoff/tramvai.git"
   },
   "main": "lib/api/index.js",
+  "typings": "lib/api/index.d.ts",
   "dependencies": {
     "@babel/cli": "^7.18.10",
     "@babel/core": "^7.18.10",
@@ -57,6 +58,7 @@
     "@fastify/static": "^6.5.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
     "@sentry/node": "^6.2.5",
+    "@svgr/webpack": "^6.4.0",
     "@tinkoff/browserslist-config": "0.0.0-stub",
     "@tinkoff/dippy": "0.0.0-stub",
     "@tinkoff/is-modern-lib": "0.0.0-stub",

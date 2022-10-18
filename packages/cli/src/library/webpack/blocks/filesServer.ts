@@ -1,8 +1,11 @@
 import path from 'path';
 import type Config from 'webpack-chain';
 import type { ConfigManager } from '../../../config/configManager';
+import { addSvgrLoader, getSvgoOptions } from '../utils/files';
 
 export default (configManager: ConfigManager) => (config: Config) => {
+  const svgoOptions = getSvgoOptions(configManager);
+
   config.module
     .rule('woff')
     .test(/\.woff2?$/)
@@ -11,22 +14,16 @@ export default (configManager: ConfigManager) => (config: Config) => {
       emit: false,
     });
 
+  addSvgrLoader(configManager, config, svgoOptions);
+
   config.module
     .rule('svg')
     .test(/\.svg$/)
+    .set('resourceQuery', { not: /react/ })
     .set('type', 'asset/source')
     .use('svg')
     .loader('svgo-loader')
-    .options({
-      plugins: configManager.build?.configurations?.svgo?.plugins ?? [
-        {
-          cleanupIDs: false,
-        },
-        {
-          collapseGroups: false,
-        },
-      ],
-    });
+    .options(svgoOptions);
 
   config.module
     .rule('tramvai-image')

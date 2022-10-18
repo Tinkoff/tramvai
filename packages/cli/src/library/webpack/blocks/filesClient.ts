@@ -2,16 +2,22 @@ import path from 'path';
 import type Config from 'webpack-chain';
 import SparkMD5 from 'spark-md5';
 import type { ConfigManager } from '../../../config/configManager';
+import { addSvgrLoader, getSvgoOptions } from '../utils/files';
 
 export const filesClientWebackRulesFactory = (configManager: ConfigManager) => (config: Config) => {
+  const svgoOptions = getSvgoOptions(configManager);
+
   config.module
     .rule('woff')
     .test(/\.woff2?$/)
     .set('type', 'asset');
 
+  addSvgrLoader(configManager, config, svgoOptions);
+
   config.module
     .rule('svg')
     .test(/\.svg$/)
+    .set('resourceQuery', { not: /react/ })
     .set('type', 'asset/resource')
     .set('generator', {
       filename: (pathInfo) => {
@@ -22,16 +28,7 @@ export const filesClientWebackRulesFactory = (configManager: ConfigManager) => (
     })
     .use('svg')
     .loader('svgo-loader')
-    .options({
-      plugins: configManager.build?.configurations?.svgo?.plugins ?? [
-        {
-          cleanupIDs: false,
-        },
-        {
-          collapseGroups: false,
-        },
-      ],
-    });
+    .options(svgoOptions);
 
   config.module
     .rule('tramvai-image')

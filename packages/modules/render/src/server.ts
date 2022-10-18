@@ -21,6 +21,7 @@ import {
   ResourceType,
   RENDER_FLOW_AFTER_TOKEN,
   MODERN_SATISFIES_TOKEN,
+  REACT_SERVER_RENDER_MODE,
 } from '@tramvai/tokens-render';
 import { Scope } from '@tinkoff/dippy';
 import { WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN } from '@tramvai/tokens-server-private';
@@ -176,6 +177,8 @@ export const DEFAULT_POLYFILL_CONDITION =
         customRender: { token: CUSTOM_RENDER, optional: true },
         extendRender: { token: EXTEND_RENDER, optional: true },
         di: DI_TOKEN,
+        renderMode: { token: REACT_SERVER_RENDER_MODE, optional: true },
+        logger: LOGGER_TOKEN,
       },
     }),
     provide({

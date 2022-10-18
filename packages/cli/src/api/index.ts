@@ -26,6 +26,7 @@ export { lessWebpackRulesFactory } from '../library/webpack/blocks/less';
 export { postcssAssetsWebpackRulesFactory } from '../library/webpack/blocks/postcssAssets';
 export { extractCssPluginFactory } from '../library/webpack/blocks/extractCssPlugin';
 export { configToEnv } from '../library/webpack/blocks/configToEnv';
+export * from '../typings/public';
 
 const app = createApp({
   commands: {

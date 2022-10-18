@@ -1,7 +1,40 @@
+import type { ImageObject, SvgComponent } from '@tramvai/cli';
+
 declare module '*.css' {
   interface IClassNames {
     [className: string]: string;
   }
   const classNames: IClassNames;
   export = classNames;
+}
+
+declare module '*.woff2' {
+  export = string;
+}
+
+type ImageString = string;
+
+declare module '*.png' {
+  export default ImageString;
+  export const image: ImageObject;
+}
+declare module '*.jpg' {
+  export default ImageString;
+  export const image: ImageObject;
+}
+declare module '*.jpeg' {
+  export default ImageString;
+  export const image: ImageObject;
+}
+
+declare module '*.svg' {
+  export = string;
+}
+declare module '*.svg?react' {
+  /**
+   * React component transformed with https://react-svgr.com/
+   */
+  const Svg: SvgComponent;
+
+  export = Svg;
 }

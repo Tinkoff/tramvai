@@ -23,6 +23,7 @@
     "@tinkoff/errors": "0.0.0-stub",
     "@tramvai/safe-strings": "0.0.0-stub",
     "@tramvai/tokens-child-app": "0.0.0-stub",
+    "@tramvai/tokens-common": "0.0.0-stub",
     "@tramvai/tokens-react-query": "0.0.0-stub",
     "@tramvai/tokens-render": "0.0.0-stub",
     "@tanstack/react-query": "^4.7.1"
