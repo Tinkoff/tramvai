@@ -33,12 +33,26 @@ Client Hints modules provides the way to solve this problem in some way. It stor
 
 #### First page loading
 
-When user enters the app for the first time module tries to determine type of the user device using user-agent string. Then it saves this **assumptive** data to `media` store. E.g. when user loads page from the desktop, then content of the `media` store will be following:
+:::warn
+
+When user enters the app for the first time, information about **real** device screen size and type **not available** in server-side code.
+
+:::
+
+This module tries to determine type of the user device using user-agent string, and separates the devices into three groups:
+- `mobile`
+- `tablet`
+- `desktop`
+
+Then it saves this **assumptive** information about device screen to `media` store. E.g. when user loads page from the desktop, then content of the `media` store will be following:
 
 ```tsx
 const state = {
+  // desktop - 1024px, tablet - 600px, mobile - 300px
   width: 1024,
+  // desktop - 768px, tablet - 800px, mobile - 500px
   height: 768,
+  // desktop - false, tablet - true, mobile - true
   isTouch: false,
   retina: false,
   supposed: true,
