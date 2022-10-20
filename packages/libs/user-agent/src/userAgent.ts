@@ -5,6 +5,7 @@ import toLower from '@tinkoff/utils/string/toLower';
 import { UAParser } from 'ua-parser-js';
 import type { UserAgent } from './types';
 import { isSameSiteNoneCompatible } from './isSameSiteNoneCompatible';
+import { getBrowserEngine, getMobileOs } from './utils';
 
 const toLowerName = compose(toLower, propOr('name', ''));
 
@@ -29,7 +30,7 @@ const uaParserExtensions = [
   [[UAParser.BROWSER.NAME, 'Firefox Focus'], UAParser.BROWSER.VERSION],
 ];
 
-export const parse = (userAgent: string): UserAgent => {
+export const parseUserAgentHeader = (userAgent: string): UserAgent => {
   const uaParser = new UAParser('', { browser: uaParserExtensions });
   const { ua, ...result } = uaParser.setUA(userAgent).getResult();
   const { browser, os, engine } = result;
@@ -37,43 +38,13 @@ export const parse = (userAgent: string): UserAgent => {
   const engineName = toLowerName(engine);
   const sameSiteNoneCompatible = isSameSiteNoneCompatible(result);
 
-  let mobileOS;
+  const mobileOS = getMobileOs(os.name);
 
   if (browserName === 'opera mobi') {
     result.device.type = 'mobile';
   }
 
-  switch (os.name) {
-    case 'Windows Phone':
-      mobileOS = 'winphone';
-      break;
-    case 'Android':
-      mobileOS = 'android';
-      break;
-    case 'iOS':
-      mobileOS = 'ios';
-      break;
-    case 'BlackBerry':
-    case 'RIM Tablet OS':
-      mobileOS = 'blackberry';
-      break;
-  }
-
-  let browserEngine;
-
-  switch (true) {
-    case browserName === 'firefox':
-      browserEngine = 'firefox';
-      break;
-    case browserName === 'safari':
-      browserEngine = 'safari';
-      break;
-    case engineName === 'webkit' || engineName === 'blink':
-      browserEngine = 'chrome';
-      break;
-    default:
-      browserEngine = 'other';
-  }
+  const browserEngine = getBrowserEngine(browserName, engineName);
 
   return {
     ...result,

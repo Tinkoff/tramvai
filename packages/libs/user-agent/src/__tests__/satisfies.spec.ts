@@ -3,18 +3,18 @@ import path from 'path';
 import tinkoffBrowsersListConfig from '@tinkoff/browserslist-config';
 import { satisfies } from '../satisfies';
 
-function readDataset(p) {
+function readDataset(p: string) {
   return fs
     .readFileSync(path.join(__dirname, 'uaDatasets', p), 'utf-8')
     .split('\n')
     .map((s) => s.trim());
 }
 
-function getDatasetLineLink(line, file) {
+function getDatasetLineLink(line: number, file: string) {
   return `${path.join(__dirname, 'uaDatasets', file)}:${line}`;
 }
 
-function testDatasets(datasetFiles = [], res, browsersListConfig?) {
+function testDatasets(datasetFiles: string[] = [], res: boolean | null, browsersListConfig?: any) {
   datasetFiles.forEach((f) => {
     const userAgents = readDataset(f);
 
@@ -26,7 +26,7 @@ function testDatasets(datasetFiles = [], res, browsersListConfig?) {
       it(`${ua}`, () => {
         try {
           expect(satisfies(ua, browsersListConfig)).toBe(res);
-        } catch (e) {
+        } catch (e: any) {
           e.message += `\n\n${ua}\n${getDatasetLineLink(i + 1, f)}\n`;
 
           throw e;
@@ -54,7 +54,7 @@ describe('user-agent/satisfies', () => {
 
 describe('user-agent/satisfies modern2', () => {
   describe('supported modern', () => {
-    testDatasets(['supported_modern.txt'], true);
+    testDatasets(['supported_modern.txt'], true, tinkoffBrowsersListConfig.modern);
   });
 
   describe('not supported modern', () => {

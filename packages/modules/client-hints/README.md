@@ -23,13 +23,25 @@ createApp({
 
 ## Explanation
 
+### User agent details parsing
+
+Parsing is implemented with library [@tinkoff/user-agent](../libs/user-agent.md) that may use either user-agent header or client-hints headers.
+
+If there is a `sec-ch-ua` header in request than user agent parsing will be based on [Client Hints](https://developer.mozilla.org/en-US/docs/Web/HTTP/Client_hints) headers. If there is no such header than old school parsing of user-agent string will be used.
+
+This logic implies next things worth to mention:
+- by default, only part of client-hints is sent by browser and you can get only partial info about user browser (no cpu spec, platform version or device model). Although, we send an additional header `accept-ch` with response from server to request this data from client - on first request from current browser there will be no such data in any case and they will appear only on subsequent requests
+- if you need to use additional info, you may specify the header [`accept-ch`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-CH) in your app with `REQUEST_MANAGER_TOKEN`
+- client-hints is mostly more performant way to parse browser info and this is way it used if it's possible
+- currently only chromium based browsers support client hints, so for other browsers and bots user-agent header will be used to gather browser info
+
 ### The problem with media on server and on client
 
 One of the SSR problem is render of the component which depends of current screen size, e.g. image carousel that should render specific number of images depending of screen width. By default, the exact screen size can be figured out only on client-side and we can't render such content on server identical to the client render. If this content is not important for the SEO we can use skeletons and spinners, but they are not suitable for every case.
 
 Client Hints modules provides the way to solve this problem in some way. It stores data about client devices in cookies and then use this cookies on server in next page loading.
 
-### How does it work
+### How does media work
 
 #### First page loading
 
@@ -104,7 +116,7 @@ If some component if depend of screen size:
 
 #### userAgent
 
-Stores the result of the user-agent string parsing.
+Stores the result of the user-agent string or client-hints headers parsing.
 
 #### media
 

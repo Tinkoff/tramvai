@@ -2,7 +2,7 @@ import isString from '@tinkoff/utils/is/string';
 import browserslist from 'browserslist';
 import browserslistTinkoffConfig from '@tinkoff/browserslist-config';
 import browserslistFileConfig from '@tramvai/cli/lib/external/browserslist-normalized-file-config';
-import { parse } from './userAgent';
+import { parseUserAgentHeader } from './userAgent';
 import type { UserAgent } from './types';
 import { BROWSERS_LIST_MAP, CHROMIUM_BASED_BROWSERS } from './constants';
 
@@ -57,7 +57,7 @@ export const satisfies = (
   browserslistConfig?: string[],
   { env = 'defaults' }: { env?: 'modern' | 'defaults' } = {}
 ): boolean | null => {
-  const ua = isString(userAgent) ? parse(userAgent) : userAgent;
+  const ua = isString(userAgent) ? parseUserAgentHeader(userAgent) : userAgent;
   const {
     engine: { name: engineName = '', version: engineVersion },
     device: { type = '' } = {},
@@ -68,7 +68,10 @@ export const satisfies = (
   // А версия движка (blink) матчится в версию chromium один к одному
   // https://github.com/faisalman/ua-parser-js/pull/390
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/Browser_detection_using_the_user_agent#Rendering_engine
-  if (engineName.toLowerCase() === 'blink' && CHROMIUM_BASED_BROWSERS.indexOf(browserName) !== -1) {
+  if (
+    engineName === 'chromium' ||
+    (engineName.toLowerCase() === 'blink' && CHROMIUM_BASED_BROWSERS.indexOf(browserName) !== -1)
+  ) {
     browserName = 'chrome';
     browserVersion = engineVersion || '';
   }
