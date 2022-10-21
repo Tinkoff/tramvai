@@ -31,5 +31,9 @@ pluginTester({
       fixture: 'already-has-comment.ts',
       snapshot: true,
     },
+    'do not miss createToken on many imports': {
+      fixture: 'many-imports.ts',
+      snapshot: true,
+    },
   },
 });

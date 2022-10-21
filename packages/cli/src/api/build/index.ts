@@ -1,4 +1,5 @@
 import type { PromiseType } from 'utility-types';
+import type { Provider } from '@tinkoff/dippy';
 import { createCommand } from '../../commands/createCommand';
 import type { WithConfig } from '../shared/types/withConfig';
 import { buildApplication } from './application';
@@ -31,7 +32,7 @@ export type Result<T extends string = any> = Promise<
   }
 >;
 
-export type BuildCommand = (params: Params) => Result;
+export type BuildCommand = (params: Params, providers?: Provider[]) => Result;
 
 export default createCommand({
   name: 'build',

@@ -54,6 +54,32 @@ export var TOKEN = /* #__PURE__*/ createToken('token');
 
 `;
 
+exports[`create-token-pure do not miss createToken on many imports: do not miss createToken on many imports 1`] = `
+
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved
+import { createToken } from '@tinkoff/dippy';
+import { Module } from '@tramvai/core'
+
+export const TOKEN = createToken('token');
+const module = Module({
+  providers: []
+});
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved
+import { createToken } from '@tinkoff/dippy';
+import { Module } from '@tramvai/core';
+export var TOKEN = /*#__PURE__*/ createToken('token');
+var module = Module({
+  providers: [],
+});
+
+
+`;
+
 exports[`create-token-pure do nothing: do nothing 1`] = `
 
 // @ts-ignore

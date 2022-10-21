@@ -1,6 +1,7 @@
 import type { Server } from 'http';
 import type { PromiseType } from 'utility-types';
 import type { ChildProcess } from 'child_process';
+import type { Provider } from '@tinkoff/dippy';
 import { createCommand } from '../../commands/createCommand';
 import type { WithConfig } from '../shared/types/withConfig';
 import { CONFIG_ENTRY_TOKEN } from '../../di/tokens';
@@ -31,7 +32,7 @@ export type Result<T extends string = any> = Promise<
   }
 >;
 
-export type StartProdCommand = (params: Params) => Result;
+export type StartProdCommand = (params: Params, providers?: Provider[]) => Result;
 
 export default createCommand({
   name: 'start-prod',

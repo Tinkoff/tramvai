@@ -48,7 +48,7 @@ export interface ApplicationBuild {
   configurations?: ConfigEntry['commands']['build']['configurations'] & {
     /**
      * @title Separate one common chunk to many small dynamic chunks
-     * @default false
+     * @default true
      */
     granularChunks?: boolean;
     /**
@@ -63,7 +63,7 @@ export interface ApplicationBuild {
     granularChunksMinSize?: number;
     /**
      * @title Enable auto chunk splitting (`granularChunks` option alternative)
-     * @default true
+     * @default false
      */
     commonChunk?: boolean;
     /**

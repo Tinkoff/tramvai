@@ -1,3 +1,4 @@
+import type { Provider } from '@tinkoff/dippy';
 import { createCommand } from '../../commands/createCommand';
 import { ABSTRACT_BUILDER_FACTORY_TOKEN, COMMAND_PARAMETERS_TOKEN } from '../../di/tokens';
 import { registerProviders } from '../../utils/di';
@@ -11,7 +12,7 @@ export interface Params {
   fileCache?: boolean;
 }
 
-export type AnalyzeCommand = (params: Params) => Promise<void>;
+export type AnalyzeCommand = (params: Params, providers?: Provider[]) => Promise<void>;
 
 export default createCommand({
   name: 'analyze',

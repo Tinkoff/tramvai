@@ -95,7 +95,7 @@ describe('JSON schema для tramvai.json', () => {
               "build": {
                 "configurations": {
                   "checkAsyncTs": false,
-                  "commonChunk": true,
+                  "commonChunk": false,
                   "commonChunkSplitNumber": 3,
                   "dedupe": "equality",
                   "definePlugin": {
@@ -122,7 +122,7 @@ describe('JSON schema для tramvai.json', () => {
                     "routesDir": "routes",
                   },
                   "generateDataQaTag": false,
-                  "granularChunks": false,
+                  "granularChunks": true,
                   "granularChunksMinSize": 20000,
                   "granularChunksSplitNumber": 2,
                   "modern": true,

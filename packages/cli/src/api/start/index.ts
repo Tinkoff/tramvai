@@ -1,5 +1,6 @@
 import type { Server } from 'http';
 import type { PromiseType } from 'utility-types';
+import type { Provider } from '@tinkoff/dippy';
 import { createCommand } from '../../commands/createCommand';
 import type { WithConfig } from '../shared/types/withConfig';
 import { startApplication } from './application';
@@ -38,7 +39,7 @@ export type Result<T extends string = any> = Promise<
   }
 >;
 
-export type StartCommand = (params: Params) => Result;
+export type StartCommand = (params: Params, providers?: Provider[]) => Result;
 
 export default createCommand({
   name: 'start',

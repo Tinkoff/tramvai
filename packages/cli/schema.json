@@ -387,7 +387,7 @@
                           },
                           "granularChunks": {
                             "title": "Separate one common chunk to many small dynamic chunks",
-                            "default": false,
+                            "default": true,
                             "type": "boolean"
                           },
                           "granularChunksSplitNumber": {
@@ -402,7 +402,7 @@
                           },
                           "commonChunk": {
                             "title": "Enable auto chunk splitting (`granularChunks` option alternative)",
-                            "default": true,
+                            "default": false,
                             "type": "boolean"
                           },
                           "commonChunkSplitNumber": {

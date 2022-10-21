@@ -12,6 +12,10 @@ export const createTokenPurePlugin: Plugin<InnerState> = ({ types: t }) => {
     },
     visitor: {
       ImportDeclaration(path) {
+        if (this.hasCreateToken) {
+          return;
+        }
+
         const { node } = path;
         const sourceValue = node.source.value;
 

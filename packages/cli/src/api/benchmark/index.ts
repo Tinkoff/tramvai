@@ -1,3 +1,4 @@
+import type { Provider } from '@tinkoff/dippy';
 import { provide } from '@tinkoff/dippy';
 import { createCommand } from '../../commands/createCommand';
 import { COMMAND_PARAMETERS_TOKEN, UI_OS_NOTIFY_TOKEN } from '../../di/tokens';
@@ -18,7 +19,8 @@ export interface Result {
 }
 
 export type BenchmarkCommand = (
-  params: StartParams | BuildParams
+  params: StartParams | BuildParams,
+  providers?: Provider[]
 ) => Promise<StartResult | BuildResult>;
 
 export default createCommand({

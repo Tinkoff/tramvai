@@ -64,14 +64,14 @@ How to add schema to the **VSCode** you can find in the [official docs](https://
       "outputClient": "dist/client"  // folder to output client bundle
     },
     "configurations": {
-      "commonChunk": true, // enables generation common chunk that includes shared code between chunks
+      "commonChunk": false, // enables generation common chunk that includes shared code between chunks
       "commonChunkSplitNumber": 3, // number of different chunks that should link to code in order to put that code in commonChunk
       "sourceMap": false, // is client sourcemaps are enabled
       "sourceMapServer": false, // is server sourcemaps are enabled
       "modern": true, // enable separate client bundle for the modern browsers only
       "checkAsyncTs": false, // enables background type checks
       "terserParallel": true, // enables parallel terser compression
-      "granularChunks": false, // enables splitting commonChunk to many independent pieces. It may significantly reduce js size on some pages
+      "granularChunks": true, // enables splitting commonChunk to many independent pieces. It may significantly reduce js size on some pages
       "granularChunksSplitNumber": 2, // number of duplicates before move code to the granular chunk
       "generateDataQaTag": false, // @deprecated automatically generate unique id for react components
       "definePlugin": { // replaces passed strings with passed values in the build time
