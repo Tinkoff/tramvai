@@ -35,5 +35,17 @@ export const webpackFinal = async (baseConfig: Configuration, options): Promise<
   addFilesRules({ baseConfig, webpackConfig, configManager });
   addStylesRules({ baseConfig, webpackConfig, configManager });
 
-  return merge(baseConfig, webpackConfig.toConfig());
+  const finalConfig = merge(baseConfig, webpackConfig.toConfig());
+
+  return {
+    ...finalConfig,
+    resolve: {
+      ...finalConfig.resolve,
+      // exclude `import` condition name, because of `@tanstack/react-query` dual package hazard -
+      // `@tramvai/storybook-addon` build in CommonJS version, and import CJS module from `@tanstack/react-query`,
+      // but `@tramvai/react-query` build in ES modules, and import `.mjs` module from `@tanstack/react-query`,
+      // as a result in bundle we have two different React context and get the error "No QueryClient set, use QueryClientProvider to set one"
+      conditionNames: ['browser', 'require', 'node', 'default'],
+    },
+  };
 };
