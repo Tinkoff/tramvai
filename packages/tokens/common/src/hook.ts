@@ -17,7 +17,12 @@ export interface Hooks {
   /**
    * Run sync hook
    */
-  runHooks<TPayload>(name: string, context: any, payload?: TPayload, options?: any): TPayload;
+  runHooks<TPayload>(
+    name: string,
+    context: any,
+    payload?: TPayload,
+    options?: any
+  ): TPayload | undefined;
 
   /**
    * Run async hooksЗапуск ассихронных хуков

@@ -6,6 +6,8 @@ sidebar_position: 4
 
 Modules are the implementation of some limited functionality of the application using the DI system and providers.
 
+In general, module is just a list of providers, with some specific logic, for example deduplication by module name.
+
 ## Module life cycle
 
 ### Initializing the application
@@ -190,6 +192,22 @@ It is recommended to specify in the module documentation the unique identifier /
 ```tsx
 const log = logger ('server'); // get a logger instance by LOGGER_TOKEN token
 ```
+
+### When to create a module, and when not?
+
+Add providers in `createApp` in a simple cases, for example:
+
+- When you need to configure any module
+- When you need one simple provider and module will be overhead
+
+In any other cases, our recommendation to create an independend modules for any features, for example:
+
+- metrics
+- logger
+- auth strategy
+- API client
+- fonts
+- domain logic
 
 ## Additional links
 

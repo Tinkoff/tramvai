@@ -200,11 +200,14 @@ export class Container {
   get<T extends ProviderDep>(tokenORObject: T) {
     let token;
     let optional = false;
+    let multi = false;
+
     if (typeof tokenORObject === 'string') {
       token = tokenORObject;
     } else if ('token' in (tokenORObject as any)) {
       token = (tokenORObject as any).token;
       optional = (tokenORObject as any).optional;
+      multi = token.options?.multi || false;
     } else {
       token = tokenORObject;
     }
@@ -217,6 +220,11 @@ export class Container {
     }
 
     if (!record && optional) {
+      // return empty array for optional multi token
+      if (multi) {
+        return [];
+      }
+      // for legacy string tokens we cannot know if the token is multi or not
       return null;
     }
 

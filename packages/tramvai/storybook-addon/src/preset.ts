@@ -31,7 +31,7 @@ export const webpackFinal = async (baseConfig: Configuration, options): Promise<
   const configManager = buildConfigManager(options);
   const webpackConfig = new Config();
 
-  addEnvVariables({ webpackConfig, configManager });
+  addEnvVariables({ webpackConfig, configManager, options });
   addFilesRules({ baseConfig, webpackConfig, configManager });
   addStylesRules({ baseConfig, webpackConfig, configManager });
 

@@ -34,7 +34,7 @@ const Image = () => {
 
 Example with default export:
 
-:::warn
+:::warning
 
 Usage without `width` and `height` attributes not recommended, it will degrade the Cumulative Layout Shift metric
 

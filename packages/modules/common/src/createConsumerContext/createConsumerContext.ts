@@ -1,21 +1,33 @@
-import type { Container } from '@tinkoff/dippy';
+import type { Container, ExtractDependencyType } from '@tinkoff/dippy';
 import type { DispatcherContext, Event, Reducer } from '@tramvai/state';
 import { convertAction } from '@tramvai/state';
 import type { Action, TramvaiAction } from '@tramvai/core';
-import type { STORE_TOKEN, PUBSUB_TOKEN, CONTEXT_TOKEN } from '@tramvai/tokens-common';
+import type {
+  STORE_TOKEN,
+  PUBSUB_TOKEN,
+  CONTEXT_TOKEN,
+  DISPATCHER_CONTEXT_TOKEN,
+} from '@tramvai/tokens-common';
 import { ACTION_EXECUTION_TOKEN } from '@tramvai/tokens-common';
 import type { PlatformAction } from './typings';
 
 type ContextType = typeof CONTEXT_TOKEN;
 
-export class ConsumerContext implements ContextType {
+type Deps = {
   di: Container;
+  dispatcherContext: ExtractDependencyType<typeof DISPATCHER_CONTEXT_TOKEN>;
+  pubsub: ExtractDependencyType<typeof PUBSUB_TOKEN>;
+  store: ExtractDependencyType<typeof STORE_TOKEN>;
+};
 
-  pubsub: typeof PUBSUB_TOKEN;
+export class ConsumerContext implements ContextType {
+  di: Deps['di'];
+
+  pubsub: Deps['pubsub'];
 
   private dispatcher: DispatcherContext<this>;
 
-  private store: typeof STORE_TOKEN;
+  private store: Deps['store'];
 
   /* Side Effects */
   executeAction = (
@@ -56,11 +68,11 @@ export class ConsumerContext implements ContextType {
     dispatcher: this.dispatcher.dehydrate(),
   });
 
-  getState: ContextType['getState'] = (reducer?) => {
-    return this.store.getState(reducer);
+  getState: ContextType['getState'] = (...args: any[]) => {
+    return this.store.getState<any>(args[0]);
   };
 
-  subscribe: ContextType['subscribe'] = (...args) => {
+  subscribe: ContextType['subscribe'] = (...args: any[]) => {
     return this.store.subscribe(args[0], args[1]);
   };
 
@@ -68,8 +80,9 @@ export class ConsumerContext implements ContextType {
   registerStore = (store: Reducer<any>) => this.dispatcher.registerStore(store);
   unregisterStore = (store: Reducer<any>) => this.dispatcher.unregisterStore(store);
 
-  constructor({ di, dispatcherContext, pubsub, store }) {
+  constructor({ di, dispatcherContext, pubsub, store }: Deps) {
     this.store = store;
+    // @ts-expect-error
     this.dispatcher = dispatcherContext;
     // TODO убрать, нужно для некоторых старых сторов на платформе
     this.dispatcher.setContext(this);
@@ -79,7 +92,7 @@ export class ConsumerContext implements ContextType {
   }
 }
 
-export function createConsumerContext({ di, dispatcherContext, pubsub, store }): ContextType {
+export function createConsumerContext({ di, dispatcherContext, pubsub, store }: Deps): ContextType {
   return new ConsumerContext({
     di,
     dispatcherContext,

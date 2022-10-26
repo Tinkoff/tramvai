@@ -18,7 +18,7 @@ export interface ExecutionContextOptions {
 
 export interface ExecutionContextManager {
   withContext<T>(
-    parentContext: ExecutionContext,
+    parentContext: ExecutionContext | null,
     nameOrOptions: string | ExecutionContextOptions,
     cb: (context: ExecutionContext, abortController: AbortController) => Promise<T>
   ): Promise<T>;

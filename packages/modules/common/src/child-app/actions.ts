@@ -14,9 +14,9 @@ export const actionsProviders: Provider[] = [
     multi: true,
     useValue: [ACTION_EXECUTION_TOKEN, ACTION_PAGE_RUNNER_TOKEN],
   }),
-  {
+  provide({
     provide: COMBINE_REDUCERS,
     multi: true,
     useValue: actionTramvaiReducer,
-  },
+  }),
 ];

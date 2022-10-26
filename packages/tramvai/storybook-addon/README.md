@@ -304,3 +304,26 @@ export const PageStory = () => <Page />;
 
   </TabItem>
 </Tabs>
+
+### How to provide environment variables?
+
+This addon provides a few important defaults:
+
+- Mock provider for `ENV_MANAGER_TOKEN`
+- Read `env.development.js` content from application root
+
+So, any variables from `env.development.js` will be registered in `envManager`.
+
+If you want to add custom variables for some stories, pass `options` for `CommonTestModule` (from `@tramvai/test-mocks` package) in story parameters:
+
+```ts
+const parameters: TramvaiStoriesParameters = {
+  tramvai: {
+    options: {
+      env: {
+        FOO: 'BAR',
+      },
+    },
+  },
+};
+```

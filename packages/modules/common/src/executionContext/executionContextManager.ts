@@ -59,14 +59,15 @@ export class ExecutionContextManager implements Interface {
       const result = await cb(context, abortController);
 
       return result;
-    } catch (error) {
+    } catch (error: any) {
       if (!error.executionContextName) {
         error.executionContextName = context.name;
       }
 
       throw error;
     } finally {
-      if (abortListener) {
+      // @ts-expect-error
+      if (abortListener && parentContext) {
         parentContext.abortSignal.removeEventListener('abort', abortListener);
       }
     }

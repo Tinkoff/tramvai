@@ -1,4 +1,4 @@
-import { Module, commandLineListTokens } from '@tramvai/core';
+import { Module, commandLineListTokens, provide } from '@tramvai/core';
 import { REQUEST_MANAGER_TOKEN, CONTEXT_TOKEN } from '@tramvai/tokens-common';
 import { setRequest } from './RequestManagerStore';
 import { sharedProviders } from './sharedProviders';
@@ -6,7 +6,7 @@ import { sharedProviders } from './sharedProviders';
 @Module({
   providers: [
     ...sharedProviders,
-    {
+    provide({
       provide: commandLineListTokens.customerStart,
       multi: true,
       useFactory: ({ context, requestManager }) => {
@@ -25,7 +25,7 @@ import { sharedProviders } from './sharedProviders';
         context: CONTEXT_TOKEN,
         requestManager: REQUEST_MANAGER_TOKEN,
       },
-    },
+    }),
   ],
 })
 export class RequestManagerModule {}

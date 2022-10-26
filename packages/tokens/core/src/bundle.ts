@@ -4,9 +4,7 @@ import type { PageAction } from './action';
 export interface BundleOptions {
   presets?: BundlePreset[];
   name: string;
-  components: {
-    [key: string]: any;
-  };
+  components: Record<string, any>;
   reducers?: Reducer<any, any>[];
   actions?: PageAction[];
 }

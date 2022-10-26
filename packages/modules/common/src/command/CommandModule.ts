@@ -30,15 +30,9 @@ import { lines } from './defaultLines';
     }),
     provide({
       provide: COMMAND_LINE_EXECUTION_CONTEXT_TOKEN,
-      useFactory: ({
-        di,
-        commandLineRunner,
-      }: {
-        di: ExtractDependencyType<typeof DI_TOKEN>;
-        commandLineRunner: CommandLineRunner;
-      }) => {
+      useFactory: ({ di, commandLineRunner }) => {
         return () => {
-          return commandLineRunner.resolveExecutionContextFromDi(di);
+          return (commandLineRunner as CommandLineRunner).resolveExecutionContextFromDi(di);
         };
       },
       deps: {

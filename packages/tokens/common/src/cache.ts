@@ -25,7 +25,7 @@ export const REGISTER_CLEAR_CACHE_TOKEN = createToken<(type: string) => void | P
 export const CLEAR_CACHE_TOKEN = createToken<(type?: string) => Promise<void>>('clearCache');
 
 export interface Cache<T = any> {
-  get(key: string): T;
+  get(key: string): T | undefined;
   set(key: string, value: T): void;
   has(key: string): boolean;
   clear(): void;

@@ -162,11 +162,11 @@ Optional dependency:
 import { optional } from '@tinkoff/dippy';
 
 // with special `optional` utility
-// string | null
+// `string` | `null` if not found
 const foo1 = container.get(optional(FOO_TOKEN));
 
 // without `optional` utility
-// string | null
+// `string` | `null` if not found
 const foo2 = container.get({ token: FOO_TOKEN, optional: true });
 ```
 
@@ -177,6 +177,15 @@ const LIST_TOKEN = createToken<{ key: string }>('list', { multi: true });
 
 // { key: string }[]
 const list = container.get(LIST_TOKEN);
+```
+
+Multi optional token:
+
+```ts
+const LIST_TOKEN = createToken<{ key: string }>('list', { multi: true });
+
+// `{ key: string }[]` | empty `[]` if not found
+const list = container.get(optional(LIST_TOKEN));
 ```
 
 ##### container.register(provider)

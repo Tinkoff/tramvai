@@ -46,7 +46,8 @@ export const INITIAL_APP_STATE_TOKEN = createToken<{ stores: Record<string, any>
 );
 
 export interface Store<State = Record<string, any>> {
-  dispatch: <Payload>(actionOrNameEvent: string | Event<Payload>, payload?: Payload) => Payload;
+  dispatch<Payload>(event: Event<Payload>): Payload;
+  dispatch<Payload>(actionOrNameEvent: string | Event<Payload>, payload?: Payload): Payload;
 
   subscribe(callback: (state: Record<string, any>) => void): () => void;
   subscribe<S>(reducer: Reducer<S>, callback: (state: S) => void): () => void;

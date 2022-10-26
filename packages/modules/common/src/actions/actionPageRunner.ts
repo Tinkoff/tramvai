@@ -1,4 +1,4 @@
-import type { Action, TramvaiAction } from '@tramvai/core';
+import type { Action, ExtractDependencyType, TramvaiAction } from '@tramvai/core';
 import { isTramvaiAction } from '@tramvai/core';
 import { ACTION_PARAMETERS } from '@tramvai/core';
 import type {
@@ -7,6 +7,7 @@ import type {
   STORE_TOKEN,
   EXECUTION_CONTEXT_MANAGER_TOKEN,
   COMMAND_LINE_EXECUTION_CONTEXT_TOKEN,
+  ACTION_EXECUTION_TOKEN,
 } from '@tramvai/tokens-common';
 import { isSilentError } from '@tinkoff/errors';
 import { actionServerStateEvent } from './actionTramvaiReducer';
@@ -19,16 +20,18 @@ declare module '@tramvai/tokens-common' {
 }
 
 export class ActionPageRunner implements ActionPageRunnerInterface {
-  private log: ReturnType<typeof LOGGER_TOKEN>;
+  private log: ReturnType<ExtractDependencyType<typeof LOGGER_TOKEN>>;
 
   constructor(
     private deps: {
-      store: typeof STORE_TOKEN;
-      actionExecution: ActionExecution;
-      executionContextManager: typeof EXECUTION_CONTEXT_MANAGER_TOKEN;
-      commandLineExecutionContext: typeof COMMAND_LINE_EXECUTION_CONTEXT_TOKEN;
+      store: ExtractDependencyType<typeof STORE_TOKEN>;
+      actionExecution: ExtractDependencyType<typeof ACTION_EXECUTION_TOKEN>;
+      executionContextManager: ExtractDependencyType<typeof EXECUTION_CONTEXT_MANAGER_TOKEN>;
+      commandLineExecutionContext: ExtractDependencyType<
+        typeof COMMAND_LINE_EXECUTION_CONTEXT_TOKEN
+      >;
       limitTime: number;
-      logger: typeof LOGGER_TOKEN;
+      logger: ExtractDependencyType<typeof LOGGER_TOKEN>;
     }
   ) {
     this.log = deps.logger('action:action-page-runner');
@@ -70,9 +73,14 @@ export class ActionPageRunner implements ActionPageRunnerInterface {
             resolve();
           };
 
-          const actionMapper = (action: Action) => {
+          const actionMapper = (action: Action | TramvaiAction<any[], any, any>) => {
             return Promise.resolve()
-              .then(() => this.deps.actionExecution.runInContext(executionContext, action))
+              .then(() =>
+                this.deps.actionExecution.runInContext(
+                  executionContext,
+                  action as TramvaiAction<any[], any, any>
+                )
+              )
               .catch((error) => {
                 if (!isSilentError(error)) {
                   const parameters = isTramvaiAction(action) ? action : action[ACTION_PARAMETERS];

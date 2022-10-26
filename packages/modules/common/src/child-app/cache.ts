@@ -11,9 +11,9 @@ export const actionsProviders: Provider[] = [
     multi: true,
     useValue: [CREATE_CACHE_TOKEN, CLEAR_CACHE_TOKEN],
   }),
-  {
+  provide({
     provide: cachesToken,
     scope: Scope.SINGLETON,
     useValue: [],
-  },
+  }),
 ];

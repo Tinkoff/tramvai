@@ -66,6 +66,11 @@ export interface GetState {
   <S>(reducer: Reducer<S>): S;
 }
 
+export interface SubscribeHandler {
+  (handler: (state: Record<string, any>) => void): () => void;
+  <S>(reducer: Reducer<S>, callback: (state: S) => void): () => void;
+}
+
 export type Dispatch = <Payload>(event: Event<Payload>) => Payload;
 
 export interface ConsumerContext {
@@ -132,8 +137,11 @@ export type DispatcherContext<TContext> = {
     storeClass: T | string | { store: T | string; optional: true }
   ): InstanceType<T> | null;
 
-  subscribe(handler: () => void): () => void;
   getState: GetState;
+
+  subscribe: SubscribeHandler;
+
+  dispatch: Dispatch;
 
   dispatcherInterface: {
     // deprecated
@@ -145,7 +153,7 @@ export type DispatcherContext<TContext> = {
 
 export interface MiddlewareApi {
   dispatch: Dispatch;
-  subscribe(handler: () => void): () => void;
+  subscribe: SubscribeHandler;
   getState: GetState;
 }
 

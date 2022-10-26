@@ -205,5 +205,22 @@ tramvai build {{ appName }}
 tramvai static {{ appName }} --buildType=none --onlyPages=/__secret_fallback__/
 ```
 
+:::tip
+
+How `tramvai static` works?
+
+This command basically runs the compiled `server.js` and makes a HTTP request to the specified URLs, every response will be saved as an HTML file.
+
+:::
+
 After this steps, you can find a file `dist/static/__secret_fallback__/index.html`.
 You can serve this file from CDN or balancer, and it will be working as usual SPA.
+
+### Environment variables
+
+In `tramvai` application we can separate a two types of env variables:
+
+- build-time env
+- deployment env
+
+When using the command `tramvai static`, only build-time env will be used and are already built into the code at `tramvai build` step, so you need to pass deployment env wherever you run `tramvai static`.

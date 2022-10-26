@@ -23,7 +23,7 @@ export interface RequestManager {
 
   getHeader(key: string): string | string[] | undefined;
 
-  getHeaders(): Record<string, string | string[]>;
+  getHeaders(): Record<string, string | string[] | undefined>;
 
   getClientIp(): string;
 

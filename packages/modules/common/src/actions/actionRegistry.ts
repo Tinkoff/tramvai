@@ -19,7 +19,7 @@ export class ActionRegistry implements Interface {
 
     this.actions.set(
       type,
-      uniq(this.actions.has(type) ? [...this.actions.get(type), ...normalized] : normalized)
+      uniq(this.actions.has(type) ? [...this.actions.get(type)!, ...normalized] : normalized)
     );
   }
 
@@ -27,7 +27,7 @@ export class ActionRegistry implements Interface {
     return uniq([...(this.actions.get(type) || []), ...(addingActions || [])]);
   }
 
-  getGlobal(): Action[] {
+  getGlobal(): Action[] | undefined {
     return this.actions.get(GLOBAL_PARAMETER);
   }
 
@@ -40,7 +40,7 @@ export class ActionRegistry implements Interface {
     const normalized = toArray(actions);
 
     if (this.actions.has(type)) {
-      this.actions.set(type, difference(this.actions.get(type), normalized));
+      this.actions.set(type, difference(this.actions.get(type)!, normalized));
     }
   }
 }

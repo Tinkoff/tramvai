@@ -10,7 +10,7 @@ export class RequestManager implements Interface {
 
   private url: string;
 
-  private parsedUrl: Url;
+  private parsedUrl!: Url;
 
   constructor({ request }: { request: typeof FASTIFY_REQUEST }) {
     this.request = request || ({} as unknown as typeof FASTIFY_REQUEST);
@@ -50,7 +50,7 @@ export class RequestManager implements Interface {
     return this.request.headers?.[key];
   }
 
-  getHeaders(): Record<string, string | string[]> {
+  getHeaders(): Record<string, string | string[] | undefined> {
     return this.request.headers;
   }
 

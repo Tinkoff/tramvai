@@ -1,13 +1,13 @@
-import path from 'path';
 import {
   ConfigManager,
   ConfigManagerValidator,
   getTramvaiConfig,
   syncJsonFile,
 } from '@tramvai/cli';
+import { getAppRootDir } from '../utils/options';
 
 export const buildConfigManager = (options): ConfigManager => {
-  const rootDir = options.tramvaiDir || path.resolve(process.cwd(), '..');
+  const rootDir = getAppRootDir(options);
   const { content, isSuccessful } = getTramvaiConfig(rootDir);
 
   if (!isSuccessful) {

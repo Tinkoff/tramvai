@@ -1,12 +1,15 @@
 import eachObj from '@tinkoff/utils/object/each';
+import isObject from '@tinkoff/utils/is/object';
+import isArray from '@tinkoff/utils/is/array';
 import { createBundle } from '@tramvai/core';
 import { resolveLazyComponent, __lazyErrorHandler } from '@tramvai/react';
 import type {
   BUNDLE_MANAGER_TOKEN,
   DISPATCHER_TOKEN,
   ActionsRegistry,
+  LOGGER_TOKEN,
 } from '@tramvai/tokens-common';
-import type { Bundle } from '@tramvai/core';
+import type { Bundle, ExtractDependencyType } from '@tramvai/core';
 import {
   fileSystemPagesEnabled,
   isFileSystemPageComponent,
@@ -18,16 +21,24 @@ type Interface = typeof BUNDLE_MANAGER_TOKEN;
 
 const FS_PAGES_DEFAULT_BUNDLE = '__default';
 
-export class BundleManager implements Interface {
-  bundles: Record<string, () => Promise<{ default: Bundle }>>;
-
-  actionRegistry: ActionsRegistry;
-
+type Deps = {
+  bundleList: Record<string, () => Promise<{ default: Bundle }>>;
   componentRegistry: ComponentRegistry;
+  actionRegistry: ActionsRegistry;
+  dispatcher: ExtractDependencyType<typeof DISPATCHER_TOKEN>;
+  logger: ExtractDependencyType<typeof LOGGER_TOKEN>;
+};
 
-  dispatcher: typeof DISPATCHER_TOKEN;
+export class BundleManager implements Interface {
+  bundles: Deps['bundleList'];
 
-  constructor({ bundleList, componentRegistry, actionRegistry, dispatcher, logger }) {
+  actionRegistry: Deps['actionRegistry'];
+
+  componentRegistry: Deps['componentRegistry'];
+
+  dispatcher: Deps['dispatcher'];
+
+  constructor({ bundleList, componentRegistry, actionRegistry, dispatcher, logger }: Deps) {
     this.bundles = bundleList;
     this.componentRegistry = componentRegistry;
     this.actionRegistry = actionRegistry;
@@ -81,25 +92,29 @@ export class BundleManager implements Interface {
 
       const component = await resolveLazyComponent(componentOrLoader);
 
+      if (!component) {
+        return;
+      }
+
       // allow page components to register any other components
-      if ('components' in component) {
+      if ('components' in component && isObject(component.components)) {
         eachObj((cmp, name: string) => {
           this.componentRegistry.add(name, cmp, pageComponent);
         }, component.components);
       }
 
-      if ('actions' in component) {
+      if ('actions' in component && isArray(component.actions)) {
         this.actionRegistry.add(pageComponent, component.actions);
       }
 
-      if ('reducers' in component) {
+      if ('reducers' in component && isArray(component.reducers)) {
         component.reducers.forEach((reducer) => {
           this.dispatcher.registerStore(reducer);
         });
       }
     }
 
-    eachObj((component, name: string) => {
+    eachObj((component, name) => {
       this.componentRegistry.add(name, component, bundle.name);
     }, bundle.components);
 

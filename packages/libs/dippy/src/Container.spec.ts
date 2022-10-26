@@ -161,6 +161,8 @@ describe('DI Container', () => {
     const container = new Container();
     const result: any[] = [];
 
+    const K = createToken<number>('K');
+
     container.register({
       provide: 'A',
       useValue: 9,
@@ -171,12 +173,36 @@ describe('DI Container', () => {
       useFactory: ({ a, b }) => {
         result.push(a, b);
       },
-      deps: { a: 'A', b: { token: 'K', optional: true } },
+      deps: { a: 'A', b: { token: K, optional: true } },
     });
 
     container.get('B');
 
     expect(result).toEqual([9, null]);
+  });
+
+  it('Опциональные зависимости - получение пустого массива если нет, multi token', () => {
+    const container = new Container();
+    const result: any[] = [];
+
+    const K = createToken<number>('K', { multi: true });
+
+    container.register({
+      provide: 'A',
+      useValue: 9,
+    });
+
+    container.register({
+      provide: 'B',
+      useFactory: ({ a, b }) => {
+        result.push(a, b);
+      },
+      deps: { a: 'A', b: { token: K, optional: true } },
+    });
+
+    container.get('B');
+
+    expect(result).toEqual([9, []]);
   });
 
   it('Опциональные зависимости - получение null если нет, хэлпер optional', () => {
@@ -194,6 +220,28 @@ describe('DI Container', () => {
         result.push(a, b);
       },
       deps: { a: 'A', b: optional('K' as any) },
+    });
+
+    container.get('B');
+
+    expect(result).toEqual([9, null]);
+  });
+
+  it('Опциональные зависимости - получение null если нет, строковый токен', () => {
+    const container = new Container();
+    const result: any[] = [];
+
+    container.register({
+      provide: 'A',
+      useValue: 9,
+    });
+
+    container.register({
+      provide: 'B',
+      useFactory: ({ a, b }) => {
+        result.push(a, b);
+      },
+      deps: { a: 'A', b: { token: 'K', optional: true } },
     });
 
     container.get('B');

@@ -17,7 +17,7 @@ import { createMockRequestManager } from './requestManager';
 import { createMockCache } from './cache';
 import { createMockContext } from './context';
 
-type CommonModuleOptions = {
+export type CommonModuleOptions = {
   env?: Parameters<typeof createMockEnvManager>[0];
   cookies?: Parameters<typeof createMockCookieManager>[0];
   onCacheCreated?: (cache: Cache) => void;

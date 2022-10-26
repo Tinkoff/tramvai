@@ -112,6 +112,7 @@ We don't always need mandatory dependencies to work. And we want to point out th
 
 ```tsx
 import { provide } from '@tramvai/core';
+
 const provider = provide({
   provide: 'token',
   useClass: class A {
@@ -132,6 +133,9 @@ Some providers are multi-providers and instead of one implementation, we will re
 
 ```tsx
 import { provide } from '@tramvai/core';
+
+const COMMANDS_TOKEN = createToken<string>('commands', { multi: true });
+
 const provider = provide({
   provide: 'token',
   useClass: class A {
@@ -140,11 +144,31 @@ const provider = provide({
     }
   },
   deps: {
-    commands: {
-      token: 'commands',
-      multi: true,
-    },
-  } as const,
+    commands: COMMANDS_TOKEN,
+  },
+});
+```
+
+### Multi optional dependencies
+
+For `multi` and `optional` dependencies, if provider was not founded, empty `[]` will be resolved, as opposed to `null` for standard tokens.
+
+```ts
+import { provide, optional, createToken } from '@tramvai/core';
+
+const COMMANDS_TOKEN = createToken<string>('commands', { multi: true });
+
+const provider = provide({
+  provide: 'token',
+  useClass: class A {
+    // `commands` - empty array
+    constructor({ commands }) {
+      commands.forEach();
+    }
+  },
+  deps: {
+    commands: optional(COMMANDS_TOKEN),
+  },
 });
 ```
 

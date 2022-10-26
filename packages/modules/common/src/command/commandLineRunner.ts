@@ -3,7 +3,12 @@ import noop from '@tinkoff/utils/function/noop';
 import { isSilentError } from '@tinkoff/errors';
 import type { CommandLineDescription, CommandLine, CommandLines, Command } from '@tramvai/core';
 import type { METRICS_MODULE_TOKEN } from '@tramvai/tokens-metrics';
-import type { Container, MultiTokenInterface, Provider } from '@tinkoff/dippy';
+import type {
+  Container,
+  ExtractDependencyType,
+  MultiTokenInterface,
+  Provider,
+} from '@tinkoff/dippy';
 import { createChildContainer } from '@tinkoff/dippy';
 import type {
   ExecutionContext,
@@ -35,33 +40,26 @@ const resolveDi = (
   return di;
 };
 
-export class CommandLineRunner implements CommandLine {
+type Deps = {
   lines: CommandLines;
-
   rootDi: Container;
+  logger: ExtractDependencyType<typeof LOGGER_TOKEN>;
+  metrics: ExtractDependencyType<typeof METRICS_MODULE_TOKEN> | null;
+  executionContextManager: ExtractDependencyType<typeof EXECUTION_CONTEXT_MANAGER_TOKEN>;
+};
 
-  log: ReturnType<typeof LOGGER_TOKEN>;
+export class CommandLineRunner implements CommandLine {
+  lines: Deps['lines'];
+  rootDi: Deps['rootDi'];
+  log: ReturnType<Deps['logger']>;
+  metrics: Deps['metrics'];
+  executionContextManager: Deps['executionContextManager'];
 
-  metrics: typeof METRICS_MODULE_TOKEN;
-
-  executionContextManager: typeof EXECUTION_CONTEXT_MANAGER_TOKEN;
   private metricsInstance: any;
   private executionContextByDi = new WeakMap<Container, ExecutionContext>();
   private abortControllerByDi = new WeakMap<Container, AbortController>();
 
-  constructor({
-    lines,
-    rootDi,
-    logger,
-    metrics,
-    executionContextManager,
-  }: {
-    lines: CommandLines;
-    rootDi: Container;
-    logger: typeof LOGGER_TOKEN;
-    metrics?: typeof METRICS_MODULE_TOKEN;
-    executionContextManager: typeof EXECUTION_CONTEXT_MANAGER_TOKEN;
-  }) {
+  constructor({ lines, rootDi, logger, metrics, executionContextManager }: Deps) {
     this.lines = lines;
     this.rootDi = rootDi;
     this.log = logger('command:command-line-runner');
@@ -93,7 +91,7 @@ export class CommandLineRunner implements CommandLine {
             // eslint-disable-next-line promise/no-nesting
             return Promise.resolve()
               .then(() => {
-                return this.executionContextManager.withContext(
+                return this.executionContextManager.withContext<void>(
                   rootExecutionContext,
                   `command-line:${line.toString()}`,
                   async (executionContext, abortController) => {
@@ -121,7 +119,7 @@ export class CommandLineRunner implements CommandLine {
   }
 
   private createLineChain(di: Container, line: MultiTokenInterface<Command>) {
-    let lineInstance: Command[];
+    let lineInstance: Command[] | null;
     try {
       lineInstance = di.get({ token: line, optional: true });
 
@@ -129,7 +127,7 @@ export class CommandLineRunner implements CommandLine {
       if (lineInstance === null) {
         return Promise.resolve();
       }
-    } catch (e) {
+    } catch (e: any) {
       // Логируем ошибку и дальше падаем
       this.log.error(e);
 
@@ -160,6 +158,7 @@ export class CommandLineRunner implements CommandLine {
         // пробегаемся по всем инстансам и для текущего получаем его запись, из которой можно получить стек
         for (let i = 0; i < instances.length; i++) {
           if (instances[i] === instance) {
+            // @ts-expect-error
             error.stack = `${error.stack}\n---- caused by: ----\n${record.multi[i].stack || ''}`;
           }
         }
@@ -218,7 +217,7 @@ export class CommandLineRunner implements CommandLine {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  private throwError(err, di?) {
+  private throwError(err: any, di?: Container) {
     // eslint-disable-next-line no-param-reassign
     err.di = di;
 

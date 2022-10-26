@@ -1,4 +1,4 @@
-import { Module, Scope } from '@tramvai/core';
+import { Module, provide, Scope } from '@tramvai/core';
 import flatten from '@tinkoff/utils/array/flatten';
 import type { DispatcherContext, Event, Reducer } from '@tramvai/state';
 import { createDispatcher, devTools } from '@tramvai/state';
@@ -13,7 +13,7 @@ import {
 
 @Module({
   providers: [
-    {
+    provide({
       provide: DISPATCHER_TOKEN,
       scope: Scope.SINGLETON,
       useFactory: ({ stores }) => createDispatcher({ stores: stores && flatten(stores) }),
@@ -23,8 +23,8 @@ import {
           optional: true,
         },
       },
-    },
-    {
+    }),
+    provide({
       provide: DISPATCHER_CONTEXT_TOKEN,
       scope: Scope.REQUEST,
       useFactory: ({ dispatcher, initialState, middlewares }) => {
@@ -38,19 +38,19 @@ import {
         middlewares: { token: STORE_MIDDLEWARE, optional: true },
         initialState: { token: INITIAL_APP_STATE_TOKEN, optional: true },
       },
-    },
-    {
+    }),
+    provide({
       provide: STORE_TOKEN,
       scope: Scope.REQUEST,
-      useFactory: ({ dispatcherContext }: { dispatcherContext: DispatcherContext<any> }) => ({
-        getState: (reducer?: Reducer<any>) => dispatcherContext.getState(reducer),
-        dispatch: <Payload>(action: Event<Payload>): Payload => dispatcherContext.dispatch(action),
-        subscribe: (reducer, callback) => dispatcherContext.subscribe(reducer, callback),
+      useFactory: ({ dispatcherContext }) => ({
+        getState: dispatcherContext.getState.bind(dispatcherContext),
+        dispatch: dispatcherContext.dispatch.bind(dispatcherContext),
+        subscribe: dispatcherContext.subscribe.bind(dispatcherContext),
       }),
       deps: {
         dispatcherContext: DISPATCHER_CONTEXT_TOKEN,
       },
-    },
+    }),
   ],
 })
 export class StateModule {}

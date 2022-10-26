@@ -1,4 +1,4 @@
-import { Module, Scope, ACTIONS_LIST_TOKEN, DI_TOKEN, provide } from '@tramvai/core';
+import { Module, Scope, ACTIONS_LIST_TOKEN, DI_TOKEN, provide, createToken } from '@tramvai/core';
 import {
   LOGGER_TOKEN,
   CONTEXT_TOKEN,
@@ -25,20 +25,22 @@ import { pageBrowser } from './conditions/pageBrowser';
 
 export { alwaysCondition, onlyServer, onlyBrowser, pageServer, pageBrowser };
 
+const LIMIT_ACTION_GLOBAL_TIME_RUN = createToken<number>('limitActionGlobalTimeRun');
+
 @Module({
   providers: [
-    {
+    provide({
       provide: COMBINE_REDUCERS,
       multi: true,
       useValue: actionTramvaiReducer,
-    },
-    {
+    }),
+    provide({
       // Регистер глобальных экшенов
       provide: ACTION_REGISTRY_TOKEN,
       scope: Scope.SINGLETON,
       useClass: ActionRegistry,
       deps: { actionsList: ACTIONS_LIST_TOKEN },
-    },
+    }),
     provide({
       provide: ACTION_EXECUTION_TOKEN,
       scope: Scope.REQUEST,
@@ -64,19 +66,19 @@ export { alwaysCondition, onlyServer, onlyBrowser, pageServer, pageBrowser };
         executionContextManager: EXECUTION_CONTEXT_MANAGER_TOKEN,
         commandLineExecutionContext: COMMAND_LINE_EXECUTION_CONTEXT_TOKEN,
         store: STORE_TOKEN,
-        limitTime: 'limitActionGlobalTimeRun',
+        limitTime: LIMIT_ACTION_GLOBAL_TIME_RUN,
         logger: LOGGER_TOKEN,
       },
     }),
-    {
-      provide: 'limitActionGlobalTimeRun',
+    provide({
+      provide: LIMIT_ACTION_GLOBAL_TIME_RUN,
       useValue: 500,
-    },
-    {
+    }),
+    provide({
       provide: ACTION_CONDITIONALS,
       multi: true,
       useValue: [alwaysCondition, onlyServer, onlyBrowser, pageServer, pageBrowser],
-    },
+    }),
   ],
 })
 class ActionModule {}

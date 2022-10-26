@@ -47,7 +47,8 @@ export interface ActionsRegistry {
     type: string,
     addingActions?: (AnyAction | TramvaiAction<any[], any, any>)[]
   ): (AnyAction | TramvaiAction<any[], any, any>)[];
-  getGlobal(): (AnyAction | TramvaiAction<any[], any, any>)[];
+
+  getGlobal(): (AnyAction | TramvaiAction<any[], any, any>)[] | undefined;
 
   remove(
     type: string,
@@ -78,6 +79,8 @@ export interface ActionExecution {
     action: Action<Payload, Result, Deps>,
     payload: Payload
   ): Result extends Promise<any> ? Result : Promise<Result>;
+
+  execution: Map<string, Record<string, any>>;
 }
 
 export interface ActionPageRunner {

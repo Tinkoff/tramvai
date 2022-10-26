@@ -31,7 +31,7 @@ export class ActionPageRunner {
       this.deps.commandLineExecutionContext(),
       { name: 'pageActions', values: { pageActions: true } },
       async (executionContext) => {
-        const actionMapper = (action: Action) => {
+        const actionMapper = (action: Action | TramvaiAction<any[], any, any>) => {
           return Promise.resolve()
             .then(() => this.deps.actionExecution.runInContext(executionContext, action))
             .catch((error) => {

@@ -13,7 +13,7 @@ export class ActionChecker implements ActionConditionChecker {
 
   private forbiddenMarker = false;
 
-  private key = null;
+  private key: string | null = null;
 
   // eslint-disable-next-line max-params
   constructor(
@@ -41,16 +41,16 @@ export class ActionChecker implements ActionConditionChecker {
   }
 
   setState(value: any) {
-    this.executionState.state[this.key] = value;
+    this.executionState.state[this.key!] = value;
   }
 
   getState() {
-    return this.executionState.state[this.key];
+    return this.executionState.state[this.key!];
   }
 
   forbid() {
     this.executionState.status = 'forbidden';
-    this.executionState.forbiddenBy = this.key;
+    this.executionState.forbiddenBy = this.key!;
     this.forbiddenMarker = true;
   }
 

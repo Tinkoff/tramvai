@@ -45,7 +45,7 @@ Client Hints modules provides the way to solve this problem in some way. It stor
 
 #### First page loading
 
-:::warn
+:::warning
 
 When user enters the app for the first time, information about **real** device screen size and type **not available** in server-side code.
 
