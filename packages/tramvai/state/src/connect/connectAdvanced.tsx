@@ -20,6 +20,9 @@ const stringifyComponent = (Comp: any) => {
   }
 };
 
+/**
+ * @deprecated
+ */
 export function connectAdvanced(
   /*
     selectorFactory is a func that is responsible for returning the selector function used to

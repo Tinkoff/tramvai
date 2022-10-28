@@ -7,8 +7,8 @@
     "serve": "docusaurus serve"
   },
   "dependencies": {
-    "@docusaurus/remark-plugin-npm2yarn": "2.0.0-beta.15",
-    "@docusaurus/theme-common": "2.0.0-beta.15",
+    "@docusaurus/remark-plugin-npm2yarn": "^2.1.0",
+    "@docusaurus/theme-common": "^2.1.0",
     "@easyops-cn/docusaurus-search-local": "^0.21.4",
     "@tinkoff/utils": "^2.1.2",
     "clsx": "^1.1.1",
@@ -16,17 +16,17 @@
     "fs-extra": "^9.0.1",
     "prism-react-renderer": "^1.1.1",
     "prop-types": "^15.7.2",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "*",
-    "@docusaurus/core": "2.0.0-beta.15",
-    "@docusaurus/plugin-google-analytics": "2.0.0-beta.15",
-    "@docusaurus/preset-classic": "2.0.0-beta.15",
+    "@docusaurus/core": "^2.1.0",
+    "@docusaurus/plugin-google-analytics": "^2.1.0",
+    "@docusaurus/preset-classic": "^2.1.0",
     "@types/prop-types": "^15.7.3",
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
     "fast-glob": "^3.2.2",
     "indent-string": "^4.0.0",
     "unist-util-visit": "^2.0.3"

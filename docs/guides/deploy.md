@@ -29,7 +29,7 @@ in APP_ID, you must pass the application identifier. After executing the command
 Recommended Dockerfile
 
 ```dockerfile
-FROM node:14-buster-slim
+FROM node:18-buster-slim
 WORKDIR /app
 COPY dist/server /app/
 COPY package.json /app/
@@ -39,7 +39,7 @@ EXPOSE 3000
 CMD [ "node", "--max-http-header-size=80000", "/app/server.js" ]
 ```
 
-- `FROM` - you can put a 14+ version of the node, preferably an alpine version to reduce the size
+- `FROM` - you can put a 16+ version of the node, preferably an alpine version to reduce the size
 
 ### Deploy static assets
 
@@ -74,7 +74,7 @@ In general, everything is the same as in a regular deployment, but you need to a
 Dockerfile example
 
 ```dockerfile
-FROM node:14-buster-slim
+FROM node:18-buster-slim
 WORKDIR /app
 COPY dist/server /app/
 COPY package.json /app/

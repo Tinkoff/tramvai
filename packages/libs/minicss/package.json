@@ -28,7 +28,7 @@
   "dependencies": {
     "css-class-generator": "^2.0.0",
     "cssesc": "^3.0.0",
-    "loader-utils": "^2.0.0"
+    "loader-utils": "^3.2.0"
   },
   "devDependencies": {},
   "license": "Apache-2.0"

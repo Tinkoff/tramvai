@@ -39,8 +39,14 @@ export default (configManager: ConfigManager) => (config: Config) => {
   // а каждый раз выкидывать ошибку при подключении такого модуля
   config.output.set('strictModuleExceptionHandling', true);
 
-  // https://webpack.js.org/configuration/output/#outputhashfunction . When release webpack 6 would need to remove
-  config.output.set('hashFunction', 'xxhash64');
+  /**
+   * https://webpack.js.org/configuration/output/#outputhashfunction . When release webpack 6 would need to remove
+   *
+   * Also fix "digital envelope routines::unsupported" error with Node.js >= 17 version.
+   * More info - https://github.com/nodejs/node/issues/40455, https://github.com/webpack/webpack/issues/14532
+   * Solution reference - https://github.com/vercel/next.js/pull/30095 (updated `loader-utils` package required)
+   */
+  config.output.hashFunction('xxhash64').hashDigestLength(16);
 
   if (configManager.fileCache) {
     config.cache({

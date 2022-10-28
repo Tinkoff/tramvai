@@ -45,6 +45,9 @@ function match<T>(arg: T | undefined, factories: Array<(arg?: T) => any>, name: 
 
 // createConnect with default args builds the 'official' connect behavior. Calling it with
 // different options opens up some testing and extensibility scenarios
+/**
+ * @deprecated
+ */
 export function createConnect({
   connectHOC = connectAdvanced,
   mapStateToPropsFactories = defaultMapStateToPropsFactories,
@@ -111,7 +114,9 @@ export function createConnect({
   };
 }
 
-// __PURE__ добавлен для включения tree shaking в сборке. Без него terser не выкенет connect
+/**
+ * @deprecated
+ */
 const connect = /* @__PURE__ */ createConnect();
 const { Consumer } = ConnectContext;
 
