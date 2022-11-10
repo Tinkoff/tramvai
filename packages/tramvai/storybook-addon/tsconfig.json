@@ -36,6 +36,9 @@
         },
         {
             "path": "../../libs/url"
+        },
+        {
+            "path": "../../libs/is-modern-lib"
         }
     ]
 }

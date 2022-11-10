@@ -23,4 +23,10 @@ MainPage.components = {
   modal: MainModal,
 };
 
+MainPage.seo = {
+  metaTags: {
+    title: 'Main Page Title',
+  },
+};
+
 export default MainPage;

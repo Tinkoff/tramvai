@@ -1,4 +1,5 @@
 import flatten from '@tinkoff/utils/array/flatten';
+import mergeDeep from '@tinkoff/utils/object/mergeDeep';
 import type { Provider } from '@tramvai/core';
 import { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
 import { CONTEXT_TOKEN } from '@tramvai/module-common';
@@ -6,6 +7,12 @@ import { MetaWalk } from '@tinkoff/meta-tags-generate';
 import { metaDefaultPack, defaultPack } from './metaDefaultPack';
 import { META_PRIORITY_ROUTE } from './constants';
 import { META_DEFAULT_TOKEN, META_WALK_TOKEN, META_UPDATER_TOKEN } from './tokens';
+
+export type PageSeoProperty = {
+  metaTags?: Record<string, string>;
+  openGraph?: Record<string, string>;
+  twitterCard?: Record<string, string>;
+};
 
 const capitalize = (str) => {
   return `${str.charAt(0).toUpperCase()}${str.slice(1)}`;
@@ -44,8 +51,17 @@ export const sharedProviders: Provider[] = [
     provide: META_UPDATER_TOKEN,
     useFactory: ({ pageService }) => {
       return (walker) => {
-        const seo = pageService.getMeta().seo || {};
+        const routeSeo = pageService.getMeta().seo || {};
+
+        // @todo: only for file-system routes?
+        const { pageComponent } = pageService.getConfig() || {};
+        const PageComponent = pageService.getComponent(pageComponent) || {};
+        const pageComponentSeo = PageComponent.seo || {};
+
+        const seo = mergeDeep({}, routeSeo, pageComponentSeo);
+
         const shareSchema = seo.shareSchema || {};
+
         const metaTags = {
           ...seo.metaTags, // Базовые теги
           ...convertWithPrefix('twitter', shareSchema.twitterCard), // преобразование тегов с twitterCard

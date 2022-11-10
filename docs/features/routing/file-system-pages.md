@@ -230,6 +230,72 @@ const CommentsPage = () => {
 }
 ```
 
+### SEO and Meta Tags
+
+All possibilites below provided by [SeoModule](references/modules/seo.md)
+
+Easy way to change page meta is to add a `seo` property to page component:
+
+```tsx
+import { PageComponent } from '@tramvai/react';
+
+const CommentsPage: PageComponent = () => <h1>Comments</h1>;
+
+CommentsPage.seo = {
+  metaTags: {
+    title: 'Comments Page Title',
+  },
+};
+
+export default CommentsPage;
+```
+
+Another way, for File-System Pages, is to update route `config` property:
+
+```ts
+const route = {
+  name: 'comments',
+  path: '/comments/',
+  config: {
+    pageComponent: '@/pages/comments',
+    seo: {
+      metaTags: {
+        title: 'Comments Page Title',
+      },
+    },
+  },
+}
+```
+
+For complex cases you can use page actions:
+
+```tsx
+import { declareAction } from '@tramvai/core';
+import { PageComponent } from '@tramvai/react';
+import { META_WALK_TOKEN, META_PRIORITY_APP } from '@tramvai/module-seo';
+
+const metaAction = declareAction({
+  name: 'meta',
+  fn() {
+    this.deps.meta.updateMeta(META_PRIORITY_APP, {
+      title: 'Comments Page Title',
+    });
+  },
+  deps: {
+    meta: META_WALK_TOKEN,
+  },
+  conditions: {
+    always: true,
+  },
+});
+
+const CommentsPage: PageComponent = () => <h1>Comments</h1>;
+
+CommentsPage.actions = [metaAction];
+
+export default CommentsPage;
+```
+
 ## How to
 
 ### How to change layout component

@@ -7,12 +7,19 @@ import { Meta, Render } from '@tinkoff/meta-tags-generate';
 import isArray from '@tinkoff/utils/is/array';
 import { META_WALK_TOKEN, META_UPDATER_TOKEN, META_DEFAULT_TOKEN } from './tokens';
 import { transformValue } from './transformValue';
+import type { PageSeoProperty } from './shared';
 import { sharedProviders } from './shared';
 import { converters } from './converters/converters';
 import type { SeoModuleOptions } from './types';
 
 export * from './constants';
 export * from './tokens';
+
+declare module '@tramvai/react' {
+  export interface PageComponentOptions {
+    seo?: PageSeoProperty;
+  }
+}
 
 @Module({
   providers: [

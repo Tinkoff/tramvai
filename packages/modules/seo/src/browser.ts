@@ -4,6 +4,7 @@ import debounce from '@tinkoff/utils/function/debounce';
 import { Module, commandLineListTokens, provide } from '@tramvai/core';
 import { Meta, Update } from '@tinkoff/meta-tags-generate';
 import { transformValue } from './transformValue';
+import type { PageSeoProperty } from './shared';
 import { sharedProviders } from './shared';
 import { converters } from './converters/converters';
 import { META_UPDATER_TOKEN, META_WALK_TOKEN, META_DEFAULT_TOKEN } from './tokens';
@@ -11,6 +12,12 @@ import type { SeoModuleOptions } from './types';
 
 export * from './constants';
 export * from './tokens';
+
+declare module '@tramvai/react' {
+  export interface PageComponentOptions {
+    seo?: PageSeoProperty;
+  }
+}
 
 @Module({
   providers: [

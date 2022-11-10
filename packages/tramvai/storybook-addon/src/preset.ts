@@ -9,6 +9,7 @@ import { babelConfigFactory } from './babel/babelConfigFactory';
 import { addEnvVariables } from './webpack/addEnvVariables';
 import { addFilesRules } from './webpack/addFilesRules';
 import { addStylesRules } from './webpack/addStylesRules';
+import { addNodeModulesTranspile } from './webpack/addNodeModulesTranspile';
 import type { TramvaiCoreDecoratorParameters } from './decorators/tramvaiCoreDecorator';
 import type { RouterDecoratorParameters } from './decorators/routerDecorator';
 import type { ReactQueryDecoratorParameters } from './decorators/reactQueryDecorator';
@@ -34,6 +35,7 @@ export const webpackFinal = async (baseConfig: Configuration, options): Promise<
   addEnvVariables({ webpackConfig, configManager, options });
   addFilesRules({ baseConfig, webpackConfig, configManager });
   addStylesRules({ baseConfig, webpackConfig, configManager });
+  addNodeModulesTranspile({ baseConfig });
 
   const finalConfig = merge(baseConfig, webpackConfig.toConfig());
 

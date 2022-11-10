@@ -119,4 +119,10 @@ describe('fs-pages', () => {
 
     await browser.close();
   });
+
+  it('page component seo property applied', async () => {
+    const parsed = await app.render('/');
+
+    expect(parsed.parsed.querySelector('title').innerText).toBe('Main Page Title');
+  });
 });

@@ -24,6 +24,9 @@ module.exports = {
           ].filter(Boolean),
         };
       }
+      if (category.label === 'Releases') {
+        return false;
+      }
       return category;
     }),
   ].filter(Boolean),
