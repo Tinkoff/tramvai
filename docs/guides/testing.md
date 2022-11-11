@@ -772,6 +772,33 @@ it('render', async () => {
 
 In order to use mocker there should be added [`@tramvai/module-mocker`](references/modules/mocker.md) to the tramvai app modules list.
 
+:::tip
+
+`@tramvai/module-mocker` works by replacing mocked API env variables when application starts.
+
+You can pass list of mocked env variables directly in `MockerModule`, and it will not affect production code, for integration tests all requests to API without specific mocks just will be proxied to original env value:
+
+```ts
+MockerModule.forRoot({
+  config: async () => ({
+    apis: ['AWESOME_API'],
+  }),
+});
+```
+
+Or add a file in the `mocks` folder:
+
+```ts title="mocks/awesome-api.js"
+module.exports = {
+  api: 'AWESOME_API',
+  mocks: {},
+}
+```
+
+`app.mocker.addMocks` will have no effect if mocked API (method first argument) not in the list!
+
+:::
+
 After that mocker will read file based mocks as described in the docs to the mocker itself and it can be used dynamically in the tests:
 
 ```ts
@@ -795,6 +822,27 @@ it('should work with mocker', async () => {
   await app.mocker.removeMocks('AWESOME_API', ['GET /endpoint/']);
 
   await app.request('/some-page/').expect(500);
+});
+```
+
+### Papi testing
+
+For [papi](features/papi/introduction.md) methods testing you can use `app.papi` wrapper methods `publicPapi` and `privatePapi` with all `supertest` features.
+
+For example, let's make request to built-in papi method which returns all application routes in payload:
+
+```ts
+it('papi', async () => {
+  const response = await app.papi.publicPapi('bundleInfo').expect(200);
+
+  expect(response.body).toMatchInlineSnapshot(`
+    {
+      "payload": [
+        "/",
+      ],
+      "resultCode": "OK",
+    }
+  `);
 });
 ```
 

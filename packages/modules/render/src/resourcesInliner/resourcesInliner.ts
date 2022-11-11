@@ -176,11 +176,12 @@ export class ResourcesInliner implements ResourcesInlinerType {
     }
 
     const url = getResourceUrl(resource);
-    const filesCache = this.getFilesCache(url);
 
     if (isUndefined(url) || this.resourcesRegistryCache.disabledUrlsCache.has(url)) {
       return false;
     }
+
+    const filesCache = this.getFilesCache(url);
 
     if (filesCache.has(url)) {
       return true;

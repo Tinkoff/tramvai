@@ -9,6 +9,7 @@ import { renderFactory, requestFactory } from '@tramvai/test-helpers';
 /**
  * Позволяет протестировать уже созданное  через createApp приложение
  * @param appOrAppPromise результат вызова createApp
+ * @deprecated используйте `startCli` метод из пакета `@tramvai/test-integration` для полноценного тестирования приложения
  */
 export const testApp = async (appOrAppPromise: App | Promise<App>) => {
   const app = await appOrAppPromise;

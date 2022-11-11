@@ -103,53 +103,6 @@ it('test', async () => {
 </details>
 </p>
 
-### Testing app
-
-> Testing app works only in node-environment. See [jest docs](https://jestjs.io/docs/27.0/configuration#testenvironment-string)
-
-```ts
-import { testApp } from '@tramvai/test-unit';
-
-it('test', async () => {
-  const { request, render } = await testApp(app);
-
-  const response = await request('/').expect(200).expect('X-App-Id', 'unit-app');
-
-  expect(response.text).toMatch('<html class="no-js" lang="ru">');
-  expect(response.text).toMatch('<div class="application">rootPage</div>');
-  expect(response.text).toMatch('<script>var initialState =');
-
-  const rootPage = await render('/');
-
-  expect(rootPage.application).toEqual('rootPage');
-
-  const secondPage = await render('/second/');
-
-  expect(secondPage.application).toEqual('secondPage');
-  expect(secondPage.initialState).toEqual({
-    stores: expect.objectContaining({
-      environment: {
-        FRONT_LOG_API: 'test',
-      },
-      router: expect.objectContaining({
-        currentUrl: expect.objectContaining({
-          path: '\\u002Fsecond\\u002F',
-        }),
-      }),
-    }),
-  });
-});
-```
-
-<p>
-<details>
-<summary>More examples</summary>
-
-@inline src/app/testApp.spec.ts
-
-</details>
-</p>
-
 ### Adding providers to DI
 
 Most of the helpers accepts option `providers` which allows to redefine already existing providers or add new.

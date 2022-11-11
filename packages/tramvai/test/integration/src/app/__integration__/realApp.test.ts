@@ -28,6 +28,20 @@ describe('test/integration/app/runFakeApp', () => {
     return app.request('/').expect(200);
   });
 
+  it('should work with papi', async () => {
+    const { papi } = app;
+    const response = await papi.publicPapi('bundleInfo').expect(200);
+
+    expect(response.body).toMatchInlineSnapshot(`
+      {
+        "payload": [
+          "/",
+        ],
+        "resultCode": "OK",
+      }
+    `);
+  });
+
   it('should run app', async () => {
     const { application } = await app.render('/');
     expect(application).toMatchInlineSnapshot(`

@@ -123,7 +123,7 @@ Where path with square brackets relates to dynamic parts of url.
 
 ## Usage
 
-Experimental feature File-System Pages hidden behind the flag `commands.build.configurations.experiments.fileSystemPages.enable` in `tramvai.json` configuration file:
+Feature File-System Pages hidden behind the flag `commands.build.configurations.fileSystemPages.enable` in `tramvai.json` configuration file:
 
 ```json
 {
@@ -387,7 +387,7 @@ const someAction = declareAction({
 
 If you want to migrate from bundles to file-system pages, there is few steps:
 
-1. Enable `experiments.fileSystemPages.enable` option in `tramvai.json`, and change default folders for safety:
+1. Enable `fileSystemPages.enable` option in `tramvai.json`, and change default folders for safety:
 
     ```json
     {

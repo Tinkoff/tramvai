@@ -36,7 +36,7 @@ Add module to the project:
 
 ```tsx
 import { createApp } from '@tramvai/core';
-import { MockerModule } from '@tramvai/module-module';
+import { MockerModule } from '@tramvai/module-mocker';
 
 createApp({
   name: 'tincoin',
@@ -81,7 +81,7 @@ By default, all of the API that has corresponding mock will be mocked. It might 
 
 ```tsx
 MockerModule.forRoot({
-  config: () => ({
+  config: async () => ({
     apis: ['MY_API'],
   }),
 });

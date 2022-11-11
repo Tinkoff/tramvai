@@ -1,6 +1,7 @@
 import { initPuppeteer, wrapPuppeteerPage } from '@tramvai/test-puppeteer';
 import { runFakeApp } from '../startCliFakeApp';
 import type { StartCliResult } from '../startCli';
+import { wrapPapi } from '../papi';
 
 describe('test/integration/app/runFakeApp', () => {
   jest.setTimeout(10000);
@@ -19,6 +20,22 @@ describe('test/integration/app/runFakeApp', () => {
 
   it('should return 200 status', async () => {
     return app.request('/').expect(200);
+  });
+
+  it('should work with papi', async () => {
+    const { papi } = app;
+    const response = await papi.publicPapi('bundleInfo').expect(200);
+
+    expect(response.body).toMatchInlineSnapshot(`
+      {
+        "payload": [
+          "/",
+          "/api/",
+          "/second/",
+        ],
+        "resultCode": "OK",
+      }
+    `);
   });
 
   it('should run app', async () => {

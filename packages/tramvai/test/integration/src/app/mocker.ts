@@ -1,4 +1,4 @@
-import type { Mocker } from '@tinkoff/mocker';
+import type { MockConfig, Mocker } from '@tinkoff/mocker';
 import type { wrapPapi } from './papi';
 
 interface Options {
@@ -7,7 +7,12 @@ interface Options {
 
 const MOCKER_API_PATH = 'mocker-api';
 
-export const wrapMocker = ({ papi }: Options): Pick<Mocker, 'addMocks' | 'removeMocks'> => {
+export const wrapMocker = ({
+  papi,
+}: Options): {
+  addMocks(api: string, mocks: Record<string, MockConfig>): Promise<any>;
+  removeMocks(api: string, mocks: string[]): Promise<any>;
+} => {
   return {
     addMocks(api, mocks) {
       return papi
