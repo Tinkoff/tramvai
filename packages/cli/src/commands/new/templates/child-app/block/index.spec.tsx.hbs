@@ -12,9 +12,9 @@ describe('testChildApp', () => {
       childApp: { di, Component },
       close,
     } = await testChildApp(childApp);
-    const { render, rerender } = testComponent(
-      <Component di={di} />
-    );
+    const { render } = testComponent(<Component di={di} props={{}} />);
+
+    expect(render.getAllByText('Child App microfront')).toBeTruthy();
 
     return close();
   });
