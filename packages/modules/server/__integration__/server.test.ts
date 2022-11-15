@@ -223,3 +223,47 @@ describe('custom utility port', () => {
     expect(await response.text()).toMatch(/# TYPE http_requests_total counter/);
   });
 });
+
+describe('custom health checks path', () => {
+  const { getApp } = testApp(
+    {
+      name: 'server',
+      config: {
+        commands: {
+          build: {
+            options: {
+              serverApiDir: resolve(__dirname, 'papi'),
+            },
+            configurations: {
+              definePlugin: {
+                dev: {
+                  // через геттер, т.к. иначе в объекте будет свойство до иницилизации переменной port, т.е. undefined
+                  get 'process.env.EXTERNAL_WEBSITE_PORT'() {
+                    return externalWebsite.getPort();
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      env: {
+        CUSTOM_LIVENESS_PATH: '/custom-liveness',
+      },
+    }
+  );
+
+  // eslint-disable-next-line jest/expect-expect
+  it('GET requests to application pages works', async () => {
+    await getApp().request('/').expect(200);
+  });
+
+  // eslint-disable-next-line jest/expect-expect
+  it('returns utility paths', async () => {
+    const { request } = getApp();
+
+    await request('/custom-liveness').expect(200);
+  });
+});

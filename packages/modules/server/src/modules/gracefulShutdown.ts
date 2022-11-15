@@ -4,6 +4,8 @@ import {
   UTILITY_SERVER_PATHS,
   READINESS_PROBE_TOKEN,
   LIVENESS_PROBE_TOKEN,
+  LIVENESS_PATH_TOKEN,
+  READINESS_PATH_TOKEN,
 } from '@tramvai/tokens-server';
 import {
   UTILITY_WEB_FASTIFY_APP_TOKEN,
@@ -15,8 +17,6 @@ import { Module, COMMAND_LINE_RUNNER_TOKEN, provide } from '@tramvai/core';
 const GRACEFUL_SHUTDOWN_TIMEOUT = 25000;
 const GRACEFUL_READINESS_TIMEOUT = 5000;
 
-const healthzPath = '/healthz';
-const readyzPath = '/readyz';
 const noopCheck = () => {};
 
 @Module({
@@ -24,7 +24,16 @@ const noopCheck = () => {};
     provide({
       provide: WEB_FASTIFY_APP_BEFORE_INIT_TOKEN,
       multi: true,
-      useFactory: ({ app, server, logger, commandLineRunner, livenessProbe, readinessProbe }) => {
+      useFactory: ({
+        app,
+        server,
+        logger,
+        commandLineRunner,
+        livenessPath,
+        readinessPath,
+        livenessProbe,
+        readinessProbe,
+      }) => {
         const log = logger('server');
 
         return function serverListen() {
@@ -64,8 +73,8 @@ const noopCheck = () => {};
               process.exit();
             },
             healthChecks: {
-              [healthzPath]: livenessProbe || noopCheck,
-              [readyzPath]: readinessProbe || noopCheck,
+              [livenessPath]: livenessProbe || noopCheck,
+              [readinessPath]: readinessProbe || noopCheck,
             },
           });
         };
@@ -75,15 +84,40 @@ const noopCheck = () => {};
         server: SERVER_TOKEN,
         logger: LOGGER_TOKEN,
         commandLineRunner: COMMAND_LINE_RUNNER_TOKEN,
+        livenessPath: LIVENESS_PATH_TOKEN,
+        readinessPath: READINESS_PATH_TOKEN,
         readinessProbe: { token: READINESS_PROBE_TOKEN, optional: true },
         livenessProbe: { token: LIVENESS_PROBE_TOKEN, optional: true },
       },
     }),
-    {
+    provide({
+      provide: LIVENESS_PATH_TOKEN,
+      useValue: '/healthz',
+    }),
+    provide({
+      provide: READINESS_PATH_TOKEN,
+      useValue: '/readyz',
+    }),
+    provide({
       provide: UTILITY_SERVER_PATHS,
-      useValue: [readyzPath, healthzPath],
+      useFactory: ({ livenessPath }) => {
+        return livenessPath;
+      },
       multi: true,
-    },
+      deps: {
+        livenessPath: LIVENESS_PATH_TOKEN,
+      },
+    }),
+    provide({
+      provide: UTILITY_SERVER_PATHS,
+      useFactory: ({ readinessPath }) => {
+        return readinessPath;
+      },
+      multi: true,
+      deps: {
+        readinessPath: READINESS_PATH_TOKEN,
+      },
+    }),
   ],
 })
 export class ServerGracefulShutdownModule {}

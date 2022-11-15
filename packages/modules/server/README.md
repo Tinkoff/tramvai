@@ -218,6 +218,27 @@ Or use env variable `UTILITY_SERVER_PORT` with defined value.
 env UTILITY_SERVER_PORT=6532 tramvai start app
 ```
 
+### Specify path for liveness and readiness probes
+
+By default, liveness and readiness probes are available by `healtz` and `readyz` paths.
+
+If you want to change this paths, use `LIVENESS_PATH_TOKEN` and `READINESS_PATH_TOKEN` tokens.
+
+```ts
+import { LIVENESS_PATH_TOKEN, READINESS_PATH_TOKEN } from '@tramvai/tokens-server';
+
+const providers = [
+  {
+    provide: LIVENESS_PATH_TOKEN,
+    useValue: '/custom-liveness',
+  },
+  {
+    provide: READINESS_PATH_TOKEN,
+    useValue: '/custom-readiness',
+  },
+];
+```
+
 ## Exportable tokens
 
 [Link](references/tokens/server.md)

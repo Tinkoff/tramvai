@@ -3,6 +3,7 @@ import { CommonModule } from '@tramvai/module-common';
 import { SpaRouterModule } from '@tramvai/module-router';
 import { RenderModule } from '@tramvai/module-render';
 import {
+  LIVENESS_PATH_TOKEN,
   PROXY_CONFIG_TOKEN,
   ServerModule,
   SERVER_MODULE_PAPI_PRIVATE_ROUTE,
@@ -21,6 +22,10 @@ createApp({
         target: `http://localhost:${process.env.EXTERNAL_WEBSITE_PORT ?? 3000}/to/`,
       },
       multi: true,
+    },
+    {
+      provide: LIVENESS_PATH_TOKEN,
+      useValue: process.env.CUSTOM_LIVENESS_PATH ?? '/healthz',
     },
     provide({
       provide: SERVER_MODULE_PAPI_PRIVATE_ROUTE,

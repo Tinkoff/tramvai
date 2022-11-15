@@ -104,6 +104,18 @@ export const UTILITY_SERVER_PORT_TOKEN = createToken<number>('server utility ser
 
 /**
  * @description
+ * Custom path for liveness probe
+ */
+export const LIVENESS_PATH_TOKEN = createToken<string>('liveness path');
+
+/**
+ * @description
+ * Custom path for readiness probe
+ */
+export const READINESS_PATH_TOKEN = createToken<string>('readiness path');
+
+/**
+ * @description
  * Custom function for k8s readiness, you might want to wait for something before allowing traffic to your app\
  * https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
  */
