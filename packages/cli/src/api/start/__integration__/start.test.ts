@@ -122,6 +122,7 @@ describe('@tramvai/cli start command', () => {
             '@/routes/home': {},
           },
           pages: {},
+          layouts: {},
         });
       });
 

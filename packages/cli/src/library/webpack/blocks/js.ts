@@ -22,7 +22,7 @@ export default (configManager: ConfigManager) => (config: Config) => {
           .options(createWorkerPoolBabel(configManager))
           .end()
       )
-      .use('babel');
+      .use('transpiler');
 
     return addTranspilerLoader(configManager, cfg, babelCfg);
   };

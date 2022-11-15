@@ -63,7 +63,7 @@ export class BrowserLoader extends Loader {
       moduleName,
     });
 
-    return Promise.reject(new Error(`Error resolving module ${moduleName}`));
+    return Promise.reject(new Error(`Error resolving child-app ${moduleName}`));
   }
 
   async init(config: ChildAppFinalConfig): Promise<void> {

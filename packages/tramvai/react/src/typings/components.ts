@@ -32,6 +32,20 @@ export interface LayoutComponentProps {
 
 export type LayoutComponent = ComponentType<LayoutComponentProps> & Partial<LayoutComponentOptions>;
 
-export type TramvaiComponent = PageComponent | LayoutComponent;
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface NestedLayoutComponentOptions {
+  actions?: PageAction[];
+  reducers?: Reducer<any, any>[];
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface NestedLayoutComponentProps {
+  children?: ReactNode;
+}
+
+export type NestedLayoutComponent = ComponentType<NestedLayoutComponentProps> &
+  Partial<NestedLayoutComponentOptions>;
+
+export type TramvaiComponent = PageComponent | LayoutComponent | NestedLayoutComponent;
 
 export type TramvaiComponentDecl = TramvaiComponent | LazyComponentWrapper<TramvaiComponent>;

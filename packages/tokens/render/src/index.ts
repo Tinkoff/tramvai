@@ -92,7 +92,7 @@ export const EXTEND_RENDER = createToken<(current: ReactElement) => ReactElement
 
 /**
  * @description
- * Token for default layout for page
+ * Token for default layout for all pages - root layout
  */
 export const DEFAULT_LAYOUT_COMPONENT = createToken('defaultLayoutComponent');
 

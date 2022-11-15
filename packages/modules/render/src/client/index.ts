@@ -5,13 +5,11 @@ import type {
   RENDERER_CALLBACK,
   USE_REACT_STRICT_MODE,
 } from '@tramvai/tokens-render';
-import type { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
 import type { ExtractDependencyType } from '@tinkoff/dippy';
 import { renderReact } from '../react';
 import { renderer } from './renderer';
 
 export function rendering({
-  pageService,
   logger,
   consumerContext,
   customRender,
@@ -20,7 +18,6 @@ export function rendering({
   useStrictMode,
   rendererCallback,
 }: {
-  pageService: ExtractDependencyType<typeof PAGE_SERVICE_TOKEN>;
   logger: any;
   consumerContext: any;
   extendRender?: ExtractDependencyType<typeof EXTEND_RENDER>;
@@ -32,7 +29,7 @@ export function rendering({
   const log = logger('module-render');
 
   return new Promise<void>((resolve, reject) => {
-    let renderResult = renderReact({ pageService, di }, consumerContext);
+    let renderResult = renderReact({ di }, consumerContext);
 
     if (extendRender) {
       each((render) => {

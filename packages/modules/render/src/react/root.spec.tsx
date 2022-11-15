@@ -2,16 +2,21 @@
  * @jest-environment jsdom
  */
 import React from 'react';
+import { DIContext } from '@tramvai/react';
 import { testComponent } from '@tramvai/test-react';
 import { waitRaf } from '@tramvai/test-jsdom';
 import { LOGGER_TOKEN } from '@tramvai/module-common';
 import { useRoute } from '@tramvai/module-router';
+import { createMockDi } from '@tramvai/test-mocks';
+import { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
+import { provide } from '@tinkoff/dippy';
 import { ComponentRegistry } from '../../../common/src/componentRegistry/componentRegistry';
 import { PageService } from '../../../router/src/services/page';
 import { Root } from './root';
 
 jest.mock('@tramvai/module-router', () => ({
   useRoute: jest.fn(),
+  usePageService: jest.requireActual('@tramvai/module-router').usePageService,
 }));
 
 const mockRoute = {
@@ -53,16 +58,25 @@ describe('react/root', () => {
 
     const pageService = new PageService({ componentRegistry, router: mockRouter });
 
-    const { rerender } = testComponent(<Root pageService={pageService} />, {
-      providers: [
-        {
-          provide: LOGGER_TOKEN,
-          useValue: () => ({
-            error: mockLog,
-          }),
-        },
-      ],
+    const di = createMockDi({
+      providers: [provide({ provide: PAGE_SERVICE_TOKEN, useValue: pageService })],
     });
+
+    const { rerender } = testComponent(
+      <DIContext.Provider value={di}>
+        <Root />
+      </DIContext.Provider>,
+      {
+        providers: [
+          {
+            provide: LOGGER_TOKEN,
+            useValue: () => ({
+              error: mockLog,
+            }),
+          },
+        ],
+      }
+    );
 
     expect(mock).toHaveBeenCalledTimes(1);
 
@@ -72,7 +86,11 @@ describe('react/root', () => {
     };
 
     await waitRaf();
-    await rerender(<Root pageService={pageService} />);
+    await rerender(
+      <DIContext.Provider value={di}>
+        <Root />
+      </DIContext.Provider>
+    );
     expect(mock).toHaveBeenCalledTimes(1);
 
     mockRoute.config = {
@@ -80,7 +98,11 @@ describe('react/root', () => {
       pageComponent: 'page',
     };
     await waitRaf();
-    await rerender(<Root pageService={pageService} />);
+    await rerender(
+      <DIContext.Provider value={di}>
+        <Root />
+      </DIContext.Provider>
+    );
     expect(mock).toHaveBeenCalledTimes(2);
   });
 });

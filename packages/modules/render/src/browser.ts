@@ -8,7 +8,7 @@ import {
   RENDERER_CALLBACK,
   USE_REACT_STRICT_MODE,
 } from '@tramvai/tokens-render';
-import { PAGE_SERVICE_TOKEN, ROUTER_TOKEN } from '@tramvai/tokens-router';
+import { ROUTER_TOKEN } from '@tramvai/tokens-router';
 import { rendering as renderInBrowser } from './client';
 import type { RenderModuleConfig } from './shared/types';
 import { LayoutModule } from './shared/LayoutModule';
@@ -69,7 +69,6 @@ const throwErrorInDev = (logger: typeof LOGGER_TOKEN) => {
         };
       },
       deps: {
-        pageService: PAGE_SERVICE_TOKEN,
         logger: LOGGER_TOKEN,
         customRender: { token: CUSTOM_RENDER, optional: true },
         extendRender: { token: EXTEND_RENDER, optional: true },

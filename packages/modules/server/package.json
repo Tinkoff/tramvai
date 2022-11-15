@@ -32,7 +32,6 @@
     "@tramvai/tokens-server": "0.0.0-stub",
     "@tramvai/tokens-server-private": "0.0.0-stub",
     "fastify": "^4.6.0",
-    "fastify-plugin": "^4.2.1",
     "@fastify/cookie": "^8.1.0",
     "@fastify/compress": "^6.1.1",
     "@fastify/formbody": "^7.2.0",

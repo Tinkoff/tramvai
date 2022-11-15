@@ -1,6 +1,6 @@
 import type { ROUTES_TOKEN } from '@tramvai/module-router';
 
-export const routes: typeof ROUTES_TOKEN[] = [
+export const routes: typeof ROUTES_TOKEN = [
   {
     name: 'base',
     path: '/base',
@@ -20,6 +20,13 @@ export const routes: typeof ROUTES_TOKEN[] = [
     path: '/state',
     config: {
       bundle: 'state',
+    },
+  },
+  {
+    name: 'error-unknown',
+    path: '/error/unknown',
+    config: {
+      bundle: 'error',
     },
   },
 ];

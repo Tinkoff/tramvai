@@ -7,6 +7,8 @@ import {
   LAYOUT_OPTIONS,
 } from '@tramvai/tokens-render';
 
+const RenderChildrenComponent = ({ children }) => children;
+
 @Module({
   providers: [
     {
@@ -22,7 +24,10 @@ import {
     {
       provide: 'componentDefaultList',
       multi: true,
-      useFactory: (components) => components,
+      useFactory: (components) => ({
+        ...components,
+        nestedLayoutDefault: RenderChildrenComponent,
+      }),
       deps: {
         layoutDefault: DEFAULT_LAYOUT_COMPONENT,
         footerDefault: { token: DEFAULT_FOOTER_COMPONENT, optional: true },

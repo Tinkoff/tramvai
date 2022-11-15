@@ -1,35 +1,62 @@
-import React, { PureComponent } from 'react';
-import type { ComponentType } from 'react';
-import type { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
-import { useRoute } from '@tramvai/module-router';
+import { useMemo } from 'react';
+import type { ComponentType, PropsWithChildren } from 'react';
+import { usePageService } from '@tramvai/module-router';
+import type { PageComponent as PageComponentType } from '@tramvai/react';
 
-interface Props {
-  LayoutComponent: React.ComponentType<{
-    Header: React.ComponentType;
-    Footer: React.ComponentType;
-    children?: React.ReactNode;
-  }>;
-  PageComponent: React.ComponentType;
-  HeaderComponent: React.ComponentType;
-  FooterComponent: React.ComponentType;
-}
+/**
+ * Result component structure:
+ *
+ * <Root>
+ *   <RootComponent>
+ *    <LayoutComponent>
+ *      <NestedLayoutComponent>
+ *        <PageComponent />
+ *      </NestedLayoutComponent>
+ *    </LayoutComponent>
+ *  </RootComponent>
+ * </Root>
+ *
+ * All components separated for a few reasons:
+ * - Page subtree can be rendered independently when Layout and Nested Layout the same
+ * - Nested Layout can be rerendered only on its changes
+ * - Layout can be rendered only on its changes
+ */
 
-class RootComponent extends PureComponent<Props> {
-  render() {
-    const { LayoutComponent, PageComponent, HeaderComponent, FooterComponent } = this.props;
+const LayoutRenderComponent = ({ children }: PropsWithChildren) => {
+  const pageService = usePageService();
+  const LayoutComponent: ComponentType<any> = pageService.resolveComponentFromConfig('layout');
+  const HeaderComponent = pageService.resolveComponentFromConfig('header');
+  const FooterComponent = pageService.resolveComponentFromConfig('footer');
 
-    return (
+  const layout = useMemo(
+    () => (
       <LayoutComponent Header={HeaderComponent} Footer={FooterComponent}>
-        <PageComponent />
+        {children}
       </LayoutComponent>
-    );
-  }
-}
+    ),
+    [LayoutComponent, HeaderComponent, FooterComponent, children]
+  );
 
-export const Root = ({ pageService }: { pageService: typeof PAGE_SERVICE_TOKEN }) => {
-  const { config } = useRoute();
-  const { pageComponent } = config;
-  let PageComponent = pageService.getComponent(pageComponent);
+  return layout;
+};
+
+const NestedLayoutRenderComponent = ({ children }: PropsWithChildren) => {
+  const pageService = usePageService();
+  const NestedLayoutComponent: ComponentType<any> =
+    pageService.resolveComponentFromConfig('nestedLayout');
+
+  const nestedLayout = useMemo(
+    () => <NestedLayoutComponent>{children}</NestedLayoutComponent>,
+    [NestedLayoutComponent, children]
+  );
+
+  return nestedLayout;
+};
+
+const PageRenderComponent = () => {
+  const pageService = usePageService();
+  const { pageComponent } = pageService.getConfig();
+  let PageComponent = pageService.getComponent(pageComponent) as PageComponentType;
 
   if (!PageComponent) {
     PageComponent = () => {
@@ -37,17 +64,18 @@ export const Root = ({ pageService }: { pageService: typeof PAGE_SERVICE_TOKEN }
     };
   }
 
-  // Get components for current page, otherwise use a defaults
-  const LayoutComponent: ComponentType<any> = pageService.resolveComponentFromConfig('layout');
-  const HeaderComponent = pageService.resolveComponentFromConfig('header');
-  const FooterComponent = pageService.resolveComponentFromConfig('footer');
+  const page = useMemo(() => <PageComponent />, [PageComponent]);
 
-  return (
-    <RootComponent
-      HeaderComponent={HeaderComponent}
-      FooterComponent={FooterComponent}
-      LayoutComponent={LayoutComponent}
-      PageComponent={PageComponent}
-    />
+  return page;
+};
+
+export const Root = () => {
+  const pageRenderComponent = useMemo(() => <PageRenderComponent />, []);
+
+  const nestedLayoutRenderComponent = useMemo(
+    () => <NestedLayoutRenderComponent>{pageRenderComponent}</NestedLayoutRenderComponent>,
+    [pageRenderComponent]
   );
+
+  return <LayoutRenderComponent>{nestedLayoutRenderComponent}</LayoutRenderComponent>;
 };

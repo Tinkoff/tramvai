@@ -50,6 +50,7 @@ describe('fs-routing', () => {
     expect(await page.$eval('.application', (node) => (node as HTMLElement).innerText))
       .toMatchInlineSnapshot(`
       "Tramvai 🥳
+      Main Page Nested Layout
       Main Page to second pageto old page
       this Footer in fs-routing
 
@@ -112,6 +113,7 @@ describe('fs-routing', () => {
     expect(await page.$eval('.application', (node) => (node as HTMLElement).innerText))
       .toMatchInlineSnapshot(`
       "Tramvai 🥳
+      Main Page Nested Layout
       Main Page to second pageto old page
       this Footer in fs-routing
 

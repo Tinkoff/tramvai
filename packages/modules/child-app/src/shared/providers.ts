@@ -41,6 +41,10 @@ declare module '@tramvai/react' {
   export interface LayoutComponentOptions {
     childApps?: ChildAppRequestConfig[];
   }
+
+  export interface NestedLayoutComponentOptions {
+    childApps?: ChildAppRequestConfig[];
+  }
 }
 
 export const sharedProviders: Provider[] = [
@@ -172,13 +176,16 @@ export const sharedProviders: Provider[] = [
     provide: commandLineListTokens.resolvePageDeps,
     useFactory: ({ pageService, preloadManager }) => {
       return async function preloadChildAppByComponent() {
-        const [layoutComponent, pageComponent] = await Promise.all([
+        const [layoutComponent, nestedLayoutComponent, pageComponent] = await Promise.all([
           resolveLazyComponent(pageService.resolveComponentFromConfig('layout')),
+          resolveLazyComponent(pageService.resolveComponentFromConfig('nestedLayout')),
           resolveLazyComponent(pageService.resolveComponentFromConfig('page')),
         ]);
 
         await Promise.all([
           ...(layoutComponent?.childApps?.map((request) => preloadManager.preload(request)) ?? []),
+          ...(nestedLayoutComponent?.childApps?.map((request) => preloadManager.preload(request)) ??
+            []),
           ...(pageComponent?.childApps?.map((request) => preloadManager.preload(request)) ?? []),
         ]);
       };

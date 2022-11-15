@@ -7,16 +7,13 @@ import {
   ERROR_BOUNDARY_FALLBACK_COMPONENT_TOKEN,
 } from '@tramvai/react';
 import { useUrl } from '@tramvai/module-router';
-import type { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
+import { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
 import { useStore } from '@tramvai/state';
 import { deserializeError, PageErrorStore } from '../shared/pageErrorStore';
 
-export const PageErrorBoundary = (
-  props: PropsWithChildren<{
-    pageService: typeof PAGE_SERVICE_TOKEN;
-  }>
-) => {
-  const { children, pageService } = props;
+export const PageErrorBoundary = (props: PropsWithChildren) => {
+  const { children } = props;
+  const pageService = useDi(PAGE_SERVICE_TOKEN);
   const url = useUrl();
   const serializedError = useStore(PageErrorStore);
   const error = useMemo(() => {

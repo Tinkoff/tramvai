@@ -15,6 +15,7 @@ createApp({
     'base-not-preloaded': () =>
       import(/* webpackChunkName: "base-not-preloaded" */ './bundles/base-not-preloaded'),
     state: () => import(/* webpackChunkName: "state" */ './bundles/state'),
+    error: () => import(/* webpackChunkName: "error" */ './bundles/error'),
   },
   modules: [
     CommonModule,
@@ -53,6 +54,16 @@ createApp({
         {
           name: 'state',
           baseUrl: process.env.CHILD_APP_STATE,
+          byTag: {
+            latest: {
+              version: '0.0.0-stub',
+              withoutCss: true,
+            },
+          },
+        },
+        {
+          name: 'fail-url',
+          baseUrl: 'http://localhost:4555',
           byTag: {
             latest: {
               version: '0.0.0-stub',

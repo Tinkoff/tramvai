@@ -143,13 +143,13 @@ To speed up data loading, we've added a preloading system for resources and asyn
 - Next we add all the CSS to the **preload** tag and add onload event on them. We need to load the blocking resources as quickly as possible.
 - When loading any CSS file, onload event will be fired (only once time) and add all **preload** tags to the necessary JS files
 
-### Basic layout
+### Root layout
 
-The `RenderModule` has a default basic layout that supports different ways of extending and adding functionality
+The `RenderModule` has a default root layout that supports different ways of extending and adding functionality
 
 [Read more about layout on the library page](references/libs/tinkoff-layout.md)
 
-#### Adding a basic header and footer
+#### Adding a default header and footer
 
 The module allows you to add header and footer components, which will be rendered by default for all pages
 
@@ -191,7 +191,7 @@ createBundle({
 
 #### Adding components and wrappers
 
-You can add custom components and wrappers for layout via the token `LAYOUT_OPTIONS`
+You can add custom components and wrappers for layout via the token `LAYOUT_OPTIONS`, this wrappers will be applied on every application page:
 
 ```tsx
 import { provide } from '@tramvai/core';
@@ -226,7 +226,13 @@ export class MyLayoutModule {}
 
 More details about the `components` and `wrappers` options can be found in [@tinkoff/layout-factory](references/libs/tinkoff-layout.md)
 
-#### Replacing the basic layout
+#### Replacing the root layout
+
+:::warning
+
+Not recommended, because a lot of dependant features can be broken!
+
+:::
 
 If the basic layout doesn't work for you, you can replace it with any other React component.
 In doing so, you need to implement all the wrappers yourself and plug in global components if you need them.
@@ -267,6 +273,64 @@ createBundle({
   },
 });
 ```
+
+### Nested layout
+
+For every page, nested layout can be applied. It is useful when you need to wrap group of pages in the same block, or add the same actions.
+
+:::note
+
+For now, only one level of layout nesting supported, and simplified component structure will look like this:
+
+```tsx
+<RootLayout>
+  <NestedLayout>
+    <Page />
+  </NestedLayout>
+</RootLayout>
+```
+
+:::
+
+Nested layout it is a simple React component with `children` property, and static properties `actions` and `reducers` are supported:
+
+```tsx
+import type { NestedLayoutComponent } from '@tramvai/react';
+
+const Layout: NestedLayoutComponent = ({ children }) => {
+  return <div>{children}</div>;
+};
+
+Layout.actions = [actionFoo, actionBar];
+
+Layout.reducers = [StoreBaz];
+```
+
+Actions will be registered as current page component actions and reducers will be registered in global store.
+
+#### Adding a nested layout
+
+You can add a `nestedLayoutComponent` property to route `config` property and register component in `bundle`.
+This layout will be rendered when you go to the corresponding route.
+
+```tsx
+createBundle({
+  name: 'common-bundle',
+  components: {
+    myNestedLayout: NestedLayout,
+  },
+});
+
+const route = {
+  name: 'main',
+  path: '/',
+  config: {
+    nestedLayoutComponent: 'myNestedLayout',
+  },
+};
+```
+
+Also, this feature available for [File-System Pages and Routes](features/routing/file-system-pages.md)
 
 ## How to
 

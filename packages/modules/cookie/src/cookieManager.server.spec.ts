@@ -1,5 +1,14 @@
 import { CookieManager } from './cookieManager.server';
-import * as utils from './utils';
+import { prepareCookieOptions } from './utils';
+
+jest.mock('./utils', () => {
+  const utils = jest.requireActual('./utils');
+
+  return {
+    ...utils,
+    prepareCookieOptions: jest.fn(utils.prepareCookieOptions),
+  };
+});
 
 const cookies = {
   a: 'test',
@@ -104,10 +113,8 @@ describe('CookieManager.server', () => {
   });
 
   it('prepareCookieOptions should be called', () => {
-    const prepareCookieOptionsSpy = jest.spyOn(utils, 'prepareCookieOptions');
-
     cookieManager.set({ name: 'b', value: 'b' });
 
-    expect(prepareCookieOptionsSpy).toHaveBeenCalled();
+    expect(prepareCookieOptions).toHaveBeenCalled();
   });
 });

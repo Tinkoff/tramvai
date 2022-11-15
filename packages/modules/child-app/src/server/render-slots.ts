@@ -25,23 +25,17 @@ export const registerChildAppRenderSlots = ({
     const config = resolveFullConfig(requestConfig);
     const di = diManager.getChildDi(config);
 
-    if (!di) {
-      return;
-    }
-
-    const slots: ExtractTokenType<typeof RENDER_SLOTS> = [
-      {
-        type: ResourceType.script,
-        slot: ResourceSlot.HEAD_CORE_SCRIPTS,
-        payload: config.client.entry,
-        attrs: {
-          'data-critical': 'true',
-        },
+    result.push({
+      type: ResourceType.script,
+      slot: ResourceSlot.HEAD_CORE_SCRIPTS,
+      payload: config.client.entry,
+      attrs: {
+        'data-critical': 'true',
       },
-    ];
+    });
 
     if (config.css) {
-      slots.push({
+      result.push({
         type: ResourceType.style,
         slot: ResourceSlot.HEAD_CORE_STYLES,
         payload: config.css.entry,
@@ -51,11 +45,15 @@ export const registerChildAppRenderSlots = ({
       });
     }
 
+    if (!di) {
+      return;
+    }
+
     try {
       const renderSlots = di.get({ token: RENDER_SLOTS, optional: true }) as any[];
 
       if (renderSlots) {
-        slots.push(...renderSlots);
+        result.push(...renderSlots);
       }
     } catch (error) {
       log.error({
@@ -63,8 +61,6 @@ export const registerChildAppRenderSlots = ({
         config: requestConfig,
       });
     }
-
-    result.push(...slots);
   });
 
   return result;

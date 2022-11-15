@@ -29,6 +29,8 @@ createApp({
         path: '/',
         config: {
           pageComponent: '@/pages/MainPage',
+          // добавляем вложенный layout для страницы
+          nestedLayoutComponent: '@/pages/layouts/MainLayout',
         },
       },
       // задаем статичный роут для приложения, который будет доступен по https://localhost:3000/second/
@@ -38,7 +40,7 @@ createApp({
         path: '/second/',
         config: {
           pageComponent: '@/pages/SecondPage',
-          // меняем дефолтный layout страницы
+          // меняем рутовый layout страницы
           layoutComponent: 'second-page/layout',
         },
       },

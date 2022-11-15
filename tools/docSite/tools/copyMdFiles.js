@@ -18,6 +18,7 @@ async function copyMdFiles() {
 
   await copyDocs({ from: 'packages/tramvai', to: `${docsDest}/references/tramvai` });
   await copyDocs({ from: 'packages/cli', to: `${docsDest}/references/cli` });
+  await copyDocs({ from: 'packages/swc', to: `${docsDest}/references/cli` });
   await copyDocs({ from: 'packages/modules', to: `${docsDest}/references/modules` });
   await copyDocs({ from: 'packages/tokens', to: `${docsDest}/references/tokens` });
   await copyDocs({ from: 'packages/libs', to: `${docsDest}/references/libs` });

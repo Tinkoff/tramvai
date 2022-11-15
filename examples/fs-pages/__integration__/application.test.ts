@@ -50,6 +50,7 @@ describe('fs-pages', () => {
     expect(await page.$eval('.application', (node) => (node as HTMLElement).innerText))
       .toMatchInlineSnapshot(`
       "Tramvai 🥳
+      Main Page Nested Layout
       Main Page to second pageto old page
       this Footer in fs-pages"
     `);
@@ -104,6 +105,7 @@ describe('fs-pages', () => {
     expect(await page.$eval('.application', (node) => (node as HTMLElement).innerText))
       .toMatchInlineSnapshot(`
       "Tramvai 🥳
+      Main Page Nested Layout
       Main Page to second pageto old page
       this Footer in fs-pages"
     `);

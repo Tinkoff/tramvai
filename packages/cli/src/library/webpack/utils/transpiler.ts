@@ -1,4 +1,5 @@
 import type Config from 'webpack-chain';
+import { sync as resolve } from 'resolve';
 import type { ConfigManager } from '../../../config/configManager';
 import { getSwcOptions } from '../../swc';
 import babelConfig from '../../babel';
@@ -11,6 +12,14 @@ export const addTranspilerLoader = (
   const { loader } = configManager.experiments.transpilation;
 
   if (loader === 'swc') {
+    try {
+      resolve('@tramvai/swc-integration/package.json', { basedir: configManager.rootDir });
+    } catch (error) {
+      throw new Error(`You are using swc loader for the transpilation, but required module is not installed.
+Please run "tramvai add --dev @tramvai/swc-integration" to fix the problem
+      `);
+    }
+
     return rule.loader('swc-loader').options(getSwcOptions(transpilerConfig)).end();
   }
 

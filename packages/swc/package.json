@@ -1,0 +1,21 @@
+{
+  "name": "@tramvai/swc-integration",
+  "version": "0.0.0-stub",
+  "description": "Tramvai integration with swc toolset",
+  "files": [
+    "target/wasm32-wasi/release/*.wasm"
+  ],
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Tinkoff/tramvai.git"
+  },
+  "scripts": {},
+  "dependencies": {
+    "@swc/core": "^1.3.14",
+    "@swc/helpers": "^0.4.12",
+    "swc-loader": "^0.2.3"
+  },
+  "peerDependencies": {},
+  "license": "Apache-2.0"
+}

@@ -19,6 +19,10 @@ export const getAllFileSystemPages = () => {
   return { ...fsPagesAndRoutes.routes, ...fsPagesAndRoutes.pages };
 };
 
+export const getAllFileSystemLayouts = () => {
+  return fsPagesAndRoutes.layouts;
+};
+
 export const isFileSystemPageComponent = (pageComponent: string): boolean => {
   return (
     fileSystemPagesEnabled() &&
@@ -67,17 +71,32 @@ export const pathToExternalFileSystemPage = (path: string): string => {
     .join('/');
 };
 
+/**
+ * @example
+ * @/routes/index to @/routes/index__layout
+ */
+export const fileSystemPageToLayoutKey = (pageComponent: string): string => {
+  return `${pageComponent}__layout`;
+};
+
 export const fileSystemPageToRoute = (pageComponent: string): Route => {
   const name = pageComponent;
   const path = staticFileSystemPageToPath(pageComponent);
+  const layouts = getAllFileSystemLayouts();
 
-  return {
+  const route: Route = {
     name,
     path,
     config: {
       pageComponent,
     },
   };
+
+  if (pageComponent in layouts) {
+    route.config!.nestedLayoutComponent = fileSystemPageToLayoutKey(pageComponent);
+  }
+
+  return route;
 };
 
 export const fileSystemPageComponentExists = (pageComponent: string): boolean => {

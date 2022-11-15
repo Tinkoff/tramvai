@@ -1,12 +1,22 @@
 import path from 'path';
 import readDir from 'fs-readdir-recursive';
+import fs from 'fs';
+
+const LAYOUT_FILENAME = '_layout.tsx';
 
 export default function () {
   const { fileSystemPages, rootDir, root, extensions } = this.getOptions();
+  const fsLayouts = [];
 
   this.cacheable(false);
 
-  const filesToPages = ({ pagesRootDirectory }: { pagesRootDirectory: string }) => {
+  const filesToPages = ({
+    pagesRootDirectory,
+    isRoutes = false,
+  }: {
+    pagesRootDirectory: string;
+    isRoutes?: boolean;
+  }) => {
     const pagesDir = path.resolve(rootDir, root, pagesRootDirectory);
 
     this.addContextDependency(pagesDir);
@@ -28,6 +38,20 @@ export default function () {
         fsPages.push(
           `'${pageComponentName}': lazy(() => import(/* webpackChunkName: "${pageComponentChunkName}" */ '${pageComponentPath}'))`
         );
+
+        if (isRoutes) {
+          const layoutPath = path.join(path.dirname(pageComponentPath), LAYOUT_FILENAME);
+
+          if (fs.existsSync(layoutPath)) {
+            // @example '@/pages/MainPage': lazy(() => import(/* webpackChunkName: "@_pages_MainPage_layout" */ '/tramvai-app/src/pages/MainPage_layout'))
+            fsLayouts.push(
+              `'${pageComponentName}': lazy(() => import(/* webpackChunkName: "${pageComponentChunkName}__layout" */ '${layoutPath.replace(
+                '.tsx',
+                ''
+              )}'))`
+            );
+          }
+        }
       }
     }
 
@@ -37,6 +61,7 @@ export default function () {
   const fsRoutes = fileSystemPages.routesDir
     ? filesToPages({
         pagesRootDirectory: fileSystemPages.routesDir,
+        isRoutes: true,
       })
     : [];
   const fsPages = fileSystemPages.pagesDir
@@ -53,6 +78,9 @@ export default {
   },
   pages: {
     ${fsPages.join(',\n')}
+  },
+  layouts: {
+    ${fsLayouts.join(',\n')}
   },
 }`;
 

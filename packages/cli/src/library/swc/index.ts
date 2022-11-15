@@ -1,6 +1,8 @@
 import browserslist from 'browserslist';
 import envTargets from '@tinkoff/browserslist-config';
 import { sync as resolve } from 'resolve';
+import findCacheDir from 'find-cache-dir';
+import type { Config } from '@swc/core';
 import type { Env } from '../../typings/Env';
 import type { Target } from '../../typings/target';
 
@@ -10,7 +12,7 @@ interface SWCConfig {
   modern?: boolean;
   isServer?: boolean;
   typescript?: boolean;
-  modules?: string | boolean;
+  modules?: Config['module']['type'] | false;
   removeTypeofWindow?: boolean;
   alias?: Record<string, any>;
   bugfixes?: boolean; // https://babeljs.io/docs/en/babel-preset-env#bugfixes
@@ -19,14 +21,8 @@ interface SWCConfig {
   rootDir?: string;
 }
 
-function hasJsxRuntime() {
-  try {
-    resolve('react/jsx-runtime', { basedir: process.cwd() });
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
+const TRAMVAI_SWC_TARGET_PATH = '@tramvai/swc-integration/target/wasm32-wasi';
+
 export const getSwcOptions = ({
   env = 'development',
   target,
@@ -36,7 +32,35 @@ export const getSwcOptions = ({
   typescript = false,
   hot = false,
   rootDir = process.cwd(),
-}: SWCConfig) => {
+}: SWCConfig): Config => {
+  const resolveWasmFile = (pluginName: string, type: 'debug' | 'release') => {
+    return resolve(`${TRAMVAI_SWC_TARGET_PATH}/${type}/${pluginName}.wasm`, {
+      basedir: rootDir,
+    });
+  };
+
+  const resolveTramvaiSwcPlugin = (pluginName: string) => {
+    try {
+      return resolveWasmFile(pluginName, 'debug');
+    } catch (_) {
+      try {
+        return resolveWasmFile(pluginName, 'release');
+      } catch (__) {
+        throw new Error(
+          `Cannot find tramvai swc-plugin "${pluginName}" related to the "${rootDir}" directory`
+        );
+      }
+    }
+  };
+  function hasJsxRuntime() {
+    try {
+      resolve('react/jsx-runtime', { basedir: rootDir });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   let resultTarget = target;
 
   if (!target) {
@@ -61,12 +85,12 @@ export const getSwcOptions = ({
   return {
     env: {
       targets,
-      corejs: '3',
+      coreJs: '3',
       loose: true,
       mode: 'entry',
     },
     module: {
-      type: modules || 'es6',
+      type: modules || undefined,
     },
     jsc: {
       // TODO: should trim output size, but doesn't work well with some libs
@@ -79,17 +103,22 @@ export const getSwcOptions = ({
         legacyDecorator: true,
         react: {
           runtime: hasJsxRuntime() ? 'automatic' : 'classic',
-          useSpread: true,
           development: env === 'development',
           refresh: hot && !isServer,
         },
         optimizer: {
           globals: {
+            // @ts-ignore
+            // TODO: there is not typings for typeofs, but the field is mentioned in docs
             typeofs: {
               window: isServer ? 'undefined' : 'object',
             },
           },
         },
+      },
+      experimental: {
+        cacheRoot: findCacheDir({ cwd: rootDir, name: 'swc' }),
+        plugins: [[resolveTramvaiSwcPlugin('create_token_pure'), {}]],
       },
     },
   };

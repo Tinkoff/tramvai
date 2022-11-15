@@ -27,6 +27,7 @@
     "@tinkoff/errors": "0.0.0-stub",
     "@tinkoff/router": "0.0.0-stub",
     "@tinkoff/url": "0.0.0-stub",
+    "@tramvai/react": "0.0.0-stub",
     "@tramvai/tokens-child-app": "0.0.0-stub",
     "@tramvai/tokens-render": "0.0.0-stub",
     "@tramvai/tokens-router": "0.0.0-stub",

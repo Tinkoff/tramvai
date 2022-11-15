@@ -22,92 +22,91 @@ export const Cmp = () => {
 };
 `;
 
-describe('child-app', () => {
-  let childAppBase: PromiseType<ReturnType<typeof start>>;
-  let childAppBaseNotPreloaded: PromiseType<ReturnType<typeof start>>;
-  let childAppState: PromiseType<ReturnType<typeof start>>;
+let childAppBase: PromiseType<ReturnType<typeof start>>;
+let childAppBaseNotPreloaded: PromiseType<ReturnType<typeof start>>;
+let childAppState: PromiseType<ReturnType<typeof start>>;
 
-  beforeAll(async () => {
-    await outputFile(REFRESH_CMP_PATH, REFRESH_CMP_CONTENT_START);
+beforeAll(async () => {
+  await outputFile(REFRESH_CMP_PATH, REFRESH_CMP_CONTENT_START);
 
-    [childAppBase, childAppBaseNotPreloaded, childAppState] = await Promise.all([
-      start({
-        port: 0,
-        config: {
-          type: 'child-app',
-          root: resolve(__dirname, 'child-app', 'base'),
-          name: 'base',
-          commands: {
-            serve: {
-              configurations: {
-                hotRefresh: true,
-              },
+  [childAppBase, childAppBaseNotPreloaded, childAppState] = await Promise.all([
+    start({
+      port: 0,
+      config: {
+        type: 'child-app',
+        root: resolve(__dirname, 'child-app', 'base'),
+        name: 'base',
+        commands: {
+          serve: {
+            configurations: {
+              hotRefresh: true,
             },
           },
         },
-      }),
-      start({
-        port: 0,
-        config: {
-          type: 'child-app',
-          root: resolve(__dirname, 'child-app', 'base-not-preloaded'),
-          name: 'base-not-preloaded',
-        },
-      }),
-      start({
-        port: 0,
-        config: {
-          type: 'child-app',
-          root: resolve(__dirname, 'child-app', 'state'),
-          name: 'state',
-        },
-      }),
-    ]);
-  });
+      },
+    }),
+    start({
+      port: 0,
+      config: {
+        type: 'child-app',
+        root: resolve(__dirname, 'child-app', 'base-not-preloaded'),
+        name: 'base-not-preloaded',
+      },
+    }),
+    start({
+      port: 0,
+      config: {
+        type: 'child-app',
+        root: resolve(__dirname, 'child-app', 'state'),
+        name: 'state',
+      },
+    }),
+  ]);
+});
 
-  const { getApp } = testApp({
-    name: 'root-app',
-    config: {
-      commands: {
-        build: {
-          configurations: {
-            definePlugin: {
-              dev: {
-                get 'process.env.CHILD_APP_BASE'() {
-                  return `"${getStaticUrl(childAppBase)}/"`;
-                },
-                get 'process.env.CHILD_APP_BASE_NOT_PRELOADED'() {
-                  return `"${getStaticUrl(childAppBaseNotPreloaded)}/"`;
-                },
-                get 'process.env.CHILD_APP_STATE'() {
-                  return `"${getStaticUrl(childAppState)}/"`;
-                },
+const { getApp } = testApp({
+  name: 'root-app',
+  config: {
+    commands: {
+      build: {
+        configurations: {
+          definePlugin: {
+            dev: {
+              get 'process.env.CHILD_APP_BASE'() {
+                return `"${getStaticUrl(childAppBase)}/"`;
+              },
+              get 'process.env.CHILD_APP_BASE_NOT_PRELOADED'() {
+                return `"${getStaticUrl(childAppBaseNotPreloaded)}/"`;
+              },
+              get 'process.env.CHILD_APP_STATE'() {
+                return `"${getStaticUrl(childAppState)}/"`;
               },
             },
           },
         },
       },
     },
-  });
-  const { getPageWrapper } = testAppInBrowser(getApp);
+  },
+});
+const { getPageWrapper } = testAppInBrowser(getApp);
 
-  afterAll(async () => {
-    await Promise.all([
-      childAppBase.close(),
-      childAppBaseNotPreloaded.close(),
-      childAppState.close(),
-    ]);
-  });
+afterAll(async () => {
+  await Promise.all([
+    childAppBase.close(),
+    childAppBaseNotPreloaded.close(),
+    childAppState.close(),
+  ]);
+});
 
-  describe('base', () => {
-    it('should resolve child-app', async () => {
-      const { request, render } = getApp();
+describe('base', () => {
+  it('should resolve child-app', async () => {
+    const { request, render } = getApp();
 
-      await request('/base/').expect(200);
+    await request('/base/').expect(200);
 
-      const { application } = await render('/base/', { parserOptions: { comment: true } });
+    const { application } = await render('/base/', { parserOptions: { comment: true } });
 
-      expect(application).toMatchInlineSnapshot(`
+    expect(application).toMatchInlineSnapshot(`
         "
               <div>Content from root</div>
               <!--$-->
@@ -119,70 +118,70 @@ describe('child-app', () => {
               <!--/$-->
             "
       `);
-    });
-
-    it('react-refresh should work', async () => {
-      const { page } = await getPageWrapper('/base/');
-
-      expect(
-        await page.$eval('#cmp', (node) => (node as HTMLElement).innerText)
-      ).toMatchInlineSnapshot(`"Cmp test: start"`);
-
-      await outputFile(REFRESH_CMP_PATH, REFRESH_CMP_CONTENT_UPDATE);
-
-      await page.waitForFunction(
-        () => {
-          return document.getElementById('cmp')?.innerHTML !== 'Cmp test: start';
-        },
-        { polling: 2000, timeout: 10000 }
-      );
-
-      expect(
-        await page.$eval('#cmp', (node) => (node as HTMLElement).innerText)
-      ).toMatchInlineSnapshot(`"Cmp test: update"`);
-    });
   });
 
-  describe('base-not-preloaded', () => {
-    it('should render child app only after page load', async () => {
-      const { request, render } = getApp();
+  it('react-refresh should work', async () => {
+    const { page } = await getPageWrapper('/base/');
 
-      await request('/base-not-preloaded/').expect(200);
+    expect(
+      await page.$eval('#cmp', (node) => (node as HTMLElement).innerText)
+    ).toMatchInlineSnapshot(`"Cmp test: start"`);
 
-      const { application } = await render('/base-not-preloaded/');
+    await outputFile(REFRESH_CMP_PATH, REFRESH_CMP_CONTENT_UPDATE);
 
-      expect(application).not.toContain('Child App');
+    await page.waitForFunction(
+      () => {
+        return document.getElementById('cmp')?.innerHTML !== 'Cmp test: start';
+      },
+      { polling: 2000, timeout: 10000 }
+    );
 
-      const { page, router } = await getPageWrapper('/base-not-preloaded/');
-
-      const getActionCount = () =>
-        page.evaluate(() => window.TRAMVAI_TEST_CHILD_APP_NOT_PRELOADED_ACTION_CALL_NUMBER);
-
-      await page.waitForSelector('#base-not-preloaded', {
-        visible: true,
-      });
-
-      expect(
-        await page.evaluate(() => document.querySelector('.application')?.innerHTML)
-      ).toContain('Child App');
-
-      expect(await getActionCount()).toBe(1);
-
-      router.navigate('/base/');
-
-      expect(await getActionCount()).toBe(1);
-    });
+    expect(
+      await page.$eval('#cmp', (node) => (node as HTMLElement).innerText)
+    ).toMatchInlineSnapshot(`"Cmp test: update"`);
   });
+});
 
-  describe('state', () => {
-    it('should resolve child-app', async () => {
-      const { request, render } = getApp();
+describe('base-not-preloaded', () => {
+  it('should render child app only after page load', async () => {
+    const { request, render } = getApp();
 
-      await request('/state/').expect(200);
+    await request('/base-not-preloaded/').expect(200);
 
-      const { application } = await render('/state/', { parserOptions: { comment: true } });
+    const { application } = await render('/base-not-preloaded/');
 
-      expect(application).toMatchInlineSnapshot(`
+    expect(application).not.toContain('Child App');
+
+    const { page, router } = await getPageWrapper('/base-not-preloaded/');
+
+    const getActionCount = () =>
+      page.evaluate(() => (window as any).TRAMVAI_TEST_CHILD_APP_NOT_PRELOADED_ACTION_CALL_NUMBER);
+
+    await page.waitForSelector('#base-not-preloaded', {
+      visible: true,
+    });
+
+    expect(await page.evaluate(() => document.querySelector('.application')?.innerHTML)).toContain(
+      'Child App'
+    );
+
+    expect(await getActionCount()).toBe(1);
+
+    router.navigate('/base/');
+
+    expect(await getActionCount()).toBe(1);
+  });
+});
+
+describe('state', () => {
+  it('should resolve child-app', async () => {
+    const { request, render } = getApp();
+
+    await request('/state/').expect(200);
+
+    const { application } = await render('/state/', { parserOptions: { comment: true } });
+
+    expect(application).toMatchInlineSnapshot(`
         "
               <h2>Root</h2>
               <div>
@@ -199,42 +198,53 @@ describe('child-app', () => {
               <!--/$-->
             "
       `);
-    });
+  });
 
-    it('should update internal state based on root', async () => {
-      const { page } = await getPageWrapper('/state/');
-      const childCmp = await page.$('#child-state');
+  it('should update internal state based on root', async () => {
+    const { page } = await getPageWrapper('/state/');
+    const childCmp = await page.$('#child-state');
 
-      expect(
-        await childCmp?.evaluate((node) => (node as HTMLElement).innerText)
-      ).toMatchInlineSnapshot(`"Current Value from Root Store: 1"`);
+    expect(
+      await childCmp?.evaluate((node) => (node as HTMLElement).innerText)
+    ).toMatchInlineSnapshot(`"Current Value from Root Store: 1"`);
 
-      const button = await page.$('#button');
+    const button = await page.$('#button');
 
-      await button?.click();
+    await button?.click();
 
-      await sleep(100);
+    await sleep(100);
 
-      expect(
-        await childCmp?.evaluate((node) => (node as HTMLElement).innerText)
-      ).toMatchInlineSnapshot(`"Current Value from Root Store: 2"`);
-    });
+    expect(
+      await childCmp?.evaluate((node) => (node as HTMLElement).innerText)
+    ).toMatchInlineSnapshot(`"Current Value from Root Store: 2"`);
+  });
 
-    it('should execute action for every transition', async () => {
-      const { page, router } = await getPageWrapper('/state/');
+  it('should execute action for every transition', async () => {
+    const { page, router } = await getPageWrapper('/state/');
 
-      const getActionCount = () =>
-        page.evaluate(() => window.TRAMVAI_TEST_CHILD_APP_ACTION_CALLED_TIMES);
+    const getActionCount = () =>
+      page.evaluate(() => (window as any).TRAMVAI_TEST_CHILD_APP_ACTION_CALLED_TIMES);
 
-      expect(await getActionCount()).toBe(1);
+    expect(await getActionCount()).toBe(1);
 
-      await router.navigate('/base/');
+    await router.navigate('/base/');
 
-      expect(await getActionCount()).toBe(1);
+    expect(await getActionCount()).toBe(1);
 
-      await router.navigate('/state/');
+    await router.navigate('/state/');
 
-      expect(await getActionCount()).toBe(2);
-    });
+    expect(await getActionCount()).toBe(2);
+  });
+});
+
+describe('errors', () => {
+  it('error on child-app load', async () => {
+    const { request, render } = getApp();
+
+    await request('/error/unknown/').expect(200);
+
+    const { application } = await render('/error/unknown/');
+
+    expect(application).toMatchInlineSnapshot(`"<div>Error page still works</div>"`);
   });
 });

@@ -173,7 +173,6 @@ export const DEFAULT_POLYFILL_CONDITION =
       useClass: ReactRenderServer,
       deps: {
         context: CONTEXT_TOKEN,
-        pageService: PAGE_SERVICE_TOKEN,
         customRender: { token: CUSTOM_RENDER, optional: true },
         extendRender: { token: EXTEND_RENDER, optional: true },
         di: DI_TOKEN,

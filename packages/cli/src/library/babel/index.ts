@@ -27,7 +27,7 @@ interface BabelConfig {
   generateDataQaTag?: boolean;
   enableFillActionNamePlugin?: boolean;
   typescript?: boolean;
-  modules?: string | boolean;
+  modules?: string | false;
   loader?: boolean;
   useESModules?: boolean;
   removeTypeofWindow?: boolean;

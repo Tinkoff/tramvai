@@ -56,6 +56,13 @@ export const ROUTER_SPA_ACTIONS_RUN_MODE_TOKEN = createToken<'before' | 'after'>
   'router spaRunMode'
 );
 
+export type PageServiceComponentType =
+  | 'page'
+  | 'layout'
+  | 'nestedLayout'
+  | 'header'
+  | 'footer'
+  | 'errorBoundary';
 export interface PageService {
   getCurrentRoute(): NavigationRoute;
   getCurrentUrl(): ReturnType<AbstractRouter['getCurrentUrl']>;
@@ -70,11 +77,9 @@ export interface PageService {
   go(to: number, options?: HistoryOptions): Promise<void>;
 
   addComponent(name: string, component: TramvaiComponent): void;
-  getComponent(name: string): TramvaiComponent;
+  getComponent(name: string): TramvaiComponent | undefined;
 
-  resolveComponentFromConfig(
-    property: 'page' | 'layout' | 'header' | 'footer' | 'errorBoundary'
-  ): TramvaiComponent | undefined;
+  resolveComponentFromConfig(property: PageServiceComponentType): TramvaiComponent | undefined;
 }
 
 export type RouteResolve = (navigation: Navigation) => Promise<Route | void>;

@@ -93,11 +93,9 @@ Settings for the js-ts transpilation process
 
 ### swc
 
-To use `loader="swc"` you need to install additional libraries by yourself:
+To use `loader="swc"` you need to install special integration package:
 
-- `"@swc/core": "^1.2.124"`
-- `"@swc/helpers": "^0.3.2"`
-- `"swc-loader": "^0.1.15"`
+`tramvai add --dev @tramvai/swc-integration`
 
 ### Defaults
 

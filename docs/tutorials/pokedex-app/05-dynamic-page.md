@@ -117,17 +117,14 @@ To get `PAGE_SERVICE_TOKEN` from the DI in the component, we'll use the `useDi` 
 import React from 'react';
 // highlight-start
 import { useStoreSelector } from '@tramvai/state';
-import { useDi } from '@tramvai/react';
-import { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
+import { useRoute } from '@tinkoff/router';
 // highlight-end
 import { fetchPokemonAction } from '~entities/pokemon';
 
 export const PokemonView = () => {
   // highlight-start
-  // get PAGE_SERVICE_TOKEN from DI
-  const pageService = useDi(PAGE_SERVICE_TOKEN);
-  // access to the `:name` parameter of the current route via PAGE_SERVICE_TOKEN
-  const { name } = pageService.getCurrentRoute().params;
+  // access to the `:name` parameter of the current route via `useRoute` hook
+  const { name } = useRoute().params;
   // get information about a specific pokemon
   const pokemon = useStoreSelector(PokemonsStore, (pokemons) => pokemons[name]);
   // highlight-end
@@ -145,10 +142,9 @@ export default PokemonView;
 ```tsx title="pages/pokemon/index.tsx"
 import React from 'react';
 import { useStoreSelector } from '@tramvai/state';
-import { useDi } from '@tramvai/react';
 // highlight-next-line
 import { Link } from '@tramvai/module-router';
-import { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
+import { useRoute } from '@tinkoff/router';
 // highlight-next-line
 import type { Pokemon, PokemonStat } from '~entities/pokemon';
 import { fetchPokemonAction, PokemonsStore } from '~entities/pokemon';
@@ -164,8 +160,7 @@ const findStatByName = (
 // highlight-end
 
 export const PokemonView = () => {
-  const pageService = useDi(PAGE_SERVICE_TOKEN);
-  const { name } = pageService.getCurrentRoute().params;
+  const { name } = useRoute().params;
   const pokemon = useStoreSelector(PokemonsStore, (pokemons) => pokemons[name]);
 
   // highlight-start

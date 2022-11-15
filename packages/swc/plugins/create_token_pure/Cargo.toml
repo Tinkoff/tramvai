@@ -1,0 +1,11 @@
+[package]
+name = "create_token_pure"
+version = "0.0.0-stub"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+swc_core = { version = "0.40.51", features = ["plugin_transform", "testing"] }
+swc_ecma_parser = { version = "0.122.15" }

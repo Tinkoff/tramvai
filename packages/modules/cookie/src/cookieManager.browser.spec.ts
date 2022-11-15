@@ -2,7 +2,16 @@
  * @jest-environment jsdom
  */
 import { CookieManager } from './cookieManager.browser';
-import * as utils from './utils';
+import { prepareCookieOptions } from './utils';
+
+jest.mock('./utils', () => {
+  const utils = jest.requireActual('./utils');
+
+  return {
+    ...utils,
+    prepareCookieOptions: jest.fn(utils.prepareCookieOptions),
+  };
+});
 
 document.cookie = 'a=test';
 
@@ -79,10 +88,8 @@ describe('CookieManager.browser', () => {
   });
 
   it('prepareCookieOptions should be called', () => {
-    const prepareCookieOptionsSpy = jest.spyOn(utils, 'prepareCookieOptions');
-
     cookieManager.set({ name: 'b', value: 'b' });
 
-    expect(prepareCookieOptionsSpy).toHaveBeenCalled();
+    expect(prepareCookieOptions).toHaveBeenCalled();
   });
 });

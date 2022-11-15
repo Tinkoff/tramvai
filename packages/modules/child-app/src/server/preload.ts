@@ -53,6 +53,9 @@ export class PreloadManager implements ChildAppPreloadManager {
 
     const promise = this.loader
       .load(config)
+      .catch(() => {
+        // Actual error will be logged by the internals of this.loader
+      })
       .then(() => {
         if (this.shouldRunImmediately) {
           return this.run('customer', config);

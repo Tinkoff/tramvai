@@ -4,8 +4,6 @@ title: File-System Pages
 sidebar_position: 2
 ---
 
-> Experimental feature!
-
 `File-System Pages` sets file naming conventions and allows you to easily connect page components with application routes, or even generate [static routes](references/modules/router/base.md#static-routes-in-the-application) in your application.
 
 ## Explanation
@@ -87,6 +85,49 @@ const routes = [
 
 [Example application](https://github.com/Tinkoff/tramvai/-/tree/master/examples/fs-pages)
 
+#### Nested Layout
+
+[Nested layout explanation](references/modules/render.md#nested-layout)
+
+With File-System Pages, you can add a nested layout in two steps:
+
+:hourglass: Create file with layout component in `pages` directory:
+
+```tsx title="pages/layouts/main.ts"
+import type { NestedLayoutComponent } from '@tramvai/react';
+
+export const Layout: NestedLayoutComponent = ({ children }) => {
+  return (
+    <>
+      <h3>Nested Layout</h3>
+      <div>{children}</div>
+    </>
+  );
+};
+
+Layout.actions = [layoutAction];
+
+export default Layout;
+```
+
+This component will be available with key `@/pages/layouts/main`.
+
+:hourglass: Add `nestedLayoutComponent` to route configuration:
+
+```ts
+const route = {
+  name: 'main',
+  path: '/',
+  config: {
+    pageComponent: '@/pages/index',
+    // highlight-next-line
+    nestedLayoutComponent: '@/pages/layouts/main',
+  },
+};
+```
+
+After this, layout will be rendered at application main page.
+
 ### File-System Routing
 
 Second option is less flexible, but fully automates the creation of routes in the application.
@@ -120,6 +161,33 @@ Where path with square brackets relates to dynamic parts of url.
 > File for `/login/` page must be named `login/index.tsx` instead of `login.tsx`, because we must have strictly one way to convert url back to page component name.
 
 [Example application](https://github.com/Tinkoff/tramvai/-/tree/master/examples/fs-routing)
+
+#### Nested Layout
+
+[Nested layout explanation](references/modules/render.md#nested-layout)
+
+With File-System Routes, adding a nested layout is trivial:
+
+:hourglass: Create file `_layout.tsx` with layout component near page component:
+
+```tsx title="routes/_layout.tsx"
+import type { NestedLayoutComponent } from '@tramvai/react';
+
+export const Layout: NestedLayoutComponent = ({ children }) => {
+  return (
+    <>
+      <h3>Nested Layout</h3>
+      <div>{children}</div>
+    </>
+  );
+};
+
+Layout.actions = [layoutAction];
+
+export default Layout;
+```
+
+After this, layout will be rendered at application main page.
 
 ## Usage
 
@@ -214,11 +282,10 @@ This components will be code-splitted with page component code.
 You can directly access these components with `PAGE_SERVICE`:
 
 ```tsx
-import { useDi } from '@tramvai/react';
-import { PAGE_SERVICE } from '@tramvai/tokens-router';
+import { usePageService } from '@tramvai/module-router';
 
 const CommentsPage = () => {
-  const pageService = useDi(PAGE_SERVICE);
+  const pageService = usePageService();
   const ModalBox = pageService.getComponent('modal-box');
 
   return (
@@ -298,7 +365,7 @@ export default CommentsPage;
 
 ## How to
 
-### How to change layout component
+### How to change root layout component
 
 When use [File-System Pages](#file-system-pages), at first, add layout component to page `components`:
 
@@ -329,7 +396,11 @@ const routes = [
 ];
 ```
 
+:::info
+
 When use [File-System Routing](#file-system-routing), at this moment you can't change the page layout.
+
+:::
 
 ### How to create static route with dynamic parameters
 

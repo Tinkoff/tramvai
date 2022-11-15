@@ -16,7 +16,7 @@ export default (configManager: ConfigManager) => (config: Config) => {
     .when(process.platform !== 'win32', (cfg) =>
       cfg.use('thread').loader('thread-loader').options(createWorkerPoolBabel(configManager)).end()
     )
-    .use('babel');
+    .use('transpiler');
 
   return addTranspilerLoader(configManager, cfg, transpilerConfig);
 };

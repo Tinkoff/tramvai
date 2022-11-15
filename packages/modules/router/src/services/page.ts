@@ -8,7 +8,7 @@ import type {
 } from '@tinkoff/router';
 import type { COMPONENT_REGISTRY_TOKEN } from '@tramvai/tokens-common';
 import type { TramvaiComponent } from '@tramvai/react';
-import type { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
+import type { PageServiceComponentType, PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
 import { isFileSystemPageComponent } from '@tramvai/experiments';
 
 type PageServiceInterface = typeof PAGE_SERVICE_TOKEN;
@@ -72,7 +72,7 @@ export class PageService implements PageServiceInterface {
     return this.componentRegistry.get(name, group);
   }
 
-  resolveComponentFromConfig(property: 'page' | 'layout' | 'header' | 'footer' | 'errorBoundary') {
+  resolveComponentFromConfig(property: PageServiceComponentType) {
     const configName = `${property}Component`;
     const defaultComponent = `${property}Default`;
 

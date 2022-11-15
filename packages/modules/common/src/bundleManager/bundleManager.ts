@@ -14,6 +14,8 @@ import {
   fileSystemPagesEnabled,
   isFileSystemPageComponent,
   getAllFileSystemPages,
+  getAllFileSystemLayouts,
+  fileSystemPageToLayoutKey,
 } from '@tramvai/experiments';
 import type { ComponentRegistry } from '../componentRegistry/componentRegistry';
 
@@ -47,10 +49,18 @@ export class BundleManager implements Interface {
     if (fileSystemPagesEnabled()) {
       const log = logger('file-system-pages:bundle-manager');
       const components = getAllFileSystemPages();
+      const layouts = getAllFileSystemLayouts();
 
       const componentsDefaultBundle = createBundle({
         name: FS_PAGES_DEFAULT_BUNDLE,
-        components,
+        components: {
+          ...Object.keys(layouts).reduce<Record<string, any>>((result, key) => {
+            // eslint-disable-next-line no-param-reassign
+            result[fileSystemPageToLayoutKey(key)] = layouts[key];
+            return result;
+          }, {}),
+          ...components,
+        },
       });
 
       this.bundles[FS_PAGES_DEFAULT_BUNDLE] = () =>

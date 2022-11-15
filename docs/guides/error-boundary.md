@@ -90,7 +90,6 @@ Concrete fallback for any of application pages can be registered by a few ways:
     import React from 'react';
     import { PageComponent } from '@tramvai/react';
 
-
     export const CommentsPage: PageComponent = () => null;
 
     CommentsPage.components = {

@@ -7,7 +7,6 @@ import type {
   CUSTOM_RENDER,
   REACT_SERVER_RENDER_MODE,
 } from '@tramvai/tokens-render';
-import type { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
 import each from '@tinkoff/utils/array/each';
 import type { ChunkExtractor } from '@loadable/server';
 import { renderReact } from '../react';
@@ -40,8 +39,6 @@ export class ReactRenderServer {
 
   context: typeof CONTEXT_TOKEN;
 
-  pageService: typeof PAGE_SERVICE_TOKEN;
-
   di: typeof DI_TOKEN;
 
   log: ReturnType<typeof LOGGER_TOKEN>;
@@ -49,8 +46,7 @@ export class ReactRenderServer {
   renderMode: typeof REACT_SERVER_RENDER_MODE;
 
   // eslint-disable-next-line sort-class-members/sort-class-members
-  constructor({ pageService, context, customRender, extendRender, di, renderMode, logger }) {
-    this.pageService = pageService;
+  constructor({ context, customRender, extendRender, di, renderMode, logger }) {
     this.context = context;
     this.customRender = customRender;
     this.extendRender = extendRender;
@@ -60,7 +56,7 @@ export class ReactRenderServer {
   }
 
   render(extractor: ChunkExtractor): Promise<string> {
-    let renderResult = renderReact({ pageService: this.pageService, di: this.di }, this.context);
+    let renderResult = renderReact({ di: this.di }, this.context);
 
     each((render) => {
       renderResult = render(renderResult);
