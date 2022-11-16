@@ -40,20 +40,23 @@ const docusaurusConfig = {
         },
         googleAnalytics: {
           trackingID: 'UA-122261674-2',
-        }
+        },
       },
     ],
   ],
   themes: [
-    [require.resolve('@easyops-cn/docusaurus-search-local'), {
-      hashed: true,
-      indexDocs: true,
-      indexPages: true,
-      indexBlog: false,
-      language: ['en', 'ru'],
-      highlightSearchTermsOnTargetPage: true,
-      docsDir: resolve('./tmp-docs'),
-    }]
+    [
+      require.resolve('@easyops-cn/docusaurus-search-local'),
+      {
+        hashed: true,
+        indexDocs: true,
+        indexPages: true,
+        indexBlog: false,
+        language: ['en', 'ru'],
+        highlightSearchTermsOnTargetPage: true,
+        docsDir: resolve('./tmp-docs'),
+      },
+    ],
   ],
 
   onBrokenLinks: 'throw',
@@ -94,6 +97,11 @@ const docusaurusConfig = {
         srcDark: 'img/logo/tramvai-yellow-full.svg',
       },
       items: [
+        {
+          to: '/versions',
+          label: 'v2.x.x',
+          position: 'right',
+        },
         { to: 'docs/get-started/overview', label: 'Docs', position: 'right' },
         { to: 'docs/references/tramvai/core', label: 'API', position: 'right' },
         {
