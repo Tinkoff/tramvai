@@ -1,0 +1,6 @@
+{
+  "name": "@tramvai/swc-integration",
+  "sourceRoot": "packages/swc",
+  "projectType": "library",
+  "targets": {}
+}

@@ -11,7 +11,9 @@
     "./lib/index.es.js": "./lib/index.browser.js"
   },
   "files": [
-    "lib"
+    "lib",
+    "tests.js",
+    "tests.d.ts"
   ],
   "sideEffects": false,
   "repository": {
