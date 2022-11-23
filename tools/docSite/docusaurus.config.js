@@ -114,6 +114,8 @@ const docusaurusConfig = {
     footer: {
       logo: {
         src: 'img/logo-tinkoff.svg',
+        width: 56,
+        height: 50,
       },
       links: [
         {
