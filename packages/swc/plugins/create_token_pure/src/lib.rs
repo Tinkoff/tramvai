@@ -38,7 +38,8 @@ impl<C: Comments> VisitMut for TransformVisitor<C> {
         if name == "@tramvai/core" || name == "@tinkoff/dippy" {
             for specifier in specifiers {
                 if let ImportSpecifier::Named(specifier) = specifier {
-                    self.has_create_token = &specifier.local.sym == "createToken"
+                    self.has_create_token = &specifier.local.sym == "createToken";
+                    return;
                 }
             }
         }

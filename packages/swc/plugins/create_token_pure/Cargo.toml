@@ -7,5 +7,5 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-swc_core = { version = "0.40.51", features = ["plugin_transform", "testing"] }
+swc_core = { version = "0.43.18", features = ["plugin_transform", "testing"] }
 swc_ecma_parser = { version = "0.122.15" }

@@ -90,7 +90,7 @@ export const getSwcOptions = ({
       mode: 'entry',
     },
     module: {
-      type: modules || undefined,
+      type: modules || 'es6',
     },
     jsc: {
       // TODO: should trim output size, but doesn't work well with some libs
@@ -118,7 +118,10 @@ export const getSwcOptions = ({
       },
       experimental: {
         cacheRoot: findCacheDir({ cwd: rootDir, name: 'swc' }),
-        plugins: [[resolveTramvaiSwcPlugin('create_token_pure'), {}]],
+        plugins: [
+          [resolveTramvaiSwcPlugin('create_token_pure'), {}],
+          [resolveTramvaiSwcPlugin('lazy_component'), {}],
+        ],
       },
     },
   };
