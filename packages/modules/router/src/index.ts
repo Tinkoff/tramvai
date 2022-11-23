@@ -1,6 +1,7 @@
 export { NoSpaRouterModule, SpaRouterModule } from './modules/server';
 export { RouterChildAppModule } from './modules/child-app';
-export { Provider, useNavigate, useRoute, useRouter, useUrl, Link } from '@tinkoff/router';
+export { Provider, useNavigate, useRoute, useRouter, useUrl } from '@tinkoff/router';
+export { Link } from './components/link';
 export * from '@tramvai/tokens-router';
 export { generateForRoot } from './modules/utils/forRoot';
 export * from './stores/RouterStore';

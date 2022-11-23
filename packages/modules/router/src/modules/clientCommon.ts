@@ -11,10 +11,12 @@ import { ROUTER_TOKEN } from '@tramvai/tokens-router';
 import { TRAMVAI_RENDER_MODE } from '@tramvai/tokens-render';
 import { RouterStore, setUrlOnRehydrate } from '../stores/RouterStore';
 import { providers as commonProviders } from './common';
+import { clientTokens } from './tokens/browser/index';
 
 import { runActionsFactory } from './hooks/runActions';
 
 export const providers: Provider[] = [
+  ...clientTokens,
   ...commonProviders,
   provide({
     provide: commandLineListTokens.customerStart,

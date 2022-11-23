@@ -56,6 +56,9 @@ export const ROUTER_SPA_ACTIONS_RUN_MODE_TOKEN = createToken<'before' | 'after'>
   'router spaRunMode'
 );
 
+export const LINK_PREFETCH_MANAGER_TOKEN =
+  createToken<LinkPrefetchManager>('link prefetch manager');
+
 export type PageServiceComponentType =
   | 'page'
   | 'layout'
@@ -85,3 +88,7 @@ export interface PageService {
 export type RouteResolve = (navigation: Navigation) => Promise<Route | void>;
 
 export type RouteTransform = (route: Route) => Route;
+
+export interface LinkPrefetchManager {
+  prefetch(url: string): Promise<void>;
+}

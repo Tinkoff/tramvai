@@ -4,6 +4,7 @@ import { SERVER_MODULE_PAPI_PUBLIC_ROUTE } from '@tramvai/tokens-server';
 import { additionalRouterParameters } from '../../tokens';
 import { routerOptions } from './routerOptions';
 import { bundleInfoPapi } from './bundleInfo';
+import { prefetchProviders } from './prefetch';
 
 export const serverTokens: Provider[] = [
   {
@@ -19,4 +20,5 @@ export const serverTokens: Provider[] = [
     multi: true,
     useValue: bundleInfoPapi,
   },
+  ...prefetchProviders,
 ];

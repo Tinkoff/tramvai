@@ -273,29 +273,6 @@ export const Cmp = () => {
 };
 ```
 
-#### Link
-
-A wrapper for a react component that makes it clickable
-
-> If the react component is passed to the Link as children, then this passed component will be rendered and the `href`, `onClick` props will be passed as props to that component and they should be used to make the navigation. Otherwise, the `<a>` tag will be rendered with children as a child.
-
-```ts
-import { Link } from '@tinkoff/router';
-import CustomLink from '@custom-scope/link';
-
-export const Component = () => {
-  return (
-    <Link url="/test/">
-      <CustomLink />
-    </Link>
-  );
-};
-
-export const WrapLink = () => {
-  return <Link url="/test/">Click me</Link>;
-};
-```
-
 ## How to
 
 ### Load route config from external api

@@ -54,7 +54,19 @@ export const loadBundle = ({
     // несмотря на наличие бандла в разметке, все равно мы должны дождаться
     // его загрузки перед рендером
     try {
-      const { components, reducers } = await bundleManager.get(bundle, pageComponent);
+      const promises = [];
+
+      // for file-system pages bundle is virtual, so it will be loaded in parallel with nested layout
+      // for classic bundles, page component will be loaded after bundle loading
+      promises.push(bundleManager.get(bundle, pageComponent));
+
+      if (nestedLayoutComponent) {
+        promises.push(resolveLazyComponent(pageService.resolveComponentFromConfig('nestedLayout')));
+      }
+
+      const [resolvedBundle, resolvedLayout] = await Promise.all(promises);
+
+      const { components, reducers } = resolvedBundle;
 
       const component = components[pageComponent];
 
@@ -66,18 +78,13 @@ export const loadBundle = ({
 
       // @todo: reuse logic from bundleManager?
       // register nested layout actions and reducers for current page
-      if (nestedLayoutComponent) {
-        // @todo: different try/catch for safety?
-        const layout = (await resolveLazyComponent(
-          pageService.resolveComponentFromConfig('nestedLayout')
-        )) as NestedLayoutComponent;
-
-        if ('actions' in layout && isArray(layout.actions)) {
-          actionRegistry.add(pageComponent, layout.actions);
+      if (resolvedLayout) {
+        if ('actions' in resolvedLayout && isArray(resolvedLayout.actions)) {
+          actionRegistry.add(pageComponent, resolvedLayout.actions);
         }
 
-        if ('reducers' in layout && isArray(layout.reducers)) {
-          layout.reducers.forEach((reducer) => {
+        if ('reducers' in resolvedLayout && isArray(resolvedLayout.reducers)) {
+          resolvedLayout.reducers.forEach((reducer) => {
             dispatcher.registerStore(reducer);
             dispatcherContext.getStore(reducer);
           });

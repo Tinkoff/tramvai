@@ -1,5 +1,6 @@
-import React, { isValidElement, cloneElement, useCallback } from 'react';
-import { useNavigate } from './useNavigate';
+import { isValidElement, cloneElement, useCallback, useState } from 'react';
+import { useNavigate } from '@tinkoff/router';
+import { usePrefetch } from '../hooks/usePrefetch';
 
 interface Props {
   // если передан react элемент, то он будет использован в качестве компонента для рендера и в него будут переданы агрументы href и onClick
@@ -17,11 +18,33 @@ interface Props {
   onClick?: Function;
   // дополнительные опции перехода
   navigateOptions?: Record<string, any>;
+  /**
+   * @description enable or disable target page resources prefetching
+   * @default true
+   */
+  prefetch?: boolean;
 }
 
 function Link(props: Props) {
-  const { children, onClick, url, query, replace, target, navigateOptions, ...otherProps } = props;
+  const {
+    children,
+    onClick,
+    url,
+    query,
+    replace,
+    target,
+    navigateOptions,
+    prefetch = true,
+    ...otherProps
+  } = props;
   const navigate = useNavigate({ url, query, replace, ...navigateOptions });
+  const [linkElement, setLinkElement] = useState(null);
+
+  usePrefetch({
+    url,
+    prefetch,
+    target: linkElement,
+  });
 
   const handleClick = useCallback(
     (event) => {
@@ -48,12 +71,28 @@ function Link(props: Props) {
   const extraProps = { href: url, onClick: handleClick, target };
 
   if (isValidElement(children)) {
-    return cloneElement(children, extraProps);
+    return cloneElement(children, {
+      // @ts-expect-error
+      ref: (element) => {
+        // @ts-expect-error
+        const { ref } = children;
+
+        // preserve original ref
+        if (typeof ref === 'function') {
+          ref(element);
+        } else if (typeof ref === 'object' && ref !== null) {
+          ref.current = element;
+        }
+
+        setLinkElement(element);
+      },
+      ...extraProps,
+    });
   }
 
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
-    <a {...otherProps} {...extraProps}>
+    <a ref={(element) => setLinkElement(element)} {...otherProps} {...extraProps}>
       {children}
     </a>
   );

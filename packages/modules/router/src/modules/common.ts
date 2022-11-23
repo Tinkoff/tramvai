@@ -10,7 +10,7 @@ import type {
   NavigationSyncHook,
   NavigationGuard,
 } from '@tinkoff/router';
-import { History, setLogger } from '@tinkoff/router';
+import { setLogger } from '@tinkoff/router';
 
 import { COMBINE_REDUCERS, LOGGER_TOKEN, COMPONENT_REGISTRY_TOKEN } from '@tramvai/tokens-common';
 import {

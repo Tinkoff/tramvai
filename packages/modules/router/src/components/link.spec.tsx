@@ -1,10 +1,9 @@
 /**
  * @jest-environment jsdom
  */
-import React from 'react';
 import { testComponent } from '@tramvai/test-react';
 import { createMockRouter } from '@tramvai/test-mocks';
-import { Link } from '@tinkoff/router';
+import { Link } from './link';
 
 describe('react/link', () => {
   const router = createMockRouter();

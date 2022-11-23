@@ -268,7 +268,7 @@ const action = declareAction({
 
 ### Working with navigation in React components
 
-You can work with routing inside React components using hooks and components - `useNavigate`, `useRoute`, `Link` from the [@tinkoff/router](references/libs/router.md#интеграция-с-react)
+You can work with routing inside React components using hooks and components - `useNavigate` and `useRoute` from the [@tinkoff/router](references/libs/router.md#интеграция-с-react)
 
 <p>
 <details>
@@ -278,6 +278,53 @@ You can work with routing inside React components using hooks and components - `
 
 </details>
 </p>
+
+#### Link
+
+A wrapper for a react component that makes it clickable
+
+> If the react component is passed to the Link as children, then this passed component will be rendered and the `href`, `onClick` props will be passed as props to that component and they should be used to make the navigation. Otherwise, the `<a>` tag will be rendered with children as a child.
+> Your passed component need to be wrapped in the `forwardRef` for routes assets prefetching.
+
+```ts
+import { Link } from '@tramvai/module-router';
+import CustomLink from '@custom-scope/link';
+
+export const Component = () => {
+  return (
+    <Link url="/test/">
+      <CustomLink />
+    </Link>
+  );
+};
+
+export const WrapLink = () => {
+  return <Link url="/test/">Click me</Link>;
+};
+```
+
+##### Page resources prefetch
+
+`Link` component will try to prefetch resources for passed `url`, if this `url` is handled by the application router.
+
+It will help to make subsequent page-loads faster because target page assets already be saved in browser cache.
+
+How it works:
+
+- Component determines when it is in the viewport (using `Intersection Observer`)
+- waits until the browser is idle (using `requestIdleCallback`)
+- checks if the user isn't on a slow connection (using `navigator.connection.effectiveType`) or has data-saver enabled (using `navigator.connection.saveData`)
+- triggers page resources (js, css) prefetching
+
+Main reference for this feature - [quicklink](https://github.com/GoogleChromeLabs/quicklink) library.
+
+If you want to disable this behaviour, pass `prefetch={false}` property.
+
+```tsx
+export const WrapLink = () => {
+  return <Link url="/test/" prefetch={false}>Click me</Link>;
+};
+```
 
 ### How to set static routes
 

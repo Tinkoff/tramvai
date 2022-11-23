@@ -68,6 +68,14 @@ export class BundleManager implements Interface {
           default: componentsDefaultBundle,
         });
 
+      for (const key in componentsDefaultBundle.components) {
+        this.componentRegistry.add(
+          key,
+          componentsDefaultBundle.components[key],
+          FS_PAGES_DEFAULT_BUNDLE
+        );
+      }
+
       log.debug({
         event: 'create default bundle with file-system pages',
         components: Object.keys(components),
