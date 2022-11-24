@@ -69,6 +69,9 @@
         },
         {
             "path": "../../tokens/server-private"
+        },
+        {
+            "path": "../../tramvai/types-actions-state-context"
         }
     ]
 }
