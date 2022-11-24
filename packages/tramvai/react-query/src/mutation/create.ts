@@ -15,7 +15,9 @@ const convertToRawMutation = <Options, Variables, Result, Deps, Key extends Muta
 ): UseMutationOptions<Result, any, Variables> => {
   const { key = identity, fn, deps, conditions, mutationOptions } = mutation[MUTATION_PARAMETERS];
 
-  const mutationKey = normalizeKey(applyOrReturn([options], key) as ReactQueryKeyOrString);
+  const mutationKey = normalizeKey(
+    applyOrReturn([options], key as unknown) as ReactQueryKeyOrString
+  );
 
   const actionWrapper = declareAction({
     name: 'mutationExecution',

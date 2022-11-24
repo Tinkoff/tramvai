@@ -94,7 +94,9 @@ export const providers: Provider[] = [
           renderMode === 'client' &&
           (!currentRoute || (currentRoute && currentRoute.actualPath !== window.location.pathname))
         ) {
-          return router.navigate(window.location.href);
+          // replace because otherwice we will push in the history the same url twice,
+          // and history.back will return to the same url
+          return router.navigate({ url: window.location.href, replace: true });
         }
       };
     },
