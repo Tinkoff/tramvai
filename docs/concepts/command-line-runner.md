@@ -91,12 +91,6 @@ Since all actions within one stage are performed in parallel with us, it is at t
 
 _For what_: To request any global customer information
 
-### resolve_page
-
-The main goal of this stage is to find out all the necessary information about the page the client visited.
-
-_For what_: To request information about the page
-
 ### resolve_page_deps
 
 At this stage, we already know about the client, about what this page is. But, we have not requested the necessary data for the page. For example: request resources from the admin panel, get a list of regions, load the necessary page blocks. And all the information that will be needed when generating the page.

@@ -108,27 +108,34 @@ For **vector** images, on contrast, [svgo](https://github.com/svg/svgo) always e
 To prevent typescript issues with image imports, update your custom types declaration:
 
 ```ts title="typings.d.ts"
-import type { ImageObject, SvgComponent } from '@tramvai-tinkoff/module-image';
-
 type ImageString = string;
 
 declare module '*.png' {
+  import type { ImageObject } from '@tramvai/cli';
+
   export default ImageString;
   export const image: ImageObject;
 }
 declare module '*.jpg' {
+  import type { ImageObject } from '@tramvai/cli';
+
   export default ImageString;
   export const image: ImageObject;
 }
 declare module '*.jpeg' {
+  import type { ImageObject } from '@tramvai/cli';
+
   export default ImageString;
   export const image: ImageObject;
 }
 
 declare module '*.svg' {
-  export = string;
+  const image: ImageString;
+  export = image;
 }
 declare module '*.svg?react' {
+  import type { SvgComponent } from '@tramvai/cli';
+
   const Svg: SvgComponent;
   export = Svg;
 }
@@ -238,6 +245,7 @@ To prevent typescript issues with import `*.woff2` file, update your custom type
 
 ```ts title="typings.d.ts"
 declare module '*.woff2' {
-  export = string;
+  const font: string;
+  export = font;
 }
 ```
