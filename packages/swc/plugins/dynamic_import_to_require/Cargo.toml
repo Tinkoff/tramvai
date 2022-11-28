@@ -1,0 +1,12 @@
+[package]
+name = "dynamic_import_to_require"
+version = "0.0.0-stub"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+swc_core = { version = "0.43.18", features = ["plugin_transform", "ecma_quote", "ecma_utils", "testing"] }
+swc_ecma_parser = { version = "0.122.15" }
+if_chain = { version = "1.0.2" }

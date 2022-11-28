@@ -121,7 +121,8 @@ export const getSwcOptions = ({
         plugins: [
           [resolveTramvaiSwcPlugin('create_token_pure'), {}],
           [resolveTramvaiSwcPlugin('lazy_component'), {}],
-        ],
+          isServer && [resolveTramvaiSwcPlugin('dynamic_import_to_require'), {}],
+        ].filter(Boolean) as Array<[string, Record<string, any>]>,
       },
     },
   };
