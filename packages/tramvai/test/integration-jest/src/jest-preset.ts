@@ -5,7 +5,7 @@ const config: Config.InitialOptions = {
 
   transform: {
     '\\.[jt]sx?$': [
-      '@swc-node/jest',
+      require.resolve('@swc-node/jest'),
       {
         experimentalDecorators: true,
       },
