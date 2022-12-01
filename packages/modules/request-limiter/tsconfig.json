@@ -20,6 +20,9 @@
         },
         {
             "path": "../../tokens/server-private"
+        },
+        {
+            "path": "../../tokens/common"
         }
     ]
 }

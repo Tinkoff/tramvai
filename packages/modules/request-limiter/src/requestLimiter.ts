@@ -6,7 +6,7 @@ import type { IntervalHistogram } from 'perf_hooks';
 import { monitorEventLoopDelay } from 'perf_hooks';
 import { DoubleLinkedList } from './utils/doubleLinkedList';
 
-const DEFAULT_OPTIONS = {
+export const DEFAULT_OPTIONS = {
   limit: 10,
   queue: 100,
   maxEventLoopDelay: 150,
@@ -42,13 +42,8 @@ export class RequestLimiter {
   private maxEventLoopDelay: number;
   private eventLoopHistogram: IntervalHistogram;
 
-  constructor(options: RequestLimiterOptions = DEFAULT_OPTIONS) {
-    const {
-      limit = DEFAULT_OPTIONS.limit,
-      queue = DEFAULT_OPTIONS.queue,
-      maxEventLoopDelay = DEFAULT_OPTIONS.maxEventLoopDelay,
-      error = DEFAULT_OPTIONS.error,
-    } = options;
+  constructor(options: RequestLimiterOptions) {
+    const { limit, queue, maxEventLoopDelay, error } = options;
 
     this.activeRequestLimit = limit;
     this.minimalActiveRequestLimit = Math.round(limit / 3);

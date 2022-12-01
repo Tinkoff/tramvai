@@ -41,7 +41,13 @@ const provider = {
 
 ### Configuration
 
-You can pass options to request limiter by `REQUESTS_LIMITER_OPTIONS_TOKEN` token:
+You can pass environment variables to configure specific request limiter options:
+
+- `REQUEST_LIMITER_MELD` - configure `maxEventLoopDelay` options parameter
+- `REQUEST_LIMITER_QUEUE` - configure `queue` options parameter
+- `REQUEST_LIMITER_LIMIT` - configure `limit` options parameter
+
+Another way, you can pass options to request limiter by `REQUESTS_LIMITER_OPTIONS_TOKEN` token (have lowest priority than env variables):
 
 ```ts
 import { REQUESTS_LIMITER_OPTIONS_TOKEN } from '@tramvai/module-request-limiter';

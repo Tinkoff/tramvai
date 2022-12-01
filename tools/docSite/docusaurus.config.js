@@ -97,7 +97,7 @@ const docusaurusConfig = {
         srcDark: 'img/logo/tramvai-yellow-full.svg',
       },
       items: [
-        {
+        process.env.DOCS_VERSIONING_DISABLE !== 'true' && {
           to: '/versions',
           label: 'v2.x.x',
           position: 'right',
@@ -109,7 +109,7 @@ const docusaurusConfig = {
           label: 'Repository',
           position: 'right',
         },
-      ],
+      ].filter(Boolean),
     },
     footer: {
       logo: {

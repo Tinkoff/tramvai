@@ -12,6 +12,7 @@ on:
 
 env:
   DOCS_BASE_URL: /
+  DOCS_VERSIONING_DISABLE: 'true'
 
 jobs:
   deploy:
