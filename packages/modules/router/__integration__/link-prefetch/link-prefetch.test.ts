@@ -9,7 +9,7 @@ describe('router/link-prefetch', () => {
   const { getPageWrapper } = testAppInBrowser(getApp);
 
   it('fetch assets for Link components target urls', async () => {
-    const { staticUrl } = getApp();
+    const { staticUrl, render } = getApp();
     const { page } = await getPageWrapper();
     const assetsRequests: string[] = [];
 
@@ -25,6 +25,22 @@ describe('router/link-prefetch', () => {
     ];
     const outOfViewportChunks = [`${staticUrl}/dist/client/pages-out-of-viewport.chunk.js`];
 
+    const { parsed } = await render('/');
+
+    const initialAssets = parsed
+      .querySelectorAll('head script[data-critical="true"]')
+      .map((element) => {
+        return (element as any)._rawAttrs.src;
+      });
+
+    expect(initialAssets).toMatchInlineSnapshot(`
+      [
+        "\${STATIC_URL}/dist/client/mainDefault.chunk.js",
+        "\${STATIC_URL}/dist/client/pages-main.chunk.js",
+        "\${STATIC_URL}/dist/client/platform.js",
+      ]
+    `);
+
     page.setRequestInterception(true);
 
     page.on('request', (request) => {
@@ -36,8 +52,6 @@ describe('router/link-prefetch', () => {
     });
 
     await page.goto(`${getApp().serverUrl}/`);
-
-    expect(assetsRequests).toStrictEqual([...initialChunks]);
 
     await sleep(100);
 

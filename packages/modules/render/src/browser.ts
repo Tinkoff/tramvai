@@ -80,6 +80,17 @@ const throwErrorInDev = (logger: typeof LOGGER_TOKEN) => {
       multi: true,
     }),
     provide({
+      provide: RENDERER_CALLBACK,
+      useFactory:
+        ({ consumerContext }) =>
+        () => {
+          consumerContext.di.register({ provide: '__TRAMVAI_HYDRATED', useValue: true });
+        },
+      deps: {
+        consumerContext: CONTEXT_TOKEN,
+      },
+    }),
+    provide({
       provide: USE_REACT_STRICT_MODE,
       useFactory: ({ deprecatedMode }) => {
         if (deprecatedMode === 'strict') {

@@ -3,6 +3,7 @@ import { stderr as stderrSupportsColor } from 'supports-color';
 // @ts-ignore
 import consoleWithStyle from 'console-with-style';
 import { wrapRouter } from './router';
+import { waitHydrated } from './utils';
 
 const checkSsrErrors = (text: string) => {
   if (text.indexOf('Server: "%s" Client: "%s"%s') !== -1) {
@@ -24,6 +25,19 @@ export const wrapPuppeteerPage = (page: Page) => {
       `You should wrap blank page before navigation, but page already has url "${page.url()}"`
     );
   }
+
+  const originalGoto = page.goto;
+
+  // wait for page loading and hydration, because selective hydration ends later
+  // eslint-disable-next-line no-param-reassign
+  page.goto = async function goto(...args) {
+    const [response] = await Promise.all([
+      originalGoto.apply(page, args),
+      page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+    ]);
+    await waitHydrated(page);
+    return response;
+  };
 
   page.on('requestfailed', (request) =>
     nativeConsole.error('[PAGE REQUEST FAILED]', {
@@ -65,6 +79,15 @@ export const wrapPuppeteerPage = (page: Page) => {
     page,
     reset: (url = 'about:blank') => {
       return page.goto(url);
+    },
+    waitForUrl: (url: string) => {
+      return page.waitForFunction(
+        (expectedUrl: string) => {
+          return window.location.href === expectedUrl;
+        },
+        {},
+        url
+      );
     },
     router: wrapRouter(page),
     close: () => {

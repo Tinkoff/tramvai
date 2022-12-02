@@ -24,6 +24,7 @@ export type Params = WithConfig<{
   noClientRebuild?: boolean;
   resolveSymlinks?: boolean;
   showConfig?: boolean;
+  // @todo: not working?
   env?: Record<string, string>;
   onlyBundles?: string[];
   strictErrorHandle?: boolean;

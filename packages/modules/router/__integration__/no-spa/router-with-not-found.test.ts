@@ -291,51 +291,39 @@ describe('router/no-spa-with-not-found', () => {
   describe('using history api directly', () => {
     it('replace state internal', async () => {
       const { serverUrl } = getApp();
-      const { page } = await getPageWrapper('/history/replace-state/internal/');
+      const { page, waitForUrl } = await getPageWrapper(
+        '/history/replace-state/internal/'
+      );
 
-      const isSpa = checkIsSpa(page);
-      await page.waitForNavigation();
+      await waitForUrl(`${serverUrl}/history/replace-state/internal/?test=a`);
 
-      expect(page.url()).toBe(`${serverUrl}/history/replace-state/internal/?test=a`);
-      expect(isSpa()).toBe(true);
       expect(await page.evaluate(() => window.history.length)).toBe(2);
     });
 
     it('replace state external', async () => {
       const { serverUrl } = getApp();
-      const { page } = await getPageWrapper('/history/replace-state/external/');
+      const { page, waitForUrl } = await getPageWrapper('/history/replace-state/external/');
 
-      const isSpa = checkIsSpa(page);
+      await waitForUrl(`${serverUrl}/test/`);
 
-      await page.waitForNavigation();
-
-      expect(page.url()).toBe(`${serverUrl}/test/`);
-      expect(isSpa()).toBe(false);
       expect(await page.evaluate(() => window.history.length)).toBe(2);
     });
 
     it('push state internal', async () => {
       const { serverUrl } = getApp();
-      const { page } = await getPageWrapper('/history/push-state/internal/');
+      const { page, waitForUrl } = await getPageWrapper('/history/push-state/internal/');
 
-      const isSpa = checkIsSpa(page);
-      await page.waitForNavigation();
+      await waitForUrl(`${serverUrl}/history/push-state/internal/?test=a`);
 
-      expect(page.url()).toBe(`${serverUrl}/history/push-state/internal/?test=a`);
-      expect(isSpa()).toBe(true);
       expect(await page.evaluate(() => window.history.length)).toBe(3);
     });
 
     it('push state external', async () => {
       const { serverUrl } = getApp();
-      const { page } = await getPageWrapper('/history/push-state/external/');
+      const { page, waitForUrl } = await getPageWrapper('/history/push-state/external/');
 
-      const isSpa = checkIsSpa(page);
+      await waitForUrl(`${serverUrl}/test/`);
 
-      await page.waitForNavigation();
-
-      expect(page.url()).toBe(`${serverUrl}/test/`);
-      expect(isSpa()).toBe(false);
       expect(await page.evaluate(() => window.history.length)).toBe(3);
     });
   });
