@@ -19,8 +19,5 @@ export default () => (config: Config) => {
 
   config.module.set('unsafeCache', true);
 
-  config.optimization.set('sideEffects', false);
-  config.optimization.set('providedExports', false);
-
   return config;
 };

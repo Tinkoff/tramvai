@@ -903,6 +903,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "provider_stack"
+version = "0.0.0-stub"
+dependencies = [
+ "if_chain",
+ "swc_common",
+ "swc_core",
+ "swc_ecma_parser",
+]
+
+[[package]]
 name = "ptr_meta"
 version = "0.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"

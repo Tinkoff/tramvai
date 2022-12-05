@@ -32,6 +32,7 @@ export const getSwcOptions = ({
   typescript = false,
   hot = false,
   rootDir = process.cwd(),
+  tramvai = false,
 }: SWCConfig): Config => {
   const resolveWasmFile = (pluginName: string, type: 'debug' | 'release') => {
     return resolve(`${TRAMVAI_SWC_TARGET_PATH}/${type}/${pluginName}.wasm`, {
@@ -122,6 +123,7 @@ export const getSwcOptions = ({
           [resolveTramvaiSwcPlugin('create_token_pure'), {}],
           [resolveTramvaiSwcPlugin('lazy_component'), {}],
           isServer && [resolveTramvaiSwcPlugin('dynamic_import_to_require'), {}],
+          tramvai && env === 'development' && [resolveTramvaiSwcPlugin('provider-stack'), {}],
         ].filter(Boolean) as Array<[string, Record<string, any>]>,
       },
     },

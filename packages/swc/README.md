@@ -45,12 +45,17 @@ Refer to docs of [`@tramvai/cli`](references/cli/experiments.md#transpilation)
 - To run all tests for all plugins run `cargo test` from the swc folder
 - To run tests for single plugin either run `cargo test` from plugin directory or run `cargo test <plugin_name>`
 
+### Formatting
+
+1. Add `rustfmt` - `rustup component add rustfmt`
+2. Run formatter - `cargo fmt`
+
 ### VS code
 
 1. Install [rust-analyzer extension](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
 2. To make the extension work do either of two:
    - Open `packages/swc` directory as a separate project in Vs Code
-   - Add to **workspace** VsCode settings `"rust-analyzer.linkedProjects": ["<path_to_tramvai>/packages/swc/Cargo.toml"]` - the value should be an absolute path to the `Cargo.toml` file inside swc dir.
+   - Add to **workspace** VsCode settings `"rust-analyzer.linkedProjects": ["Cargo.toml"]` - the value should be an relative path to the `Cargo.toml` file inside swc dir.
 3. It is desirable to set clippy as a checker for rust code. To do so set `clippy` to setting `rust-analyzer.checkOnSave.command`
 
 ### Contributing
