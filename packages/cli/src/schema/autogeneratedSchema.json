@@ -172,7 +172,7 @@
                       "additionalProperties": false
                     },
                     "alias": {
-                      "title": "Aliases for project imports",
+                      "title": "`@@deprecated @tramvai/cli now supports baseUrl and paths from the app's tsconfig.json file.\nJust check or add configuration to your tsconfig file and remove alias from tramvai.json`",
                       "additionalProperties": true,
                       "type": "object"
                     },
@@ -976,12 +976,12 @@
                     },
                     "modern": {
                       "title": "Enable development build for modern browsers",
-                      "default": false,
+                      "default": true,
                       "type": "boolean"
                     },
                     "hotRefresh": {
                       "title": "Enable react hot-refresh",
-                      "default": false,
+                      "default": true,
                       "type": "boolean"
                     },
                     "hotRefreshOptions": {
@@ -1289,7 +1289,7 @@
                       "additionalProperties": false
                     },
                     "alias": {
-                      "title": "Aliases for project imports",
+                      "title": "`@@deprecated @tramvai/cli now supports baseUrl and paths from the app's tsconfig.json file.\nJust check or add configuration to your tsconfig file and remove alias from tramvai.json`",
                       "additionalProperties": true,
                       "type": "object"
                     },
@@ -1571,12 +1571,12 @@
                     },
                     "modern": {
                       "title": "Enable development build for modern browsers",
-                      "default": false,
+                      "default": true,
                       "type": "boolean"
                     },
                     "hotRefresh": {
                       "title": "Enable react hot-refresh",
-                      "default": false,
+                      "default": true,
                       "type": "boolean"
                     },
                     "hotRefreshOptions": {
@@ -1864,7 +1864,7 @@
                       "additionalProperties": false
                     },
                     "alias": {
-                      "title": "Aliases for project imports",
+                      "title": "`@@deprecated @tramvai/cli now supports baseUrl and paths from the app's tsconfig.json file.\nJust check or add configuration to your tsconfig file and remove alias from tramvai.json`",
                       "additionalProperties": true,
                       "type": "object"
                     },
@@ -2146,12 +2146,12 @@
                     },
                     "modern": {
                       "title": "Enable development build for modern browsers",
-                      "default": false,
+                      "default": true,
                       "type": "boolean"
                     },
                     "hotRefresh": {
                       "title": "Enable react hot-refresh",
-                      "default": false,
+                      "default": true,
                       "type": "boolean"
                     },
                     "hotRefreshOptions": {

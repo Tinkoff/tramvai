@@ -1,3 +1,4 @@
+import mergeDeep from '@tinkoff/utils/object/mergeDeep';
 import { Writable } from 'stream';
 import { start } from '@tramvai/cli';
 import type { PromiseType } from 'utility-types';
@@ -41,7 +42,15 @@ export const startCli = async (
     noServerRebuild: !enableRebuild,
     ...(typeof targetOrConfig === 'string'
       ? { target: targetOrConfig }
-      : { config: targetOrConfig }),
+      : {
+          config: mergeDeep(
+            {
+              // disable hot-refresh that may break checks for full page load because of never-ending request
+              commands: { serve: { configurations: { hotRefresh: false } } },
+            },
+            targetOrConfig
+          ),
+        }),
     env: {
       ...env,
       MOCKER_ENABLED: 'true',
@@ -53,6 +62,8 @@ export const startCli = async (
 
   const serverUrl = getServerUrl(cliResult);
   const staticUrl = getStaticUrl(cliResult);
+  // @FIXME: the utility port might be defined on the provider level and we don't have access to it
+  // in this case. So the value might be inconsistent with actual utility server (actually, already inconsistent for tincoin)
   const utilityServerUrl = getUtilityServerUrl(env, cliResult);
   const appName = typeof targetOrConfig === 'string' ? targetOrConfig : targetOrConfig.name;
 

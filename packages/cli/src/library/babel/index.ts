@@ -2,8 +2,7 @@ import path from 'path';
 import browserslist from 'browserslist';
 import envTargets from '@tinkoff/browserslist-config';
 import { sync as resolve } from 'resolve';
-import type { Env } from '../../typings/Env';
-import type { Target } from '../../typings/target';
+import type { TranspilerConfig } from '../webpack/utils/transpiler';
 
 const envConfig = {
   production: {
@@ -18,25 +17,6 @@ const envConfig = {
     ],
   },
 };
-
-interface BabelConfig {
-  env?: Env;
-  target?: Target;
-  modern?: boolean;
-  isServer?: boolean;
-  generateDataQaTag?: boolean;
-  enableFillActionNamePlugin?: boolean;
-  typescript?: boolean;
-  modules?: string | false;
-  loader?: boolean;
-  useESModules?: boolean;
-  removeTypeofWindow?: boolean;
-  alias?: Record<string, any>;
-  tramvai?: boolean;
-  hot?: boolean;
-  excludesPresetEnv?: string[];
-  rootDir?: string;
-}
 
 function hasJsxRuntime() {
   try {
@@ -59,7 +39,6 @@ export const babelConfigFactory = ({
   // @ts-expect-error
   markCreateTokenAsPure = true,
   typescript = false,
-  useESModules = !(isServer && env === 'development'), // на сервере в режиме дев node_modules не компилятся поэтому отключаем ESModules,
   loader = true,
   removeTypeofWindow,
   alias,
@@ -67,7 +46,7 @@ export const babelConfigFactory = ({
   hot = false,
   excludesPresetEnv,
   rootDir = process.cwd(),
-}: BabelConfig) => {
+}: Partial<TranspilerConfig>) => {
   const cfg = envConfig[env] || {};
   let resultTarget = target;
 
@@ -126,7 +105,8 @@ export const babelConfigFactory = ({
       .filter(Boolean),
 
     plugins: [
-      ['@babel/transform-runtime', { useESModules }],
+      // TODO: useESModules is deprecated and should work automatically - https://babeljs.io/docs/en/babel-plugin-transform-runtime#useesmodules
+      ['@babel/transform-runtime', { useESModules: !(isServer && env === 'development') }],
       path.resolve(__dirname, './plugins/lazy-component/legacy-universal-replace'), // TODO: удалить плагин после того как отпадёт необходимость поддерживать легаси
       path.resolve(__dirname, './plugins/lazy-component/lazy-component'),
       generateDataQaTag && path.resolve(__dirname, './plugins/react-element-info-unique'), // Собственный плагин. Необходимо удалить в будущем

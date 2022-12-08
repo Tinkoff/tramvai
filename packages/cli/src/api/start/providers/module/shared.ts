@@ -10,7 +10,7 @@ import type { ModuleConfigEntry } from '../../../../typings/configEntry/module';
 import type { Params } from '../../index';
 import { ConfigManager } from '../../../../config/configManager';
 import {
-  closeWorkerPoolBabel,
+  closeWorkerPoolTranspiler,
   closeWorkerPoolStyles,
 } from '../../../../library/webpack/utils/workersPool';
 import { stopServer } from '../../utils/stopServer';
@@ -92,7 +92,7 @@ export const sharedProviders: readonly Provider[] = [
     useFactory: ({ configManager }: { configManager: typeof CONFIG_MANAGER_TOKEN }) => {
       return async () => {
         await Promise.all([
-          closeWorkerPoolBabel(configManager),
+          closeWorkerPoolTranspiler(configManager),
           closeWorkerPoolStyles(configManager),
         ]);
       };

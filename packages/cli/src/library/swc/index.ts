@@ -1,39 +1,55 @@
+import isEmpty from '@tinkoff/utils/is/empty';
+import path from 'path';
+import { existsSync } from 'fs';
 import browserslist from 'browserslist';
 import envTargets from '@tinkoff/browserslist-config';
 import { sync as resolve } from 'resolve';
 import findCacheDir from 'find-cache-dir';
 import type { Config } from '@swc/core';
-import type { Env } from '../../typings/Env';
-import type { Target } from '../../typings/target';
-
-interface SWCConfig {
-  env?: Env;
-  target?: Target;
-  modern?: boolean;
-  isServer?: boolean;
-  typescript?: boolean;
-  modules?: Config['module']['type'] | false;
-  removeTypeofWindow?: boolean;
-  alias?: Record<string, any>;
-  bugfixes?: boolean; // https://babeljs.io/docs/en/babel-preset-env#bugfixes
-  tramvai?: boolean;
-  hot?: boolean;
-  rootDir?: string;
-}
+import type { TranspilerConfig } from '../webpack/utils/transpiler';
 
 const TRAMVAI_SWC_TARGET_PATH = '@tramvai/swc-integration/target/wasm32-wasi';
 
-export const getSwcOptions = ({
-  env = 'development',
-  target,
-  modern,
-  isServer = false,
-  modules = false,
-  typescript = false,
-  hot = false,
-  rootDir = process.cwd(),
-  tramvai = false,
-}: SWCConfig): Config => {
+const NOT_SUPPORTED_FIELDS = ['alias', 'generateDataQaTag', 'enableFillActionNamePlugin'];
+let warningWasShown = false;
+
+export const getSwcOptions = (config: TranspilerConfig): Config => {
+  const {
+    env = 'development',
+    target,
+    modern,
+    isServer = false,
+    modules = false,
+    typescript = false,
+    hot = false,
+    removeTypeofWindow,
+    tramvai = false,
+    rootDir = process.cwd(),
+  } = config;
+
+  if (!warningWasShown) {
+    for (const field of NOT_SUPPORTED_FIELDS) {
+      if (config[field] && !isEmpty(config[field])) {
+        console.warn(
+          `@tramvai/swc-integration do not support "${field}" configuration. Consider removing it from tramvai.json`
+        );
+
+        warningWasShown = true;
+      }
+    }
+
+    const swcrcPath = path.resolve(rootDir, '.swcrc');
+
+    if (existsSync(swcrcPath)) {
+      console.warn(
+        `Found .swcrc config in the app root directory ("${swcrcPath}").
+Having swc config may conflict with @tramvai/cli configuration`
+      );
+
+      warningWasShown = true;
+    }
+  }
+
   const resolveWasmFile = (pluginName: string, type: 'debug' | 'release') => {
     return resolve(`${TRAMVAI_SWC_TARGET_PATH}/${type}/${pluginName}.wasm`, {
       basedir: rootDir,
@@ -99,6 +115,8 @@ export const getSwcOptions = ({
       parser: {
         syntax: typescript ? 'typescript' : 'ecmascript',
         decorators: true,
+        tsx: true,
+        jsx: true,
       },
       transform: {
         legacyDecorator: true,
@@ -109,11 +127,15 @@ export const getSwcOptions = ({
         },
         optimizer: {
           globals: {
+            // let the webpack replace NODE_ENV as replacement with swc may mess up with tests
+            envs: [],
             // @ts-ignore
             // TODO: there is not typings for typeofs, but the field is mentioned in docs
-            typeofs: {
-              window: isServer ? 'undefined' : 'object',
-            },
+            typeofs: removeTypeofWindow
+              ? {
+                  window: isServer ? 'undefined' : 'object',
+                }
+              : {},
           },
         },
       },
@@ -123,7 +145,7 @@ export const getSwcOptions = ({
           [resolveTramvaiSwcPlugin('create_token_pure'), {}],
           [resolveTramvaiSwcPlugin('lazy_component'), {}],
           isServer && [resolveTramvaiSwcPlugin('dynamic_import_to_require'), {}],
-          tramvai && env === 'development' && [resolveTramvaiSwcPlugin('provider-stack'), {}],
+          tramvai && env === 'development' && [resolveTramvaiSwcPlugin('provider_stack'), {}],
         ].filter(Boolean) as Array<[string, Record<string, any>]>,
       },
     },

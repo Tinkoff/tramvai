@@ -25,35 +25,39 @@ const getCustomConfig = (configManager: ConfigManager) => {
   return additionalConfig || {};
 };
 
-const createBabelConfig = (configManager: ConfigManager) => {
+const createTranspilerConfig = (configManager: ConfigManager) => {
   return {
-    name: 'babel',
+    name: 'transpiler',
     poolTimeout: configManager.env === 'development' ? Infinity : undefined,
     workers: calculateNumberOfWorkers(),
     ...getCustomConfig(configManager),
   };
 };
 
-export const createWorkerPoolBabel = (configManager: ConfigManager) => {
-  const config = createBabelConfig(configManager);
+export const createWorkerPoolTranspiler = (configManager: ConfigManager) => {
+  const config = createTranspilerConfig(configManager);
 
-  if (!(createWorkerPoolBabel as any).warmup) {
-    threadLoader.warmup(config, [
-      'babel-loader',
-      '@babel/preset-env',
-      '@babel/preset-typescript',
-      '@babel/preset-react',
-      '@babel/plugin-transform-runtime',
-      'babel-plugin-lodash',
-    ]);
-    (createWorkerPoolBabel as any).warmup = true;
+  if (!(createWorkerPoolTranspiler as any).warmup) {
+    if (configManager.experiments.transpilation.loader === 'swc') {
+      threadLoader.warmup(config, ['swc-loader', '@swc/core']);
+    } else {
+      threadLoader.warmup(config, [
+        'babel-loader',
+        '@babel/preset-env',
+        '@babel/preset-typescript',
+        '@babel/preset-react',
+        '@babel/plugin-transform-runtime',
+        'babel-plugin-lodash',
+      ]);
+    }
+    (createWorkerPoolTranspiler as any).warmup = true;
   }
 
   return config;
 };
 
-export const closeWorkerPoolBabel = (configManager: ConfigManager) => {
-  getPool(createBabelConfig(configManager))?.disposeWorkers();
+export const closeWorkerPoolTranspiler = (configManager: ConfigManager) => {
+  getPool(createTranspilerConfig(configManager))?.disposeWorkers();
 };
 
 const createStylesConfig = (configManager: ConfigManager) => {

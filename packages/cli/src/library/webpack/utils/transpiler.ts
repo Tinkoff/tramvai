@@ -3,11 +3,31 @@ import { sync as resolve } from 'resolve';
 import type { ConfigManager } from '../../../config/configManager';
 import { getSwcOptions } from '../../swc';
 import babelConfig from '../../babel';
+import type { Env } from '../../../typings/Env';
+import type { Target } from '../../../typings/target';
+
+export type TranspilerConfig = {
+  env: Env;
+  target: Target;
+  modern: boolean;
+  isServer: boolean;
+  generateDataQaTag: boolean;
+  enableFillActionNamePlugin: boolean;
+  typescript: boolean;
+  modules: 'es6' | 'commonjs' | false;
+  loader: boolean;
+  removeTypeofWindow: boolean;
+  alias: Record<string, any>;
+  tramvai: boolean;
+  hot: boolean;
+  excludesPresetEnv: string[];
+  rootDir: string;
+};
 
 export const addTranspilerLoader = (
   configManager: ConfigManager,
   rule: Config.Use,
-  transpilerConfig: Record<string, any>
+  transpilerConfig: TranspilerConfig
 ) => {
   const { loader } = configManager.experiments.transpilation;
 
@@ -28,9 +48,17 @@ Please run "tramvai add --dev @tramvai/swc-integration" to fix the problem
   }
 };
 
-export const getTranspilerConfig = (configManager: ConfigManager) => {
-  const { generateDataQaTag, alias, removeTypeofWindow, enableFillActionNamePlugin } =
-    configManager.build.configurations;
+export const getTranspilerConfig = (
+  configManager: ConfigManager,
+  overrideOptions: Partial<TranspilerConfig> = {}
+): TranspilerConfig => {
+  const {
+    generateDataQaTag,
+    alias,
+    removeTypeofWindow,
+    enableFillActionNamePlugin,
+    excludesPresetEnv,
+  } = configManager.build.configurations;
   const { env, modern } = configManager;
 
   return {
@@ -42,9 +70,13 @@ export const getTranspilerConfig = (configManager: ConfigManager) => {
     tramvai: true,
     removeTypeofWindow,
     hot: configManager.hotRefresh,
-    excludesPresetEnv: configManager.build.configurations.excludesPresetEnv,
+    excludesPresetEnv,
     enableFillActionNamePlugin,
     rootDir: configManager.rootDir,
     target: configManager.target,
+    loader: true,
+    modules: false,
+    typescript: false,
+    ...overrideOptions,
   };
 };

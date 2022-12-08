@@ -143,6 +143,7 @@
     "terser-webpack-plugin": "^5.3.5",
     "text-table": "^0.2.0",
     "thread-loader": "^3.0.4",
+    "tsconfig-paths-webpack-plugin": "^4.0.0",
     "universal-analytics": "^0.4.23",
     "utility-types": "^3.10.0",
     "v8-compile-cache": "^2.3.0",

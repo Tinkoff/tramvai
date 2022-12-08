@@ -84,7 +84,6 @@ How to add schema to the **VSCode** you can find in the [official docs](https://
         "cssLocalIdentName": "[hash:base64:5]", // specifies identifier for the css class names
         "config": "postcss.config" // path to the postcss.config file
       },
-      "alias": {}, // alias config. More details in the [docs](https://www.npmjs.com/package/babel-plugin-module-resolver)
       "removeTypeofWindow": true, // enables babel plugin transform-define that will replace code `typeof window` to 'undefined' or 'object' depending on the environment
       "dedupe": "equality" | "semver" | false, // controls the deduplication plugin
       "svgo": {

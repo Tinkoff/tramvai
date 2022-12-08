@@ -101,19 +101,16 @@ const runRebuild = async (di: Container, { times }: { times: number }): Promise<
 };
 
 export const benchmarkStart = async (di: Container): Promise<StartResult> => {
-  // прогоняем один раз, чтобы очистить старые кеши и прогреть код команды
-  await runStartCommand(di, { times: 1, shouldClearCache: true });
-
   const { times = 5 } = di.get(COMMAND_PARAMETERS_TOKEN) as Params;
 
-  const cache = await runStartCommand(di, {
-    times,
-    shouldClearCache: false,
+  const noCache = await runStartCommand(di, {
+    times: Math.max(Math.floor(times / 3), 2),
+    shouldClearCache: true,
   });
 
-  const noCache = await runStartCommand(di, {
-    times,
-    shouldClearCache: true,
+  const cache = await runStartCommand(di, {
+    times: Math.max(Math.floor(times / 2), 2),
+    shouldClearCache: false,
   });
 
   const rebuild = await runRebuild(di, { times });

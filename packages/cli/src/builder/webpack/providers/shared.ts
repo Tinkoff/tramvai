@@ -3,7 +3,7 @@ import { provide } from '@tinkoff/dippy';
 import { EventEmitter } from 'events';
 import { CONFIG_MANAGER_TOKEN } from '../../../di/tokens';
 import {
-  closeWorkerPoolBabel,
+  closeWorkerPoolTranspiler,
   closeWorkerPoolStyles,
 } from '../../../library/webpack/utils/workersPool';
 import {
@@ -67,7 +67,7 @@ export const sharedProviders: Provider[] = [
     useFactory: ({ configManager }) => {
       return async () => {
         await Promise.all([
-          closeWorkerPoolBabel(configManager),
+          closeWorkerPoolTranspiler(configManager),
           closeWorkerPoolStyles(configManager),
         ]);
       };

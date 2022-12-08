@@ -1,5 +1,7 @@
 import type Config from 'webpack-chain';
 import path from 'path';
+import { existsSync } from 'fs';
+import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
 import type { ConfigManager } from '../../../config/configManager';
 import { extensions } from '../../../config/constants';
 
@@ -14,6 +16,19 @@ export default (configManager: ConfigManager) => (config: Config) => {
       'main',
     ].filter(Boolean)
   );
+
+  const tsconfigPath = path.resolve(rootDir, 'tsconfig.json');
+
+  if (existsSync(tsconfigPath)) {
+    config.resolve.plugin('tsconfig-paths').use(TsconfigPathsPlugin, [
+      {
+        configFile: tsconfigPath,
+        extensions,
+        mainFields: config.resolve.mainFields.values(),
+        silent: true,
+      },
+    ] as ConstructorParameters<typeof TsconfigPathsPlugin>);
+  }
 
   config.resolve.extensions
     .merge(extensions)

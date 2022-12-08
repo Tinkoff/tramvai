@@ -78,12 +78,12 @@ interface ServeConfig {
     sourceMap?: boolean;
     /**
      * @title Enable development build for modern browsers
-     * @default false
+     * @default true
      */
     modern?: boolean;
     /**
      * @title Enable react hot-refresh
-     * @default false
+     * @default true
      */
     hotRefresh?: boolean;
     /**
@@ -198,7 +198,9 @@ interface BuildConfig {
       assetsConfig?: string;
     };
     /**
-     * @title Aliases for project imports
+     * @title `@@deprecated @tramvai/cli now supports baseUrl and paths from the app's tsconfig.json file.
+     * Just check or add configuration to your tsconfig file and remove alias from tramvai.json`
+     * @deprecated
      * @additionalProperties true
      */
     alias?: Record<string, any>;
