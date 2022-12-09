@@ -1,5 +1,6 @@
+import debounce from '@tinkoff/utils/function/debounce';
 import type React from 'react';
-import { createElement, useEffect } from 'react';
+import { createElement } from 'react';
 import { useIsomorphicLayoutEffect } from '@tinkoff/react-hooks';
 import type { FC } from 'react';
 import type { Renderer } from './types';
@@ -26,15 +27,30 @@ const ExecuteRenderCallback: FC<{ callback: () => void; children?: React.ReactNo
 const renderer: Renderer = ({ element, container, callback, log }) => {
   if (process.env.__TRAMVAI_CONCURRENT_FEATURES && typeof hydrateRoot === 'function') {
     const wrappedElement = createElement(ExecuteRenderCallback, { callback }, element);
+    let allErrors = new Map();
+
+    const logHydrateRecoverableError = debounce(50, () => {
+      if (allErrors.size === 0) {
+        return;
+      }
+
+      const [{ error, errorInfo }, ...otherErrors] = Array.from(allErrors.values());
+      allErrors = new Map();
+
+      log.error({
+        event: 'hydrate:recover-after-error',
+        error,
+        errorInfo,
+        otherErrors,
+      });
+    });
 
     return startTransition(() => {
       hydrateRoot(container, wrappedElement, {
         onRecoverableError: (error, errorInfo) => {
-          log.error({
-            event: 'hydrate:recover-after-error',
-            error,
-            errorInfo,
-          });
+          // deduplicate by unique important string values
+          allErrors.set(error?.message + errorInfo?.componentStack, { error, errorInfo });
+          logHydrateRecoverableError();
         },
       });
     });

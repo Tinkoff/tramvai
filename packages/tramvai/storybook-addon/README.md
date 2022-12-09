@@ -333,6 +333,7 @@ const parameters: TramvaiStoriesParameters = {
 For testing changes in this plugin locally, you need a few steps:
 
 1. [tramvai repo] Copy `examples-standalone/storybook` application to different folder, e.g. `storybook-app`
+1. [storybook-app] run `git init` in this folder (`@storybook/builder-webpack5` uses as root the first parent directory containing `.git` folder)
 1. [storybook-app] Update there all `tramvai` dependencies in `package.json`
 1. [tramvai repo] Copy plugin build output from `packages/tramvai/storybook-addon/lib`
 1. [storybook-app] Paste into the `storybook-app/node_modules/@tramvai/storybook-addon/lib` folder
