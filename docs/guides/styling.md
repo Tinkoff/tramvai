@@ -118,36 +118,12 @@ module.exports = {
 };
 ```
 
-## External styles
+## Third-party styles
 
 For example, we want to include `antd` styles - `antd/dist/antd.css`.
 We have a few options for this - direct import in CSS file, or with DI provider.
 
-### Provider
-
-With multi token `RENDER_SLOTS` you can easily add external styles to every application page:
-
-```ts title="index.ts"
-import { createApp, provide } from '@tramvai/core';
-import { RENDER_SLOTS, ResourceType, ResourceSlot } from '@tramvai/module-render';
-
-createApp({
-  name: 'appName',
-  modules: [],
-  providers: [
-    provide({
-      provide: RENDER_SLOTS,
-      useValue: {
-        type: ResourceType.style,
-        slot: ResourceSlot.HEAD_CORE_STYLES,
-        payload: 'antd/dist/antd.css',
-      },
-    }),
-  ],
-});
-```
-
-### Import
+### Local import
 
 :hourglass: First, install `postcss-global-import` plugin:
 
@@ -184,6 +160,30 @@ module.exports = {
 
 ```ts title="index.ts"
 import './antd.module.css';
+```
+
+### External import
+
+With multi token `RENDER_SLOTS` you can easily add external styles to every application page:
+
+```ts title="index.ts"
+import { createApp, provide } from '@tramvai/core';
+import { RENDER_SLOTS, ResourceType, ResourceSlot } from '@tramvai/module-render';
+
+createApp({
+  name: 'appName',
+  modules: [],
+  providers: [
+    provide({
+      provide: RENDER_SLOTS,
+      useValue: {
+        type: ResourceType.style,
+        slot: ResourceSlot.HEAD_CORE_STYLES,
+        payload: 'https://cdnjs.cloudflare.com/ajax/libs/antd/4.24.5/antd.min.css',
+      },
+    }),
+  ],
+});
 ```
 
 ## Performance
