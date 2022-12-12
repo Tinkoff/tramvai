@@ -1,5 +1,3 @@
-# Интеграция с tramvai
-
 There are three main options for working with application state:
 
 - Change state
@@ -147,6 +145,53 @@ const provider = {
     store: STORE_TOKEN,
   },
 };
+```
+
+## Connecting reducers to the app
+
+You have two options to connect your reducer to the app:
+
+- with [`COMBINE_REDUCERS`](#combine_reducers) provider
+- through [bundle `reducers` option](#with-bundle)
+
+### COMBINE_REDUCERS
+
+Registering the reducers this way will allow to use its globally for every part of the app.
+
+```tsx
+import { provide, Provider } from '@tramvai/core';
+import { COMBINE_REDUCERS } from '@tramvai/tokens-common';
+import { MyStore } from './reducer';
+
+export const providers: Provider[] = [
+  provide({
+    providers: [
+      // register reducer in the application
+      {
+        provide: COMBINE_REDUCERS,
+        multi: true,
+        // highlight-next-line
+        useValue: MyStore,
+      },
+    ],
+  }),
+];
+```
+
+### With bundle
+
+When [creating a bundle](concepts/bundle.md#create-a-bundle) specify `reducers` option with the list of reducers. These reducers will be available only after corresponding bundle has been loaded
+
+```ts
+import { createBundle } from '@tramvai/core';
+import { MyStore } from './reducer';
+
+export default createBundle({
+  name: 'mainDefault',
+  components: {},
+  reducers: [MyStore],
+  actions: [],
+});
 ```
 
 ## Actions

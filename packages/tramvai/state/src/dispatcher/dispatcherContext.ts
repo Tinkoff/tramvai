@@ -66,6 +66,13 @@ export class DispatcherContext<TContext> extends SimpleEmitter {
     const eventHandlers = this.dispatcher.handlers[event.type] || [];
 
     if (!eventHandlers.length) {
+      if (process.env.NODE_ENV === 'development') {
+        console.warn(`
+The event "${event.type}" has been dispatched, but no reducers for this event were registered.
+Have you forgot to register reducer or add event handler in existing reducer?
+`);
+      }
+
       return event.payload;
     }
 

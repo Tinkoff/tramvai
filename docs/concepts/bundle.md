@@ -4,8 +4,8 @@ title: Bundle
 sidebar_position: 7
 ---
 
-Bundles allow you to select components, reducers and actions common for different pages.
-Bundles are registered for the entire application, the name of the current bundle is taken from the current route, if they match, the application initializes the bundle:
+Bundles allow you to select components, reducers and actions common for different pages. Bundles are registered for the entire application, the name of the current bundle is taken from the current route, if they match, the application initializes the bundle:
+
 - searches in the bundle for components that match the `pageComponent` and `layoutComponent` from the route, saves them to the general case of components, then these components are used by the `RenderModule` when rendering the page
 - saves actions to the general action register
 - registers new reducers
@@ -19,13 +19,13 @@ To highlight unnecessary code on each page, each bundle passed to `createApp` mu
 It is recommended to use [dynamic import](https://webpack.js.org/guides/code-splitting/#dynamic-imports) with the magic comment `webpackChunkName` to specify the name of the new chunk, for example:
 
 ```tsx
-() => import(/* webpackChunkName: "mainDefault" */ './bundles/mainDefault')
+() => import(/* webpackChunkName: "mainDefault" */ './bundles/mainDefault');
 ```
 
 ## Default bundle
 
-Each route must have properties `bundle` with the name of the bundle, `pageComponent` and `layoutComponent` with the names of the corresponding components.
-The default values ​​are as follows:
+Each route must have properties `bundle` with the name of the bundle, `pageComponent` and `layoutComponent` with the names of the corresponding components. The default values ​​are as follows:
+
 - `bundle: 'mainDefault'`
 - `pageComponent: 'pageDefault'`
 - `layoutComponent: 'layoutDefault'`
@@ -45,6 +45,8 @@ export default createBundle({
   components: {
     pageDefault: MainPage,
   },
+  reducers: [],
+  actions: [],
 });
 ```
 

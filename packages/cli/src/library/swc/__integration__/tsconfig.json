@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@tramvai/core": [
+        "mocks/tramvai-core.ts"
+      ],
+      "@tramvai/react": [
+        "mocks/tramvai-react.ts"
+      ],
+    }
+  }
+}

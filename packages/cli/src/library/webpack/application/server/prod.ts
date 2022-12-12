@@ -30,7 +30,12 @@ export const webpackServerConfig = ({
     (configManager.build.configurations.externals || []).map((s) => new RegExp(`^${s}`))
   );
 
-  if (!configManager.disableProdOptimization) {
+  if (configManager.disableProdOptimization) {
+    // with this option for id of module path to file will be used
+    config.optimization.set('moduleIds', 'named');
+    // prevent modules from concatenation in single module to easier debug
+    config.optimization.set('concatenateModules', false);
+  } else {
     config.plugin('terser').use(TerserPlugin, [
       {
         extractComments: false,

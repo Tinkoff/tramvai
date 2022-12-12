@@ -8,8 +8,10 @@ export default (configManager: ConfigManager) => (config: Config) => {
   const { modern, debug, disableProdOptimization } = configManager;
 
   if (disableProdOptimization) {
-    // в качестве id модуля будет использоваться путь до файла
+    // with this option for id of module path to file will be used
     config.optimization.set('moduleIds', 'named');
+    // prevent modules from concatenation in single module to easier debug
+    config.optimization.set('concatenateModules', false);
 
     config.plugin('terser').use(TerserPlugin, [
       {

@@ -1,3 +1,7 @@
+//! forked from [babel-plugin-dynamic-import-node](https://github.com/airbnb/babel-plugin-dynamic-import-node)
+//! but without full compatibility as we intend to use this plugin only with webpack and on server side
+//! because of it's performance impact on webpack builds - see related [comment](https://github.com/webpack/webpack/issues/12102#issuecomment-1337109118)
+
 #![allow(clippy::not_unsafe_ptr_arg_deref)]
 
 use if_chain::if_chain;
