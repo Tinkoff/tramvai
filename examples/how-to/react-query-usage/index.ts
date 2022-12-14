@@ -16,6 +16,7 @@ const bundle = createBundle({
     ),
     'use-query-parameters': lazy(() => import('./components/use-query-parameters')),
     'use-query-options': lazy(() => import('./components/use-query-options')),
+    'use-query-deps': lazy(() => import('./components/use-query-deps')),
     'use-query-fail': lazy(() => import('./components/use-query-fail')),
     'use-infinite-query': lazy(() => import('./components/use-infinite-query')),
     'use-mutation': lazy(() => import('./components/use-mutation')),

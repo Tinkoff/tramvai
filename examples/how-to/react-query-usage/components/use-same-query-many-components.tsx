@@ -4,8 +4,8 @@ import { FAKE_API_CLIENT } from '../../fakeApiClient';
 
 const query = createQuery({
   key: 'base',
-  fn: async (_, { apiClient }) => {
-    const { payload } = await apiClient.get<string>('api/base');
+  async fn(_) {
+    const { payload } = await this.deps.apiClient.get<string>('api/base');
 
     await new Promise((resolve) => setTimeout(resolve, 5000));
 

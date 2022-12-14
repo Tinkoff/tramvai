@@ -44,6 +44,13 @@ export const routes: Array<typeof ROUTES_TOKEN> = [
     },
   },
   {
+    name: 'use-query-deps',
+    path: '/use-query-deps',
+    config: {
+      pageComponent: 'use-query-deps',
+    },
+  },
+  {
     name: 'use-query-fail',
     path: '/use-query-fail',
     config: {

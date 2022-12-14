@@ -1,6 +1,6 @@
 import React from 'react';
 import type { RenderHookOptions } from '@testing-library/react';
-import { renderHook, act } from '@testing-library/react';
+import { renderHook, act, waitFor } from '@testing-library/react';
 import { Provider as StateProvider } from '@tramvai/state';
 import { DIContext } from '@tramvai/react';
 import type { CONTEXT_TOKEN } from '@tramvai/tokens-common';
@@ -58,6 +58,7 @@ export const testHook = <TProps, TResult>(
     result,
     rerender,
     act,
+    waitFor,
     context,
     router,
   };

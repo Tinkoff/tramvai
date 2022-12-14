@@ -17,9 +17,6 @@
             "path": "../../modules/react-query"
         },
         {
-            "path": "../state"
-        },
-        {
             "path": "../../libs/dippy"
         },
         {
@@ -27,6 +24,9 @@
         },
         {
             "path": "../../tokens/common"
+        },
+        {
+            "path": "../react"
         }
     ]
 }

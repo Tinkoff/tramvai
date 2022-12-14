@@ -1,39 +1,36 @@
-import { expectTypeOf } from 'expect-type';
-import type { InfiniteData } from '@tanstack/react-query';
 import { createToken } from '@tinkoff/dippy';
-import { createInfiniteQuery } from './create';
-import { useInfiniteQuery } from './use';
+import { expectTypeOf } from 'expect-type';
+import { createMutation } from './create';
+import { useMutation } from './use';
 
 describe('parameters', () => {
-  it('no parameters', async () => {
-    const query = createInfiniteQuery({
+  it('no parameters', () => {
+    const mutation = createMutation({
       key: 'test',
       fn: async () => {},
     });
 
-    const { data } = useInfiniteQuery(query);
+    const { data } = useMutation(mutation);
 
-    expectTypeOf(data).toEqualTypeOf<InfiniteData<void> | undefined>();
+    expectTypeOf(data).toBeVoid();
   });
 
-  it('specified parameter', async () => {
-    const query = createInfiniteQuery({
+  it('specified parameter', () => {
+    const mutation = createMutation({
       key: 'test',
-      fn: async (param: string) => {
+      fn: async (param?: string) => {
         return 25;
       },
     });
 
     // @ts-expect-error
-    useQuery(query);
+    useMutation(mutation, 5);
     // @ts-expect-error
-    useQuery(query, 5);
-    // @ts-expect-error
-    useQuery(query, {});
+    useMutation(mutation, {});
 
-    const { data } = useInfiniteQuery(query, 'test');
+    const { data } = useMutation(mutation, 'test');
 
-    expectTypeOf(data).toEqualTypeOf<InfiniteData<number> | undefined>();
+    expectTypeOf(data).toEqualTypeOf<number | undefined>();
   });
 });
 
@@ -42,7 +39,7 @@ describe('deps', () => {
   const STRING_TOKEN = createToken<string>();
 
   it('use deps in key and fn', () => {
-    createInfiniteQuery({
+    createMutation({
       key() {
         expectTypeOf(this.deps).toEqualTypeOf({});
         return '';
@@ -53,7 +50,7 @@ describe('deps', () => {
       },
     });
 
-    createInfiniteQuery({
+    createMutation({
       key() {
         expectTypeOf(this.deps).toEqualTypeOf<{
           num: number;

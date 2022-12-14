@@ -8,8 +8,8 @@ interface Response {
 
 const query = createInfiniteQuery({
   key: 'list',
-  fn: async (_, start = 0, { apiClient }) => {
-    const { payload } = await apiClient.get<Response>('api/list', {
+  async fn(_, start = 0) {
+    const { payload } = await this.deps.apiClient.get<Response>('api/list', {
       query: {
         count: 30,
         start,

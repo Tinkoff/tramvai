@@ -49,5 +49,12 @@ module.exports = {
 
       res.send('post');
     },
+    'GET /api/by-route': (req, res) => {
+      const { route } = req.query;
+
+      res.status(200);
+
+      res.send(`response-${route}`);
+    },
   },
 };

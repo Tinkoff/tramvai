@@ -1,19 +1,27 @@
-import type { ProvideDepsIterator } from '@tinkoff/dippy';
+import type { ProvideDepsIterator, ProviderDeps } from '@tinkoff/dippy';
 import type { UseInfiniteQueryOptions, InfiniteData } from '@tanstack/react-query';
 import type { TramvaiAction } from '@tramvai/core';
-import type { BaseCreateQueryOptions, BaseQuery } from '../baseQuery/types';
+import type { BaseCreateQueryOptions, BaseQuery, ReactQueryContext } from '../baseQuery/types';
 
-export interface CreateInfiniteQueryOptions<Options, PageParam, Result, Deps>
+export interface CreateInfiniteQueryOptions<Options, PageParam, Result, Deps extends ProviderDeps>
   extends BaseCreateQueryOptions<Options, Deps> {
   infiniteQueryOptions?: UseInfiniteQueryOptions<Result, Error>;
 
-  fn: (options: Options, pageParam: PageParam, deps: ProvideDepsIterator<Deps>) => Promise<Result>;
+  fn: (
+    this: ReactQueryContext<Deps>,
+    options: Options,
+    pageParam: PageParam,
+    /**
+     * @deprecated use this.deps instead
+     */
+    deps: ProvideDepsIterator<Deps>
+  ) => Promise<Result>;
 
   getNextPageParam?: (lastPage: Result, allPages: Result[]) => PageParam;
   getPreviousPageParam?: (firstPage: Result, allPages: Result[]) => PageParam;
 }
 
-export type InfiniteQuery<Options, PageParam, Result, Deps> = BaseQuery<
+export type InfiniteQuery<Options, PageParam, Result, Deps extends ProviderDeps> = BaseQuery<
   Options,
   CreateInfiniteQueryOptions<Options, PageParam, Result, Deps>,
   InfiniteQuery<Options, PageParam, Result, Deps>,

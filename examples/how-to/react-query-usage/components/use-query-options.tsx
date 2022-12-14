@@ -3,8 +3,8 @@ import { FAKE_API_CLIENT } from '../../fakeApiClient';
 
 const query = createQuery({
   key: 'time',
-  fn: async (_, { apiClient }) => {
-    const { payload } = await apiClient.request<string>({
+  async fn(_) {
+    const { payload } = await this.deps.apiClient.request<string>({
       path: 'api/time',
       cache: false,
     });

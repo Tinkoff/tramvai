@@ -3,8 +3,8 @@ import { FAKE_API_CLIENT } from '../fakeApiClient';
 
 const query1 = createQuery({
   key: 'test-1',
-  fn: async (_, { apiClient }) => {
-    const { payload } = await apiClient.get<string>('api/group/test-1');
+  async fn(_) {
+    const { payload } = await this.deps.apiClient.get<string>('api/group/test-1');
     await new Promise((resolve) => setTimeout(resolve, 250));
 
     return payload;
@@ -16,8 +16,8 @@ const query1 = createQuery({
 
 const query2 = createQuery({
   key: 'test-2',
-  fn: async (_, { apiClient }) => {
-    const { payload } = await apiClient.get<string>('api/group/test-2');
+  async fn(_) {
+    const { payload } = await this.deps.apiClient.get<string>('api/group/test-2');
     await new Promise((resolve) => setTimeout(resolve, 50));
 
     return payload;

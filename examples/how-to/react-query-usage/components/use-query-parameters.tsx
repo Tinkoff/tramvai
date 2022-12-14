@@ -4,9 +4,9 @@ import { FAKE_API_CLIENT } from '../../fakeApiClient';
 
 const query = createQuery({
   key: (parameter: string) => ['api-group', parameter],
-  fn: async (parameter, { apiClient }) => {
+  async fn(parameter) {
     console.log(`request to ${parameter}`);
-    const { payload } = await apiClient.get<string>(`api/group/${parameter}`);
+    const { payload } = await this.deps.apiClient.get<string>(`api/group/${parameter}`);
 
     await new Promise((resolve) => setTimeout(resolve, 5000));
 

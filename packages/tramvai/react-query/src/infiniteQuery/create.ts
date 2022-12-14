@@ -1,18 +1,20 @@
 import identity from '@tinkoff/utils/function/identity';
-import applyOrReturn from '@tinkoff/utils/function/applyOrReturn';
 import type { UseInfiniteQueryOptions } from '@tanstack/react-query';
 import type { ActionContext } from '@tramvai/core';
 import { declareAction } from '@tramvai/core';
 import { QUERY_CLIENT_TOKEN } from '@tramvai/module-react-query';
 import { CONTEXT_TOKEN } from '@tramvai/tokens-common';
+import type { Container, ProviderDeps } from '@tinkoff/dippy';
+import { DI_TOKEN } from '@tinkoff/dippy';
 import type { CreateInfiniteQueryOptions, InfiniteQuery } from './types';
-import type { ReactQueryKeyOrString } from '../baseQuery/types';
+import type { ReactQueryContext, ReactQueryKeyOrString } from '../baseQuery/types';
 import { QUERY_PARAMETERS } from '../baseQuery/types';
 import { normalizeKey } from '../shared/normalizeKey';
+import { resolveDI } from '../shared/resolveDI';
 
-const convertToRawQuery = <Options, PageParam, Result, Deps>(
+const convertToRawQuery = <Options, PageParam, Result, Deps extends ProviderDeps>(
   query: InfiniteQuery<Options, PageParam, Result, Deps>,
-  context: ActionContext,
+  di: Container,
   options: Options
 ): UseInfiniteQueryOptions<Result, Error> => {
   const {
@@ -20,17 +22,20 @@ const convertToRawQuery = <Options, PageParam, Result, Deps>(
     fn,
     getNextPageParam,
     getPreviousPageParam,
-    deps,
+    deps = {},
     conditions,
     infiniteQueryOptions,
   } = query[QUERY_PARAMETERS];
+  const resolvedDeps = di.getOfDeps(deps as Deps);
+  const ctx: ReactQueryContext<Deps> = { deps: resolvedDeps };
 
-  const queryKey = normalizeKey(applyOrReturn([options], key) as ReactQueryKeyOrString);
+  const rawQueryKey = typeof key === 'function' ? key.call(ctx, options) : key;
+  const queryKey = normalizeKey(rawQueryKey as ReactQueryKeyOrString);
 
   const actionWrapper = declareAction({
     name: 'infiniteQueryExecution',
     async fn(pageParam: PageParam) {
-      return fn(options, pageParam, this.deps);
+      return fn.call(ctx, options, pageParam, ctx.deps);
     },
     conditionsFailResult: 'reject',
     deps,
@@ -46,6 +51,7 @@ const convertToRawQuery = <Options, PageParam, Result, Deps>(
       conditions,
     },
     queryFn: ({ pageParam }) => {
+      const context = di.get(CONTEXT_TOKEN);
       return context.executeAction(actionWrapper, pageParam);
     },
   };
@@ -54,7 +60,7 @@ export const createInfiniteQuery = <
   Options = unknown,
   PageParam = unknown,
   Result = unknown,
-  Deps = unknown
+  Deps extends ProviderDeps = {}
 >(
   queryParameters: CreateInfiniteQueryOptions<Options, PageParam, Result, Deps>
 ): InfiniteQuery<Options, PageParam, Result, Deps> => {
@@ -71,19 +77,19 @@ export const createInfiniteQuery = <
         },
       });
     },
-    raw: (context: ActionContext, options: Options) => {
-      return convertToRawQuery(query, context, options);
+    raw: (diOrContext: ActionContext | Container, options: Options) => {
+      return convertToRawQuery(query, resolveDI(diOrContext), options);
     },
     prefetchAction: (options: Options) => {
       return declareAction({
         name: 'infiniteQueryPrefetch',
         fn() {
           return this.deps.queryClient.prefetchInfiniteQuery(
-            convertToRawQuery(query, this.deps.context, options)
+            convertToRawQuery(query, this.deps.di, options)
           );
         },
         deps: {
-          context: CONTEXT_TOKEN,
+          di: DI_TOKEN,
           queryClient: QUERY_CLIENT_TOKEN,
         },
         conditions,
@@ -94,11 +100,11 @@ export const createInfiniteQuery = <
         name: 'infiniteQueryFetch',
         fn() {
           return this.deps.queryClient.fetchInfiniteQuery(
-            convertToRawQuery(query, this.deps.context, options)
+            convertToRawQuery(query, this.deps.di, options)
           );
         },
         deps: {
-          context: CONTEXT_TOKEN,
+          di: DI_TOKEN,
           queryClient: QUERY_CLIENT_TOKEN,
         },
         conditions,

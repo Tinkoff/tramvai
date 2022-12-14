@@ -21,7 +21,7 @@
     "@tinkoff/react-hooks": "0.0.0-stub",
     "@tramvai/core": "0.0.0-stub",
     "@tramvai/module-react-query": "0.0.0-stub",
-    "@tramvai/state": "0.0.0-stub",
+    "@tramvai/react": "0.0.0-stub",
     "@tramvai/tokens-common": "0.0.0-stub"
   },
   "peerDependencies": {

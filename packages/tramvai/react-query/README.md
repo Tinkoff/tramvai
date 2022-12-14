@@ -92,15 +92,16 @@ As a parameter `key` you can use:
 
 - a string, such as `key: 'query-name'`
 - an array where any serializable data can be used as elements, for example `key: ['query-name', false, { bar: 'baz }]`
-- a function that takes the parameters with which `query` is called and returns a string - `key: (options) => 'query-name'`
-- a function that accepts parameters, with which `query` is called, and returns an array, where any serializable data can be used as elements - `key: (options) => ['query-name', options, { bar: 'baz' }]`
+- a function that takes the parameters with which `query` is called and returns a string - `key: (this: { deps }, options) => 'query-name'`. Where through `this.deps` you can get resolved deps for the query.
+- a function that accepts parameters, with which `query` is called, and returns an array, where any serializable data can be used as elements - `key: (this: { deps }, options) => ['query-name', options, { bar: 'baz' }]`
 
 ```ts
 import { createQuery, useQuery } from '@tramvai/react-query';
 
 const query = createQuery({
   key: (id: number) => ['user', id],
-  fn: async (id, { apiClient }) => {
+  async fn(id) {
+    const { apiClient } = this.deps;
     const { payload } = await apiClient.get(`api/user/${id}`);
 
     return payload;
@@ -143,10 +144,8 @@ React Hook for working with the list of `Query` objects
 import { useQueries } from '@tramvai/react-query';
 
 export function Component() {
-  const [
-    { data: data1, isLoading: isLoading1 },
-    { data: data2, isLoading: isLoading2 },
-  ] = useQueries([query1, query2]);
+  const [{ data: data1, isLoading: isLoading1 }, { data: data2, isLoading: isLoading2 }] =
+    useQueries([query1, query2]);
 
   return (
     <div>
@@ -166,7 +165,8 @@ import { createInfiniteQuery } from '@tramvai/react-query';
 
 const query = createInfiniteQuery({
   key: 'list',
-  fn: async (_, start = 0, { apiClient }) => {
+  async fn(_, start = 0) {
+    const { apiClient } = this.deps;
     const { payload } = await apiClient.get<Response>('api/list', {
       query: {
         count: 30,
@@ -229,7 +229,8 @@ import { createMutation } from '@tramvai/react-query';
 
 const mutation = createMutation({
   key: 'post',
-  fn: async (_, data: string, { apiClient }) => {
+  async fn(_, data: string) {
+    const { apiClient } = this.deps;
     const { payload } = await apiClient.post('api/post', {
       body: {
         data,

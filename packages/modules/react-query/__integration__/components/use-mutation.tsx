@@ -3,8 +3,8 @@ import { FAKE_API_CLIENT } from '../fakeApiClient';
 
 const mutation = createMutation({
   key: 'post',
-  fn: async (_, data: string, { apiClient }) => {
-    const { payload } = await apiClient.post('api/post', {
+  async fn(_, data: string) {
+    const { payload } = await this.deps.apiClient.post('api/post', {
       body: {
         data,
       },
