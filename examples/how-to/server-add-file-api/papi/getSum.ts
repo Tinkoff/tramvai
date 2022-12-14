@@ -1,7 +1,7 @@
-import { Request, Response } from '@tramvai/papi';
-import { CREATE_CACHE_TOKEN } from '@tramvai/module-common';
+import { createPapiMethod } from '@tramvai/papi';
+import { PAPI_CACHE_TOKEN } from '../tokens';
 
-// в tramvai.json мы добавили указание на директорию с файловым апи
+// in tramvai.json we've added option to setup file-based papi
 //       "commands": {
 //         "build": {
 //           "options": {
@@ -10,52 +10,43 @@ import { CREATE_CACHE_TOKEN } from '@tramvai/module-common';
 //           }
 //         }
 //       }
-// и теперь каждый файл в этой директории будет обработчиком какого-то урла в зависимости от имени самого файла
-// /${appName}/papi/${fileName} т.е. для текушего файла урл будет /server/papi/getSum
+//
+// And thanks to that option any file in that directory will become papi handler for url based on filename
+// /${appName}/papi/${fileName} i.e. for current file it'll be /server/papi/getSum
 
-// экспортируя переменную rootDeps мы можем запросить зависимости из рутового DI на сервере
-// эти записимости будут переданы в handler третьим параметром
-export const rootDeps = {
-  createCache: CREATE_CACHE_TOKEN,
-};
+// eslint-disable-next-line import/no-default-export
+export default createPapiMethod({
+  // handler function will be called for any request to url that handled by this papi
+  async handler({ body, requestManager }) {
+    const { cache } = this.deps;
+    const method = requestManager.getMethod();
+    const { a, b } = body;
 
-// если зависимости при этом надо как-то изначально проиницилизировать, то можно использовать
-// mapDeps который будет вызван один раз, получит в качестве аргумента зависимости из deps, и
-// результат этой функции будет использован вместо третьего аргумента в handler
-export const mapRootDeps = ({ createCache }: typeof rootDeps) => {
-  return {
-    cache: createCache('memory'),
-  };
-};
+    if (method !== 'POST') {
+      throw new Error('only post methods');
+    }
 
-// handler это наш обработчик который будет вызываться на каждый запрос
-// тоже самое будет если сделать export default
-export const handler = (req: Request, res: Response, { cache }: ReturnType<typeof mapRootDeps>) => {
-  const {
-    body: { a, b },
-    method,
-  } = req;
+    if (!a || !b) {
+      return {
+        error: true,
+        message: 'body parameters a and b should be set',
+      };
+    }
 
-  if (method !== 'POST') {
-    throw new Error('only post methods');
-  }
+    const key = `${a},${b}`;
 
-  if (!a || !b) {
-    return {
-      error: true,
-      message: 'body parameters a and b should be set',
-    };
-  }
+    if (cache.has(key)) {
+      return { error: false, fromCache: true, result: cache.get(key) };
+    }
 
-  const key = `${a},${b}`;
+    const result = +a + +b;
 
-  if (cache.has(key)) {
-    return { error: false, fromCache: true, result: cache.get(key) };
-  }
+    cache.set(key, result);
 
-  const result = +a + +b;
-
-  cache.set(key, result);
-
-  return { error: false, fromCache: false, result };
-};
+    return { error: false, fromCache: false, result };
+  },
+  deps: {
+    // Singleton tokens that should outlive function handler scope should be defined in the app itself
+    cache: PAPI_CACHE_TOKEN,
+  },
+});

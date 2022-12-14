@@ -2,8 +2,9 @@
   "name": "@tinkoff-test-app/tramvai-how-to",
   "version": "0.0.0-stub",
   "dependencies": {
-    "@tinkoff/utils": "^2.1.1",
+    "@tinkoff/dippy": "0.0.0-stub",
     "@tinkoff/errors": "0.0.0-stub",
+    "@tinkoff/utils": "^2.1.1",
     "@tramvai/core": "0.0.0-stub",
     "@tramvai/module-common": "0.0.0-stub",
     "@tramvai/module-http-client": "0.0.0-stub",

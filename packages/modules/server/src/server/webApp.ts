@@ -26,6 +26,7 @@ import { errorHandler } from './error';
 export const webAppFactory = ({ server }: { server: typeof SERVER_TOKEN }) => {
   const app = fastify({
     ignoreTrailingSlash: true,
+    bodyLimit: 2097152, // 2mb
     serverFactory: (handler) => {
       server.on('request', handler);
 
@@ -84,7 +85,7 @@ export const webAppInitCommand = ({
       await runHandlers(instance, limiterRequest);
 
       await app.register(fastifyCookie);
-      await app.register(fastifyFormBody, { bodyLimit: 2097152 }); // 2mb
+      await app.register(fastifyFormBody);
 
       await runHandlers(instance, init);
 

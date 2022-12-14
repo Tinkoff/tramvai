@@ -82,9 +82,18 @@ For example: we want to create a new papi handler that reads the body of the req
 
 <p>
 <details>
-<summary>getSum.ts content</summary>
+<summary>papi/getSum.ts content</summary>
 
 @inline ../../../examples/how-to/server-add-file-api/papi/getSum.ts
+
+</details>
+</p>
+
+<p>
+<details>
+<summary>index.ts content</summary>
+
+@inline ../../../examples/how-to/server-add-file-api/index.ts
 
 </details>
 </p>
@@ -105,7 +114,7 @@ import { provide } from '@tramvai/core';
     provide({
       provide: SERVER_MODULE_PAPI_PUBLIC_ROUTE,
       multi: true,
-      useValue: createPapiMethod ({
+      useValue: createPapiMethod({
         method: 'get', // method, can be post, all and so on
         path: '/test', // path where the route will be available
         async handler() {

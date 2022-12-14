@@ -1,7 +1,6 @@
-## Как запустить приложения
+## How to run example
 
-Почитайте блок `Запуск приложения в тестовом режиме` в файле CONTRIBUTING.md из корня, далее
-
-- Выберите приложение, которое хотите запустить, каждая директория это отдельное приложение, например `react-query-usage`
-- Далее из корня проекта запустите команду `npm run examples:howto -- start react-query-usage` передав название приложения
-- Запустится приложение, доступные роуты можете посмотреть в файле routes приложения, например `react-query-usage/routes.ts`
+1. Make sure you've built packages in the repo (with `yarn build` or `yarn watch`)
+2. Choose an app that you want to run - every nested directory it is a separate app with the name equals to the name of directory, e.g. `react-query-usage`
+3. From the root of `examples/how-to` run command `npm run examples:howto -- start <app_name>` where `<app_name>` is the name of chosen app
+4. The app will start. To see available routes you can refer to `routes.ts` file inside app directory, e.g. `react-query-usage/routes.ts`
