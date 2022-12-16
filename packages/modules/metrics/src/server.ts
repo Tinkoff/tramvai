@@ -14,6 +14,8 @@ import { RequestModule } from './request';
 import { InstantMetricsModule } from './instantMetrics/server';
 import { eventLoopMetrics } from './metrics/eventLoop';
 
+export { getUrlAndOptions } from './request/createRequestWithMetrics';
+
 export * from '@tramvai/tokens-metrics';
 
 @Module({

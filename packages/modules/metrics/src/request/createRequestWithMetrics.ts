@@ -56,7 +56,7 @@ export const getUrlAndOptions = (args: Args) => {
   const parsedUrl = new URL(url);
   const urlWOQuery = parsedUrl.origin + parsedUrl.pathname;
 
-  return [urlWOQuery, options || {}];
+  return [urlWOQuery, options || {}, parsedUrl];
 };
 
 // in seconds

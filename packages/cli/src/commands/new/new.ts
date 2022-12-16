@@ -30,13 +30,14 @@ const getPathToTestingFramework = (type: Type, testingFramework: TestingFramewor
 
 export default async function createNew(context: Context, params: Params): Promise<CommandResult> {
   const {
-    name,
+    name: inputName,
     type: inputType,
     template: inputTemplate,
     packageManager: inputPackageManager,
     testingFramework: inputTestingFramework,
   } = params;
-  const directoryName = path.join(process.cwd(), name);
+  const directoryName = path.join(process.cwd(), inputName);
+  const name = path.basename(directoryName);
   const configEntry: ConfigEntry = {
     type: 'application',
     name,

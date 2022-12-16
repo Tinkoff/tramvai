@@ -14,12 +14,6 @@ see [@tinkoff/logger](../libs/logger#display-logs).
 
 > By default, on server all of the logs of level warn and above are enabled. On the client in dev-mode all the logs of level error and above are enabled while in prod-mode all of the logs on client are disabled.
 
-### Send logs to the API
-
-It is implied that logs from the server are collected by the external tool that has access to the server console output and because of this logging to the external API from the server is not needed.
-
-In browser logs to the API are send with [RemoteReporter](../libs/logger.md#remotereporter). By default, all of the logs with levels `error` and `fatal` are send. The url for the API is specified by environment variable `FRONT_LOG_API`. For the customization see docs for the [RemoteReporter](../libs/logger.md#remotereporter).
-
 ### See logs from the server in browser
 
 This functionality is available only in dev-mode and can make development a little easier.
@@ -110,6 +104,84 @@ import { LOGGER_TOKEN } from '@tramvai/module-common';
   ],
 })
 export class MyModule {}
+```
+
+### Send logs to the API
+
+:::info
+
+It is implied that logs from the server are collected by the external tool that has access to the server console output and because of this logging to the external API from the server is not needed.
+
+:::
+
+For browser logs, you can send them to the API with [RemoteReporter](../libs/logger.md#remotereporter).
+
+For example, if we want to send logs with levels `error` and `fatal` to url declared in environment variable `FRONT_LOG_API`:
+
+```ts
+import { createToken, provide, Scope, APP_INFO_TOKEN } from '@tramvai/core';
+import { ENV_USED_TOKEN, ENV_MANAGER_TOKEN, LOGGER_INIT_HOOK } from '@tramvai/tokens-common';
+import { RemoteReporter } from '@tinkoff/logger';
+import { isUrl } from '@tinkoff/env-validators';
+
+const REMOTE_REPORTER = createToken<RemoteReporter>('remoteReporter');
+
+const providers = [
+  // provide new env variable with logs collector endpoint
+  provide({
+    provide: ENV_USED_TOKEN,
+    useValue: [
+      // use isUrl for validation
+      { key: 'FRONT_LOG_API', dehydrate: true, validator: isUrl },
+    ],
+  }),
+  // provide new remote reporter
+  provide({
+    provide: REMOTE_REPORTER,
+    // we need only one instance of reporter
+    scope: Scope.SINGLETON,
+    useFactory: ({ appInfo, envManager, wuid }) => {
+      const { appName } = appInfo;
+      const logApi = envManager.get('FRONT_LOG_API');
+
+      return new RemoteReporter({
+        // number of parallel request
+        requestCount: 1,
+        // log levels which will be send to api
+        emitLevels: { error: true, fatal: true },
+        makeRequest(logObj) {
+          return sendLog({
+            logApi,
+            // additional information for every reported logs
+            payload: {
+              ...logObj,
+              appName,
+              userAgent: window.navigator.userAgent,
+              href: window.location.href,
+            },
+          });
+        },
+      });
+    },
+    deps: {
+      appInfo: APP_INFO_TOKEN,
+      envManager: ENV_MANAGER_TOKEN,
+    },
+  }),
+  // add reporter to logger
+  provide({
+    provide: LOGGER_INIT_HOOK,
+    multi: true,
+    useFactory({ remoteReporter }) {
+      return (loggerInstance) => {
+        loggerInstance.addBeforeReporter(remoteReporter);
+      };
+    },
+    deps: {
+      remoteReporter: REMOTE_REPORTER,
+    },
+  }),
+];
 ```
 
 ### How to properly format logs
