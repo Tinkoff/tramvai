@@ -45,6 +45,7 @@ export const modernLibs = [
   'parse5',
   'async-mutex',
   'xlsx',
+  '@react-hook',
 ];
 
 const regexStringFactory = ({ except }: { except?: boolean } = {}) =>
