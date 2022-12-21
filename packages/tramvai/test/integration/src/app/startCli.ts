@@ -1,5 +1,6 @@
 import mergeDeep from '@tinkoff/utils/object/mergeDeep';
 import { Writable } from 'stream';
+import envCi from 'env-ci';
 import { start } from '@tramvai/cli';
 import type { PromiseType } from 'utility-types';
 import waitOn from 'wait-on';
@@ -10,6 +11,8 @@ import { wrapPapi } from './papi';
 import { wrapMocker } from './mocker';
 
 export * from './utils';
+
+const ciInfo = envCi();
 
 export interface StartCliOptions extends Omit<StartOptions, 'config' | 'target'> {
   enableRebuild?: boolean;
@@ -40,6 +43,9 @@ export const startCli = async (
     stderr,
     noClientRebuild: !enableRebuild,
     noServerRebuild: !enableRebuild,
+    // build cache made tests unstable in CI, because of cache writing process are async,
+    // and there is no way to wait this process (`idleTimeoutForInitialStore: 0` helps sometimes, but no guarantees)
+    fileCache: !ciInfo.isCi,
     ...(typeof targetOrConfig === 'string'
       ? { target: targetOrConfig }
       : {

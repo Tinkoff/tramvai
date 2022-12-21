@@ -11,9 +11,7 @@ const config: Config.InitialOptions = {
       },
     ],
   },
-  // TODO: из-за этого чаще падают тесты в ci по таймаутам
-  // globalSetup: require.resolve('./globalSetup'),
-  // globalTeardown: require.resolve('./globalTeardown'),
+  globalSetup: require.resolve('./globalSetup'),
   testEnvironment: require.resolve('./node-environment'),
   watchPlugins: [require.resolve('./watchPlugin')],
   setupFilesAfterEnv: [require.resolve('./setupCliMock')],

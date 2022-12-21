@@ -1,7 +1,7 @@
-import { startBrowser } from './browser';
+import { setDefaultResultOrder } from 'dns';
 
-module.exports = async () => {
-  const browser = await startBrowser();
-
-  process.env.PUPPETEER_WS_ENDPOINT = browser.wsEndpoint();
+module.exports = () => {
+  if (typeof setDefaultResultOrder === 'function') {
+    setDefaultResultOrder('ipv4first');
+  }
 };
