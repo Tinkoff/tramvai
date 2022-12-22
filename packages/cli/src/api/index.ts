@@ -1,5 +1,4 @@
 import { writableNoopStream } from 'noop-stream';
-import type { Provider } from '@tinkoff/dippy';
 import {
   ANALYTICS_PACKAGE_INFO_TOKEN,
   COMMAND_PARAMETERS_TOKEN,
@@ -27,6 +26,7 @@ export { postcssAssetsWebpackRulesFactory } from '../library/webpack/blocks/post
 export { extractCssPluginFactory } from '../library/webpack/blocks/extractCssPlugin';
 export { configToEnv } from '../library/webpack/blocks/configToEnv';
 export * from '../typings/public';
+export * from './start/utils/tips/types';
 
 const app = createApp({
   commands: {

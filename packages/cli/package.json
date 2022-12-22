@@ -181,6 +181,9 @@
     "babel-plugin-tester": "^10.1.0",
     "react": "18.2.0"
   },
+  "optionalDependencies": {
+    "@tramvai-tinkoff/cli-tips": "0.0.0-stub"
+  },
   "hiddenDependencies": {
     "image-webpack-loader": "^6.0.0"
   },

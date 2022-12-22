@@ -2,8 +2,10 @@ import chalk from 'chalk';
 import type { Container } from '@tinkoff/dippy';
 import { successBox } from '../../../utils/formatting';
 import { UI_SHOW_BANNER_TOKEN, CONFIG_MANAGER_TOKEN, STDOUT_TOKEN } from '../../../di/tokens';
+import { getDocUrl, getTip } from './tips';
 
 const label = (name) => chalk.bold.cyan(`▸ ${name}:`);
+const link = (url) => chalk.underline.blue(url);
 
 export function showBanner(di: Container) {
   if (!di.get({ token: UI_SHOW_BANNER_TOKEN, optional: true })) {
@@ -35,21 +37,34 @@ export function showBanner(di: Container) {
 
   if (config.type === 'application') {
     // Listeners
-    messageLines.push(chalk.bold('Static: ') + chalk.underline.blue(staticServer));
-    messageLines.push(chalk.bold('App:    ') + chalk.underline.blue(server));
+    messageLines.push(chalk.bold('Static: ') + link(staticServer));
+    messageLines.push(chalk.bold('App:    ') + link(server));
   }
 
   if (config.type === 'child-app') {
-    messageLines.push(chalk.bold('Base Url: ') + chalk.underline.blue(`${server}/`));
+    messageLines.push(chalk.bold('Base Url: ') + link(`${server}/`));
 
     messageLines.push(
       chalk.bold('JS:       ') +
-        chalk.underline.blue(`${config.name}/${config.name}_(client|server)@${config.version}.js`)
+        link(`${config.name}/${config.name}_(client|server)@${config.version}.js`)
     );
 
     messageLines.push(
-      chalk.bold('CSS:      ') +
-        chalk.underline.blue(`${config.name}/${config.name}@${config.version}.css`)
+      chalk.bold('CSS:      ') + link(`${config.name}/${config.name}@${config.version}.css`)
+    );
+  }
+
+  const tip = getTip(di);
+
+  if (tip) {
+    messageLines.push(
+      `
+${chalk.italic.yellow('Tip of the day:')}
+
+${tip.text}
+
+${chalk.bold.green('Related documentation:')}
+${link(`${getDocUrl(tip.docLink)}`)}`
     );
   }
 

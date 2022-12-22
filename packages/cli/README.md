@@ -161,6 +161,7 @@ Configuration is provided through json-file with the name `tramvai.json` in the 
 ### build or serve config?
 
 When you are deciding where to put specific settings in `tramvai.json` consider next statements:
+
 - `serve` config is only for development builds (using `tramvai start`)
 - `build` config mostly focused on production builds (`tramvai build`, `tramvai analyze`, `tramvai start-prod`) but may affect development builds as well (is this case this configs are merged)
 
@@ -237,3 +238,14 @@ For setting access through local network follow next steps:
 3. from the testing device open the new page in the browser and use the ip address from the previous step as domain name
 
 > When calling @tramvai/cli using npm you need to pass `--` before any additional arguments, e.g. command should look similar to this `npm start -- --staticHost 192.168.1.3`
+
+### How to enable paths mapping
+
+In case you want to use special imports instead of pure relative paths in your code.
+
+More details and examples you can find in typescript documentation:
+
+- [baseUrl](https://www.typescriptlang.org/docs/handbook/module-resolution.html#base-url)
+- [path mapping](https://www.typescriptlang.org/docs/handbook/module-resolution.html#path-mapping)
+
+@tramvai/cli will reuse options `baseUrl` and `paths` from the app's `tsconfig.json` to provide path mapping functionality.
