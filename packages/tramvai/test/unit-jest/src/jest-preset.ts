@@ -9,6 +9,9 @@ const config: Config.InitialOptions = {
       require.resolve('@swc-node/jest'),
       {
         experimentalDecorators: true,
+        // enable inline sourcemap to be able to debug tests
+        // based on https://github.com/swc-project/swc-node/issues/656
+        sourcemap: 'inline',
       },
     ],
   },
