@@ -2,10 +2,7 @@ import type { Provider } from '@tinkoff/dippy';
 import { provide } from '@tinkoff/dippy';
 import { EventEmitter } from 'events';
 import { CONFIG_MANAGER_TOKEN } from '../../../di/tokens';
-import {
-  closeWorkerPoolTranspiler,
-  closeWorkerPoolStyles,
-} from '../../../library/webpack/utils/workersPool';
+import { closeWorkerPoolTranspiler } from '../../../library/webpack/utils/workersPool';
 import {
   CLOSE_HANDLER_TOKEN,
   EVENT_EMITTER_TOKEN,
@@ -66,10 +63,7 @@ export const sharedProviders: Provider[] = [
     multi: true,
     useFactory: ({ configManager }) => {
       return async () => {
-        await Promise.all([
-          closeWorkerPoolTranspiler(configManager),
-          closeWorkerPoolStyles(configManager),
-        ]);
+        await closeWorkerPoolTranspiler(configManager);
       };
     },
     deps: {

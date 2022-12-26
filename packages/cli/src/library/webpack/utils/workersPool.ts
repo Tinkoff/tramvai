@@ -59,28 +59,3 @@ export const createWorkerPoolTranspiler = (configManager: ConfigManager) => {
 export const closeWorkerPoolTranspiler = (configManager: ConfigManager) => {
   getPool(createTranspilerConfig(configManager))?.disposeWorkers();
 };
-
-const createStylesConfig = (configManager: ConfigManager) => {
-  return {
-    name: 'styles',
-    workerParallelJobs: 2,
-    workers: Math.max(getCpuNumber(), 2),
-    poolTimeout: configManager.env === 'development' ? Infinity : undefined,
-    ...getCustomConfig(configManager),
-  };
-};
-
-export const createWorkerPoolStyles = (configManager: ConfigManager) => {
-  const config = createStylesConfig;
-
-  if (!(createWorkerPoolStyles as any).warmup) {
-    threadLoader.warmup(config, ['postcss-loader']);
-    (createWorkerPoolStyles as any).warmup = true;
-  }
-
-  return config;
-};
-
-export const closeWorkerPoolStyles = (configManager: ConfigManager) => {
-  getPool(createStylesConfig(configManager))?.disposeWorkers();
-};

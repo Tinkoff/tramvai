@@ -9,10 +9,7 @@ import {
 import type { ModuleConfigEntry } from '../../../../typings/configEntry/module';
 import type { Params } from '../../index';
 import { ConfigManager } from '../../../../config/configManager';
-import {
-  closeWorkerPoolTranspiler,
-  closeWorkerPoolStyles,
-} from '../../../../library/webpack/utils/workersPool';
+import { closeWorkerPoolTranspiler } from '../../../../library/webpack/utils/workersPool';
 import { stopServer } from '../../utils/stopServer';
 import { createServer } from '../../utils/createServer';
 import { listenServer } from '../../utils/listenServer';
@@ -91,10 +88,7 @@ export const sharedProviders: readonly Provider[] = [
     multi: true,
     useFactory: ({ configManager }: { configManager: typeof CONFIG_MANAGER_TOKEN }) => {
       return async () => {
-        await Promise.all([
-          closeWorkerPoolTranspiler(configManager),
-          closeWorkerPoolStyles(configManager),
-        ]);
+        closeWorkerPoolTranspiler(configManager);
       };
     },
     deps: {
