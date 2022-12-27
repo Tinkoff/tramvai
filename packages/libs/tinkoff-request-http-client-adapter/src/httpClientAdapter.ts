@@ -62,8 +62,15 @@ export class HttpClientAdapter extends BaseHttpClient implements HttpClient {
       return modifyResponse ? modifyResponse(resToModify) : resToModify;
     } catch (error) {
       const meta = res.getExternalMeta();
+      const status = getStatus(res);
+      const headers = getHeaders(res);
+
       // Useful for logging
-      const errorWithMeta = Object.assign(error as HttpClientError, { __meta: meta });
+      const errorWithMeta = Object.assign(error as HttpClientError, {
+        __meta: meta,
+        status,
+        headers,
+      });
 
       throw modifyError ? modifyError(errorWithMeta, adaptedReq) : errorWithMeta;
     }

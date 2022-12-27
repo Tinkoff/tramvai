@@ -96,6 +96,10 @@ type HttpClientResponse<P = any> = {
 
 ```tsx
 type HttpClientError = Error & {
+  // HTTP response code, only exists when request was finished
+  status?: number;
+  // HTTP response headers, only exists when request was finished
+  headers?: Record<string, any>;
   [key: string]: any;
 };
 ```

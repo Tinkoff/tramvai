@@ -47,6 +47,8 @@ export type HttpClientResponse<P = any> = {
 };
 
 export type HttpClientError = Error & {
+  status?: number;
+  headers?: Record<string, any>;
   [key: string]: any;
 };
 

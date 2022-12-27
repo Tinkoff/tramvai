@@ -66,6 +66,8 @@ describe('@tinkoff/request to HttpClient adapter', () => {
       }
 
       expect(error.message).toBe('Request timed out');
+      expect(error.status).toBe(undefined);
+      expect(error.headers).toEqual({});
 
       await terminate();
     });
@@ -96,6 +98,8 @@ describe('@tinkoff/request to HttpClient adapter', () => {
       }
 
       expect(error.message).toBe('Request timed out');
+      expect(error.status).toBe(undefined);
+      expect(error.headers).toEqual({});
 
       await terminate();
     });
@@ -374,6 +378,8 @@ describe('@tinkoff/request to HttpClient adapter', () => {
           open: true,
         },
       });
+      expect(error.status).toBe(undefined);
+      expect(error.headers).toEqual({});
 
       await terminate();
     });
@@ -410,6 +416,7 @@ describe('@tinkoff/request to HttpClient adapter', () => {
       expect(error.status).toBe(500);
       expect(error.body).toEqual(response);
       expect(error.errorId).toBe('FAKE_API');
+      expect(error.headers).toMatchObject({ 'content-type': 'application/json; charset=utf-8' });
 
       await terminate();
     });
@@ -715,6 +722,8 @@ describe('@tinkoff/request to HttpClient adapter', () => {
       }
 
       expect(error.meta).toBe('some meta info');
+      expect(error.status).toBe(500);
+      expect(error.headers).toMatchObject({ 'content-type': 'application/json; charset=utf-8' });
 
       await terminate();
     });
