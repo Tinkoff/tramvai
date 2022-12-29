@@ -58,6 +58,9 @@
         },
         {
             "path": "../../libs/terminus"
+        },
+        {
+            "path": "../../tokens/core-private"
         }
     ]
 }

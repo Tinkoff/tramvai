@@ -176,6 +176,12 @@ There are special headers in the module, which help to determine the exact infor
 
 For all of the headers above which are passed via environment variables to be available, you need the external infrastructure to pass them when building and deprovisioning the application image (inside tinkoff this is done automatically).
 
+#### Server-Timing
+
+Header [Server-Timing](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Server-Timing) provides additional information about different timings that were spent on server to handle current request. Currently, it shows timings for [CommandLineRunner's](concepts/command-line-runner.md) lines execution.
+
+To see values that related to request look for the header `Server-Timing` or check the `Timing` tab in browser DevTools for the page's main html.
+
 ### Debugging
 
 Module uses loggers with identifiers: `server`, `server:static`, `server:webapp`, `server:node-debug:request`

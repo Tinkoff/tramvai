@@ -16,9 +16,6 @@
             "path": "../../libs/browser-timings"
         },
         {
-            "path": "../common"
-        },
-        {
             "path": "../../tokens/metrics"
         },
         {
@@ -53,6 +50,12 @@
         },
         {
             "path": "../../tokens/router"
+        },
+        {
+            "path": "../../tokens/common"
+        },
+        {
+            "path": "../../tokens/core-private"
         }
     ]
 }

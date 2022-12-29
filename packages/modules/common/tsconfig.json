@@ -38,9 +38,6 @@
             "path": "../../tokens/common"
         },
         {
-            "path": "../../tokens/metrics"
-        },
-        {
             "path": "../../tokens/server"
         },
         {
@@ -72,6 +69,9 @@
         },
         {
             "path": "../../tramvai/types-actions-state-context"
+        },
+        {
+            "path": "../../tokens/core-private"
         }
     ]
 }

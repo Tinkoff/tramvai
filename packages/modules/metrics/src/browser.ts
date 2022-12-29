@@ -1,5 +1,5 @@
 import { Scope, Module, commandLineListTokens } from '@tramvai/core';
-import { LOGGER_TOKEN } from '@tramvai/module-common';
+import { LOGGER_TOKEN } from '@tramvai/tokens-common';
 import { METRICS_MODULE_TOKEN } from '@tramvai/tokens-metrics';
 import { browserTimings } from '@tinkoff/browser-timings';
 import { Counter, Gauge, Histogram, Summary } from '@tinkoff/metrics-noop';

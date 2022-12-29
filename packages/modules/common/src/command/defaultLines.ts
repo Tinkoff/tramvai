@@ -1,6 +1,7 @@
+import type { CommandLineDescription } from '@tramvai/core';
 import { commandLineListTokens } from '@tramvai/core';
 
-const command = {
+const command: CommandLineDescription = {
   init: [commandLineListTokens.init, commandLineListTokens.listen],
   close: [commandLineListTokens.close],
   customer: [

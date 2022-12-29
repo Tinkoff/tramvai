@@ -1,5 +1,5 @@
 import { Module, Scope, commandLineListTokens } from '@tramvai/core';
-import { LOGGER_TOKEN, CONTEXT_TOKEN } from '@tramvai/module-common';
+import { LOGGER_TOKEN, CONTEXT_TOKEN } from '@tramvai/tokens-common';
 import { PAPI_SERVICE } from '@tramvai/tokens-http-client';
 import { RemoteReporter } from '@tinkoff/logger';
 import { sharedProviders } from './shared';

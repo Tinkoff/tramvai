@@ -1,6 +1,6 @@
-import { createApp, commandLineListTokens, provide } from '@tramvai/core';
+import { createApp, commandLineListTokens } from '@tramvai/core';
 import { MetricsModule } from '@tramvai/module-metrics';
-import { LOGGER_TOKEN } from '@tramvai/module-common';
+import { LOGGER_TOKEN } from '@tramvai/tokens-common';
 import { METRICS_MODULE_TOKEN, REGISTER_INSTANT_METRIC_TOKEN } from '@tramvai/tokens-metrics';
 import { modules, bundles } from '../../../../test/shared/common';
 

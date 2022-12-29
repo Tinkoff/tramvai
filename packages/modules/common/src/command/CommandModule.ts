@@ -1,11 +1,10 @@
 import { Module, COMMAND_LINE_RUNNER_TOKEN, COMMAND_LINES_TOKEN, DI_TOKEN } from '@tramvai/core';
+import { COMMAND_LINE_EXECUTION_END_TOKEN } from '@tramvai/tokens-core-private';
 import {
   EXECUTION_CONTEXT_MANAGER_TOKEN,
   LOGGER_TOKEN,
   COMMAND_LINE_EXECUTION_CONTEXT_TOKEN,
 } from '@tramvai/tokens-common';
-import { METRICS_MODULE_TOKEN } from '@tramvai/tokens-metrics';
-import type { ExtractDependencyType } from '@tinkoff/dippy';
 import { Scope, provide } from '@tinkoff/dippy';
 import { CommandLineRunner } from './commandLineRunner';
 import { lines } from './defaultLines';
@@ -21,11 +20,11 @@ import { lines } from './defaultLines';
         lines: COMMAND_LINES_TOKEN,
         rootDi: DI_TOKEN,
         logger: LOGGER_TOKEN,
-        metrics: {
-          token: METRICS_MODULE_TOKEN,
+        executionContextManager: EXECUTION_CONTEXT_MANAGER_TOKEN,
+        executionEndHandlers: {
+          token: COMMAND_LINE_EXECUTION_END_TOKEN,
           optional: true,
         },
-        executionContextManager: EXECUTION_CONTEXT_MANAGER_TOKEN,
       },
     }),
     provide({

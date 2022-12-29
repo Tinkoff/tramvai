@@ -1,5 +1,5 @@
-import { COMBINE_REDUCERS } from '@tramvai/module-common';
-import { MetricsStore, State } from './store';
+import { COMBINE_REDUCERS } from '@tramvai/tokens-common';
+import { MetricsStore } from './store';
 
 export const sharedProviders = [
   {

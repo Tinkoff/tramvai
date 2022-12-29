@@ -14,6 +14,7 @@ let docUrl = 'https://tramvai.dev/docs/';
 let tips = publicTips;
 
 try {
+  // eslint-disable-next-line import/no-extraneous-dependencies
   const { tips: privateTips, docUrl: privateDocUrl } = require('@tramvai-tinkoff/cli-tips');
 
   tips = tips.concat(privateTips);

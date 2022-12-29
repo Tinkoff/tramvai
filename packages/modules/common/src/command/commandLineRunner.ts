@@ -1,8 +1,16 @@
 import type { AbortController } from 'node-abort-controller';
-import noop from '@tinkoff/utils/function/noop';
 import { isSilentError } from '@tinkoff/errors';
-import type { CommandLineDescription, CommandLine, CommandLines, Command } from '@tramvai/core';
-import type { METRICS_MODULE_TOKEN } from '@tramvai/tokens-metrics';
+import type {
+  CommandLineDescription,
+  CommandLineRunner as Interface,
+  CommandLines,
+  Command,
+} from '@tramvai/core';
+import type {
+  CommandLineTimingInfo,
+  COMMAND_LINE_EXECUTION_END_TOKEN,
+} from '@tramvai/tokens-core-private';
+import { COMMAND_LINE_TIMING_INFO_TOKEN } from '@tramvai/tokens-core-private';
 import type {
   Container,
   ExtractDependencyType,
@@ -16,8 +24,6 @@ import type {
   LOGGER_TOKEN,
 } from '@tramvai/tokens-common';
 import { ROOT_EXECUTION_CONTEXT_TOKEN } from '@tramvai/tokens-common';
-
-const DEFAULT_BUCKETS = [0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10, 20, 40, 60];
 
 const resolveDi = (
   type: keyof CommandLines,
@@ -44,27 +50,25 @@ type Deps = {
   lines: CommandLines;
   rootDi: Container;
   logger: ExtractDependencyType<typeof LOGGER_TOKEN>;
-  metrics: ExtractDependencyType<typeof METRICS_MODULE_TOKEN> | null;
   executionContextManager: ExtractDependencyType<typeof EXECUTION_CONTEXT_MANAGER_TOKEN>;
+  executionEndHandlers: ExtractDependencyType<typeof COMMAND_LINE_EXECUTION_END_TOKEN> | null;
 };
 
-export class CommandLineRunner implements CommandLine {
+export class CommandLineRunner implements Interface {
   lines: Deps['lines'];
   rootDi: Deps['rootDi'];
   log: ReturnType<Deps['logger']>;
-  metrics: Deps['metrics'];
   executionContextManager: Deps['executionContextManager'];
-
-  private metricsInstance: any;
+  executionEndHandlers: Deps['executionEndHandlers'];
   private executionContextByDi = new WeakMap<Container, ExecutionContext>();
   private abortControllerByDi = new WeakMap<Container, AbortController>();
 
-  constructor({ lines, rootDi, logger, metrics, executionContextManager }: Deps) {
+  constructor({ lines, rootDi, logger, executionContextManager, executionEndHandlers }: Deps) {
     this.lines = lines;
     this.rootDi = rootDi;
     this.log = logger('command:command-line-runner');
-    this.metrics = metrics;
     this.executionContextManager = executionContextManager;
+    this.executionEndHandlers = executionEndHandlers;
   }
 
   run(
@@ -82,18 +86,23 @@ export class CommandLineRunner implements CommandLine {
       status,
     });
 
+    const timingInfo: CommandLineTimingInfo = {};
+
+    di.register({ provide: COMMAND_LINE_TIMING_INFO_TOKEN, useValue: timingInfo });
+
     return (
       this.lines[type][status]
         .reduce((chain, line) => {
           return chain.then(() => {
-            const doneMetric = this.createDurationMetric();
+            const lineName = line.toString();
+            timingInfo[lineName] = { start: performance.now() };
 
             // eslint-disable-next-line promise/no-nesting
             return Promise.resolve()
               .then(() => {
                 return this.executionContextManager.withContext<void>(
                   rootExecutionContext,
-                  `command-line:${line.toString()}`,
+                  `command-line:${lineName}`,
                   async (executionContext, abortController) => {
                     this.executionContextByDi.set(di, executionContext);
                     this.abortControllerByDi.set(di, abortController);
@@ -102,13 +111,21 @@ export class CommandLineRunner implements CommandLine {
                   }
                 );
               })
-              .finally(() => doneMetric({ line: line.toString() }));
+              .finally(() => {
+                timingInfo[lineName].end = performance.now();
+              });
           });
         }, Promise.resolve())
         // После завершения цепочки отдаем context выполнения
         .finally(() => {
           this.executionContextByDi.delete(di);
           this.abortControllerByDi.delete(di);
+
+          if (this.executionEndHandlers) {
+            for (const executionEndHandler of this.executionEndHandlers) {
+              executionEndHandler(di, type, status, timingInfo);
+            }
+          }
         })
         .then(() => di)
     );
@@ -196,24 +213,6 @@ export class CommandLineRunner implements CommandLine {
 
         this.throwError(err, di);
       });
-  }
-
-  private createDurationMetric() {
-    if (!this.metrics) {
-      return noop;
-    }
-
-    // Мы должны только один раз создавать инстанс метрики
-    if (!this.metricsInstance) {
-      this.metricsInstance = this.metrics.histogram({
-        name: `command_line_runner_execution_time`,
-        help: 'Command line processing duration',
-        labelNames: ['line'],
-        buckets: DEFAULT_BUCKETS,
-      });
-    }
-
-    return this.metricsInstance.startTimer();
   }
 
   // eslint-disable-next-line class-methods-use-this

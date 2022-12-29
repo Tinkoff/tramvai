@@ -21,4 +21,5 @@ export {
   isExtendedModule,
   ModuleType,
   ExtendedModule,
+  declareModule,
 } from '@tinkoff/dippy';

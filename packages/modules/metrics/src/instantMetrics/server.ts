@@ -3,7 +3,7 @@ import { SERVER_MODULE_PAPI_PUBLIC_ROUTE } from '@tramvai/tokens-server';
 import { createPapiMethod } from '@tramvai/papi';
 import type { Counter } from '@tramvai/tokens-metrics';
 import { METRICS_MODULE_TOKEN, REGISTER_INSTANT_METRIC_TOKEN } from '@tramvai/tokens-metrics';
-import { LOGGER_TOKEN, CONTEXT_TOKEN } from '@tramvai/module-common';
+import { LOGGER_TOKEN, CONTEXT_TOKEN } from '@tramvai/tokens-common';
 import fromPairs from '@tinkoff/utils/object/fromPairs';
 import { sharedProviders } from './shared';
 import { setInstantMetrics } from './store';

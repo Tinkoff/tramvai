@@ -20,7 +20,6 @@
     "build": "yarn references && tsc -b ./tsconfig.solution.json",
     "build:publish": "wsrun -p '@{tinkoff,tramvai}/*' -e -m --serial build",
     "build:change-typings": "wsrun -p '@{tinkoff,tramvai}/*' -c json -I -f package.json -e \"this.typings=this.typings && this.typings.replace(/^src\\/(.*)\\.ts/, 'lib/\\$1.d.ts')\"",
-    "build:remove-optional": "wsrun -c json -I -f package.json -e \"this.optionalDependencies = undefined\"",
     "cli:generate-schema": "yarn workspace @tramvai/cli generate-schema",
     "publish:all": "node tools/public-packages/publish-public-packages.js"
   },

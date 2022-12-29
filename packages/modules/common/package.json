@@ -38,6 +38,7 @@
     "@tramvai/module-environment": "0.0.0-stub",
     "@tramvai/module-log": "0.0.0-stub",
     "@tramvai/tokens-child-app": "0.0.0-stub",
+    "@tramvai/tokens-core-private": "0.0.0-stub",
     "@tramvai/tokens-common": "0.0.0-stub",
     "@tramvai/tokens-render": "0.0.0-stub",
     "@tramvai/tokens-server-private": "0.0.0-stub",
@@ -53,7 +54,6 @@
     "@tramvai/papi": "0.0.0-stub",
     "@tramvai/react": "0.0.0-stub",
     "@tramvai/state": "0.0.0-stub",
-    "@tramvai/tokens-metrics": "0.0.0-stub",
     "@tramvai/tokens-server": "0.0.0-stub",
     "react": ">=16.14.0",
     "tslib": "^2.4.0"

@@ -20,11 +20,12 @@
   },
   "dependencies": {
     "@tramvai/core": "0.0.0-stub",
+    "@tramvai/tokens-common": "0.0.0-stub",
+    "@tramvai/tokens-core-private": "0.0.0-stub",
     "@tramvai/tokens-server": "0.0.0-stub",
     "@tramvai/tokens-server-private": "0.0.0-stub",
     "@tramvai/tokens-metrics": "0.0.0-stub",
     "@tramvai/tokens-router": "0.0.0-stub",
-    "@tramvai/module-common": "0.0.0-stub",
     "@tramvai/tokens-http-client": "0.0.0-stub",
     "@tramvai/state": "0.0.0-stub",
     "@tramvai/papi": "0.0.0-stub",

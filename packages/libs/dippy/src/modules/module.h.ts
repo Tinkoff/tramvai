@@ -15,7 +15,7 @@ export interface ModuleParameters {
   name: string;
 }
 
-interface ModuleSecretParameters {
+export interface ModuleSecretParameters {
   [MODULE_PARAMETERS]: ModuleParameters;
 }
 

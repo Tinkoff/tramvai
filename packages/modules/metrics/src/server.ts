@@ -1,4 +1,5 @@
 import { Scope, Module, provide, commandLineListTokens } from '@tramvai/core';
+import { COMMAND_LINE_EXECUTION_END_TOKEN } from '@tramvai/tokens-core-private';
 import { UTILITY_SERVER_PATHS } from '@tramvai/tokens-server';
 import {
   UTILITY_WEB_FASTIFY_APP_TOKEN,
@@ -13,6 +14,7 @@ import flatten from '@tinkoff/utils/array/flatten';
 import { RequestModule } from './request';
 import { InstantMetricsModule } from './instantMetrics/server';
 import { eventLoopMetrics } from './metrics/eventLoop';
+import { commandLineMetrics } from './metrics/commandLine';
 
 export { getUrlAndOptions } from './request/createRequestWithMetrics';
 
@@ -130,6 +132,15 @@ export * from '@tramvai/tokens-metrics';
         metrics: METRICS_MODULE_TOKEN,
       },
       multi: true,
+    }),
+    provide({
+      provide: COMMAND_LINE_EXECUTION_END_TOKEN,
+      useFactory: ({ metrics }) => {
+        return commandLineMetrics(metrics);
+      },
+      deps: {
+        metrics: METRICS_MODULE_TOKEN,
+      },
     }),
   ],
 })

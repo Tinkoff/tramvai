@@ -33,6 +33,12 @@ import { provide } from '@tramvai/core';
 export class RenderModule {}
 ```
 
+## Explanation
+
+### Execution timings
+
+You may either get execution timings for single request with [server module](references/modules/server.md#server-timing) or get the aggregated values with [metrics module](references/modules/metrics.md)
+
 ## Commands
 
 A number of basic commands are predefined in the tramvai, which are performed at certain stages of the application. Based on these stages, the work of the basic tramvai modules is built and actions can be added to custom modules.
@@ -133,6 +139,7 @@ In some cases CommandLineRunner may try to abort execution of the lines. In such
 2. Use context's `abortSignal` to subscribe to events of aborting execution
 
 Example:
+
 ```ts
 import { provide, commandLineListTokens } from '@tramvai/core';
 import { COMMAND_LINE_EXECUTION_CONTEXT_TOKEN } from '@tramvai/tokens-common';
@@ -150,20 +157,17 @@ provide({
       if (!execution.abortSignal.aborted) {
         await anotherAction();
       }
-    }
+    };
   },
   deps: {
-    commandLineExecutionContext: COMMAND_LINE_EXECUTION_CONTEXT_TOKEN
-  }
-})
-
+    commandLineExecutionContext: COMMAND_LINE_EXECUTION_CONTEXT_TOKEN,
+  },
+});
 ```
 
 ## Errors in stages
 
-On the server side, you can intercept errors from `commandLineRunner` stages by adding `express` error middleware with a multi token `WEB_APP_AFTER_INIT_TOKEN`.
-In this middleware you can change the response status, headers and body, and end the response.
-For example, exceptions when rendering React components from current page, get into this handler (`Error Boundary` not working at server-side).
+On the server side, you can intercept errors from `commandLineRunner` stages by adding `express` error middleware with a multi token `WEB_APP_AFTER_INIT_TOKEN`. In this middleware you can change the response status, headers and body, and end the response. For example, exceptions when rendering React components from current page, get into this handler (`Error Boundary` not working at server-side).
 
 Middleware example:
 

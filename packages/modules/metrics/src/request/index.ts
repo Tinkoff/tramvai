@@ -5,7 +5,7 @@ import {
   METRICS_SERVICES_REGISTRY_TOKEN,
   METRICS_MODULE_CONFIG_TOKEN,
 } from '@tramvai/tokens-metrics';
-import { ENV_MANAGER_TOKEN } from '@tramvai/module-common';
+import { ENV_MANAGER_TOKEN } from '@tramvai/tokens-common';
 import noop from '@tinkoff/utils/function/noop';
 import https from 'https';
 import http from 'http';

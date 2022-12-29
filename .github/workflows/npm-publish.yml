@@ -35,7 +35,6 @@ jobs:
       - run: yarn build
       - run: yarn build:publish
       - run: yarn build:change-typings
-      - run: yarn build:remove-optional
       - run: yarn build:change-versions
 
       - name: Publish

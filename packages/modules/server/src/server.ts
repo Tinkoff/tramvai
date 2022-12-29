@@ -57,6 +57,7 @@ EventEmitter.defaultMaxListeners = 50;
     modules.DependenciesVersionModule,
     modules.UtilityServerModule,
     modules.KeepAliveModule,
+    modules.ServerTimingModule,
     process.env.NODE_ENV !== 'production' && modules.DebugHttpRequestsModule,
   ].filter(Boolean),
   providers: [
