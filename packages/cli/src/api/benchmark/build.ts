@@ -65,19 +65,16 @@ const runBuildCommand = async (
 };
 
 export const benchmarkBuild = async (di: Container): Promise<BuildResult> => {
-  // прогоняем один раз, чтобы очистить старые кеши и прогреть код команды
-  await runBuildCommand(di, { times: 1, shouldClearCache: true });
-
   const { times = 5 } = di.get(COMMAND_PARAMETERS_TOKEN) as Params;
+
+  const noCache = await runBuildCommand(di, {
+    times: Math.max(Math.floor(times / 2), 2),
+    shouldClearCache: true,
+  });
 
   const cache = await runBuildCommand(di, {
     times,
     shouldClearCache: false,
-  });
-
-  const noCache = await runBuildCommand(di, {
-    times,
-    shouldClearCache: true,
   });
 
   return {
