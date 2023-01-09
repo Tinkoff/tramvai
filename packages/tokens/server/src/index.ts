@@ -77,7 +77,7 @@ export const SERVER_TOKEN = createToken<Server>('server');
  * @description
  * Add resources for request proxying  to the app through `http-proxy-middleware`
  */
-export const PROXY_CONFIG_TOKEN = createToken<ProxyConfig[]>('proxyConfigToken', {
+export const PROXY_CONFIG_TOKEN = createToken<ProxyConfig>('proxyConfigToken', {
   multi: true,
 });
 
