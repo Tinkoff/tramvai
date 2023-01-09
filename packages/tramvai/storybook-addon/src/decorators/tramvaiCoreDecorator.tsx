@@ -10,6 +10,7 @@ import {
   createMockStore,
   CommonTestModule,
 } from '@tramvai/test-mocks';
+import type { StorybookDecorator } from '../types';
 
 export interface TramvaiCoreDecoratorParameters {
   tramvai?: {
@@ -21,9 +22,9 @@ export interface TramvaiCoreDecoratorParameters {
   };
 }
 
-export const TramvaiCoreDecorator = (
+export const TramvaiCoreDecorator: StorybookDecorator<TramvaiCoreDecoratorParameters> = (
   Story,
-  { parameters }: { parameters: TramvaiCoreDecoratorParameters }
+  { parameters }
 ) => {
   const envFromFile: Record<string, string> = process.env.TRAMVAI_ENV_FROM_FILE as any;
 
@@ -34,10 +35,10 @@ export const TramvaiCoreDecorator = (
   const diMock = createMockDi({
     modules: [
       CommonTestModule.forRoot({
-        ...parameters.tramvai.options,
+        ...parameters.tramvai?.options,
         env: {
           ...envFromFile,
-          ...parameters.tramvai.options?.env,
+          ...parameters.tramvai?.options?.env,
         },
       }),
       ...(parameters.tramvai?.modules ?? []),

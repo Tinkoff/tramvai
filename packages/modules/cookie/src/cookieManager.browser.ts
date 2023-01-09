@@ -23,7 +23,7 @@ class CookiesFallback implements ICookies {
     this.cache = Object.create(null);
   }
 
-  get(name: string): string {
+  get(name: string): string | undefined {
     return this.cache[name] || undefined;
   }
 

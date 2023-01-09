@@ -28,7 +28,7 @@ export class CookieManager implements Interface {
     this.cookies = { ...requestManager.getCookies() };
   }
 
-  get(name) {
+  get(name: string) {
     return this.cookies[name];
   }
 

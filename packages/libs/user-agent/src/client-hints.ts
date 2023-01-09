@@ -69,7 +69,9 @@ const parseBrowser = (brandsList: string): { browser: Browser; engine: Engine } 
  * @param headers
  * @returns
  */
-export const parseClientHintsHeaders = (headers: Record<string, string | string[]>): UserAgent => {
+export const parseClientHintsHeaders = (
+  headers: Record<string, string | string[] | undefined>
+): UserAgent => {
   const { browser, engine } = parseBrowser(
     (headers['sec-ch-ua-full-version-list'] as string) || (headers['sec-ch-ua'] as string)
   );

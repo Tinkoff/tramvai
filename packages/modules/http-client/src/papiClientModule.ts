@@ -13,7 +13,7 @@ export const PapiClientModule = /* @__PURE__ */ Module({
       useClass: PapiService,
       deps: {
         di: DI_TOKEN,
-        papi: { token: SERVER_MODULE_PAPI_PUBLIC_ROUTE, optional: true, multi: true as const },
+        papi: { token: SERVER_MODULE_PAPI_PUBLIC_ROUTE, optional: true },
       },
     }),
   ],

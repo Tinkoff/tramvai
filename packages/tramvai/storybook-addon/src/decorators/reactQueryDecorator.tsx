@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { DefaultOptions } from '@tanstack/react-query';
+import type { StorybookDecorator } from '../types';
 
 export interface ReactQueryDecoratorParameters {
   tramvai?: {
@@ -7,7 +8,7 @@ export interface ReactQueryDecoratorParameters {
   };
 }
 
-export const ReactQueryDecorator = (
+export const ReactQueryDecorator: StorybookDecorator<ReactQueryDecoratorParameters> = (
   Story,
   { parameters }: { parameters: ReactQueryDecoratorParameters }
 ) => {

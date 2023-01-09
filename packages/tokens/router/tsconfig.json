@@ -6,7 +6,8 @@
     "compilerOptions": {
         "declarationDir": "./lib",
         "outDir": "./lib",
-        "rootDir": "./src"
+        "rootDir": "./src",
+        "strict": true
     },
     "references": [
         {
@@ -16,7 +17,7 @@
             "path": "../../libs/router"
         },
         {
-            "path": "../common"
+            "path": "../../tramvai/react"
         }
     ]
 }

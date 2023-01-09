@@ -1,37 +1,38 @@
 {
-    "extends": "../../../tsconfig.lib.json",
-    "include": [
-        "./src"
-    ],
-    "compilerOptions": {
-        "declarationDir": "./lib",
-        "outDir": "./lib",
-        "rootDir": "./src"
+  "extends": "../../../tsconfig.lib.json",
+  "include": [
+    "./src"
+  ],
+  "compilerOptions": {
+    "declarationDir": "./lib",
+    "outDir": "./lib",
+    "rootDir": "./src",
+    "strict": true
+  },
+  "references": [
+    {
+      "path": "../../tramvai/core"
     },
-    "references": [
-        {
-            "path": "../../tramvai/core"
-        },
-        {
-            "path": "../../libs/user-agent"
-        },
-        {
-            "path": "../../libs/dippy"
-        },
-        {
-            "path": "../../tramvai/state"
-        },
-        {
-            "path": "../../libs/safe-strings"
-        },
-        {
-            "path": "../../tokens/child-app"
-        },
-        {
-            "path": "../../tokens/common"
-        },
-        {
-            "path": "../../tokens/cookie"
-        }
-    ]
+    {
+      "path": "../../libs/user-agent"
+    },
+    {
+      "path": "../../libs/dippy"
+    },
+    {
+      "path": "../../tramvai/state"
+    },
+    {
+      "path": "../../libs/safe-strings"
+    },
+    {
+      "path": "../../tokens/child-app"
+    },
+    {
+      "path": "../../tokens/common"
+    },
+    {
+      "path": "../../tokens/cookie"
+    }
+  ]
 }

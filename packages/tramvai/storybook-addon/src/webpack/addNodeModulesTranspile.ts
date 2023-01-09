@@ -3,7 +3,7 @@ import { modernLibsFilter } from '@tinkoff/is-modern-lib';
 import { babelConfigFactory } from '../babel/babelConfigFactory';
 
 export function addNodeModulesTranspile({ baseConfig }: { baseConfig: Configuration }) {
-  baseConfig.module.rules.push({
+  baseConfig.module?.rules?.push({
     test: /\.[cm]?js[x]?$/,
     include: modernLibsFilter,
     // already processed in storybook loaders

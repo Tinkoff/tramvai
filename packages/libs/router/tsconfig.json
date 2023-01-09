@@ -1,21 +1,21 @@
 {
-    "extends": "../../../tsconfig.lib.json",
-    "include": [
-        "./src"
-    ],
-    "compilerOptions": {
-        "declarationDir": "./lib",
-        "outDir": "./lib",
-        "rootDir": "./src",
-        "strict": false,
-        "downlevelIteration": true
+  "extends": "../../../tsconfig.lib.json",
+  "include": [
+    "./src"
+  ],
+  "compilerOptions": {
+    "declarationDir": "./lib",
+    "outDir": "./lib",
+    "rootDir": "./src",
+    "strict": false,
+    "downlevelIteration": true
+  },
+  "references": [
+    {
+      "path": "../../libs/url"
     },
-    "references": [
-        {
-            "path": "../../libs/url"
-        },
-        {
-            "path": "../react-hooks"
-        }
-    ]
+    {
+      "path": "../react-hooks"
+    }
+  ]
 }

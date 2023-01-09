@@ -34,7 +34,7 @@ export interface Cache<T = any> {
 export type CacheType = 'memory';
 
 export interface CacheOptionsByType<T> {
-  memory: [Options<string, T>] | [];
+  memory: [Options<string, T> | undefined] | [];
 }
 
 export type CacheFactory = <T, Type extends CacheType = 'memory'>(

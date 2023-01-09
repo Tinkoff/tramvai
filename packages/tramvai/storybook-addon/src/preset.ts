@@ -14,6 +14,7 @@ import type { TramvaiCoreDecoratorParameters } from './decorators/tramvaiCoreDec
 import type { RouterDecoratorParameters } from './decorators/routerDecorator';
 import type { ReactQueryDecoratorParameters } from './decorators/reactQueryDecorator';
 import type { ActionsDecoratorParameters } from './decorators/actionsDecorator';
+import type { StorybookOptions } from './types';
 
 export type TramvaiStoriesParameters = TramvaiCoreDecoratorParameters &
   RouterDecoratorParameters &
@@ -28,7 +29,10 @@ export const babel = (cfg: TransformOptions): TransformOptions => {
   return babelConfigFactory();
 };
 
-export const webpackFinal = async (baseConfig: Configuration, options): Promise<Configuration> => {
+export const webpackFinal = async (
+  baseConfig: Configuration,
+  options: StorybookOptions
+): Promise<Configuration> => {
   const configManager = buildConfigManager(options);
   const webpackConfig = new Config();
 

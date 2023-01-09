@@ -10,13 +10,13 @@ const scrollToTop = () => {
   }
 };
 
-const isAutoScrollEnabled = (route) => {
+const isAutoScrollEnabled = (route: ReturnType<typeof useRoute>) => {
   return !route.navigateState?.disableAutoscroll;
 };
 
 const scrollToAnchor = (anchor: string): boolean => {
   try {
-    document.querySelector(anchor).scrollIntoView({
+    document.querySelector(anchor)?.scrollIntoView({
       behavior: 'smooth',
     });
 

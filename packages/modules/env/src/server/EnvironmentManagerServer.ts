@@ -1,8 +1,8 @@
 import noop from '@tinkoff/utils/function/noop';
-import type { EnvParameter } from '../types';
+import type { EnvParameter } from '@tramvai/tokens-common';
 import { EnvironmentManager } from '../shared/EnvironmentManager';
 
-const readFileWithEnv = (path) => {
+const readFileWithEnv = (path: string) => {
   try {
     const requireFunc =
       // @ts-ignore
@@ -26,7 +26,7 @@ export class EnvironmentManagerServer extends EnvironmentManager {
     return this.clientUsedList;
   }
 
-  updateClientUsed(result) {
+  updateClientUsed(result: Record<string, string>) {
     this.clientUsedList = Object.assign(this.clientUsedList, result);
   }
 
@@ -48,7 +48,7 @@ export class EnvironmentManagerServer extends EnvironmentManager {
   }
 
   private getEnvInApp() {
-    const appValue = {};
+    const appValue: Record<string, string> = {};
     this.tokens.forEach((token) => {
       if (token.value !== undefined) {
         appValue[token.key] = token.value;
@@ -57,12 +57,12 @@ export class EnvironmentManagerServer extends EnvironmentManager {
     return appValue;
   }
 
-  private collectionEnv() {
+  private collectionEnv(): Record<string, string> {
     return { ...this.getEnvInApp(), ...this.getEnvInFiles(), ...process.env };
   }
 
   private processing() {
-    const result = {};
+    const result: Record<string, string> = {};
     const envParameters = this.collectionEnv();
 
     this.tokens.forEach(({ key, validator = noop, optional, dehydrate }) => {

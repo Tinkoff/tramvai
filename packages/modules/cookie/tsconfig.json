@@ -1,34 +1,35 @@
 {
-    "extends": "../../../tsconfig.lib.json",
-    "include": [
-        "./src"
-    ],
-    "compilerOptions": {
-        "declarationDir": "./lib",
-        "outDir": "./lib",
-        "rootDir": "./src"
+  "extends": "../../../tsconfig.lib.json",
+  "include": [
+    "./src"
+  ],
+  "compilerOptions": {
+    "declarationDir": "./lib",
+    "outDir": "./lib",
+    "rootDir": "./src",
+    "strict": true
+  },
+  "references": [
+    {
+      "path": "../../tramvai/core"
     },
-    "references": [
-        {
-            "path": "../../tramvai/core"
-        },
-        {
-            "path": "../../libs/dippy"
-        },
-        {
-            "path": "../../tokens/common"
-        },
-        {
-            "path": "../../tramvai/state"
-        },
-        {
-            "path": "../../libs/cookies"
-        },
-        {
-            "path": "../client-hints"
-        },
-        {
-            "path": "../../tokens/cookie"
-        }
-    ]
+    {
+      "path": "../../libs/dippy"
+    },
+    {
+      "path": "../../tokens/common"
+    },
+    {
+      "path": "../../tramvai/state"
+    },
+    {
+      "path": "../../libs/cookies"
+    },
+    {
+      "path": "../client-hints"
+    },
+    {
+      "path": "../../tokens/cookie"
+    }
+  ]
 }

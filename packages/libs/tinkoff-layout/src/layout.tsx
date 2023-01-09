@@ -34,9 +34,9 @@ export const createLayout = ({ components = {}, wrappers = {} }: LayoutOptions =
           <Component key={name} />
         ))}
         <ContentWrapper>
-          {Header ? <HeaderWrapper>{(props) => <Header {...props} />}</HeaderWrapper> : null}
+          {Header ? <HeaderWrapper>{(props: any) => <Header {...props} />}</HeaderWrapper> : null}
           <PageWrapper>{children}</PageWrapper>
-          {Footer ? <FooterWrapper>{(props) => <Footer {...props} />}</FooterWrapper> : null}
+          {Footer ? <FooterWrapper>{(props: any) => <Footer {...props} />}</FooterWrapper> : null}
         </ContentWrapper>
       </LayoutWrapper>
     );

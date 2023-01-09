@@ -3,6 +3,7 @@ import flatten from '@tinkoff/utils/array/flatten';
 import type { DI_TOKEN } from '@tramvai/core';
 import type { HttpClientRequest, HttpClientResponse } from '@tramvai/http-client';
 import { BaseHttpClient } from '@tramvai/http-client';
+import type { ExtractDependencyType } from '@tinkoff/dippy';
 import { createChildContainer } from '@tinkoff/dippy';
 import { getPapiParameters } from '@tramvai/papi';
 import { FASTIFY_REQUEST, FASTIFY_RESPONSE } from '@tramvai/tokens-server-private';
@@ -10,8 +11,8 @@ import type { SERVER_MODULE_PAPI_PUBLIC_ROUTE } from '@tramvai/tokens-server';
 import { PAPI_EXECUTOR } from '@tramvai/tokens-server-private';
 
 export interface Deps {
-  di: typeof DI_TOKEN;
-  papi?: typeof SERVER_MODULE_PAPI_PUBLIC_ROUTE[];
+  di: ExtractDependencyType<typeof DI_TOKEN>;
+  papi: ExtractDependencyType<typeof SERVER_MODULE_PAPI_PUBLIC_ROUTE> | null;
 }
 
 export class PapiService extends BaseHttpClient {
@@ -25,7 +26,7 @@ export class PapiService extends BaseHttpClient {
   }
 
   async request<R = any>({ path, query, body }: HttpClientRequest): Promise<HttpClientResponse<R>> {
-    const papiRoute = find((papi) => getPapiParameters(papi).path === `/${path}`, this.papi);
+    const papiRoute = find((papi) => getPapiParameters(papi).path === `/${path}`, this.papi ?? []);
 
     if (!papiRoute) {
       throw new Error(`papi handler '${path}' not found`);

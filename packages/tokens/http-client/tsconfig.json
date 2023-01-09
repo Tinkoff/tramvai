@@ -1,22 +1,23 @@
 {
-    "extends": "../../../tsconfig.lib.json",
-    "include": [
-        "./src"
-    ],
-    "compilerOptions": {
-        "declarationDir": "./lib",
-        "outDir": "./lib",
-        "rootDir": "./src"
+  "extends": "../../../tsconfig.lib.json",
+  "include": [
+    "./src"
+  ],
+  "compilerOptions": {
+    "declarationDir": "./lib",
+    "outDir": "./lib",
+    "rootDir": "./src",
+    "strict": true
+  },
+  "references": [
+    {
+      "path": "../../../packages/libs/dippy"
     },
-    "references": [
-        {
-            "path": "../../../packages/libs/dippy"
-        },
-        {
-            "path": "../../../packages/libs/http-client"
-        },
-        {
-            "path": "../../../packages/libs/tinkoff-request-http-client-adapter"
-        }
-    ]
+    {
+      "path": "../../../packages/libs/http-client"
+    },
+    {
+      "path": "../../../packages/libs/tinkoff-request-http-client-adapter"
+    }
+  ]
 }

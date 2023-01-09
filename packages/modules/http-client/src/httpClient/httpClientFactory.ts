@@ -56,15 +56,17 @@ export const httpClientFactory = ({
   logger: ExtractDependencyType<typeof LOGGER_TOKEN>;
   envManager: ExtractDependencyType<typeof ENV_MANAGER_TOKEN>;
   appInfo: ExtractDependencyType<typeof APP_INFO_TOKEN>;
-  requestManager?: ExtractDependencyType<typeof REQUEST_MANAGER_TOKEN>;
-  headersList?: ExtractDependencyType<typeof API_CLIENT_PASS_HEADERS>;
-  createCache?: ExtractDependencyType<typeof CREATE_CACHE_TOKEN>;
+  requestManager: ExtractDependencyType<typeof REQUEST_MANAGER_TOKEN> | null;
+  headersList: ExtractDependencyType<typeof API_CLIENT_PASS_HEADERS> | null;
+  createCache: ExtractDependencyType<typeof CREATE_CACHE_TOKEN> | null;
   makeRequestRegistry: Map<string, MakeRequest>;
-  agent?: ExtractDependencyType<typeof HTTP_CLIENT_AGENT>;
+  agent: ExtractDependencyType<typeof HTTP_CLIENT_AGENT> | null;
   querySerializer?: QuerySerializer;
-  disableCircuitBreaker: ExtractDependencyType<typeof DISABLE_CIRCUIT_BREAKER>;
-  defaultOptions?: Partial<HttpClientFactoryOptions>;
-  commandLineExecutionContext?: ExtractDependencyType<typeof COMMAND_LINE_EXECUTION_CONTEXT_TOKEN>;
+  disableCircuitBreaker: ExtractDependencyType<typeof DISABLE_CIRCUIT_BREAKER> | null;
+  defaultOptions: Partial<HttpClientFactoryOptions> | null;
+  commandLineExecutionContext: ExtractDependencyType<
+    typeof COMMAND_LINE_EXECUTION_CONTEXT_TOKEN
+  > | null;
 }): ExtractTokenType<typeof HTTP_CLIENT_FACTORY> => {
   return (options: HttpClientFactoryOptions): HttpClient => {
     if (!options.name) {
@@ -74,7 +76,7 @@ export const httpClientFactory = ({
     const forceDisableCache = envManager.get('HTTP_CLIENT_CACHE_DISABLED');
     const forceDisabledCircuitBreaker = envManager.get('HTTP_CLIENT_CIRCUIT_BREAKER_DISABLED');
 
-    const adapterOptions: TinkoffRequestOptions = mergeOptions(
+    const adapterOptions = mergeOptions(
       mergeOptions(
         {
           logger,
@@ -100,7 +102,7 @@ export const httpClientFactory = ({
         defaultOptions ?? {}
       ),
       options
-    ) as TinkoffRequestOptions;
+    ) as TinkoffRequestOptions & { name: string };
 
     // по умолчанию, на сервере, библиотека https://github.com/node-fetch/node-fetch
     // отправляет заголовок "User-Agent" вида "node-fetch".
@@ -131,7 +133,7 @@ export const httpClientFactory = ({
       makeRequestRegistry.set(adapterOptions.name, createTinkoffRequest(adapterOptions));
     }
 
-    const makeRequest = makeRequestRegistry.get(adapterOptions.name);
+    const makeRequest = makeRequestRegistry.get(adapterOptions.name)!;
 
     const httpClientAdapter = new HttpClientAdapter({
       options: adapterOptions as HttpClientBaseOptions,

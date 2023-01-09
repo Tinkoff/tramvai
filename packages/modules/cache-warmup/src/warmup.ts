@@ -27,7 +27,7 @@ export async function warmUpCache(options: {
 
     const requestsOptions = createRequestsOptions({
       urls,
-      port: environmentManager.get('PORT'),
+      port: environmentManager.get('PORT')!,
       userAgents,
     });
 
@@ -51,7 +51,7 @@ export async function warmUpCache(options: {
 
     log.info(`Cache warmup  made ${results.length} requests for ${urls.length} URLs`);
     log.info(`Cache warmup took - ${Date.now() - startTimestamp}ms`);
-  } catch (error) {
+  } catch (error: any) {
     log.error(error, "Cache warmup process 'FAILURE'");
   }
 }

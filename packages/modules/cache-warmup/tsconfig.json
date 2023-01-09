@@ -1,28 +1,29 @@
 {
-    "extends": "../../../tsconfig.lib.json",
-    "include": [
-        "src/**/*"
-    ],
-    "compilerOptions": {
-        "outDir": "./lib",
-        "declarationDir": "./lib",
-        "rootDir": "./src"
+  "extends": "../../../tsconfig.lib.json",
+  "include": [
+    "src/**/*"
+  ],
+  "compilerOptions": {
+    "outDir": "./lib",
+    "declarationDir": "./lib",
+    "rootDir": "./src",
+    "strict": true
+  },
+  "references": [
+    {
+      "path": "../../tramvai/core"
     },
-    "references": [
-        {
-            "path": "../../tramvai/core"
-        },
-        {
-            "path": "../common"
-        },
-        {
-            "path": "../../tramvai/state"
-        },
-        {
-            "path": "../../libs/url"
-        },
-        {
-            "path": "../../tokens/http-client"
-        }
-    ]
+    {
+      "path": "../common"
+    },
+    {
+      "path": "../../tramvai/state"
+    },
+    {
+      "path": "../../libs/url"
+    },
+    {
+      "path": "../../tokens/http-client"
+    }
+  ]
 }

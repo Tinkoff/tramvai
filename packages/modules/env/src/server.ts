@@ -1,5 +1,6 @@
 import { Module, Scope, commandLineListTokens, provide } from '@tramvai/core';
 import flatten from '@tinkoff/utils/array/flatten';
+import type { EnvParameter } from '@tramvai/tokens-common';
 import {
   CONTEXT_TOKEN,
   COMBINE_REDUCERS,
@@ -19,7 +20,7 @@ export { ENV_MANAGER_TOKEN, ENV_USED_TOKEN };
     provide({
       provide: ENV_MANAGER_TOKEN,
       useFactory: ({ tokens }) => {
-        return new EnvironmentManagerServer(flatten(tokens));
+        return new EnvironmentManagerServer(flatten<EnvParameter>(tokens ?? []));
       },
       deps: {
         tokens: {

@@ -27,7 +27,7 @@ describe('Cookies real environment', () => {
 
   it('Get/set/erase basics', () => {
     // Test get (when no cookie has been set)
-    expect(cookies.get('banana')).toBe(null);
+    expect(cookies.get('banana')).toBeUndefined();
 
     // Test set
     cookies.set('banana', 'yellow');
@@ -35,12 +35,12 @@ describe('Cookies real environment', () => {
 
     // Test erase
     cookies.erase('banana');
-    expect(cookies.get('banana')).toBe(null);
+    expect(cookies.get('banana')).toBeUndefined();
   });
 
   it('Get/set/erase cookie using expire option', () => {
     // Test get (when no cookie has been set)
-    expect(cookies.get('banana')).toBe(null);
+    expect(cookies.get('banana')).toBeUndefined();
 
     // Test set with the expires option set
     cookies.set('banana', 'yellow', { expires: 100 });
@@ -48,7 +48,7 @@ describe('Cookies real environment', () => {
 
     // Test erase
     cookies.erase('banana');
-    expect(cookies.get('banana')).toBe(null);
+    expect(cookies.get('banana')).toBeUndefined();
   });
 
   it('Set cookie using all possible options', () => {
@@ -61,7 +61,7 @@ describe('Cookies real environment', () => {
     });
     // Note that the cookie won't be set because the domain/path/secure options are
     // not correct for the PhantomJS session
-    expect(cookies.get('banana')).toBe(null);
+    expect(cookies.get('banana')).toBeUndefined();
   });
 
   it('Set empty cookie', () => {
@@ -71,7 +71,7 @@ describe('Cookies real environment', () => {
 
   it('Erase non-existing cookie', () => {
     // Shouldn't raise any error
-    expect(cookies.erase('orange')).toBe(undefined);
+    expect(cookies.erase('orange')).toBeUndefined();
   });
 
   it('Verify cookie name encoding and decoding', () => {
@@ -91,7 +91,7 @@ describe('Cookies real environment', () => {
 
       // Erase cookie
       cookies.erase(name);
-      expect(cookies.get(name)).toBe(null);
+      expect(cookies.get(name)).toBeUndefined();
     }
   });
 

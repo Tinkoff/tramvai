@@ -1,4 +1,4 @@
-import { Module, Scope } from '@tramvai/core';
+import { Module, provide, Scope } from '@tramvai/core';
 import { ClientHintsModule, USER_AGENT_TOKEN } from '@tramvai/module-client-hints';
 import { CookieManager } from './cookieManager.browser';
 import { COOKIE_MANAGER_TOKEN } from './tokens';
@@ -8,7 +8,7 @@ export { COOKIE_MANAGER_TOKEN };
 @Module({
   imports: [ClientHintsModule],
   providers: [
-    {
+    provide({
       // Управление куками в приложении
       provide: COOKIE_MANAGER_TOKEN,
       useClass: CookieManager,
@@ -23,7 +23,7 @@ export { COOKIE_MANAGER_TOKEN };
         },
         userAgent: USER_AGENT_TOKEN,
       },
-    },
+    }),
   ],
 })
 export class CookieModule {}

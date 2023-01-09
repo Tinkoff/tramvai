@@ -2,6 +2,7 @@ import path from 'path';
 import browserslist from 'browserslist';
 import envTargets from '@tinkoff/browserslist-config';
 import { sync as resolve } from 'resolve';
+import type { TransformOptions } from '@babel/core';
 import type { TranspilerConfig } from '../webpack/utils/transpiler';
 
 const envConfig = {
@@ -102,7 +103,7 @@ export const babelConfigFactory = ({
       typescript && '@babel/preset-typescript',
     ]
       .concat(cfg.presets || [])
-      .filter(Boolean),
+      .filter(Boolean) as TransformOptions['presets'],
 
     plugins: [
       // TODO: useESModules is deprecated and should work automatically - https://babeljs.io/docs/en/babel-plugin-transform-runtime#useesmodules

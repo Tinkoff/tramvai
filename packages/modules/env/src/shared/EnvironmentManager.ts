@@ -1,11 +1,13 @@
-export class EnvironmentManager {
+import type { EnvironmentManager as Interface } from '@tramvai/tokens-common';
+
+export class EnvironmentManager implements Interface {
   protected parameters: Record<string, string>;
 
   constructor() {
     this.parameters = {};
   }
 
-  get(name) {
+  get(name: string): string | undefined {
     return this.parameters[name];
   }
 
@@ -18,7 +20,7 @@ export class EnvironmentManager {
     return this.parameters;
   }
 
-  update(result) {
+  update(result: Record<string, string>) {
     this.parameters = Object.assign(this.parameters, result);
   }
 
@@ -26,7 +28,7 @@ export class EnvironmentManager {
     return this.getAll();
   }
 
-  updateClientUsed(result) {
+  updateClientUsed(result: Record<string, string>) {
     this.update(result);
   }
 }

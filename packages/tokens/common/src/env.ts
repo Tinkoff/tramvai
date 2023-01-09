@@ -1,7 +1,7 @@
 import { createToken } from '@tinkoff/dippy';
 
 export interface EnvironmentManager {
-  get(name: string): string;
+  get(name: string): string | undefined;
   getInt(name: string, def: number): number;
   getAll(): Record<string, string>;
   update(result: Record<string, string>): void;

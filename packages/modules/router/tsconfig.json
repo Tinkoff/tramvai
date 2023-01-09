@@ -1,70 +1,71 @@
 {
-    "extends": "../../../tsconfig.lib.json",
-    "include": [
-        "./src"
-    ],
-    "compilerOptions": {
-        "declarationDir": "./lib",
-        "outDir": "./lib",
-        "rootDir": "./src"
+  "extends": "../../../tsconfig.lib.json",
+  "include": [
+    "./src"
+  ],
+  "compilerOptions": {
+    "declarationDir": "./lib",
+    "outDir": "./lib",
+    "rootDir": "./src",
+    "strict": false
+  },
+  "references": [
+    {
+      "path": "../../libs/url"
     },
-    "references": [
-        {
-            "path": "../../libs/url"
-        },
-        {
-            "path": "../../tramvai/core"
-        },
-        {
-            "path": "../../tramvai/state"
-        },
-        {
-            "path": "../server"
-        },
-        {
-            "path": "../log"
-        },
-        {
-            "path": "../../libs/errors"
-        },
-        {
-            "path": "../../tramvai/papi"
-        },
-        {
-            "path": "../../libs/router"
-        },
-        {
-            "path": "../../tokens/common"
-        },
-        {
-            "path": "../../libs/dippy"
-        },
-        {
-            "path": "../../tokens/router"
-        },
-        {
-            "path": "../../tokens/server"
-        },
-        {
-            "path": "../../tokens/render"
-        },
-        {
-            "path": "../../tramvai/test/helpers"
-        },
-        {
-            "path": "../../tramvai/test/mocks"
-        },
-        {
-            "path": "../../cli"
-        },
-        {
-            "path": "../../tramvai/experiments"
-        },
-        {
-            "path": "../../tokens/child-app"
-        },
-        {
-            "path": "../../tramvai/react"
-        }
-    ]
+    {
+      "path": "../../tramvai/core"
+    },
+    {
+      "path": "../../tramvai/state"
+    },
+    {
+      "path": "../server"
+    },
+    {
+      "path": "../log"
+    },
+    {
+      "path": "../../libs/errors"
+    },
+    {
+      "path": "../../tramvai/papi"
+    },
+    {
+      "path": "../../libs/router"
+    },
+    {
+      "path": "../../tokens/common"
+    },
+    {
+      "path": "../../libs/dippy"
+    },
+    {
+      "path": "../../tokens/router"
+    },
+    {
+      "path": "../../tokens/server"
+    },
+    {
+      "path": "../../tokens/render"
+    },
+    {
+      "path": "../../tramvai/test/helpers"
+    },
+    {
+      "path": "../../tramvai/test/mocks"
+    },
+    {
+      "path": "../../cli"
+    },
+    {
+      "path": "../../tramvai/experiments"
+    },
+    {
+      "path": "../../tokens/child-app"
+    },
+    {
+      "path": "../../tramvai/react"
+    }
+  ]
 }

@@ -7,6 +7,7 @@
     "module": "CommonJS",
     "declarationDir": "./lib",
     "outDir": "./lib",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "strict": false
   }
 }

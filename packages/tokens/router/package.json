@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@tinkoff/router": "0.0.0-stub",
-    "@tramvai/tokens-common": "0.0.0-stub"
+    "@tramvai/react": "0.0.0-stub"
   },
   "peerDependencies": {
     "@tinkoff/dippy": "0.0.0-stub",

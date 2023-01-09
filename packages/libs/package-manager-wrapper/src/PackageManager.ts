@@ -36,7 +36,7 @@ export interface DedupeOptions {
 const exec = util.promisify(childProcess.exec);
 
 export abstract class PackageManager {
-  readonly name: 'npm' | 'yarn' | 'unknown';
+  readonly name: 'npm' | 'yarn' | 'unknown' = 'unknown';
 
   protected rootDir: string;
   protected registry?: string;

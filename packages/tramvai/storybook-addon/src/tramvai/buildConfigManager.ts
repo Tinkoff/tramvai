@@ -4,9 +4,10 @@ import {
   getTramvaiConfig,
   syncJsonFile,
 } from '@tramvai/cli';
+import type { StorybookOptions } from '../types';
 import { getAppRootDir } from '../utils/options';
 
-export const buildConfigManager = (options): ConfigManager => {
+export const buildConfigManager = (options: StorybookOptions): ConfigManager => {
   const rootDir = getAppRootDir(options);
   const { content, isSuccessful } = getTramvaiConfig(rootDir);
 

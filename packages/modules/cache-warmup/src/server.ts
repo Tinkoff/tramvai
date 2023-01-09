@@ -9,11 +9,11 @@ import { warmUpCache } from './warmup';
     provide({
       provide: commandLineListTokens.listen,
       multi: true,
-      useFactory(deps) {
+      useFactory({ papiService, logger, environmentManager }) {
         return () => {
-          const log = deps.logger('cache-warmup');
+          const log = logger('cache-warmup');
 
-          if (!deps.papiService) {
+          if (!papiService) {
             log.info('Skip cache warmup when @tramvai/module-http-client is not enabled');
             return;
           }
@@ -33,7 +33,7 @@ import { warmUpCache } from './warmup';
             return;
           }
 
-          warmUpCache(deps);
+          warmUpCache({ papiService, logger, environmentManager });
         };
       },
       deps: {

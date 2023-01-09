@@ -1,44 +1,45 @@
 {
-    "extends": "../../../tsconfig.lib.json",
-    "include": [
-        "./src"
-    ],
-    "compilerOptions": {
-        "module": "CommonJS",
-        "declarationDir": "./lib",
-        "outDir": "./lib",
-        "rootDir": "./src"
+  "extends": "../../../tsconfig.lib.json",
+  "include": [
+    "./src"
+  ],
+  "compilerOptions": {
+    "module": "CommonJS",
+    "declarationDir": "./lib",
+    "outDir": "./lib",
+    "rootDir": "./src",
+    "strict": true
+  },
+  "references": [
+    {
+      "path": "../../cli"
     },
-    "references": [
-        {
-            "path": "../../cli"
-        },
-        {
-            "path": "../../tramvai/state"
-        },
-        {
-            "path": "../../tramvai/react"
-        },
-        {
-            "path": "../../tramvai/test/mocks"
-        },
-        {
-            "path": "../../tokens/common"
-        },
-        {
-            "path": "../../tramvai/core"
-        },
-        {
-            "path": "../../libs/dippy"
-        },
-        {
-            "path": "../../libs/router"
-        },
-        {
-            "path": "../../libs/url"
-        },
-        {
-            "path": "../../libs/is-modern-lib"
-        }
-    ]
+    {
+      "path": "../../tramvai/state"
+    },
+    {
+      "path": "../../tramvai/react"
+    },
+    {
+      "path": "../../tramvai/test/mocks"
+    },
+    {
+      "path": "../../tokens/common"
+    },
+    {
+      "path": "../../tramvai/core"
+    },
+    {
+      "path": "../../libs/dippy"
+    },
+    {
+      "path": "../../libs/router"
+    },
+    {
+      "path": "../../libs/url"
+    },
+    {
+      "path": "../../libs/is-modern-lib"
+    }
+  ]
 }

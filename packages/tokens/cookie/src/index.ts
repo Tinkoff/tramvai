@@ -16,7 +16,7 @@ export interface CookieSetOptions extends CookieOptions {
 }
 
 export interface CookieManager {
-  get(name): string;
+  get(name: string): string | undefined;
   all(): Record<string, string>;
   set({ name, value, ...options }: CookieSetOptions): void;
   remove(name: string, options?: CookieOptions): void;

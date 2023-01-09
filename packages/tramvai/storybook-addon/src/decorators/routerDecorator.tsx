@@ -2,6 +2,7 @@ import { Provider as RouterProvider } from '@tinkoff/router';
 import type { Route } from '@tinkoff/router';
 import type { Url } from '@tinkoff/url';
 import { createMockRouter } from '@tramvai/test-mocks';
+import type { StorybookDecorator } from '../types';
 
 export interface RouterDecoratorParameters {
   tramvai?: {
@@ -10,7 +11,7 @@ export interface RouterDecoratorParameters {
   };
 }
 
-export const RouterDecorator = (
+export const RouterDecorator: StorybookDecorator<RouterDecoratorParameters> = (
   Story,
   { parameters }: { parameters: RouterDecoratorParameters }
 ) => {

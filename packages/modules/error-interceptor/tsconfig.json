@@ -1,28 +1,29 @@
 {
-    "extends": "../../../tsconfig.lib.json",
-    "include": [
-        "./src"
-    ],
-    "compilerOptions": {
-        "declarationDir": "./lib",
-        "outDir": "./lib",
-        "rootDir": "./src"
+  "extends": "../../../tsconfig.lib.json",
+  "include": [
+    "./src"
+  ],
+  "compilerOptions": {
+    "declarationDir": "./lib",
+    "outDir": "./lib",
+    "rootDir": "./src",
+    "strict": true
+  },
+  "references": [
+    {
+      "path": "../../tramvai/core"
     },
-    "references": [
-        {
-            "path": "../../tramvai/core"
-        },
-        {
-            "path": "../../libs/error-handlers"
-        },
-        {
-            "path": "../render"
-        },
-        {
-            "path": "../common"
-        },
-        {
-            "path": "../../tramvai/react"
-        }
-    ]
+    {
+      "path": "../../libs/error-handlers"
+    },
+    {
+      "path": "../render"
+    },
+    {
+      "path": "../common"
+    },
+    {
+      "path": "../../tramvai/react"
+    }
+  ]
 }

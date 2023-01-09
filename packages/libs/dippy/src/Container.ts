@@ -344,7 +344,7 @@ export class Container {
 
       try {
         value = (record.factory as (deps: ProvideDepsIterator<any>) => T)(this.hydrateDeps(record));
-      } catch (e) {
+      } catch (e: any) {
         this.recordValues.set(record, NOT_YET);
 
         if (optional && e.type === Errors.NOT_FOUND) {

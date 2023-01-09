@@ -24,7 +24,7 @@ export const getTramvaiDepsVersions = async (): Promise<Map<string, SemVer>> => 
         ).catch(() => null);
 
         if (version) {
-          depsVersions.set(name, parse(version));
+          depsVersions.set(name, parse(version)!);
         }
       }
     },

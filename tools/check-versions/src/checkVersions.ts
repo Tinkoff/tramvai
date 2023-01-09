@@ -43,7 +43,9 @@ export const checkVersions = (depsVersions: Map<string, SemVer>) => {
   log.error(`The versions of the tramvai modules do not match!
 
   It is necessary to do the following:
-    1. Check package.json and set the package versions to a fixed version "${maxVersion.raw}" for the packages listed below
+    1. Check package.json and set the package versions to a fixed version "${
+      maxVersion!.raw
+    }" for the packages listed below
     2. Update the lock file with the command "npm i" or "yarn"
     3. If after upgrading the error still occurs - check the lock file for incorrect versions and maybe rebuild the lock file
     4. If there is no version of a package when you upgrade, it is probably an outdated package and you should look up for the replacement at https://tramvai.dev/docs/releases/migration.

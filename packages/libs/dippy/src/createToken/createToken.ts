@@ -51,13 +51,17 @@ export class TokenClass<T> implements TokenType<T> {
 const BASE_TOKEN_TYPE = 'base token';
 const MULTI_TOKEN_TYPE = 'multi token';
 
-export type BaseTokenInterface<T = any> = T & {
-  __type?: typeof BASE_TOKEN_TYPE;
-};
+export type BaseTokenInterface<T = any> = T extends null | undefined
+  ? T
+  : T & {
+      __type?: typeof BASE_TOKEN_TYPE;
+    };
 
-export type MultiTokenInterface<T = any> = T & {
-  __type?: typeof MULTI_TOKEN_TYPE;
-};
+export type MultiTokenInterface<T = any> = T extends null | undefined
+  ? T
+  : T & {
+      __type?: typeof MULTI_TOKEN_TYPE;
+    };
 
 export type TokenInterface<T = any> = BaseTokenInterface<T> | MultiTokenInterface<T>;
 

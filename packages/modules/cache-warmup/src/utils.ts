@@ -33,7 +33,7 @@ export async function queueRequests<T>(options: QueueReuestsOptions<T>) {
     }
   };
 
-  const queue = [];
+  const queue: Promise<any>[] = [];
   const result: Array<ReturnType<typeof req>> = [];
 
   for (const option of requestsOptions) {
@@ -85,7 +85,7 @@ export function createRequestsOptions(options: {
     );
 
     return requestOptions;
-  }, []);
+  }, [] as Request[]);
 }
 
 function generateRandomIPv4Adress() {

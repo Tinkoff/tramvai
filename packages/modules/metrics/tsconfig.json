@@ -1,61 +1,62 @@
 {
-    "extends": "../../../tsconfig.lib.json",
-    "include": [
-        "./src"
-    ],
-    "compilerOptions": {
-        "declarationDir": "./lib",
-        "outDir": "./lib",
-        "rootDir": "./src"
+  "extends": "../../../tsconfig.lib.json",
+  "include": [
+    "./src"
+  ],
+  "compilerOptions": {
+    "declarationDir": "./lib",
+    "outDir": "./lib",
+    "rootDir": "./src",
+    "strict": false
+  },
+  "references": [
+    {
+      "path": "../../tramvai/core"
     },
-    "references": [
-        {
-            "path": "../../tramvai/core"
-        },
-        {
-            "path": "../../libs/browser-timings"
-        },
-        {
-            "path": "../../tokens/metrics"
-        },
-        {
-            "path": "../../tokens/server"
-        },
-        {
-            "path": "../../libs/monkeypatch"
-        },
-        {
-            "path": "../../libs/url"
-        },
-        {
-            "path": "../../tramvai/papi"
-        },
-        {
-            "path": "../../tramvai/state"
-        },
-        {
-            "path": "../../libs/logger"
-        },
-        {
-            "path": "../../libs/metrics-noop"
-        },
-        {
-            "path": "../../tokens/http-client"
-        },
-        {
-            "path": "../../tokens/server-private"
-        },
-        {
-            "path": "../../libs/measure-fastify-requests"
-        },
-        {
-            "path": "../../tokens/router"
-        },
-        {
-            "path": "../../tokens/common"
-        },
-        {
-            "path": "../../tokens/core-private"
-        }
-    ]
+    {
+      "path": "../../libs/browser-timings"
+    },
+    {
+      "path": "../../tokens/metrics"
+    },
+    {
+      "path": "../../tokens/server"
+    },
+    {
+      "path": "../../libs/monkeypatch"
+    },
+    {
+      "path": "../../libs/url"
+    },
+    {
+      "path": "../../tramvai/papi"
+    },
+    {
+      "path": "../../tramvai/state"
+    },
+    {
+      "path": "../../libs/logger"
+    },
+    {
+      "path": "../../libs/metrics-noop"
+    },
+    {
+      "path": "../../tokens/http-client"
+    },
+    {
+      "path": "../../tokens/server-private"
+    },
+    {
+      "path": "../../libs/measure-fastify-requests"
+    },
+    {
+      "path": "../../tokens/router"
+    },
+    {
+      "path": "../../tokens/common"
+    },
+    {
+      "path": "../../tokens/core-private"
+    }
+  ]
 }

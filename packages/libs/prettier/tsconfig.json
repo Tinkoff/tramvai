@@ -1,12 +1,13 @@
 {
-    "extends": "../../../tsconfig.lib.json",
-    "include": [
-        "./src"
-    ],
-    "compilerOptions": {
-        "module": "CommonJS",
-        "declarationDir": "./lib",
-        "outDir": "./lib",
-        "rootDir": "./src"
-    }
+  "extends": "../../../tsconfig.lib.json",
+  "include": [
+    "./src"
+  ],
+  "compilerOptions": {
+    "module": "CommonJS",
+    "declarationDir": "./lib",
+    "outDir": "./lib",
+    "rootDir": "./src",
+    "strict": true
+  }
 }

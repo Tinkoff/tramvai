@@ -7,7 +7,7 @@ import type {
 import { PackageManager } from './PackageManager';
 
 export class NpmPackageManager extends PackageManager {
-  readonly name: 'npm';
+  readonly name = 'npm';
 
   constructor(options: PackageManagerOptions) {
     super(options);

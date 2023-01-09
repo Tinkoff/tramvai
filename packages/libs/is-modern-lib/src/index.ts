@@ -99,11 +99,10 @@ export const modernLibsFilter = (filePath: string): boolean => {
     return cache[cacheKey];
   }
 
-  let packageJsonPath: string;
+  const packageJsonPath: string = packagePath ? path.resolve(packagePath, 'package.json') : '';
   let packageJson: Record<string, any> = {};
 
   try {
-    packageJsonPath = path.resolve(packagePath, 'package.json');
     packageJson = require(packageJsonPath);
   } catch (e) {
     console.error(`${packageJsonPath} read failure`, e);

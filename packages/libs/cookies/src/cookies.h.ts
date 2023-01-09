@@ -8,7 +8,7 @@ export interface CookieOptions {
 }
 
 export interface ICookies {
-  get(name: string): string | null;
+  get(name: string): string | undefined;
 
   set(name: string, value: string, options?: CookieOptions): void;
 

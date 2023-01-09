@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import type { Action } from '@tramvai/core';
 import { useDi } from '@tramvai/react';
 import { ACTION_EXECUTION_TOKEN } from '@tramvai/tokens-common';
+import type { StorybookDecorator } from '../types';
 
 export interface ActionsDecoratorParameters {
   tramvai?: {
@@ -9,7 +10,7 @@ export interface ActionsDecoratorParameters {
   };
 }
 
-export const ActionsDecorator = (
+export const ActionsDecorator: StorybookDecorator<ActionsDecoratorParameters> = (
   Story,
   { parameters }: { parameters: ActionsDecoratorParameters }
 ) => {

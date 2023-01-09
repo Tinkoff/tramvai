@@ -66,6 +66,11 @@ export class ChildContainer extends Container {
       return super.hydrate(record, token, optional);
     }
 
-    return super.hydrate.call(this.root, record, token, optional);
+    return super.hydrate.call<Container, [RecordProvide<T>, symbol, boolean], T | null>(
+      this.root,
+      record,
+      token,
+      optional
+    );
   }
 }

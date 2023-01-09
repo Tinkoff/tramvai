@@ -2,7 +2,8 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "module": "commonjs",
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "strict": true
   },
   "files": [],
   "include": [],

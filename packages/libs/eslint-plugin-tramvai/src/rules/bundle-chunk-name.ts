@@ -15,7 +15,7 @@ const convertObjToString = (obj: Record<string, any>) => {
 
       return acc;
     },
-    [],
+    [] as string[],
     obj
   ).join(', ');
 };
@@ -51,7 +51,7 @@ export const rule: Rule.RuleModule = {
     const config: Config = context.options[0] ?? {};
     const propertyNames = config.propertyNames ?? ['bundles'];
 
-    const checkImport = (node, nodeSource) => {
+    const checkImport = (node: any, nodeSource: any) => {
       const prop = node.parent?.parent;
 
       if (!prop) {
@@ -101,7 +101,7 @@ export const rule: Rule.RuleModule = {
           });
         }
 
-        let evaledComment;
+        let evaledComment: Record<string, any> | undefined;
         try {
           // just like webpack itself does
           evaledComment = runInNewContext(`(function(){return {${comment.value}}})()`);
@@ -130,10 +130,11 @@ export const rule: Rule.RuleModule = {
     };
 
     return {
-      ImportExpression(node: any) {
+      ImportExpression(node) {
         return checkImport(node, node.source);
       },
-      CallExpression(node: any) {
+      CallExpression(node) {
+        // @ts-ignore
         if (node?.callee?.type === 'Import') {
           return checkImport(node, node.arguments[0]);
         }

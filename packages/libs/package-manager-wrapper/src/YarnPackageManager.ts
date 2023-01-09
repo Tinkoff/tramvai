@@ -7,7 +7,7 @@ import type {
 import { PackageManager } from './PackageManager';
 
 export class YarnPackageManager extends PackageManager {
-  readonly name: 'yarn';
+  readonly name = 'yarn';
 
   constructor(options: PackageManagerOptions) {
     super(options);

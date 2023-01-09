@@ -1,34 +1,35 @@
 {
-    "extends": "../../../tsconfig.lib.json",
-    "include": [
-        "./src"
-    ],
-    "compilerOptions": {
-        "declarationDir": "./lib",
-        "outDir": "./lib",
-        "rootDir": "./src"
+  "extends": "../../../tsconfig.lib.json",
+  "include": [
+    "./src"
+  ],
+  "compilerOptions": {
+    "declarationDir": "./lib",
+    "outDir": "./lib",
+    "rootDir": "./src",
+    "strict": false
+  },
+  "references": [
+    {
+      "path": "../../libs/mocker"
     },
-    "references": [
-        {
-            "path": "../../libs/mocker"
-        },
-        {
-            "path": "../../tramvai/core"
-        },
-        {
-            "path": "../../tramvai/papi"
-        },
-        {
-            "path": "../../tokens/server"
-        },
-        {
-            "path": "../../libs/dippy"
-        },
-        {
-            "path": "../../tokens/common"
-        },
-        {
-            "path": "../../tokens/server-private"
-        }
-    ]
+    {
+      "path": "../../tramvai/core"
+    },
+    {
+      "path": "../../tramvai/papi"
+    },
+    {
+      "path": "../../tokens/server"
+    },
+    {
+      "path": "../../libs/dippy"
+    },
+    {
+      "path": "../../tokens/common"
+    },
+    {
+      "path": "../../tokens/server-private"
+    }
+  ]
 }

@@ -9,7 +9,7 @@ import type { ExtractDependencyType } from '@tinkoff/dippy';
 export const fillHeaderIp = ({
   requestManager,
 }: {
-  requestManager?: ExtractDependencyType<typeof REQUEST_MANAGER_TOKEN>;
+  requestManager: ExtractDependencyType<typeof REQUEST_MANAGER_TOKEN> | null;
 }) => {
   if (!requestManager) {
     return identity;
@@ -30,8 +30,8 @@ export const fillHeaders = ({
   requestManager,
   headersList,
 }: {
-  requestManager?: ExtractDependencyType<typeof REQUEST_MANAGER_TOKEN>;
-  headersList: ExtractDependencyType<typeof API_CLIENT_PASS_HEADERS>;
+  requestManager: ExtractDependencyType<typeof REQUEST_MANAGER_TOKEN> | null;
+  headersList: ExtractDependencyType<typeof API_CLIENT_PASS_HEADERS> | null;
 }) => {
   if (!requestManager) {
     return identity;

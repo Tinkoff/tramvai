@@ -10,8 +10,8 @@ export const composeComponent = (
   return toArray(wrappers ?? []).reduce((Wrapped, wrapper) => wrapper(Wrapped), Component);
 };
 
-export const composeLayoutOptions = (list: LayoutOptions[]): LayoutOptions => {
-  return flatten<LayoutOptions>(list ?? []).reduce(
+export const composeLayoutOptions = (list: LayoutOptions[]): Required<LayoutOptions> => {
+  return flatten<Required<LayoutOptions>>(list ?? []).reduce(
     (acc, item) => {
       const { components, wrappers } = acc;
       if (item.components) {

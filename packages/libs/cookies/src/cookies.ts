@@ -5,7 +5,7 @@ export class Cookies implements ICookies {
   constructor(private defaults: CookieOptions = {}) {}
 
   // eslint-disable-next-line class-methods-use-this
-  get(name: string): string | null {
+  get(name: string): string | undefined {
     const cookies = document.cookie.split(';');
 
     // Iterate all cookies
@@ -46,8 +46,8 @@ export class Cookies implements ICookies {
       }
     }
 
-    // Return `null` as the cookie was not found
-    return null;
+    // Return `undefined` as the cookie was not found
+    return undefined;
   }
 
   set(name: string, value: string, options?: CookieOptions): void {

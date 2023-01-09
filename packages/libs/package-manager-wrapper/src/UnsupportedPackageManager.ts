@@ -2,7 +2,7 @@ import type { PackageManagerOptions } from './PackageManager';
 import { PackageManager } from './PackageManager';
 
 export class UnknownPackageManager extends PackageManager {
-  readonly name: 'unknown';
+  readonly name = 'unknown';
 
   constructor(options: PackageManagerOptions) {
     super(options);
