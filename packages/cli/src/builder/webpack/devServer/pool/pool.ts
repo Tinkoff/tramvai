@@ -30,9 +30,14 @@ export const createWorkerPool = async (
       },
       reset: (worker: Worker) => {
         worker.removeAllListeners('exit');
+
         return new Promise((resolve, reject) => {
           worker.on('exit', () => {
             reject(new Error('please, destroy it'));
+          });
+
+          worker.on('error', (error) => {
+            console.warn('unexpected worker error:', error);
           });
 
           return workerBridge.destroy(worker);

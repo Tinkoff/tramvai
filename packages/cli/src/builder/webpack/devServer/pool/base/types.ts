@@ -3,6 +3,7 @@ import type { Container } from '@tinkoff/dippy';
 
 export interface Worker extends EventEmitter {
   on(event: 'exit', listener: (code: number, signal: string) => void): this;
+  on(event: 'error', listener: (error: Error) => void): this;
 }
 
 export interface WorkerMessages {
