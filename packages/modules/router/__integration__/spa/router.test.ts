@@ -424,11 +424,9 @@ describe('router/spa', () => {
       const { page } = await getPageWrapper();
       const response = await request('/').expect(200);
 
-      page.setRequestInterception(true);
-
-      page.on('request', (req) => {
-        if (req.url() === 'https://www-test.tinkoff.ru/') {
-          req.respond({
+      page.route('**/*', (route) => {
+        if (route.request().url() === 'https://www-test.tinkoff.ru/') {
+          route.fulfill({
             status: response.status,
             headers: response.headers,
             body: response.text,
@@ -437,7 +435,7 @@ describe('router/spa', () => {
           return;
         }
 
-        return req.continue();
+        return route.continue();
       });
 
       await page.goto('https://www-test.tinkoff.ru/');

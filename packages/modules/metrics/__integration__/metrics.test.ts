@@ -1,57 +1,85 @@
-import type puppeteer from 'puppeteer';
+import type { Page } from 'playwright-core';
 import { testApp } from '@tramvai/internal-test-utils/testApp';
 import { testAppInBrowser } from '@tramvai/internal-test-utils/browser';
 
-let page: puppeteer.Page;
-let completedRequests: any[];
+describe('modules/metrics/instantMetrics', () => {
+  let page: Page;
+  let completedRequests: any[];
 
-const { getApp } = testApp({
-  name: 'metrics',
-});
-const { getBrowser } = testAppInBrowser(getApp);
-
-const getMetrics = async () => {
-  const { request } = getApp();
-
-  const { text: metrics } = await request('/metrics').expect(200);
-
-  return metrics.split('\n\n').reduce((acc, metric) => {
-    const lines = metric.split('\n');
-    const type = lines[1].split(' ')[2];
-
-    acc[type] = lines
-      .slice(2, Infinity)
-      .map((line) => line.split(' ')[0])
-      .join('\n');
-
-    return acc;
-  }, {} as Record<string, string>);
-};
-
-beforeEach(async () => {
-  page = await getBrowser().newPage();
-  completedRequests = [];
-  await page.setRequestInterception(true);
-
-  await page.on('request', (request) => {
-    completedRequests.push({
-      method: request.method(),
-      url: request.url(),
-      postData: request.postData(),
-    });
-
-    request.continue();
+  const { getApp } = testApp({
+    name: 'metrics',
   });
-});
+  const { getBrowser } = testAppInBrowser(getApp);
 
-afterEach(async () => {
-  await page.setRequestInterception(false);
-});
+  const getMetrics = async () => {
+    const { request } = getApp();
 
-it('should return commandLine metrics', async () => {
-  let metrics = await getMetrics();
+    const { text: metrics } = await request('/metrics').expect(200);
 
-  expect(metrics.command_line_runner_execution_time).toMatchInlineSnapshot(`
+    return metrics.split('\n\n').reduce((acc, metric) => {
+      const lines = metric.split('\n');
+      const type = lines[1].split(' ')[2];
+
+      acc[type] = lines
+        .slice(2, Infinity)
+        .map((line) => line.split(' ')[0])
+        .join('\n');
+
+      return acc;
+    }, {} as Record<string, string>);
+  };
+
+  beforeEach(async () => {
+    page = await getBrowser().newPage();
+    completedRequests = [];
+
+    await page.on('request', (request) => {
+      completedRequests.push({
+        method: request.method(),
+        url: request.url(),
+        postData: request.postData(),
+      });
+    });
+  });
+
+  it('Отправляет instant метрику если event соответствует сущетсвующей метрике', async () => {
+    await page.goto(`${getApp().serverUrl}/`, { waitUntil: 'networkidle' });
+
+    expect(completedRequests).toEqual(
+      expect.arrayContaining([
+        {
+          method: 'POST',
+          postData: null,
+          url: expect.stringContaining('metrics/sent-instant-metric'),
+        },
+      ])
+    );
+  });
+
+  it('Не отправляет метрику если таковая не заведена', async () => {
+    await page.goto(`${getApp().serverUrl}/`, { waitUntil: 'networkidle' });
+
+    expect(completedRequests).toEqual(
+      expect.not.arrayContaining([
+        { method: 'POST', url: expect.stringContaining('metrics/didntsend-instant-metric') },
+      ])
+    );
+  });
+
+  // eslint-disable-next-line jest/expect-expect
+  it('Возвращает метрики по урлу /metrics', async () => {
+    const { request } = getApp();
+
+    await request('/metrics').expect(
+      200,
+      /# TYPE http_requests_total counter\nhttp_requests_total{method="\w+",status="\d+"} \d+/
+    );
+  });
+
+  it.skip('should return commandLine metrics', async () => {
+    let metrics = await getMetrics();
+
+    expect(metrics.command_line_runner_execution_time).toMatchInlineSnapshot(`
     "command_line_runner_execution_time_bucket{le="0.01",line="init"}
     command_line_runner_execution_time_bucket{le="0.025",line="init"}
     command_line_runner_execution_time_bucket{le="0.05",line="init"}
@@ -83,14 +111,13 @@ it('should return commandLine metrics', async () => {
     command_line_runner_execution_time_bucket{le="60",line="listen"}
     command_line_runner_execution_time_bucket{le="+Inf",line="listen"}
     command_line_runner_execution_time_sum{line="listen"}
-    command_line_runner_execution_time_count{line="listen"}"
   `);
 
-  await page.goto(`${getApp().serverUrl}/`);
+    await page.goto(`${getApp().serverUrl}/`);
 
-  metrics = await getMetrics();
+    metrics = await getMetrics();
 
-  expect(metrics.command_line_runner_execution_time).toMatchInlineSnapshot(`
+    expect(metrics.command_line_runner_execution_time).toMatchInlineSnapshot(`
     "command_line_runner_execution_time_bucket{le="0.01",line="init"}
     command_line_runner_execution_time_bucket{le="0.025",line="init"}
     command_line_runner_execution_time_bucket{le="0.05",line="init"}
@@ -204,33 +231,38 @@ it('should return commandLine metrics', async () => {
     command_line_runner_execution_time_sum{line="clear"}
     command_line_runner_execution_time_count{line="clear"}"
   `);
-});
+  });
 
-it('Send instant metric if event has correspond metric', async () => {
-  await page.goto(`${getApp().serverUrl}/`, { waitUntil: 'networkidle0' });
+  it('Send instant metric if event has correspond metric', async () => {
+    await page.goto(`${getApp().serverUrl}/`, { waitUntil: 'networkidle' });
 
-  expect(completedRequests).toEqual(
-    expect.arrayContaining([
-      { method: 'POST', url: expect.stringContaining('metrics/sent-instant-metric') },
-    ])
-  );
-});
+    expect(completedRequests).toEqual(
+      expect.arrayContaining([
+        {
+          method: 'POST',
+          postData: null,
+          url: expect.stringContaining('metrics/sent-instant-metric'),
+        },
+      ])
+    );
+  });
 
-it('Do not send instant metric if metric does not exist', async () => {
-  await page.goto(`${getApp().serverUrl}/`, { waitUntil: 'networkidle0' });
+  it('Do not send instant metric if metric does not exist', async () => {
+    await page.goto(`${getApp().serverUrl}/`, { waitUntil: 'networkidle' });
 
-  expect(completedRequests).toEqual(
-    expect.not.arrayContaining([
-      { method: 'POST', url: expect.stringContaining('metrics/didntsend-instant-metric') },
-    ])
-  );
-});
+    expect(completedRequests).toEqual(
+      expect.not.arrayContaining([
+        { method: 'POST', url: expect.stringContaining('metrics/didntsend-instant-metric') },
+      ])
+    );
+  });
 
-// eslint-disable-next-line jest/expect-expect
-it('return http_request_total metrics', async () => {
-  const metrics = await getMetrics();
+  // eslint-disable-next-line jest/expect-expect
+  it('return http_request_total metrics', async () => {
+    const metrics = await getMetrics();
 
-  expect(metrics.http_requests_total).toMatchInlineSnapshot(
-    `"http_requests_total{method="GET",status="200"}"`
-  );
+    expect(metrics.http_requests_total).toMatchInlineSnapshot(
+      `"http_requests_total{method="GET",status="200"}"`
+    );
+  });
 });

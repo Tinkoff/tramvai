@@ -1,11 +1,11 @@
-import type { Browser } from 'puppeteer';
-import { launch } from 'puppeteer';
-import { PUPPETEER_DEFAULT_LAUNCH_OPTIONS } from '@tramvai/test-puppeteer';
+import type { BrowserServer } from 'playwright-core';
+import { chromium } from 'playwright-core';
+import { PLAYWRIGHT_DEFAULT_LAUNCH_OPTIONS } from '@tramvai/test-pw';
 
-let browser: Browser;
+let browser: BrowserServer;
 
 export const startBrowser = async () => {
-  browser = await launch(PUPPETEER_DEFAULT_LAUNCH_OPTIONS);
+  browser = await chromium.launchServer(PLAYWRIGHT_DEFAULT_LAUNCH_OPTIONS);
   return browser;
 };
 

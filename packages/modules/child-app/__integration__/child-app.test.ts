@@ -158,7 +158,7 @@ describe('base-not-preloaded', () => {
       page.evaluate(() => (window as any).TRAMVAI_TEST_CHILD_APP_NOT_PRELOADED_ACTION_CALL_NUMBER);
 
     await page.waitForSelector('#base-not-preloaded', {
-      visible: true,
+      state: 'visible',
     });
 
     expect(await page.evaluate(() => document.querySelector('.application')?.innerHTML)).toContain(

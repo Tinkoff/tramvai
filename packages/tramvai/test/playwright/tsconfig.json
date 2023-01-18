@@ -4,7 +4,6 @@
         "./src"
     ],
     "compilerOptions": {
-        "module": "CommonJS",
         "declarationDir": "./lib",
         "outDir": "./lib",
         "rootDir": "./src",
@@ -12,10 +11,10 @@
     },
     "references": [
         {
-            "path": "../../../cli"
+            "path": "../../../tokens/router"
         },
         {
-            "path": "../playwright"
+            "path": "../integration"
         }
     ]
 }

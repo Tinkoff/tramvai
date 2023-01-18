@@ -1,4 +1,4 @@
-import { initPuppeteer, wrapPuppeteerPage } from '@tramvai/test-puppeteer';
+import { initPlaywright, wrapPlaywrightPage } from '@tramvai/test-pw';
 import { runFakeApp } from '../startCliFakeApp';
 import type { StartCliResult } from '../startCli';
 import { wrapPapi } from '../papi';
@@ -43,12 +43,12 @@ describe('test/integration/app/runFakeApp', () => {
     expect(application).toMatchInlineSnapshot(`"fake app"`);
   });
 
-  it('should work with puppeteer', async () => {
-    const { browser } = await initPuppeteer(app.serverUrl);
+  it('should work with playwright', async () => {
+    const { browser } = await initPlaywright(app.serverUrl);
 
     const page = await browser.newPage();
 
-    const wrapper = wrapPuppeteerPage(page);
+    const wrapper = wrapPlaywrightPage(page);
 
     await page.goto(app.serverUrl);
 

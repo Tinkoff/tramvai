@@ -47,9 +47,9 @@ it('main page HTML snapshot', async () => {
 });
 ```
 
-### Testing app in browser with the `puppeteer`
+### Testing app in browser with the `playwright`
 
-You may use another library [@tramvai/test-puppeteer](references/tramvai/test/puppeteer.md) to implement testing in the browser.
+You may use another library [@tramvai/test-pw](references/tramvai/test/playwright.md) to implement testing in the browser.
 
 ### Usage of `@tinkoff/mocker` in tests
 

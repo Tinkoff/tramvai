@@ -1,6 +1,6 @@
 import type { StartCliResult } from '@tramvai/test-integration';
 import { startCli } from '@tramvai/test-integration';
-import { initPuppeteer } from '@tramvai/test-puppeteer';
+import { initPlaywright } from '@tramvai/test-pw';
 import path from 'path';
 
 jest.setTimeout(30000);
@@ -19,7 +19,7 @@ describe('react-18-integration', () => {
   });
 
   it('main page render full content after hydration', async () => {
-    const { browser } = await initPuppeteer(app.serverUrl);
+    const { browser } = await initPlaywright(app.serverUrl);
 
     const page = await browser.newPage();
 

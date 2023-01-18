@@ -5,7 +5,7 @@ import { start } from '@tramvai/cli';
 import type { PromiseType } from 'utility-types';
 import { getPort } from '@tramvai/internal-test-utils/utils/getPort';
 import { getServerUrl } from '@tramvai/test-integration';
-import { initPuppeteer } from '@tramvai/test-puppeteer';
+import { initPlaywright } from '@tramvai/test-pw';
 import { getListeningPort } from '../utils/getListeningPort';
 
 const FIXTURES_DIR = resolve(__dirname, '__fixtures__');
@@ -129,7 +129,7 @@ describe('@tramvai/cli start command', () => {
       it('react-refresh should work', async () => {
         const serverUrl = getServerUrl(startResult);
 
-        const { browser, close: closeBrowser } = await initPuppeteer(serverUrl);
+        const { browser, close: closeBrowser } = await initPlaywright(serverUrl);
 
         const page = await browser.newPage();
 

@@ -43,20 +43,20 @@ describe('render', () => {
     const { page } = await getPageWrapper('/');
 
     const scripts = await page.evaluate(() => {
-      return Array.from(document.querySelectorAll('script[src]')).map(
-        (script: HTMLScriptElement) => script.src
+      return Array.from(document.querySelectorAll<HTMLScriptElement>('script[src]')).map(
+        (script) => script.src
       );
     });
 
     const styles = await page.evaluate(() => {
-      return Array.from(document.querySelectorAll('link[rel=stylesheet]')).map(
-        (link: HTMLLinkElement) => link.href
+      return Array.from(document.querySelectorAll<HTMLLinkElement>('link[rel=stylesheet]')).map(
+        (link) => link.href
       );
     });
 
     const preload = await page.evaluate(() => {
-      return Array.from(document.querySelectorAll('link[rel=preload]')).map(
-        (link: HTMLLinkElement) => link.href
+      return Array.from(document.querySelectorAll<HTMLLinkElement>('link[rel=preload]')).map(
+        (link) => link.href
       );
     });
 

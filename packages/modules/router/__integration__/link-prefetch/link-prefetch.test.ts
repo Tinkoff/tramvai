@@ -41,14 +41,10 @@ describe('router/link-prefetch', () => {
       ]
     `);
 
-    page.setRequestInterception(true);
-
     page.on('request', (request) => {
       if (request.url().startsWith(staticUrl)) {
         assetsRequests.push(request.url());
       }
-
-      request.continue();
     });
 
     await page.goto(`${getApp().serverUrl}/`);

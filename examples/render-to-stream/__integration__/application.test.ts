@@ -1,6 +1,6 @@
 import type { StartCliResult } from '@tramvai/test-integration';
 import { startCli } from '@tramvai/test-integration';
-import { initPuppeteer } from '@tramvai/test-puppeteer';
+import { initPlaywright } from '@tramvai/test-pw';
 import path from 'path';
 
 jest.setTimeout(30000);
@@ -47,7 +47,7 @@ describe('render-to-stream', () => {
   });
 
   it('client hydration', async () => {
-    const { browser, getPageWrapper } = await initPuppeteer(app.serverUrl);
+    const { browser, getPageWrapper } = await initPlaywright(app.serverUrl);
 
     const { page } = await getPageWrapper(app.serverUrl);
 

@@ -19,24 +19,22 @@ describe('resources inliner', () => {
 
     const { page } = await getPageWrapper();
 
-    page.setRequestInterception(true);
-
-    page.on('request', (request) => {
-      if (request.url() === 'https://test.acdn.tinkoff.ru/123.css') {
-        request.respond({
+    page.route('**/*', (route) => {
+      if (route.request().url() === 'https://test.acdn.tinkoff.ru/123.css') {
+        route.fulfill({
           body: '',
           status: 200,
         });
       } else {
-        request.continue();
+        route.continue();
       }
     });
 
     await page.goto(`${getApp().serverUrl}/`);
 
     const links = await page.evaluate(() => {
-      return Array.from(document.querySelectorAll('link[rel=stylesheet]')).map(
-        (link: HTMLLinkElement) => link.href
+      return Array.from(document.querySelectorAll<HTMLLinkElement>('link[rel=stylesheet]')).map(
+        (link) => link.href
       );
     });
     const styles = await page.evaluate(() => {
@@ -55,7 +53,7 @@ describe('resources inliner', () => {
     await page.reload();
 
     const linksAfterReload = await page.evaluate(() => {
-      return Array.from(document.querySelectorAll('link[rel=stylesheet]')).map(
+      return Array.from(document.querySelectorAll<HTMLLinkElement>('link[rel=stylesheet]')).map(
         (link: HTMLLinkElement) => link.href
       );
     });

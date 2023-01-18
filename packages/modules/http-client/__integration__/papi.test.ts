@@ -22,7 +22,7 @@ describe('HttpClientModule, papi', () => {
     );
 
     await page.goto(`${serverUrl}/http-client-papi/`, {
-      waitUntil: 'networkidle0',
+      waitUntil: 'networkidle',
     });
 
     expect(

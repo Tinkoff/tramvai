@@ -1,30 +1,30 @@
-import type puppeteer from 'puppeteer';
+import type { Page } from 'playwright-core';
 
-export const getRouteName = (page: puppeteer.Page) => {
+export const getRouteName = (page: Page) => {
   return page.evaluate(() => {
     return document.getElementById('route-name')?.innerText;
   });
 };
 
-export const getPageTitle = (page: puppeteer.Page) => {
+export const getPageTitle = (page: Page) => {
   return page.evaluate(() => {
     return document.getElementById('page')?.innerText;
   });
 };
 
-export const getUrlPath = (page: puppeteer.Page) => {
+export const getUrlPath = (page: Page) => {
   return page.evaluate(() => {
     return document.getElementById('url-path')?.innerText;
   });
 };
 
-export const getUseRoute = (page: puppeteer.Page) => {
+export const getUseRoute = (page: Page) => {
   return page.evaluate(() => {
     return document.getElementById('use-route')?.innerText;
   });
 };
 
-export const checkIsSpa = (page: puppeteer.Page) => {
+export const checkIsSpa = (page: Page) => {
   let hasLoaded = false;
 
   page.on('load', () => {
@@ -35,19 +35,19 @@ export const checkIsSpa = (page: puppeteer.Page) => {
   };
 };
 
-export const checkLatestNavigationType = (page: puppeteer.Page) => {
+export const checkLatestNavigationType = (page: Page) => {
   return page.evaluate(() => {
     return window.__LATEST_NAVIGATION_TYPE__;
   });
 };
 
-export const internalRouterStateFromDi = (page: puppeteer.Page) => {
+export const internalRouterStateFromDi = (page: Page) => {
   return page.evaluate(() => {
     return window.contextExternal.di.get('router router').lastNavigation;
   });
 };
 
-export const internalRouterStateFromState = (page: puppeteer.Page) => {
+export const internalRouterStateFromState = (page: Page) => {
   return page.evaluate(() => {
     return window.contextExternal.getState().router;
   });

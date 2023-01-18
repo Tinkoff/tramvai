@@ -1,7 +1,7 @@
 import type { StartCliResult } from '@tramvai/test-integration';
 import { sleep } from '@tramvai/test-integration';
 import { startCli } from '@tramvai/test-integration';
-import { initPuppeteer } from '@tramvai/test-puppeteer';
+import { initPlaywright } from '@tramvai/test-pw';
 import path from 'path';
 import fetch from 'node-fetch';
 
@@ -91,7 +91,7 @@ describe('page-render-mode', () => {
   });
 
   it('main page render full content after hydration', async () => {
-    const { browser } = await initPuppeteer(app.serverUrl);
+    const { browser } = await initPlaywright(app.serverUrl);
 
     const page = await browser.newPage();
 
@@ -108,7 +108,7 @@ describe('page-render-mode', () => {
   });
 
   it('second page render full content after hydration', async () => {
-    const { browser } = await initPuppeteer(app.serverUrl);
+    const { browser } = await initPlaywright(app.serverUrl);
 
     const page = await browser.newPage();
 
@@ -132,7 +132,7 @@ describe('page-render-mode', () => {
     });
 
     it('static page works', async () => {
-      const { browser } = await initPuppeteer(app.serverUrl);
+      const { browser } = await initPlaywright(app.serverUrl);
 
       const page = await browser.newPage();
 

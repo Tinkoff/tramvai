@@ -1,6 +1,6 @@
 import type { StartCliResult } from '@tramvai/test-integration';
 import { startCli } from '@tramvai/test-integration';
-import { initPuppeteer, wrapPuppeteerPage } from '@tramvai/test-puppeteer';
+import { initPlaywright, wrapPlaywrightPage } from '@tramvai/test-pw';
 import path from 'path';
 
 jest.setTimeout(30000);
@@ -40,10 +40,10 @@ describe('fs-pages', () => {
   // @todo: how to test client actions?
 
   it('SPA transition from file-system page to file-system page', async () => {
-    const { browser } = await initPuppeteer(app.serverUrl);
+    const { browser } = await initPlaywright(app.serverUrl);
 
     const page = await browser.newPage();
-    const wrapper = wrapPuppeteerPage(page);
+    const wrapper = wrapPlaywrightPage(page);
 
     await page.goto(app.serverUrl);
 
@@ -68,10 +68,10 @@ describe('fs-pages', () => {
   });
 
   it('SPA transition from usual page to file-system page', async () => {
-    const { browser } = await initPuppeteer(app.serverUrl);
+    const { browser } = await initPlaywright(app.serverUrl);
 
     const page = await browser.newPage();
-    const wrapper = wrapPuppeteerPage(page);
+    const wrapper = wrapPlaywrightPage(page);
 
     await page.goto(`${app.serverUrl}/old/`);
 
@@ -95,10 +95,10 @@ describe('fs-pages', () => {
   });
 
   it('SPA transition from file-system page to usual page', async () => {
-    const { browser } = await initPuppeteer(app.serverUrl);
+    const { browser } = await initPlaywright(app.serverUrl);
 
     const page = await browser.newPage();
-    const wrapper = wrapPuppeteerPage(page);
+    const wrapper = wrapPlaywrightPage(page);
 
     await page.goto(app.serverUrl);
 

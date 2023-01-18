@@ -1,5 +1,5 @@
 import { resolve } from 'path';
-import { initPuppeteer } from '@tramvai/test-puppeteer';
+import { initPlaywright } from '@tramvai/test-pw';
 import { runRealApp } from '../startCliRealApp';
 import type { StartCliResult } from '../startCli';
 
@@ -57,8 +57,8 @@ describe('test/integration/app/runFakeApp', () => {
     `);
   });
 
-  it('should work with puppeteer', async () => {
-    const { browser } = await initPuppeteer(app.serverUrl);
+  it('should work with playwright', async () => {
+    const { browser } = await initPlaywright(app.serverUrl);
 
     const page = await browser.newPage();
 

@@ -1,15 +1,15 @@
 {
-  "name": "@tramvai/test-puppeteer",
-  "sourceRoot": "packages/tramvai/test/puppeteer/src",
-  "projectType": "library",
-  "targets": {
-    "build-publish": {
-      "outputs": [
-        "packages/tramvai/test/puppeteer/lib",
-        "packages/tramvai/test/puppeteer/__migrations__",
-        "packages/tramvai/test/puppeteer/package.json"
-      ],
-      "executor": "@tramvai/nx-plugin:build"
+    "name": "@tramvai/test-puppeteer",
+    "sourceRoot": "packages/tramvai/test/puppeteer/src",
+    "projectType": "library",
+    "targets": {
+        "build-publish": {
+            "outputs": [
+                "packages/tramvai/test/puppeteer/lib",
+                "packages/tramvai/test/puppeteer/__migrations__",
+                "packages/tramvai/test/puppeteer/package.json"
+            ],
+            "executor": "@tramvai/nx-plugin:build"
+        }
     }
-  }
 }

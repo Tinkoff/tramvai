@@ -1,4 +1,4 @@
-import type { Page } from 'puppeteer';
+import type { Page } from 'playwright-core';
 import { testApp } from '@tramvai/internal-test-utils/testApp';
 import { testAppInBrowser } from '@tramvai/internal-test-utils/browser';
 import { sleep } from '@tramvai/test-integration';

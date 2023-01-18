@@ -87,7 +87,7 @@ You may use helper library [@tramvai/test-child-app](references/tramvai/test/chi
 Full testing requires to run standalone app that will reuse your app.
 
 1. Create test app in your repository. Also you may use `@tramvai/test-trandapp` for generating simple app without hassle (not yet available in open-source).
-2. Using [@tramvai/test-integration](references/tramvai/test/integration.md) and [@tramvai/test-puppeteer](references/tramvai/test/puppeteer.md) you may perform any kind of tests including testing in browser.
+2. Using [@tramvai/test-integration](references/tramvai/test/integration.md) and [@tramvai/test-pw](references/tramvai/test/playwright.md) you may perform any kind of tests including testing in browser.
 
 ### Deploy
 

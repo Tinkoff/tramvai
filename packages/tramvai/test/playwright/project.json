@@ -1,0 +1,15 @@
+{
+  "name": "@tramvai/test-pw",
+  "sourceRoot": "packages/tramvai/test/playwright/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/tramvai/test/playwright/lib",
+        "packages/tramvai/test/playwright/__migrations__",
+        "packages/tramvai/test/playwright/package.json"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

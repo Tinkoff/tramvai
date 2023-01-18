@@ -1,7 +1,7 @@
 import path from 'path';
 import type { StartCliResult } from '@tramvai/test-integration';
 import { startCli } from '@tramvai/test-integration';
-import { initPuppeteer } from '@tramvai/test-puppeteer';
+import { initPlaywright } from '@tramvai/test-pw';
 
 jest.setTimeout(30000);
 
@@ -25,7 +25,7 @@ describe('assets', () => {
   });
 
   it('client HTML snapshot', async () => {
-    const { browser, getPageWrapper } = await initPuppeteer(app.serverUrl);
+    const { browser, getPageWrapper } = await initPlaywright(app.serverUrl);
     const { page } = await getPageWrapper(app.serverUrl);
 
     expect(

@@ -291,9 +291,7 @@ describe('router/no-spa-with-not-found', () => {
   describe('using history api directly', () => {
     it('replace state internal', async () => {
       const { serverUrl } = getApp();
-      const { page, waitForUrl } = await getPageWrapper(
-        '/history/replace-state/internal/'
-      );
+      const { page, waitForUrl } = await getPageWrapper('/history/replace-state/internal/');
 
       await waitForUrl(`${serverUrl}/history/replace-state/internal/?test=a`);
 
@@ -360,21 +358,22 @@ describe('router/no-spa-with-not-found', () => {
       const { page } = await getPageWrapper();
       const response = await request('/').expect(200);
 
-      page.setRequestInterception(true);
+      page.route(
+        () => true,
+        (route) => {
+          if (route.request().url() === 'https://www-test.tinkoff.ru/') {
+            route.fulfill({
+              status: response.status,
+              headers: response.headers,
+              body: response.text,
+            });
 
-      page.on('request', (req) => {
-        if (req.url() === 'https://www-test.tinkoff.ru/') {
-          req.respond({
-            status: response.status,
-            headers: response.headers,
-            body: response.text,
-          });
+            return;
+          }
 
-          return;
+          return route.continue();
         }
-
-        return req.continue();
-      });
+      );
 
       await page.goto('https://www-test.tinkoff.ru/');
 

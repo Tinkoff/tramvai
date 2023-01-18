@@ -76,8 +76,7 @@ Unit testing approach is perfectly suited for these blocks.
 
 ### Actions
 
-Actions can contain complex logic and interactions with global state and DI providers that can easily be covered by unit tests.
-Library `@tramvai/test-unit` export `testAction` API for this purpose, here a simple example:
+Actions can contain complex logic and interactions with global state and DI providers that can easily be covered by unit tests. Library `@tramvai/test-unit` export `testAction` API for this purpose, here a simple example:
 
 ```ts
 import { declareAction } from '@tramvai/core';
@@ -102,6 +101,7 @@ it('test', async () => {
 ```
 
 Even for simple unit tests some of important dependencies need to be mocked or initialized:
+
 - DI container
 - Store for reducers
 
@@ -144,7 +144,7 @@ it('test', async () => {
   const { run } = testAction(action, {
     modules: [
       // configure `ENV_MANAGER_TOKEN` mock, created by `CommonTestModule`, with `forRoot`
-      CommonTestModule.forRoot({ env: { ENV_KEY: 'ENV_VALUE' } })
+      CommonTestModule.forRoot({ env: { ENV_KEY: 'ENV_VALUE' } }),
     ],
   });
 
@@ -154,9 +154,7 @@ it('test', async () => {
 
 #### DI configuration
 
-DI mock is the main opportunity to change the behavior of dependencies in unit tests.
-You can pass a custom DI container to utilities, or only list of required modules and providers.
-In example below both test suites are equivalent:
+DI mock is the main opportunity to change the behavior of dependencies in unit tests. You can pass a custom DI container to utilities, or only list of required modules and providers. In example below both test suites are equivalent:
 
 ```ts
 import { testAction } from '@tramvai/test-unit';
@@ -201,12 +199,14 @@ it('test', async () => {
   const request = jest.fn(async () => ({ payload: null }));
 
   // create mock for HTTP_CLIENT
-  const providers = [{
-    provide: HTTP_CLIENT,
-    useValue: {
-      request,
+  const providers = [
+    {
+      provide: HTTP_CLIENT,
+      useValue: {
+        request,
+      },
     },
-  }];
+  ];
 
   // pass this mock to DI
   const { run } = testAction(action, { providers });
@@ -220,20 +220,15 @@ it('test', async () => {
 
 :::tip
 
-Better way to test HTTP calls is to mock as little as possible.
-For unit tests, prefer to mock `node-fetch` library, and use real HTTP clients implementations.
+Better way to test HTTP calls is to mock as little as possible. For unit tests, prefer to mock `node-fetch` library, and use real HTTP clients implementations.
 
-This kind of mocks requires more setup code, because we need to initialize `tramvai` network layer.
-Some modules export specific utilities for simplifying testing process.
-For example, `@tramvai/module-http-client` export [testApi](https://tramvai.dev/docs/references/modules/http-client/#testing-your-api-clients) helper.
+This kind of mocks requires more setup code, because we need to initialize `tramvai` network layer. Some modules export specific utilities for simplifying testing process. For example, `@tramvai/module-http-client` export [testApi](https://tramvai.dev/docs/references/modules/http-client/#testing-your-api-clients) helper.
 
 :::
 
 #### Store configuration
 
-For `tramvai` Store mock you can pass a list of reducers, or initial state object, or both.
-Reducers will be registered in Store directly, and if initial state will have the same keys, this values will be applied for the relevant reducers.
-For the rest of initial state keys, fake reducers will be created.
+For `tramvai` Store mock you can pass a list of reducers, or initial state object, or both. Reducers will be registered in Store directly, and if initial state will have the same keys, this values will be applied for the relevant reducers. For the rest of initial state keys, fake reducers will be created.
 
 Example with passed `stores`:
 
@@ -286,8 +281,7 @@ import { createReducer, createEvent } from '@tramvai/state';
 import { declareAction } from '@tramvai/core';
 
 const increment = createEvent('increment');
-const reducer = createReducer('counter', 0)
-  .on(increment, (state) => state + 1);
+const reducer = createReducer('counter', 0).on(increment, (state) => state + 1);
 
 const action = declareAction({
   name: 'increment',
@@ -311,9 +305,7 @@ it('test', async () => {
 
 ### Reducers
 
-Every reducers in `tramvai` application is an independent part of the global Store, and also can be covered by unit tests.
-Because reducers do not interact directly with DI, we don't need to mock anything.
-Library `@tramvai/test-unit` export `testReducer` API for this purpose, where Store will be created automatically, e.g.:
+Every reducers in `tramvai` application is an independent part of the global Store, and also can be covered by unit tests. Because reducers do not interact directly with DI, we don't need to mock anything. Library `@tramvai/test-unit` export `testReducer` API for this purpose, where Store will be created automatically, e.g.:
 
 ```ts
 import { createReducer, createEvent } from '@tramvai/state';
@@ -321,8 +313,7 @@ import { testReducer } from '@tramvai/test-unit';
 
 const increment = createEvent('increment');
 
-const reducer = createReducer('counter', 0)
-  .on(increment, (state) => state + 1);
+const reducer = createReducer('counter', 0).on(increment, (state) => state + 1);
 
 it('increment', () => {
   const store = testReducer(reducer);
@@ -337,16 +328,13 @@ it('increment', () => {
 
 ### Modules
 
-In general, modules in `tramvai` are just configurable sets of DI providers, united by common features.
-Testing a module involves checking its initialization and behavior of the providers added to the application.
-Library `@tramvai/test-unit` exports `testModule` API for this purpose, and like `testAction` API, DI container mock will be created automatically, and can be configured or replaced.
+In general, modules in `tramvai` are just configurable sets of DI providers, united by common features. Testing a module involves checking its initialization and behavior of the providers added to the application. Library `@tramvai/test-unit` exports `testModule` API for this purpose, and like `testAction` API, DI container mock will be created automatically, and can be configured or replaced.
 
 :::tip
 
 Integration tests usually is a better way to testing complex modules, because you can test a real application behavior, not only `tramvai` internals.
 
-If the module being tested has a direct impact on the response of the application (HTML markup, redirects, any other side-effect), use `@tramvai/test-integration` library, and additionally `@tramvai/test-puppeteer` to run tests in a real browser.
-But if your module only adds some dependencies without side-effects to DI, e.g. API clients, unit testing is a simpliest way to go.
+If the module being tested has a direct impact on the response of the application (HTML markup, redirects, any other side-effect), use `@tramvai/test-integration` library, and additionally `@tramvai/test-pw` to run tests in a real browser. But if your module only adds some dependencies without side-effects to DI, e.g. API clients, unit testing is a simpliest way to go.
 
 :::
 
@@ -359,8 +347,7 @@ interface CustomLogger {
   log(message: string): void;
 }
 
-const CUSTOM_LOGGER_TOKEN =
-  createToken<(name: string) => CustomLogger>('custom logger');
+const CUSTOM_LOGGER_TOKEN = createToken<(name: string) => CustomLogger>('custom logger');
 
 @Module({
   providers: [
@@ -380,7 +367,7 @@ Simple unit test for `CUSTOM_LOGGER_TOKEN` provider can look like this:
 ```ts
 import { testModule } from '@tramvai/test-unit';
 
-jest.spyOn(global.console, 'log')
+jest.spyOn(global.console, 'log');
 
 it('test', () => {
   const { di } = testModule(CustomLoggerModule);
@@ -419,7 +406,7 @@ class TestModule {}
 import { testModule } from '@tramvai/test-unit';
 import { commandLineListTokens } from '@tramvai/core';
 
-jest.spyOn(global.console, 'log')
+jest.spyOn(global.console, 'log');
 
 it('test', async () => {
   const { runLine } = testModule(TestModule);
@@ -467,7 +454,7 @@ We can pass `CustomLoggerModule` to `modules` property in `testModule` utility:
 import { testModule } from '@tramvai/test-unit';
 import { commandLineListTokens } from '@tramvai/core';
 
-jest.spyOn(global.console, 'log')
+jest.spyOn(global.console, 'log');
 
 it('test', async () => {
   const { runLine } = testModule(TestModule, {
@@ -618,8 +605,7 @@ import { testComponent } from '@tramvai/test-react';
 
 const incrementEvent = createEvent('increment');
 
-const CountStore = createReducer('count', 0)
-  .on(incrementEvent, (state) => state + 1);
+const CountStore = createReducer('count', 0).on(incrementEvent, (state) => state + 1);
 
 const Component = () => {
   const count = useStore(CountStore);
@@ -629,7 +615,7 @@ const Component = () => {
 
 it('state', async () => {
   const { context, act, screen } = testComponent(<Component />, {
-    stores: [CountStore]
+    stores: [CountStore],
   });
 
   expect(screen.getByRole('heading').textContent).toBe('0');
@@ -676,8 +662,7 @@ it('hook', async () => {
 
 ## Integration tests
 
-For any web applications, comprehensive testing requires running that application in a browser.
-For SSR applications, another main requirement is to build and start server code of the application.
+For any web applications, comprehensive testing requires running that application in a browser. For SSR applications, another main requirement is to build and start server code of the application.
 
 We will use `jest` and `puppeteer` in examples below.
 
@@ -685,15 +670,13 @@ We will use `jest` and `puppeteer` in examples below.
 
 - `@tramvai/test-integration` responsible for running application
 - `@tramvai/test-integration-jest` contains `jest` configuration
-- `@tramvai/test-puppeteer` provides wrappers for testing application in-browser
+- `@tramvai/test-pw` provides wrappers for testing application in-browser
 
 ### Setup test suite
 
-Test suite in `jest` terms is the root `describe` block in the test file.
-We need to build and run application once for test suite, and close application server when test suite is finished.
+Test suite in `jest` terms is the root `describe` block in the test file. We need to build and run application once for test suite, and close application server when test suite is finished.
 
-`@tramvai/test-integration` export `startCli` method, which works similar to `tramvai new` command.
-This API allows to configure application build, for example provide any environment variables or run application on different port.
+`@tramvai/test-integration` export `startCli` method, which works similar to `tramvai new` command. This API allows to configure application build, for example provide any environment variables or run application on different port.
 
 :::caution
 
@@ -720,7 +703,7 @@ describe('testing-app', () => {
         SOME_ENV: 'test',
       },
     });
-  // timeout depends on your application build time
+    // timeout depends on your application build time
   }, 80000);
 
   // close after end
@@ -743,7 +726,8 @@ For example, we want to check that the page `/` returns 200 status code and appl
 ```ts
 it('request', async () => {
   // `supertest` API, send request to root page
-  const response = await app.request('/')
+  const response = await app
+    .request('/')
     // test status code
     .expect(200)
     // test headers
@@ -792,7 +776,7 @@ Or add a file in the `mocks` folder:
 module.exports = {
   api: 'AWESOME_API',
   mocks: {},
-}
+};
 ```
 
 `app.mocker.addMocks` will have no effect if mocked API (method first argument) not in the list!
@@ -853,11 +837,11 @@ it('papi', async () => {
 `puppeteer` instance need to be initialized in the start of the test suite, and closed in the end:
 
 ```ts
-import { initPuppeteer } from '@tramvai/test-puppeteer';
+import { initPlaywright } from '@tramvai/test-pw';
 
 it('puppeteer', async () => {
   // pass application url, usually http://localhost:3000
-  const { browser } = await initPuppeteer(app.serverUrl);
+  const { browser } = await initPlaywright(app.serverUrl);
 
   // ...
 
@@ -871,19 +855,19 @@ Default example, open `/second-page/` application url in browser, step by step:
 
 ```ts
 import {
-  initPuppeteer,
+  initPlaywright,
   // highlight-next-line
-  wrapPuppeteerPage,
-} from '@tramvai/test-puppeteer';
+  wrapPlaywrightPage,
+} from '@tramvai/test-pw';
 
 it('puppeteer', async () => {
-  const { browser } = await initPuppeteer(app.serverUrl);
+  const { browser } = await initPlaywright(app.serverUrl);
 
   // highlight-start
   // open empty browser tab
   const page = await browser.newPage();
   // wrapper required for better logs
-  const wrapper = wrapPuppeteerPage(page);
+  const wrapper = wrapPlaywrightPage(page);
 
   // equivalent to navigate browser tab to "http://localhost:3000/second-page/" url
   await page.goto(`${app.serverUrl}/second-page/`);
@@ -897,7 +881,7 @@ The same, but simplified example:
 
 ```ts
 it('puppeteer', async () => {
-  const { browser, getPageWrapper } = await initPuppeteer(app.serverUrl);
+  const { browser, getPageWrapper } = await initPlaywright(app.serverUrl);
 
   // highlight-next-line
   const { page } = await getPageWrapper(`${app.serverUrl}/second-page/`);
@@ -912,7 +896,7 @@ Page wrapper return special `router` object, which works directly with `tramvai`
 
 ```ts
 it('puppeteer', async () => {
-  const { browser, getPageWrapper } = await initPuppeteer(app.serverUrl);
+  const { browser, getPageWrapper } = await initPlaywright(app.serverUrl);
 
   // highlight-start
   const { router } = await getPageWrapper(`${app.serverUrl}/second-page/`);
@@ -941,7 +925,7 @@ In example below we will check `.application` element content with both methods:
 
 ```ts
 it('puppeteer', async () => {
-  const { browser, getPageWrapper } = await initPuppeteer(app.serverUrl);
+  const { browser, getPageWrapper } = await initPlaywright(app.serverUrl);
 
   const { page } = await getPageWrapper(app.serverUrl);
 
@@ -963,7 +947,7 @@ For example, we want to block any requests to `https://www.test.api.example`:
 
 ```ts
 it('puppeteer', async () => {
-  const { browser, getPageWrapper } = await initPuppeteer(app.serverUrl);
+  const { browser, getPageWrapper } = await initPlaywright(app.serverUrl);
 
   const { page } = await getPageWrapper(app.serverUrl);
 
