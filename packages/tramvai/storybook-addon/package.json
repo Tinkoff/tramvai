@@ -3,7 +3,7 @@
   "version": "0.0.0-stub",
   "description": "",
   "main": "lib/preset.js",
-  "typings": "src/preset.ts",
+  "typings": "lib/preset.d.ts",
   "files": [
     "lib"
   ],
