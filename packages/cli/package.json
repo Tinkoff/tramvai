@@ -106,6 +106,7 @@
     "handlebars": "^4.7.7",
     "http-proxy": "^1.18.1",
     "image-size": "^1.0.2",
+    "ini": "^3.0.1",
     "inquirer": "^7.3.3",
     "inquirer-autocomplete-prompt": "^1.4.0",
     "inspectpack": "^4.7.1",

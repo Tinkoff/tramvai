@@ -328,6 +328,35 @@ const parameters: TramvaiStoriesParameters = {
 };
 ```
 
+## Troubleshooting
+
+### "Rendered more hooks than during the previous render."
+
+In case of using both `fastRefresh` and `strictMode` in `reactOptions` in Storybook config in main.js, you might see the error message above.
+
+This is a known issue in [Storybook itself](https://github.com/storybookjs/storybook/issues/15223), as a temporary workaround you can simply disable the `strictMode` in Storybook config.
+
+Won't work:
+
+```js title=".storybook/main.js"
+module.exports = {
+  reactOptions: {
+    fastRefresh: true,
+    strictMode: true,
+  }
+};
+```
+
+Works:
+
+```js title=".storybook/main.js"
+module.exports = {
+  reactOptions: {
+    fastRefresh: true,
+  }
+};
+```
+
 ## Contribute
 
 For testing changes in this plugin locally, you need a few steps:
