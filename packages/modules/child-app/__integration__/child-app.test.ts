@@ -25,11 +25,12 @@ export const Cmp = () => {
 let childAppBase: PromiseType<ReturnType<typeof start>>;
 let childAppBaseNotPreloaded: PromiseType<ReturnType<typeof start>>;
 let childAppState: PromiseType<ReturnType<typeof start>>;
+let childAppReactQuery: PromiseType<ReturnType<typeof start>>;
 
 beforeAll(async () => {
   await outputFile(REFRESH_CMP_PATH, REFRESH_CMP_CONTENT_START);
 
-  [childAppBase, childAppBaseNotPreloaded, childAppState] = await Promise.all([
+  [childAppBase, childAppBaseNotPreloaded, childAppState, childAppReactQuery] = await Promise.all([
     start({
       port: 0,
       config: {
@@ -61,6 +62,14 @@ beforeAll(async () => {
         name: 'state',
       },
     }),
+    start({
+      port: 0,
+      config: {
+        type: 'child-app',
+        root: resolve(__dirname, 'child-app', 'react-query'),
+        name: 'react-query',
+      },
+    }),
   ]);
 });
 
@@ -81,6 +90,9 @@ const { getApp } = testApp({
               get 'process.env.CHILD_APP_STATE'() {
                 return `"${getStaticUrl(childAppState)}/"`;
               },
+              get 'process.env.CHILD_APP_REACT_QUERY'() {
+                return `"${getStaticUrl(childAppReactQuery)}/"`;
+              },
             },
           },
         },
@@ -95,6 +107,7 @@ afterAll(async () => {
     childAppBase.close(),
     childAppBaseNotPreloaded.close(),
     childAppState.close(),
+    childAppReactQuery.close(),
   ]);
 });
 
@@ -246,5 +259,24 @@ describe('errors', () => {
     const { application } = await render('/error/unknown/');
 
     expect(application).toMatchInlineSnapshot(`"<div>Error page still works</div>"`);
+  });
+});
+
+describe('react-query', () => {
+  it('should work with react-query', async () => {
+    const { request, render } = getApp();
+
+    await request('/react-query/').expect(200);
+
+    const { application } = await render('/react-query/');
+
+    expect(application).toMatchInlineSnapshot(`
+      "
+            <div>Content from root</div>
+            
+            <div>Hello, Mock!</div>
+            
+          "
+    `);
   });
 });

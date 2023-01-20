@@ -29,4 +29,11 @@ export const routes: typeof ROUTES_TOKEN = [
       bundle: 'error',
     },
   },
+  {
+    name: 'react-query',
+    path: '/react-query',
+    config: {
+      bundle: 'react-query',
+    },
+  },
 ];
