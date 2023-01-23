@@ -96,5 +96,14 @@ export default (configManager: ConfigManager) => (config: Config) => {
       },
     ]);
 
+  // TODO: remove after dropping support for node@14
+  if (configManager.buildType === 'server') {
+    config.plugin('node-performance').use(webpack.ProvidePlugin, [
+      {
+        performance: ['perf_hooks', 'performance'],
+      },
+    ]);
+  }
+
   return config;
 };
