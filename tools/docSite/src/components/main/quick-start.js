@@ -17,7 +17,7 @@ export function QuickStart() {
         </p>
         <Code language="sh">{code}</Code>
         <div className="text--center">
-          <BaseLink to="docs/get-started/create-app">
+          <BaseLink to="docs/get-started/quick-start">
             Get started
           </BaseLink>
         </div>

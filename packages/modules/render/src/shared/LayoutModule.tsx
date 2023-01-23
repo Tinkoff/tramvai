@@ -4,6 +4,7 @@ import {
   DEFAULT_LAYOUT_COMPONENT,
   DEFAULT_HEADER_COMPONENT,
   DEFAULT_FOOTER_COMPONENT,
+  DEFAULT_ERROR_BOUNDARY_COMPONENT,
   LAYOUT_OPTIONS,
 } from '@tramvai/tokens-render';
 
@@ -32,6 +33,7 @@ const RenderChildrenComponent = ({ children }) => children;
         layoutDefault: DEFAULT_LAYOUT_COMPONENT,
         footerDefault: { token: DEFAULT_FOOTER_COMPONENT, optional: true },
         headerDefault: { token: DEFAULT_HEADER_COMPONENT, optional: true },
+        errorBoundaryDefault: { token: DEFAULT_ERROR_BOUNDARY_COMPONENT, optional: true },
       },
     },
   ],

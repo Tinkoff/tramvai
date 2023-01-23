@@ -42,4 +42,4 @@ Module [@tramvai/module-router](references/modules/router/base.md) is responsibl
 
 Our `PokemonList` page is now registered in the app, and it will be automatically rendered on the `/` route, and available on `http://localhost:3000/`!
 
-**[Next lesson](tutorials/pokedex-app/03-create-http-client.md)**
+**[Next lesson](02-tutorial/03-create-http-client.md)**

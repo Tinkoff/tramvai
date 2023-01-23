@@ -352,4 +352,4 @@ NODE_TLS_REJECT_UNAUTHORIZED=0 tramvai start pokedex
 
 :::
 
-**[Next lesson](tutorials/pokedex-app/05-dynamic-page.md)**
+**[Next lesson](02-tutorial/05-dynamic-page.md)**

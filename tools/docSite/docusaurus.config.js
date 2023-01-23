@@ -122,7 +122,7 @@ const docusaurusConfig = {
           title: 'Docs',
           items: [
             { to: 'docs/concepts/overview', label: 'Architecture' },
-            { to: 'docs/get-started/create-app', label: 'Get started' },
+            { to: 'docs/get-started/quick-start', label: 'Get started' },
             { to: 'docs/references/tramvai/core', label: 'API reference' },
           ],
         },

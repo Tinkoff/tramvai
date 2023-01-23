@@ -18,6 +18,9 @@
     "watch": "tsc -w",
     "build-for-publish": "true"
   },
+  "devDependencies": {
+    "@tramvai/react": "0.0.0-stub"
+  },
   "dependencies": {
     "@tinkoff/htmlpagebuilder": "0.0.0-stub"
   },

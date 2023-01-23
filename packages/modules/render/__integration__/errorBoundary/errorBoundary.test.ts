@@ -12,6 +12,18 @@ describe('errorBoundary', () => {
           options: {
             polyfill: 'polyfill.ts',
           },
+          configurations: {
+            definePlugin: {
+              dev: {
+                'process.env.TEST_DEFAULT_ERROR_BOUNDARY': true,
+              },
+            },
+            fileSystemPages: {
+              enable: true,
+              pagesDir: 'pages',
+              routesDir: false,
+            },
+          },
         },
       },
     },
@@ -99,15 +111,59 @@ describe('errorBoundary', () => {
     });
   });
 
-  describe('Error page render, show legacy boundary fallback', () => {
+  describe('Error page render, show specific page boundary from file-system pages', () => {
+    it('HTTP status', async () => {
+      const { request } = getApp();
+
+      const { statusCode } = await request('/page-error-fs-specific-fallback/');
+
+      expect(statusCode).toBe(500);
+    });
+
+    it('SSR render', async () => {
+      const { render } = getApp();
+
+      const { parsed } = await render('/page-error-fs-specific-fallback/');
+      const pageContent = parsed.querySelector('main h1').innerText;
+
+      expect(pageContent).toBe('FS Pages Error Boundary');
+    });
+
     it('SSR hydrate', async () => {
-      const { page } = await getPageWrapper('/legacy-error-boundary/');
+      const { page } = await getPageWrapper('/page-error-fs-specific-fallback/');
+
+      const pageContent = await getPageContentTitle(page);
+
+      expect(pageContent).toBe('FS Pages Error Boundary');
+    });
+  });
+
+  describe('Error page render, show default boundary fallback from token', () => {
+    it('HTTP status', async () => {
+      const { request } = getApp();
+
+      const { statusCode } = await request('/token-default-error-boundary/');
+
+      expect(statusCode).toBe(500);
+    });
+
+    it('SSR render', async () => {
+      const { render } = getApp();
+
+      const { parsed } = await render('/token-default-error-boundary/');
+      const pageContent = parsed.querySelector('main h1').innerText;
+
+      expect(pageContent).toBe('Token Default Error Boundary');
+    });
+
+    it('SSR hydrate', async () => {
+      const { page } = await getPageWrapper('/token-default-error-boundary/');
 
       await sleep(100);
 
       const pageContent = await getPageContentTitle(page);
 
-      expect(pageContent).toBe('Legacy Error Boundary');
+      expect(pageContent).toBe('Token Default Error Boundary');
     });
   });
 
@@ -259,25 +315,33 @@ describe('errorBoundary', () => {
     pageContentTitle = await getPageContentTitle(page);
     expect(pageContentTitle).toBe('Page Error Boundary');
 
+    // to page-error-fs-specific-fallback
+
+    await router.navigate('/page-error-fs-specific-fallback/');
+    // wait for page and fallback components sequential loading
+    await sleep(100);
+    pageContentTitle = await getPageContentTitle(page);
+    expect(pageContentTitle).toBe('FS Pages Error Boundary');
+
     // to page-error-not-existed
 
     await router.navigate('/page-error-not-existed/');
     pageContentTitle = await getPageContentTitle(page);
     expect(pageContentTitle).toBe('Default Error Boundary');
 
-    // to legacy-error-boundary
+    // to token-default-error-boundary
 
-    await router.navigate('/legacy-error-boundary/');
+    await router.navigate('/token-default-error-boundary/');
     pageContentTitle = await getPageContentTitle(page);
-    expect(pageContentTitle).toBe('Legacy Error Boundary');
+    expect(pageContentTitle).toBe('Token Default Error Boundary');
 
-    // to page-action-error
+    // // to page-action-error
 
     await router.navigate('/page-action-error/');
     pageContentTitle = await getPageContentTitle(page);
     expect(pageContentTitle).toBe('Default Error Boundary');
 
-    // to page-guard-error
+    // // to page-guard-error
 
     await router.navigate('/page-guard-error/');
     pageContentTitle = await getPageContentTitle(page);

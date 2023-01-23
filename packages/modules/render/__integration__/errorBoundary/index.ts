@@ -10,8 +10,10 @@ import {
 } from '@tramvai/react';
 import { HttpError, throwHttpError } from '@tinkoff/errors';
 import { parse } from '@tinkoff/url';
+import { DEFAULT_ERROR_BOUNDARY_COMPONENT } from '@tramvai/tokens-render';
 import { LegacyErrorBoundary } from './components/LegacyErrorBoundary';
 import { RootErrorBoundary } from './components/RootErrorBoundary';
+import { TokenDefaultErrorBoundary } from './components/TokenDefaultErrorBoundary';
 
 createApp({
   name: 'render-error-boundary',
@@ -39,6 +41,14 @@ createApp({
         },
       },
       {
+        name: 'page-error-fs-specific-fallback',
+        path: '/page-error-fs-specific-fallback/',
+        config: {
+          pageComponent: '@/pages/error-page',
+          errorBoundaryComponent: '@/pages/error-boundary',
+        },
+      },
+      {
         name: 'page-error-not-existed',
         path: '/page-error-not-existed/',
         config: {
@@ -50,6 +60,13 @@ createApp({
         path: '/legacy-error-boundary/',
         config: {
           bundle: 'legacy',
+        },
+      },
+      {
+        name: 'token-default-error-boundary',
+        path: '/token-default-error-boundary/',
+        config: {
+          bundle: 'error',
         },
       },
       {
@@ -78,6 +95,7 @@ createApp({
   bundles: {
     mainDefault: () => import(/* webpackChunkName: 'mainDefault' */ './bundles/mainDefault'),
     legacy: () => import(/* webpackChunkName: 'legacy' */ './bundles/legacy'),
+    error: () => import(/* webpackChunkName: 'error' */ './bundles/error'),
   },
   providers: [
     provide({
@@ -88,6 +106,14 @@ createApp({
       provide: ROOT_ERROR_BOUNDARY_COMPONENT_TOKEN,
       useValue: RootErrorBoundary,
     }),
+    ...(process.env.TEST_DEFAULT_ERROR_BOUNDARY
+      ? [
+          provide({
+            provide: DEFAULT_ERROR_BOUNDARY_COMPONENT,
+            useValue: TokenDefaultErrorBoundary,
+          }),
+        ]
+      : []),
     provide({
       provide: ROUTER_GUARD_TOKEN,
       multi: true,

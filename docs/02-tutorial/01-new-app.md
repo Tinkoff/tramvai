@@ -43,8 +43,8 @@ After loading, you will see a welcome page with the header **Tramvai 🥳**
 
 ## Application structure
 
-A detailed overview of the application structure can be found in [Project structure](get-started/app-structure.md) and in the `README.md` file of our new application.
+A detailed overview of the application structure can be found in [Project structure](01-get-started/02-quick-start.md#application-structure) and in the `README.md` file of our new application.
 
 We recommend using [feature-sliced methodology](https://feature-sliced.design/) to structure the code, which may be overkill for small demonstration applications, but will have a good effect on the structure of the application when it is further developed.
 
-**[Next lesson](tutorials/pokedex-app/02-add-page.md)**
+**[Next lesson](02-tutorial/02-add-page.md)**

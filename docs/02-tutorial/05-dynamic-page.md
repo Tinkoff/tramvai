@@ -220,4 +220,4 @@ Done!
 
 Now you can go to the `http://localhost:3000/pokemon/bulbasaur/` page, where you will find detailed information about this wonderful creature :)
 
-**[Next lesson](tutorials/pokedex-app/06-styling.md)**
+**[Next lesson](02-tutorial/06-styling.md)**

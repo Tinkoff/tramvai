@@ -1,10 +1,39 @@
 ---
-id: app-structure
-title: Project structure
-sidebar_position: 3
+id: quick-start
+title: Quick Start
 ---
 
-A quick overview of the structure of the application that generates by tramvai `new` command. At the same time, we support both monorepositories and repositories with one application. Repository type, package manager and testing framework settings are selected when the command `new` executed.
+[![Try it on CodeSandbox!](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/tramvai-new-qgk90?fontsize=14&hidenavigation=1&theme=dark)
+
+Tramvai provides a powerful CLI for build and development processes - `@tramvai/cli`
+
+## Prerequisites
+
+- [Node.js version `14+`](https://nodejs.org/en/download)
+
+## New application
+
+You can generate a new application and install required dependencies by one command:
+
+```sh
+npx @tramvai/create awesome-app
+```
+
+After starting, you need to select settings - application type, project template, package manager and testing framework. For a quick start, the default settings are fine.
+
+## Development
+
+Now we need to run our application in watch mode, for easy development and to check that our project is working. To do this, execute the command:
+
+```bash
+cd awesome-app && npm start
+```
+
+This command will start a server in dev mode that will monitor the server and client code. After executing the command, you can go to the address `http://localhost:3000/` and see the lifted clean application.
+
+## Application structure
+
+A quick overview of the structure of the application that generates by `tramvai new` command. At the same time, we support both monorepositories and repositories with one application.
 
 We recommend follow [feature-sliced methodology](https://feature-sliced.design/) guidlines to structure application code.
 
@@ -51,16 +80,4 @@ app-directory
 └── routes - application pages
 ```
 
-<!-- #### Library
-
-```bash
-@todo
-``` -->
-
-### Additional links
-
-The following links provide detailed definitions of terms `bundle`, `module` and a description of the settings `tramvai.json`
-
-- [Module](concepts/module.md)
-- [Bundle](concepts/bundle.md)
-- [Tramvai CLI settings](references/cli/base.md)
+##### - [Next: Tutorial](02-tutorial/01-new-app.md)

@@ -1,6 +1,7 @@
 import type { ReactElement, ComponentType } from 'react';
 import { createToken } from '@tinkoff/dippy';
 import { StorageRecord } from '@tinkoff/htmlpagebuilder';
+import type { UniversalErrorBoundaryFallbackProps } from '@tramvai/react';
 import * as ResourceSlot from './slots';
 
 /**
@@ -107,6 +108,14 @@ export const DEFAULT_HEADER_COMPONENT = createToken('defaultHeaderComponent');
  * Token for default footer for page
  */
 export const DEFAULT_FOOTER_COMPONENT = createToken('defaultFooterComponent');
+
+/**
+ * @description
+ * Token for default Error Boundary for page
+ */
+export const DEFAULT_ERROR_BOUNDARY_COMPONENT = createToken<
+  ComponentType<UniversalErrorBoundaryFallbackProps>
+>('defaultErrorBoundaryComponent');
 
 /**
  * @description

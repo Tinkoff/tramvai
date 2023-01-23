@@ -209,4 +209,4 @@ createApp({
 
 Now we have a ready HTTP client that can be used in components, actions and other providers!
 
-**[Next lesson](tutorials/pokedex-app/04-fetch-data.md)**
+**[Next lesson](02-tutorial/04-fetch-data.md)**
