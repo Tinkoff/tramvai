@@ -1,6 +1,7 @@
 import type { ComponentType, ReactNode } from 'react';
 import type { PageAction, Reducer } from '@tramvai/types-actions-state-context';
 import type { LoadableComponent } from '@loadable/component';
+import type { UniversalErrorBoundaryFallbackProps } from '../error/UniversalErrorBoundary';
 
 export type LazyComponentWrapper<Component extends ComponentType<any>> = {
   // typings in loadable do not respect module with default export
@@ -23,7 +24,6 @@ export type PageComponent = ComponentType<PageComponentProps> & Partial<PageComp
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface LayoutComponentOptions {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface LayoutComponentProps {
   Header: ComponentType;
   Footer: ComponentType;
@@ -32,20 +32,25 @@ export interface LayoutComponentProps {
 
 export type LayoutComponent = ComponentType<LayoutComponentProps> & Partial<LayoutComponentOptions>;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface NestedLayoutComponentOptions {
+export interface MetaComponentOptions {
   actions?: PageAction[];
   reducers?: Reducer<any, any>[];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface NestedLayoutComponentProps {
   children?: ReactNode;
 }
 
 export type NestedLayoutComponent = ComponentType<NestedLayoutComponentProps> &
-  Partial<NestedLayoutComponentOptions>;
+  Partial<MetaComponentOptions>;
 
-export type TramvaiComponent = PageComponent | LayoutComponent | NestedLayoutComponent;
+export type ErrorBoundaryComponent = ComponentType<UniversalErrorBoundaryFallbackProps> &
+  Partial<MetaComponentOptions>;
+
+export type TramvaiComponent =
+  | PageComponent
+  | LayoutComponent
+  | NestedLayoutComponent
+  | ErrorBoundaryComponent;
 
 export type TramvaiComponentDecl = TramvaiComponent | LazyComponentWrapper<TramvaiComponent>;

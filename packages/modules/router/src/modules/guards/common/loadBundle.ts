@@ -1,6 +1,5 @@
 import isArray from '@tinkoff/utils/is/array';
 import type { NavigationGuard } from '@tinkoff/router';
-import type { NestedLayoutComponent } from '@tramvai/react';
 import { resolveLazyComponent } from '@tramvai/react';
 import type {
   BUNDLE_MANAGER_TOKEN,
@@ -45,7 +44,8 @@ export const loadBundle = ({
         bundle,
         pageComponent,
       });
-      // если бандл не найдён, то всё ок мы должны вернуть 404 на сервере, а на клиенте просто загрузить новую страницу
+      // если бандл не найден, то всё ок и мы должны вернуть 404 на сервере,
+      // а на клиенте просто загрузить новую страницу
       responseManager.setStatus(404);
       return false;
     }

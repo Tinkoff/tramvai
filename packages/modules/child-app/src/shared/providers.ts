@@ -42,7 +42,7 @@ declare module '@tramvai/react' {
     childApps?: ChildAppRequestConfig[];
   }
 
-  export interface NestedLayoutComponentOptions {
+  export interface MetaComponentOptions {
     childApps?: ChildAppRequestConfig[];
   }
 }

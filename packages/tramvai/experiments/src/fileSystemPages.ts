@@ -23,6 +23,10 @@ export const getAllFileSystemLayouts = () => {
   return fsPagesAndRoutes.layouts;
 };
 
+export const getAllFileSystemErrorBoundaries = () => {
+  return fsPagesAndRoutes.errorBoundaries;
+};
+
 export const isFileSystemPageComponent = (pageComponent: string): boolean => {
   return (
     fileSystemPagesEnabled() &&
@@ -79,10 +83,19 @@ export const fileSystemPageToLayoutKey = (pageComponent: string): string => {
   return `${pageComponent}__layout`;
 };
 
+/**
+ * @example
+ * @/routes/index to @/routes/index__errorBoundary
+ */
+export const fileSystemPageToErrorBoundaryKey = (pageComponent: string): string => {
+  return `${pageComponent}__errorBoundary`;
+};
+
 export const fileSystemPageToRoute = (pageComponent: string): Route => {
   const name = pageComponent;
   const path = staticFileSystemPageToPath(pageComponent);
   const layouts = getAllFileSystemLayouts();
+  const errorBoundaries = getAllFileSystemErrorBoundaries();
 
   const route: Route = {
     name,
@@ -94,6 +107,10 @@ export const fileSystemPageToRoute = (pageComponent: string): Route => {
 
   if (pageComponent in layouts) {
     route.config!.nestedLayoutComponent = fileSystemPageToLayoutKey(pageComponent);
+  }
+
+  if (pageComponent in errorBoundaries) {
+    route.config!.errorBoundaryComponent = fileSystemPageToErrorBoundaryKey(pageComponent);
   }
 
   return route;

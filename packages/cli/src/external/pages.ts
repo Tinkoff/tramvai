@@ -1,4 +1,9 @@
-import type { LazyComponentWrapper, NestedLayoutComponent, PageComponent } from '@tramvai/react';
+import type {
+  ErrorBoundaryComponent,
+  LazyComponentWrapper,
+  NestedLayoutComponent,
+  PageComponent,
+} from '@tramvai/react';
 
 // eslint-disable-next-line import/no-default-export
 export default {
@@ -9,4 +14,5 @@ export default {
   routes: Record<string, LazyComponentWrapper<PageComponent>>;
   pages: Record<string, LazyComponentWrapper<PageComponent>>;
   layouts: Record<string, LazyComponentWrapper<NestedLayoutComponent>>;
+  errorBoundaries: Record<string, LazyComponentWrapper<ErrorBoundaryComponent>>;
 };

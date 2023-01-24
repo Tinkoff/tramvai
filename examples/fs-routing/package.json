@@ -26,7 +26,6 @@
     "jest-circus": "^29.0.2"
   },
   "dependencies": {
-    "@tinkoff/router": "0.0.0-stub",
     "@tramvai/core": "0.0.0-stub",
     "@tramvai/react": "0.0.0-stub",
     "@tramvai/state": "0.0.0-stub",

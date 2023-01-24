@@ -8,7 +8,7 @@ export const Footer = () => {
   return (
     <div className={styles.footer}>
       <div>this Footer in fs-routing</div>
-      <ModalComponent />
+      {ModalComponent !== undefined && <ModalComponent />}
     </div>
   );
 };

@@ -15,7 +15,9 @@ import {
   isFileSystemPageComponent,
   getAllFileSystemPages,
   getAllFileSystemLayouts,
+  getAllFileSystemErrorBoundaries,
   fileSystemPageToLayoutKey,
+  fileSystemPageToErrorBoundaryKey,
 } from '@tramvai/experiments';
 import type { ComponentRegistry } from '../componentRegistry/componentRegistry';
 
@@ -50,15 +52,20 @@ export class BundleManager implements Interface {
       const log = logger('file-system-pages:bundle-manager');
       const components = getAllFileSystemPages();
       const layouts = getAllFileSystemLayouts();
+      const errorBoundaries = getAllFileSystemErrorBoundaries();
+
+      const getComponentsFor = (mapping: Record<any, any>, getKey: (name: string) => string) =>
+        Object.keys(mapping).reduce<Record<string, any>>((result, key) => {
+          // eslint-disable-next-line no-param-reassign
+          result[getKey(key)] = mapping[key];
+          return result;
+        }, {});
 
       const componentsDefaultBundle = createBundle({
         name: FS_PAGES_DEFAULT_BUNDLE,
         components: {
-          ...Object.keys(layouts).reduce<Record<string, any>>((result, key) => {
-            // eslint-disable-next-line no-param-reassign
-            result[fileSystemPageToLayoutKey(key)] = layouts[key];
-            return result;
-          }, {}),
+          ...getComponentsFor(layouts, fileSystemPageToLayoutKey),
+          ...getComponentsFor(errorBoundaries, fileSystemPageToErrorBoundaryKey),
           ...components,
         },
       });

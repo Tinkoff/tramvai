@@ -11,8 +11,10 @@ export const MainPage: PageComponent = () => {
 
   return (
     <div>
-      Main Page <Button onClick={() => navigate('/second/')}>to second page</Button>
+      Main Page
+      <Button onClick={() => navigate('/second/')}>to second page</Button>
       <Button onClick={() => navigate('/old/')}>to old page</Button>
+      <Button onClick={() => navigate('/third/')}>to error page</Button>
     </div>
   );
 };

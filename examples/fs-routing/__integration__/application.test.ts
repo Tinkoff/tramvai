@@ -30,6 +30,14 @@ describe('fs-routing', () => {
     return app.request('/old/').expect(200);
   });
 
+  it('request to third page return status 200', async () => {
+    return app.request('/third/').expect(200);
+  });
+
+  it('request to fourth page return status 500', async () => {
+    return app.request('/fourth/').expect(500);
+  });
+
   it('file-system pages server actions', async () => {
     const { initialState } = await app.render('/');
     const actionsServerState = initialState.stores.actionTramvai.serverState;
@@ -51,7 +59,7 @@ describe('fs-routing', () => {
       .toMatchInlineSnapshot(`
       "Tramvai 🥳
       Main Page Nested Layout
-      Main Page to second pageto old page
+      Main Pageto second pageto old pageto error page
       this Footer in fs-routing
 
       This is modal for index page!"
@@ -114,7 +122,7 @@ describe('fs-routing', () => {
       .toMatchInlineSnapshot(`
       "Tramvai 🥳
       Main Page Nested Layout
-      Main Page to second pageto old page
+      Main Pageto second pageto old pageto error page
       this Footer in fs-routing
 
       This is modal for index page!"
@@ -138,5 +146,50 @@ describe('fs-routing', () => {
     const parsed = await app.render('/');
 
     expect(parsed.parsed.querySelector('title').innerText).toBe('Main Page Title');
+  });
+
+  it('if a render error occurs, page must fallback to the error boundary for that page', async () => {
+    const { browser } = await initPlaywright(app.serverUrl);
+
+    const page = await browser.newPage();
+    await page.goto(`${app.serverUrl}/third/`);
+
+    expect(await page.$eval('.application', (node) => (node as HTMLElement).innerText))
+      .toMatchInlineSnapshot(`
+      "Tramvai 🥳
+      There will be an error when you will click on the button 🤓break a leg!to main page
+      this Footer in fs-routing"
+    `);
+
+    await page.click('#break-button');
+
+    expect(await page.$eval('.application', (node) => (node as HTMLElement).innerText))
+      .toMatchInlineSnapshot(`
+      "An error occurred during render route /third/!
+
+      Current url: /third/
+
+      Error: Cannot read properties of undefined (reading 'azaza')"
+    `);
+
+    await browser.close();
+  });
+
+  it('if an error occurs during server rendering, page must fallback to the error boundary for that page', async () => {
+    const { browser } = await initPlaywright(app.serverUrl);
+
+    const page = await browser.newPage();
+    await page.goto(`${app.serverUrl}/fourth/`);
+
+    expect(await page.$eval('.application', (node) => (node as HTMLElement).innerText))
+      .toMatchInlineSnapshot(`
+      "An error occurred during render route /fourth/!
+
+      Current url: /fourth/
+
+      Error: Cannot read properties of undefined (reading 'azaza')"
+    `);
+
+    await browser.close();
   });
 });

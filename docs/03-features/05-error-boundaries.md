@@ -3,7 +3,7 @@ id: error-boundaries
 title: Error Boundaries
 ---
 
-In SSR applications errors can occure in different stages:
+In SSR applications errors can occur in different stages:
 
 - On server initialization
 - At runtime, when server handle user request
@@ -64,8 +64,7 @@ If this component also crashes at the rendering stage, in case of `HttpError` us
 
 If the first rendering of the page on the server fails, `tramvai` will try to render the page a second time, but already using the Error Boundary with fallback component. Also, we use [React Error Boundaries](https://reactjs.org/docs/error-boundaries.html) under the hood, so the error fallback will render in case of any rendering errors in the browser.
 
-You can provide default fallback for all pages, and specific fallback to concrete page.
-In this fallback components `tramvai` will pass `url` and `error` properties:
+You can provide default fallback for all pages, and specific fallback to concrete page. In this fallback components `tramvai` will pass `url` and `error` properties:
 
 ```tsx title="DefaultErrorBoundary.tsx"
 export const DefaultErrorBoundary = ({ url, error }) => {
@@ -75,14 +74,13 @@ export const DefaultErrorBoundary = ({ url, error }) => {
       <p>Location: {url.path}</p>
       <p>Error: {error.message}</p>
     </div>
-  )
-}
+  );
+};
 ```
 
 :::info
 
-Default response status for server-side Error Boundary - `500`.
-This status can be changed by adding `httpStatus` property to `Error` object.
+Default response status for server-side Error Boundary - `500`. This status can be changed by adding `httpStatus` property to `Error` object.
 
 :::
 
@@ -103,7 +101,23 @@ const provider = {
 
 ### Specific fallback
 
-<!-- @TODO: specific fallback for file-system routing! -->
+There are two ways to add a specific error boundary to the page.
+
+#### \_error.tsx
+
+You can declare an error boundary to the page by adding a file called `_error.tsx` near the page component:
+
+```
+src
+└── pages
+    ├── login
+      └── index.tsx
+      └── _error.tsx
+```
+
+The component signature still be the same as the [DefaultErrorBoundary](#page-error-boundary), so properties `error` and `url` will be available here.
+
+#### For manually created route
 
 Concrete fallback for any of application pages can be registered in route configuration:
 
@@ -116,8 +130,8 @@ export const CommentsFallback = ({ error }) => {
       <h1>Unexpected Error</h1>
       <p>Can't show comments, reason: {error.message}</p>
     </div>
-  )
-}
+  );
+};
 ```
 
 And we will get this file structure:
@@ -136,15 +150,17 @@ import { SpaRouterModule } from '@tramvai/modules-router';
 
 createApp({
   modules: [
-    SpaRouterModule.forRoot([{
-      name: 'comments',
-      path: '/comments/',
-      config: {
-        pageComponent: '@/pages/comments',
-        // highlight-next-line
-        errorBoundaryComponent: '@/pages/comments-fallback',
+    SpaRouterModule.forRoot([
+      {
+        name: 'comments',
+        path: '/comments/',
+        config: {
+          pageComponent: '@/pages/comments',
+          // highlight-next-line
+          errorBoundaryComponent: '@/pages/comments-fallback',
+        },
       },
-    }]),
+    ]),
   ],
 });
 ```
@@ -153,8 +169,7 @@ createApp({
 
 ### How to render page error fallback on errors in actions?
 
-By default, errors in [actions](concepts/action.md) are skipped on server-side, and `tramvai` try to execute failed actions again in browser.
-The exception is `NotFoundError` and `RedirectFoundError` from `@tinkoff/errors` library - these errors will cause `404` page rendering or redirect accordingly.
+By default, errors in [actions](concepts/action.md) are skipped on server-side, and `tramvai` try to execute failed actions again in browser. The exception is `NotFoundError` and `RedirectFoundError` from `@tinkoff/errors` library - these errors will cause `404` page rendering or redirect accordingly.
 
 If the action failed to fetch critical data for page rendering, and you want to change response status code, and show error page for user, you need to dispath `setPageErrorEvent` action:
 
@@ -175,8 +190,7 @@ const action = declareAction({
 
 ### How to render page error fallback on errors in router guards?
 
-Errors in [router guards](references/libs/router.md#router-guards) will be ignored by default.
-Like the previous reciepe, if you need to render page fallback from guard, you can dispatch `setPageErrorEvent` inside:
+Errors in [router guards](references/libs/router.md#router-guards) will be ignored by default. Like the previous reciepe, if you need to render page fallback from guard, you can dispatch `setPageErrorEvent` inside:
 
 ```ts
 import { STORE_TOKEN } from '@tramvai/module-common';
@@ -199,7 +213,7 @@ const provider = {
   deps: {
     store: STORE_TOKEN,
   },
-}
+};
 ```
 
 ##### - [Next: App Lifecycle](03-features/06-app-lifecycle.md)

@@ -3,10 +3,12 @@ import readDir from 'fs-readdir-recursive';
 import fs from 'fs';
 
 const LAYOUT_FILENAME = '_layout.tsx';
+const ERROR_BOUNDARY_FILENAME = '_error.tsx';
 
 export default function () {
   const { fileSystemPages, rootDir, root, extensions } = this.getOptions();
   const fsLayouts = [];
+  const fsErrorBoundaries = [];
 
   this.cacheable(false);
 
@@ -40,12 +42,25 @@ export default function () {
         );
 
         if (isRoutes) {
-          const layoutPath = path.join(path.dirname(pageComponentPath), LAYOUT_FILENAME);
+          const pageDirname = path.dirname(pageComponentPath);
+
+          const layoutPath = path.join(pageDirname, LAYOUT_FILENAME);
+          const errorBoundaryPath = path.join(pageDirname, ERROR_BOUNDARY_FILENAME);
 
           if (fs.existsSync(layoutPath)) {
-            // @example '@/pages/MainPage': lazy(() => import(/* webpackChunkName: "@_pages_MainPage_layout" */ '/tramvai-app/src/pages/MainPage_layout'))
+            // @example '@/pages/MainPage': lazy(() => import(/* webpackChunkName: "@_pages_MainPage__layout" */ '/tramvai-app/src/pages/MainPage_layout'))
             fsLayouts.push(
               `'${pageComponentName}': lazy(() => import(/* webpackChunkName: "${pageComponentChunkName}__layout" */ '${layoutPath.replace(
+                '.tsx',
+                ''
+              )}'))`
+            );
+          }
+
+          if (fs.existsSync(errorBoundaryPath)) {
+            // @example '@/pages/MainPage': lazy(() => import(/* webpackChunkName: "@_pages_MainPage__errorBoundary" */ '/tramvai-app/src/pages/MainPage_errorBoundary'))
+            fsErrorBoundaries.push(
+              `'${pageComponentName}': lazy(() => import(/* webpackChunkName: "${pageComponentChunkName}__errorBoundary" */ '${errorBoundaryPath.replace(
                 '.tsx',
                 ''
               )}'))`
@@ -72,17 +87,20 @@ export default function () {
 
   const code = `import { lazy } from '@tramvai/react';
 
-export default {
-  routes: {
-    ${fsRoutes.join(',\n')}
-  },
-  pages: {
-    ${fsPages.join(',\n')}
-  },
-  layouts: {
-    ${fsLayouts.join(',\n')}
-  },
-}`;
+  export default {
+    routes: {
+      ${fsRoutes.join(',\n')}
+    },
+    pages: {
+      ${fsPages.join(',\n')}
+    },
+    layouts: {
+      ${fsLayouts.join(',\n')}
+    },
+    errorBoundaries: {
+      ${fsErrorBoundaries.join(',\n')}
+    },
+  }`;
 
   return code;
 }
