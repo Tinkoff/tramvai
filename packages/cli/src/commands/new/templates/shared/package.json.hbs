@@ -7,8 +7,8 @@
     "lint": "eslint --ext .ts,.tsx --ignore-path .gitignore ."{{#if isJest}},
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
-    "test:integration": "jest -w=3 --config ./jest.integration.config.js",
-    "test:integration:watch": "jest --runInBand --watch --config ./jest.integration.config.js"{{/if}}
+    "test:integration": "jest -w=3 --config ./jest.integration.config.ts",
+    "test:integration:watch": "jest --runInBand --watch --config ./jest.integration.config.ts"{{/if}}
   },
   "devDependencies": {},
   "dependencies": {},
