@@ -36,6 +36,25 @@ const PageActionErrorComponent = () => {
   );
 };
 
+const NestedLayoutComponent = ({ children }) => {
+  return (
+    <>
+      <nav>Nested Layout</nav>
+      {children}
+    </>
+  );
+};
+
+const ErrorNestedLayoutComponent = ({ children }) => {
+  throw new Error('Error Nested Layout SSR');
+  return (
+    <>
+      <nav>Nested Layout</nav>
+      {children}
+    </>
+  );
+};
+
 const errorAction = declareAction({
   name: 'errorAction',
   fn() {
@@ -66,5 +85,7 @@ export default createBundle({
     pageErrorBoundaryComponent: PageErrorBoundary,
     pageActionErrorComponent: PageActionErrorComponent,
     pageGuardErrorComponent: PageGuardErrorComponent,
+    nestedLayoutComponent: NestedLayoutComponent,
+    errorNestedLayoutComponent: ErrorNestedLayoutComponent,
   },
 });

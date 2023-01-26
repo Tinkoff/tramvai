@@ -104,4 +104,4 @@ Sync hooks:
 
 - `change` - runs when any of changes to current route\url happens
 
-##### - [Next: Routing - Not Found](03-features/07-routing/06-not-found.md)
+##### - [Next: Routing - Wildcard Routes](03-features/07-routing/06-wildcard-routes.md)

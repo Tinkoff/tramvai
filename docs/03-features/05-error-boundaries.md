@@ -64,6 +64,8 @@ If this component also crashes at the rendering stage, in case of `HttpError` us
 
 If the first rendering of the page on the server fails, `tramvai` will try to render the page a second time, but already using the Error Boundary with fallback component. Also, we use [React Error Boundaries](https://reactjs.org/docs/error-boundaries.html) under the hood, so the error fallback will render in case of any rendering errors in the browser.
 
+Error Boundary only wrap Page Component, and Nested Layout with Root Layout will be rendered as usual.
+
 You can provide default fallback for all pages, and specific fallback to concrete page. In this fallback components `tramvai` will pass `url` and `error` properties:
 
 ```tsx title="DefaultErrorBoundary.tsx"
@@ -103,14 +105,14 @@ const provider = {
 
 There are two ways to add a specific error boundary to the page.
 
-#### \_error.tsx
+#### `_error.tsx`
 
 You can declare an error boundary to the page by adding a file called `_error.tsx` near the page component:
 
 ```
 src
 └── pages
-    ├── login
+    └── login
       └── index.tsx
       └── _error.tsx
 ```
@@ -167,11 +169,15 @@ createApp({
 
 ## How to
 
-### How to render page error fallback on errors in actions?
+### Force render Page Error Boundary in Action
 
-By default, errors in [actions](concepts/action.md) are skipped on server-side, and `tramvai` try to execute failed actions again in browser. The exception is `NotFoundError` and `RedirectFoundError` from `@tinkoff/errors` library - these errors will cause `404` page rendering or redirect accordingly.
+:::warning
 
-If the action failed to fetch critical data for page rendering, and you want to change response status code, and show error page for user, you need to dispath `setPageErrorEvent` action:
+`setPageErrorEvent` - experimental API, and can be changed in future releases.
+
+:::
+
+By default, errors in [actions](concepts/action.md) are skipped on server-side, and `tramvai` try to execute failed actions again in browser. If the action failed to fetch critical data for page rendering, and you want to change response status code, and show error page for user, you need to dispath `setPageErrorEvent` action:
 
 ```ts
 import { declareAction } from '@tramvai/core';
@@ -188,7 +194,13 @@ const action = declareAction({
 });
 ```
 
-### How to render page error fallback on errors in router guards?
+### Force render Page Error Boundary in Router Guard
+
+:::warning
+
+`setPageErrorEvent` - experimental API, and can be changed in future releases.
+
+:::
 
 Errors in [router guards](references/libs/router.md#router-guards) will be ignored by default. Like the previous reciepe, if you need to render page fallback from guard, you can dispatch `setPageErrorEvent` inside:
 

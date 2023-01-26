@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import type { ComponentType, PropsWithChildren } from 'react';
 import { usePageService } from '@tramvai/module-router';
 import type { PageComponent as PageComponentType } from '@tramvai/react';
+import { PageErrorBoundary } from './pageErrorBoundary';
 
 /**
  * Result component structure:
@@ -10,7 +11,9 @@ import type { PageComponent as PageComponentType } from '@tramvai/react';
  *   <RootComponent>
  *    <LayoutComponent>
  *      <NestedLayoutComponent>
- *        <PageComponent />
+ *        <ErrorBoundaryComponent>
+ *          <PageComponent />
+ *        </ErrorBoundaryComponent>
  *      </NestedLayoutComponent>
  *    </LayoutComponent>
  *  </RootComponent>
@@ -64,7 +67,14 @@ const PageRenderComponent = () => {
     };
   }
 
-  const page = useMemo(() => <PageComponent />, [PageComponent]);
+  const page = useMemo(
+    () => (
+      <PageErrorBoundary>
+        <PageComponent />
+      </PageErrorBoundary>
+    ),
+    [PageComponent]
+  );
 
   return page;
 };

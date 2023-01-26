@@ -165,11 +165,14 @@ describe('fs-routing', () => {
 
     expect(await page.$eval('.application', (node) => (node as HTMLElement).innerText))
       .toMatchInlineSnapshot(`
-      "An error occurred during render route /third/!
+      "Tramvai 🥳
+      An error occurred during render route /third/!
 
       Current url: /third/
 
-      Error: Cannot read properties of undefined (reading 'azaza')"
+      Error: Cannot read properties of undefined (reading 'azaza')
+
+      this Footer in fs-routing"
     `);
 
     await browser.close();
@@ -183,11 +186,14 @@ describe('fs-routing', () => {
 
     expect(await page.$eval('.application', (node) => (node as HTMLElement).innerText))
       .toMatchInlineSnapshot(`
-      "An error occurred during render route /fourth/!
+      "Tramvai 🥳
+      An error occurred during render route /fourth/!
 
       Current url: /fourth/
 
-      Error: Cannot read properties of undefined (reading 'azaza')"
+      Error: Cannot read properties of undefined (reading 'azaza')
+
+      this Footer in fs-routing"
     `);
 
     await browser.close();

@@ -60,7 +60,7 @@ export class ExecutionContextManager implements Interface {
 
       return result;
     } catch (error: any) {
-      if (!error.executionContextName) {
+      if (typeof error === 'object' && !error.executionContextName) {
         error.executionContextName = context.name;
       }
 

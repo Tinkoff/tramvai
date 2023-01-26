@@ -294,6 +294,80 @@ describe('errorBoundary', () => {
     });
   });
 
+  describe('Nested layout rendered when exception in page component', () => {
+    it('HTTP status', async () => {
+      const { request } = getApp();
+
+      const { statusCode } = await request('/page-error-nested-layout/');
+
+      expect(statusCode).toBe(500);
+    });
+
+    it('SSR render', async () => {
+      const { render } = getApp();
+
+      const { parsed } = await render('/page-error-nested-layout/');
+      const layoutContent = parsed.querySelector('nav').innerText;
+      const pageContent = parsed.querySelector('main h1').innerText;
+
+      expect(layoutContent).toBe('Nested Layout');
+      expect(pageContent).toBe('Page Error Boundary');
+    });
+
+    it('SSR hydrate', async () => {
+      const { page } = await getPageWrapper('/page-error-nested-layout/');
+
+      const layoutContent = await page.evaluate(() => {
+        return document.querySelector('nav')?.innerText;
+      });
+      const pageContent = await getPageContentTitle(page);
+
+      expect(layoutContent).toBe('Nested Layout');
+      expect(pageContent).toBe('Page Error Boundary');
+    });
+  });
+
+  describe('Nested layout error, root layout rendered', () => {
+    it('HTTP status', async () => {
+      const { request } = getApp();
+
+      const { statusCode } = await request('/page-error-nested-layout-error/');
+
+      expect(statusCode).toBe(500);
+    });
+
+    it('SSR render', async () => {
+      const { render } = getApp();
+
+      const { parsed } = await render('/page-error-nested-layout-error/');
+      const documentContent = parsed.outerHTML;
+
+      expect(documentContent).toMatchInlineSnapshot(`
+        "<html lang="ru">
+          <head>
+            <title>Error Error Nested Layout SSR at /page-error-nested-layout-error/</title>
+          </head>
+          <body>
+            <h1>Root Error Boundary</h1>
+          </body>
+        </html>
+        "
+      `);
+    });
+
+    it('SSR hydrate', async () => {
+      const { page } = await getPageWrapper('/page-error-nested-layout-error/');
+
+      const documentContent = await page.evaluate(() => {
+        return document.documentElement.outerHTML;
+      });
+
+      expect(documentContent).toMatchInlineSnapshot(
+        `"<html lang="ru"><head><title>Error &lt;!-- --&gt;Error Nested Layout SSR&lt;!-- --&gt; at &lt;!-- --&gt;/page-error-nested-layout-error/</title></head><body><h1>Root Error Boundary</h1></body></html>"`
+      );
+    });
+  });
+
   it('SPA-navigations', async () => {
     const { page, router } = await getPageWrapper('/');
     let pageContentTitle: string | undefined;

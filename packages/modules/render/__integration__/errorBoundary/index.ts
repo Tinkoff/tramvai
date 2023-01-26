@@ -88,6 +88,24 @@ createApp({
         path: '/global-error/',
         config: {},
       },
+      {
+        name: 'page-error-nested-layout',
+        path: '/page-error-nested-layout/',
+        config: {
+          pageComponent: 'errorPageComponent',
+          nestedLayoutComponent: 'nestedLayoutComponent',
+          errorBoundaryComponent: 'pageErrorBoundaryComponent',
+        },
+      },
+      {
+        name: 'page-error-nested-layout-error',
+        path: '/page-error-nested-layout-error/',
+        config: {
+          pageComponent: 'errorPageComponent',
+          nestedLayoutComponent: 'errorNestedLayoutComponent',
+          errorBoundaryComponent: 'pageErrorBoundaryComponent',
+        },
+      },
     ]),
     RenderModule,
     ServerModule,
