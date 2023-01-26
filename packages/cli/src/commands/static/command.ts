@@ -8,6 +8,7 @@ export type Params = {
   serve?: boolean;
   buildType: 'all' | 'none';
   onlyPages?: string[];
+  csr?: boolean;
 };
 
 export class StaticCommand extends CLICommand<Params> {
@@ -45,6 +46,11 @@ export class StaticCommand extends CLICommand<Params> {
       value: '[fileCache]',
       transformer: (value) => value !== 'false',
       description: 'Enable/disable persistent file cache for used cli builder',
+    },
+    {
+      name: '--csr',
+      value: '[csr]',
+      description: 'Generate Fallback for Client-Side rendering mode',
     },
   ];
 

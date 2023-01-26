@@ -48,13 +48,12 @@ export class SingletonDiManager implements ChildAppDiManager {
       }
 
       return di;
-    } catch (error) {
+    } catch (error: any) {
       this.log.error({
         event: 'resolve-di-fail',
         error,
         config,
       });
-      return null;
     }
   }
 

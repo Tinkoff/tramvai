@@ -1,6 +1,6 @@
 import type { ROUTES_TOKEN } from '@tramvai/module-router';
 
-export const routes: typeof ROUTES_TOKEN = [
+export const routes: typeof ROUTES_TOKEN & any[] = [
   {
     name: 'base',
     path: '/base',
@@ -23,17 +23,17 @@ export const routes: typeof ROUTES_TOKEN = [
     },
   },
   {
-    name: 'error-unknown',
-    path: '/error/unknown',
-    config: {
-      bundle: 'error',
-    },
-  },
-  {
     name: 'react-query',
     path: '/react-query',
     config: {
       bundle: 'react-query',
+    },
+  },
+  {
+    name: 'error',
+    path: '/error',
+    config: {
+      bundle: 'error',
     },
   },
 ];

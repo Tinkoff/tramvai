@@ -40,7 +40,7 @@ export interface ChildAppExternalConfig {
 
 export interface ChildAppReactConfig extends ChildAppRequestConfig {
   props?: Record<string, any>;
-  fallback?: ComponentType<any>;
+  fallback?: ComponentType<{ error?: Error }>;
 }
 
 export interface ResolutionConfig extends Partial<ChildAppExternalConfig> {
@@ -73,8 +73,9 @@ export interface ChildAppPreloadManager {
 }
 
 export interface ChildAppRenderManager {
-  getChildDi(request: ChildAppRequestConfig): [Container | null, Promise<Container | null> | null];
-  flush(): Promise<boolean>;
+  getChildDi(
+    request: ChildAppRequestConfig
+  ): [Container | undefined, Promise<Container | undefined> | undefined];
   clear(): void;
 }
 
@@ -91,7 +92,7 @@ export interface ChildAppStateManager {
 }
 
 export interface ChildAppDiManager {
-  getChildDi(config: ChildAppFinalConfig): Container | null;
+  getChildDi(config: ChildAppFinalConfig): Container | undefined;
   forEachChildDi(callback: (di: Container) => void): void;
 }
 

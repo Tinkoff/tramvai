@@ -22,7 +22,7 @@ export const getChildProviders = (appDi: Container): Provider[] => {
           dispatcher,
           // context will be set later by the CONTEXT_TOKEN
           context: {},
-          initialState,
+          initialState: initialState ?? { stores: [] },
           middlewares: flatten(middlewares || []),
           parentDispatcherContext,
           parentAllowedStores: flatten(parentAllowedStores || []),

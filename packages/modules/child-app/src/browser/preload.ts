@@ -22,6 +22,7 @@ export class PreloadManager implements ChildAppPreloadManager {
   private currentlyPreloaded = new Map<string, ChildAppFinalConfig>();
   private hasPreloadBefore = new Set<string>();
   private hasInitialized = false;
+  private map = new Map<string, Promise<void>>();
 
   constructor({
     loader,
@@ -47,33 +48,48 @@ export class PreloadManager implements ChildAppPreloadManager {
     await this.init();
 
     const config = this.resolveExternalConfig(request);
+
+    if (!config) {
+      return;
+    }
+
     const { key } = config;
 
+    if (this.pageHasRendered) {
+      this.currentlyPreloaded.set(key, config);
+    }
+
     if (!this.isPreloaded(config)) {
+      if (this.map.has(key)) {
+        return this.map.get(key);
+      }
+      // TODO: remove after dropping support for react@<18 as it can handle hydration errors with Suspense
       // in case React render yet has not been executed do not load any external child-app app as
       // as it will lead to markup mismatch on markup hydration
       if (this.pageHasRendered) {
         // but in case render has happened load child-app as soon as possible
-        try {
-          await this.loader.load(config);
+        const promise = (async () => {
+          try {
+            await this.loader.load(config);
 
-          await this.run('customer', config);
-          await this.run('clear', config);
+            await this.run('customer', config);
+            await this.run('clear', config);
+          } catch (error) {}
+
           this.hasPreloadBefore.add(key);
-        } catch (error) {}
-      }
-    }
+        })();
 
-    if (this.pageHasRendered) {
-      this.currentlyPreloaded.set(key, config);
+        this.map.set(key, promise);
+
+        return promise;
+      }
     }
   }
 
   isPreloaded(request: ChildAppRequestConfig): boolean {
     const config = this.resolveExternalConfig(request);
-    const { key } = config;
 
-    return this.hasPreloadBefore.has(key);
+    return !!config && this.hasPreloadBefore.has(config.key);
   }
 
   async runPreloaded() {
@@ -104,6 +120,7 @@ export class PreloadManager implements ChildAppPreloadManager {
   async clearPreloaded(): Promise<void> {
     if (this.pageHasLoaded) {
       this.currentlyPreloaded.clear();
+      this.map.clear();
       return;
     }
 
@@ -116,6 +133,7 @@ export class PreloadManager implements ChildAppPreloadManager {
     });
 
     this.currentlyPreloaded.clear();
+    this.map.clear();
 
     await Promise.all(promises);
   }
@@ -130,8 +148,11 @@ export class PreloadManager implements ChildAppPreloadManager {
 
       preloaded.forEach((request) => {
         const config = this.resolveExternalConfig(request);
-        this.currentlyPreloaded.set(config.key, config);
-        this.hasPreloadBefore.add(config.key);
+
+        if (config) {
+          this.currentlyPreloaded.set(config.key, config);
+          this.hasPreloadBefore.add(config.key);
+        }
       });
 
       this.hasInitialized = true;

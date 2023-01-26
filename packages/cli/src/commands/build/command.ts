@@ -7,6 +7,7 @@ import type { BuildCommand as BuildCommandType } from '../../api/build';
 
 export type Params = Parameters<BuildCommandType>[0] & {
   target: string;
+  csr?: boolean;
 };
 
 class BuildCommand extends CLICommand<Params> {
@@ -55,6 +56,11 @@ class BuildCommand extends CLICommand<Params> {
       value: '[fileCache]',
       transformer: (value) => value !== 'false',
       description: 'Enable/disable persistent file cache for used cli builder',
+    },
+    {
+      name: '--csr',
+      value: '[csr]',
+      description: 'Build for Client-Side rendering mode',
     },
   ];
 

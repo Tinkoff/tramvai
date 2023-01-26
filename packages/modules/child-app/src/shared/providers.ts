@@ -63,6 +63,7 @@ export const sharedProviders: Provider[] = [
     useClass: ChildAppResolutionConfigManager,
     deps: {
       configs: { token: CHILD_APP_RESOLUTION_CONFIGS_TOKEN, optional: true },
+      logger: LOGGER_TOKEN,
     },
   }),
   provide({
@@ -79,8 +80,9 @@ export const sharedProviders: Provider[] = [
   }),
   provide({
     provide: CHILD_APP_RESOLVE_CONFIG_TOKEN,
-    useFactory: ({ envManager, rootBaseUrl, resolutionConfigManager }) => {
+    useFactory: ({ envManager, logger, rootBaseUrl, resolutionConfigManager }) => {
       const rawEnv = envManager.get('CHILD_APP_DEBUG');
+      const log = logger('child-app:resolve-config');
       const debug = new Map<string, string | undefined>();
 
       rawEnv?.split(';').reduce((acc, entry) => {
@@ -89,13 +91,14 @@ export const sharedProviders: Provider[] = [
         return acc.set(name, url);
       }, debug);
 
-      return (request: ChildAppRequestConfig): ChildAppFinalConfig => {
+      return (request) => {
         const { name, tag = debug.has(name) ? 'debug' : 'latest' } = request;
         const req: ChildAppRequestConfig = { name, tag, version: request.version };
         const config = resolutionConfigManager.resolve(req);
 
         if (!config) {
-          throw new Error(`Child-app "${name}" with tag "${tag}" has not found`);
+          log.error(`Child-app "${name}" with tag "${tag}" has not found`);
+          return;
         }
 
         const { version, baseUrl: configBaseUrl, client, server, css, withoutCss } = config;
@@ -131,6 +134,7 @@ export const sharedProviders: Provider[] = [
     },
     deps: {
       envManager: ENV_MANAGER_TOKEN,
+      logger: LOGGER_TOKEN,
       rootBaseUrl: CHILD_APP_RESOLVE_BASE_URL_TOKEN,
       resolutionConfigManager: CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN,
     },

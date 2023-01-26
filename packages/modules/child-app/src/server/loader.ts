@@ -69,6 +69,6 @@ export class ServerLoader extends Loader {
   get(config: ChildAppFinalConfig): ChildApp | void {
     const container = this.loader.getByUrl<ModuleFederationContainer>(config.server.entry);
 
-    return container && this.resolve(this.initializedMap.get(container));
+    return container && this.resolve(this.initializedMap.get(container)!);
   }
 }

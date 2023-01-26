@@ -68,7 +68,6 @@ createApp({
         },
         {
           name: 'base-not-preloaded',
-          baseUrl: process.env.CHILD_APP_BASE_NOT_PRELOADED,
           byTag: {
             latest: {
               version: '0.0.0-stub',
@@ -78,7 +77,6 @@ createApp({
         },
         {
           name: 'state',
-          baseUrl: process.env.CHILD_APP_STATE,
           byTag: {
             latest: {
               version: '0.0.0-stub',
@@ -88,7 +86,6 @@ createApp({
         },
         {
           name: 'react-query',
-          baseUrl: process.env.CHILD_APP_REACT_QUERY,
           byTag: {
             latest: {
               version: '0.0.0-stub',
@@ -97,8 +94,7 @@ createApp({
           },
         },
         {
-          name: 'fail-url',
-          baseUrl: 'http://localhost:4555',
+          name: 'error',
           byTag: {
             latest: {
               version: '0.0.0-stub',

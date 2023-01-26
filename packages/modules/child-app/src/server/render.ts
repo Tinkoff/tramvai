@@ -1,7 +1,6 @@
 import type { Container } from '@tinkoff/dippy';
 import type {
   ChildAppDiManager,
-  ChildAppFinalConfig,
   ChildAppPreloadManager,
   ChildAppRenderManager,
   ChildAppRequestConfig,
@@ -15,7 +14,6 @@ export class RenderManager implements ChildAppRenderManager {
   private readonly resolveFullConfig: typeof CHILD_APP_RESOLVE_CONFIG_TOKEN;
   private readonly log: ReturnType<typeof LOGGER_TOKEN>;
   private readonly hasRenderedSet = new Set<string>();
-  private readonly loadingInProgress = new Map<string, ChildAppFinalConfig>();
   constructor({
     logger,
     preloadManager,
@@ -33,13 +31,19 @@ export class RenderManager implements ChildAppRenderManager {
     this.resolveFullConfig = resolveFullConfig;
   }
 
-  getChildDi(request: ChildAppRequestConfig): [Container | null, null | Promise<Container | null>] {
+  getChildDi(
+    request: ChildAppRequestConfig
+  ): [Container | undefined, undefined | Promise<Container | undefined>] {
     const config = this.resolveFullConfig(request);
+
+    if (!config) {
+      throw new Error(`Child app "${request.name}" not found`);
+    }
 
     this.hasRenderedSet.add(config.key);
 
     if (this.preloadManager.isPreloaded(request)) {
-      return [this.diManager.getChildDi(config), null];
+      return [this.diManager.getChildDi(config), undefined];
     }
 
     this.log.warn({
@@ -47,31 +51,7 @@ export class RenderManager implements ChildAppRenderManager {
       request,
     });
 
-    this.loadingInProgress.set(config.key, config);
-
-    const promiseDi = this.preloadManager.preload(request).then(() => {
-      return this.diManager.getChildDi(config);
-    });
-
-    return [null, promiseDi];
-  }
-
-  async flush() {
-    const promises: Promise<void>[] = [];
-
-    for (const [_, request] of this.loadingInProgress.entries()) {
-      promises.push(this.preloadManager.preload(request));
-    }
-
-    this.loadingInProgress.clear();
-
-    if (promises.length) {
-      await Promise.all(promises);
-
-      return true;
-    }
-
-    return false;
+    return [undefined, undefined];
   }
 
   clear() {
@@ -80,7 +60,7 @@ export class RenderManager implements ChildAppRenderManager {
     for (const request of preloadedList) {
       const config = this.resolveFullConfig(request);
 
-      if (!this.hasRenderedSet.has(config.key)) {
+      if (!config || !this.hasRenderedSet.has(config.key)) {
         this.log.warn({
           message: 'Child-app has been preloaded but not used in React render',
           request,

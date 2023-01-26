@@ -62,7 +62,7 @@ export class StateManager implements ChildAppStateManager {
       const context = di.get(CONTEXT_TOKEN);
 
       this.state[key] = context.dehydrate().dispatcher;
-    } catch (error) {
+    } catch (error: any) {
       if (error.code !== 'E_STUB') {
         this.log.error({
           event: 'get-state-failed',

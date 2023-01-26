@@ -1,27 +1,27 @@
 import noop from '@tinkoff/utils/function/noop';
 import type { ComponentType } from 'react';
-import { createElement, useMemo, useContext, useState, useEffect, Suspense, memo } from 'react';
+import { useMemo, useContext, useState, useEffect, Suspense, memo } from 'react';
 import type { ChildAppReactConfig } from '@tramvai/tokens-child-app';
-import { CHILD_APP_RESOLVE_CONFIG_TOKEN } from '@tramvai/tokens-child-app';
 import { CHILD_APP_INTERNAL_RENDER_TOKEN } from '@tramvai/tokens-child-app';
 import { LOGGER_TOKEN } from '@tramvai/tokens-common';
-import { useDi } from '@tramvai/react';
-import type { ExtractDependencyType } from '@tinkoff/dippy';
+import { useDi, UniversalErrorBoundary } from '@tramvai/react';
+import { useUrl } from '@tramvai/module-router';
 import { RenderContext } from './render-context';
 
 const FailedChildAppFallback = ({
   name,
   version,
   tag,
-  logger,
   fallback: Fallback,
 }: {
   name: string;
-  version: string;
-  tag: string;
-  logger: ReturnType<ExtractDependencyType<typeof LOGGER_TOKEN>>;
-  fallback: ComponentType<any>;
+  version?: string;
+  tag?: string;
+  fallback?: ComponentType<any>;
 }) => {
+  const logger = useDi(LOGGER_TOKEN);
+
+  const log = logger('child-app:render');
   // On client-side hydration errors will be handled in `hydrateRoot` `onRecoverableError` property,
   // and update errors will be handled in Error Boundaries.
   //
@@ -31,7 +31,7 @@ const FailedChildAppFallback = ({
   // On server-side, we still use `renderToString`,
   // and need to manually log render errors for components, wrapped in Suspense Boundaries.
   if (typeof window === 'undefined') {
-    logger.error({
+    log.error({
       event: 'failed-render',
       message: 'child-app failed to render, will try to recover during hydration',
       name,
@@ -43,24 +43,39 @@ const FailedChildAppFallback = ({
   return Fallback ? <Fallback /> : null;
 };
 
-export const ChildApp = memo(({ name, version, tag, props, fallback }: ChildAppReactConfig) => {
+const ChildAppWrapper = ({
+  name,
+  version,
+  tag,
+  props,
+  fallback: Fallback,
+}: ChildAppReactConfig) => {
   const renderManager = useContext(RenderContext);
-  const resolveExternalConfig = useDi(CHILD_APP_RESOLVE_CONFIG_TOKEN);
   const logger = useDi(LOGGER_TOKEN);
 
   const log = logger('child-app:render');
-  const [maybeDi, promiseDi] = useMemo(() => {
-    return renderManager.getChildDi(resolveExternalConfig({ name, version, tag }));
-  }, [name, version, tag, renderManager, resolveExternalConfig]);
+  const [maybeDi, maybePromiseDi] = useMemo(() => {
+    return renderManager!.getChildDi({ name, version, tag });
+  }, [name, version, tag, renderManager]);
 
   const [di, setDi] = useState(maybeDi);
+  const [promiseDi, setPromiseDi] = useState(maybePromiseDi);
 
   useEffect(() => {
     if (!di && promiseDi) {
       // any errors with loading child-app should be handled in some other place
-      promiseDi.then(setDi).catch(noop);
+      promiseDi
+        .then(setDi)
+        .finally(() => setPromiseDi(undefined))
+        .catch(noop);
     }
   }, [di, promiseDi]);
+
+  if (!di && promiseDi) {
+    // in case child-app was not rendered on ssr
+    // and we have to wait before it's loading
+    return Fallback ? <Fallback /> : null;
+  }
 
   if (!di) {
     log.error({
@@ -70,7 +85,14 @@ export const ChildApp = memo(({ name, version, tag, props, fallback }: ChildAppR
       tag,
       message: 'child-app was not initialized',
     });
-    return null;
+
+    if (process.env.__TRAMVAI_CONCURRENT_FEATURES || typeof window !== 'undefined') {
+      throw new Error(
+        `Child-app was not initialized, check the loading error for child-app "${name}"`
+      );
+    }
+
+    return Fallback ? <Fallback /> : null;
   }
 
   try {
@@ -84,34 +106,12 @@ export const ChildApp = memo(({ name, version, tag, props, fallback }: ChildAppR
         version,
         tag,
       });
+
       return null;
     }
 
-    const result = createElement(Cmp, {
-      di,
-      props,
-    });
-
-    if (process.env.__TRAMVAI_CONCURRENT_FEATURES) {
-      return (
-        <Suspense
-          fallback={
-            <FailedChildAppFallback
-              name={name}
-              version={version}
-              tag={tag}
-              logger={log}
-              fallback={fallback}
-            />
-          }
-        >
-          {result}
-        </Suspense>
-      );
-    }
-
-    return result;
-  } catch (error) {
+    return <Cmp di={di} props={props} />;
+  } catch (error: any) {
     log.error({
       event: 'get-render',
       message: 'Cannot get render token from child-app',
@@ -120,6 +120,26 @@ export const ChildApp = memo(({ name, version, tag, props, fallback }: ChildAppR
       version,
       tag,
     });
+
     return null;
   }
+};
+
+export const ChildApp = memo((config: ChildAppReactConfig) => {
+  const { fallback } = config;
+  const url = useUrl();
+
+  const result = (
+    <UniversalErrorBoundary url={url} fallback={fallback as any}>
+      <ChildAppWrapper {...config} />
+    </UniversalErrorBoundary>
+  );
+
+  if (process.env.__TRAMVAI_CONCURRENT_FEATURES) {
+    const fallbackRender = FailedChildAppFallback(config);
+
+    return <Suspense fallback={fallbackRender}>{result}</Suspense>;
+  }
+
+  return result;
 });

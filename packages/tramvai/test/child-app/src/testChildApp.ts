@@ -71,8 +71,9 @@ This test wrapper supports only child-app with name "${childApp.name}"`);
 
   const resolveExternalConfig = appDi.get(CHILD_APP_RESOLVE_CONFIG_TOKEN);
   const diManager = appDi.get(CHILD_APP_DI_MANAGER_TOKEN);
+  const config = resolveExternalConfig({ name: childApp.name });
 
-  const di = diManager.getChildDi(resolveExternalConfig({ name: childApp.name }));
+  const di = config && diManager.getChildDi(config);
 
   if (!di) {
     throw new Error('Cannot resolve child-app di');

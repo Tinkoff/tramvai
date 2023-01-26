@@ -1,4 +1,4 @@
-type LogFunction = (...args: unknown[]) => void;
+type LogFunction = (...args: any[]) => void;
 
 export interface Logger {
   trace: LogFunction;

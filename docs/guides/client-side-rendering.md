@@ -156,53 +156,16 @@ Also, you will have the same meta tags for all application pages, it can affect 
 
 :::
 
-In client-side rendering mode, you can generate static HTML from every page, but we recommended to create special static route for this.
-It will allow you to change meta tags information.
-Example below use [file-system pages feature](features/routing/file-system-pages.md#file-system-pages).
+For one client-side rendering fallback, which will work on every application route, we need a few things:
+- Fallback component with some preloader or skeleton (`PAGE_RENDER_DEFAULT_FALLBACK_COMPONENT`)
+- Special route for this page (for example, `/__csr_fallback__/`)
+- Build application (server and client code) as usual
+- Generate static HTML page for `/__csr_fallback__/` route
 
-:hourglass: At first, create empty fallback page:
-
-```tsx title="pages/FallbackPage.tsx"
-import React from 'react';
-
-export const FallbackPage = () => {
-  return null;
-};
-
-export default FallbackPage;
-```
-
-:hourglass: And add new static route with this page to application:
-
-```ts
-const routes = [
-  {
-    name: 'fallback',
-    path: '/__secret_fallback__/',
-    config: {
-      pageComponent: '@/pages/FallbackPage',
-      meta: {
-        seo: {
-          metaTags: {
-            title: 'Some common title',
-          },
-        }
-      }
-    },
-  },
-]
-```
-
-:hourglass: Then build your application as usual:
+All of this are included when using `tramvai static` command with `--csr` flag, when `@tramvai/module-page-render-mode` are connected in the application. Only one step you need for HTML fallback generation:
 
 ```bash
-tramvai build {{ appName }}
-```
-
-:hourglass: In the end, generate static HTML only for one page (if we use default fallback for all pages, page url doesn't matter):
-
-```bash
-tramvai static {{ appName }} --buildType=none --onlyPages=/__secret_fallback__/
+tramvai static {{ appName }} --csr
 ```
 
 :::tip
@@ -213,8 +176,8 @@ This command basically runs the compiled `server.js` and makes a HTTP request to
 
 :::
 
-After this steps, you can find a file `dist/static/__secret_fallback__/index.html`.
-You can serve this file from CDN or balancer, and it will be working as usual SPA.
+After this steps, you can find a file `dist/static/__csr_fallback__/index.html`.
+You can deploy this file with other assets to S3 file storage and serve this file from CDN or balancer, and it will be working as usual SPA.
 
 ### Environment variables
 
@@ -223,4 +186,13 @@ In `tramvai` application we can separate a two types of env variables:
 - build-time env
 - deployment env
 
-When using the command `tramvai static`, only build-time env will be used and are already built into the code at `tramvai build` step, so you need to pass deployment env wherever you run `tramvai static`.
+When using the command `tramvai static {{ appName }} --csr`, you need to pass both build-time and deployment env for CI job when you will run `tramvai static`, because of real application server will be launched for this command, and real requests for API's will be sended.
+
+### Testing
+
+For fallback development, you can use start command with CSR flag - `tramvai start {{ appName }} --csr` - and open special route `http://localhost:3000/__csr_fallback__/` in browser.
+
+For testing fallback close to production, you can use `http-server` library, and this scripts:
+- `ASSETS_PREFIX=http://localhost:4444/ tramvai static {{ appName }} --csr` for build and fallback generation
+- `npx http-server dist/static/__csr_fallback__ --proxy http://localhost:8080\\? --cors` for serving fallback HTML at 8080 port
+- `npx http-server dist/client -p 4444 --cors` for serving assets at 4444 port

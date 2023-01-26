@@ -1,4 +1,3 @@
-import React from 'react';
 import { useDi } from '@tramvai/react';
 import { CHILD_APP_BASE_TOKEN } from './tokens';
 // @ts-ignore
@@ -9,7 +8,7 @@ export const BaseCmp = ({ fromRoot }: { fromRoot: string }) => {
 
   return (
     <>
-      <div>Child App: {val}</div>
+      <div id="base">Child App: {val}</div>
       <Cmp />
     </>
   );

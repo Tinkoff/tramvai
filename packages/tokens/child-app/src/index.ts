@@ -49,7 +49,11 @@ export const commandLineListTokens = {
 export const CHILD_APP_RESOLUTION_CONFIGS_TOKEN = createToken<
   | ChildAppResolutionConfig
   | ChildAppResolutionConfig[]
-  | (() => ChildAppResolutionConfig | ChildAppResolutionConfig[])
+  | (() =>
+      | ChildAppResolutionConfig
+      | ChildAppResolutionConfig[]
+      | Promise<ChildAppResolutionConfig>
+      | Promise<ChildAppResolutionConfig[]>)
 >('child-app resolve configs', multiOptions);
 
 /**
@@ -57,7 +61,7 @@ export const CHILD_APP_RESOLUTION_CONFIGS_TOKEN = createToken<
  * @description Used to resolve and extend resolution configs for child-apps
  */
 export const CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN = createToken<{
-  resolve(config: ChildAppRequestConfig): ResolutionConfig | null;
+  resolve(config: ChildAppRequestConfig): ResolutionConfig | undefined;
   init(): Promise<void>;
 }>('child-app resolution config manager');
 
@@ -66,14 +70,14 @@ export const CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN = createToken<{
  * @description Used to resolve external config with urls to external code entries
  */
 export const CHILD_APP_RESOLVE_CONFIG_TOKEN = createToken<
-  (config: ChildAppRequestConfig) => ChildAppFinalConfig
+  (config: ChildAppRequestConfig) => ChildAppFinalConfig | undefined
 >('child-app resolve external config');
 
 /**
  * @public
  * @description Base url for external urls for child apps on client
  */
-export const CHILD_APP_RESOLVE_BASE_URL_TOKEN = createToken<string>(
+export const CHILD_APP_RESOLVE_BASE_URL_TOKEN = createToken<string | undefined>(
   'child-app resolve external base url'
 );
 

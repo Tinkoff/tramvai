@@ -32,6 +32,34 @@ createApp({
 - `RequestDI` - DI-Container which is created for every request and represents specific data for single client. RequestDI inherits providers from SingletonDI and it is independent from other RequestDIs
 - `CommandLineRunner` - instance of [CommandModule](references/modules/common.md#commandmodule)
 
+### Workflow
+
+This section will explain how the child-app are loaded and executed.
+
+#### Both SSR + Client hydration
+
+1. Provider `CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN` will assemble all of the configs for child-apps that were provided through token `CHILD_APP_RESOLUTION_CONFIGS_TOKEN` and resolve the configs on `resolvePageDeps` command line
+2. Provider `CHILD_APP_RESOLVE_CONFIG_TOKEN` is used to generate config that are later consumable by child-app loader
+3. Child-apps that will be rendered on the page should be preloaded with `CHILD_APP_PRELOAD_MANAGER_TOKEN` - see [preload child-app](#preload-child-app)
+
+#### SSR
+
+1. For every child-app that was preloaded server loads its code and executes all of the initialization - see [loading child-app](#loading-child-app)
+2. Any child-app that were preloaded during request are added as script tag to client code to the output html
+3. During render for child-apps their render code is executed to provide proper HTML
+4. State is dehydrated for child-app the same time as root-app's state
+
+#### Client hydration
+
+1. For every child-app that was preloaded on server tramvai executes all of the initialization - see [loading child-app](#loading-child-app). In other cases initialization happens during first usage
+2. If child-app was preloaded on server than client code should be loaded on page loaded. Otherwise tramvai will try to load client code on preload call on client side or during attempt to render child-app
+3. During page render react will attempt to rehydrate render for child-apps that came from server. In case of errors it will rerender it from scratch
+
+#### SPA navigations
+
+1. During loading for next route child-app might be preloaded - it will be initialized during loading in that case otherwise child-app will be loaded as soon as it will be used.
+2. While loading child-app it will render null. After loading child-app's render function will be used
+
 ### DI
 
 Every child-app has its own DI-hierarchy which is isolated from other child app and partially from root-app. The only way communicate fpr DIs it's getting providers from root-app di inside child-app.
@@ -136,7 +164,69 @@ This token is considered undesirable to use as it leads to high coupling with st
 
 :::
 
+### Error handling
+
+#### Error while loading child-app configs
+
+Child-app configs might be loaded with providers for multi token `CHILD_APP_RESOLUTION_CONFIGS_TOKEN` that are implemented in custom modules or in the app code.
+
+Error that were raised in custom providers will be logged as errors under `child-app:resolution-config` key. After that there errors will be ignored and won't affect other resolutions, but the configs that could be loaded with that provider will be lost.
+
+#### Child-app with specified name was not found
+
+There is 2 causes that may lead to missing child-app in config:
+
+- configs defined through `CHILD_APP_RESOLUTION_CONFIGS_TOKEN` was failed and therefore there is no info about used child-app
+- wrong naming of child-app
+
+In any of that causes the error about missing child-app will be logged and the render for it will just return null.
+
+If you are facing that problem first check the logs about errors for loading child-app configs than check that naming is right and such child-app exists in your configs.
+
+#### Failed to load child-app code
+
+Request to child-app code can fail by various causes.
+
+If request has failed on server side the script tag with link to child-app client code will still be added to the html in order to try to load the child-app on client side. It will render fallback if provided or null on SSR (wrapped in Suspense for react@18) in that case and will try to resolve and render the child-app on the client.
+
+If request has failed on client side it will render [fallback](#fallback) passing error or the default errorBoundary component.
+
+#### Error during child-app render
+
+Errors that happens inside child-app's render function
+
+If render has failed on server side it will render fallback if provided or null otherwise. It may then proper rehydrated on client side.
+
+If render has failed on client side it will render fallback with error if provided or default errorBoundary component
+
+#### Error in commandLine handler
+
+Any errors inside child-app commandLine execution will be logged and won't affect the execution of the root-app.
+
 ## API
+
+### ChildApp
+
+React component to render child-app with specified config in the react tree
+
+```ts
+import React from 'react';
+import { ChildApp } from '@tramvai/module-child-app';
+
+export const Page = () => {
+  return (
+    <div>
+      ...
+      <ChildApp name="[name]" />
+      ...
+    </div>
+  );
+};
+```
+
+#### fallback
+
+React.ComponentType that will be rendered while child-app is loading (by default is null) or there was an error inside child-app (by default is a standard errorBoundary component)
 
 ### CHILD_APP_INTERNAL_ROOT_STATE_ALLOWED_STORE_TOKEN
 
@@ -269,7 +359,14 @@ const PageCmp: PageComponent = () => {
 PageCmp.childApps = [{ name: '[name]' }];
 ```
 
-### Debug child-app
+### Debug child-app problems
+
+If your are facing any problems while developing or using child-app use next instructions first.
+
+1. Check the logs with key `child-app` that may lead to source of problems
+2. If there is not enough logs enable all `child-app` logs - [how to display logs](references/modules/log.md#display-logs)
+
+### Run debug version of child-app
 
 #### Single child-app
 
@@ -328,13 +425,11 @@ You may specify a full config to debug to a specific child-app:
 
 ### This Suspense boundary received an update before it finished hydrating
 
-When `React` >= `18` version is used, child-app will be wrapped in `Suspense` boundary for [Selective Hydration](https://github.com/reactwg/react-18/discussions/130).
-This optimization can significantly decrease Total Blocking Time metric of the page.
+When `React` >= `18` version is used, child-app will be wrapped in `Suspense` boundary for [Selective Hydration](https://github.com/reactwg/react-18/discussions/130). This optimization can significantly decrease Total Blocking Time metric of the page.
 
-There is one drawback of this optimization - if you will try rerender child-app during selective hydration, `React` will switch to deopt mode and made full client-rendering of the child-app component.
-Potential ways to fix this problem [described here](https://github.com/facebook/react/issues/24476#issuecomment-1127800350).
-`ChildApp` component already wrapped in `React.memo`.
+There is one drawback of this optimization - if you will try rerender child-app during selective hydration, `React` will switch to deopt mode and made full client-rendering of the child-app component. Potential ways to fix this problem [described here](https://github.com/facebook/react/issues/24476#issuecomment-1127800350). `ChildApp` component already wrapped in `React.memo`.
 
 Few advices to avoid this problem:
+
 - Memoize object, passed to child-app `props` property
-- Prevent pass to child-app properties, which can be changed during hydration, for example at cliend-side in page actions
+- Prevent pass to child-app properties, which can be changed during hydration, for example at client-side in page actions

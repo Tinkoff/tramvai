@@ -11,7 +11,7 @@ export const getChildProviders = (appDi: Container): Provider[] => {
   return [
     provide({
       provide: LOGGER_TOKEN,
-      useValue: Object.assign((opts) => {
+      useValue: Object.assign((opts: any) => {
         return logger('child-app').child(opts);
       }, logger),
     }),

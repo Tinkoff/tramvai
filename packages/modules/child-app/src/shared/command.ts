@@ -20,7 +20,7 @@ export class CommandLineRunner implements ChildAppCommandLineRunner {
     rootCommandLineRunner: typeof COMMAND_LINE_RUNNER_TOKEN;
     diManager: ChildAppDiManager;
   }) {
-    this.log = logger('child-app:commandlinerunner');
+    this.log = logger('child-app:command-line-runner');
     this.rootCommandLineRunner = rootCommandLineRunner;
     this.diManager = diManager;
   }
@@ -46,7 +46,7 @@ export class CommandLineRunner implements ChildAppCommandLineRunner {
         commandLineRunner.metricsInstance = this.rootCommandLineRunner.metricsInstance;
         await commandLineRunner.run(type, status, [], di);
       }
-    } catch (error) {
+    } catch (error: any) {
       if (error.code !== 'E_STUB') {
         this.log.error({
           event: 'run-failed',

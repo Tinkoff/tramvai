@@ -17,6 +17,7 @@ import { generateStatic } from './generate';
 import { toWebpackConfig } from '../../library/webpack/utils/toWebpackConfig';
 import { copyStatsJsonFileToServerDirectory } from '../../builder/webpack/utils/copyStatsJsonFile';
 import { safeRequire } from '../../utils/safeRequire';
+import { app } from '../index';
 import { startStaticServer } from './staticServer';
 import { startServer } from './server';
 
@@ -35,20 +36,7 @@ export const staticApp = async (
   const serverConfigManager = clientConfigManager.withSettings({ buildType: 'server' });
 
   if (options.buildType !== 'none') {
-    // @TODO: перевести на builder
-    await Promise.all([
-      webpackBuild(
-        clientConfigManager,
-        toWebpackConfig(webpackClientConfig({ configManager: clientConfigManager })),
-        context
-      ),
-      webpackBuild(
-        serverConfigManager,
-        toWebpackConfig(webpackServerConfig({ configManager: serverConfigManager })),
-        context
-      ),
-    ]);
-
+    await app.run('build', options);
     await copyStatsJsonFileToServerDirectory(clientConfigManager);
   } else {
     context.logger.event({
@@ -114,6 +102,9 @@ export const staticApp = async (
 
   if (options.onlyPages) {
     paths = intersection(paths, options.onlyPages);
+  } else if (options.csr) {
+    // implicit connection with packages/modules/page-render-mode/src/ForceCSRModule.ts
+    paths = ['/__csr_fallback__/'];
   }
 
   context.logger.event({

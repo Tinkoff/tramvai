@@ -8,7 +8,7 @@ import { getModuleFederation, initModuleFederation } from '../shared/webpack/mod
 import type { ChildAppModuleWrapper } from '../shared/types/module';
 
 export const getModuleFromGlobal = (entry: string): ModuleFederationContainer | void => {
-  return window[`child-app__${entry}`];
+  return (window as any)[`child-app__${entry}`];
 };
 
 export class BrowserLoader extends Loader {

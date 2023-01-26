@@ -23,6 +23,11 @@ export const registerChildAppRenderSlots = ({
 
   preloadManager.getPreloadedList().forEach((requestConfig) => {
     const config = resolveFullConfig(requestConfig);
+
+    if (!config) {
+      return;
+    }
+
     const di = diManager.getChildDi(config);
 
     result.push({
@@ -38,7 +43,7 @@ export const registerChildAppRenderSlots = ({
       result.push({
         type: ResourceType.style,
         slot: ResourceSlot.HEAD_CORE_STYLES,
-        payload: config.css.entry,
+        payload: config.css.entry ?? null,
         attrs: {
           'data-critical': 'true',
         },

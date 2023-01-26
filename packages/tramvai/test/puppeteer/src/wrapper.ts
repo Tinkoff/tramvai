@@ -6,7 +6,14 @@ import { wrapRouter } from './router';
 import { waitHydrated } from './utils';
 
 const checkSsrErrors = (text: string) => {
-  if (text.indexOf('Server: "%s" Client: "%s"%s') !== -1) {
+  if (
+    // react@<18
+    text.indexOf('Server: "%s" Client: "%s"%s') !== -1 ||
+    // react@18
+    text.indexOf(
+      'An error occurred during hydration. The server HTML was replaced with client content'
+    ) !== -1
+  ) {
     throw new Error(`SSR breaking error: ${text}`);
   }
 };

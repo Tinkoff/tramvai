@@ -8,22 +8,27 @@ import type {
   ResolutionConfig,
 } from '@tramvai/tokens-child-app';
 import type { ExtractDependencyType, ExtractTokenType } from '@tinkoff/dippy';
+import type { LOGGER_TOKEN } from '@tramvai/tokens-common';
 
 type Interface = ExtractTokenType<typeof CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN>;
 
 export class ChildAppResolutionConfigManager implements Interface {
   private rawConfigs: ExtractDependencyType<typeof CHILD_APP_RESOLUTION_CONFIGS_TOKEN>;
   private mapping: Map<string, ChildAppResolutionConfig>;
+  private log: ReturnType<typeof LOGGER_TOKEN>;
 
   private hasInitialized = false;
-  private initPromise: Promise<void>;
+  private initPromise?: Promise<void>;
   constructor({
     configs,
+    logger,
   }: {
     configs: ExtractDependencyType<typeof CHILD_APP_RESOLUTION_CONFIGS_TOKEN> | null;
+    logger: typeof LOGGER_TOKEN;
   }) {
     this.rawConfigs = configs ?? [];
     this.mapping = new Map();
+    this.log = logger('child-app:resolution-config');
   }
 
   async init() {
@@ -38,11 +43,19 @@ export class ChildAppResolutionConfigManager implements Interface {
     this.initPromise = (async () => {
       const configs = await Promise.all(
         this.rawConfigs.map((rawConfig) => {
-          return applyOrReturn([], rawConfig);
+          return Promise.resolve()
+            .then(() => {
+              return applyOrReturn([], rawConfig);
+            })
+            .catch((error) => {
+              this.log.error(error, 'Failed while resolving resolution config');
+            });
         })
       );
       flatten<ChildAppResolutionConfig>(configs).forEach((config) => {
-        this.mapping.set(config.name, config);
+        if (config) {
+          this.mapping.set(config.name, config);
+        }
       });
 
       this.hasInitialized = true;
@@ -51,11 +64,11 @@ export class ChildAppResolutionConfigManager implements Interface {
     return this.initPromise;
   }
 
-  resolve({ name, version, tag = 'latest' }: ChildAppRequestConfig): ResolutionConfig {
+  resolve({ name, version, tag = 'latest' }: ChildAppRequestConfig): ResolutionConfig | undefined {
     const fromMapping = this.mapping.get(name);
 
     if (!fromMapping) {
-      return null;
+      return;
     }
 
     const cfg = fromMapping.byTag[tag];

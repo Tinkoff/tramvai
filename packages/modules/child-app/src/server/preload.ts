@@ -44,6 +44,11 @@ export class PreloadManager implements ChildAppPreloadManager {
     await this.resolutionConfigManager.init();
 
     const config = this.resolveFullConfig(request);
+
+    if (!config) {
+      return;
+    }
+
     const { key } = config;
 
     if (this.map.has(key)) {
@@ -73,9 +78,8 @@ export class PreloadManager implements ChildAppPreloadManager {
 
   isPreloaded(request: ChildAppRequestConfig): boolean {
     const config = this.resolveFullConfig(request);
-    const { key } = config;
 
-    return this.map.has(key);
+    return !!config && this.map.has(config.key);
   }
 
   async runPreloaded() {

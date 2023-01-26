@@ -1,53 +1,56 @@
 {
-  "extends": "../../../tsconfig.lib.json",
-  "include": [
-    "./src"
-  ],
-  "compilerOptions": {
-    "outDir": "./lib",
-    "declarationDir": "./lib",
-    "rootDir": "./src",
-    "strict": false
-  },
-  "references": [
-    {
-      "path": "../../tramvai/core"
+    "extends": "../../../tsconfig.lib.json",
+    "include": [
+        "./src"
+    ],
+    "compilerOptions": {
+        "outDir": "./lib",
+        "declarationDir": "./lib",
+        "rootDir": "./src",
+        "strict": true
     },
-    {
-      "path": "../../libs/dippy"
-    },
-    {
-      "path": "../../libs/module-loader-client"
-    },
-    {
-      "path": "../../libs/module-loader-server"
-    },
-    {
-      "path": "../../tramvai/child-app-core"
-    },
-    {
-      "path": "../../tramvai/react"
-    },
-    {
-      "path": "../../tokens/render"
-    },
-    {
-      "path": "../../tokens/common"
-    },
-    {
-      "path": "../../libs/safe-strings"
-    },
-    {
-      "path": "../../tokens/child-app"
-    },
-    {
-      "path": "../../tramvai/state"
-    },
-    {
-      "path": "../../libs/env-validators"
-    },
-    {
-      "path": "../../tokens/router"
-    }
-  ]
+    "references": [
+        {
+            "path": "../../tramvai/core"
+        },
+        {
+            "path": "../../libs/dippy"
+        },
+        {
+            "path": "../../libs/module-loader-client"
+        },
+        {
+            "path": "../../libs/module-loader-server"
+        },
+        {
+            "path": "../../tramvai/child-app-core"
+        },
+        {
+            "path": "../../tramvai/react"
+        },
+        {
+            "path": "../../tokens/render"
+        },
+        {
+            "path": "../../tokens/common"
+        },
+        {
+            "path": "../../libs/safe-strings"
+        },
+        {
+            "path": "../../tokens/child-app"
+        },
+        {
+            "path": "../../tramvai/state"
+        },
+        {
+            "path": "../../libs/env-validators"
+        },
+        {
+            "path": "../../tokens/router"
+        },
+        {
+            "path": "../router"
+        }
+    ]
 }

@@ -1,4 +1,3 @@
-import React from 'react';
 import { createBundle } from '@tramvai/core';
 import { ChildApp } from '@tramvai/module-child-app';
 

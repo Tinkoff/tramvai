@@ -16,14 +16,10 @@ export const getChildProviders = (appDi: Container): Provider[] => {
   const context = appDi.get(CONTEXT_TOKEN);
 
   return [
-    {
+    provide({
       provide: commandLineListTokens.customerStart,
       multi: true,
-      useFactory: ({
-        subscriptions,
-      }: {
-        subscriptions: typeof CHILD_APP_INTERNAL_ROOT_STATE_SUBSCRIPTION_TOKEN[];
-      }) => {
+      useFactory: ({ subscriptions }) => {
         return async function resolveRootStateForChild() {
           if (!subscriptions) {
             return;
@@ -33,7 +29,7 @@ export const getChildProviders = (appDi: Container): Provider[] => {
 
           return Promise.all(
             subscriptions.map((sub) => {
-              const subscription = new Subscription(sub.stores.map(context.getStore));
+              const subscription = new Subscription(sub.stores.map(context.getStore as any));
 
               subscription.setOnStateChange(() => {
                 sub.listener(context.getState());
@@ -49,7 +45,7 @@ export const getChildProviders = (appDi: Container): Provider[] => {
       deps: {
         subscriptions: { token: CHILD_APP_INTERNAL_ROOT_STATE_SUBSCRIPTION_TOKEN, optional: true },
       },
-    },
+    }),
     provide({
       provide: commandLineListTokens.clear,
       multi: true,

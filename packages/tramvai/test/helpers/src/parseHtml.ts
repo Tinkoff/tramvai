@@ -6,7 +6,9 @@ export type ParseOptions = Partial<ParserOptions>;
 
 export const parseHtml = (
   html: string,
-  parserOptions: ParseOptions = { blockTextElements: { script: false, style: false } }
+  parserOptions: ParseOptions = {
+    blockTextElements: { script: false, style: false },
+  }
 ) => {
   if (!html) {
     return null;

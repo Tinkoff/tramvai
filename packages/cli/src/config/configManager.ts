@@ -33,6 +33,8 @@ export interface Settings<E extends Env> {
   onlyBundles?: string[];
   disableProdOptimization?: boolean;
   fileCache?: boolean;
+  // force client-side rendering mode
+  csr?: boolean;
 }
 
 const getOption = <T>(optionName: string, cfgs: any[], dflt?: T): T => {
@@ -117,6 +119,9 @@ export class ConfigManager<T extends ConfigEntry = ConfigEntry, E extends Env = 
     : 'build']['configurations']['experiments'];
 
   public showConfig: boolean;
+
+  public csr: boolean;
+
   // eslint-disable-next-line complexity,max-statements
   constructor(configEntry: T, settings: Settings<E>) {
     this.configEntry = configEntry;
@@ -180,6 +185,7 @@ export class ConfigManager<T extends ConfigEntry = ConfigEntry, E extends Env = 
         ? this.serve.configurations?.experiments
         : this.build.configurations?.experiments) ?? {};
     this.showConfig = settings.showConfig ?? false;
+    this.csr = settings.csr ?? false;
 
     if (this.showConfig) {
       showConfig(this);
@@ -226,6 +232,9 @@ export class ConfigManager<T extends ConfigEntry = ConfigEntry, E extends Env = 
       settings: {
         ...this.settings,
         rootDir: this.rootDir,
+        // drop options that couldn't be serialized
+        stdout: undefined,
+        stderr: undefined,
       },
     };
   }

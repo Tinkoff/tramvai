@@ -31,11 +31,17 @@ export class RenderManager implements ChildAppRenderManager {
     this.resolveExternalConfig = resolveExternalConfig;
   }
 
-  getChildDi(request: ChildAppRequestConfig): [Container | null, null | Promise<Container | null>] {
+  getChildDi(
+    request: ChildAppRequestConfig
+  ): [Container | undefined, undefined | Promise<Container | undefined>] {
     const config = this.resolveExternalConfig(request);
 
+    if (!config) {
+      throw new Error(`Child app "${request.name}" not found`);
+    }
+
     if (this.preloadManager.isPreloaded(request)) {
-      return [this.diManager.getChildDi(config), null];
+      return [this.diManager.getChildDi(config), undefined];
     }
 
     this.log.warn({
@@ -47,11 +53,7 @@ export class RenderManager implements ChildAppRenderManager {
       return this.diManager.getChildDi(config);
     });
 
-    return [null, promiseDi];
-  }
-
-  async flush() {
-    return false;
+    return [undefined, promiseDi];
   }
 
   clear() {}
