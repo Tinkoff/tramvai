@@ -1,0 +1,14 @@
+{
+  "name": "@tinkoff/webpack-dedupe-plugin",
+  "sourceRoot": "packages/libs/webpack-dedupe-plugin/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/libs/webpack-dedupe-plugin/lib",
+        "packages/libs/webpack-dedupe-plugin/package.json"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

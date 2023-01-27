@@ -1,6 +1,6 @@
 import type { Configuration } from 'webpack';
+import type { DeduplicateStrategy } from '@tinkoff/webpack-dedupe-plugin';
 import type { ProjectType } from '../projectType';
-import type { DeduplicateStrategy } from '../../library/webpack/plugins/DedupePlugin';
 
 type ServeNotifications = {
   /**

@@ -67,6 +67,7 @@
     "@tinkoff/request-core": "^0.9.2",
     "@tinkoff/request-plugin-protocol-http": "^0.11.6",
     "@tinkoff/utils": "^2.1.3",
+    "@tinkoff/webpack-dedupe-plugin": "0.0.0-stub",
     "@tramvai/build": "0.0.0-stub",
     "@tramvai/react": "0.0.0-stub",
     "@tramvai/tools-check-versions": "0.0.0-stub",

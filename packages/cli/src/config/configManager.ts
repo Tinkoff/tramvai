@@ -1,13 +1,13 @@
 import isNil from '@tinkoff/utils/is/nil';
 import prop from '@tinkoff/utils/object/prop';
 import { resolve } from 'path';
+import type { DeduplicateStrategy } from '@tinkoff/webpack-dedupe-plugin';
 import type { ProjectType, BuildType } from '../typings/projectType';
 import type { Env } from '../typings/Env';
 import type { ConfigEntry } from '../typings/configEntry/common';
 import { validate } from './validate';
 import moduleVersion from '../utils/moduleVersion';
 import { packageVersion } from '../utils/packageVersion';
-import type { DeduplicateStrategy } from '../library/webpack/plugins/DedupePlugin';
 import { showConfig } from './showConfig';
 import type { Target } from '../typings/target';
 

@@ -1,6 +1,6 @@
 import type Config from 'webpack-chain';
 import { DuplicatesPlugin } from 'inspectpack/plugin';
-import { createDedupePlugin } from '../../plugins/DedupePlugin';
+import { createDedupePlugin } from '@tinkoff/webpack-dedupe-plugin';
 import type { ConfigManager } from '../../../../config/configManager';
 
 export default (configManager: ConfigManager) => (config: Config) => {

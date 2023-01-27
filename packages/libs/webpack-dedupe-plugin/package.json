@@ -1,0 +1,30 @@
+{
+  "name": "@tinkoff/webpack-dedupe-plugin",
+  "version": "0.0.0-stub",
+  "initialVersion": "1.0.0",
+  "description": "Module deduplication plugin for webpack",
+  "main": "./lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Tinkoff/tramvai.git"
+  },
+  "scripts": {
+    "build": "tramvai-build --for-publish",
+    "watch": "tsc -w",
+    "build-for-publish": "true"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "semver": "^7.3.7"
+  },
+  "peerDependencies": {
+    "webpack": "^5.75.0"
+  },
+  "sideEffects": false,
+  "module": "./lib/index.es.js",
+  "license": "Apache-2.0"
+}

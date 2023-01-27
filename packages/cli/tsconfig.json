@@ -1,48 +1,51 @@
 {
-  "extends": "../../tsconfig.lib.json",
-  "include": [
-    "./src",
-    "./src/**/*.json"
-  ],
-  "compilerOptions": {
-    "module": "CommonJS",
-    "declarationDir": "./lib",
-    "outDir": "./lib",
-    "rootDir": "./src",
-    "strict": false,
-    "types": [
-      "node",
-      "jest",
-      "webpack"
+    "extends": "../../tsconfig.lib.json",
+    "include": [
+        "./src",
+        "./src/**/*.json"
+    ],
+    "compilerOptions": {
+        "module": "CommonJS",
+        "declarationDir": "./lib",
+        "outDir": "./lib",
+        "rootDir": "./src",
+        "strict": false,
+        "types": [
+            "node",
+            "jest",
+            "webpack"
+        ]
+    },
+    "references": [
+        {
+            "path": "../libs/is-modern-lib"
+        },
+        {
+            "path": "../libs/logger"
+        },
+        {
+            "path": "../libs/minicss"
+        },
+        {
+            "path": "../libs/dippy"
+        },
+        {
+            "path": "../../tools/check-versions"
+        },
+        {
+            "path": "../../tools/migrate"
+        },
+        {
+            "path": "../libs/package-manager-wrapper"
+        },
+        {
+            "path": "../../tools/build"
+        },
+        {
+            "path": "../tramvai/react"
+        },
+        {
+            "path": "../libs/webpack-dedupe-plugin"
+        }
     ]
-  },
-  "references": [
-    {
-      "path": "../libs/is-modern-lib"
-    },
-    {
-      "path": "../libs/logger"
-    },
-    {
-      "path": "../libs/minicss"
-    },
-    {
-      "path": "../libs/dippy"
-    },
-    {
-      "path": "../../tools/check-versions"
-    },
-    {
-      "path": "../../tools/migrate"
-    },
-    {
-      "path": "../libs/package-manager-wrapper"
-    },
-    {
-      "path": "../../tools/build"
-    },
-    {
-      "path": "../tramvai/react"
-    }
-  ]
 }
