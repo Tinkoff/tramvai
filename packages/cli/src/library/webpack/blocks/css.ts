@@ -22,6 +22,7 @@ export const cssWebpackRulesFactory =
         cssLocalIdentName = null,
         cssLocalIdentNameDev = cssLocalIdentName ?? cssLocalIdentNameDevDefault,
         cssLocalIdentNameProd = cssLocalIdentName ?? cssLocalIdentNameProdDefault,
+        cssModulePattern,
       } = {},
     } = configManager.build.configurations;
     const { env, sourceMap } = configManager;
@@ -35,6 +36,10 @@ export const cssWebpackRulesFactory =
       const cssModulesOptions: Record<string, any> = {
         localIdentName,
       };
+
+      if (cssModulePattern) {
+        cssModulesOptions.auto = new RegExp(cssModulePattern);
+      }
 
       // TODO: можно будет избавиться от проверки и сотавить всё в minicss-плагине, когда зарелизят эти изменения
       // https://github.com/webpack-contrib/css-loader/blob/master/src/utils.js#L310

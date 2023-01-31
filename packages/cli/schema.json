@@ -188,6 +188,10 @@
                               "assetsConfig": {
                                 "title": "Path to postcss config file for assets",
                                 "type": "string"
+                              },
+                              "cssModulePattern": {
+                                "title": "Enable CSS modules for all files matching /RegExp/i.test(filename) regexp.",
+                                "type": "string"
                               }
                             },
                             "additionalProperties": false
@@ -1313,6 +1317,10 @@
                                 "assetsConfig": {
                                   "title": "Path to postcss config file for assets",
                                   "type": "string"
+                                },
+                                "cssModulePattern": {
+                                  "title": "Enable CSS modules for all files matching /RegExp/i.test(filename) regexp.",
+                                  "type": "string"
                                 }
                               },
                               "additionalProperties": false
@@ -1895,6 +1903,10 @@
                                   },
                                   "assetsConfig": {
                                     "title": "Path to postcss config file for assets",
+                                    "type": "string"
+                                  },
+                                  "cssModulePattern": {
+                                    "title": "Enable CSS modules for all files matching /RegExp/i.test(filename) regexp.",
                                     "type": "string"
                                   }
                                 },

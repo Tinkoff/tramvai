@@ -80,6 +80,23 @@ Name generation is configured via the options `cssLocalIdentNameDev` and `cssLoc
 };
 ```
 
+### CSS modules processing
+
+By default, all `*.css` imports will be processed as CSS Modules.
+
+IF you want to disable Modules for some files, for example with global styles, you can do it by adding `cssModulePattern` regexp to the config:
+
+```json
+"commands": {
+  "build": {
+    "configurations": {
+      // CSS Modules will be disabled for *.global.css files
+      "postcss": "/^(?!.global.css$).$/"
+    }
+  }
+}
+```
+
 ### Polyfills for the standard NodeJS modules
 
 By default, `webpack` starting with 5th version, do not add polyfills to browser bundle when using nodejs standard modules in the browser code, e.g. when using _crypto_, _path_, _process_, _buffer_, etc.

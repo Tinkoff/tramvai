@@ -196,6 +196,10 @@ interface BuildConfig {
        * @title Path to postcss config file for assets
        */
       assetsConfig?: string;
+      /**
+       * @title Enable CSS modules for all files matching /RegExp/i.test(filename) regexp.
+       */
+      cssModulePattern?: string;
     };
     /**
      * @title `@@deprecated @tramvai/cli now supports baseUrl and paths from the app's tsconfig.json file.

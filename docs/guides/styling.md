@@ -38,28 +38,30 @@ It is not required at this moment, but prefer use `.module.css` suffix for CSS f
 
 ### Global styles
 
-You can define some global styles for specific selector:
+All *.css file imports will be treated as CSS Modules by default. To disable CSS Modules processing for specific styles within a CSS file, you can use the :global scope. For example:
 
-```css title="app.module.css"
-:global(.layout) {
-  display: flex;
+```css
+.header {
+  background-color: red;
+}
+
+:global .global-header {
+  background-color: blue;
 }
 ```
+In this example, the .header class will be processed as a CSS Module, while the .global-header class will not be processed as a module and will have a global scope.
 
-Or define a global block:
+To disable CSS Modules processing for specific files, such as global styles, you can add the cssModulePattern regular expression to the configuration as follows:
 
-```css title="app.module.css"
-:global {
-  .layout {
-    display: flex;
+```json
+"commands": {
+  "build": {
+    "configurations": {
+      // CSS Modules processing will be skipped for *.global.css files
+      "postcss": "/^(?!.global.css$).$/"
+    }
   }
 }
-```
-
-Then just import this file in application:
-
-```ts title="index.ts"
-import './app.module.css';
 ```
 
 ### Typings
