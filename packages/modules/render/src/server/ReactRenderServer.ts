@@ -95,7 +95,9 @@ export class ReactRenderServer {
             pipe(htmlWritable);
           },
           onError(error) {
-            // error can be inside Suspense boundaries, this is not critical, continue rendering
+            // error can be inside Suspense boundaries, this is not critical, continue rendering.
+            // for criticall errors, this callback will be called with `onShellError`,
+            // so this is a best place to error logging
             log.error({
               event: 'streaming-render:error',
               error,
