@@ -79,13 +79,13 @@ export function createToken<T = any>(name?: string, options?: TokenOptions): T {
 /**
  * Helper function to declare a optional token dependency
  */
-export function optional<Token extends TokenInterface<unknown>>(
+export function optional<Token extends TokenInterface<any>>(
   token: Token
 ): { token: Token; optional: true } {
   return { token, optional: true };
 }
 
-export type ExtractTokenType<Token extends TokenInterface<unknown>> = Token extends TokenInterface<
+export type ExtractTokenType<Token extends TokenInterface<any>> = Token extends TokenInterface<
   infer Type
 >
   ? Type
@@ -99,7 +99,7 @@ type Not<T extends boolean> = T extends true ? false : true;
 type IsNever<T> = [T] extends [never] ? true : false;
 type IsAny<T> = [T] extends [Secret] ? Not<IsNever<T>> : false;
 
-export type ExtractDependencyType<Token extends TokenInterface<unknown>> = IsAny<Token> extends true
+export type ExtractDependencyType<Token extends TokenInterface<any>> = IsAny<Token> extends true
   ? any
   : [Token] extends [MultiTokenInterface<infer Type>]
   ? Type[]

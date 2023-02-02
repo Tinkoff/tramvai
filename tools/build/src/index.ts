@@ -50,7 +50,9 @@ export class TramvaiBuild {
     logger.info(`build${this.options.watchMode ? ' in watch mode' : ''} ${this.packageJSON.name}`);
 
     try {
-      await this.clearOutput();
+      if (!this.options.only) {
+        await this.clearOutput();
+      }
 
       if (this.options.copyStaticAssets) {
         await this.copyStaticAssets();

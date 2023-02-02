@@ -16,7 +16,8 @@
     "tramvai-debug": "bin/platform-debug.js"
   },
   "scripts": {
-    "build": "npm run generate-schema && tramvai-build --only migrations --cp false && tsc ",
+    "build": "npm run generate-schema && tsc",
+    "build-publish": "npm run generate-schema && tramvai-build --only migrations --cp false && tsc",
     "watch": "npm run generate-schema && tsc -w",
     "generate-schema": "generate-schema"
   },

@@ -2,5 +2,17 @@
   "name": "@tramvai/cli",
   "sourceRoot": "packages/cli/src",
   "projectType": "library",
-  "targets": {}
+  "targets": {
+    "build-publish": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "build-publish"
+      },
+      "outputs": [
+        "packages/cli/lib",
+        "packages/cli/__migrations__",
+        "packages/cli/package.json"
+      ]
+    }
+  }
 }
