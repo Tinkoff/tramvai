@@ -14,12 +14,16 @@ import type { AnalyzeCommand } from './analyze';
 import type { StartProdCommand } from './start-prod';
 
 export * from '../di/tokens';
-export { ConfigManager } from '../config/configManager';
+export { ConfigManager, createConfigManager } from '../config/configManager';
+export { CliConfigEntry } from '../typings/configEntry/cli';
+export { ApplicationConfigEntry } from '../typings/configEntry/application';
+export { ChildAppConfigEntry } from '../typings/configEntry/child-app';
+export { ConvertToSchema } from '../schema/ConfigSchema';
 export { ConfigManager as ConfigManagerValidator } from '../models/config';
 export { getTramvaiConfig } from '../utils/getTramvaiConfig';
 export { syncJsonFile } from '../utils/syncJsonFile';
 export { babelConfigFactory } from '../library/babel';
-export { filesClientWebackRulesFactory } from '../library/webpack/blocks/filesClient';
+export { filesClientWebpackRulesFactory } from '../library/webpack/blocks/filesClient';
 export { cssWebpackRulesFactory } from '../library/webpack/blocks/css';
 export { lessWebpackRulesFactory } from '../library/webpack/blocks/less';
 export { postcssAssetsWebpackRulesFactory } from '../library/webpack/blocks/postcssAssets';

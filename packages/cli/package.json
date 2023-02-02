@@ -6,7 +6,8 @@
     "src",
     "lib",
     "bin",
-    "schema.json"
+    "schema.json",
+    "__migrations__"
   ],
   "bin": {
     "platform": "bin/platform.js",
@@ -15,7 +16,7 @@
     "tramvai-debug": "bin/platform-debug.js"
   },
   "scripts": {
-    "build": "npm run generate-schema && tsc",
+    "build": "npm run generate-schema && tramvai-build --only migrations --cp false && tsc ",
     "watch": "npm run generate-schema && tsc -w",
     "generate-schema": "generate-schema"
   },
@@ -170,6 +171,7 @@
     "@types/glob": "^7.2.0",
     "@types/http-proxy": "^1.17.9",
     "@types/inquirer": "^7.3.3",
+    "@types/fs-readdir-recursive": "^1.1.0",
     "@types/resolve": "^1.20.2",
     "@types/rimraf": "^3.0.2",
     "@types/semver": "^7.3.12",

@@ -1,4 +1,5 @@
 import type { Provider } from '@tinkoff/dippy';
+import { provide } from '@tinkoff/dippy';
 import { CLOSE_HANDLER_TOKEN, INIT_HANDLER_TOKEN } from '../../tokens';
 import {
   CONFIG_MANAGER_TOKEN,
@@ -8,23 +9,17 @@ import {
 } from '../../../../di/tokens';
 import type { ChildAppConfigEntry } from '../../../../typings/configEntry/child-app';
 import type { Params } from '../../index';
-import { ConfigManager } from '../../../../config/configManager';
 import { closeWorkerPoolTranspiler } from '../../../../library/webpack/utils/workersPool';
 import { stopServer } from '../../utils/stopServer';
 import { createServer } from '../../utils/createServer';
 import { listenServer } from '../../utils/listenServer';
+import { createConfigManager } from '../../../../config/configManager';
 
 export const sharedProviders: readonly Provider[] = [
-  {
+  provide({
     provide: CONFIG_MANAGER_TOKEN,
-    useFactory: ({
-      configEntry,
-      parameters,
-    }: {
-      configEntry: ChildAppConfigEntry;
-      parameters: Params;
-    }) => {
-      return new ConfigManager(configEntry, {
+    useFactory: ({ configEntry, parameters }) => {
+      return createConfigManager(configEntry as ChildAppConfigEntry, {
         ...parameters,
         env: 'development',
         port: parameters.port ?? 4040,
@@ -35,7 +30,7 @@ export const sharedProviders: readonly Provider[] = [
       configEntry: CONFIG_ENTRY_TOKEN,
       parameters: COMMAND_PARAMETERS_TOKEN,
     },
-  },
+  }),
   {
     provide: STATIC_SERVER_TOKEN,
     useFactory: createServer,
@@ -83,10 +78,10 @@ export const sharedProviders: readonly Provider[] = [
       staticServer: STATIC_SERVER_TOKEN,
     },
   },
-  {
+  provide({
     provide: CLOSE_HANDLER_TOKEN,
     multi: true,
-    useFactory: ({ configManager }: { configManager: typeof CONFIG_MANAGER_TOKEN }) => {
+    useFactory: ({ configManager }) => {
       return async () => {
         await closeWorkerPoolTranspiler(configManager);
       };
@@ -94,5 +89,5 @@ export const sharedProviders: readonly Provider[] = [
     deps: {
       configManager: CONFIG_MANAGER_TOKEN,
     },
-  },
+  }),
 ] as const;

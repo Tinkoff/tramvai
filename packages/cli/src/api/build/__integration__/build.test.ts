@@ -55,19 +55,10 @@ describe('@tramvai/cli build command', () => {
           name: 'app',
           type: 'application',
           root: resolve(FIXTURES_DIR, 'app'),
-          commands: {
-            build: {
-              options: {
-                server: resolve(FIXTURES_DIR, 'app/server'),
-              },
-              configurations: {
-                modern: false,
-                definePlugin: {
-                  dev: {
-                    IS_REACT_APP: true,
-                  },
-                },
-              },
+          modern: false,
+          define: {
+            development: {
+              IS_REACT_APP: 'true',
             },
           },
         },

@@ -1,6 +1,7 @@
 import * as fs from 'fs-extra';
 import path from 'path';
 import type { ConfigManager } from '../../../config/configManager';
+import type { ApplicationConfigEntry } from '../../../typings/configEntry/application';
 
 export function copyBuildFile({
   config,
@@ -8,16 +9,14 @@ export function copyBuildFile({
   fromType,
   fileName,
 }: {
-  config: ConfigManager;
+  config: ConfigManager<ApplicationConfigEntry>;
   fromType: 'client' | 'server';
   inputPath?: string;
   fileName: string;
 }) {
   const inputPathBase =
-    inputPath ||
-    (fromType === 'client' ? config.build.options.outputClient : config.build.options.outputServer);
-  const outputPathBase =
-    fromType === 'client' ? config.build.options.outputServer : config.build.options.outputClient;
+    inputPath || (fromType === 'client' ? config.output.client : config.output.server);
+  const outputPathBase = fromType === 'client' ? config.output.server : config.output.client;
 
   return fs.copy(
     path.resolve(config.rootDir, inputPathBase, fileName),

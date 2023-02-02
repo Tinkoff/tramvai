@@ -1,9 +1,10 @@
 import path from 'path';
 import type Config from 'webpack-chain';
 import type { ConfigManager } from '../../../config/configManager';
+import type { CliConfigEntry } from '../../../typings/configEntry/cli';
 import { addSvgrLoader, getSvgoOptions } from '../utils/files';
 
-export default (configManager: ConfigManager) => (config: Config) => {
+export default (configManager: ConfigManager<CliConfigEntry>) => (config: Config) => {
   const svgoOptions = getSvgoOptions(configManager);
 
   config.module
@@ -43,13 +44,13 @@ export default (configManager: ConfigManager) => (config: Config) => {
       emit: false,
     });
 
-  if (configManager.build?.configurations?.imageOptimization?.enabled) {
+  if (configManager.imageOptimization?.enabled) {
     config.module
       .rule('image-optimization')
       .test(/\.(gif|png|jpe?g|svg)$/)
       .use('image')
       .loader('image-webpack-loader')
-      .options({ ...configManager.build?.configurations?.imageOptimization?.options })
+      .options({ ...(configManager.imageOptimization?.options as Record<string, any>) })
       .end()
       .enforce('pre');
   }

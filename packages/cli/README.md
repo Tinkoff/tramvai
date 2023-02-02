@@ -44,21 +44,19 @@ After any command you can pass `--help` string, e.g. `tramvai --help` or `tramva
 
 ### Notifications settings
 
-Inside `tramvai.json` the settings for the notification can be specified at path `commands.serve.notifications`. Parameters are passed to [webpack-build-notifier](https://github.com/RoccoC/webpack-build-notifier#config-options). You can specify global configuration or a specific configuration either for client or server build.
+Inside `tramvai.json` the settings for the notification can be specified at path `notifications`. Parameters are passed to [webpack-build-notifier](https://github.com/RoccoC/webpack-build-notifier#config-options). You can specify global configuration or a specific configuration either for client or server build.
 
 ```json
-"commands": {
-    "serve": {
-      "notifications": {
-        "suppressSuccess": "always",
-        "server": {
-          "suppressWarning": true
-        },
-        "client": {
-          "activateTerminalOnError": true
-        }
-      }
+{
+  "notifications": {
+    "suppressSuccess": "always",
+    "server": {
+      "suppressWarning": true
+    },
+    "client": {
+      "activateTerminalOnError": true
     }
+  }
 }
 ```
 
@@ -67,17 +65,24 @@ Inside `tramvai.json` the settings for the notification can be specified at path
 Name generation is configured via the options `cssLocalIdentNameDev` and `cssLocalIdentNameProd` (common option `cssLocalIdentName` might be used to specify settings for both prod and dev).
 
 ```json
-"commands": {
-  "build": {
-    "configurations": {
-      "postcss": {
-        "cssLocalIdentName": "[hash:base64:5]", // default value (deprecated)
-        "cssLocalIdentNameDev": "[name]__[local]_[minicss]", // available values see in the docs to [css-loader](https://github.com/webpack-contrib/css-loader)
-        "cssLocalIdentNameProd": "[minicss]", // additionally new tag `minicss` can be used for the generating minimal css names. Based on [article](https://dev.to/denisx/reduce-bundle-size-via-one-letter-css-classname-hash-strategy-10g6)
-      };
-    };
-  };
-};
+{
+  "postcss": {
+    "cssLocalIdentName": "[hash:base64:5]", // default value (deprecated)
+  }
+}
+```
+
+or
+
+```json
+{
+  "postcss": {
+    "cssLocalIdentName": {
+      "development": "[name]__[local]_[minicss]", // available values see in the docs to [css-loader](https://github.com/webpack-contrib/css-loader)
+      "production": "[minicss]", // additionally new tag `minicss` can be used for the generating minimal css names. Based on [article](https://dev.to/denisx/reduce-bundle-size-via-one-letter-css-classname-hash-strategy-10g6)
+    }
+  }
+}
 ```
 
 ### CSS modules processing
@@ -87,12 +92,10 @@ By default, all `*.css` imports will be processed as CSS Modules.
 IF you want to disable Modules for some files, for example with global styles, you can do it by adding `cssModulePattern` regexp to the config:
 
 ```json
-"commands": {
-  "build": {
-    "configurations": {
-      // CSS Modules will be disabled for *.global.css files
-      "postcss": "/^(?!.global.css$).$/"
-    }
+{
+  "postcss": {
+    // CSS Modules processing will be skipped for *.global.css files
+    "cssModulePattern": "/^(?!.global.css$).$/"
   }
 }
 ```
@@ -126,11 +129,10 @@ If you want to override path to tsconfig through **pluginOptions.tsconfig** the 
 
 ### Deduplication of modules
 
-Option `commands.build.configurations.dedupe` controls the settings of plugin for the deduplication process. Available options are:
+Option `dedupe` controls the settings of plugin for the deduplication process. Available options are:
 
 - `"equality"` - uses strict version comparison. Dedupes modules in `node_modules` with equal package version that are imported from different sources. E.g. imports for `node_modules/package/index.js` and `node_modules/nested-package/node_modules/package/index.js` are deduped into a single `node_modules/package/index.js` import whilst without dedupe it will bundle two files as separate modules.
 - `"semver"` - compares version of packages based on semver. It can dedupe all of the imports with the same major version and any of the minor and patch versions. E.g. next versions will be deduped: from `1.14.0` and `1.16.2` to `1.16.2`, from `0.14.1` and `0.16.5` to `0.16.5`, whilst versions `0.0.2` and `0.0.5` will be left without deduplication.
-- `false` - disable deduplication, by default
 
 ### Debug an app
 
@@ -159,7 +161,7 @@ By default, for browser is used the fastest sourcemaps, while for server no sour
 
 Flag `--debug` enables sourcemap generation for the server bundle.
 
-Option `commands.serve.configurations.sourceMap` enables sourcemap generation both for browser and server code.
+Option `sourceMap` enables sourcemap generation both for browser and server code.
 
 ##### Production
 
@@ -167,22 +169,11 @@ By default, sourcemaps are disabled both for the client and server code.
 
 Flag `--debug` enables sourcemaps generation for the client and server bundles.
 
-Option `commands.build.configurations.sourceMap` enables sourcemap generation for the client bundle.
-
-Option `commands.build.configurations.sourceMapServer` enables sourcemap generation for the server bundle.
+Option `sourceMap` enables sourcemap generation for bundle.
 
 ## Configuration
 
 Configuration is provided through json-file with the name `tramvai.json` in the root of the single-application/monorepo
-
-### build or serve config?
-
-When you are deciding where to put specific settings in `tramvai.json` consider next statements:
-
-- `serve` config is only for development builds (using `tramvai start`)
-- `build` config mostly focused on production builds (`tramvai build`, `tramvai analyze`, `tramvai start-prod`) but may affect development builds as well (is this case this configs are merged)
-
-In conclusion: put most of the settings in the `build` config and put settings in the `serve` config only if they are specific to development builds or you need to override `build` settings to the development process.
 
 ## How to
 

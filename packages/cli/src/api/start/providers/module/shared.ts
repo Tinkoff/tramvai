@@ -1,4 +1,5 @@
 import type { Provider } from '@tinkoff/dippy';
+import { provide } from '@tinkoff/dippy';
 import { CLOSE_HANDLER_TOKEN, INIT_HANDLER_TOKEN } from '../../tokens';
 import {
   CONFIG_MANAGER_TOKEN,
@@ -6,25 +7,19 @@ import {
   COMMAND_PARAMETERS_TOKEN,
   STATIC_SERVER_TOKEN,
 } from '../../../../di/tokens';
-import type { ModuleConfigEntry } from '../../../../typings/configEntry/module';
-import type { Params } from '../../index';
-import { ConfigManager } from '../../../../config/configManager';
+import type { ConfigManager } from '../../../../config/configManager';
+import { createConfigManager } from '../../../../config/configManager';
 import { closeWorkerPoolTranspiler } from '../../../../library/webpack/utils/workersPool';
 import { stopServer } from '../../utils/stopServer';
 import { createServer } from '../../utils/createServer';
 import { listenServer } from '../../utils/listenServer';
+import type { ModuleConfigEntry } from '../../../../typings/configEntry/module';
 
 export const sharedProviders: readonly Provider[] = [
-  {
+  provide({
     provide: CONFIG_MANAGER_TOKEN,
-    useFactory: ({
-      configEntry,
-      parameters,
-    }: {
-      configEntry: ModuleConfigEntry;
-      parameters: Params;
-    }) => {
-      return new ConfigManager(configEntry, {
+    useFactory: ({ configEntry, parameters }) => {
+      return createConfigManager(configEntry as ModuleConfigEntry, {
         ...parameters,
         env: 'development',
         port: parameters.port ?? 4040,
@@ -35,21 +30,15 @@ export const sharedProviders: readonly Provider[] = [
       configEntry: CONFIG_ENTRY_TOKEN,
       parameters: COMMAND_PARAMETERS_TOKEN,
     },
-  },
-  {
+  }),
+  provide({
     provide: STATIC_SERVER_TOKEN,
     useFactory: createServer,
-  },
-  {
+  }),
+  provide({
     provide: INIT_HANDLER_TOKEN,
     multi: true,
-    useFactory: ({
-      staticServer,
-      parameters,
-    }: {
-      staticServer: typeof STATIC_SERVER_TOKEN;
-      parameters: Params;
-    }) => {
+    useFactory: ({ staticServer, parameters }) => {
       return async function staticServerListen() {
         const { host = 'localhost', port = 4040 } = parameters;
 
@@ -70,11 +59,11 @@ export const sharedProviders: readonly Provider[] = [
       staticServer: STATIC_SERVER_TOKEN,
       parameters: COMMAND_PARAMETERS_TOKEN,
     },
-  },
-  {
+  }),
+  provide({
     provide: CLOSE_HANDLER_TOKEN,
     multi: true,
-    useFactory: ({ staticServer }: { staticServer: typeof STATIC_SERVER_TOKEN }) => {
+    useFactory: ({ staticServer }) => {
       return () => {
         return stopServer(staticServer);
       };
@@ -82,11 +71,11 @@ export const sharedProviders: readonly Provider[] = [
     deps: {
       staticServer: STATIC_SERVER_TOKEN,
     },
-  },
-  {
+  }),
+  provide({
     provide: CLOSE_HANDLER_TOKEN,
     multi: true,
-    useFactory: ({ configManager }: { configManager: typeof CONFIG_MANAGER_TOKEN }) => {
+    useFactory: ({ configManager }) => {
       return async () => {
         closeWorkerPoolTranspiler(configManager);
       };
@@ -94,5 +83,5 @@ export const sharedProviders: readonly Provider[] = [
     deps: {
       configManager: CONFIG_MANAGER_TOKEN,
     },
-  },
+  }),
 ] as const;

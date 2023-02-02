@@ -1,9 +1,10 @@
 import sizeOf from 'image-size';
+import type { LoaderContext } from 'webpack';
 
 /**
  * Reuse file-loader logic, but return a object with src and size of image
  */
-export default function (content) {
+export default function (this: LoaderContext<{}>, content: string) {
   const result = require('file-loader').call(this, content);
 
   const dimensions = sizeOf(this.resourcePath);

@@ -1,16 +1,20 @@
 import isNil from '@tinkoff/utils/is/nil';
+import isArray from '@tinkoff/utils/is/array';
+import isObject from '@tinkoff/utils/is/object';
 import prop from '@tinkoff/utils/object/prop';
+import mapObj from '@tinkoff/utils/object/map';
 import { resolve } from 'path';
-import type { DeduplicateStrategy } from '@tinkoff/webpack-dedupe-plugin';
-import type { ProjectType, BuildType } from '../typings/projectType';
+import type { BuildType } from '../typings/projectType';
 import type { Env } from '../typings/Env';
-import type { ConfigEntry } from '../typings/configEntry/common';
-import { validate } from './validate';
+import type { ConfigEntry, OverridableOption } from '../typings/configEntry/common';
+import { isOverridableOption } from '../typings/configEntry/common';
+import { isApplication, isChildApp, isModule, validate } from './validate';
 import moduleVersion from '../utils/moduleVersion';
 import { packageVersion } from '../utils/packageVersion';
 import { showConfig } from './showConfig';
 import type { Target } from '../typings/target';
 
+// @TODO: maybe split settings depending on env?
 export interface Settings<E extends Env> {
   env?: E;
   rootDir?: string;
@@ -18,7 +22,6 @@ export interface Settings<E extends Env> {
   buildType?: BuildType;
   debug?: boolean;
   trace?: boolean;
-  removeTypeofWindow?: boolean;
   sourceMap?: boolean;
   host?: string;
   port?: number;
@@ -37,7 +40,7 @@ export interface Settings<E extends Env> {
   csr?: boolean;
 }
 
-const getOption = <T>(optionName: string, cfgs: any[], dflt?: T): T => {
+const getOption = <T>(optionName: string, cfgs: any[], dflt: T): T => {
   const getter = prop(optionName);
 
   for (let i = 0; i < cfgs.length; i++) {
@@ -51,207 +54,130 @@ const getOption = <T>(optionName: string, cfgs: any[], dflt?: T): T => {
   return dflt;
 };
 
-export class ConfigManager<T extends ConfigEntry = ConfigEntry, E extends Env = any>
-  implements Required<Settings<E>>
-{
-  private configEntry: T;
+type OmitOverridable<T extends Record<string, any>> = {
+  [key in keyof T]: T[key] extends OverridableOption<infer U>
+    ? U
+    : T[key] extends Record<string, any>
+    ? OmitOverridable<T[key]>
+    : T[key];
+};
 
-  public name: string;
+const omitEnvOptions = <T extends Record<string, any>>(
+  env: Env,
+  options: T
+): OmitOverridable<T> => {
+  return mapObj((value) => {
+    if (isOverridableOption(value)) {
+      return value[env];
+    }
 
-  public type: ProjectType;
+    if (isObject(value) && !isArray(value)) {
+      return omitEnvOptions(env, value);
+    }
 
-  public root: string;
+    return value;
+  }, options);
+};
 
-  public build: T['commands']['build'];
+export type ConfigManager<
+  C extends ConfigEntry = ConfigEntry,
+  E extends Env = Env
+> = OmitOverridable<C> &
+  Required<Settings<E>> & {
+    target: Target;
+    buildPath: string;
+    withSettings(settings: Settings<E>): ConfigManager<C, E>;
+    dehydrate(): [C, Settings<E>];
+  };
 
-  public serve: T['commands']['serve'];
+export const createConfigManager = <C extends ConfigEntry = ConfigEntry, E extends Env = Env>(
+  configEntry: C,
+  settings: Settings<E>
+): ConfigManager<C, E> => {
+  const env: E = settings.env ?? ('development' as E);
+  const normalizedConfigEntry = omitEnvOptions(env, configEntry);
 
-  private settings: Settings<E>;
+  const { type } = configEntry;
+  const rootDir = settings.rootDir ?? process.cwd();
+  const debug = settings.debug ?? false;
+  const modern = getOption('modern', [settings, configEntry], true);
+  const buildType = settings.buildType ?? 'client';
+  let target: Target = 'defaults';
 
-  public version: string;
+  if (buildType === 'server') {
+    target = 'node';
+  } else if (modern) {
+    target = 'modern';
+  }
 
-  public env: E;
-
-  public buildType: BuildType;
-
-  public rootDir: string;
-
-  public debug: boolean;
-
-  public trace: boolean;
-
-  public sourceMap: boolean;
-
-  public host: string;
-
-  public port: number;
-
-  public staticHost: string;
-
-  public staticPort: number;
-
-  public profile: boolean;
-
-  public noServerRebuild: boolean;
-
-  public noClientRebuild: boolean;
-
-  public modern: boolean;
-
-  public dedupe: DeduplicateStrategy | false;
-
-  public dedupeIgnore?: RegExp[];
-
-  public removeTypeofWindow: boolean;
-
-  public resolveSymlinks: boolean;
-
-  public hotRefresh: boolean;
-
-  public disableProdOptimization: boolean;
-
-  public target: Target;
-
-  public fileCache: boolean;
-
-  public experiments: T['commands'][E extends 'development'
-    ? 'serve'
-    : 'build']['configurations']['experiments'];
-
-  public showConfig: boolean;
-
-  public csr: boolean;
-
-  // eslint-disable-next-line complexity,max-statements
-  constructor(configEntry: T, settings: Settings<E>) {
-    this.configEntry = configEntry;
-    this.name = configEntry.name;
-    this.type = configEntry.type;
-    this.root = configEntry.root;
-    this.build = configEntry.commands.build || {};
-    this.serve = configEntry.commands.serve || {};
-
-    this.settings = settings;
-    this.env = settings.env || ('development' as E);
-    this.rootDir = settings.rootDir || process.cwd();
-    this.version =
-      settings.version ||
-      (this.type === 'module' ? moduleVersion(configEntry) : '') ||
-      (this.type === 'child-app' ? packageVersion(configEntry, this.env, this.rootDir) : '');
-    this.buildType = settings.buildType || 'client';
-    this.debug = settings.debug || false;
-    this.trace = settings.trace || false;
-    this.sourceMap =
-      this.buildType === 'server' && this.debug
-        ? true
-        : getOption(
-            'sourceMap',
-            [
-              settings,
-              this.env === 'development' ? this.serve.configurations : this.build.configurations,
-            ],
-            false
-          );
-    this.host = settings.host || '0.0.0.0';
-    this.port = Number(settings.port ?? 3000);
-    this.staticHost = settings.staticHost || 'localhost';
-    this.staticPort = Number(settings.staticPort ?? (this.type === 'module' ? 4040 : 4000));
-    this.profile = settings.profile || false;
-    this.noServerRebuild = settings.noServerRebuild || false;
-    this.noClientRebuild = settings.noClientRebuild || false;
-    this.modern = getOption(
-      'modern',
-      [
-        settings,
-        this.env === 'development' ? this.serve.configurations : this.build.configurations,
-      ],
-      true
-    );
-    this.dedupe = this.build.configurations?.dedupe;
-    this.dedupeIgnore = this.build.configurations?.dedupeIgnore?.map(
-      (ignore) => new RegExp(`^${ignore}`)
-    );
-    this.removeTypeofWindow = this.build.configurations?.removeTypeofWindow;
-    this.resolveSymlinks = settings.resolveSymlinks ?? true;
-    this.hotRefresh = this.env === 'development' && this.serve.configurations?.hotRefresh;
-    this.disableProdOptimization = settings.disableProdOptimization ?? false;
-    this.onlyBundles = settings.onlyBundles;
-    this.target = this.resolveTarget();
+  const config: ConfigManager<C, E> = {
+    ...normalizedConfigEntry,
+    version:
+      (type === 'module' ? moduleVersion(configEntry) : '') ||
+      (type === 'child-app' ? packageVersion(configEntry, env, rootDir) : ''),
+    trace: false,
+    host: '0.0.0.0',
+    staticHost: 'localhost',
+    profile: false,
+    noClientRebuild: false,
+    noServerRebuild: false,
+    resolveSymlinks: true,
+    disableProdOptimization: false,
+    onlyBundles: [],
     // according to measures fileCache in webpack doesn't affect
     // performance much so enable it by default as it always was before
-    this.fileCache = settings.fileCache ?? true;
-    this.experiments =
-      (this.env === 'development'
-        ? this.serve.configurations?.experiments
-        : this.build.configurations?.experiments) ?? {};
-    this.showConfig = settings.showConfig ?? false;
-    this.csr = settings.csr ?? false;
+    fileCache: true,
+    showConfig: false,
+    csr: false,
+    ...settings,
+    env,
+    rootDir,
+    buildType,
+    debug,
+    port: Number(settings.port ?? 3000),
+    staticPort: Number(settings.staticPort ?? (type === 'module' ? 4040 : 4000)),
+    modern,
+    sourceMap:
+      buildType === 'server' && debug
+        ? true
+        : getOption('sourceMap', [settings, normalizedConfigEntry], false),
+    target,
+    buildPath: '',
+    withSettings(overrideSettings) {
+      return createConfigManager(configEntry, {
+        ...settings,
+        ...overrideSettings,
+      });
+    },
+    dehydrate() {
+      return [
+        configEntry,
+        {
+          ...settings,
+          // drop options that couldn't be serialized
+          stdout: undefined,
+          stderr: undefined,
+        },
+      ];
+    },
+  };
 
-    if (this.showConfig) {
-      showConfig(this);
-    }
-
-    validate(this);
+  if (isApplication(config)) {
+    config.buildPath = resolve(
+      rootDir,
+      buildType === 'server' ? config.output.server : config.output.client
+    );
+  } else if (isChildApp(config)) {
+    config.buildPath = resolve(rootDir, ...config.output.split('/'));
+  } else if (isModule(config)) {
+    config.buildPath = resolve(rootDir, ...config.output.split('/'), config.name, config.version);
   }
 
-  public onlyBundles: string[];
-
-  getBuildPath() {
-    switch (this.type) {
-      case 'application':
-        return resolve(
-          this.rootDir,
-          this.buildType === 'server'
-            ? this.build.options.outputServer
-            : this.build.options.outputClient
-        );
-      case 'module':
-        return resolve(
-          this.rootDir,
-          ...this.build.options.output.split('/'),
-          this.name,
-          this.version
-        );
-      case 'child-app':
-        return resolve(this.rootDir, ...this.build.options.output.split('/'));
-    }
-
-    throw new Error('projectType not supported');
+  if (config.showConfig) {
+    showConfig(config);
   }
 
-  withSettings(settings: Settings<E>) {
-    return new ConfigManager(this.configEntry, {
-      ...this.settings,
-      ...settings,
-    });
-  }
+  validate(config);
 
-  dehydrate() {
-    return {
-      configEntry: this.configEntry,
-      settings: {
-        ...this.settings,
-        rootDir: this.rootDir,
-        // drop options that couldn't be serialized
-        stdout: undefined,
-        stderr: undefined,
-      },
-    };
-  }
-
-  static rehydrate(state: ReturnType<ConfigManager['dehydrate']>) {
-    return new ConfigManager(state.configEntry, state.settings);
-  }
-
-  private resolveTarget(): Target {
-    if (this.buildType === 'server') {
-      return 'node';
-    }
-
-    if (this.modern) {
-      return 'modern';
-    }
-
-    return 'defaults';
-  }
-}
+  return config;
+};

@@ -37,7 +37,7 @@ function getOptions(cmd) {
   cmd.options.forEach((o) => {
     const key = o.long.replace(/^--/, '');
 
-    if (typeof cmd[key] !== 'function') {
+    if (typeof cmd[key] !== 'function' && typeof cmd[key] !== 'undefined') {
       args[key] = cmd[key];
     }
   });

@@ -15,7 +15,7 @@ export default (configManager: ConfigManager<ModuleConfigEntry>) => (config: Con
   config.target('node');
 
   config.output
-    .path(configManager.getBuildPath())
+    .path(configManager.buildPath)
     .publicPath('')
     .filename('[name]_server.js')
     .chunkFilename('[name]_server.chunk.js')

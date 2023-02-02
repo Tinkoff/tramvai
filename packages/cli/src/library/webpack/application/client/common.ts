@@ -18,12 +18,10 @@ import nodeClient from '../../blocks/nodeClient';
 import { pagesResolve } from '../../blocks/pagesResolve';
 import { DEFAULT_STATS_OPTIONS, DEFAULT_STATS_FIELDS } from '../../constants/stats';
 import { configToEnv } from '../../blocks/configToEnv';
+import { safeRequireResolve } from '../../../../utils/safeRequire';
 
 export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config: Config) => {
-  const {
-    options: { polyfill = '' } = {},
-    configurations: { fileSystemPages },
-  } = configManager.build;
+  const { polyfill, fileSystemPages } = configManager;
 
   config.name('client');
 
@@ -31,7 +29,7 @@ export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config
   config.batch(commonApplication(configManager));
   config.batch(files(configManager));
 
-  if (fileSystemPages.enable) {
+  if (fileSystemPages.enabled) {
     config.batch(pagesResolve(configManager));
   }
 
@@ -56,8 +54,10 @@ export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config
     ])
     .end();
 
-  if (polyfill) {
-    config.entry('polyfill').add(path.resolve(configManager.rootDir, polyfill));
+  const polyfillPath = path.resolve(configManager.rootDir, polyfill ?? 'src/polyfill');
+
+  if (safeRequireResolve(polyfillPath, typeof polyfill === 'undefined')) {
+    config.entry('polyfill').add(polyfillPath);
   }
 
   const statsFileName = configManager.modern ? 'stats.modern.json' : 'stats.json';

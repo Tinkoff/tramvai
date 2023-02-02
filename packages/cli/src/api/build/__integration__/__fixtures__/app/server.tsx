@@ -1,5 +1,4 @@
 import express from 'express';
-import React from 'react';
 import { createServer } from 'http';
 import { renderToString } from 'react-dom/server';
 import { appConfig } from '@tramvai/cli/lib/external/config';

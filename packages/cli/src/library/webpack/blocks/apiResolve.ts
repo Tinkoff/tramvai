@@ -6,7 +6,7 @@ import type { ApplicationConfigEntry } from '../../../typings/configEntry/applic
 
 // eslint-disable-next-line import/no-default-export
 export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config: Config) => {
-  const dir = path.resolve(configManager.rootDir, configManager.build.options.serverApiDir);
+  const dir = path.resolve(configManager.rootDir, configManager.serverApiDir);
   const files = readDir(dir);
 
   if (!files.length) {

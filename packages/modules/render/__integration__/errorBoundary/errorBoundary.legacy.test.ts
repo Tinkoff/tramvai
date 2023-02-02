@@ -7,13 +7,7 @@ describe('errorBoundary legacy', () => {
   const { getApp } = testApp({
     name: 'render',
     config: {
-      commands: {
-        build: {
-          options: {
-            polyfill: 'polyfill.ts',
-          },
-        },
-      },
+      polyfill: 'polyfill.ts',
     },
   });
   const { getPageWrapper } = testAppInBrowser(getApp);

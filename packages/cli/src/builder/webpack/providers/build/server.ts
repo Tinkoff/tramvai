@@ -29,7 +29,7 @@ export const buildServerProviders: Provider[] = [
     multi: true,
     useFactory: ({ configManager }) => {
       return function clearBuildDir() {
-        return rimraf.sync(`${configManager.getBuildPath()}/**`, {});
+        return rimraf.sync(`${configManager.buildPath}/**`, {});
       };
     },
     deps: {

@@ -4,4 +4,5 @@ export type Options = {
   watchMode?: boolean;
   forPublish?: boolean;
   preserveModules?: boolean;
+  only?: 'migrations' | 'tests';
 };

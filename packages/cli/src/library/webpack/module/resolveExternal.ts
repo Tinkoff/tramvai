@@ -1,1 +1,1 @@
-export default (name) => ['__externals', name];
+export default (name: string) => ['__externals', name];

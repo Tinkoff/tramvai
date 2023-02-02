@@ -325,3 +325,12 @@ To copy css while deb-build change next command:
 Such imports are not compiled. To use it properly you can use `@tramvai/cli` for building app or any other solution for the css-modules.
 
 > When building correctness of imports for the css is not checking so check your package manually before publication.
+
+### Build only migrations or tests
+
+If you need to build only migrations or tests files then you can specify option `--only` with either `migrations` or `tests` value.
+
+```bash
+tramvai-build --only migrations
+tramvai-build --only tests
+```

@@ -4,7 +4,6 @@ import path from 'path';
 import common from '../common/main';
 
 import type { ConfigManager } from '../../../config/configManager';
-import type { ModuleConfigEntry } from '../../../typings/configEntry/module';
 
 import ts from '../blocks/ts';
 import js from '../blocks/js';
@@ -14,8 +13,9 @@ import type { ModuleFederationPluginOptions } from '../types/webpack';
 import { getSharedModules } from './moduleFederationShared';
 import { configToEnv } from '../blocks/configToEnv';
 import sourcemaps from '../blocks/sourcemaps';
+import type { ChildAppConfigEntry } from '../../../typings/configEntry/child-app';
 
-export default (configManager: ConfigManager<ModuleConfigEntry>) => (config: Config) => {
+export default (configManager: ConfigManager<ChildAppConfigEntry>) => (config: Config) => {
   const { name, root, sourceMap } = configManager;
 
   const cssLocalIdentName =

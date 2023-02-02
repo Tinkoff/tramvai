@@ -2,6 +2,7 @@ import type { Provider } from '@tinkoff/dippy';
 import { provide } from '@tinkoff/dippy';
 import rimraf from 'rimraf';
 import webpack from 'webpack';
+import type { ConfigManager } from '../../../../config/configManager';
 import {
   CLI_PACKAGE_MANAGER,
   CLI_ROOT_DIR_TOKEN,
@@ -47,7 +48,7 @@ export const buildClientProviders: Provider[] = [
     multi: true,
     useFactory: ({ configManager }) => {
       return function clearBuildDir() {
-        return rimraf.sync(`${configManager.getBuildPath()}/**`, {});
+        return rimraf.sync(`${configManager.buildPath}/**`, {});
       };
     },
     deps: {
@@ -59,7 +60,7 @@ export const buildClientProviders: Provider[] = [
     multi: true,
     useFactory: ({ configManager, rootDir, packageManager }) => {
       return async function prepareImageOptimization() {
-        if (configManager.build?.configurations?.imageOptimization?.enabled) {
+        if (configManager.imageOptimization?.enabled) {
           await npmRequire({
             cliRootDir: rootDir,
             packageManager,

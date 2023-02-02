@@ -2,7 +2,7 @@ type PackageManagers = 'npm' | 'yarn';
 
 const choices = ['npm', 'yarn'];
 
-const packageManagerQuestion = (answer) => ({
+const packageManagerQuestion = (answer: string) => ({
   type: 'list' as const,
   name: 'packageManager' as const,
   message: 'Choose a package manager for the project',

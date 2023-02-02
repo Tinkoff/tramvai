@@ -5,14 +5,15 @@ import type { EventEmitter } from 'events';
 import type { ConfigManager } from '../../config/configManager';
 import type { GetBuildStats } from '../../typings/build/Builder';
 import type { AnalyzePlugin } from './types';
+import type { CliConfigEntry } from '../../typings/configEntry/cli';
 
-export const CLIENT_CONFIG_MANAGER_TOKEN = createToken<ConfigManager>(
+export const CLIENT_CONFIG_MANAGER_TOKEN = createToken<ConfigManager<CliConfigEntry>>(
   'builder-webpack clientConfigManager'
 );
-export const CLIENT_MODERN_CONFIG_MANAGER_TOKEN = createToken<ConfigManager>(
+export const CLIENT_MODERN_CONFIG_MANAGER_TOKEN = createToken<ConfigManager<CliConfigEntry>>(
   'builder-webpack clientModernConfigManager'
 );
-export const SERVER_CONFIG_MANAGER_TOKEN = createToken<ConfigManager>(
+export const SERVER_CONFIG_MANAGER_TOKEN = createToken<ConfigManager<CliConfigEntry>>(
   'builder-webpack serverConfigManager'
 );
 export const WEBPACK_CLIENT_CONFIG_TOKEN = createToken<Config>('builder-webpack clientConfig');

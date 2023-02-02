@@ -95,7 +95,7 @@ export async function cliInitialized(cliArgs = process.argv) {
     );
 
     return await cliInstance.run(cliArgs);
-  } catch (e) {
+  } catch (e: any) {
     logger.event({
       type: 'error',
       event: 'GLOBAL:ERROR',

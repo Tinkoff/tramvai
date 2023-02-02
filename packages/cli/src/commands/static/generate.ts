@@ -17,8 +17,8 @@ export const generateStatic = async (
   const q = new PQueue(MAX_CONCURRENT);
   const promises = [];
 
-  const { host, port, rootDir, build } = configManager;
-  const staticPath = resolve(rootDir, build.options.outputStatic);
+  const { host, port, rootDir, output } = configManager;
+  const staticPath = resolve(rootDir, output.static);
   const serverPath = `http://${host}:${port}`;
 
   for (const path of paths) {

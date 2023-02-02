@@ -8,12 +8,16 @@ const bundlesMap = {
   third: () => import('./bundles/third'),
 };
 
-const url = new URL(window.location.href);
+if (typeof window === 'undefined') {
+  require('./server')
+} else {
+  const url = new URL(window.location.href);
 
-if (url.searchParams.has('bundle')) {
-  bundlesMap[
-    url.searchParams.get('bundle') as keyof typeof bundlesMap
-  ]().then(({ default: name }: { default: string }) => console.log(`loaded bundle ${name}`));
+  if (url.searchParams.has('bundle')) {
+    bundlesMap[
+      url.searchParams.get('bundle') as keyof typeof bundlesMap
+    ]().then(({ default: name }: { default: string }) => console.log(`loaded bundle ${name}`));
+  }
+
+  ReactDOM.hydrate(<App />, document.getElementById('root'));
 }
-
-ReactDOM.hydrate(<App />, document.getElementById('root'));

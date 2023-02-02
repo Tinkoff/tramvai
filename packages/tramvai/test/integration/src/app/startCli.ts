@@ -52,7 +52,7 @@ export const startCli = async (
           config: mergeDeep(
             {
               // disable hot-refresh that may break checks for full page load because of never-ending request
-              commands: { serve: { configurations: { hotRefresh: false } } },
+              hotRefresh: { enabled: false },
             },
             targetOrConfig
           ),

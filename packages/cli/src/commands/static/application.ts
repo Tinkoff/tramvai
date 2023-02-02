@@ -11,7 +11,7 @@ import { webpackServerConfig } from '../../library/webpack/application/server/pr
 import type { CommandResult } from '../../models/command';
 import type { ApplicationConfigEntry } from '../../typings/configEntry/application';
 import type { Params } from './command';
-import { ConfigManager } from '../../config/configManager';
+import { createConfigManager } from '../../config/configManager';
 import { request } from './request';
 import { generateStatic } from './generate';
 import { toWebpackConfig } from '../../library/webpack/utils/toWebpackConfig';
@@ -27,7 +27,7 @@ export const staticApp = async (
   configEntry: ApplicationConfigEntry,
   options: Params
 ): Promise<CommandResult> => {
-  const clientConfigManager = new ConfigManager(configEntry, {
+  const clientConfigManager = createConfigManager(configEntry, {
     env: 'production',
     ...options,
     buildType: 'client',
@@ -46,17 +46,8 @@ export const staticApp = async (
     });
   }
 
-  const {
-    name,
-    host,
-    port,
-    staticPort,
-    staticHost,
-    build: {
-      options: { outputClient },
-    },
-  } = serverConfigManager;
-  const root = serverConfigManager.getBuildPath();
+  const { name, host, port, staticPort, staticHost, output } = serverConfigManager;
+  const root = serverConfigManager.buildPath;
 
   context.logger.event({
     type: 'debug',
@@ -76,7 +67,7 @@ export const staticApp = async (
       PORT_SERVER: `${port}`,
       ASSETS_PREFIX:
         process.env.ASSETS_PREFIX ??
-        `http://${staticHost}:${staticPort}/${outputClient.replace(/\/$/, '')}/`,
+        `http://${staticHost}:${staticPort}/${output.client.replace(/\/$/, '')}/`,
     },
   });
 

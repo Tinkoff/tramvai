@@ -20,10 +20,7 @@ import { extractCssPluginFactory } from '../../blocks/extractCssPlugin';
 
 // eslint-disable-next-line import/no-default-export
 export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config: Config) => {
-  const {
-    options: { server = '', outputServer = '' } = {},
-    configurations: { fileSystemPages },
-  } = configManager.build;
+  const { output, fileSystemPages } = configManager;
 
   config.name('server');
 
@@ -32,7 +29,7 @@ export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config
   config.batch(files(configManager));
   config.batch(apiResolve(configManager));
 
-  if (fileSystemPages.enable) {
+  if (fileSystemPages.enabled) {
     config.batch(pagesResolve(configManager));
   }
 
@@ -43,13 +40,13 @@ export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config
 
   config
     .entry('server')
-    .add(path.resolve(configManager.rootDir, server))
+    .add(path.resolve(configManager.rootDir, `${configManager.root}/index`))
     .end()
     .resolve.extensions.merge(['.node']);
 
   config.output
-    .path(configManager.getBuildPath())
-    .publicPath(path.posix.join('/', outputServer))
+    .path(configManager.buildPath)
+    .publicPath(path.posix.join('/', output.server))
     .filename('server.js');
 
   config.optimization.splitChunks(false).removeAvailableModules(false);

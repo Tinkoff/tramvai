@@ -15,21 +15,15 @@ describe('router/no-spa-with-not-found', () => {
   const { getApp } = testApp({
     name: 'router-no-spa-with-not-found',
     config: {
-      commands: {
-        build: {
-          configurations: {
-            definePlugin: {
-              dev: {
-                'process.env.TEST_NOT_FOUND': true,
-              },
-            },
-            fileSystemPages: {
-              enable: true,
-              pagesDir: '../shared/pages',
-              routesDir: false,
-            },
-          },
+      define: {
+        development: {
+          'process.env.TEST_NOT_FOUND': 'true',
         },
+      },
+      fileSystemPages: {
+        enabled: true,
+        pagesDir: '../shared/pages',
+        routesDir: false,
       },
     },
   });

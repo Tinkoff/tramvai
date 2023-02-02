@@ -44,12 +44,8 @@ beforeAll(async () => {
         type: 'child-app',
         root: resolve(__dirname, 'child-app', 'base'),
         name: 'base',
-        commands: {
-          serve: {
-            configurations: {
-              hotRefresh: true,
-            },
-          },
+        hotRefresh: {
+          enabled: true,
         },
       },
     }),
@@ -122,16 +118,10 @@ const { getApp } = testApp(
   {
     name: 'root-app',
     config: {
-      commands: {
-        build: {
-          configurations: {
-            definePlugin: {
-              dev: {
-                get 'process.env.CHILD_APP_BASE'() {
-                  return `"${getStaticUrl(childAppBase)}/"`;
-                },
-              },
-            },
+      define: {
+        development: {
+          get 'process.env.CHILD_APP_BASE'() {
+            return `"${getStaticUrl(childAppBase)}/"`;
           },
         },
       },

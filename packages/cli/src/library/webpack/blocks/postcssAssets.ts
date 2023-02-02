@@ -4,17 +4,16 @@ import PostcssAssetsPlugin from 'postcss-assets-webpack-plugin';
 import type { ConfigManager } from '../../../config/configManager';
 
 import { safeRequire } from '../../../utils/safeRequire';
+import type { CliConfigEntry } from '../../../typings/configEntry/cli';
 
 export const postcssAssetsWebpackRulesFactory =
-  (configManager: ConfigManager) => (config: Config) => {
-    const { postcss: { assetsConfig: postcssAssetsConfigPath = '' } = {} } =
-      configManager.build.configurations;
+  (configManager: ConfigManager<CliConfigEntry>) => (config: Config) => {
+    const {
+      postcss: { assetsConfig: postcssAssetsConfigPath = '' },
+    } = configManager;
 
     const postcssAssetsConfig = postcssAssetsConfigPath
-      ? safeRequire(
-          path.resolve(configManager.rootDir, postcssAssetsConfigPath),
-          process.env.NODE_ENV === 'test'
-        ) ?? {
+      ? safeRequire(path.resolve(configManager.rootDir, postcssAssetsConfigPath)) ?? {
           plugins: [],
         }
       : { plugins: [] };

@@ -2,12 +2,15 @@ import fs from 'fs';
 import path from 'path';
 import { copyBuildFile } from './copyBuildFile';
 import type { ConfigManager } from '../../../config/configManager';
+import type { ApplicationConfigEntry } from '../../../typings/configEntry/application';
 
-export const copyStatsJsonFileToServerDirectory = async (clientConfigManager: ConfigManager) => {
+export const copyStatsJsonFileToServerDirectory = async (
+  clientConfigManager: ConfigManager<ApplicationConfigEntry>
+) => {
   const STATS_JSON_FILE_NAME = 'stats.json';
   const STATS_JSON_FILE_NAME_MODERN = 'stats.modern.json';
 
-  const statsJsonFileDirectoryPath = clientConfigManager.build.options.outputClient;
+  const statsJsonFileDirectoryPath = clientConfigManager.output.client;
 
   const statsJsonFilePath = path.resolve(
     clientConfigManager.rootDir,

@@ -10,7 +10,7 @@ import {
 import { stopServer } from '../../utils/stopServer';
 import type { ApplicationConfigEntry } from '../../../../typings/configEntry/application';
 import type { Params } from '../../index';
-import { ConfigManager } from '../../../../config/configManager';
+import { createConfigManager } from '../../../../config/configManager';
 import { createServer } from '../../utils/createServer';
 import { listenServer } from '../../utils/listenServer';
 import { getListeningPort } from '../../utils/getListeningPort';
@@ -29,7 +29,7 @@ export const sharedProviders: readonly Provider[] = [
       server: typeof SERVER_TOKEN;
       staticServer: typeof STATIC_SERVER_TOKEN;
     }) => {
-      return new ConfigManager(configEntry, {
+      return createConfigManager(configEntry, {
         ...parameters,
         env: 'development',
         buildType: 'client',

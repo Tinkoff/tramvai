@@ -6,7 +6,7 @@ export type ModuleFederationPluginOptions = ConstructorParameters<
 
 export type ModuleFederationSharedObject = Record<
   string,
-  Exclude<Exclude<ModuleFederationPluginOptions['shared'], any[]>[string], string>
+  Exclude<Exclude<Required<ModuleFederationPluginOptions>['shared'], any[]>[string], string>
 >;
 
-export type SplitChunksOptions = Configuration['optimization']['splitChunks'];
+export type SplitChunksOptions = Required<Required<Configuration>['optimization']>['splitChunks'];

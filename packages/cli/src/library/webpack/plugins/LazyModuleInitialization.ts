@@ -1,5 +1,6 @@
 import type { Compiler, LibraryOptions } from 'webpack';
 import { library, sources } from 'webpack';
+// @ts-ignore
 // eslint-disable-next-line no-restricted-imports
 import ExportPropertyLibraryPlugin from 'webpack/lib/library/ExportPropertyLibraryPlugin';
 
@@ -35,7 +36,11 @@ export default class LazyModuleInitialization extends library.AbstractLibraryPlu
     };
   }
 
-  render(source: sources.Source, context, { options: { name } }) {
+  render(
+    source: sources.Source,
+    context: unknown,
+    { options: { name } }: { options: { name: string } }
+  ) {
     // оборачиваем код модуля в lazy-обёртку
     return new sources.ConcatSource(
       'window.__externals = window.__externals || {};\n',

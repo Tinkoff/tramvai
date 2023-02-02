@@ -1,40 +1,20 @@
-import type { ConfigEntry } from './common';
+import type { CliConfigEntry } from './cli';
 
-export interface ChildAppBuild {
-  /**
-   * @default {}
-   */
-  options?: {
-    /**
-     * @title Path to build module assets
-     * @default "dist/child-app"
-     */
-    output?: string;
-  };
-  /**
-   * @default {}
-   */
-  configurations?: ConfigEntry['commands']['build']['configurations'] & {
-    /**
-     * @default {"config": "postcss.config", "cssLocalIdentName": "[hash:base64:5]"}
-     */
-    postcss?: ConfigEntry['commands']['build']['configurations']['postcss'];
-  };
-}
-
-export interface ChildAppConfigEntry extends ConfigEntry {
+export interface ChildAppConfigEntry extends CliConfigEntry {
   type: 'child-app';
   /**
+   * @title Path to build module assets
+   * @default "dist/child-app"
+   */
+  output: string;
+  /**
    * @default {}
    */
-  commands?: {
+  postcss: CliConfigEntry['postcss'] & {
     /**
-     * @default {}
+     * @title CSS identifiers build algorithm
+     * @default "[hash:base64:5]"
      */
-    build?: ChildAppBuild;
-    /**
-     * @default {}
-     */
-    serve?: ConfigEntry['commands']['serve'];
+    cssLocalIdentName?: CliConfigEntry['postcss']['cssLocalIdentName'];
   };
 }

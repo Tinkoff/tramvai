@@ -4,8 +4,8 @@ import chalk from 'chalk';
 import type { ConfigManager } from './configManager';
 import { box } from '../utils/formatting';
 
-export const showConfig = (configManager: ConfigManager) => {
-  const configStr = prettyoutput(omit(['configEntry'], configManager), {
+export const showConfig = (configManager: ConfigManager<any, any>) => {
+  const configStr = prettyoutput(omit(['options'], configManager), {
     hideUndefined: true,
     maxDepth: Infinity,
   });

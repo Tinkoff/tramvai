@@ -15,20 +15,12 @@ describe('default utility port', () => {
   const { getApp } = testApp({
     name: 'server',
     config: {
-      commands: {
-        build: {
-          options: {
-            serverApiDir: resolve(__dirname, 'papi'),
-          },
-          configurations: {
-            definePlugin: {
-              dev: {
-                // через геттер, т.к. иначе в объекте будет свойство до иницилизации переменной port, т.е. undefined
-                get 'process.env.EXTERNAL_WEBSITE_PORT'() {
-                  return externalWebsite.getPort();
-                },
-              },
-            },
+      serverApiDir: resolve(__dirname, 'papi'),
+      define: {
+        development: {
+          // через геттер, т.к. иначе в объекте будет свойство до иницилизации переменной port, т.е. undefined
+          get 'process.env.EXTERNAL_WEBSITE_PORT'() {
+            return externalWebsite.getPort().toString();
           },
         },
       },
@@ -183,17 +175,11 @@ describe('custom utility port', () => {
     {
       name: 'server',
       config: {
-        commands: {
-          build: {
-            configurations: {
-              definePlugin: {
-                dev: {
-                  // через геттер, т.к. иначе в объекте будет свойство до иницилизации переменной port, т.е. undefined
-                  get 'process.env.EXTERNAL_WEBSITE_PORT'() {
-                    return externalWebsite.getPort();
-                  },
-                },
-              },
+        define: {
+          development: {
+            // через геттер, т.к. иначе в объекте будет свойство до иницилизации переменной port, т.е. undefined
+            get 'process.env.EXTERNAL_WEBSITE_PORT'() {
+              return externalWebsite.getPort().toString();
             },
           },
         },
@@ -229,20 +215,12 @@ describe('custom health checks path', () => {
     {
       name: 'server',
       config: {
-        commands: {
-          build: {
-            options: {
-              serverApiDir: resolve(__dirname, 'papi'),
-            },
-            configurations: {
-              definePlugin: {
-                dev: {
-                  // через геттер, т.к. иначе в объекте будет свойство до иницилизации переменной port, т.е. undefined
-                  get 'process.env.EXTERNAL_WEBSITE_PORT'() {
-                    return externalWebsite.getPort();
-                  },
-                },
-              },
+        serverApiDir: resolve(__dirname, 'papi'),
+        define: {
+          development: {
+            // через геттер, т.к. иначе в объекте будет свойство до иницилизации переменной port, т.е. undefined
+            get 'process.env.EXTERNAL_WEBSITE_PORT'() {
+              return externalWebsite.getPort().toString();
             },
           },
         },

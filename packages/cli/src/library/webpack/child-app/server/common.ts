@@ -1,14 +1,14 @@
 import type Config from 'webpack-chain';
 
 import type { ConfigManager } from '../../../../config/configManager';
-import type { ModuleConfigEntry } from '../../../../typings/configEntry/module';
 
 import common from '../common';
 import files from '../../blocks/filesServer';
 import RuntimePathPlugin from '../../plugins/RuntimePathPlugin';
 import { extractCssPluginFactory } from '../../blocks/extractCssPlugin';
+import type { ChildAppConfigEntry } from '../../../../typings/configEntry/child-app';
 
-export default (configManager: ConfigManager<ModuleConfigEntry>) => (config: Config) => {
+export default (configManager: ConfigManager<ChildAppConfigEntry>) => (config: Config) => {
   config.name('server');
 
   config.batch(common(configManager));
@@ -16,7 +16,7 @@ export default (configManager: ConfigManager<ModuleConfigEntry>) => (config: Con
   config.target('node');
 
   config.output
-    .path(configManager.getBuildPath())
+    .path(configManager.buildPath)
     .publicPath('')
     .filename(`[name]_server@${configManager.version}.js`)
     .chunkFilename('[name]_server.chunk.[hash].js');

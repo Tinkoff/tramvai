@@ -26,7 +26,7 @@ const getFileApi = ({ logger }: { logger: typeof LOGGER_TOKEN }) => {
         message: `Cannot resolve a papi handler.
 Check that you are using file based papi right way by docs https://tramvai.dev/docs/how-to/how-create-papi#automatic-handler-creation
 In case you have not added any file papi handler, consider renaming directory ./src/api (by default) to the other name to resolve conflicts with papi, or
-change settings application.commands.build.options.serverApiDir in tramvai.json`,
+change settings serverApiDir in tramvai.json`,
       });
 
       throw new Error('Not a papi');

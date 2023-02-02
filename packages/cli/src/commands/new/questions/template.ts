@@ -13,7 +13,7 @@ const choices = [
   },
 ];
 
-const templateQuestion = (answer) => ({
+const templateQuestion = (answer: string) => ({
   type: 'list' as const,
   name: 'template' as const,
   message: 'Choose a template for your project',

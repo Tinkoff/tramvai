@@ -15,20 +15,14 @@ export const webpackServerConfig = ({
   configManager: ConfigManager<ApplicationConfigEntry>;
 }) => {
   const config = new Config();
-  const { debug } = configManager;
-
-  const {
-    configurations: { sourceMapServer },
-  } = configManager.build;
+  const { debug, sourceMap } = configManager;
 
   config.batch(common(configManager));
   config.batch(commonProd(configManager));
 
   config.bail(true);
 
-  config.externals(
-    (configManager.build.configurations.externals || []).map((s) => new RegExp(`^${s}`))
-  );
+  config.externals(configManager.externals.map((s) => new RegExp(`^${s}`)));
 
   if (configManager.disableProdOptimization) {
     // with this option for id of module path to file will be used
@@ -63,7 +57,7 @@ export const webpackServerConfig = ({
     },
   ]);
 
-  if (sourceMapServer || debug) {
+  if (sourceMap || debug) {
     config.batch(sourcemaps(configManager));
   }
 

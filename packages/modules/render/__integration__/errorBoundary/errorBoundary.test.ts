@@ -7,24 +7,16 @@ describe('errorBoundary', () => {
   const { getApp } = testApp({
     name: 'render',
     config: {
-      commands: {
-        build: {
-          options: {
-            polyfill: 'polyfill.ts',
-          },
-          configurations: {
-            definePlugin: {
-              dev: {
-                'process.env.TEST_DEFAULT_ERROR_BOUNDARY': true,
-              },
-            },
-            fileSystemPages: {
-              enable: true,
-              pagesDir: 'pages',
-              routesDir: false,
-            },
-          },
+      polyfill: 'polyfill.ts',
+      define: {
+        development: {
+          'process.env.TEST_DEFAULT_ERROR_BOUNDARY': 'true',
         },
+      },
+      fileSystemPages: {
+        enabled: true,
+        pagesDir: 'pages',
+        routesDir: false,
       },
     },
   });

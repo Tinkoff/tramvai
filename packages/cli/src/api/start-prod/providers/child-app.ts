@@ -5,15 +5,14 @@ import {
   CONFIG_ENTRY_TOKEN,
   CONFIG_MANAGER_TOKEN,
 } from '../../../di/tokens';
-import type { Params } from '../index';
-import { ConfigManager } from '../../index';
-import type { ConfigEntry } from '../../../typings/configEntry/common';
+import { createConfigManager } from '../../../config/configManager';
+import type { ChildAppConfigEntry } from '../../../typings/configEntry/child-app';
 
 export const childAppProviders: readonly Provider[] = [
   provide({
     provide: CONFIG_MANAGER_TOKEN,
-    useFactory: ({ configEntry, parameters }: { configEntry: ConfigEntry; parameters: Params }) => {
-      return new ConfigManager(configEntry, {
+    useFactory: ({ configEntry, parameters }) => {
+      return createConfigManager(configEntry as ChildAppConfigEntry, {
         ...parameters,
         env: 'production',
         staticPort: parameters.staticPort ?? 4040,

@@ -3,8 +3,11 @@ import express from 'express';
 import compression from 'compression';
 import zlib from 'zlib';
 import type { ConfigManager } from '../../config/configManager';
+import type { ApplicationConfigEntry } from '../../typings/configEntry/application';
 
-export const startServer = (configManager: ConfigManager): Promise<Server> => {
+export const startServer = (
+  configManager: ConfigManager<ApplicationConfigEntry>
+): Promise<Server> => {
   const { port } = configManager;
   const app = express();
 
@@ -22,7 +25,7 @@ export const startServer = (configManager: ConfigManager): Promise<Server> => {
     next();
   });
 
-  app.use('/', express.static(configManager.build.options.outputStatic));
+  app.use('/', express.static(configManager.output.static));
 
   return new Promise((resolve) => {
     const server = app.listen(port, () => {

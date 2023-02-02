@@ -93,9 +93,7 @@ describe('@tramvai/cli start command', () => {
           port: serverPort,
           staticPort: staticServerPort,
           type: 'application',
-          configEntry: expect.objectContaining({
-            name: 'app',
-          }),
+          name: 'app',
         });
 
         const { body: browserslistConfig } = await request
@@ -136,8 +134,6 @@ describe('@tramvai/cli start command', () => {
 
         await page.goto(serverUrl);
 
-        console.log(await page.$eval('body', (node) => node.innerHTML));
-
         expect(
           await page.$eval('#cmp', (node) => (node as HTMLElement).innerText)
         ).toMatchInlineSnapshot(`"Cmp test: start"`);
@@ -173,13 +169,6 @@ describe('@tramvai/cli start command', () => {
           name: 'app',
           type: 'application',
           root,
-          commands: {
-            build: {
-              options: {
-                server: resolve(root, 'server.tsx'),
-              },
-            },
-          },
         },
       });
 

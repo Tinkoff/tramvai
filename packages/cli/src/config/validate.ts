@@ -3,24 +3,25 @@ import { sync as requireResolve } from 'resolve';
 import type { ConfigManager } from './configManager';
 import type { ApplicationConfigEntry } from '../typings/configEntry/application';
 import type { ModuleConfigEntry } from '../typings/configEntry/module';
-import { extensions } from './constants';
 import type { ChildAppConfigEntry } from '../typings/configEntry/child-app';
+import { extensions } from './constants';
+import type { Env } from '../typings/Env';
 
-export const isApplication = (
-  configManager: ConfigManager
-): configManager is ConfigManager<ApplicationConfigEntry> => {
+export const isApplication = <E extends Env>(
+  configManager: ConfigManager<any, E>
+): configManager is ConfigManager<ApplicationConfigEntry, E> => {
   return configManager.type === 'application';
 };
 
-export const isModule = (
-  configManager: ConfigManager
-): configManager is ConfigManager<ModuleConfigEntry> => {
+export const isModule = <E extends Env>(
+  configManager: ConfigManager<any, E>
+): configManager is ConfigManager<ModuleConfigEntry, E> => {
   return configManager.type === 'module';
 };
 
-export const isChildApp = (
-  configManager: ConfigManager
-): configManager is ConfigManager<ChildAppConfigEntry> => {
+export const isChildApp = <E extends Env>(
+  configManager: ConfigManager<any, E>
+): configManager is ConfigManager<ChildAppConfigEntry, E> => {
   return configManager.type === 'child-app';
 };
 
@@ -28,7 +29,7 @@ const throwErrorMissing = (config: string, path: string) => {
   throw new Error(`Can not resolve '${path}', check your configuration: '${config}'`);
 };
 
-export const validate = (configManager: ConfigManager) => {
+export const validate = (configManager: ConfigManager<any, any>) => {
   const { rootDir } = configManager;
 
   const isMissing = (path: string) => {
@@ -43,27 +44,15 @@ export const validate = (configManager: ConfigManager) => {
   };
 
   if (isApplication(configManager)) {
-    const {
-      root,
-      buildType,
-      build: { options },
-    } = configManager;
+    const { root, buildType, polyfill } = configManager;
 
     if (buildType === 'client') {
-      const { polyfill } = options;
-
       if (isMissing(root)) {
         throwErrorMissing('root', `${root}/index`);
       }
 
       if (polyfill && isMissing(polyfill)) {
-        throwErrorMissing('commands.build.options.polyfill', polyfill);
-      }
-    } else {
-      const { server } = options;
-
-      if (isMissing(server)) {
-        throwErrorMissing('commands.build.options.server', server);
+        throwErrorMissing('polyfill', polyfill);
       }
     }
   } else if (isModule(configManager)) {

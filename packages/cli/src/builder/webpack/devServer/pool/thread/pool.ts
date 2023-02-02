@@ -15,6 +15,13 @@ export const ThreadWorkerBridge: WorkerBridgeFactory<Worker> = (di) => {
       // WARN: potentially dangerous code that will lead to bugs in case of run parallel builds from once process
       // as nodejs do not support this for threads - https://github.com/nodejs/node/issues/41673
       // but it is not a very popular usage anyway
+      // Found issues:
+      // 1. babel-plugin-lodash will reload configs when the cwd is changed
+      // and if this happens between file compilations
+      // it'll lead to obscure errors inside this plugin as it won't resolve
+      // previously resolved modules and there will be the mess
+      // [source code](https://github.com/lodash/babel-plugin-lodash/blob/master/src/config.js#L18)
+      // but it currently affects only jest tests probably because of jest's workers usage
       process.chdir(di.get(CONFIG_ROOT_DIR_TOKEN));
 
       const worker = new Worker(path.resolve(__dirname, './worker.js'), {

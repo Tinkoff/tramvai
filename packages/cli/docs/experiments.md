@@ -14,38 +14,17 @@ Experimental flags are provided in `tramvai.json` and should be passed separatel
       "name": "app",
       "root": "src",
       "type": "application",
-      "commands": {
-        "build": {
-          "options": {
-            "server": "src/index"
-          },
-          "configurations": {
-            "experiments": {
-              "minicss": {
-                "useImportModule": true
-              },
-              "webpack": {
-                "cacheUnaffected": true
-              },
-              "transpilation": {
-                "loader": "swc"
-              }
-            }
-          }
+      "experiments": {
+        "minicss": {
+          "useImportModule": true
         },
-        "serve": {
-          "configurations": {
-            "experiments": {
-              "minicss": {
-                "useImportModule": true
-              },
-              "webpack": {
-                "cacheUnaffected": true
-              },
-              "transpilation": {
-                "loader": "swc"
-              }
-            }
+        "webpack": {
+          "cacheUnaffected": true
+        },
+        "transpilation": {
+          "loader": {
+            "development": "swc",
+            "production": "babel"
           }
         }
       }
@@ -56,9 +35,9 @@ Experimental flags are provided in `tramvai.json` and should be passed separatel
 
 ## CLI settings
 
-### serve
+### serverRunner
 
-- `serverRunner="process"|"thread"` - use different ways to run the server app. "thread" most of the time is little faster, but might lead to some bugs, especially when running cli though nodejs api
+- `serverRunner="process"|"thread"` - use different ways to run the server app in development mode. "thread" most of the time is little faster, but might lead to some bugs, especially when running cli though nodejs api
 
 #### Defaults
 
@@ -73,7 +52,7 @@ Webpack by itself has [a list of experimental flags](https://webpack.js.org/conf
 
 ### Defaults
 
-- `cacheUnaffected=true` - should improve build performance in `serve` mode
+- `cacheUnaffected=true` - should improve build performance in development mode
 
 ## minicss
 

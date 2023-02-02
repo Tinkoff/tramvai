@@ -5,11 +5,7 @@ import fastifyCompress from '@fastify/compress';
 import fastifyStatic from '@fastify/static';
 import zlib from 'zlib';
 import { CLOSE_HANDLER_TOKEN, INIT_HANDLER_TOKEN, PROCESS_HANDLER_TOKEN } from '../tokens';
-import {
-  COMMAND_PARAMETERS_TOKEN,
-  CONFIG_MANAGER_TOKEN,
-  STATIC_SERVER_TOKEN,
-} from '../../../di/tokens';
+import { CONFIG_MANAGER_TOKEN, STATIC_SERVER_TOKEN } from '../../../di/tokens';
 import { createServer } from '../../start/utils/createServer';
 import { stopServer } from '../../start/utils/stopServer';
 import { listenServer } from '../../start/utils/listenServer';
@@ -75,12 +71,12 @@ export const sharedProviders: readonly Provider[] = [
 
         if (isApplication(configManager)) {
           await app.register(fastifyStatic, {
-            root: configManager.getBuildPath(),
-            prefix: `/${configManager.build.options.outputClient.replace(/\/$/, '')}/`,
+            root: configManager.buildPath,
+            prefix: `/${configManager.output.client.replace(/\/$/, '')}/`,
           });
         } else if (isChildApp(configManager)) {
           await app.register(fastifyStatic, {
-            root: configManager.getBuildPath(),
+            root: configManager.buildPath,
             prefix: `/${configManager.name}/`,
           });
         }

@@ -1,14 +1,24 @@
 import path from 'path';
 import readDir from 'fs-readdir-recursive';
 import fs from 'fs';
+import type { LoaderDefinitionFunction } from 'webpack';
+import type { ApplicationConfigEntry } from '../../../api';
 
 const LAYOUT_FILENAME = '_layout.tsx';
 const ERROR_BOUNDARY_FILENAME = '_error.tsx';
 
-export default function () {
+interface Options {
+  rootDir: string;
+  root: string;
+  extensions: string[];
+  fileSystemPages: ApplicationConfigEntry['fileSystemPages'];
+}
+
+// eslint-disable-next-line func-style
+const pagesResolve: LoaderDefinitionFunction<Options> = function () {
   const { fileSystemPages, rootDir, root, extensions } = this.getOptions();
-  const fsLayouts = [];
-  const fsErrorBoundaries = [];
+  const fsLayouts: string[] = [];
+  const fsErrorBoundaries: string[] = [];
 
   this.cacheable(false);
 
@@ -24,7 +34,7 @@ export default function () {
     this.addContextDependency(pagesDir);
 
     // skip files whose name starts with dot or underscore symbols
-    const pagesFiles = readDir(pagesDir, (name) => name[0] !== '.' && name[0] !== '_');
+    const pagesFiles = readDir(pagesDir, (name: string) => name[0] !== '.' && name[0] !== '_');
     const fsPages = [];
 
     for (const file of pagesFiles) {
@@ -103,4 +113,6 @@ export default function () {
   }`;
 
   return code;
-}
+};
+
+export default pagesResolve;

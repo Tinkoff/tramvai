@@ -34,7 +34,7 @@ export class StartProdCommand extends CLICommand<Params> {
     {
       name: '--rs, --resolveSymlinks',
       value: '[resolveSymlinks]',
-      transformer: (value) => value !== 'false',
+      transformer: (value: string) => value !== 'false',
       description:
         'Pass value to `resolve.symlinks` in webpack (https://webpack.js.org/configuration/resolve/#resolve-symlinks)`',
     },
@@ -76,7 +76,7 @@ export class StartProdCommand extends CLICommand<Params> {
     {
       name: '--fileCache',
       value: '[fileCache]',
-      transformer: (value) => value !== 'false',
+      transformer: (value: string) => value !== 'false',
       description: 'Enable/disable persistent file cache for used cli builder',
     },
     {

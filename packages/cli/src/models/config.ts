@@ -1,19 +1,20 @@
 import Ajv from 'ajv';
+import isObject from '@tinkoff/utils/is/object';
+import isEmpty from '@tinkoff/utils/is/empty';
 import clone from '@tinkoff/utils/clone';
 import type { Config, SyncJsonFile } from '../typings/projectType';
 import type { ConfigEntry } from '../typings/configEntry/common';
+import { isOverridableOption } from '../typings/configEntry/common';
 import { getTramvaiConfig } from '../utils/getTramvaiConfig';
 import { merge } from '../utils/merge';
 import { schema } from '../schema/tramvai';
 
 export class ConfigManager {
-  private readonly defaultConfigFileName = 'platform.json';
-
   config: Config;
 
   syncConfigFile: SyncJsonFile;
 
-  constructor({ config, syncConfigFile }) {
+  constructor({ config, syncConfigFile }: { config: Config; syncConfigFile: SyncJsonFile }) {
     this.config = config;
     this.syncConfigFile = syncConfigFile;
 
@@ -53,7 +54,7 @@ export class ConfigManager {
   }
 
   private updateConfig(config: Config): Promise<void> {
-    const { path, configName: configFileName = this.defaultConfigFileName } = getTramvaiConfig();
+    const { path } = getTramvaiConfig();
 
     return this.syncConfigFile({ path, newContent: config }).then(() => {
       this.set(config);
@@ -77,14 +78,45 @@ export class ConfigManager {
     Object.keys(configParameters.projects).forEach((projectName) => {
       const entry = configParameters.projects[projectName];
 
-      configParameters.projects[projectName] = merge(
-        projectsConfig,
-        projectsConfig[entry.type],
-        entry
-      );
+      configParameters.projects[projectName] = merge(projectsConfig, entry);
     });
 
     const ajv = new Ajv({ useDefaults: true });
+
+    ajv.addKeyword('cli_overridable', {
+      modifying: true,
+      errors: false,
+      validate(schemaValue, currentValue, propSchema) {
+        const defaultValue = (propSchema as any).default;
+
+        if (!isObject(currentValue)) {
+          return true;
+        }
+
+        let defaultDev = defaultValue;
+        let defaultProd = defaultValue;
+
+        if (isOverridableOption(defaultValue)) {
+          defaultDev = defaultValue.development;
+          defaultProd = defaultValue.production;
+        }
+
+        if (isOverridableOption(currentValue) || isEmpty(currentValue)) {
+          if (!currentValue.development) {
+            // eslint-disable-next-line no-param-reassign
+            currentValue.development = defaultDev;
+          }
+
+          if (!currentValue.production) {
+            // eslint-disable-next-line no-param-reassign
+            currentValue.production = defaultProd;
+          }
+        }
+
+        return true;
+      },
+    });
+
     const validate = ajv.compile(schema);
     const valid = validate(configParameters);
 

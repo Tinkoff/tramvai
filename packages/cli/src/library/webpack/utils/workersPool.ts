@@ -2,6 +2,7 @@ import * as threadLoader from 'thread-loader';
 import { getPool } from 'thread-loader/dist/workerPools';
 import os from 'os';
 import type { ConfigManager } from '../../../config/configManager';
+import type { CliConfigEntry } from '../../../typings/configEntry/cli';
 
 // fork https://github.com/webpack-contrib/thread-loader/blob/76535bfaafd70bd1ec50e66541d2ad8a64175880/src/workerPools.js#L6
 function getCpuNumber() {
@@ -15,17 +16,13 @@ function calculateNumberOfWorkers() {
   return Math.max(1, cpus / 2 - 1);
 }
 
-const getCustomConfig = (configManager: ConfigManager) => {
-  const {
-    build: {
-      configurations: { threadLoader: additionalConfig },
-    },
-  } = configManager;
+const getCustomConfig = (configManager: ConfigManager<CliConfigEntry>): any => {
+  const { threadLoader: additionalConfig } = configManager;
 
   return additionalConfig || {};
 };
 
-const createTranspilerConfig = (configManager: ConfigManager) => {
+const createTranspilerConfig = (configManager: ConfigManager<CliConfigEntry>) => {
   return {
     name: 'transpiler',
     poolTimeout: configManager.env === 'development' ? Infinity : undefined,
@@ -34,7 +31,7 @@ const createTranspilerConfig = (configManager: ConfigManager) => {
   };
 };
 
-export const createWorkerPoolTranspiler = (configManager: ConfigManager) => {
+export const createWorkerPoolTranspiler = (configManager: ConfigManager<CliConfigEntry>) => {
   const config = createTranspilerConfig(configManager);
 
   if (!(createWorkerPoolTranspiler as any).warmup) {
@@ -56,6 +53,6 @@ export const createWorkerPoolTranspiler = (configManager: ConfigManager) => {
   return config;
 };
 
-export const closeWorkerPoolTranspiler = (configManager: ConfigManager) => {
+export const closeWorkerPoolTranspiler = (configManager: ConfigManager<CliConfigEntry>) => {
   getPool(createTranspilerConfig(configManager))?.disposeWorkers();
 };

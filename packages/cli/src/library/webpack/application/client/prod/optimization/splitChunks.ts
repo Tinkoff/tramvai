@@ -57,14 +57,11 @@ const resolveFrameworksPaths = (rootDir: string, frameworksList: string[]) => {
 // eslint-disable-next-line max-statements
 export const splitChunksConfig =
   (configManager: ConfigManager<ApplicationConfigEntry>) => (config: Config) => {
-    const {
-      rootDir,
-      build: { configurations },
-    } = configManager;
+    const { rootDir, splitChunks } = configManager;
 
     const topLevelFrameworkPaths = resolveFrameworksPaths(rootDir, ['react', 'react-dom']);
 
-    const reachCacheGroup: Exclude<SplitChunksOptions, boolean>['cacheGroups'][string] = {
+    const reactCacheGroup: Exclude<Required<SplitChunksOptions>, boolean>['cacheGroups'][string] = {
       chunks: 'all',
       name: 'react',
       // This regex ignores nested copies of framework libraries so they're bundled with their issuer.
@@ -82,51 +79,53 @@ export const splitChunksConfig =
       // Don't let webpack eliminate this chunk (prevents this chunk from becoming a part of the commons chunk)
       enforce: true,
     };
-    let splitChunks: SplitChunksOptions = false;
+    let webpackSplitChunks: SplitChunksOptions = false;
 
-    if (configurations.granularChunks) {
-      splitChunks = {
-        chunks: 'all',
-        maxInitialRequests: 10,
-        maxAsyncRequests: 20,
-        cacheGroups: {
-          default: false,
-          defaultVendors: false,
-          reachCacheGroup,
-          shared: {
-            chunks: 'async',
-            minChunks: configurations.granularChunksSplitNumber,
-            minSize: configurations.granularChunksMinSize,
-            reuseExistingChunk: true,
-            name(module, chunks) {
-              return crypto
-                .createHash('sha1')
-                .update(
-                  chunks.reduce((acc: string, chunk: webpack.Chunk) => {
-                    return acc + chunk.name;
-                  }, '')
-                )
-                .digest('hex');
+    switch (splitChunks.mode) {
+      case 'granularChunks':
+        webpackSplitChunks = {
+          chunks: 'all',
+          maxInitialRequests: 10,
+          maxAsyncRequests: 20,
+          cacheGroups: {
+            default: false,
+            defaultVendors: false,
+            reactCacheGroup,
+            shared: {
+              chunks: 'async',
+              minChunks: splitChunks.granularChunksSplitNumber,
+              minSize: splitChunks.granularChunksMinSize,
+              reuseExistingChunk: true,
+              name(module: any, chunks: webpack.Chunk[]) {
+                return crypto
+                  .createHash('sha1')
+                  .update(
+                    chunks.reduce((acc: string, chunk: webpack.Chunk) => {
+                      return acc + chunk.name;
+                    }, '')
+                  )
+                  .digest('hex');
+              },
             },
           },
-        },
-      };
-    } else if (configurations.commonChunk) {
-      splitChunks = {
-        cacheGroups: {
-          default: false,
-          defaultVendors: false,
-          reachCacheGroup,
-          commons: {
-            name: 'common-chunk',
-            minChunks: configurations.commonChunkSplitNumber,
+        };
+      // eslint-disable-next-line no-fallthrough
+      case 'commonChunk':
+        webpackSplitChunks = {
+          cacheGroups: {
+            default: false,
+            defaultVendors: false,
+            reactCacheGroup,
+            commons: {
+              name: 'common-chunk',
+              minChunks: splitChunks.commonChunkSplitNumber,
+            },
           },
-        },
-      };
+        };
     }
 
     config.optimization
-      .splitChunks(splitChunks)
+      .splitChunks(webpackSplitChunks)
       // namedChunks должно быть включено, чтобы webpack-flush-chunks смог определить имена чанков от которых зависит чанк бандла после обработчки через splitChunks
       .set('chunkIds', 'named');
 

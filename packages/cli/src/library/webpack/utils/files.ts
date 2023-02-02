@@ -1,9 +1,10 @@
 import type Config from 'webpack-chain';
 import type { ConfigManager } from '../../../config/configManager';
+import type { CliConfigEntry } from '../../../typings/configEntry/cli';
 import { addTranspilerLoader, getTranspilerConfig } from './transpiler';
 
 export const addSvgrLoader = (
-  configManager: ConfigManager,
+  configManager: ConfigManager<CliConfigEntry>,
   config: Config,
   svgoOptions: Record<string, any>
 ) => {
@@ -23,9 +24,9 @@ export const addSvgrLoader = (
   svgrConfig.use('svgr').loader('@svgr/webpack').options({ babel: false, svgo: svgoOptions }).end();
 };
 
-export const getSvgoOptions = (configManager: ConfigManager) => {
+export const getSvgoOptions = (configManager: ConfigManager<CliConfigEntry>) => {
   return {
-    plugins: configManager.build?.configurations?.svgo?.plugins ?? [
+    plugins: configManager.svgo?.plugins ?? [
       {
         cleanupIDs: false,
       },

@@ -42,7 +42,6 @@ export default async function createNew(context: Context, params: Params): Promi
     type: 'application',
     name,
     root: directoryName,
-    commands: {},
   };
 
   const {

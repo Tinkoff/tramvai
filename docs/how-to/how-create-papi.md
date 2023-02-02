@@ -7,7 +7,7 @@ Let's consider on the basis of the case: it is necessary to create a separate ap
 
 ## Automatic handler creation
 
-Based on the configuration parameter `application.commands.build.options.serverApiDir` in tramvai.json (by default folder `./src/api`) the directory where the papi handlers are stored is determined. Create a new file in this folder with the name of our new handler, i.e. `getSum.ts` for our example. The default export from the file will be used as a handler, create it:
+Based on the configuration parameter `<app>.serverApiDir` in tramvai.json (by default folder `./src/api`) the directory where the papi handlers are stored is determined. Create a new file in this folder with the name of our new handler, i.e. `getSum.ts` for our example. The default export from the file will be used as a handler, create it:
 
 ```tsx
 import { createPapiMethod } from '@tramvai/papi';

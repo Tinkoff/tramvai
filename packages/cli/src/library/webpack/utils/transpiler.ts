@@ -5,6 +5,7 @@ import { getSwcOptions } from '../../swc';
 import babelConfig from '../../babel';
 import type { Env } from '../../../typings/Env';
 import type { Target } from '../../../typings/target';
+import type { CliConfigEntry } from '../../../typings/configEntry/cli';
 
 export type TranspilerConfig = {
   env: Env;
@@ -25,7 +26,7 @@ export type TranspilerConfig = {
 };
 
 export const addTranspilerLoader = (
-  configManager: ConfigManager,
+  configManager: ConfigManager<CliConfigEntry>,
   rule: Config.Use,
   transpilerConfig: TranspilerConfig
 ) => {
@@ -49,16 +50,10 @@ Please run "tramvai add --dev @tramvai/swc-integration" to fix the problem
 };
 
 export const getTranspilerConfig = (
-  configManager: ConfigManager,
+  configManager: ConfigManager<CliConfigEntry>,
   overrideOptions: Partial<TranspilerConfig> = {}
 ): TranspilerConfig => {
-  const {
-    generateDataQaTag,
-    alias,
-    removeTypeofWindow,
-    enableFillActionNamePlugin,
-    excludesPresetEnv,
-  } = configManager.build.configurations;
+  const { generateDataQaTag, alias, enableFillActionNamePlugin, excludesPresetEnv } = configManager;
   const { env, modern } = configManager;
 
   return {
@@ -68,8 +63,8 @@ export const getTranspilerConfig = (
     modern,
     alias,
     tramvai: true,
-    removeTypeofWindow,
-    hot: configManager.hotRefresh,
+    removeTypeofWindow: true,
+    hot: !!configManager.hotRefresh.enabled,
     excludesPresetEnv,
     enableFillActionNamePlugin,
     rootDir: configManager.rootDir,

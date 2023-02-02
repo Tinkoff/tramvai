@@ -59,6 +59,10 @@ logger.enable('tramvai-migrate');
 
   log.debug('Migrations found');
 
+  files.sort((a, b) => {
+    return a.name.localeCompare(b.name);
+  });
+
   const appliedFilename = resolve(cwd, APPLIED_FILENAME);
   await ensureFile(appliedFilename);
 
@@ -80,6 +84,8 @@ logger.enable('tramvai-migrate');
     if (!appliedMigrations.includes(fileInfo.name)) {
       log.info(`Running migration '${fileInfo.name}' from module '${packageName}'`);
       if (!api) {
+        // TODO: createApi is executed for every migration
+        // that could be optimized to single initialization
         // eslint-disable-next-line no-await-in-loop
         ({ api, save } = await createApi(cwd));
       }

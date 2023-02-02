@@ -37,27 +37,9 @@ beforeAll(async () => {
       name: 'swc-app',
       type: 'application',
       root: './',
-      commands: {
-        build: {
-          options: {
-            server: 'index.ts',
-          },
-          configurations: {
-            experiments: {
-              transpilation: {
-                loader: 'swc',
-              },
-            },
-          },
-        },
-        serve: {
-          configurations: {
-            experiments: {
-              transpilation: {
-                loader: 'swc',
-              },
-            },
-          },
+      experiments: {
+        transpilation: {
+          loader: 'swc',
         },
       },
     },

@@ -22,7 +22,7 @@ export const ProcessWorkerBridge: WorkerBridgeFactory<Worker> = (di) => {
       cluster.setupMaster({
         // указываем другой файл для работы cluster.fork
         exec: path.resolve(__dirname, './worker.js'),
-        execArgv: [].concat(
+        execArgv: ([] as string[]).concat(
           configManager.debug ? DEBUG_ARGV : [],
           configManager.trace ? TRACE_ARGV : []
         ),
@@ -43,8 +43,8 @@ export const ProcessWorkerBridge: WorkerBridgeFactory<Worker> = (di) => {
         PORT_SERVER: `${configManager.port}`,
       });
 
-      worker.process.stdout.pipe(stdout);
-      worker.process.stderr.pipe(stderr);
+      worker.process.stdout?.pipe(stdout);
+      worker.process.stderr?.pipe(stderr);
 
       return worker;
     },

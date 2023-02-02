@@ -3,6 +3,7 @@ import { existsSync } from 'fs-extra';
 import { sync as resolveSync } from 'resolve';
 import { CONFIG_MANAGER_TOKEN } from '../../../../di/tokens';
 import type { TramvaiTip } from './types';
+import { isApplication } from '../../../../config/validate';
 
 const DEFAULT_ROOT_DIR = process.cwd();
 
@@ -22,10 +23,7 @@ Consider to test out swc support.`,
     isApplicable(di) {
       const configManager = di.get(CONFIG_MANAGER_TOKEN);
 
-      return (
-        configManager.serve.configurations?.experiments?.transpilation?.loader !== 'swc' &&
-        configManager.build.configurations?.experiments?.transpilation?.loader !== 'swc'
-      );
+      return configManager.experiments?.transpilation?.loader !== 'swc';
     },
   },
   {
@@ -43,7 +41,7 @@ Consider to test out swc support.`,
     isApplicable(di) {
       const configManager = di.get(CONFIG_MANAGER_TOKEN);
 
-      return configManager.hotRefresh !== true;
+      return configManager.hotRefresh.enabled !== true;
     },
   },
   {
@@ -53,9 +51,14 @@ It may reduce the boilerplate code required with bundles`,
     isApplicable(di) {
       const configManager = di.get(CONFIG_MANAGER_TOKEN);
       const { rootDir, root } = configManager;
-      const { fileSystemPages } = configManager.build.configurations;
 
-      if (!fileSystemPages.enable) {
+      if (!isApplication(configManager)) {
+        return false;
+      }
+
+      const { fileSystemPages } = configManager;
+
+      if (!fileSystemPages.enabled) {
         return true;
       }
 
@@ -107,7 +110,7 @@ So you can remove alias config from tramvai.json`,
     isApplicable(di) {
       const configManager = di.get(CONFIG_MANAGER_TOKEN);
 
-      return !!configManager.build.configurations?.alias;
+      return !!configManager.alias;
     },
   },
   {

@@ -5,29 +5,12 @@
       "name": "{{configEntry.name}}",
       "root": "src",
       "type": "application",
-      "commands": {
-        "build": {
-          "options": {
-            "server": "src/index.ts"
-          },
-          "configurations": {
-            "sourceMap": true,
-            "modern": true,
-            "granularChunks": true,
-            "postcss": {
-              "config": "src/postcss"
-            },
-            "fileSystemPages": {
-              "enable": true
-            }
-          }
-        },
-        "serve": {
-          "configurations": {
-            "hotRefresh": true,
-            "modern": true
-          }
-        }
+      "sourceMap": true,
+      "postcss": {
+        "config": "src/postcss"
+      },
+      "fileSystemPages": {
+        "enabled": true
       }
     }
   }

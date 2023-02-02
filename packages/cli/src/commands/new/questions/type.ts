@@ -13,7 +13,7 @@ const choices = [
   },
 ];
 
-const typeQuestion = (answer) => ({
+const typeQuestion = (answer: string) => ({
   type: 'list' as const,
   name: 'type' as const,
   message: 'Choose a type for your project',

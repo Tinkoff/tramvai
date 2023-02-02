@@ -5,16 +5,7 @@
       "name": "app",
       "root": "app",
       "type": "application",
-      "commands": {
-        "build": {
-          "options": {
-            "server": "app/server.tsx"
-          },
-          "configurations": {
-            "modern": false
-          }
-        }
-      }
+      "modern": false
     },
     "module": {
       "name": "module",

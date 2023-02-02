@@ -4,7 +4,7 @@ import { nodeModules, NEXT } from './consts';
 
 import { removeAfter, removeBefore, hasValue, firstMatch } from '.';
 
-export const parseRequest = (requestStr) => {
+export const parseRequest = (requestStr: string) => {
   const parts = (requestStr || '').split('!');
 
   const file = path.relative(

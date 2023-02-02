@@ -1,6 +1,6 @@
 import type { Configuration } from 'webpack';
 import type Config from 'webpack-chain';
-import type { ConfigManager } from '@tramvai/cli';
+import type { CliConfigEntry, ConfigManager } from '@tramvai/cli';
 import {
   extractCssPluginFactory,
   cssWebpackRulesFactory,
@@ -16,7 +16,7 @@ export function addStylesRules({
 }: {
   baseConfig: Configuration;
   webpackConfig: Config;
-  configManager: ConfigManager;
+  configManager: ConfigManager<CliConfigEntry>;
 }) {
   // remove existed styles loaders
   removeRules({ baseConfig, extensions: /(css|less)/ });

@@ -2,6 +2,17 @@ import type { ModuleConfigEntry } from '../typings/configEntry/module';
 import type { ApplicationConfigEntry } from '../typings/configEntry/application';
 import type { PackageConfigEntry } from '../typings/configEntry/package';
 import type { ChildAppConfigEntry } from '../typings/configEntry/child-app';
+import type { ConfigEntry, OverridableOption } from '../typings/configEntry/common';
+
+type ConvertOptionsToSchema<T> = T extends OverridableOption<infer U>
+  ? { development?: U; production?: U } | U
+  : T extends Record<string, any>
+  ? {
+      [key in keyof T]?: ConvertOptionsToSchema<T[key]>;
+    }
+  : T;
+
+export type ConvertToSchema<T extends ConfigEntry> = ConfigEntry & ConvertOptionsToSchema<T>;
 
 /**
  * Исходный интерфейс для генерации JSON Schema файла конфигурации.
@@ -14,8 +25,8 @@ import type { ChildAppConfigEntry } from '../typings/configEntry/child-app';
  * которые можно использовать как угодно, в том числе внутри conditional веток с ключевыми словами `if`, `then`, `else`
  */
 export type ConfigSchema = {
-  application: ApplicationConfigEntry;
-  module: ModuleConfigEntry;
-  'child-app': ChildAppConfigEntry;
-  package: PackageConfigEntry;
+  application: ConvertToSchema<ApplicationConfigEntry>;
+  module: ConvertToSchema<ModuleConfigEntry>;
+  'child-app': ConvertToSchema<ChildAppConfigEntry>;
+  package: ConvertToSchema<PackageConfigEntry>;
 };

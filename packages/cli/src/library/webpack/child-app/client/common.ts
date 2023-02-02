@@ -2,7 +2,6 @@ import type Config from 'webpack-chain';
 
 import { StatsWriterPlugin } from 'webpack-stats-plugin';
 import type { ConfigManager } from '../../../../config/configManager';
-import type { ModuleConfigEntry } from '../../../../typings/configEntry/module';
 
 import common from '../common';
 import files from '../../blocks/filesClient';
@@ -12,8 +11,9 @@ import type { LazyLibraryOptions } from '../../plugins/LazyLibraryInitialization
 import { LazyLibraryInitialization } from '../../plugins/LazyLibraryInitialization';
 import { DEFAULT_STATS_FIELDS, DEFAULT_STATS_OPTIONS } from '../../constants/stats';
 import { extractCssPluginFactory } from '../../blocks/extractCssPlugin';
+import type { ChildAppConfigEntry } from '../../../../typings/configEntry/child-app';
 
-export default (configManager: ConfigManager<ModuleConfigEntry>) => (config: Config) => {
+export default (configManager: ConfigManager<ChildAppConfigEntry>) => (config: Config) => {
   const { name, version } = configManager;
   config.name('client');
 
@@ -22,7 +22,7 @@ export default (configManager: ConfigManager<ModuleConfigEntry>) => (config: Con
   config.target(['web', 'es5']);
 
   config.output
-    .path(configManager.getBuildPath())
+    .path(configManager.buildPath)
     .publicPath('auto')
     .library(configManager.name)
     .filename(`[name]_client@${version}.js`)

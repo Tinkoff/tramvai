@@ -1,9 +1,10 @@
 import Config from 'webpack-chain';
 import type { ConfigManager } from '../../../config/configManager';
+import type { CliConfigEntry } from '../../../typings/configEntry/cli';
 import js from './js';
 import ts from './ts';
 
-export const serverInline = (configManager: ConfigManager) => (config: Config) => {
+export const serverInline = (configManager: ConfigManager<CliConfigEntry>) => (config: Config) => {
   // создаём клиентский конфиг и отключаем modern режим
   const clientConfigManager = configManager.withSettings({ buildType: 'client', modern: false });
 

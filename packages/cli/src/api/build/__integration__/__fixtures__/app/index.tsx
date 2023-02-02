@@ -1,4 +1,3 @@
-import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 
@@ -9,12 +8,19 @@ const bundlesMap = {
   third: () => import('./bundles/third'),
 };
 
-const url = new URL(window.location.href);
-
-if (url.searchParams.has('bundle')) {
-  bundlesMap[url.searchParams.get('bundle')]().then(({ default: name }) =>
-    console.log(`loaded bundle ${name}`)
-  );
+if (typeof window === 'undefined') {
+  require('./server.tsx')
 }
 
-ReactDOM.hydrate(<App />, document.getElementById('root'));
+if (typeof window !== 'undefined') {
+  const url = new URL(window.location.href);
+
+  if (url.searchParams.has('bundle')) {
+    bundlesMap[url.searchParams.get('bundle')]().then(({ default: name }) =>
+      console.log(`loaded bundle ${name}`)
+    );
+  }
+
+  ReactDOM.hydrate(<App />, document.getElementById('root'));
+
+}

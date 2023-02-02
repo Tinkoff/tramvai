@@ -4,7 +4,7 @@ import {
   COMMAND_PARAMETERS_TOKEN,
   CONFIG_ENTRY_TOKEN,
 } from '../../../di/tokens';
-import { ConfigManager } from '../../../config/configManager';
+import { createConfigManager } from '../../../config/configManager';
 import type { ApplicationConfigEntry } from '../../../typings/configEntry/application';
 import type { Params } from '../index';
 
@@ -18,7 +18,7 @@ export const sharedProviders: readonly Provider[] = [
       configEntry: ApplicationConfigEntry;
       parameters: Params;
     }) => {
-      return new ConfigManager(configEntry, {
+      return createConfigManager(configEntry, {
         ...parameters,
         env: 'production',
         buildType: 'client',

@@ -4,10 +4,11 @@ import { createWorkerPoolTranspiler } from '../utils/workersPool';
 import type { ConfigManager } from '../../../config/configManager';
 import type { TranspilerConfig } from '../utils/transpiler';
 import { getTranspilerConfig, addTranspilerLoader } from '../utils/transpiler';
+import type { CliConfigEntry } from '../../../typings/configEntry/cli';
 
 // eslint-disable-next-line import/no-default-export
-export default (configManager: ConfigManager) => (config: Config) => {
-  const { transpileOnlyModernLibs } = configManager.build.configurations;
+export default (configManager: ConfigManager<CliConfigEntry>) => (config: Config) => {
+  const { transpileOnlyModernLibs } = configManager;
 
   const jsRule = (transpilerConfig: TranspilerConfig) => (rule: Config.Rule) => {
     const cfg = rule

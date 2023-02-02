@@ -5,38 +5,12 @@
       "name": "{{configEntry.name}}",
       "root": "apps/{{configEntry.name}}",
       "type": "application",
-      "commands": {
-        "build": {
-          "options": {
-            "server": "apps/{{configEntry.name}}/index.ts"
-          },
-          "configurations": {
-            "sourceMap": true,
-            "modern": true,
-            "granularChunks": true,
-            "postcss": {
-              "config": "apps/{{configEntry.name}}/postcss"
-            },
-            "alias": {
-              "~shared": "./apps/{{configEntry.name}}/shared",
-              "~entities": "./apps/{{configEntry.name}}/entities",
-              "~features": "./apps/{{configEntry.name}}/features",
-              "~widgets": "./apps/{{configEntry.name}}/widgets",
-              "~pages": "./apps/{{configEntry.name}}/pages",
-              "~processes": "./apps/{{configEntry.name}}/processes",
-              "~app": "./apps/{{configEntry.name}}/app"
-            },
-            "fileSystemPages": {
-              "enable": true
-            }
-          }
-        },
-        "serve": {
-          "configurations": {
-            "hotRefresh": true,
-            "modern": true
-          }
-        }
+      "sourceMap": true,
+      "postcss": {
+        "config": "apps/{{configEntry.name}}/postcss"
+      },
+      "fileSystemPages": {
+        "enabled": true
       }
     }
   }

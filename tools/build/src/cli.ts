@@ -32,6 +32,9 @@ const args = (yargs as Argv<Options>)
     description:
       'build package source code to many output file according to the module tree instead of building to single output file (many files generally are more tree-shakable)',
   })
+  .option('only', {
+    choices: ['migrations', 'tests'] as const,
+  })
   .alias('h', 'help')
   .help().argv;
 

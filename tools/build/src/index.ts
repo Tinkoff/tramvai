@@ -17,6 +17,15 @@ import type { PackageJSON } from './packageJson';
 import { logger } from './logger';
 import { defaultSourceDir } from './fileNames.ts';
 
+const migrationBuild = createMigrationsBuild();
+
+const ALL_BUILDS = [migrationBuild, nodeCjsBuild, nodeEsBuild, browserBuild, testsBuild];
+
+const BUILDS: Record<Options['only'], Build[]> = {
+  migrations: [migrationBuild],
+  tests: [testsBuild],
+};
+
 export class TramvaiBuild {
   private cwd: string;
   private options: Options;
@@ -27,11 +36,11 @@ export class TramvaiBuild {
   constructor(
     options: Partial<Options>,
     // список конфигураций rollup, на основе которых будут выполнены сборки
-    builds: Build[] = [createMigrationsBuild(), nodeCjsBuild, nodeEsBuild, browserBuild, testsBuild]
+    builds?: Build[]
   ) {
     this.cwd = process.cwd();
     this.options = this.normalizeOptions(options);
-    this.builds = builds;
+    this.builds = builds ?? (options.only ? BUILDS[options.only] : undefined) ?? ALL_BUILDS;
 
     this.readPackageJson();
   }

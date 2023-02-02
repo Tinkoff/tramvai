@@ -15,13 +15,6 @@ export const runFakeApp = async (
         name: 'fake-app',
         type: 'application',
         root,
-        commands: {
-          build: {
-            options: {
-              server: root,
-            },
-          },
-        },
       } as StartOptions['config'],
       config
     ),

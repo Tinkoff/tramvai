@@ -15,13 +15,6 @@ const build = async (config: Partial<BuildConfig> & { name: string; root: string
       {
         name: `router-${config.name}`,
         type: 'application',
-        commands: {
-          build: {
-            options: {
-              server: config.root,
-            },
-          },
-        },
       },
       config
     ),

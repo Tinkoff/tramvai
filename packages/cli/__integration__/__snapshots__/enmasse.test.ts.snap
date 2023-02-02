@@ -256,6 +256,12 @@ exports[`enmasse test react-app platform build react-app 1`] = `
     "type": "file",
   },
   {
+    "extension": ".map",
+    "name": "server.map",
+    "path": "dist/server/server.map",
+    "type": "file",
+  },
+  {
     "extension": ".json",
     "name": "stats",
     "path": "dist/server/stats",

@@ -84,17 +84,11 @@ For automatic `imagemin` processing use option `imageOptimization`:
 {
   "projects": {
     "appName": {
-      "commands": {
-        "build": {
-          "configurations": {
-            "imageOptimization": {
-              // enable image optimization
-              "enabled": true,
-              // options for the detailed settings (https://github.com/tcoopman/image-webpack-loader#options)
-              "options": {}
-            }
-          }
-        }
+      "imageOptimization": {
+        // enable image optimization
+        "enabled": true,
+        // options for the detailed settings (https://github.com/tcoopman/image-webpack-loader#options)
+        "options": {}
       }
     }
   }

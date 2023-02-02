@@ -20,7 +20,7 @@ export default (configManager: ConfigManager<ModuleConfigEntry>) => (config: Con
   config.target(['web', 'es5']);
 
   config.output
-    .path(configManager.getBuildPath())
+    .path(configManager.buildPath)
     .publicPath('')
     .library(configManager.name)
     .libraryTarget('lazy')

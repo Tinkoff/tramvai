@@ -21,14 +21,13 @@ export const webpackServerConfig = ({
   configManager: ConfigManager<ApplicationConfigEntry>;
   showProgress: typeof UI_SHOW_PROGRESS_TOKEN | null;
 }) => {
-  const { options: { server = '' } = {} } = configManager.build;
   const config = new Config();
 
   config.batch(common(configManager));
   config.batch(commonDev());
   config.batch(
     commonApplicationDev({
-      entry: path.resolve(configManager.rootDir, server),
+      entry: path.resolve(configManager.rootDir, `${configManager.root}/index`),
       onlyBundles: configManager.onlyBundles,
     })
   );
@@ -47,9 +46,9 @@ export const webpackServerConfig = ({
   }
 
   config.externals(
-    (configManager.build.configurations.externals || [])
-      .concat(configManager.serve.configurations.externals || [])
-      .map((s) => new RegExp(`^${s}`))
+    ['react$', 'react-dom', 'prop-types', 'fastify', 'core-js', ...configManager.externals].map(
+      (s) => new RegExp(`^${s}`)
+    )
   );
 
   config.optimization.set('emitOnErrors', false);
@@ -85,7 +84,7 @@ export const webpackServerConfig = ({
         process.env.ASSETS_PREFIX ??
         `"http://${configManager.staticHost}:${
           configManager.staticPort
-        }/${configManager.build.options.outputClient.replace(/\/$/, '')}/"`,
+        }/${configManager.output.client.replace(/\/$/, '')}/"`,
     },
   ]);
 

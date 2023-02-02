@@ -33,16 +33,7 @@ describe('modules/requestsLimiter', () => {
         name: 'requestsLimiter',
         root,
         type: 'application',
-        commands: {
-          build: {
-            configurations: {
-              sourceMap: true,
-            },
-            options: {
-              server: resolve(root, 'index.ts'),
-            },
-          },
-        },
+        sourceMap: true,
       },
       env,
       port,

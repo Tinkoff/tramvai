@@ -17,16 +17,10 @@ describe('router/spa', () => {
   const { getApp } = testApp({
     name: 'router-spa',
     config: {
-      commands: {
-        build: {
-          configurations: {
-            fileSystemPages: {
-              enable: true,
-              pagesDir: '../shared/pages',
-              routesDir: false,
-            },
-          },
-        },
+      fileSystemPages: {
+        enabled: true,
+        pagesDir: '../shared/pages',
+        routesDir: false,
       },
     },
   });

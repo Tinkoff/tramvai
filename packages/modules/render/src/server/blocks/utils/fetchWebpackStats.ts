@@ -23,17 +23,10 @@ let fetchStats: (modern: boolean) => Promise<WebpackStats> = async () => {
 
 if (process.env.NODE_ENV === 'development') {
   fetchStats = async () => {
-    const {
-      modern: configModern,
-      staticHost,
-      staticPort,
-      build: {
-        options: { outputClient },
-      },
-    } = appConfig;
+    const { modern: configModern, staticHost, staticPort, output } = appConfig;
 
     const getUrl = (filename: string) =>
-      `http://${staticHost}:${staticPort}/${outputClient}/${filename}`;
+      `http://${staticHost}:${staticPort}/${output.client}/${filename}`;
 
     const request = await fetch(getUrl(configModern ? 'stats.modern.json' : 'stats.json'));
     const stats = await request.json();

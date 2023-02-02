@@ -54,12 +54,10 @@ In this example, the .header class will be processed as a CSS Module, while the 
 To disable CSS Modules processing for specific files, such as global styles, you can add the cssModulePattern regular expression to the configuration as follows:
 
 ```json
-"commands": {
-  "build": {
-    "configurations": {
-      // CSS Modules processing will be skipped for *.global.css files
-      "postcss": "/^(?!.global.css$).$/"
-    }
+{
+  "postcss": {
+    // CSS Modules processing will be skipped for *.global.css files
+    "cssModulePattern": "/^(?!.global.css$).$/"
   }
 }
 ```
@@ -89,14 +87,8 @@ Default path for file with PostCSS plugins is `postcss.config.js`, and is define
 {
   "projects": {
     "appName": {
-      "commands": {
-        "build": {
-          "configurations": {
-            "postcss": {
-              "config": "src/postcss"
-            }
-          }
-        }
+      "postcss": {
+        "config": "src/postcss"
       }
     }
   }

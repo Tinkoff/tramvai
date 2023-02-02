@@ -8,14 +8,14 @@ const isUnifiedVersion = (name: string) => {
   return name.startsWith('@tramvai');
 };
 
-const getVersionFromDep = (dep) => parse(dep)?.version || minVersion(dep)?.version;
+const getVersionFromDep = (dep: string) => parse(dep)?.version || minVersion(dep)?.version;
 
 const updateEntry = async (
   deps: Record<string, any>,
   dep: string,
   { currentVersion, version }: { currentVersion: string; version: string }
 ) => {
-  let nextVersion: string;
+  let nextVersion: string | undefined;
 
   if (isUnifiedVersion(dep) && getVersionFromDep(deps[dep]) === currentVersion) {
     nextVersion = version;
@@ -65,6 +65,10 @@ export const updatePackageJson = async (version: string) => {
   const file = fs.readFileSync('package.json');
   const content = JSON.parse(file.toString());
   const currentVersion = getVersionFromDep(content.dependencies['@tramvai/core']);
+
+  if (!currentVersion) {
+    throw new Error("Couldn't resolve current tramvai version");
+  }
 
   if (currentVersion === version) {
     console.error('The installed version is equal to the current version, no update is required.');

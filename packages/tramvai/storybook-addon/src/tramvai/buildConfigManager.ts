@@ -1,13 +1,16 @@
+import type { ApplicationConfigEntry, ConfigManager } from '@tramvai/cli';
 import {
-  ConfigManager,
   ConfigManagerValidator,
+  createConfigManager,
   getTramvaiConfig,
   syncJsonFile,
 } from '@tramvai/cli';
 import type { StorybookOptions } from '../types';
 import { getAppRootDir } from '../utils/options';
 
-export const buildConfigManager = (options: StorybookOptions): ConfigManager => {
+export const buildConfigManager = (
+  options: StorybookOptions
+): ConfigManager<ApplicationConfigEntry> => {
   const rootDir = getAppRootDir(options);
   const { content, isSuccessful } = getTramvaiConfig(rootDir);
 
@@ -22,8 +25,8 @@ export const buildConfigManager = (options: StorybookOptions): ConfigManager => 
 
   const { projects } = content;
   const defaultProject = Object.keys(projects)[0];
-  const configManager = new ConfigManager(
-    configManagerValidator.getProject(options.tramvaiAppName || defaultProject),
+  const configManager = createConfigManager<ApplicationConfigEntry>(
+    configManagerValidator.getProject(options.tramvaiAppName || defaultProject) as any,
     { rootDir, buildType: 'client', env: process.env.NODE_ENV as any }
   );
 

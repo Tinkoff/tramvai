@@ -14,9 +14,9 @@ export default (configManager: ConfigManager) => (config: Config) => {
     .loader(path.resolve(__dirname, '../loaders/replaceContent'))
     .options({
       code: `
-  import { ConfigManager } from '@tramvai/cli/lib/config/configManager';
+  import { createConfigManager } from '@tramvai/cli/lib/config/configManager';
 
-  const appConfig = ConfigManager.rehydrate(${JSON.stringify(configManager.dehydrate())});
+  const appConfig = createConfigManager(...${JSON.stringify(configManager.dehydrate())});
   const moduleConfig = appConfig;
 
   export { appConfig, moduleConfig };

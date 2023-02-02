@@ -2,14 +2,9 @@ import { createPapiMethod } from '@tramvai/papi';
 import { PAPI_CACHE_TOKEN } from '../tokens';
 
 // in tramvai.json we've added option to setup file-based papi
-//       "commands": {
-//         "build": {
-//           "options": {
-//             "server": "server-add-file-api/index.ts",
-//             "serverApiDir": "server-add-file-api/papi"
-//           }
-//         }
-//       }
+//   {
+//      "serverApiDir": "server-add-file-api/papi"
+//   }
 //
 // And thanks to that option any file in that directory will become papi handler for url based on filename
 // /${appName}/papi/${fileName} i.e. for current file it'll be /server/papi/getSum

@@ -24,7 +24,7 @@ import '@tinkoff/pack-polyfills';
 
 #### Set up @tramvai/cli
 
-After that, we need to tell `@tramvai/cli` that our project has polyfills. To do this, in `tramvai.json` we add for our project the line `"polyfill: "src/polyfill.ts"` in `projects[APP_ID].commands.build.options.polyfill` example:
+After that, we need to tell `@tramvai/cli` that our project has polyfills. To do this, in `tramvai.json` we add for our project the line `"polyfill: "src/polyfill.ts"` in `projects[APP_ID].polyfill` example:
 
 ```json
 {
@@ -33,14 +33,7 @@ After that, we need to tell `@tramvai/cli` that our project has polyfills. To do
       "name": "pfphome",
       "root": "src",
       "type": "application",
-      "commands": {
-        "build": {
-          "options": {
-            "server": "src/index.ts",
-            "polyfill": "src/polyfill.ts"
-          }
-        }
-      }
+      "polyfill": "src/polyfill.ts"
     }
   }
 }

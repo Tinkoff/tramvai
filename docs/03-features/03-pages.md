@@ -232,16 +232,10 @@ File-System Routing is configured by `fileSystemPages` option in `tramvai.json`:
 {
   "projects": {
     "awesome-app": {
-      "commands": {
-        "build": {
-          "configurations": {
-            "fileSystemPages": {
-              "enable": true,
-              "routesDir": "routes",
-              "pagesDir": "pages"
-            }
-          }
-        }
+      "fileSystemPages": {
+        "enabled": true,
+        "routesDir": "routes",
+        "pagesDir": "pages"
       }
     }
   }

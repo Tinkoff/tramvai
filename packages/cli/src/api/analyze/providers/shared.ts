@@ -5,13 +5,14 @@ import {
   COMMAND_PARAMETERS_TOKEN,
   CONFIG_ENTRY_TOKEN,
 } from '../../../di/tokens';
-import { ConfigManager } from '../../../config/configManager';
+import { createConfigManager } from '../../../config/configManager';
+import type { CliConfigEntry } from '../../../typings/configEntry/cli';
 
 export const sharedProviders: readonly Provider[] = [
   provide({
     provide: CONFIG_MANAGER_TOKEN,
     useFactory: ({ configEntry, parameters }) => {
-      return new ConfigManager(configEntry, {
+      return createConfigManager(configEntry as CliConfigEntry, {
         ...parameters,
         env: 'production',
         buildType: 'client',

@@ -15,7 +15,7 @@ export interface Params {
 }
 
 export interface Result {
-  [key: string]: RunStats;
+  [key: string]: RunStats | undefined;
 }
 
 export type BenchmarkCommand = (

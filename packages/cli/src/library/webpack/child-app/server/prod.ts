@@ -1,14 +1,14 @@
 import Config from 'webpack-chain';
 import type { ConfigManager } from '../../../../config/configManager';
-import type { ModuleConfigEntry } from '../../../../typings/configEntry/module';
 import common from './common';
 import optimize from '../../blocks/optimize';
 import commonProd from '../../common/server/prod';
+import type { ChildAppConfigEntry } from '../../../../typings/configEntry/child-app';
 
 export const webpackServerConfig = ({
   configManager,
 }: {
-  configManager: ConfigManager<ModuleConfigEntry>;
+  configManager: ConfigManager<ChildAppConfigEntry>;
 }) => {
   const config = new Config();
 

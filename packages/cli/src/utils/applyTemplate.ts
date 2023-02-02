@@ -26,10 +26,10 @@ const replaceHbs = (pathFile: string) => pathFile.replace(/\.hbs$/, '');
  * @returns Object indicating whether the template application was successful
  */
 
-function transformOutputPath(rawPath): string {
+function transformOutputPath(rawPath: string): string {
   return rawPath
     .split('/')
-    .map((filename) => {
+    .map((filename: string) => {
       // dotfiles are ignored when published to npm, therefore in templates
       // we need to use underscore instead (e.g. "_gitignore")
       if (filename.charAt(0) === '_' && filename.charAt(1) !== '_') {

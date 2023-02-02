@@ -79,7 +79,7 @@ export class DedupePlugin {
     const id = module.identifier();
 
     if (this.cache.has(key)) {
-      this.cache.get(key).add(id);
+      this.cache.get(key)!.add(id);
     } else {
       this.cache.set(key, new Set([id]));
     }

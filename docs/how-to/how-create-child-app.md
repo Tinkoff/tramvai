@@ -91,6 +91,12 @@ Full testing requires to run standalone app that will reuse your app.
 
 ### Deploy
 
+:::info
+
+Child-app is built ignoring `modern` option in tramvai config. This is because we don't know the actual environment that will load the child-app and this environment may require legacy support
+
+:::
+
 1. Build your child-app with command `tramvai build [name]`
 2. Copy generated files from `./dist/child-app` (by default) to the external cdn
 3. Provide link to the cdn itself through token `CHILD_APP_RESOLVE_BASE_URL_TOKEN` or env `CHILD_APP_EXTERNAL_URL`

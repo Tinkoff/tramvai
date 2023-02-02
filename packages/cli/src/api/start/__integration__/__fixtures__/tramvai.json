@@ -5,23 +5,12 @@
       "name": "app",
       "root": "app",
       "type": "application",
-      "commands": {
-        "build": {
-          "options": {
-            "server": "app/server.tsx",
-            "serverApiDir": "app/api"
-          },
-          "configurations": {
-            "fileSystemPages": {
-              "enable": true
-            }
-          }
-        },
-        "serve": {
-          "configurations": {
-            "hotRefresh": true
-          }
-        }
+      "serverApiDir": "app/api",
+      "fileSystemPages": {
+        "enabled": true
+      },
+      "hotRefresh": {
+        "enabled": true
       }
     },
     "module": {

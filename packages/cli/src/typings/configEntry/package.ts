@@ -1,4 +1,6 @@
-export interface PackageConfigEntry {
+import type { ConfigEntry } from './common';
+
+export interface PackageConfigEntry extends ConfigEntry {
   type: 'package';
   /**
    * @title Package name

@@ -3,8 +3,9 @@ import TerserPlugin from 'terser-webpack-plugin';
 import CssMinimizer from 'css-minimizer-webpack-plugin';
 import CssoWebpackPlugin from 'csso-webpack-plugin';
 import type { ConfigManager } from '../../../config/configManager';
+import type { CliConfigEntry } from '../../../typings/configEntry/cli';
 
-export default (configManager: ConfigManager) => (config: Config) => {
+export default (configManager: ConfigManager<CliConfigEntry>) => (config: Config) => {
   const { modern, debug, disableProdOptimization } = configManager;
 
   if (disableProdOptimization) {
@@ -33,14 +34,12 @@ export default (configManager: ConfigManager) => (config: Config) => {
     return;
   }
 
-  const {
-    configurations: { terserParallel },
-  } = configManager.build;
+  const { terser } = configManager;
 
   config.plugin('terser').use(TerserPlugin, [
     {
       extractComments: false,
-      parallel: terserParallel,
+      parallel: terser.parallel,
       terserOptions: {
         ecma: modern ? 6 : 5,
         mangle: {
@@ -59,7 +58,7 @@ export default (configManager: ConfigManager) => (config: Config) => {
     },
   ]);
 
-  if (configManager.build.configurations.cssMinimize === 'csso') {
+  if (configManager.cssMinimize === 'csso') {
     config.plugin('csso').use(CssoWebpackPlugin as any, [{ restructure: false }]);
   } else {
     config.plugin('css-minimizer').use(CssMinimizer);

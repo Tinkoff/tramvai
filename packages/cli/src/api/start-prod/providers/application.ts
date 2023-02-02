@@ -8,17 +8,19 @@ import {
   CONFIG_MANAGER_TOKEN,
 } from '../../../di/tokens';
 import type { Params } from '../index';
-import { ConfigManager } from '../../index';
 import type { ConfigEntry } from '../../../typings/configEntry/common';
 import { CLOSE_HANDLER_TOKEN, SERVER_PROCESS_TOKEN } from '../tokens';
 import { DEBUG_ARGV } from '../../../config/constants';
 import { safeRequire } from '../../../utils/safeRequire';
+import type { ConfigManager } from '../../../config/configManager';
+import { createConfigManager } from '../../../config/configManager';
+import type { ApplicationConfigEntry } from '../../../typings/configEntry/application';
 
 export const applicationsProviders: readonly Provider[] = [
   provide({
     provide: CONFIG_MANAGER_TOKEN,
     useFactory: ({ configEntry, parameters }: { configEntry: ConfigEntry; parameters: Params }) => {
-      return new ConfigManager(configEntry, {
+      return createConfigManager(configEntry, {
         ...parameters,
         env: 'production',
         port: parameters.port ?? 3000,
@@ -35,19 +37,13 @@ export const applicationsProviders: readonly Provider[] = [
     provide: SERVER_PROCESS_TOKEN,
     useFactory: ({ configManager, parameters }) => {
       const { env } = parameters;
-      const serverConfigManager = configManager.withSettings({
+      const serverConfigManager = (
+        configManager as ConfigManager<ApplicationConfigEntry>
+      ).withSettings({
         buildType: 'server',
       });
-      const {
-        debug,
-        port,
-        staticPort,
-        staticHost,
-        build: {
-          options: { outputClient },
-        },
-      } = serverConfigManager;
-      const root = serverConfigManager.getBuildPath();
+      const { debug, port, staticPort, staticHost, output } = serverConfigManager;
+      const root = serverConfigManager.buildPath;
 
       return fork(path.resolve(root, 'server.js'), [], {
         execArgv: debug ? DEBUG_ARGV : [],
@@ -62,7 +58,7 @@ export const applicationsProviders: readonly Provider[] = [
           PORT_SERVER: `${port}`,
           ASSETS_PREFIX:
             process.env.ASSETS_PREFIX ??
-            `http://${staticHost}:${staticPort}/${outputClient.replace(/\/$/, '')}/`,
+            `http://${staticHost}:${staticPort}/${output.client.replace(/\/$/, '')}/`,
         },
       });
     },

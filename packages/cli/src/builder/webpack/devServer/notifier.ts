@@ -1,7 +1,7 @@
 import type webpack from 'webpack';
 import WebpackBuildNotifierPlugin from 'webpack-build-notifier';
 import type { ConfigManager } from '../../../config/configManager';
-import type { ApplicationConfigEntry } from '../../../typings/configEntry/application';
+import type { CliConfigEntry } from '../../../typings/configEntry/cli';
 
 const getStatsByType = (stats: webpack.MultiStats, type: string) => {
   return stats.stats.find((st) => {
@@ -11,21 +11,21 @@ const getStatsByType = (stats: webpack.MultiStats, type: string) => {
 
 export const notifier = (
   compiler: webpack.MultiCompiler,
-  configManager: ConfigManager<ApplicationConfigEntry>
+  configManager: ConfigManager<CliConfigEntry>
 ) => {
   const clientNotifier = new WebpackBuildNotifierPlugin({
     successSound: false,
     warningSound: false,
-    ...configManager.serve?.notifications,
-    ...configManager.serve?.notifications?.client,
+    ...configManager.notifications,
+    ...configManager.notifications?.client,
   });
   const serverNotifier = new WebpackBuildNotifierPlugin({
     // отлкючаем нотификацию для одного из нотификатора, чтобы не дублировать
     suppressSuccess: 'always',
     successSound: false,
     warningSound: false,
-    ...configManager.serve?.notifications,
-    ...configManager.serve?.notifications?.server,
+    ...configManager.notifications,
+    ...configManager.notifications?.server,
   });
 
   compiler.hooks.done.tap('webpack-build-notifier', (stats) => {

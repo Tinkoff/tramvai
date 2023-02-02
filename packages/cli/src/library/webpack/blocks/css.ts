@@ -5,30 +5,33 @@ import ExtractCssChunks from 'mini-css-extract-plugin';
 import { createGenerator } from '@tinkoff/minicss-class-generator';
 import { safeRequire } from '../../../utils/safeRequire';
 import type { ConfigManager } from '../../../config/configManager';
+import type { CliConfigEntry } from '../../../typings/configEntry/cli';
 
 const cssLocalIdentNameDevDefault = '[name]__[local]_[minicss]';
 const cssLocalIdentNameProdDefault = '[minicss]';
+
+export const getPostcssConfigPath = (configManager: ConfigManager<CliConfigEntry>) => {
+  return configManager.postcss.config ?? 'postcss.config';
+};
 
 interface Options {
   localIdentName?: string;
 }
 
 export const cssWebpackRulesFactory =
-  (configManager: ConfigManager, options: Options = {}) =>
+  (configManager: ConfigManager<CliConfigEntry>, options: Options = {}) =>
   (config: Config) => {
+    const { env, sourceMap } = configManager;
     const {
       postcss: {
-        config: postcssConfig = '',
-        cssLocalIdentName = null,
-        cssLocalIdentNameDev = cssLocalIdentName ?? cssLocalIdentNameDevDefault,
-        cssLocalIdentNameProd = cssLocalIdentName ?? cssLocalIdentNameProdDefault,
+        config: postcssConfig,
+        cssLocalIdentName = env === 'production'
+          ? cssLocalIdentNameProdDefault
+          : cssLocalIdentNameDevDefault,
         cssModulePattern,
-      } = {},
-    } = configManager.build.configurations;
-    const { env, sourceMap } = configManager;
-    const localIdentName =
-      options.localIdentName ??
-      (env === 'production' ? cssLocalIdentNameProd : cssLocalIdentNameDev);
+      },
+    } = configManager;
+    const localIdentName = options.localIdentName ?? cssLocalIdentName;
 
     const configCssLoader = (cfg) => {
       cfg.use('extract-css').loader(ExtractCssChunks.loader).options({ esModule: false });
@@ -55,12 +58,13 @@ export const cssWebpackRulesFactory =
       });
     };
 
-    const postcssCfg = postcssConfig
-      ? safeRequire(
-          path.resolve(configManager.rootDir, postcssConfig),
-          process.env.NODE_ENV === 'test'
-        ) ?? {}
-      : {};
+    const postcssCfg =
+      safeRequire(
+        path.resolve(configManager.rootDir, getPostcssConfigPath(configManager)),
+        // ignore missed file if users haven't provided any value
+        // in case the path was provided it should exist
+        typeof postcssConfig === 'undefined'
+      ) ?? {};
 
     config.module
       .rule('css')

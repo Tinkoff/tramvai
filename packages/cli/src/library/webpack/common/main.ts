@@ -7,6 +7,8 @@ import resolve from '../blocks/resolve';
 import ignoreLocales from '../blocks/ignoreLocales';
 import type { ConfigManager } from '../../../config/configManager';
 import { safeRequireResolve } from '../../../utils/safeRequire';
+import type { CliConfigEntry } from '../../../typings/configEntry/cli';
+import { getPostcssConfigPath } from '../blocks/css';
 
 const filterNonExisted = (filePaths: string[]) => {
   return filePaths.filter((filePath) => {
@@ -15,9 +17,8 @@ const filterNonExisted = (filePaths: string[]) => {
 };
 
 // eslint-disable-next-line import/no-default-export
-export default (configManager: ConfigManager) => (config: Config) => {
+export default (configManager: ConfigManager<CliConfigEntry>) => (config: Config) => {
   const env = configManager.env === 'development' ? 'dev' : 'prod';
-  const { postcss: { config: postcssConfig } = {} } = configManager.build.configurations;
 
   config.context(path.resolve(__dirname, '..', '..', '..', '..'));
   config.batch(resolve(configManager));
@@ -62,7 +63,10 @@ export default (configManager: ConfigManager) => (config: Config) => {
         // It may be missing in cases when cli is running programmaticaly
         config: filterNonExisted([path.resolve(configManager.rootDir, 'tramvai.json')]),
         css: filterNonExisted([
-          postcssConfig && safeRequireResolve(path.resolve(configManager.rootDir, postcssConfig)),
+          safeRequireResolve(
+            path.resolve(configManager.rootDir, getPostcssConfigPath(configManager)),
+            true
+          ),
         ]),
       },
     });
@@ -84,7 +88,8 @@ export default (configManager: ConfigManager) => (config: Config) => {
     .plugin('define')
     .use(webpack.DefinePlugin, [
       {
-        ...configManager.build.configurations.definePlugin[env],
+        ...configManager.define.shared,
+        ...configManager.define[configManager.env],
 
         'process.env.APP_ID': JSON.stringify(configManager.name || 'common'),
         'process.env.APP_VERSION': JSON.stringify(process.env.APP_VERSION),

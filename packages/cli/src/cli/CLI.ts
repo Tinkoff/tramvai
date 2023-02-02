@@ -14,21 +14,21 @@ export class CLI {
 
   commands: Command[];
 
-  runTask = (name, params) => {
+  runTask = (name: string, params: any) => {
     const task = this.tasks.find((item) => item.name === name);
 
     if (!task) {
-      console.error('Не найдена задача: ', name, params);
+      throw new Error(`Task ${name} not found`);
     }
 
     return task.run(params);
   };
 
-  runCommand = (name, params) => {
+  runCommand = (name: string, params: any) => {
     const command = this.commands.find((item) => item.name === name);
 
     if (!command) {
-      console.error('Не найдена команда: ', name, params);
+      throw new Error(`Command ${name} not found`);
     }
 
     return command.run(params);
@@ -69,11 +69,11 @@ export class CLI {
     this.commands = commandsMap.map((CommandItem) => new CommandItem(this.context));
   }
 
-  async run(argv) {
+  async run(argv: any) {
     return this.createCommandLineUI(argv);
   }
 
-  protected createCommandLineUI(argv): Promise<CommandResult> {
+  protected createCommandLineUI(argv: any): Promise<CommandResult> {
     return new Promise((resolve) => {
       commander(this.commands, resolve)(argv);
     });

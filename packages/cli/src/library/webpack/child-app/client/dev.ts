@@ -3,17 +3,17 @@ import WebpackBar from 'webpackbar';
 import webpack from 'webpack';
 import ReactRefreshPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import type { ConfigManager } from '../../../../config/configManager';
-import type { ModuleConfigEntry } from '../../../../typings/configEntry/module';
 import common from './common';
 import commonDev from '../../common/dev';
 import type { UI_SHOW_PROGRESS_TOKEN } from '../../../../di/tokens';
 import { extendEntry } from '../../utils/extendEntry';
+import type { ChildAppConfigEntry } from '../../../../typings/configEntry/child-app';
 
 export const webpackClientConfig = ({
   configManager,
   showProgress,
 }: {
-  configManager: ConfigManager<ModuleConfigEntry>;
+  configManager: ConfigManager<ChildAppConfigEntry>;
   showProgress: typeof UI_SHOW_PROGRESS_TOKEN | null;
 }) => {
   const config = new Config();
@@ -38,18 +38,18 @@ export const webpackClientConfig = ({
     },
   ]);
 
-  if (configManager.hotRefresh) {
-    const { configurations: { hotRefreshOptions = {} } = {} } = configManager.serve;
+  const { hotRefresh } = configManager;
 
+  if (hotRefresh?.enabled) {
     config.plugin('hot-module').use(webpack.HotModuleReplacementPlugin);
     config.plugin('react-refresh').use(ReactRefreshPlugin, [
       {
-        ...hotRefreshOptions,
+        ...hotRefresh.options,
         overlay:
-          typeof hotRefreshOptions.overlay === 'boolean'
-            ? hotRefreshOptions.overlay
+          typeof hotRefresh.options?.overlay === 'boolean'
+            ? hotRefresh.options.overlay
             : {
-                ...hotRefreshOptions.overlay,
+                ...hotRefresh.options?.overlay,
               },
       },
     ]);

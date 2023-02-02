@@ -16,6 +16,12 @@ tramvai start -p 8080 <app>
 
 ## React hot refresh
 
+:::info
+
+The feature is enabled by default
+
+:::
+
 It is possible to refresh react components without page similar to the way in works in [React Native](https://reactnative.dev/docs/fast-refresh).
 
 Besides fash page refreshes (hot-reload) in that mode state is preserved for hooks `useState` and `useRef`.
@@ -32,27 +38,19 @@ Constraints:
 To enable this mode, add to `tramvai.json`:
 
 ```json
-"commands": {
-    "serve": {
-      "configurations": {
-        "hotRefresh": true
-      }
-    }
+"hotRefresh": {
+  "enabled": true
 }
 ```
 
 You can configure settings with `hotRefreshOptions` option, see details [in the docs of react-refresh](https://github.com/pmmmwh/react-refresh-webpack-plugin#options):
 
 ```json
-"commands": {
-    "serve": {
-      "configurations": {
-        "hotRefresh": true,
-        "hotRefreshOptions": {
-          "overlay": false // disable error overlay
-        }
-      }
-    }
+"hotRefresh": {
+  "enabled": true,
+  "options": {
+    "overlay": false // disable error overlay
+  }
 }
 ```
 
@@ -61,27 +59,17 @@ You can configure settings with `hotRefreshOptions` option, see details [in the 
 In `tramvai.json`
 
 ```json
-"commands": {
-    "serve": {
-      "configurations": {
-        "sourceMap": true
-      }
-    }
+"sourceMap": {
+  "development": true
 }
 ```
 
 ## modern build and dev-mode
 
-In dev-mode may work only single build mode: either `modern` or `legacy`. By default `legacy` is used. If you want to use modern build in dev mode, add next lines to the `tramvai.json`:
+In dev-mode may work only single build mode: either `modern` or `legacy`. By default `modern` is used. If you want to use legacy build in dev mode, add next lines to the `tramvai.json`:
 
 ```json
-"commands": {
-    "serve": {
-      "configurations": {
-        "modern": true
-      }
-    }
-}
+"modern": false
 ```
 
 ## How to

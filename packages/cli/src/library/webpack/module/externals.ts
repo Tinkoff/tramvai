@@ -14,4 +14,4 @@ export default modules.reduce((acc, name) => {
   };
 
   return acc;
-}, {});
+}, {} as Record<string, {}>);

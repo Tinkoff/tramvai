@@ -27,15 +27,13 @@ export const webpackClientConfig = ({
 }) => {
   const config = new Config();
 
-  const { configurations } = configManager.build;
-
   config.batch(common(configManager));
   config.batch(commonProd(configManager));
 
   config.bail(true);
 
   config.output
-    .path(configManager.getBuildPath())
+    .path(configManager.buildPath)
     .publicPath('')
     .filename('[name].[contenthash].js')
     .chunkFilename('[name].[contenthash].chunk.js')
@@ -73,7 +71,7 @@ export const webpackClientConfig = ({
 
   config.batch(optimize(configManager));
 
-  const { checkAsyncTs } = configManager.build.configurations;
+  const { checkAsyncTs, debug, sourceMap } = configManager;
 
   if (isObject(checkAsyncTs) && checkAsyncTs.failOnBuild) {
     const additionalOptions = isObject(checkAsyncTs) ? checkAsyncTs.pluginOptions || {} : {};
@@ -96,7 +94,7 @@ export const webpackClientConfig = ({
     config.plugin('fork-ts-checker').use(require('fork-ts-checker-webpack-plugin'), [options]);
   }
 
-  if (configurations.sourceMap || configManager.debug) {
+  if (sourceMap || debug) {
     config.batch(sourcemaps(configManager));
   }
 

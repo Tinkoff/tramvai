@@ -59,8 +59,12 @@ export const serverRunner = ({
     const file = `${Object.keys(config.entryPoints.entries())[0]}.js`;
     const filename = path.resolve(config.output.get('path'), file);
     // настоящая ссылка на файл используется для отладки в debug режиме
-    const realFilename = `http://${configManager.staticHost}:${configManager.staticPort}/${configManager.build.options.outputServer}/${file}`;
+    const realFilename = `http://${configManager.staticHost}:${configManager.staticPort}/${configManager.output.server}/${file}`;
     const serverCompiler = compiler.compilers.find((comp) => comp.name === 'server');
+
+    if (!serverCompiler) {
+      throw new Error('Server compiler has not found');
+    }
 
     const fs = serverCompiler.outputFileSystem as any;
     // ThreadWorkerPool is experimental
@@ -76,11 +80,11 @@ export const serverRunner = ({
         ? ThreadWorkerBridge
         : ProcessWorkerBridge
     );
-    let worker: Worker;
+    let worker: Worker | null;
     let serverInvalidated = true;
-    let workerPort: number;
-    let resolveWorkerPort: () => void;
-    let workerPortPromise: Promise<void>;
+    let workerPort: number | null;
+    let resolveWorkerPort: () => void | null;
+    let workerPortPromise: Promise<void> | null;
     let hasExitedUnexpectedly = false;
 
     const proxy = createProxyServer({
@@ -248,8 +252,11 @@ export const serverRunner = ({
           workerPort = null;
           workerPortPromise = null;
 
+          if (worker) {
+            pool.release(worker);
+          }
+
           worker = null;
-          pool.release(worker);
 
           console.error(EXITED_UNEXPECTEDLY);
         });

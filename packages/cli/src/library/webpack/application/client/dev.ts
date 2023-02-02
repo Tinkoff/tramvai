@@ -57,11 +57,11 @@ export const webpackClientConfig = ({
   }
 
   config.output
-    .path(configManager.getBuildPath())
+    .path(configManager.buildPath)
     .publicPath(
       `http://${configManager.staticHost}:${
         configManager.staticPort
-      }/${configManager.build.options.outputClient.replace(/\/$/, '')}/`
+      }/${configManager.output.client.replace(/\/$/, '')}/`
     )
     .filename('[name].js')
     .chunkFilename('[name].chunk.js')
@@ -88,7 +88,7 @@ export const webpackClientConfig = ({
     }
   }
 
-  const { checkAsyncTs } = configManager.build.configurations;
+  const { checkAsyncTs } = configManager;
 
   if (checkAsyncTs) {
     const additionalOptions = isObject(checkAsyncTs) ? checkAsyncTs.pluginOptions || {} : {};
@@ -129,9 +129,9 @@ export const webpackClientConfig = ({
     },
   ]);
 
-  if (configManager.hotRefresh) {
-    const { configurations: { hotRefreshOptions = {} } = {} } = configManager.serve;
+  const { hotRefresh } = configManager;
 
+  if (hotRefresh?.enabled) {
     const splitChunks: SplitChunksOptions = {
       cacheGroups: {
         default: false,
@@ -156,12 +156,12 @@ export const webpackClientConfig = ({
     config.plugin('hot-module').use(webpack.HotModuleReplacementPlugin);
     config.plugin('react-refresh').use(ReactRefreshPlugin, [
       {
-        ...hotRefreshOptions,
+        ...hotRefresh.options,
         overlay:
-          typeof hotRefreshOptions.overlay === 'boolean'
-            ? hotRefreshOptions.overlay
+          typeof hotRefresh.options?.overlay === 'boolean'
+            ? hotRefresh.options.overlay
             : {
-                ...hotRefreshOptions.overlay,
+                ...hotRefresh.options?.overlay,
               },
       },
     ]);

@@ -33,13 +33,9 @@ The `granularChunksSplitNumber` parameter allows you to override the default num
 {
   "projects": {
     "{appName}": {
-      "commands": {
-        "build": {
-          "configurations": {
-            "granularChunks": true,
-            "granularChunksSplitNumber": 3
-          }
-        }
+      "splitChunks": {
+        "mode": "granularChunks",
+        "granularChunksSplitNumber": 3
       }
     }
   }
@@ -63,12 +59,8 @@ For applications with a lot of bundles, `common-chunk.js` can include a huge amo
 {
   "projects": {
     "{appName}": {
-      "commands": {
-        "build": {
-          "configurations": {
-            "commonChunkSplitNumber": 5
-          }
-        }
+      "splitChunks": {
+        "commonChunkSplitNumber": 5
       }
     }
   }
@@ -91,12 +83,8 @@ For applications that have only one tramvai bundle for all pages, or separate th
 {
   "projects": {
     "{appName}": {
-      "commands": {
-        "build": {
-          "configurations": {
-            "commonChunk": false
-          }
-        }
+      "splitChunks": {
+        "mode": false
       }
     }
   }

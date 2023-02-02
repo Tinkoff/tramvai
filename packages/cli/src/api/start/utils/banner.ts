@@ -3,6 +3,7 @@ import type { Container } from '@tinkoff/dippy';
 import { successBox } from '../../../utils/formatting';
 import { UI_SHOW_BANNER_TOKEN, CONFIG_MANAGER_TOKEN, STDOUT_TOKEN } from '../../../di/tokens';
 import { getDocUrl, getTip } from './tips';
+import { isApplication } from '../../../config/validate';
 
 const label = (name) => chalk.bold.cyan(`▸ ${name}:`);
 const link = (url) => chalk.underline.blue(url);
@@ -24,9 +25,9 @@ export function showBanner(di: Container) {
     titleLines.push(`${label('Type')}             ${config.type}`);
   }
   titleLines.push(`${label('Modern')}           ${config.modern}`);
-  titleLines.push(`${label('ReactRefresh')}     ${config.hotRefresh}`);
+  titleLines.push(`${label('ReactRefresh')}     ${config.hotRefresh.enabled}`);
 
-  if (config.build.configurations.fileSystemPages.enable) {
+  if (isApplication(config) && config.fileSystemPages.enabled) {
     titleLines.push(`${label('FileSystemPages')}  true`);
   }
 

@@ -11,28 +11,35 @@ import type { STATIC_SERVER_TOKEN } from '../../../di/tokens';
 import { CONFIG_ROOT_DIR_TOKEN, UI_OS_NOTIFY_TOKEN } from '../../../di/tokens';
 import { WEBPACK_WATCHING_TOKEN, CLOSE_HANDLER_TOKEN } from '../tokens';
 import { close } from '../../../utils/close';
+import { isApplication, isChildApp, isModule } from '../../../config/validate';
 
 const getPrefix = (configManager: ConfigManager): string => {
-  switch (configManager.type) {
-    case 'application':
-      return '/';
-    case 'child-app':
-      return `/${configManager.name}`;
-    case 'module':
-      return `/${configManager.name}/:version`;
+  if (isApplication(configManager)) {
+    return '/';
+  }
+
+  if (isChildApp(configManager)) {
+    return `/${configManager.name}`;
+  }
+
+  if (isModule(configManager)) {
+    return `/${configManager.name}/:version`;
   }
 
   throw new Error(`${configManager.type} is not supported`);
 };
 
 const getHotModulePrefix = (configManager: ConfigManager): string => {
-  switch (configManager.type) {
-    case 'application':
-      return `/${configManager.build.options.outputClient}`;
-    case 'child-app':
-      return `/${configManager.name}`;
-    case 'module':
-      return `/${configManager.name}/:version`;
+  if (isApplication(configManager)) {
+    return `/${configManager.output.client}`;
+  }
+
+  if (isChildApp(configManager)) {
+    return `/${configManager.name}`;
+  }
+
+  if (isModule(configManager)) {
+    return `/${configManager.name}/:version`;
   }
 
   throw new Error(`${configManager.type} is not supported`);
@@ -78,7 +85,7 @@ export const createDevServer = ({
       },
     });
 
-    if (configManager.hotRefresh) {
+    if (configManager.hotRefresh.enabled) {
       app.use(getHotModulePrefix(configManager), webpackHotMiddleware(compiler, { log: false }));
     }
 

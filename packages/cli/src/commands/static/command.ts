@@ -44,7 +44,7 @@ export class StaticCommand extends CLICommand<Params> {
     {
       name: '--fileCache',
       value: '[fileCache]',
-      transformer: (value) => value !== 'false',
+      transformer: (value: string) => value !== 'false',
       description: 'Enable/disable persistent file cache for used cli builder',
     },
     {
