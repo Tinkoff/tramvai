@@ -13,6 +13,7 @@ import { CHILD_APP_INTERNAL_CONFIG_TOKEN } from '@tramvai/tokens-child-app';
 import type { LOGGER_TOKEN } from '@tramvai/tokens-common';
 import { getChildProviders } from './child/singletonProviders';
 import { commonModuleStubs } from './child/stubs';
+import { validateChildAppProvider } from './child/validate';
 
 export class SingletonDiManager implements ChildAppDiManager {
   private readonly log: ReturnType<typeof LOGGER_TOKEN>;
@@ -101,8 +102,11 @@ export class SingletonDiManager implements ChildAppDiManager {
         di.register(provider);
       });
     });
-
     providers.forEach((provider) => {
+      if (process.env.NODE_ENV === 'development') {
+        validateChildAppProvider(provider);
+      }
+
       di.register(provider);
     });
 

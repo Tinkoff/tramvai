@@ -15,7 +15,9 @@
     "plugins.js"
   ],
   "sideEffects": [
-    "./lib/browser.js"
+    "./lib/browser.js",
+    "./lib/index.browser.js",
+    "./lib/browser.browser.js"
   ],
   "repository": {
     "type": "git",

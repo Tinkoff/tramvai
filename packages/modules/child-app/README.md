@@ -421,6 +421,14 @@ You may specify a full config to debug to a specific child-app:
    ```
 2. Run root-app with `CHILD_APP_DEBUG` environment variable with value of child-app names needed to debug
 
+## Limitations
+
+### Usage of envs
+
+Child-app cannot control the environment variables and therefore should not use token `ENV_USED_TOKEN` at all. If you try to specify `ENV_USED_TOKEN` provider you will get error in development mode and in prod mode it will just be ignored.
+
+Controlling of the envs content should be fully delegated to the root-app itself. Child-app can only use final values through `ENV_MANAGER_TOKEN` or any other options that passes data from root-app to child-app.
+
 ## Known issues
 
 ### This Suspense boundary received an update before it finished hydrating
