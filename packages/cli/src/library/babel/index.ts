@@ -144,6 +144,7 @@ export const babelConfigFactory = ({
       ],
       tramvai && env === 'development' && path.resolve(__dirname, './plugins/provider-stack'),
       !isServer &&
+        env === 'development' &&
         hot && ['react-refresh/babel', { skipEnvCheck: process.env.NODE_ENV === 'test' }],
     ]
       .concat(cfg.plugins || [])
