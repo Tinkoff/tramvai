@@ -123,7 +123,7 @@ Having swc config may conflict with @tramvai/cli configuration`
         react: {
           runtime: hasJsxRuntime() ? 'automatic' : 'classic',
           development: env === 'development',
-          refresh: hot && !isServer,
+          refresh: hot && env === 'development' && !isServer,
         },
         optimizer: {
           globals: {
