@@ -154,6 +154,10 @@ This will completely free up the application server.
 When caching a fallback, your users potentially can have a outdated content.
 Also, you will have the same meta tags for all application pages, it can affect SEO.
 
+Some important features will not work:
+- User-Agent parsing - User-Agent or Client-Hints parsed only at server side, so you will need to realize it on client side if you need it
+- Media detection - always will came wrong from server (with SSR only first load will be without real data), so will be useless for optimizations
+
 :::
 
 For one client-side rendering fallback, which will work on every application route, we need a few things:
@@ -196,3 +200,13 @@ For testing fallback close to production, you can use `http-server` library, and
 - `ASSETS_PREFIX=http://localhost:4444/ tramvai static {{ appName }} --csr` for build and fallback generation
 - `npx http-server dist/static/__csr_fallback__ --proxy http://localhost:8080\\? --cors` for serving fallback HTML at 8080 port
 - `npx http-server dist/client -p 4444 --cors` for serving assets at 4444 port
+
+### Known errors
+
+#### Infinite reload
+
+It is expected error, when you try to open fallback page in browser locally or directly from `s3`, and it will be reloaded infinitely.
+
+When you open a fallback page, it will try to navigate to the current url, and if current url is not registered in app router, not found logic will be triggered, which will force hard reload under the hood.
+
+If you want to test fallback locally - use `http-server` as described above in [Testing](#testing) section. For production environment, you need to configure your own balancer to serve fallback page for all routes.

@@ -6,7 +6,10 @@ import type { PromiseType } from 'utility-types';
 import { getPort } from '@tramvai/internal-test-utils/utils/getPort';
 import { getServerUrl } from '@tramvai/test-integration';
 import { initPlaywright } from '@tramvai/test-pw';
+import { createServer } from '../utils/createServer';
+import { listenServer } from '../utils/listenServer';
 import { getListeningPort } from '../utils/getListeningPort';
+import { stopServer } from '../utils/stopServer';
 
 const FIXTURES_DIR = resolve(__dirname, '__fixtures__');
 
@@ -256,6 +259,39 @@ describe('@tramvai/cli start command', () => {
 
       return close();
     });
+
+    it('should start the app on the next available port, if default port is busy', async () => {
+      const testServerStub = createServer();
+      const testStaticServerStub = createServer();
+
+      // To avoid situation when two subsequent calls
+      // of the `detectPortSync` return the same free port.
+      await listenServer(testServerStub, '0.0.0.0', getPort() + 50);
+      await listenServer(testStaticServerStub, '0.0.0.0', getPort());
+
+      const { server, staticServer, close } = await start({
+        rootDir: FIXTURES_DIR,
+        target: 'app',
+        resolveSymlinks: false,
+        port: getListeningPort(testServerStub),
+        staticPort: getListeningPort(testStaticServerStub),
+      });
+
+      const testServer = supertestByPort(getListeningPort(server));
+      const testStatic = supertestByPort(getListeningPort(staticServer));
+
+      expect(server?.address()).toMatchObject({
+        port: expect.any(Number),
+      });
+      expect(staticServer?.address()).toMatchObject({
+        port: expect.any(Number),
+      });
+
+      await testServer.get('/').expect(200);
+      await testStatic.get('/').expect(404);
+
+      return Promise.all([close(), stopServer(testServerStub), stopServer(testStaticServerStub)]);
+    });
   });
 
   describe('module', () => {
@@ -277,7 +313,7 @@ describe('@tramvai/cli start command', () => {
     });
 
     it('should start module by specific config', async () => {
-      const staticServerPort = await getPort();
+      const staticServerPort = getPort();
 
       const { staticServer, close } = await start({
         config: {

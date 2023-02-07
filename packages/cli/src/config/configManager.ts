@@ -90,6 +90,10 @@ export type ConfigManager<
     dehydrate(): [C, Settings<E>];
   };
 
+export const DEFAULT_PORT = 3000;
+export const DEFAULT_STATIC_PORT = 4000;
+export const DEFAULT_STATIC_MODULE_PORT = 4040;
+
 export const createConfigManager = <C extends ConfigEntry = ConfigEntry, E extends Env = Env>(
   configEntry: C,
   settings: Settings<E>
@@ -134,8 +138,10 @@ export const createConfigManager = <C extends ConfigEntry = ConfigEntry, E exten
     rootDir,
     buildType,
     debug,
-    port: Number(settings.port ?? 3000),
-    staticPort: Number(settings.staticPort ?? (type === 'module' ? 4040 : 4000)),
+    port: Number(settings.port ?? DEFAULT_PORT),
+    staticPort: Number(
+      settings.staticPort ?? (type === 'module' ? DEFAULT_STATIC_MODULE_PORT : DEFAULT_STATIC_PORT)
+    ),
     modern,
     sourceMap:
       buildType === 'server' && debug

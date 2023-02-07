@@ -2,7 +2,6 @@ import type { Provider } from '@tinkoff/dippy';
 import { provide } from '@tinkoff/dippy';
 import rimraf from 'rimraf';
 import webpack from 'webpack';
-import type { ConfigManager } from '../../../../config/configManager';
 import {
   CLI_PACKAGE_MANAGER,
   CLI_ROOT_DIR_TOKEN,

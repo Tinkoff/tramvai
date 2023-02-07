@@ -11,23 +11,27 @@ import type { Params } from '../index';
 import type { ConfigEntry } from '../../../typings/configEntry/common';
 import { CLOSE_HANDLER_TOKEN, SERVER_PROCESS_TOKEN } from '../tokens';
 import { DEBUG_ARGV } from '../../../config/constants';
+import { detectPortSync } from '../../../utils/detectPortSync';
 import { safeRequire } from '../../../utils/safeRequire';
 import type { ConfigManager } from '../../../config/configManager';
-import { createConfigManager } from '../../../config/configManager';
+import {
+  createConfigManager,
+  DEFAULT_PORT,
+  DEFAULT_STATIC_PORT,
+} from '../../../config/configManager';
 import type { ApplicationConfigEntry } from '../../../typings/configEntry/application';
 
 export const applicationsProviders: readonly Provider[] = [
   provide({
     provide: CONFIG_MANAGER_TOKEN,
-    useFactory: ({ configEntry, parameters }: { configEntry: ConfigEntry; parameters: Params }) => {
-      return createConfigManager(configEntry, {
+    useFactory: ({ configEntry, parameters }: { configEntry: ConfigEntry; parameters: Params }) =>
+      createConfigManager(configEntry, {
         ...parameters,
         env: 'production',
-        port: parameters.port ?? 3000,
-        staticPort: parameters.staticPort ?? 4000,
         buildType: 'client',
-      });
-    },
+        port: detectPortSync(parameters.port ?? DEFAULT_PORT),
+        staticPort: detectPortSync(parameters.staticPort ?? DEFAULT_STATIC_PORT),
+      }),
     deps: {
       configEntry: CONFIG_ENTRY_TOKEN,
       parameters: COMMAND_PARAMETERS_TOKEN,

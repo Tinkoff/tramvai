@@ -1,88 +1,62 @@
 import type { Provider } from '@tinkoff/dippy';
+import { provide } from '@tinkoff/dippy';
+
 import { CLOSE_HANDLER_TOKEN, INIT_HANDLER_TOKEN } from '../../tokens';
 import {
   CONFIG_MANAGER_TOKEN,
   CONFIG_ENTRY_TOKEN,
   COMMAND_PARAMETERS_TOKEN,
-  SERVER_TOKEN,
   STATIC_SERVER_TOKEN,
 } from '../../../../di/tokens';
 import { stopServer } from '../../utils/stopServer';
 import type { ApplicationConfigEntry } from '../../../../typings/configEntry/application';
-import type { Params } from '../../index';
-import { createConfigManager } from '../../../../config/configManager';
+import {
+  createConfigManager,
+  DEFAULT_PORT,
+  DEFAULT_STATIC_PORT,
+} from '../../../../config/configManager';
 import { createServer } from '../../utils/createServer';
 import { listenServer } from '../../utils/listenServer';
-import { getListeningPort } from '../../utils/getListeningPort';
+import { detectPortSync } from '../../../../utils/detectPortSync';
 
 export const sharedProviders: readonly Provider[] = [
-  {
+  provide({
     provide: CONFIG_MANAGER_TOKEN,
-    useFactory: ({
-      configEntry,
-      parameters,
-      server,
-      staticServer,
-    }: {
-      configEntry: ApplicationConfigEntry;
-      parameters: Params;
-      server: typeof SERVER_TOKEN;
-      staticServer: typeof STATIC_SERVER_TOKEN;
-    }) => {
-      return createConfigManager(configEntry, {
+    useFactory: ({ configEntry, parameters }) =>
+      createConfigManager(configEntry as ApplicationConfigEntry, {
         ...parameters,
         env: 'development',
-        buildType: 'client',
-        port: server ? getListeningPort(server) : parameters.port,
-        staticPort: getListeningPort(staticServer),
-      });
-    },
+        port: detectPortSync(parameters.port ?? DEFAULT_PORT),
+        staticPort: detectPortSync(parameters.staticPort ?? DEFAULT_STATIC_PORT),
+      }),
     deps: {
       configEntry: CONFIG_ENTRY_TOKEN,
       parameters: COMMAND_PARAMETERS_TOKEN,
-      staticServer: STATIC_SERVER_TOKEN,
-      server: { token: SERVER_TOKEN, optional: true },
     },
-  },
-  {
+  }),
+  provide({
     provide: STATIC_SERVER_TOKEN,
     useFactory: createServer,
-  },
-  {
+  }),
+  provide({
     provide: INIT_HANDLER_TOKEN,
     multi: true,
-    useFactory: ({
-      staticServer,
-      parameters,
-    }: {
-      staticServer: typeof STATIC_SERVER_TOKEN;
-      parameters: Params;
-    }) => {
+    useFactory: ({ configManager, staticServer }) => {
       return async function staticServerListen() {
-        const { staticHost = 'localhost', staticPort = 4000 } = parameters;
+        const { staticHost, staticPort } = configManager;
 
-        try {
-          await listenServer(staticServer, staticHost.replace('localhost', '0.0.0.0'), staticPort);
-        } catch (error) {
-          if ((error as any).code === 'EADDRINUSE') {
-            throw new Error(
-              `Address '${staticHost}:${staticPort}' in use, either release this port or use options --staticPort --staticHost`
-            );
-          }
-
-          throw error;
-        }
+        await listenServer(staticServer, staticHost.replace('localhost', '0.0.0.0'), staticPort);
       };
     },
     deps: {
       staticServer: STATIC_SERVER_TOKEN,
-      parameters: COMMAND_PARAMETERS_TOKEN,
+      configManager: CONFIG_MANAGER_TOKEN,
     },
-  },
-  {
+  }),
+  provide({
     provide: CLOSE_HANDLER_TOKEN,
     multi: true,
-    useFactory: ({ staticServer }: { staticServer: typeof STATIC_SERVER_TOKEN }) => {
+    useFactory: ({ staticServer }) => {
       return () => {
         return stopServer(staticServer);
       };
@@ -90,5 +64,5 @@ export const sharedProviders: readonly Provider[] = [
     deps: {
       staticServer: STATIC_SERVER_TOKEN,
     },
-  },
+  }),
 ] as const;

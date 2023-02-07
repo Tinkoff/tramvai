@@ -7,25 +7,23 @@ import {
   COMMAND_PARAMETERS_TOKEN,
   STATIC_SERVER_TOKEN,
 } from '../../../../di/tokens';
-import type { ConfigManager } from '../../../../config/configManager';
-import { createConfigManager } from '../../../../config/configManager';
+import { createConfigManager, DEFAULT_STATIC_MODULE_PORT } from '../../../../config/configManager';
 import { closeWorkerPoolTranspiler } from '../../../../library/webpack/utils/workersPool';
 import { stopServer } from '../../utils/stopServer';
 import { createServer } from '../../utils/createServer';
 import { listenServer } from '../../utils/listenServer';
+import { detectPortSync } from '../../../../utils/detectPortSync';
 import type { ModuleConfigEntry } from '../../../../typings/configEntry/module';
 
 export const sharedProviders: readonly Provider[] = [
   provide({
     provide: CONFIG_MANAGER_TOKEN,
-    useFactory: ({ configEntry, parameters }) => {
-      return createConfigManager(configEntry as ModuleConfigEntry, {
+    useFactory: ({ configEntry, parameters }) =>
+      createConfigManager(configEntry as ModuleConfigEntry, {
         ...parameters,
         env: 'development',
-        port: parameters.port ?? 4040,
-        buildType: 'client',
-      });
-    },
+        port: detectPortSync(parameters.port ?? DEFAULT_STATIC_MODULE_PORT),
+      }),
     deps: {
       configEntry: CONFIG_ENTRY_TOKEN,
       parameters: COMMAND_PARAMETERS_TOKEN,
@@ -38,26 +36,16 @@ export const sharedProviders: readonly Provider[] = [
   provide({
     provide: INIT_HANDLER_TOKEN,
     multi: true,
-    useFactory: ({ staticServer, parameters }) => {
+    useFactory: ({ staticServer, configManager }) => {
       return async function staticServerListen() {
-        const { host = 'localhost', port = 4040 } = parameters;
+        const { host, port } = configManager;
 
-        try {
-          await listenServer(staticServer, host, port);
-        } catch (error) {
-          if ((error as any).code === 'EADDRINUSE') {
-            throw new Error(
-              `Address '${host}:${port}' in use, either release this port or use options --port --host`
-            );
-          }
-
-          throw error;
-        }
+        await listenServer(staticServer, host, port);
       };
     },
     deps: {
       staticServer: STATIC_SERVER_TOKEN,
-      parameters: COMMAND_PARAMETERS_TOKEN,
+      configManager: CONFIG_MANAGER_TOKEN,
     },
   }),
   provide({

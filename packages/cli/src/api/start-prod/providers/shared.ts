@@ -21,19 +21,9 @@ export const sharedProviders: readonly Provider[] = [
     multi: true,
     useFactory: ({ staticServer, configManager }) => {
       return async function staticServerListen() {
-        const { staticHost = 'localhost', staticPort = 4000 } = configManager;
+        const { staticHost, staticPort } = configManager;
 
-        try {
-          await listenServer(staticServer, staticHost.replace('localhost', '0.0.0.0'), staticPort);
-        } catch (error) {
-          if ((error as any).code === 'EADDRINUSE') {
-            throw new Error(
-              `Address '${staticHost}:${staticPort}' in use, either release this port or use options --staticPort --staticHost`
-            );
-          }
-
-          throw error;
-        }
+        await listenServer(staticServer, staticHost.replace('localhost', '0.0.0.0'), staticPort);
       };
     },
     deps: {

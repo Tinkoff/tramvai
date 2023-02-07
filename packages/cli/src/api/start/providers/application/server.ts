@@ -1,45 +1,36 @@
 import type { Provider } from '@tinkoff/dippy';
+import { provide } from '@tinkoff/dippy';
+
 import { INIT_HANDLER_TOKEN, CLOSE_HANDLER_TOKEN } from '../../tokens';
-import { COMMAND_PARAMETERS_TOKEN, SERVER_TOKEN } from '../../../../di/tokens';
+import { CONFIG_MANAGER_TOKEN, SERVER_TOKEN } from '../../../../di/tokens';
 import { stopServer } from '../../utils/stopServer';
 import { createServer } from '../../utils/createServer';
 import { listenServer } from '../../utils/listenServer';
-import type { Params } from '../../index';
 
 export const serverProviders: readonly Provider[] = [
-  {
+  provide({
     provide: SERVER_TOKEN,
     useFactory: createServer,
-  },
-  {
+  }),
+  provide({
     provide: INIT_HANDLER_TOKEN,
     multi: true,
-    useFactory: ({ server, parameters }: { server: typeof SERVER_TOKEN; parameters: Params }) => {
+    useFactory: ({ server, configManager }) => {
       return async function staticServerListen() {
-        const { host = '0.0.0.0', port = 3000 } = parameters;
+        const { host, port } = configManager;
 
-        try {
-          await listenServer(server, host, port);
-        } catch (error) {
-          if ((error as any).code === 'EADDRINUSE') {
-            throw new Error(
-              `Address '${host}:${port}' in use, either release this port or use options --port --host`
-            );
-          }
-
-          throw error;
-        }
+        await listenServer(server, host, port);
       };
     },
     deps: {
       server: SERVER_TOKEN,
-      parameters: COMMAND_PARAMETERS_TOKEN,
+      configManager: CONFIG_MANAGER_TOKEN,
     },
-  },
-  {
+  }),
+  provide({
     provide: CLOSE_HANDLER_TOKEN,
     multi: true,
-    useFactory: ({ server }: { server: typeof SERVER_TOKEN }) => {
+    useFactory: ({ server }) => {
       return () => {
         return stopServer(server);
       };
@@ -47,5 +38,5 @@ export const serverProviders: readonly Provider[] = [
     deps: {
       server: SERVER_TOKEN,
     },
-  },
+  }),
 ] as const;
