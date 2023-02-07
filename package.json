@@ -12,7 +12,7 @@
     "SSR"
   ],
   "scripts": {
-    "postinstall": "tsc -b tools/monorepo/fix-ts-references tools/monorepo/depscheck tools/build && wsrun -p '@{tinkoff,tramvai}/*' -m copy-external-files",
+    "postinstall": "tsc -b tools/monorepo/fix-ts-references tools/monorepo/depscheck tools/build packages/libs/webpack-dedupe-plugin && wsrun -p '@{tinkoff,tramvai}/*' -m copy-external-files",
     "references": "fix-ts-references --fix",
     "prewatch": "npm run cli:generate-schema",
     "watch": "yarn references && tsc -b ./tsconfig.solution.json --watch",
