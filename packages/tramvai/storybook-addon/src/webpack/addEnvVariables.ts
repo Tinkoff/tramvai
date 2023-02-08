@@ -1,7 +1,7 @@
 import path from 'path';
 import webpack from 'webpack';
 import type Config from 'webpack-chain';
-import type { ConfigManager } from '@tramvai/cli';
+import type { CliConfigEntry, ConfigManager } from '@tramvai/cli';
 import { configToEnv } from '@tramvai/cli';
 import { getAppRootDir } from '../utils/options';
 import type { StorybookOptions } from '../types';
@@ -12,11 +12,10 @@ export function addEnvVariables({
   options,
 }: {
   webpackConfig: Config;
-  configManager: ConfigManager;
+  configManager: ConfigManager<CliConfigEntry>;
   options: StorybookOptions;
 }) {
   const rootDir = getAppRootDir(options);
-  const env = configManager.env === 'development' ? 'dev' : 'prod';
   let envFromFile: Record<string, string> = {};
 
   try {
@@ -27,7 +26,8 @@ export function addEnvVariables({
 
   webpackConfig.plugin('define').use(webpack.DefinePlugin, [
     {
-      ...(configManager as any).build.configurations.definePlugin[env],
+      ...configManager.define.shared,
+      ...configManager.define[configManager.env],
       'process.env.NODE_ENV': JSON.stringify(configManager.env),
       'process.env.APP_ID': JSON.stringify(configManager.name),
       'process.env.BROWSER': true,
