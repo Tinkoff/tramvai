@@ -353,3 +353,50 @@ describe('configs', () => {
     `);
   });
 });
+
+describe('config without commands', () => {
+  const api = createApi({
+    packageJSON: { source: {}, path: '/package.json' },
+    tramvaiJSON: {
+      source: {
+        projects: {
+          app1: {
+            type: 'application',
+            name: 'app1',
+            root: 'src/app1',
+            postcss: {
+              config: 'src/postcss',
+            },
+            fileSystemPages: {
+              enabled: true,
+            },
+          },
+        },
+      },
+      path: '/tramvai.json',
+    },
+    transformTests: {},
+  });
+
+  it('should convert config', async () => {
+    await migration(api);
+
+    expect(JSON.stringify(api.tramvaiJSON.source, null, 2)).toMatchInlineSnapshot(`
+      "{
+        "projects": {
+          "app1": {
+            "type": "application",
+            "name": "app1",
+            "root": "src/app1",
+            "postcss": {
+              "config": "src/postcss"
+            },
+            "fileSystemPages": {
+              "enabled": true
+            }
+          }
+        }
+      }"
+    `);
+  });
+});

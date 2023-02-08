@@ -19,6 +19,10 @@ const migrateCommands = (configWithCommands: {
 }): Record<string, any> => {
   const { type, commands: { build = {}, serve = {} } = {} } = configWithCommands;
 
+  if (!('commands' in configWithCommands)) {
+    return configWithCommands;
+  }
+
   const newConfig = {
     polyfill: build.options?.polyfill,
     serverApiDir: build.options?.serverApiDir,

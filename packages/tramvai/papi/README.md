@@ -70,7 +70,7 @@ export const papi = createPapiMethod({
 import { createPapiMethod } from '@tramvai/papi';
 
 export const papi = createPapiMethod({
-  async handler({ query, cookies }) {
+  async handler({ parsedUrl: { query }, cookies }) {
     const { a, b } = query;
     const { testCookie } = cookie;
 
@@ -151,7 +151,7 @@ const app = createApp({
 });
 
 export const papi = createPapiMethod({
-  async handler({ query }) {
+  async handler({ parsedUrl: { query } }) {
     const { cacheKey } = query;
     const { cache } = this.deps;
 
