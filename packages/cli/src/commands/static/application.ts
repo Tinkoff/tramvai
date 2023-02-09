@@ -93,7 +93,7 @@ export const staticApp = async (
 
   if (options.onlyPages) {
     paths = intersection(paths, options.onlyPages);
-  } else if (options.csr) {
+  } else if (process.env.TRAMVAI_FORCE_CLIENT_SIDE_RENDERING === 'true') {
     // implicit connection with packages/modules/page-render-mode/src/ForceCSRModule.ts
     paths = ['/__csr_fallback__/'];
   }

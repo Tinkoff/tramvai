@@ -7,7 +7,6 @@ import type { StartCommand as StartCommandType } from '../../api/start';
 
 export type Params = Parameters<StartCommandType>[0] & {
   target: string;
-  csr?: boolean;
 };
 
 export class StartCommand extends CLICommand<Params> {
@@ -104,11 +103,6 @@ export class StartCommand extends CLICommand<Params> {
       value: '[fileCache]',
       transformer: (value: string) => value !== 'false',
       description: 'Enable/disable persistent file cache for used cli builder',
-    },
-    {
-      name: '--csr',
-      value: '[csr]',
-      description: 'Run with Client-Side rendering mode',
     },
   ];
 

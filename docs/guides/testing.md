@@ -476,6 +476,12 @@ it('test', async () => {
 
 :::caution
 
+Only React >= 18 version is supported
+
+:::
+
+:::caution
+
 Use jest `jsdom` environment for components unit testing.
 
 :::

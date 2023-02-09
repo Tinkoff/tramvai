@@ -166,10 +166,10 @@ For one client-side rendering fallback, which will work on every application rou
 - Build application (server and client code) as usual
 - Generate static HTML page for `/__csr_fallback__/` route
 
-All of this are included when using `tramvai static` command with `--csr` flag, when `@tramvai/module-page-render-mode` are connected in the application. Only one step you need for HTML fallback generation:
+All of this are included when using `tramvai static` command with `TRAMVAI_FORCE_CLIENT_SIDE_RENDERING=true` env variable, when `@tramvai/module-page-render-mode` are connected in the application. Only one step you need for HTML fallback generation:
 
 ```bash
-tramvai static {{ appName }} --csr
+TRAMVAI_FORCE_CLIENT_SIDE_RENDERING=true tramvai static {{ appName }}
 ```
 
 :::tip
@@ -190,14 +190,16 @@ In `tramvai` application we can separate a two types of env variables:
 - build-time env
 - deployment env
 
-When using the command `tramvai static {{ appName }} --csr`, you need to pass both build-time and deployment env for CI job when you will run `tramvai static`, because of real application server will be launched for this command, and real requests for API's will be sended.
+When using the command `TRAMVAI_FORCE_CLIENT_SIDE_RENDERING=true tramvai static {{ appName }}`, you need to pass both build-time and deployment env for CI job when you will run `tramvai static`, because of real application server will be launched for this command, and real requests for API's will be sended.
+
+Env variable `TRAMVAI_FORCE_CLIENT_SIDE_RENDERING` will be available in `ENV_MANAGER_TOKEN`, you can use it for some custom logic about CSR.
 
 ### Testing
 
-For fallback development, you can use start command with CSR flag - `tramvai start {{ appName }} --csr` - and open special route `http://localhost:3000/__csr_fallback__/` in browser.
+For fallback development, you can use start command with CSR flag - `TRAMVAI_FORCE_CLIENT_SIDE_RENDERING=true tramvai start {{ appName }}` - and open special route `http://localhost:3000/__csr_fallback__/` in browser.
 
 For testing fallback close to production, you can use `http-server` library, and this scripts:
-- `ASSETS_PREFIX=http://localhost:4444/ tramvai static {{ appName }} --csr` for build and fallback generation
+- `TRAMVAI_FORCE_CLIENT_SIDE_RENDERING=true ASSETS_PREFIX=http://localhost:4444/ tramvai static {{ appName }}` for build and fallback generation
 - `npx http-server dist/static/__csr_fallback__ --proxy http://localhost:8080\\? --cors` for serving fallback HTML at 8080 port
 - `npx http-server dist/client -p 4444 --cors` for serving assets at 4444 port
 

@@ -1,5 +1,9 @@
 import { commandLineListTokens, declareModule, provide } from '@tramvai/core';
-import { COMPONENT_REGISTRY_TOKEN } from '@tramvai/tokens-common';
+import {
+  COMPONENT_REGISTRY_TOKEN,
+  ENV_USED_TOKEN,
+  ENV_MANAGER_TOKEN,
+} from '@tramvai/tokens-common';
 import { TRAMVAI_RENDER_MODE } from '@tramvai/tokens-render';
 import { ROUTER_TOKEN } from '@tramvai/tokens-router';
 import { PAGE_RENDER_DEFAULT_FALLBACK_COMPONENT } from './tokens';
@@ -10,6 +14,8 @@ const FALLBACK_GROUP = '__default';
 const FALLBACK_NAME = '__csr_fallback__';
 // just some unic path
 const FALLBACK_PATH = '/__csr_fallback__/';
+// env for force CSR mode
+const FORCE_RENDER_ENV_KEY = 'TRAMVAI_FORCE_CLIENT_SIDE_RENDERING';
 
 const FALLBACK_ROUTE = {
   name: FALLBACK_NAME,
@@ -21,47 +27,67 @@ const FALLBACK_ROUTE = {
 };
 
 /**
- * Module for force CSR mode, only connected when `@tramvai/cli` commands run with `--csr` flag
+ * Module for force CSR mode, only add logic when `TRAMVAI_FORCE_CLIENT_SIDE_RENDERING=true` env variable is set
  */
 export const ForceCSRModule = declareModule({
   name: 'ForceCSRModule',
   providers: [
+    provide({
+      provide: ENV_USED_TOKEN,
+      useValue: [{ key: FORCE_RENDER_ENV_KEY, optional: true }],
+    }),
     // set CSR mode globally
     provide({
       provide: TRAMVAI_RENDER_MODE,
-      useValue: 'client',
+      useFactory: ({ envManager }) =>
+        envManager.get(FORCE_RENDER_ENV_KEY) === 'true' ? 'client' : 'ssr',
+      deps: {
+        envManager: ENV_MANAGER_TOKEN,
+      },
     }),
     // register CSR fallback component
     provide({
       provide: commandLineListTokens.listen,
-      useFactory: ({ componentRegistry, fallback }) => {
+      useFactory: ({ componentRegistry, fallback, envManager }) => {
         return function addCSRFallbackCompnent() {
-          componentRegistry.add(FALLBACK_NAME, fallback, FALLBACK_GROUP);
+          if (envManager.get(FORCE_RENDER_ENV_KEY) === 'true') {
+            componentRegistry.add(FALLBACK_NAME, fallback, FALLBACK_GROUP);
+          }
         };
       },
       deps: {
         componentRegistry: COMPONENT_REGISTRY_TOKEN,
-        fallback: PAGE_RENDER_DEFAULT_FALLBACK_COMPONENT,
+        fallback: { token: PAGE_RENDER_DEFAULT_FALLBACK_COMPONENT, optional: true },
+        envManager: ENV_MANAGER_TOKEN,
       },
     }),
     // add CSR fallback route
     provide({
       provide: commandLineListTokens.customerStart,
-      useFactory: ({ router }) => {
+      useFactory: ({ router, envManager }) => {
         return function addCSRFallbackRoute() {
-          router.registerHook('beforeResolve', async () => {
-            router.addRoute(FALLBACK_ROUTE);
-          });
+          if (envManager.get(FORCE_RENDER_ENV_KEY) === 'true') {
+            router.registerHook('beforeResolve', async () => {
+              router.addRoute(FALLBACK_ROUTE);
+            });
+          }
         };
       },
       deps: {
         router: ROUTER_TOKEN,
+        envManager: ENV_MANAGER_TOKEN,
       },
     }),
     // tramvai static will not generate CSR fallback if /bundleInfo is not contains this route
     {
       provide: 'router bundleInfoAdditional',
-      useValue: () => FALLBACK_ROUTE,
+      useFactory:
+        ({ envManager }) =>
+        () =>
+          envManager.get(FORCE_RENDER_ENV_KEY) === 'true' ? FALLBACK_ROUTE : null,
+      deps: {
+        envManager: ENV_MANAGER_TOKEN,
+      },
     },
   ],
 });

@@ -14,6 +14,6 @@ declare module '@tramvai/react' {
 // @todo: перенести в @tramvai/module-render
 export const PageRenderModeModule = declareModule({
   name: 'PageRenderModeModule',
-  imports: [...(process.env.__TRAMVAI_FORCE_CLIENT_SIDE_RENDERING ? [ForceCSRModule] : [])],
+  imports: [ForceCSRModule],
   providers: [...sharedProviders],
 });

@@ -1,5 +1,4 @@
 import noop from '@tinkoff/utils/function/noop';
-import type { ComponentType } from 'react';
 import { useMemo, useContext, useState, useEffect, Suspense, memo } from 'react';
 import type { ChildAppReactConfig } from '@tramvai/tokens-child-app';
 import { CHILD_APP_INTERNAL_RENDER_TOKEN } from '@tramvai/tokens-child-app';
@@ -9,15 +8,9 @@ import { useUrl } from '@tramvai/module-router';
 import { RenderContext } from './render-context';
 
 const FailedChildAppFallback = ({
-  name,
-  version,
-  tag,
-  fallback: Fallback,
+  config: { name, version, tag, fallback: Fallback },
 }: {
-  name: string;
-  version?: string;
-  tag?: string;
-  fallback?: ComponentType<any>;
+  config: ChildAppReactConfig;
 }) => {
   const logger = useDi(LOGGER_TOKEN);
 
@@ -136,9 +129,7 @@ export const ChildApp = memo((config: ChildAppReactConfig) => {
   );
 
   if (process.env.__TRAMVAI_CONCURRENT_FEATURES) {
-    const fallbackRender = FailedChildAppFallback(config);
-
-    return <Suspense fallback={fallbackRender}>{result}</Suspense>;
+    return <Suspense fallback={<FailedChildAppFallback config={config} />}>{result}</Suspense>;
   }
 
   return result;

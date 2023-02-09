@@ -14,6 +14,12 @@ If you are using jest for testing, consider to add a library [@testing-library/j
 npm i --save-dev @tramvai/test-react
 ```
 
+:::caution
+
+Only React >= 18 version is supported
+
+:::
+
 ## Explanation
 
 ### act

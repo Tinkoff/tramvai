@@ -14,7 +14,6 @@ export interface Params {
   sourceMap?: boolean;
   resolveSymlinks?: boolean;
   showConfig?: boolean;
-  csr?: boolean;
 }
 
 export class StartProdCommand extends CLICommand<Params> {
@@ -78,11 +77,6 @@ export class StartProdCommand extends CLICommand<Params> {
       value: '[fileCache]',
       transformer: (value: string) => value !== 'false',
       description: 'Enable/disable persistent file cache for used cli builder',
-    },
-    {
-      name: '--csr',
-      value: '[csr]',
-      description: 'Run with Client-Side rendering mode',
     },
   ];
 

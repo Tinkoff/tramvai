@@ -36,8 +36,6 @@ export interface Settings<E extends Env> {
   onlyBundles?: string[];
   disableProdOptimization?: boolean;
   fileCache?: boolean;
-  // force client-side rendering mode
-  csr?: boolean;
 }
 
 const getOption = <T>(optionName: string, cfgs: any[], dflt: T): T => {

@@ -22,7 +22,6 @@ export const configToEnv = (configManager: ConfigManager<ConfigEntry>) => (confi
         fileSystemPages.pagesDir
       ),
       'process.env.__TRAMVAI_CONCURRENT_FEATURES': JSON.stringify(shouldUseReactRoot()),
-      'process.env.__TRAMVAI_FORCE_CLIENT_SIDE_RENDERING': JSON.stringify(configManager.csr),
     },
   ]);
 };
