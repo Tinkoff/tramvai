@@ -1,7 +1,7 @@
 import type { Provider } from '@tinkoff/dippy';
 import { Scope, DI_TOKEN } from '@tinkoff/dippy';
 import { commandLineListTokens, COMMAND_LINE_RUNNER_TOKEN, provide } from '@tramvai/core';
-import type { ChildAppFinalConfig, ChildAppRequestConfig } from '@tramvai/tokens-child-app';
+import type { ChildAppRequestConfig } from '@tramvai/tokens-child-app';
 import { CHILD_APP_RESOLUTION_CONFIGS_TOKEN } from '@tramvai/tokens-child-app';
 import { CHILD_APP_RESOLUTION_CONFIG_MANAGER_TOKEN } from '@tramvai/tokens-child-app';
 import { CHILD_APP_RENDER_MANAGER_TOKEN } from '@tramvai/tokens-child-app';
@@ -32,20 +32,6 @@ import { ChildAppStore } from './store';
 import { extendRender } from './render';
 import { initModuleFederation } from './webpack/moduleFederation';
 import { ChildAppResolutionConfigManager } from './resolutionConfigManager';
-
-declare module '@tramvai/react' {
-  export interface PageComponentOptions {
-    childApps?: ChildAppRequestConfig[];
-  }
-
-  export interface LayoutComponentOptions {
-    childApps?: ChildAppRequestConfig[];
-  }
-
-  export interface MetaComponentOptions {
-    childApps?: ChildAppRequestConfig[];
-  }
-}
 
 export const sharedProviders: Provider[] = [
   provide({

@@ -1,3 +1,5 @@
+import '../typings/application';
+
 import { writableNoopStream } from 'noop-stream';
 import {
   ANALYTICS_PACKAGE_INFO_TOKEN,

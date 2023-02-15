@@ -207,8 +207,10 @@ For testing fallback close to production, you can use `http-server` library, and
 
 #### Infinite reload
 
-It is expected error, when you try to open fallback page in browser locally or directly from `s3`, and it will be reloaded infinitely.
+It is expected error, when you try to open fallback page directly or open non-existent route, and it will be reloaded infinitely.
 
-When you open a fallback page, it will try to navigate to the current url, and if current url is not registered in app router, not found logic will be triggered, which will force hard reload under the hood.
+When you open a fallback page, it will try to navigate to the current url, and if current url is not registered in app router, not found default logic will be triggered, which will force **hard reload** under the hood. It is useful when another applications is served from the same domain, you have some shared menu with relative links, and you can't navigate to them with SPA-transition.
 
-If you want to test fallback locally - use `http-server` as described above in [Testing](#testing) section. For production environment, you need to configure your own balancer to serve fallback page for all routes.
+You can add [Not Found](03-features/07-routing/06-wildcard-routes.md#not-found-page) route for application, and it will be rendered instead of infinite reload. But you will be unable to navigate to other applications through relative links.
+
+If you want to test production version of fallback locally - use `http-server` as described above in [Testing](#testing) section. For real production environment, you need to configure your own balancer to serve fallback page for all routes.

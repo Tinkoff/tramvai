@@ -99,40 +99,10 @@ For **vector** images, on contrast, [svgo](https://github.com/svg/svgo) always e
 
 ### Typings
 
-To prevent typescript issues with image imports, update your custom types declaration:
+To prevent typescript issues with image imports, make sure that your custom types declaration contains `@tramvai/cli` package reference:
 
 ```ts title="typings.d.ts"
-type ImageString = string;
-
-declare module '*.png' {
-  import type { ImageObject } from '@tramvai/cli';
-
-  export default ImageString;
-  export const image: ImageObject;
-}
-declare module '*.jpg' {
-  import type { ImageObject } from '@tramvai/cli';
-
-  export default ImageString;
-  export const image: ImageObject;
-}
-declare module '*.jpeg' {
-  import type { ImageObject } from '@tramvai/cli';
-
-  export default ImageString;
-  export const image: ImageObject;
-}
-
-declare module '*.svg' {
-  const image: ImageString;
-  export = image;
-}
-declare module '*.svg?react' {
-  import type { SvgComponent } from '@tramvai/cli';
-
-  const Svg: SvgComponent;
-  export = Svg;
-}
+/// <reference types="@tramvai/cli" />
 ```
 
 ## Fonts
@@ -235,11 +205,8 @@ provide({
 
 ### Typings
 
-To prevent typescript issues with import `*.woff2` file, update your custom types declaration:
+To prevent typescript issues with import `*.woff2` file, make sure that your custom types declaration contains `@tramvai/cli` package reference:
 
 ```ts title="typings.d.ts"
-declare module '*.woff2' {
-  const font: string;
-  export = font;
-}
+/// <reference types="@tramvai/cli" />
 ```

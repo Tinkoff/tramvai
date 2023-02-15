@@ -64,18 +64,10 @@ To disable CSS Modules processing for specific files, such as global styles, you
 
 ### Typings
 
-For prevent typescript issues with import `.css` files, update your custom types declaration:
+For prevent typescript issues with import `.css` files, make sure that your custom types declaration contains `@tramvai/cli` package reference:
 
 ```ts title="typings.d.ts"
-declare module '*.css' {
-  interface IClassNames {
-    [className: string]: string;
-  }
-
-  const classNames: IClassNames;
-
-  export = classNames;
-}
+/// <reference types="@tramvai/cli" />
 ```
 
 ## PostCSS

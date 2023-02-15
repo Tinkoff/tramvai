@@ -7,6 +7,7 @@ module.exports = {
       plugins: ['@tinkoff/tramvai'],
       rules: {
         '@tinkoff/tramvai/bundle-chunk-name': 'error',
+        'spaced-comment': 'off',
       },
     },
   },
