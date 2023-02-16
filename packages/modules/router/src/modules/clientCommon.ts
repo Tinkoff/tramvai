@@ -6,6 +6,7 @@ import {
   STORE_TOKEN,
   ACTION_PAGE_RUNNER_TOKEN,
   ACTION_REGISTRY_TOKEN,
+  ENV_MANAGER_TOKEN,
 } from '@tramvai/tokens-common';
 import { ROUTER_TOKEN } from '@tramvai/tokens-router';
 import { TRAMVAI_RENDER_MODE } from '@tramvai/tokens-render';
@@ -21,8 +22,14 @@ export const providers: Provider[] = [
   provide({
     provide: commandLineListTokens.customerStart,
     multi: true,
-    useFactory: ({ router, store }) => {
+    useFactory: ({ router, store, envManager }) => {
       return async function routerInit() {
+        // run full navigation flow for CSR fallback on application start
+        if (envManager.get('TRAMVAI_FORCE_CLIENT_SIDE_RENDERING') === 'true') {
+          router.start();
+          return router.navigate({ url: window.location.href, replace: true });
+        }
+
         const currentRoute = store.getState(RouterStore).currentRoute as NavigationRoute;
 
         return router.rehydrate({
@@ -33,6 +40,7 @@ export const providers: Provider[] = [
     deps: {
       router: ROUTER_TOKEN,
       store: STORE_TOKEN,
+      envManager: ENV_MANAGER_TOKEN,
     },
   }),
   provide({
@@ -40,8 +48,13 @@ export const providers: Provider[] = [
     // после этого уже можно будет делать переходы и т.д.
     provide: commandLineListTokens.clear,
     multi: true,
-    useFactory: ({ router, store }) => {
+    useFactory: ({ router, store, envManager }) => {
       return function routerStart() {
+        // router already started for CSR fallback on this stage
+        if (envManager.get('TRAMVAI_FORCE_CLIENT_SIDE_RENDERING') === 'true') {
+          return;
+        }
+
         const routerState = store.getState().router;
 
         if (routerState.currentUrl.href !== window.location.href) {
@@ -54,6 +67,7 @@ export const providers: Provider[] = [
     deps: {
       router: ROUTER_TOKEN,
       store: STORE_TOKEN,
+      envManager: ENV_MANAGER_TOKEN,
     },
   }),
   provide({
@@ -62,13 +76,8 @@ export const providers: Provider[] = [
     provide: commandLineListTokens.clear,
     multi: true,
     useFactory: (deps) => {
-      const currentRoute = deps.store.getState(RouterStore).currentRoute as NavigationRoute;
-
-      // in client-side rendering mode, action will be executed on first navigation
-      if (
-        deps.renderMode === 'client' &&
-        (!currentRoute || (currentRoute && currentRoute.actualPath !== window.location.pathname))
-      ) {
+      // actions already executed for CSR fallback before this stage
+      if (deps.envManager.get('TRAMVAI_FORCE_CLIENT_SIDE_RENDERING') === 'true') {
         return noop;
       }
       return runActionsFactory(deps);
@@ -79,31 +88,7 @@ export const providers: Provider[] = [
       actionRegistry: ACTION_REGISTRY_TOKEN,
       actionPageRunner: ACTION_PAGE_RUNNER_TOKEN,
       renderMode: TRAMVAI_RENDER_MODE,
-    },
-  }),
-  provide({
-    provide: commandLineListTokens.clear,
-    multi: true,
-    useFactory: ({ store, router, renderMode }) => {
-      return async function csrFirstNavigation() {
-        const currentRoute = store.getState(RouterStore).currentRoute as NavigationRoute;
-
-        // in client-side rendering mode, if current route inconsistent with current location,
-        // run navigation to current location.
-        if (
-          renderMode === 'client' &&
-          (!currentRoute || (currentRoute && currentRoute.actualPath !== window.location.pathname))
-        ) {
-          // replace because otherwice we will push in the history the same url twice,
-          // and history.back will return to the same url
-          return router.navigate({ url: window.location.href, replace: true });
-        }
-      };
-    },
-    deps: {
-      store: STORE_TOKEN,
-      router: ROUTER_TOKEN,
-      renderMode: TRAMVAI_RENDER_MODE,
+      envManager: ENV_MANAGER_TOKEN,
     },
   }),
 ];
