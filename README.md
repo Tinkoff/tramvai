@@ -2,51 +2,44 @@
 
 Modular framework for universal React applications
 
+[Setup](#get-started) &bull; [Docs](https://tramvai.dev/docs/get-started/overview) &bull; [Tutorial](#tutorials)
+
 ---
 
 ## Features
 
-- ✈️ **Universal**
-
+- ✈️ **Server Side Rendering**  
   Creates SSR `React` applications - includes solid server with metrics, health checks and graceful degradation support
 
-- 💉 **Dependency Injection**
-
-  Provides simple and powerful DI system, inspired by `Angular` and `Nest.js` best practices
-
-- 🧩 **Modular**
-
-  Every application build from list of feature modules - doing one thing right!
-
-- ⚡ **Fast and lightweight**
-
+- ⚡ **Fast and lightweight**  
   Enforces best web-performance techniques - resources preloading and inlining, lazy hydration 🚀, modern ES bundles, tree-shakable libraries
 
-- 🔗 **Chain of commands**
+- 🧩 **Modular**  
+  Every application build from list of feature modules - doing one thing right!
 
-  Elegant pattern for complete control over application life-cycle - predictable flow for every HTTP request into application, running async actions in parallel, limits the duration of server-side actions
+  - **Micro Frontends**  
+    Heavily integrated solution for Micro Frontends with SSR and Module Federation
 
-- 🧱 **Micro Frontends**
+- **📦 Code quality out of the box**  
+  Tramvai introduces best practices and paradigms from back-end to allow you to create enterprise-grade applications:
 
-  Heavily integrated solution for Micro Frontends with SSR and Module Federation
+  - **Dependency Injection**  
+    Provides simple and powerful DI system, inspired by `Angular` and `Nest.js` best practices
+  - **Chain of commands**  
+    Elegant pattern for complete control over application life-cycle - predictable flow for every HTTP request into application, running async actions in parallel, limits the duration of server-side actions
 
-- 🛠️ **Tooling**
-
+- 🛠️ **Tooling**  
   Functional CLI for generating, develop, analyze, and bundling `tramvai` applications - powered by `webpack@5`
-
-- 🧪 **Testing**
-
-  Complete set of unit and integration testing utilites - powered by `jest` and `testing-library`
-
-- 🕊️ **Migrations**
-
-  Automatic migrations with `jscodeshift` codemodes
+  - **Testing**  
+    Complete set of unit and integration testing utilites - powered by `jest` and `testing-library`
+  - **Migrations**  
+    Automatic migrations with `jscodeshift` codemodes
 
 ## Get started
 
 1. Generate new application
 
-   ```sh
+   ```bash
    npm init @tramvai my-awesome-app # or npx @tramvai/create my-awesome-app
    ```
 
@@ -54,7 +47,8 @@ Modular framework for universal React applications
    ```bash
    cd my-awesome-app && npm start
    ```
-   application will be available at `http://localhost:3000/`
+
+3. Application will be available at **`http://localhost:3000/`**
 
 ## Tutorials
 
