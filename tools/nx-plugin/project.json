@@ -2,7 +2,7 @@
   "name": "@tramvai/nx-plugin",
   "sourceRoot": "tools/nx-plugin/src",
   "targets": {
-    "build": {
+    "build-publish": {
       "executor": "@nrwl/js:tsc",
       "outputs": [
         "{options.outputPath}"

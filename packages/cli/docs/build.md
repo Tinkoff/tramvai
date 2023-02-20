@@ -38,7 +38,7 @@ Library settings should be specified in the `package.json` of the library itself
   "sideEffects": false,
   "scripts": {
     "start": "tramvai build {{packageName}} --watchMode", // watch mode to develop package
-    "build": "tramvai build {{packageName}} --forPublish" // single time build for the production
+    "build": "tramvai build {{packageName}} --forPublish --preserveModules" // single time build for the production
   }
 }
 ```

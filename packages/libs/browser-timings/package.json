@@ -13,9 +13,8 @@
     "url": "git@github.com:Tinkoff/tramvai.git"
   },
   "scripts": {
-    "build": "tramvai-build --for-publish",
-    "watch": "tsc -w",
-    "build-for-publish": "true"
+    "build": "tramvai-build --forPublish --preserveModules",
+    "watch": "tsc -w"
   },
   "sideEffects": false,
   "gitHead": "8e826a214c87b188fc4d254cdd8f2a2b2c55f3a8",

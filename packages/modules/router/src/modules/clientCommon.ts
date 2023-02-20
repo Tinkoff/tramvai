@@ -6,9 +6,9 @@ import {
   STORE_TOKEN,
   ACTION_PAGE_RUNNER_TOKEN,
   ACTION_REGISTRY_TOKEN,
+  ENV_MANAGER_TOKEN,
 } from '@tramvai/tokens-common';
 import { ROUTER_TOKEN } from '@tramvai/tokens-router';
-import { TRAMVAI_RENDER_MODE } from '@tramvai/tokens-render';
 import { RouterStore, setUrlOnRehydrate } from '../stores/RouterStore';
 import { providers as commonProviders } from './common';
 import { clientTokens } from './tokens/browser/index';
@@ -21,8 +21,14 @@ export const providers: Provider[] = [
   provide({
     provide: commandLineListTokens.customerStart,
     multi: true,
-    useFactory: ({ router, store }) => {
+    useFactory: ({ router, store, envManager }) => {
       return async function routerInit() {
+        // регидрация для CSR заглушки без серверного состояния,
+        // что бы запустить хуки beforeResolve и change
+        if (envManager.get('TRAMVAI_FORCE_CLIENT_SIDE_RENDERING') === 'true') {
+          return router.rehydrate({});
+        }
+
         const currentRoute = store.getState(RouterStore).currentRoute as NavigationRoute;
 
         return router.rehydrate({
@@ -33,6 +39,7 @@ export const providers: Provider[] = [
     deps: {
       router: ROUTER_TOKEN,
       store: STORE_TOKEN,
+      envManager: ENV_MANAGER_TOKEN,
     },
   }),
   provide({
@@ -62,15 +69,6 @@ export const providers: Provider[] = [
     provide: commandLineListTokens.clear,
     multi: true,
     useFactory: (deps) => {
-      const currentRoute = deps.store.getState(RouterStore).currentRoute as NavigationRoute;
-
-      // in client-side rendering mode, action will be executed on first navigation
-      if (
-        deps.renderMode === 'client' &&
-        (!currentRoute || (currentRoute && currentRoute.actualPath !== window.location.pathname))
-      ) {
-        return noop;
-      }
       return runActionsFactory(deps);
     },
     deps: {
@@ -78,32 +76,6 @@ export const providers: Provider[] = [
       router: ROUTER_TOKEN,
       actionRegistry: ACTION_REGISTRY_TOKEN,
       actionPageRunner: ACTION_PAGE_RUNNER_TOKEN,
-      renderMode: TRAMVAI_RENDER_MODE,
-    },
-  }),
-  provide({
-    provide: commandLineListTokens.clear,
-    multi: true,
-    useFactory: ({ store, router, renderMode }) => {
-      return async function csrFirstNavigation() {
-        const currentRoute = store.getState(RouterStore).currentRoute as NavigationRoute;
-
-        // in client-side rendering mode, if current route inconsistent with current location,
-        // run navigation to current location.
-        if (
-          renderMode === 'client' &&
-          (!currentRoute || (currentRoute && currentRoute.actualPath !== window.location.pathname))
-        ) {
-          // replace because otherwice we will push in the history the same url twice,
-          // and history.back will return to the same url
-          return router.navigate({ url: window.location.href, replace: true });
-        }
-      };
-    },
-    deps: {
-      store: STORE_TOKEN,
-      router: ROUTER_TOKEN,
-      renderMode: TRAMVAI_RENDER_MODE,
     },
   }),
 ];

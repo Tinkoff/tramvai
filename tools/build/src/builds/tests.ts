@@ -20,12 +20,21 @@ export const testsBuild: Build = {
         declarationDir: undefined,
       },
     });
-    const output = createOutputOptions(params, {
-      file: 'tests.js',
-      format: 'cjs',
-      exportsField: 'named',
-      postfix: '.js',
-    });
+    const output = createOutputOptions(
+      {
+        ...params,
+        options: {
+          ...params.options,
+          preserveModules: false,
+        },
+      },
+      {
+        file: 'tests.js',
+        format: 'cjs',
+        exportsField: 'named',
+        postfix: '.js',
+      }
+    );
 
     return {
       input,

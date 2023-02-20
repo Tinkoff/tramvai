@@ -21,12 +21,12 @@ export default async function (tree: Tree) {
       name: packageJson.name,
       ...config,
       sourceRoot:
-        config.sourceRoot.endsWith('/src') || !hasSrcDir
+        (config.sourceRoot && config.sourceRoot.endsWith('/src')) || !hasSrcDir
           ? config.sourceRoot
           : `${config.sourceRoot}/src`,
       targets: {
         ...config.targets,
-        ...(packageJson.private || !packageJson.scripts?.['build-for-publish']
+        ...(packageJson.private
           ? {}
           : {
               'build-publish': {

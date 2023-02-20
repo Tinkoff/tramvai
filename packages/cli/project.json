@@ -6,7 +6,7 @@
     "build-publish": {
       "executor": "nx:run-script",
       "options": {
-        "script": "build-publish"
+        "script": "build"
       },
       "outputs": [
         "packages/cli/lib",

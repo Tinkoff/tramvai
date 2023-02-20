@@ -21,7 +21,7 @@ export default async function runExecutor(options: BuildExecutorSchema, context:
   let channel: { stdout: string; stderr: string };
 
   try {
-    channel = await exec('tramvai-build --for-publish --preserve-modules', {
+    channel = await exec('tramvai-build --forPublish --preserveModules', {
       cwd: path.join(root, projectConfiguration.root),
     });
   } catch (e) {

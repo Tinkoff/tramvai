@@ -154,9 +154,10 @@ This will completely free up the application server.
 When caching a fallback, your users potentially can have a outdated content.
 Also, you will have the same meta tags for all application pages, it can affect SEO.
 
-Some important features will not work:
+Some important features will not work or work different:
 - User-Agent parsing - User-Agent or Client-Hints parsed only at server side, so you will need to realize it on client side if you need it
 - Media detection - always will came wrong from server (with SSR only first load will be without real data), so will be useless for optimizations
+- On page initialization, router flow will be different - `beforeResolve` hook will be triggered at `customerStart` line
 
 :::
 

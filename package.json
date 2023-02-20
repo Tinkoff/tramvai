@@ -35,7 +35,7 @@
   ],
   "devDependencies": {
     "@types/jest": "^29.0.2",
-    "@types/node": "^16.10.2",
+    "@types/node": "^18.13.0",
     "@types/webpack-env": "^1.13.16",
     "expect-type": "^0.13.0",
     "typescript": "4.9.3",

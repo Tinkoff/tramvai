@@ -14,9 +14,8 @@
     "url": "git@github.com:Tinkoff/tramvai.gitt"
   },
   "scripts": {
-    "build": "tramvai-build --for-publish",
-    "watch": "tsc -w",
-    "build-for-publish": "true"
+    "build": "tramvai-build --forPublish --preserveModules",
+    "watch": "tsc -w"
   },
   "dependencies": {
     "tslib": "^2.4.0"

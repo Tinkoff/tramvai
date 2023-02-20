@@ -15,9 +15,8 @@
     "directory": "packages/modules/cache-warmup"
   },
   "scripts": {
-    "build": "tramvai-build --for-publish",
-    "watch": "tsc -w",
-    "build-for-publish": "true"
+    "build": "tramvai-build --forPublish --preserveModules",
+    "watch": "tsc -w"
   },
   "dependencies": {
     "@tinkoff/request-core": "^0.9.2",

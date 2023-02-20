@@ -8,7 +8,7 @@
   },
   "typings": "src/index.ts",
   "scripts": {
-    "build": "tramvai-build --for-publish",
+    "build": "tramvai-build --forPublish --preserveModules",
     "watch": "tramvai-build --watch"
   },
   "dependencies": {

@@ -15,6 +15,7 @@
     "plugins.js"
   ],
   "sideEffects": [
+    "./lib/index.js",
     "./lib/browser.js",
     "./lib/index.browser.js",
     "./lib/browser.browser.js"
@@ -24,9 +25,8 @@
     "url": "git@github.com:Tinkoff/tramvai.git"
   },
   "scripts": {
-    "build": "tramvai-build --for-publish",
-    "watch": "tsc -w",
-    "build-for-publish": "true"
+    "build": "tramvai-build --forPublish --preserveModules",
+    "watch": "tsc -w"
   },
   "dependencies": {
     "@tinkoff/utils": "^2.1.2",

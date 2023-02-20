@@ -47,7 +47,7 @@ Modular framework for universal React applications
 1. Generate new application
 
    ```sh
-   npm init @tramvai my-awesome-app # or npx @tramvai/create my-awesome-app
+   npm init @tramvai@latest my-awesome-app
    ```
 
 2. Run development server

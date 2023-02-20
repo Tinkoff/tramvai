@@ -42,6 +42,9 @@ export abstract class ClientRouter extends AbstractRouter {
   }
 
   async rehydrate(navigation: Navigation) {
+    // this flag for cases when we don't have initial router state from server - CSR fallback for example
+    const fullRehydration = !navigation.to;
+
     logger.debug({
       event: 'rehydrate',
       navigation,
@@ -55,15 +58,29 @@ export abstract class ClientRouter extends AbstractRouter {
       url,
     };
     this.lastNavigation = this.currentNavigation;
+
+    if (fullRehydration) {
+      await this.runHooks('beforeResolve', this.currentNavigation);
+
+      const to = this.resolveRoute({ url }, { wildcard: true });
+
+      this.currentNavigation.to = to;
+    }
+
     // rerun guard check in case it differs from server side
     await this.runGuards(this.currentNavigation);
 
     // and init any history listeners
     this.history.init(this.currentNavigation);
+
+    if (fullRehydration) {
+      this.runSyncHooks('change', this.currentNavigation);
+    }
+
     this.currentNavigation = null;
 
     // add dehydrated route to tree to prevent its loading
-    if (navigation.to) {
+    if (!fullRehydration) {
       this.addRoute({
         name: navigation.to.name,
         path: navigation.to.path,

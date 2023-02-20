@@ -312,7 +312,7 @@ export { foo };
   describe('preserve-modules', () => {
     it('build default library', async () => {
       const { files, packageJson, readOutFile } = await buildLibAndReadOutput('library', {
-        args: ['-p', '--preserve-modules'],
+        args: ['-p', '--preserveModules'],
       });
 
       expect(files).toEqual([
@@ -387,7 +387,7 @@ export { foo };
 
     it('copy assets', async () => {
       const { files } = await buildLibAndReadOutput('library-assets', {
-        args: ['-p', '--preserve-modules'],
+        args: ['-p', '--preserveModules'],
       });
 
       expect(files).toContain('style.css');
@@ -395,7 +395,7 @@ export { foo };
 
     it('lazy import', async () => {
       const { files, readOutFile } = await buildLibAndReadOutput('library-lazy', {
-        args: ['-p', '--preserve-modules'],
+        args: ['-p', '--preserveModules'],
       });
 
       expect(files).toContain('lazy.js');
@@ -437,7 +437,7 @@ export { foo };
 
     it('require', async () => {
       const { files, readOutFile } = await buildLibAndReadOutput('library-require', {
-        args: ['-p', '--preserve-modules'],
+        args: ['-p', '--preserveModules'],
       });
 
       expect(files).toContain('req.js');
@@ -481,7 +481,7 @@ export { foo };
       const { migrationFiles, readMigrationFile } = await buildLibAndReadOutput(
         'library-migrations',
         {
-          args: ['-p', '--preserve-modules'],
+          args: ['-p', '--preserveModules'],
         }
       );
 
@@ -505,7 +505,7 @@ export { foo };
       const { files, packageJson, readOutFile } = await buildLibAndReadOutput(
         'library-browser-object',
         {
-          args: ['-p', '--preserve-modules'],
+          args: ['-p', '--preserveModules'],
         }
       );
 
@@ -645,7 +645,7 @@ export { testNested };
       const { files, packageJson, readOutFile } = await buildLibAndReadOutput(
         'library-browser-string',
         {
-          args: ['-p', '--preserve-modules'],
+          args: ['-p', '--preserveModules'],
         }
       );
 
@@ -720,7 +720,7 @@ export { test };
       const { files, packageJson, readOutFile } = await buildLibAndReadOutput(
         'library-browser-string-index',
         {
-          args: ['-p', '--preserve-modules'],
+          args: ['-p', '--preserveModules'],
         }
       );
 
