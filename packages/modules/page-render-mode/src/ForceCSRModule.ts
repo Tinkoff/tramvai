@@ -67,9 +67,7 @@ export const ForceCSRModule = declareModule({
       useFactory: ({ router, envManager }) => {
         return function addCSRFallbackRoute() {
           if (envManager.get(FORCE_RENDER_ENV_KEY) === 'true') {
-            router.registerHook('beforeResolve', async () => {
-              router.addRoute(FALLBACK_ROUTE);
-            });
+            router.addRoute(FALLBACK_ROUTE);
           }
         };
       },
