@@ -14,8 +14,8 @@ Tramvai provides a complete integration for the awesome [@tanstack/react-query](
 You need to install `@tramvai/react-query` and `@tramvai/module-react-query` packages
 
 ```bash
-tramvai add @tramvai/react-query
-tramvai add @tramvai/module-react-query
+npx tramvai add @tramvai/react-query
+npx tramvai add @tramvai/module-react-query
 ```
 
 And connect module to the project
@@ -26,7 +26,7 @@ import { ReactQueryModule } from '@tramvai/module-react-query';
 
 createApp({
   name: 'tincoin',
-  modules: [...ReactQueryModule],
+  modules: [ReactQueryModule],
 });
 ```
 

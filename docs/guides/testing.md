@@ -24,8 +24,8 @@ npm install --save-dev jest jest-circus jest-environment-jsdom @types/jest ts-no
 :hourglass: Install tramvai-specific jest presets (`tramvai add` command considers current `tramvai` version in application):
 
 ```bash
-tramvai add --dev @tramvai/test-unit-jest
-tramvai add --dev @tramvai/test-integration-jest
+npx tramvai add --dev @tramvai/test-unit-jest
+npx tramvai add --dev @tramvai/test-integration-jest
 ```
 
 :hourglass: Create `jest.config.ts` as preset for unit tests:

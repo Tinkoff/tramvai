@@ -9,7 +9,7 @@ Link to complete React Query documentation - https://tramvai.dev/docs/features/d
 You need to install `@tramvai/module-react-query`
 
 ```bash
-yarn add @tramvai/module-react-query
+npx tramvai add @tramvai/module-react-query
 ```
 
 And connect in the project
@@ -20,7 +20,7 @@ import { ReactQueryModule } from '@tramvai/module-react-query';
 
 createApp({
   name: 'tincoin',
-  modules: [...ReactQueryModule],
+  modules: [ReactQueryModule],
 });
 ```
 

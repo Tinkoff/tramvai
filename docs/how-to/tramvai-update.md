@@ -48,13 +48,13 @@ tramvai update 1.0.0
 `tramvai add <packageName>` by default installs the package to `dependencies`:
 
 ```bash
-tramvai add @tramvai/module-router
+npx tramvai add @tramvai/module-router
 ```
 
 The `--dev` flag will install the package to `devDependencies`:
 
 ```bash
-tramvai add @tramvai/test-unit --dev
+npx tramvai add @tramvai/test-unit --dev
 ```
 
 ## Checking tramvai versions in the app

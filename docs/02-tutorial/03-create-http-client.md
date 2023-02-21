@@ -23,7 +23,7 @@ The DI allows you to construct the application from modules as if they were sepa
 :hourglass: Install the library `@tramvai/module-http-client`:
 
 ```bash
-tramvai add @tramvai/module-http-client
+npx tramvai add @tramvai/module-http-client
 ```
 
 :hourglass: Connect `@tramvai/module-http-client` into the application:

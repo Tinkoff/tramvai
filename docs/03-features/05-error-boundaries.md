@@ -22,6 +22,12 @@ This guide will be focused how to customize and show error pages for the users i
 
 If a critical error occurred during the request handling, e.g. Page Error Boundary rendering was unsuccessful, or an exception has been thrown out in any [CommandLineRunner](concepts/command-line-runner.md) stages before rendering, `tramvai` provides an opportunity to render custom `5xx` page. Root Boundary works only on server side.
 
+:::info
+
+Root Error Boundary works only server-side
+
+:::
+
 You can provide this boundary by using token `ROOT_ERROR_BOUNDARY_COMPONENT_TOKEN`:
 
 ```ts

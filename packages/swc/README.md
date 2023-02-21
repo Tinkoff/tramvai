@@ -8,7 +8,7 @@ This package contains of next things:
 ## Installation
 
 ```sh
-tramvai add --dev @tramvai/swc-integration
+npx tramvai add --dev @tramvai/swc-integration
 ```
 
 ## API

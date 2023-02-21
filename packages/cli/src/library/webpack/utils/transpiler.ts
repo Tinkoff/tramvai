@@ -37,7 +37,7 @@ export const addTranspilerLoader = (
       resolve('@tramvai/swc-integration/package.json', { basedir: configManager.rootDir });
     } catch (error) {
       throw new Error(`You are using swc loader for the transpilation, but required module is not installed.
-Please run "tramvai add --dev @tramvai/swc-integration" to fix the problem
+Please run "npx tramvai add --dev @tramvai/swc-integration" to fix the problem
       `);
     }
 

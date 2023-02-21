@@ -44,7 +44,7 @@ By default, [Header and Footer](03-features/04-layouts.md#header-and-footer) wil
 If you want to change between different rendering modes, you need to install `@tramvai/module-page-render-mode`. By default, this module connection has no changes, because default rendering mode is `ssr`. You can change this mode for all pages or for specific pages only.
 
 ```bash
-tramvai add @tramvai/module-page-render-mode
+npx tramvai add @tramvai/module-page-render-mode
 ```
 
 And connect in the project
