@@ -19,7 +19,7 @@ But if long responses from your API are the expected behavior, you can overwrite
 :::
 
 The data from the actions are not passed to the page component `props`.
-The standard pattern for loading data is to create a special [reducer](references/tramvai/state/create-reducer.md) to store the data, and dispatch [events](references/tramvai/state/create-event.md) to fill that reducer in the action.
+The standard pattern for loading data is to create a special [reducer](03-features/08-state-management.md#reducer) to store the data, and dispatch [events](03-features/08-state-management.md#event) to fill that reducer in the action.
 
 :::tip
 

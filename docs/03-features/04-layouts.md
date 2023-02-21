@@ -224,7 +224,7 @@ This actions will be code-splitted with layout component code.
 
 ### Reducers
 
-Nested Layout components support [reducers](references/tramvai/state/create-reducer.md) in `reducers` static property, these reducers will be registered in application store:
+Nested Layout components support [reducers](03-features/08-state-management.md#reducer) in `reducers` static property, these reducers will be registered in application store:
 
 ```tsx
 Layout.reducers = [SomeDataStore];

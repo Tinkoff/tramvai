@@ -31,7 +31,7 @@ This actions will be code-splitted with page component code.
 
 ### Reducers
 
-Page components support [reducers](references/tramvai/state/create-reducer.md) in `reducers` static property, these reducers will be registered in application store:
+Page components support [reducers](03-features/08-state-management.md#reducer) in `reducers` static property, these reducers will be registered in application store:
 
 ```tsx
 MainPage.reducers = [SomeDataStore];

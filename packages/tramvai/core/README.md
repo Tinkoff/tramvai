@@ -60,7 +60,7 @@ After calling createApp, [СommandLineRunner](concepts/command-line-runner.md) i
   - `this` - action execution context that contains some helper functions and resolved deps
   - `params` - data passed to action
 - `deps` - List of providers that are needed for the action to work
-- `conditions` - List of restrictions for the execution of the action
+- `conditions` - List of conditions for the execution of the action
 - `conditionsFailResult` - [see](#conditionsfailresult)
 
 #### Action Execution Context
@@ -105,33 +105,6 @@ declareAction({
 });
 ```
 
-abort execution:
-```ts
-const innerAction = declareAction(/** ... */);
-
-const action = declareAction({
-  name: 'root',
-  async fn() {
-    setTimeout(() => {
-      this.abortController.abort()
-    }, 4000);
-
-    const { payload } = await this.deps.httpClient.request({
-      url: 'https://www.domain.com/api/endpoint',
-      // pass signal to the request
-      signal: this.abortSignal,
-    });
-
-    // if innerAction1 will end after abortController.abort was called
-    // then calling innerAction2 will throw an instance of ExecutionAbortError
-    await this.executeAction(innerAction, payload);
-  },
-  deps: {
-    httpClient: HTTP_CLIENT,
-  },
-});
-```
-
 ### createBundle
 
 `createBundle(options: BundleOptions)` - method to create a bundle.
@@ -144,7 +117,7 @@ const action = declareAction({
 - `components: {}` - An object with registered components for the bundle, which you can use in application routes
 - `presets?: []` - A list of additional properties for the current bundle. This list is merged with the current properties. Needed to extract common parts, e.g. a set with actions and components for authorization. Reference - babel and eslint presets
 - `actions?: []` - List of [actions](concepts/action.md) that will be registered globally for the bundle
-- `reducers?: []` - List of [reducers](references/tramvai/state/base.md), which must be registered with the loading of the bundle
+- `reducers?: []` - List of [reducers](03-features/08-state-management.md#reducer), which must be registered with the loading of the bundle
 
 #### Usage
 

@@ -2,6 +2,8 @@
 
 A module that adds integration with the [react-query](https://tanstack.com/query/v4) library and is required for [@tramvai/react-query](references/tramvai/react-query.md)
 
+Link to complete React Query documentation - https://tramvai.dev/docs/features/data-fetching/react-query/
+
 ## Installation
 
 You need to install `@tramvai/module-react-query`

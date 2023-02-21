@@ -87,7 +87,7 @@ This is the most popular library for creating DI, with:
 
 ### state
 
-The [state management library](references/tramvai/state/base.md) built into tramvai is almost completely similar to the Redux interface, with few nuances:
+The [state management library](03-features/08-state-management.md) built into tramvai is almost completely similar to the Redux interface, with few nuances:
 
 - Allows you to sign components only for updating certain reducers, solving the problem with performance
 - There is a lot of code written using the deprecated version of the state and you can't just switch to another solution
