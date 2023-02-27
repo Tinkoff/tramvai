@@ -7,3 +7,4 @@ export * from './dependenciesVersion';
 export * from './utilityServer';
 export * from './keepAlive';
 export * from './serverTiming';
+export * from './earlyHints';

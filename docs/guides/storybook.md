@@ -59,8 +59,8 @@ cd ../
 
 :hourglass: Install `@tramvai/storybook-addon`:
 
-```bash npm2yarn
-npm install @tramvai/storybook-addon
+```bash
+npx tramvai add --dev @tramvai/storybook-addon
 ```
 
 :hourglass: connect addon in the configuration file:

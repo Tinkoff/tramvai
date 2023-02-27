@@ -46,6 +46,7 @@
     "@tramvai/module-environment": "0.0.0-stub",
     "@tramvai/tokens-common": "0.0.0-stub",
     "@tramvai/tokens-core-private": "0.0.0-stub",
+    "@tramvai/tokens-render": "0.0.0-stub",
     "tslib": "^2.4.0"
   },
   "devDependencies": {

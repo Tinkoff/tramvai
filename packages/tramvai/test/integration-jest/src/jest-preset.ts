@@ -11,6 +11,9 @@ const config: Config.InitialOptions = {
         // enable inline sourcemap to be able to debug tests
         // based on https://github.com/swc-project/swc-node/issues/656
         sourcemap: 'inline',
+        // force commonjs modules to prevent possible errors
+        // https://github.com/swc-project/swc-node/issues/699
+        module: 'commonjs',
       },
     ],
   },

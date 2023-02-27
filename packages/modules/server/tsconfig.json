@@ -62,6 +62,9 @@
     },
     {
       "path": "../../tokens/core-private"
+    },
+    {
+      "path": "../../tokens/render"
     }
   ]
 }

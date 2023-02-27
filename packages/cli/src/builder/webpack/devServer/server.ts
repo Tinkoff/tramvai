@@ -135,7 +135,20 @@ export const serverRunner = ({
     // http-proxy всегда склеивает слеши в урле, что немного неожиданно при работе с сервером напрямую
     // https://github.com/http-party/node-http-proxy/issues/775
     // поэтому пытаемся вернуть все слеши на место
-    proxy.on('proxyReq', (proxyReq, req) => {
+    proxy.on('proxyReq', (proxyReq, req, res) => {
+      // Early Hints support
+      proxyReq.socket.on('data', (data) => {
+        try {
+          const chunk = data.toString();
+
+          if (chunk.startsWith('HTTP/1.1 103 Early Hints')) {
+            res.socket.write(data);
+          }
+        } catch (e) {
+          // do nothing
+        }
+      });
+
       // https://github.com/http-party/node-http-proxy/issues/1022#issuecomment-439245479
       // eslint-disable-next-line no-param-reassign
       (proxyReq as any).path = req.url;

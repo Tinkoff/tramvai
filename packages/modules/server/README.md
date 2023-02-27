@@ -186,6 +186,31 @@ To see values that related to request look for the header `Server-Timing` or che
 
 Module uses loggers with identifiers: `server`, `server:static`, `server:webapp`, `server:node-debug:request`
 
+### Early Hints
+
+Module send the [103 Early Hints](https://developer.chrome.com/blog/early-hints) response to provide better performance, though there are several limitations (look [here](https://chromium.googlesource.com/chromium/src/+/master/docs/early-hints.md#what_s-not-supported) and [here](https://developer.chrome.com/blog/early-hints/#current-limitations)). Currently, module provides hints for next resources:
+
+- Resources with `preconnectLink` type;
+- General resources, which have the `preloadLink` type;
+- Page resources, that exist in the `ResourcesRegistry` with `'data-critical': "true"` attribute;
+- Preconnects for CDN urls, that are computed from `preloadLink` or `data-critical` resources, described above;
+
+Server will try to response with 103 as soon as possible and there can be more than one such responses.
+
+```shell
+curl -I -X HEAD http://localhost:3000
+
+HTTP/1.1 103 Early Hints
+Link: <https://www.cdn-tinkoff.ru>; rel=preconnect
+Link: <https://www.cdn-tinkoff.ru/frontend-libraries/npm/react-kit-font/1.0.0/TinkoffSans.woff2>; rel=preload; as=font
+Link: <https://www-stage.cdn-tinkoff.ru/frontend-libraries/feedback/1.14.0/feedback.css>; rel=preload; as=style
+Link: <https://www-stage.cdn-tinkoff.ru>; rel=preconnect
+
+HTTP/1.1 200 OK
+...
+
+```
+
 ## How to
 
 ### Setting `keepAliveTimeout` for the server

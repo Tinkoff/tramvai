@@ -141,3 +141,14 @@ export type FASTIFY_APP_ERROR_HANDLER = (
 export type PapiExecutor = <Result>(papi: Papi<Result>) => Result;
 
 export const PAPI_EXECUTOR = createToken<PapiExecutor>('papi executor');
+
+/**
+ * @description
+ * Service that creates a response for the 103 Early Hints status code
+ * and writes it to the TCP socket directly
+ */
+export const EARLY_HINTS_MANAGER_TOKEN = createToken<EarlyHintsManager>('earlyHintsManager');
+
+export interface EarlyHintsManager {
+  flushHints(): Promise<void>;
+}

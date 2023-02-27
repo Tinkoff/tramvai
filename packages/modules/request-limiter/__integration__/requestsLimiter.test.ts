@@ -1,4 +1,3 @@
-import { resolve } from 'path';
 import type { PromiseType } from 'utility-types';
 import { startProd } from '@tramvai/cli';
 import fetch from 'node-fetch';

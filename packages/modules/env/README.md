@@ -23,8 +23,8 @@ import { provide } from '@tramvai/core';
     provide({
       provide: ENV_USED_TOKEN,
       useValue: [
-        { key: 'DEBUG_MODULE', optional: true },
-        { key: 'DEBUG_MODULE_URL', optional: true },
+        { key: 'DEBUG_MODULE' },
+        { key: 'DEBUG_MODULE_URL' },
       ],
       multi: true,
     }),
@@ -140,3 +140,7 @@ To do this, pass env parameters when starting the application. For example in Do
 To get a list of variables, there is a `/papi/apiList` method
 
 Request example: `http://localhost:3000/${appName}/papi/apiList`
+
+### How to make an ENV variable optional?
+
+To do this, pass `optional: true` parameter. For example { key: 'DEBUG_MODULE', optional: true }

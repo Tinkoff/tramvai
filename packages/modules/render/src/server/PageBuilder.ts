@@ -90,6 +90,9 @@ export class PageBuilder {
     // first we render the application, because we need to extract information about the data used by the components
     await this.renderApp(extractor);
 
+    // load information and dependency for the current bundle and page
+    await this.fetchChunksInfo(extractor);
+
     await Promise.all(
       this.renderFlowAfter.map((callback) =>
         callback().catch((error) => {
@@ -99,9 +102,6 @@ export class PageBuilder {
     );
 
     this.dehydrateState();
-
-    // load information and dependency for the current bundle and page
-    await this.fetchChunksInfo(extractor);
 
     this.preloadBlock();
 
