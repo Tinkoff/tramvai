@@ -177,7 +177,7 @@ createApp({
 
 ### Force render Page Error Boundary in Action
 
-:::warning
+:::caution
 
 `setPageErrorEvent` - experimental API, and can be changed in future releases.
 
@@ -202,7 +202,7 @@ const action = declareAction({
 
 ### Force render Page Error Boundary in Router Guard
 
-:::warning
+:::caution
 
 `setPageErrorEvent` - experimental API, and can be changed in future releases.
 

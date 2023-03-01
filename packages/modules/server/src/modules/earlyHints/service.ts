@@ -31,6 +31,10 @@ export class EarlyHintsManager implements EarlyHintsInterface {
       let resourceHint: string | null = null;
       let cdnHint: string | null = null;
 
+      if (!resource.payload) {
+        return acc;
+      }
+
       if (resource.type === 'preconnectLink') {
         resourceHint = `Link: <${resource.payload}>; rel=preconnect`;
       }

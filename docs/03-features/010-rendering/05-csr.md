@@ -29,6 +29,7 @@ Some important features will not work:
 - User-Agent parsing - User-Agent or Client-Hints parsed only at server side, so you will need to implement it on client side if you need it
 - Media detection - always will came wrong from server (with SSR only first load will be without real data), so will be useless for optimizations
 - On page initialization, router flow will be different - `beforeResolve` hook will be triggered at `customerStart` line
+- On [redirects](03-features/07-routing/07-redirects.md) while page initialization, global actions and `resolveUserDeps` with `resolvePageDeps` lines will be triggered twice, one for current route and one for redirect route
 
 :::
 
@@ -38,7 +39,7 @@ For one client-side rendering fallback, which will work on every application rou
 - Build application (server and client code) as usual
 - Generate static HTML page for `/__csr_fallback__/` route
 
-All of this are included when using `tramvai static` command with `TRAMVAI_FORCE_CLIENT_SIDE_RENDERING=true` env variable, when `@tramvai/module-page-render-mode` are connected in the application. You need only one step for HTML fallback generation:
+All of this are included when using `tramvai static` command with `TRAMVAI_FORCE_CLIENT_SIDE_RENDERING=true` env variable, when `@tramvai/module-page-render-mode` are [connected in the application](03-features/010-rendering/02-page-render-mode.md#installation). You need only one step for HTML fallback generation:
 
 ```bash
 TRAMVAI_FORCE_CLIENT_SIDE_RENDERING=true tramvai static {{ appName }}

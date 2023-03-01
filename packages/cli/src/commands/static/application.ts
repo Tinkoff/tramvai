@@ -71,6 +71,15 @@ export const staticApp = async (
     },
   });
 
+  server.catch((reason) => {
+    context.logger.event({
+      type: 'error',
+      event: 'COMMAND:STATIC:BUILD',
+      message: `message: server.js launch failed`,
+      payload: reason,
+    });
+  });
+
   const bundleInfoPath = `http://localhost:${port}/${name}/papi/bundleInfo`;
 
   await Promise.race([

@@ -2,11 +2,14 @@ import { parse } from '@tinkoff/url';
 import type { Options } from './abstract';
 import { AbstractRouter } from './abstract';
 import type { Navigation, NavigateOptions } from '../types';
-import { isSameHost } from '../utils';
+import { isSameHost, makeNavigateOptions } from '../utils';
 import { logger } from '../logger';
 import { ClientHistory } from '../history/client';
 
 export abstract class ClientRouter extends AbstractRouter {
+  // this flag for cases when we don't have initial router state from server - CSR fallback initialization
+  protected fullRehydrationInProcess: boolean = null;
+
   constructor(options: Options) {
     super(options);
     this.history = new ClientHistory();
@@ -42,8 +45,7 @@ export abstract class ClientRouter extends AbstractRouter {
   }
 
   async rehydrate(navigation: Navigation) {
-    // this flag for cases when we don't have initial router state from server - CSR fallback for example
-    const fullRehydration = !navigation.to;
+    this.fullRehydrationInProcess = !navigation.to;
 
     logger.debug({
       event: 'rehydrate',
@@ -59,12 +61,17 @@ export abstract class ClientRouter extends AbstractRouter {
     };
     this.lastNavigation = this.currentNavigation;
 
-    if (fullRehydration) {
+    if (this.fullRehydrationInProcess) {
       await this.runHooks('beforeResolve', this.currentNavigation);
 
       const to = this.resolveRoute({ url }, { wildcard: true });
+      const redirect = to?.redirect;
 
       this.currentNavigation.to = to;
+
+      if (redirect) {
+        return this.redirect(this.currentNavigation, makeNavigateOptions(redirect));
+      }
     }
 
     // rerun guard check in case it differs from server side
@@ -73,14 +80,14 @@ export abstract class ClientRouter extends AbstractRouter {
     // and init any history listeners
     this.history.init(this.currentNavigation);
 
-    if (fullRehydration) {
+    if (this.fullRehydrationInProcess) {
       this.runSyncHooks('change', this.currentNavigation);
     }
 
     this.currentNavigation = null;
 
     // add dehydrated route to tree to prevent its loading
-    if (!fullRehydration) {
+    if (!this.fullRehydrationInProcess) {
       this.addRoute({
         name: navigation.to.name,
         path: navigation.to.path,
@@ -90,6 +97,8 @@ export abstract class ClientRouter extends AbstractRouter {
         alias: url.pathname,
       });
     }
+
+    this.fullRehydrationInProcess = null;
   }
 
   protected resolveRoute(...options: Parameters<AbstractRouter['resolveRoute']>) {
@@ -132,6 +141,15 @@ export abstract class ClientRouter extends AbstractRouter {
 
   protected async redirect(navigation: Navigation, target: NavigateOptions) {
     await super.redirect(navigation, target);
+
+    // on CSR fallback initialization, if we found a redirect,
+    // we need to make hard reload for prevent current page rendering
+    if (this.fullRehydrationInProcess) {
+      window.location.replace(target.url);
+
+      // prevent routing from any continues navigation returning promise which will be not resolved
+      return new Promise<void>(() => {});
+    }
 
     return this.internalNavigate(
       {
