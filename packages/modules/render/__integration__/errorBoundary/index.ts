@@ -1,8 +1,8 @@
 import React from 'react';
 import { commandLineListTokens, createApp, provide } from '@tramvai/core';
 import { CommonModule, REQUEST_MANAGER_TOKEN, STORE_TOKEN } from '@tramvai/module-common';
-import { SpaRouterModule, ROUTER_GUARD_TOKEN } from '@tramvai/module-router';
-import { RenderModule, setPageErrorEvent } from '@tramvai/module-render';
+import { SpaRouterModule, ROUTER_GUARD_TOKEN, setPageErrorEvent } from '@tramvai/module-router';
+import { RenderModule } from '@tramvai/module-render';
 import { ServerModule } from '@tramvai/module-server';
 import {
   ERROR_BOUNDARY_FALLBACK_COMPONENT_TOKEN,

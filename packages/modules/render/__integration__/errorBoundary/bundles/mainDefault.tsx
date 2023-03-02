@@ -1,7 +1,7 @@
 import React from 'react';
 import { declareAction, createBundle } from '@tramvai/core';
 import { HttpError } from '@tinkoff/errors';
-import { setPageErrorEvent } from '@tramvai/module-render';
+import { setPageErrorEvent } from '@tramvai/module-router';
 import { ErrorPageComponentSSR } from '../components/ErrorPageComponentSSR';
 
 const PageComponent = () => {

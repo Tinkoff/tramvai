@@ -9,13 +9,13 @@ import {
   USE_REACT_STRICT_MODE,
 } from '@tramvai/tokens-render';
 import { ROUTER_TOKEN } from '@tramvai/tokens-router';
+import { PageErrorStore, setPageErrorEvent } from '@tramvai/module-router';
 import { rendering as renderInBrowser } from './client';
 import type { RenderModuleConfig } from './shared/types';
 import { LayoutModule } from './shared/LayoutModule';
 import { providers as sharedProviders } from './shared/providers';
-import { PageErrorStore, setPageErrorEvent } from './shared/pageErrorStore';
 
-export * from './shared/pageErrorStore';
+export { PageErrorStore, setPageErrorEvent };
 export * from '@tramvai/tokens-render';
 
 export const DEFAULT_POLYFILL_CONDITION = '';

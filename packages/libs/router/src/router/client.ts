@@ -129,6 +129,9 @@ export abstract class ClientRouter extends AbstractRouter {
       } else {
         window.location.assign(nextUrl);
       }
+    } else if (this.onBlock) {
+      // last resort case for CSR fallback
+      return this.onBlock(navigation);
     }
 
     // prevent routing from any continues navigation returning promise which will be not resolved

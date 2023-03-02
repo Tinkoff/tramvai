@@ -93,8 +93,7 @@ export default ProductErrorBoundary;
 import { NotFoundError } from '@tinkoff/errors';
 import { declareAction } from '@tramvai/core';
 import type { PageComponent } from '@tramvai/react';
-import { setPageErrorEvent } from '@tramvai/module-render';
-import { PAGE_SERVICE_TOKEN } from '@tramvai/module-router';
+import { PAGE_SERVICE_TOKEN, setPageErrorEvent } from '@tramvai/module-router';
 
 const fetchProductAction = declareAction({
   name: 'fetchProductAction',

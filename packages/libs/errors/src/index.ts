@@ -7,3 +7,4 @@ export * from './execution/executionError';
 export * from './execution/executionAbortError';
 export * from './execution/utils';
 export * from './action/conditionFail';
+export * from './router/block';

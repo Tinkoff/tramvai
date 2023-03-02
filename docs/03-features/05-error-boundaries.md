@@ -188,7 +188,7 @@ By default, errors in [actions](concepts/action.md) are skipped on server-side, 
 ```ts
 import { declareAction } from '@tramvai/core';
 import { HttpError } from '@tinkoff/errors';
-import { setPageErrorEvent } from '@tramvai/module-render';
+import { setPageErrorEvent } from '@tramvai/module-router';
 
 const action = declareAction({
   name: 'action',
@@ -212,8 +212,7 @@ Errors in [router guards](references/libs/router.md#router-guards) will be ignor
 
 ```ts
 import { STORE_TOKEN } from '@tramvai/module-common';
-import { ROUTER_GUARD_TOKEN } from '@tramvai/module-router';
-import { setPageErrorEvent } from '@tramvai/module-render';
+import { ROUTER_GUARD_TOKEN, setPageErrorEvent } from '@tramvai/module-router';
 import { HttpError } from '@tinkoff/errors';
 
 const provider = {

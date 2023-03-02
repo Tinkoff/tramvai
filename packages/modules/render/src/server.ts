@@ -28,6 +28,7 @@ import { WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN } from '@tramvai/tokens-server-priva
 import { ROOT_ERROR_BOUNDARY_COMPONENT_TOKEN } from '@tramvai/react';
 import { parse } from '@tinkoff/url';
 import { satisfies } from '@tinkoff/user-agent';
+import { PageErrorStore, setPageErrorEvent, deserializeError } from '@tramvai/module-router';
 import { RESOURCE_INLINER, RESOURCES_REGISTRY_CACHE, ResourcesInliner } from './resourcesInliner';
 import { ResourcesRegistry } from './resourcesRegistry';
 import { PageBuilder } from './server/PageBuilder';
@@ -36,9 +37,8 @@ import { ReactRenderServer } from './server/ReactRenderServer';
 import type { RenderModuleConfig } from './shared/types';
 import { LayoutModule } from './shared/LayoutModule';
 import { providers as sharedProviders } from './shared/providers';
-import { PageErrorStore, setPageErrorEvent, deserializeError } from './shared/pageErrorStore';
 
-export * from './shared/pageErrorStore';
+export { PageErrorStore, setPageErrorEvent };
 export * from '@tramvai/tokens-render';
 
 const REQUEST_TTL = 5 * 60 * 1000;

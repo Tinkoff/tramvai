@@ -9,7 +9,7 @@ import {
 import { useUrl } from '@tramvai/module-router';
 import { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
 import { useStore } from '@tramvai/state';
-import { deserializeError, PageErrorStore } from '../shared/pageErrorStore';
+import { deserializeError, PageErrorStore } from '@tramvai/module-router';
 
 export const PageErrorBoundary = (props: PropsWithChildren) => {
   const { children } = props;

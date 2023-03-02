@@ -26,9 +26,9 @@ export type IPageErrorStore = SerializedError | null;
 
 export const setPageErrorEvent = createEvent<AnyError | null>('setPageError');
 
-const initialState: IPageErrorStore = null;
+const initialState = null;
 
-export const PageErrorStore = createReducer('pageError', initialState).on(
+export const PageErrorStore = createReducer('pageError', initialState as IPageErrorStore).on(
   setPageErrorEvent,
   (state, error) => error && serializeError(error)
 );

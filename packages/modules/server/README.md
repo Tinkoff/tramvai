@@ -188,7 +188,32 @@ Module uses loggers with identifiers: `server`, `server:static`, `server:webapp`
 
 ### Early Hints
 
-Module send the [103 Early Hints](https://developer.chrome.com/blog/early-hints) response to provide better performance, though there are several limitations (look [here](https://chromium.googlesource.com/chromium/src/+/master/docs/early-hints.md#what_s-not-supported) and [here](https://developer.chrome.com/blog/early-hints/#current-limitations)). Currently, module provides hints for next resources:
+Module can send the [103 Early Hints](https://developer.chrome.com/blog/early-hints) response to provide better performance, though there are several limitations (look [here](https://chromium.googlesource.com/chromium/src/+/master/docs/early-hints.md#what_s-not-supported) and [here](https://developer.chrome.com/blog/early-hints/#current-limitations)).
+
+If you want to enable Early Hints, provide `EARLY_HINTS_ENABLED` env variable:
+
+```
+EARLY_HINTS_ENABLED: 'true'
+```
+
+Or provide custom `EARLY_HINTS_ENABLED_TOKEN` token (`EARLY_HINTS_ENABLED` will be ignored):
+
+```ts
+import { EARLY_HINTS_ENABLED_TOKEN } from '@tramvai/tokens-server';
+
+const provider = {
+  provide: EARLY_HINTS_ENABLED_TOKEN,
+  useValue: () => true,
+};
+```
+
+:::info
+
+You must check that the balancers and proxies in front of your application support Early Hints
+
+:::
+
+Currently, module provides hints for next resources:
 
 - Resources with `preconnectLink` type;
 - General resources, which have the `preloadLink` type;

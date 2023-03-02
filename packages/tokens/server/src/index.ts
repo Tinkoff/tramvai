@@ -127,6 +127,12 @@ export const READINESS_PROBE_TOKEN = createToken<() => Promise<any>>('readiness-
  */
 export const LIVENESS_PROBE_TOKEN = createToken<() => Promise<any>>('liveness-probe-fn');
 
+/**
+ * @description
+ * Enable Early Hints. By default return `true` when `EARLY_HINTS_ENABLED` env variable has a `"true"` value
+ */
+export const EARLY_HINTS_ENABLED_TOKEN = createToken<() => boolean>('early hints enabled');
+
 export interface ServerModuleStaticsOptions {
   path: string;
 }

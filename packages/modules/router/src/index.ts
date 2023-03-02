@@ -5,6 +5,7 @@ export { Link } from './components/link';
 export * from '@tramvai/tokens-router';
 export { generateForRoot } from './modules/utils/forRoot';
 export * from './stores/RouterStore';
+export * from './stores/PageErrorStore';
 export * from './hooks/usePageService';
 
 type RouteConfig = {

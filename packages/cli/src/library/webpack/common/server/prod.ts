@@ -1,5 +1,6 @@
 import type Config from 'webpack-chain';
-import { createDedupePlugin } from '@tinkoff/webpack-dedupe-plugin';
+import type { DedupePluginOptions } from '@tinkoff/webpack-dedupe-plugin';
+import { DedupePlugin } from '@tinkoff/webpack-dedupe-plugin';
 import type { ConfigManager } from '../../../../config/configManager';
 import type { CliConfigEntry } from '../../../../typings/configEntry/cli';
 
@@ -14,11 +15,12 @@ export default (configManager: ConfigManager<CliConfigEntry>) => (config: Config
   ]);
 
   if (configManager.dedupe.enabled) {
-    config.plugin('dedupe-plugin').use(
-      createDedupePlugin(
-        configManager.dedupe.strategy,
-        configManager.dedupe.ignore?.map((ignore) => new RegExp(`^${ignore}`))
-      )
-    );
+    config.plugin('dedupe-plugin').use(DedupePlugin, [
+      {
+        strategy: configManager.dedupe.strategy,
+        showLogs: false,
+        ignorePackages: configManager.dedupe.ignore?.map((ignore) => new RegExp(`^${ignore}`)),
+      } as DedupePluginOptions,
+    ]);
   }
 };

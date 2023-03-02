@@ -1,7 +1,7 @@
 import { provide } from '@tramvai/core';
 import { COMBINE_REDUCERS } from '@tramvai/tokens-common';
 import { TRAMVAI_RENDER_MODE } from '@tramvai/tokens-render';
-import { PageErrorStore } from './pageErrorStore';
+import { PageErrorStore } from '@tramvai/module-router';
 
 export const providers = [
   provide({

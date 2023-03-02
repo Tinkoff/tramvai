@@ -1,26 +1,36 @@
 import type { FASTIFY_RESPONSE, EARLY_HINTS_MANAGER_TOKEN } from '@tramvai/tokens-server-private';
 import type { PageResource, RESOURCES_REGISTRY } from '@tramvai/tokens-render';
+import type { ExtractDependencyType } from '@tinkoff/dippy';
+import type { EARLY_HINTS_ENABLED_TOKEN } from '@tramvai/tokens-server';
 
 type EarlyHintsInterface = typeof EARLY_HINTS_MANAGER_TOKEN;
 type Response = typeof FASTIFY_RESPONSE;
 type ResourcesRegistry = typeof RESOURCES_REGISTRY;
+type EarlyHintsEnabled = ExtractDependencyType<typeof EARLY_HINTS_ENABLED_TOKEN>;
 
 interface ConstructorPayload {
   response: Response;
   resourcesRegistry: ResourcesRegistry;
+  earlyHintsEnabled: EarlyHintsEnabled;
 }
 
 export class EarlyHintsManager implements EarlyHintsInterface {
   private sentHints = new Set<string>();
   private readonly response: Response;
   private readonly resourcesRegistry: ResourcesRegistry;
+  private readonly earlyHintsEnabled: EarlyHintsEnabled;
 
   constructor(payload: ConstructorPayload) {
     this.response = payload.response;
     this.resourcesRegistry = payload.resourcesRegistry;
+    this.earlyHintsEnabled = payload.earlyHintsEnabled;
   }
 
   public async flushHints(): Promise<void> {
+    if (!this.earlyHintsEnabled()) {
+      return;
+    }
+
     const hints = this.getHints();
 
     await this.writeToSocket(hints);

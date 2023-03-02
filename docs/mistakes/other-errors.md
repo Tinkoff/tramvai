@@ -1,6 +1,6 @@
 ---
 title: Other errors
-sidebar_position: 99
+sidebar_position: 9
 ---
 
 Other errors that may happen during development or using of the tramvai app.

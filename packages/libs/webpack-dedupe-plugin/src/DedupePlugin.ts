@@ -1,4 +1,4 @@
-import { relative } from 'path';
+import { relative, dirname } from 'path';
 import type webpack from 'webpack';
 import type { Compiler, Module } from 'webpack';
 
@@ -8,7 +8,7 @@ import chalk from 'chalk';
 const cwd = process.cwd();
 
 declare module 'webpack' {
-  export interface Module {
+  export interface Module extends NMFResult {
     // абсолютный путь к ресурсу
     resource: string;
   }
@@ -24,6 +24,8 @@ export interface NMFResult {
       // версия либы
       version?: string;
     };
+    // path to dirname with package.json for the module
+    descriptionFileRoot?: string;
     // путь к файлу который импортируем, относительно package.json либы
     relativePath?: string;
   };
@@ -31,27 +33,51 @@ export interface NMFResult {
 
 export type DeduplicateStrategy = 'equality' | 'semver';
 
+export type DedupeInfo = Map<
+  string,
+  {
+    name: string;
+    toVersion: string;
+    toPath: string;
+    deduped: Map<string, string>;
+  }
+>;
+
+export interface DedupePluginOptions {
+  strategy?: DeduplicateStrategy;
+  ignorePackages?: RegExp[];
+  showLogs?: boolean;
+  onDedupeInfo?: (info: DedupeInfo) => void;
+}
+
 const PLUGIN_NAME = 'DedupePlugin';
 
 export class DedupePlugin {
   private readonly strategy: DeduplicateStrategy;
   private readonly ignorePackages?: RegExp[];
+  private readonly showLogs: boolean;
   private cache: Map<string, Set<string>> = new Map();
   private versions: Map<string, string> = new Map();
-  private logs: Map<
-    string,
-    {
-      name: string;
-      toVersion: string;
-      toPath: string;
-      deduped: Array<{ fromVersion: string; fromPath: string }>;
+  private dedupeInfo: DedupeInfo = new Map();
+  constructor(options: DedupePluginOptions);
+  /**
+   * @deprecated Pass object with options
+   */
+  constructor(strategy: DeduplicateStrategy, ignorePackages?: RegExp[]);
+  constructor(options: DeduplicateStrategy | DedupePluginOptions, ignorePackages?: RegExp[]) {
+    if (typeof options === 'string') {
+      this.strategy = options;
+      this.ignorePackages = ignorePackages;
+      this.showLogs = true;
+    } else {
+      this.strategy = options.strategy ?? 'equality';
+      this.ignorePackages = options.ignorePackages;
+      this.showLogs = options.showLogs ?? true;
+      this.onDedupeInfo = options.onDedupeInfo;
     }
-  > = new Map();
-
-  constructor(strategy: DeduplicateStrategy, ignorePackages?: RegExp[]) {
-    this.strategy = strategy;
-    this.ignorePackages = ignorePackages;
   }
+
+  private readonly onDedupeInfo?: DedupePluginOptions['onDedupeInfo'];
 
   // функция проверяет находится ли данный модуль в списке исключений
   isIgnoredModule(result: NMFResult) {
@@ -206,7 +232,11 @@ export class DedupePlugin {
     });
     // done также вызывается только в рутовом компиляторе
     compiler.hooks.done.tap(PLUGIN_NAME, () => {
-      this.flushLogs();
+      this.onDedupeInfo?.(this.dedupeInfo);
+
+      if (this.showLogs) {
+        this.flushLogs();
+      }
     });
   }
 
@@ -214,36 +244,36 @@ export class DedupePlugin {
     const splitted = cacheKey.split('@');
     const fromVersion = this.versions.get(fromModule.identifier());
     const toVersion = this.versions.get(toModule.identifier());
-    const fromPath = getRelativePathFromCwd(fromModule.resource);
-    const toPath = getRelativePathFromCwd(toModule.resource);
+    const fromPath = getModuleRoot(fromModule);
+    const toPath = getModuleRoot(toModule);
     // учитываем scoped пакеты
     const name = splitted[0] || `@${splitted[1]}`;
-    const key = `${name}@${toVersion}:${toPath}`;
-    let { deduped } = this.logs.get(key) ?? {};
+
+    const key = `${name}@${toVersion}`;
+    let { deduped } = this.dedupeInfo.get(key) ?? {};
+
     if (!deduped) {
-      deduped = [];
-      this.logs.set(key, {
+      deduped = new Map();
+      this.dedupeInfo.set(key, {
         name,
         toVersion,
         toPath,
         deduped,
       });
     }
-    deduped.push({
-      fromVersion,
-      fromPath,
-    });
+
+    deduped.set(fromPath, fromVersion);
   }
 
   flushLogs() {
-    const keys = [...this.logs.keys()].sort();
+    const keys = [...this.dedupeInfo.keys()].sort();
     let log = `\n${chalk.blue('Deduplicated modules:')}\n`;
     for (const key of keys) {
-      const { name, toVersion, toPath, deduped } = this.logs.get(key);
+      const { name, toVersion, toPath, deduped } = this.dedupeInfo.get(key);
       log += `\tDeduped to ${chalk.cyanBright(name)}@${chalk.green(toVersion)}:${chalk.bgGray(
         toPath
       )}\n`;
-      for (const { fromPath, fromVersion } of deduped) {
+      for (const [fromPath, fromVersion] of deduped.entries()) {
         log += `\t\tfrom ${chalk.red(fromVersion)}:${chalk.bgGray(fromPath)}\n`;
       }
       log += '\n';
@@ -255,8 +285,14 @@ export class DedupePlugin {
   }
 }
 
+/**
+ * @deprecated Use `new DedupePlugin(options)` instead
+ */
 export function createDedupePlugin(strategy: DeduplicateStrategy, ignorePackages?: RegExp[]) {
-  return new DedupePlugin(strategy, ignorePackages);
+  return new DedupePlugin({
+    strategy,
+    ignorePackages,
+  });
 }
 
 export function createCacheKeyFromNMFResult(
@@ -304,4 +340,10 @@ function getResourceVersion(nmfResult: NMFResult) {
 // получаем относительный путь от корня вместо абсолютного
 function getRelativePathFromCwd(path: string) {
   return relative(cwd, path);
+}
+
+function getModuleRoot(module: Module) {
+  const path = module.resourceResolveData?.descriptionFileRoot ?? dirname(module.resource);
+
+  return getRelativePathFromCwd(path);
 }
