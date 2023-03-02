@@ -102,6 +102,12 @@ export class ActionExecution implements Interface {
       parameters = getParameters(action);
     }
 
+    if (!parameters) {
+      throw new Error(
+        'Cannot resolve internal data for action. Make sure you are using the result of `declareAction` call as an action'
+      );
+    }
+
     const executionState = this.getExecutionState(parameters.name);
 
     if (!this.canExecuteAction(payload, parameters, executionState, type)) {

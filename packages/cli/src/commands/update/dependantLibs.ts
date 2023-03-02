@@ -1,5 +1,5 @@
-import { getLatestPackageVersion } from '../../utils/commands/dependencies/getLatestPackageVersion';
-import { getPackageInfo } from '../../utils/commands/dependencies/getPackageInfo';
+import getLatestPackageVersion from 'latest-version';
+import getPackageInfo from 'package-json';
 
 // map of packages that is not in unified versioning
 // but we still want to update it
@@ -34,9 +34,9 @@ export const getLibPackageVersion = async (
     return getLatestPackageVersion(name);
   }
 
-  const deps = await getPackageInfo(`${unifiedModule}@${unifiedVersion}`, 'dependencies');
+  const { dependencies } = await getPackageInfo(unifiedModule, { version: unifiedVersion });
 
-  if (!deps[name]) {
+  if (!dependencies[name]) {
     console.warn(
       `⚠️ cannot resolve proper version for the "${name}" package.
 You have to update this package by yourself.`
@@ -45,5 +45,5 @@ You have to update this package by yourself.`
     return;
   }
 
-  return deps[name];
+  return dependencies[name];
 };

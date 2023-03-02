@@ -1,13 +1,9 @@
 import resolve from 'resolve';
 import { clearExecArgv } from '../utils/clearExecArgv';
-import { fixYarnSettingsOverride } from '../utils/fixYarnSettingsOverride';
-import { handleErrors } from '../utils/handleErrors';
 import { initSentry } from '../utils/sentry';
 
 clearExecArgv();
 initSentry();
-handleErrors();
-fixYarnSettingsOverride();
 
 resolve(
   '@tramvai/cli/lib/cli',

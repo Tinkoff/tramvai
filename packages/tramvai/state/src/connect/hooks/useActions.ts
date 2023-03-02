@@ -1,7 +1,7 @@
 import isArray from '@tinkoff/utils/is/array';
 import { useMemo } from 'react';
 import { useShallowEqual } from '@tinkoff/react-hooks';
-import type { AnyAction as Action, TramvaiAction } from '@tramvai/types-actions-state-context';
+import type { Action, TramvaiAction } from '@tramvai/types-actions-state-context';
 import { useConsumerContext } from './useConsumerContext';
 
 export function useActions<P extends any[], R, Deps = any>(

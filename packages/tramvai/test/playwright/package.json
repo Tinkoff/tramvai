@@ -22,10 +22,11 @@
     "@tramvai/tokens-router": "0.0.0-stub",
     "console-with-style": "^1.1.0",
     "supports-color": "8.1.1",
-    "tslib": "^2.4.0",
-    "playwright-core": "1.29.0"
+    "tslib": "^2.4.0"
   },
-  "peerDependencies": {},
+  "peerDependencies": {
+    "playwright-core": "*"
+  },
   "devDependencies": {
     "@types/supports-color": "^8.1.1",
     "playwright-core": "1.29.0"

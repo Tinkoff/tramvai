@@ -24,6 +24,7 @@ Library mostly provides strong typings to papi handlers and most of the logic of
 ### createPapiMethod
 
 Options:
+
 - `path` - specifies the path of url that current papi should handle. Required when specifying papi in tramvai DI, and not used when specified through file api.
 - `method` - specified HTTP-method that is acceptable by current papi. By default, it equals to "all"
 - `handler` - see [handler](#handler)
@@ -38,6 +39,7 @@ Function that handles actual request and should return. It accepts the details o
 Details of the request are passed with first parameter when handler is called. You can see available properties in typings when specifying papi method. It should provide most of the data that might be required to handle the request.
 
 Additionally, though `this` passed data that bounded to papi method:
+
 - `deps` - resolved deps that were specified when defining papi method. Deps are resolved with [Child DI Container](concepts/di.md#container-is-a-child), so do not use it for creating caches as it won't work.
 - `log` - instance of [LOGGER_TOKEN](references/modules/log.md#logger_token) bounded with current papi method
 
@@ -77,7 +79,7 @@ export const papi = createPapiMethod({
     return {
       testCookie,
       a,
-      b
+      b,
     };
   },
 });
@@ -111,11 +113,11 @@ export const papi = createPapiMethod({
 
     cookieManager.set({ name: 'b', value: 'abc', expires: 35 });
 
-    return "response";
+    return 'response';
   },
   deps: {
     cookieManager: COOKIE_MANAGER_TOKEN,
-  }
+  },
 });
 ```
 
@@ -126,7 +128,7 @@ Deps are resolved with ChildContainer that means they are getting resolved on ev
 For example, if you want to use some papi specific cache you should create new token and provide the cache instance with that token and with option `scope: Scope.SINGLETON`
 
 ```tsx
-import { createToken, Scope, provide } from '@tinkoff/dippy'
+import { createToken, Scope, provide } from '@tinkoff/dippy';
 import { createApp } from '@tramvai/core';
 import { createPapiMethod } from '@tramvai/papi';
 import { Cache, CREATE_CACHE_TOKEN } from '@tramvai/tokens-common';
@@ -146,8 +148,8 @@ const app = createApp({
       deps: {
         createCache: CREATE_CACHE_TOKEN,
       },
-    })
-  ]
+    }),
+  ],
 });
 
 export const papi = createPapiMethod({
@@ -166,7 +168,7 @@ export const papi = createPapiMethod({
     return result;
   },
   deps: {
-    cache: PAPI_CACHE_TOKEN
-  }
+    cache: PAPI_CACHE_TOKEN,
+  },
 });
 ```

@@ -2,19 +2,19 @@ import uniq from '@tinkoff/utils/array/uniq';
 import difference from '@tinkoff/utils/array/difference';
 import toArray from '@tinkoff/utils/array/toArray';
 import flatten from '@tinkoff/utils/array/flatten';
-import type { Action } from '@tramvai/core';
+import type { PageAction } from '@tramvai/core';
 import type { ActionsRegistry as Interface } from '@tramvai/tokens-common';
 
 export const GLOBAL_PARAMETER = '@@global';
 
 export class ActionRegistry implements Interface {
-  private actions: Map<string, Action[]>;
+  private actions: Map<string, PageAction[]>;
 
-  constructor({ actionsList }: { actionsList: Action[] }) {
-    this.actions = new Map([[GLOBAL_PARAMETER, flatten<Action>(actionsList)]]);
+  constructor({ actionsList }: { actionsList: PageAction[] }) {
+    this.actions = new Map([[GLOBAL_PARAMETER, flatten<PageAction>(actionsList)]]);
   }
 
-  add(type: string, actions: Action | Action[]) {
+  add(type: string, actions: PageAction | PageAction[]) {
     const normalized = toArray(actions);
 
     this.actions.set(
@@ -23,15 +23,15 @@ export class ActionRegistry implements Interface {
     );
   }
 
-  get(type: string, addingActions?: Action[]): Action[] {
+  get(type: string, addingActions?: PageAction[]): PageAction[] {
     return uniq([...(this.actions.get(type) || []), ...(addingActions || [])]);
   }
 
-  getGlobal(): Action[] | undefined {
+  getGlobal(): PageAction[] | undefined {
     return this.actions.get(GLOBAL_PARAMETER);
   }
 
-  remove(type: string, actions?: Action | Action[]) {
+  remove(type: string, actions?: PageAction | PageAction[]) {
     if (!actions) {
       this.actions.delete(type);
       return;

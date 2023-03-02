@@ -19,5 +19,8 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
-  "module": "lib/index.es.js"
+  "module": "lib/index.es.js",
+  "dependencies": {
+    "execa": "^5.1.1"
+  }
 }

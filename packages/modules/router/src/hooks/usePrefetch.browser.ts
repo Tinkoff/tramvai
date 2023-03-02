@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useDi } from '@tramvai/react';
 import { LINK_PREFETCH_MANAGER_TOKEN } from '@tramvai/tokens-router';
-import { requestIdleCallback, cancelIdleCallback } from '../utils/requestIdleCallback';
 import { optional } from '@tinkoff/dippy';
+import { requestIdleCallback, cancelIdleCallback } from '../utils/requestIdleCallback';
 
 const isUserNetworkConditionsSuitableForPrefetch = () => {
   const { saveData, effectiveType = '' } = (navigator as any).connection ?? {};

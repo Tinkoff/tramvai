@@ -29,7 +29,7 @@ const Image = () => {
 
   // <img src="${ASSETS_PREFIX}/dist/client/9930f34d1d49796027f2a18ea89e6ccf.jpeg" width="1104" height="460" />
   return <img src={src} width={width} height={height} />;
-}
+};
 ```
 
 Example with default export:
@@ -46,7 +46,7 @@ import src from './images/mountains.jpeg';
 const Image = () => {
   // <img src="${ASSETS_PREFIX}/dist/client/9930f34d1d49796027f2a18ea89e6ccf.jpeg" />
   return <img src={src} />;
-}
+};
 ```
 
 ### Vector
@@ -65,7 +65,7 @@ import Image from './images/logo.svg?react';
 const Logo = () => {
   // <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80.9 72.2" width="100" height="100">...</svg>
   return <Image width="100" height="100" />;
-}
+};
 ```
 
 All properties to this `Image` component will be passed to root `svg` tag.
@@ -141,7 +141,7 @@ provde({
       crossOrigin: 'anonymous',
     },
   },
-})
+});
 ```
 
 ### Custom Web Fonts

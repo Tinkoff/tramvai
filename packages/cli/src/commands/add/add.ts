@@ -1,7 +1,5 @@
 import type { Context } from '../../models/context';
 import type { CommandResult } from '../../models/command';
-import { installDependency } from '../../utils/commands/dependencies/installDependency';
-import { deduplicate } from '../../utils/commands/dependencies/deduplicate';
 import { migrate } from '../../utils/commands/dependencies/migrate';
 import { findTramvaiVersion } from '../../utils/commands/dependencies/findTramvaiVersion';
 import { checkVersions } from '../../utils/commands/dependencies/checkVersions';
@@ -14,9 +12,24 @@ export type Params = {
 export default async (context: Context, { packageName, dev }: Params): Promise<CommandResult> => {
   const version = await findTramvaiVersion();
 
-  await installDependency({ name: packageName, version, devDependency: dev }, context);
+  await context.packageManager.install({
+    name: packageName,
+    version,
+    devDependency: dev,
+    stdio: 'inherit',
+  });
 
-  await deduplicate(context);
+  if (context.packageManager.name !== 'npm') {
+    // npm dedupe is extremely slow in most cases
+    // so execute it only for yarn
+    context.logger.event({
+      type: 'info',
+      event: 'dedupe',
+      message: 'Deduplicate dependencies',
+    });
+
+    await context.packageManager.dedupe({ stdio: 'inherit' });
+  }
 
   await migrate(context);
 

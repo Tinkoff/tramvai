@@ -1,6 +1,7 @@
 import { expectTypeOf } from 'expect-type';
 import { createAction, declareAction } from '@tramvai/core';
 import { useActions } from './useActions';
+import { createEvent } from '../../createEvent/createEvent';
 
 describe('useActions.test-types', () => {
   describe('modern actions', () => {
@@ -86,6 +87,22 @@ describe('useActions.test-types', () => {
       expectTypeOf(hookAction2).returns.resolves.toBeVoid();
       expectTypeOf(hookAction2).parameter(0).toEqualTypeOf<{ a: number } | undefined>();
       expectTypeOf(hookAction2).parameter(1).toBeUndefined();
+    });
+  });
+
+  describe('error usage', () => {
+    it('passing not actions', () => {
+      const event = createEvent('test');
+      const fn = () => {};
+
+      // @ts-expect-error
+      useActions(event);
+
+      // @ts-expect-error
+      useActions(fn);
+
+      // @ts-expect-error
+      useActions([event, fn]);
     });
   });
 });

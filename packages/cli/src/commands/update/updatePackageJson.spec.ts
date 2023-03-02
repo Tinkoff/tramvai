@@ -10,23 +10,17 @@ const mockPackageInfoDependencies = jest.fn<Record<string, string | undefined>, 
 jest.mock('../../utils/commands/dependencies/packageHasVersion', () => ({
   packageHasVersion: () => true,
 }));
-jest.mock('../../utils/commands/dependencies/getLatestPackageVersion', () => ({
-  getLatestPackageVersion: (dep: string) => {
-    if (dep.startsWith('@tramvai')) {
-      return LATEST_TRAMVAI_VERSION;
-    }
+jest.mock('latest-version', () => (dep: string) => {
+  if (dep.startsWith('@tramvai')) {
+    return LATEST_TRAMVAI_VERSION;
+  }
 
-    return LATEST_LIB_VERSION;
-  },
-}));
+  return LATEST_LIB_VERSION;
+});
 
-jest.mock('../../utils/commands/dependencies/getPackageInfo', () => ({
-  getPackageInfo: (packageName: string, field?: string) => {
-    if (field === 'dependencies') {
-      return mockPackageInfoDependencies(packageName);
-    }
-  },
-}));
+jest.mock('package-json', () => (packageName: string) => {
+  return { dependencies: mockPackageInfoDependencies(packageName) };
+});
 
 jest.mock('fs', () => ({
   readFileSync: () => JSON.stringify(mockPackageJson),
@@ -54,18 +48,18 @@ it('should update tramvai deps to latest versions', async () => {
     },
   };
 
-  mockPackageInfoDependencies.mockImplementation((dep) => {
+  mockPackageInfoDependencies.mockImplementation((dep: string) => {
     switch (dep) {
-      case '@tramvai/core@1.115.6':
+      case '@tramvai/core':
         return { '@tinkoff/dippy': '0.7.44', '@tinkoff/utils': '^2.1.0' };
-      case '@tramvai/module-common@1.115.6':
+      case '@tramvai/module-common':
         return {
           '@tinkoff/error': '0.6.1',
           '@tinkoff/url': '0.4.1',
         };
-      case '@tramvai/cli@1.115.6':
+      case '@tramvai/cli':
         return {};
-      case '@tramvai/module-router@1.115.6':
+      case '@tramvai/module-router':
         return {
           '@tinkoff/router': '0.4.3',
           '@tinkoff/url': '0.4.1',

@@ -11,7 +11,7 @@ export class Logger {
       console.error(event.type, event.event, event.message, event.payload);
     } else if (event.type === 'warning') {
       console.warn(event.type, event.event, event.message, event.payload);
-    } else if (process.env.DEBUG_MODE === 'true') {
+    } else if (event.type === 'info' || process.env.DEBUG_MODE === 'true') {
       console.log(event.type, event.event, event.message, event.payload);
     }
   }

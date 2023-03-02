@@ -1,15 +1,14 @@
 import fs from 'fs';
 import path from 'path';
-import util from 'util';
-import childProcess from 'child_process';
-import type { ExecOptions, PromiseWithChild } from 'child_process';
+import type { Options } from 'execa';
+import { command } from 'execa';
 
 export interface PackageManagerOptions {
   rootDir: string;
   registry?: string;
 }
 
-export interface InstallOptions {
+export interface InstallOptions extends Options {
   name?: string;
   version?: string;
   registry?: string;
@@ -18,22 +17,20 @@ export interface InstallOptions {
   devDependency?: boolean;
 }
 
-export interface RemoveOptions {
+export interface RemoveOptions extends Options {
   name: string;
   registry?: string;
   cwd?: string;
 }
 
-export interface ExistsOptions {
+export interface ExistsOptions extends Options {
   name: string;
   cwd?: string;
 }
 
-export interface DedupeOptions {
+export interface DedupeOptions extends Options {
   cwd?: string;
 }
-
-const exec = util.promisify(childProcess.exec);
 
 export abstract class PackageManager {
   readonly name: 'npm' | 'yarn' | 'unknown' = 'unknown';
@@ -66,13 +63,8 @@ export abstract class PackageManager {
     }
   }
 
-  protected run(
-    command: string,
-    options: ExecOptions
-  ): PromiseWithChild<{ stdout: string; stderr: string }> {
-    // TODO: maybe replace with execa in order to show output in console with stdio: 'inherit'
-    // as it easier to debug problems in that case
-    return exec(command, {
+  protected run(cmd: string, options: Options) {
+    return command(cmd, {
       ...options,
       cwd: options.cwd || this.rootDir,
     });

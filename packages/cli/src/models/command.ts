@@ -59,7 +59,7 @@ export abstract class CLICommand<
 
   async run(parameters: TParams) {
     this.context.logger.event({
-      type: 'info',
+      type: 'debug',
       event: `RUN:COMMAND:${this.name}`,
       message: JSON.stringify(parameters),
     });

@@ -5,10 +5,10 @@ title: Styling
 
 ## CSS Modules
 
-`tramvai` provides [CSS Modules](https://github.com/css-modules/css-modules) as default approach for styling.
+`tramvai` provides [CSS Modules](https://github.com/css-modules/css-modules) as default approach for styling. 
 Any imports of CSS files as JS modules will be processed as CSS Modules, for example if we try to create a `Button` component:
 
-import Tabs from '@theme/Tabs';
+import Tabs from '@theme/Tabs'; 
 import TabItem from '@theme/TabItem';
 
 <Tabs>
@@ -32,8 +32,8 @@ export const Button = () => <button className={styles.button} />;
   </TabItem>
 </Tabs>
 
-:::tip
-It is not required at this moment, but prefer use `.module.css` suffix for CSS files - in a future releases only filenames with this pattern will be processed as CSS Modules
+:::tip 
+It is not required at this moment, but prefer use `.module.css` suffix for CSS files - in a future releases only filenames with this pattern will be processed as CSS Modules 
 :::
 
 ### Global styles
@@ -49,6 +49,7 @@ All *.css file imports will be treated as CSS Modules by default. To disable CSS
   background-color: blue;
 }
 ```
+
 In this example, the .header class will be processed as a CSS Module, while the .global-header class will not be processed as a module and will have a global scope.
 
 To disable CSS Modules processing for specific files, such as global styles, you can add the cssModulePattern regular expression to the configuration as follows:

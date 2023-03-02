@@ -29,7 +29,7 @@
   "peerDependencies": {
     "@tramvai/cli": "0.0.0-stub",
     "jest-environment-node": "^27 || ^28 || ^29",
-    "playwright-core": "1.29.0"
+    "playwright-core": "*"
   },
   "devDependencies": {
     "@jest/types": "^29.0.2"

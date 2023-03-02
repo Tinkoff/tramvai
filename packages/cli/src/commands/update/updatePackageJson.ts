@@ -1,6 +1,8 @@
 import { parse, minVersion } from 'semver';
 import fs from 'fs';
 import pMap from 'p-map';
+import type { Ora } from 'ora';
+import ora from 'ora';
 import { packageHasVersion } from '../../utils/commands/dependencies/packageHasVersion';
 import { getLibPackageVersion, isDependantLib } from './dependantLibs';
 
@@ -10,47 +12,45 @@ const isUnifiedVersion = (name: string) => {
 
 const getVersionFromDep = (dep: string) => parse(dep)?.version || minVersion(dep)?.version;
 
-const updateEntry = async (
-  deps: Record<string, any>,
-  dep: string,
-  { currentVersion, version }: { currentVersion: string; version: string }
-) => {
-  let nextVersion: string | undefined;
-
-  if (isUnifiedVersion(dep) && getVersionFromDep(deps[dep]) === currentVersion) {
-    nextVersion = version;
-  } else if (isDependantLib(dep)) {
-    const libVersion = await getLibPackageVersion(dep, version);
-    nextVersion = libVersion;
-  }
-
-  if (nextVersion) {
-    const depHasVersion = await packageHasVersion(dep, nextVersion);
-
-    if (depHasVersion) {
-      console.log(`- ${dep}@${nextVersion}`);
-      // eslint-disable-next-line no-param-reassign
-      deps[dep] = nextVersion;
-    } else {
-      console.warn(
-        `⚠️ cannot update ${dep} to ${nextVersion} version, this version does not exist.
-Maybe this package was removed or renamed.
-Wait migrations, then manually update or remove dependency from package.json, if necessary.`
-      );
-    }
-  }
-};
-
 const updateDependencies = (
   dependencies: Record<string, string> = {},
   targetVersion: string,
-  currentVersion: string
+  currentVersion: string,
+  spinner: Ora
 ) => {
   return pMap<string, void>(
     Object.keys(dependencies),
     async (dep) => {
-      if (Object.prototype.hasOwnProperty.call(dependencies, dep)) {
-        await updateEntry(dependencies, dep, { currentVersion, version: targetVersion });
+      let nextVersion: string | undefined;
+
+      if (isUnifiedVersion(dep) && getVersionFromDep(dependencies[dep]) === currentVersion) {
+        nextVersion = targetVersion;
+      } else if (isDependantLib(dep)) {
+        const libVersion = await getLibPackageVersion(dep, targetVersion);
+        nextVersion = libVersion;
+      }
+
+      if (nextVersion) {
+        const depHasVersion = await packageHasVersion(dep, nextVersion);
+
+        // clear the spinner to be able to log info that should be preserved in the output
+        // the idea borrowed from [here](https://github.com/sindresorhus/ora/issues/120)
+        spinner.clear();
+
+        if (depHasVersion) {
+          console.log(`- ${dep}@${nextVersion}`);
+          // eslint-disable-next-line no-param-reassign
+          dependencies[dep] = nextVersion;
+        } else {
+          console.warn(
+            `⚠️ cannot update ${dep} to ${nextVersion} version, this version does not exist.
+    Maybe this package was removed or renamed.
+    Wait migrations, then manually update or remove dependency from package.json, if necessary.`
+          );
+        }
+
+        // start the spinner back with the initial text
+        spinner.start(spinner.text);
       }
     },
     {
@@ -60,8 +60,6 @@ const updateDependencies = (
 };
 
 export const updatePackageJson = async (version: string) => {
-  console.log(`Update package.json to ${version} version`);
-
   const file = fs.readFileSync('package.json');
   const content = JSON.parse(file.toString());
   const currentVersion = getVersionFromDep(content.dependencies['@tramvai/core']);
@@ -72,12 +70,18 @@ export const updatePackageJson = async (version: string) => {
 
   if (currentVersion === version) {
     console.error('The installed version is equal to the current version, no update is required.');
-    process.exit(0);
+    return;
   }
 
-  await updateDependencies(content.dependencies, version, currentVersion);
-  await updateDependencies(content.devDependencies, version, currentVersion);
-  await updateDependencies(content.peerDependencies, version, currentVersion);
+  const spinner = ora(`Updating package.json versions`).start();
 
-  fs.writeFileSync('package.json', JSON.stringify(content, null, 2));
+  try {
+    await updateDependencies(content.dependencies, version, currentVersion, spinner);
+    await updateDependencies(content.devDependencies, version, currentVersion, spinner);
+    await updateDependencies(content.peerDependencies, version, currentVersion, spinner);
+
+    fs.writeFileSync('package.json', JSON.stringify(content, null, 2));
+  } finally {
+    spinner.stop();
+  }
 };

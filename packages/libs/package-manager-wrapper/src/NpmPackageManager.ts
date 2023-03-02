@@ -24,6 +24,9 @@ export class NpmPackageManager extends PackageManager {
       '--legacy-peer-deps',
       noSave && '--no-save',
       devDependency && '--save-dev',
+      // use already existing package version if it satisfies semver,
+      // instead of adding latest version during install
+      '--prefer-dedupe',
       this.registryFlag(options),
     ].filter(Boolean);
 

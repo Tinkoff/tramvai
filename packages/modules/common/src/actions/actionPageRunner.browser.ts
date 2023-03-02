@@ -41,7 +41,7 @@ export class ActionPageRunner {
                 this.log.error({
                   error,
                   event: `action-execution-error`,
-                  message: `${parameters.name} execution error`,
+                  message: `${parameters?.name ?? 'uknown'} execution error`,
                 });
               }
 

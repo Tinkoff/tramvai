@@ -1,6 +1,6 @@
 import { createToken } from '@tinkoff/dippy';
 import type { Action } from '@tramvai/tokens-core';
-import type { TramvaiAction } from '@tramvai/types-actions-state-context';
+import type { TramvaiAction, PageAction } from '@tramvai/types-actions-state-context';
 import type { ExecutionContext } from './execution';
 
 /**
@@ -32,31 +32,14 @@ export const ACTION_CONDITIONALS = createToken<ActionCondition | ActionCondition
   }
 );
 
-type AnyAction = Action | TramvaiAction<any, any, any>;
-
 export interface ActionsRegistry {
-  add(
-    type: string,
-    actions:
-      | AnyAction
-      | TramvaiAction<any[], any, any>
-      | (AnyAction | TramvaiAction<any[], any, any>)[]
-  ): void;
+  add(type: string, actions: PageAction | PageAction[]): void;
 
-  get(
-    type: string,
-    addingActions?: (AnyAction | TramvaiAction<any[], any, any>)[]
-  ): (AnyAction | TramvaiAction<any[], any, any>)[];
+  get(type: string, addingActions?: PageAction[]): PageAction[];
 
-  getGlobal(): (AnyAction | TramvaiAction<any[], any, any>)[] | undefined;
+  getGlobal(): PageAction[] | undefined;
 
-  remove(
-    type: string,
-    actions?:
-      | AnyAction
-      | TramvaiAction<any[], any, any>
-      | (AnyAction | TramvaiAction<any[], any, any>)[]
-  ): void;
+  remove(type: string, actions?: PageAction[]): void;
 }
 
 export interface ActionExecution {

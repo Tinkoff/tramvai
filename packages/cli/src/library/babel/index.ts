@@ -84,7 +84,9 @@ export const babelConfigFactory = ({
         {
           modules,
           useBuiltIns: 'entry',
-          corejs: '3',
+          // from core-js version depends what polyfills will be included with `useBuiltIns: 'entry'` option
+          // this logic is here - https://github.com/zloirock/core-js/blob/master/packages/core-js-compat/src/modules-by-versions.mjs
+          corejs: require('core-js/package.json').version,
           loose: true,
           targets,
           browserslistEnv: resultTarget,

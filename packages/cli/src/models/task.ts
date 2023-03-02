@@ -34,7 +34,7 @@ export abstract class Task {
     parameters: { arguments?: string[]; options?: Record<string, any> } = {}
   ): Promise<TaskResult> {
     this.context.logger.event({
-      type: 'info',
+      type: 'debug',
       event: `RUN:TASK:${this.name}`,
       message: JSON.stringify(parameters),
     });
