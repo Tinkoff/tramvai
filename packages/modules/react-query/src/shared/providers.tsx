@@ -12,19 +12,14 @@ import {
   QUERY_CLIENT_DEFAULT_OPTIONS_TOKEN,
   QUERY_DEHYDRATE_STATE_NAME_TOKEN,
 } from '@tramvai/tokens-react-query';
-import { LOGGER_TOKEN } from '@tramvai/tokens-common';
-import { noopLogger } from './noopLogger';
-import { devLoggerFactory } from './devLogger';
 
 export const sharedQueryProviders: Provider[] = [
   provide({
     provide: QUERY_CLIENT_TOKEN,
-    useFactory: ({ defaultOptions, logger }) => {
+    useFactory: ({ defaultOptions }) => {
       const { queries = {} } = defaultOptions;
 
       return new QueryClient({
-        // suppress any logs from react-query in production
-        logger: process.env.NODE_ENV === 'production' ? noopLogger : devLoggerFactory(logger),
         defaultOptions: {
           ...defaultOptions,
           queries: {
@@ -47,7 +42,6 @@ export const sharedQueryProviders: Provider[] = [
     },
     deps: {
       defaultOptions: QUERY_CLIENT_DEFAULT_OPTIONS_TOKEN,
-      logger: LOGGER_TOKEN,
     },
   }),
   provide({
