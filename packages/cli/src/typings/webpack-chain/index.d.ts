@@ -116,7 +116,7 @@ declare module 'webpack-chain' {
 
     stats(value: webpack.Options.Stats): this;
 
-    target(value: string | string[]): this;
+    target(value: string | string[] | false): this;
 
     watch(value: boolean): this;
 

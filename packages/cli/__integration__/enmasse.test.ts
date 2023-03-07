@@ -66,7 +66,6 @@ describe('enmasse', () => {
     .forEach((file) => {
       const app = file;
 
-      // eslint-disable-next-line jest/valid-describe
       describe(`test ${app}`, () => {
         beforeAll(() => {
           const appCwd = join(examplesRoot, app);

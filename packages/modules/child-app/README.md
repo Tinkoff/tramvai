@@ -62,7 +62,7 @@ This section will explain how the child-app are loaded and executed.
 
 ### DI
 
-Every child-app has its own DI-hierarchy which is isolated from other child app and partially from root-app. The only way communicate fpr DIs it's getting providers from root-app di inside child-app.
+Every child-app has its own DI-hierarchy which is isolated from other child app and partially from root-app. The only way communicate for DIs it's getting providers from root-app DI inside child-app.
 
 Next picture shows connection between DI-containers in `root-app` and `child-app`s
 
@@ -79,6 +79,16 @@ How does it work when we trying to get provider from DI in `child-app`:
 3. If current DI is `SingletonDI` then go to `SingletonDI` of `root-app` and check for provider there
    1. If it exists then return it
    2. Throw error otherwise
+
+There is a list of providers - exceptions, for which only factories will be borrowed, not instances, and new instances will be created in current Child-App DI:
+- `COMMAND_LINE_RUNNER_TOKEN`
+- `ACTION_EXECUTION_TOKEN`
+- `ACTION_PAGE_RUNNER_TOKEN`
+- `DISPATCHER_TOKEN`
+- `STORE_TOKEN`
+- `CONTEXT_TOKEN`
+- `CREATE_CACHE_TOKEN`
+- `CLEAR_CACHE_TOKEN`
 
 ### CommandLineRunner
 
@@ -163,6 +173,39 @@ This token is considered undesirable to use as it leads to high coupling with st
 [See how to do it](#child_app_internal_root_state_allowed_store_token)
 
 :::
+
+### Module Federation sharing dependencies
+
+Child-apps utilizes [Module Federation](https://webpack.js.org/concepts/module-federation/) feature of webpack.
+
+That allows child-apps:
+- share dependencies between child-apps and root-app
+- fallbacks to loading dependencies on request if implementation for dependency was not provided before or version of the dependency not satisfies request
+
+The list of default shared dependencies is very short as it can increase bundle size in cases when child-apps are not used.
+
+The following dependencies are shared by default:
+- react core packages (react, react-dom, react/jsx-runtime)
+- @tramvai/react
+- @tinkoff/dippy
+- @tramvai/core
+
+To add additional dependency follow [instructions](#add-dependency-to-shared-list)
+
+#### FAQ about shared dependencies
+
+- **How shared dependencies look like?**. It mostly the implementation details but some info below might be useful for understanding:
+  - if shared dependency is provided in root-app the dependency will built in the initial chunk of root-app and dependency will be available without any additional network requests (these dependencies are marked as `eager` in moduleFederation config)
+  - if shared dependency is missing in the root-app then additional network request will be executed to some of child-app static files to load dependency code (the highest available version of dependency from all of child-apps will be loaded) i.e. additional js file with the name of shared dependency will be loaded on child-app usage.
+- **How does shared dependencies affects root-app build?**. Using shared dependency slightly increases the generated bundle size. So it is preferred to make the list of shared dependencies as small as possible.
+- **How versions of shared dependencies are resolved?**. Module federation will prefer to use the highest available version for the dependency but only if it satisfies the semver constraints of the all consumers. So it is preferred to use higher versions of the dependencies in the root-app and do not upgrade dependency versions in the child-apps without special need.
+- **Dependency is added to list of shared but is not used by the app code**. Such dependency will not be provided and will not be available for consumption by other apps in that case.
+- **How css is shared?**. Currently css are fully separated between root-app and child-app and child-app buid generates only single css file for the whole child-app
+- **If two modules are using same shared dependency and root-app doesn't provide this dependency will the code for dep be loaded twice?**. It depends. On the client-side module federation will try to make only single network request, but with SSR it becomes a little more complicated and it is hard to resolve everything properly on server-side so sometimes it may lead to two network requests for different versions of the same dependency.
+- **If version in child-app and root-app are not semver compatible**. Then child-app will load it's own version in that case as root-app cannot provide compatible version
+- **Can I make sure the shared dependency is initialized only once across consumers?**. Yes, you can pass an object with `singleton` property instead of bare string in the tramvai.json config for shared dependency.
+- **Should I add only high level wrapper of the dependencies I need to provide the list of all dependencies that I want to share?**. Better try different setups and see the output bundle size as it depends. The main rule is provide all of modules that might be imported by app code and that use the same low-level libraries. E.g. to share react-query integration add `@tramvai/module-react-query` and `@tramvai/react-query` to the shared dependencies
+- **When building child-app I see two chunks related to the same package**. It happens due to some of caveats how module federation works. But anyway most of the time only single chunk will be used for the package, so just ignore the fact that in generated files you see two chunks.
 
 ### Error handling
 
@@ -359,6 +402,56 @@ const PageCmp: PageComponent = () => {
 PageCmp.childApps = [{ name: '[name]' }];
 ```
 
+### Add dependency to shared list
+
+:::tip
+
+To get most of the sharing dependencies add dependency both for root-apps that uses child-apps with the dependency and child-apps that uses the dependency
+
+:::
+
+In tramvai.json add new `shared` field
+
+```json
+{
+  "projects": {
+    "root-app": {
+      "name": "root-app",
+      "root": "root-app",
+      "type": "application",
+      "hotRefresh": {
+        "enabled": true
+      },
+      "shared": {
+        "deps": [
+          "@tramvai/react-query",
+          "@tramvai/module-react-query",
+          { "name": "@tramvai/state", "singleton": true }
+        ]
+      }
+    },
+    "child-app": {
+      "name": "child-app",
+      "root": "child-app",
+      "type": "child-app",
+      "shared": {
+        "deps": [
+          "@tramvai/react-query",
+          "@tramvai/module-react-query",
+          { "name": "@tramvai/state", "singleton": true },
+        ]
+      }
+    }
+  }
+}
+```
+
+In order to choose what dependencies should be shared:
+- use `tramvai analyze` command to explore the output bundle and how different options affects it
+- try different dependencies and see what is loading on the page when child-app is used
+- validate how adding shared dependency affects root-app bundle size through `trmavai analyze`
+
+
 ### Debug child-app problems
 
 If your are facing any problems while developing or using child-app use next instructions first.
@@ -441,3 +534,26 @@ Few advices to avoid this problem:
 
 - Memoize object, passed to child-app `props` property
 - Prevent pass to child-app properties, which can be changed during hydration, for example at client-side in page actions
+
+### Shared dependency are still loaded although the root-app shares it
+
+Refer to the [FAQ](#faq-about-shared-dependencies) about the details. In summary:
+- it is more reliable to provide shared dependency from the root-app than relying on sharing between several child-apps
+- make sure all versions of the shared dependencies are semver compatible
+
+### Token with name already created!
+
+The issue happens when `@tinkoff/dippy` library is shared due to fact that root-app and child-apps will have separate instances of the same tokens packages with the same naming.
+
+For now, just ignore that kind of warnings during development. In producation these warnings won't be shown
+
+### Possible problems with shared dependency
+
+#### react-query: No QueryClient set, use QueryClientProvider to set one
+
+The issue may happen if there are different instances of `@tramvai/module-react-query` and `@tramvai/react-query` and therefore internal code inside `@tramvai/react-query` resolves React Context that differs from the QueryClient Provided inside `@tramvai/module-react-query`
+
+To resolve the issue:
+- when defining shared dependencies add both `@tramvai/module-react-query` and `@tramvai/module-react-query`
+- make sure that both packages are used in the root-app (or none) as both instances should resolve to one place and if it isn't apply then for example `@tramvai/react-query` might instantiate with different React Context
+- another option would be to add underlying library `@tanstack/react-query` to both child-app and root-app shared dependencies to make sure that required React Context is created only in single instance

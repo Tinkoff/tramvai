@@ -101,6 +101,8 @@ ${parsed.href || `${parsed.protocol}//${parsed.hostname}${parsed.path}`}
 
           monkeypatch({ obj: http, method: 'request', handler });
           monkeypatch({ obj: https, method: 'request', handler });
+          monkeypatch({ obj: http, method: 'get', handler });
+          monkeypatch({ obj: https, method: 'get', handler });
         };
       },
       deps: {

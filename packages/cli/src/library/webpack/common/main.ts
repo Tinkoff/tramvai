@@ -20,6 +20,13 @@ const filterNonExisted = (filePaths: string[]) => {
 export default (configManager: ConfigManager<CliConfigEntry>) => (config: Config) => {
   const env = configManager.env === 'development' ? 'dev' : 'prod';
 
+  // uniqueName are used for various webpack internals
+  // currently, we use that value in the ModuleFederation glue code
+  config.output.set(
+    'uniqueName',
+    `${configManager.type}:${configManager.name}:${configManager.version}`
+  );
+
   config.context(path.resolve(__dirname, '..', '..', '..', '..'));
   config.batch(resolve(configManager));
   config.batch(ignoreLocales());

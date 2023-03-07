@@ -30,6 +30,7 @@
     "@tinkoff/env-validators": "0.0.0-stub",
     "@tinkoff/module-loader-client": "0.0.0-stub",
     "@tinkoff/module-loader-server": "0.0.0-stub",
+    "@tinkoff/url": "0.0.0-stub",
     "@tramvai/child-app-core": "0.0.0-stub",
     "@tramvai/module-router": "0.0.0-stub",
     "@tramvai/safe-strings": "0.0.0-stub",
@@ -48,6 +49,7 @@
     "react": ">=16.14.0",
     "react-dom": ">=16.14.0",
     "object-assign": "^4.1.1",
+    "semver": "^7.3.8",
     "tslib": "^2.4.0"
   },
   "module": "lib/server.es.js"

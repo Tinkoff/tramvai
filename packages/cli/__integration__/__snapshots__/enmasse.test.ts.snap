@@ -38,12 +38,6 @@ exports[`enmasse test module platform build module 1`] = `
     "type": "file",
   },
   {
-    "extension": ".css",
-    "name": "module_server.css",
-    "path": "dist/modules/module/prerelease/module_server.css",
-    "type": "file",
-  },
-  {
     "extension": ".js",
     "name": "module_server.js",
     "path": "dist/modules/module/prerelease/module_server.js",
@@ -247,12 +241,6 @@ exports[`enmasse test react-app platform build react-app 1`] = `
     "extension": ".js",
     "name": "server",
     "path": "dist/server/server",
-    "type": "file",
-  },
-  {
-    "extension": ".css",
-    "name": "server.css",
-    "path": "dist/server/server.css",
     "type": "file",
   },
   {

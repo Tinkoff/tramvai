@@ -4,8 +4,6 @@ title: Child App
 sidebar_position: 1
 ---
 
-_This feature currently in beta and might still introduce breaking changes_
-
 [Micro frontends](https://micro-frontends.org/) heavily integrated with tramvai framework
 
 ## Features

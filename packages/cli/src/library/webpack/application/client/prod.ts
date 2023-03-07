@@ -6,7 +6,7 @@ import isObject from '@tinkoff/utils/is/object';
 import isUndefined from '@tinkoff/utils/is/undefined';
 
 // eslint-disable-next-line no-restricted-imports
-import type { ForkTsCheckerWebpackPluginOptions } from 'fork-ts-checker-webpack-plugin/lib/ForkTsCheckerWebpackPluginOptions';
+import type { ForkTsCheckerWebpackPluginOptions } from 'fork-ts-checker-webpack-plugin/lib/plugin-options';
 import RuntimePathPlugin from '../../plugins/RuntimePathPlugin';
 
 import type { ConfigManager } from '../../../../config/configManager';

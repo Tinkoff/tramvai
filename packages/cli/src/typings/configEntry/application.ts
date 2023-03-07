@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-restricted-imports
-import type { ForkTsCheckerWebpackPluginOptions } from 'fork-ts-checker-webpack-plugin/lib/ForkTsCheckerWebpackPluginOptions';
+import type { ForkTsCheckerWebpackPluginOptions } from 'fork-ts-checker-webpack-plugin/lib/plugin-options';
 import type { CliConfigEntry, Experiments } from './cli';
 import type { OverridableOption } from './common';
 

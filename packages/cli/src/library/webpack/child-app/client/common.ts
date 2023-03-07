@@ -1,16 +1,12 @@
 import type Config from 'webpack-chain';
+import { ChunkCorrelationPlugin } from '@module-federation/node';
 
-import { StatsWriterPlugin } from 'webpack-stats-plugin';
 import type { ConfigManager } from '../../../../config/configManager';
 
 import common from '../common';
 import files from '../../blocks/filesClient';
 import nodeClient from '../../blocks/nodeClient';
 import postcssAssets from '../../blocks/postcssAssets';
-import type { LazyLibraryOptions } from '../../plugins/LazyLibraryInitialization';
-import { LazyLibraryInitialization } from '../../plugins/LazyLibraryInitialization';
-import { DEFAULT_STATS_FIELDS, DEFAULT_STATS_OPTIONS } from '../../constants/stats';
-import { extractCssPluginFactory } from '../../blocks/extractCssPlugin';
 import type { ChildAppConfigEntry } from '../../../../typings/configEntry/child-app';
 
 export default (configManager: ConfigManager<ChildAppConfigEntry>) => (config: Config) => {
@@ -26,28 +22,13 @@ export default (configManager: ConfigManager<ChildAppConfigEntry>) => (config: C
     .publicPath('auto')
     .library(configManager.name)
     .filename(`[name]_client@${version}.js`)
-    .chunkFilename('[name]_client.chunk.[hash].js');
-
-  config.batch(
-    extractCssPluginFactory(configManager, {
-      filename: `[name]@${version}.css`,
-      chunkFilename: '[name].chunk.[hash].css',
-    })
-  );
+    .chunkFilename('[name]_client.chunk.[contenthash].js');
 
   config.batch(postcssAssets(configManager));
 
-  config.plugin('lazy-initialization').use(LazyLibraryInitialization, [
-    {
-      prefix: 'child-app',
-    } as LazyLibraryOptions,
-  ]);
-
-  config.plugin('stats-plugin').use(StatsWriterPlugin, [
+  config.plugin('stats-plugin').use(ChunkCorrelationPlugin, [
     {
       filename: `${name}_stats@${version}.json`,
-      stats: DEFAULT_STATS_OPTIONS,
-      fields: DEFAULT_STATS_FIELDS,
     },
   ]);
 

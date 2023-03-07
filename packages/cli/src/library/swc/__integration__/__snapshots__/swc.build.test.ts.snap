@@ -28,8 +28,7 @@ exports[`client-legacy: images/logo.svg\\?react 1`] = `
                   /*#__PURE__*/
                   return (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("svg", _extends({
                       xmlns: "http://www.w3.org/2000/svg",
-                      viewBox: "0 0 80.9 72.2",
-                      role: "img"
+                      viewBox: "0 0 80.9 72.2"
                   }, props, {
                       children: [ 
                       /*#__PURE__*/ (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
@@ -219,8 +218,7 @@ exports[`client-modern: images/logo.svg\\?react 1`] = `
               }
               const __WEBPACK_DEFAULT_EXPORT__ = props => /*#__PURE__*/ (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("svg", _extends({
                   xmlns: "http://www.w3.org/2000/svg",
-                  viewBox: "0 0 80.9 72.2",
-                  role: "img"
+                  viewBox: "0 0 80.9 72.2"
               }, props, {
                   children: [ 
                   /*#__PURE__*/ (0, react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {
@@ -386,7 +384,6 @@ exports[`server: images/logo.svg\\?react 1`] = `
 const SvgLogo = (props)=>/*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("svg", {
         xmlns: "http://www.w3.org/2000/svg",
         viewBox: "0 0 80.9 72.2",
-        role: "img",
         ...props,
         children: [
             /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("path", {

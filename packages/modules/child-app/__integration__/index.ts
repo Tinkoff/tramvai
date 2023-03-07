@@ -3,6 +3,7 @@ import { CommonModule, ENV_MANAGER_TOKEN, ENV_USED_TOKEN } from '@tramvai/module
 import { RenderModule } from '@tramvai/module-render';
 import { SpaRouterModule } from '@tramvai/module-router';
 import { ServerModule } from '@tramvai/module-server';
+import { ReactQueryModule } from '@tramvai/module-react-query';
 import { ApiClientsModule, HTTP_CLIENT_FACTORY } from '@tramvai/module-api-clients';
 import { MockerModule } from '@tramvai/module-mocker';
 import { ChildAppModule, CHILD_APP_RESOLUTION_CONFIGS_TOKEN } from '@tramvai/module-child-app';
@@ -26,6 +27,7 @@ createApp({
     ServerModule,
     ApiClientsModule,
     ChildAppModule,
+    ReactQueryModule,
     MockerModule,
   ],
   providers: [

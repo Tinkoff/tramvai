@@ -2,9 +2,14 @@ import { testApp } from '@tramvai/internal-test-utils/testApp';
 import { testAppInBrowser } from '@tramvai/internal-test-utils/browser';
 import { sleep } from '@tramvai/test-integration';
 
-const { getApp } = testApp({
-  name: 'react-query',
-});
+const { getApp } = testApp(
+  {
+    name: 'react-query',
+  },
+  {
+    rootDir: __dirname,
+  }
+);
 const { getPageWrapper } = testAppInBrowser(getApp);
 
 describe('useQuery', () => {

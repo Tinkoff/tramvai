@@ -107,6 +107,7 @@ export const sharedProviders: Provider[] = [
           client: {
             baseUrl: `${baseUrl}${name}/`,
             entry: `${baseUrl}${name}/${name}_client@${version}.js`,
+            stats: `${baseUrl}${name}/${name}_stats@${version}.json`,
             ...client,
           },
           css: withoutCss

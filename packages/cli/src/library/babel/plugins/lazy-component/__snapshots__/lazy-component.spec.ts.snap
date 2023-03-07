@@ -13,29 +13,20 @@ lazy({
   chunkName() {
     return 'cmp';
   },
-
   requireSync(props) {
     return __webpack_require__(this.resolve(props));
   },
-
   isReady(props) {
     const key = this.resolve(props);
     return !!__webpack_modules__[key];
   },
-
-  importAsync: () =>
-    import(
-      /* webpackChunkName: "cmp" */
-      './cmp'
-    ),
-
+  importAsync: () => import(/* webpackChunkName: "cmp" */ './cmp'),
   requireAsync(props) {
     const key = this.resolve(props);
     return this.importAsync(props).then((resolved) => {
       return resolved;
     });
   },
-
   resolve() {
     return require.resolveWeak('./cmp');
   },
@@ -61,29 +52,20 @@ lazy({
   chunkName() {
     return 'main';
   },
-
   requireSync(props) {
     return __webpack_require__(this.resolve(props));
   },
-
   isReady(props) {
     const key = this.resolve(props);
     return !!__webpack_modules__[key];
   },
-
-  importAsync: () =>
-    import(
-      /* webpackChunkName: "main" */
-      './inner/first'
-    ),
-
+  importAsync: () => import(/* webpackChunkName: "main" */ './inner/first'),
   requireAsync(props) {
     const key = this.resolve(props);
     return this.importAsync(props).then((resolved) => {
       return resolved;
     });
   },
-
   resolve() {
     return require.resolveWeak('./inner/first');
   },
@@ -92,31 +74,25 @@ lazy({
   chunkName() {
     return 'inner-second';
   },
-
   requireSync(props) {
     return __webpack_require__(this.resolve(props));
   },
-
   isReady(props) {
     const key = this.resolve(props);
     return !!__webpack_modules__[key];
   },
-
   importAsync: () =>
     import(
       /* webpackChunkName: "inner-second" */
-
       /* stupid comments */
       './inner/second'
     ),
-
   requireAsync(props) {
     const key = this.resolve(props);
     return this.importAsync(props).then((resolved) => {
       return resolved;
     });
   },
-
   resolve() {
     return require.resolveWeak('./inner/second');
   },
@@ -125,31 +101,25 @@ lazy({
   chunkName() {
     return 'inner-third';
   },
-
   requireSync(props) {
     return __webpack_require__(this.resolve(props));
   },
-
   isReady(props) {
     const key = this.resolve(props);
     return !!__webpack_modules__[key];
   },
-
   importAsync: () =>
     import(
       /* webpackChunkName: "inner-third" */
-
       /* webpackPreload: true */
       './inner/third'
     ),
-
   requireAsync(props) {
     const key = this.resolve(props);
     return this.importAsync(props).then((resolved) => {
       return resolved;
     });
   },
-
   resolve() {
     return require.resolveWeak('./inner/third');
   },
@@ -158,29 +128,21 @@ lazy({
   chunkName() {
     return 'component';
   },
-
   requireSync(props) {
     return __webpack_require__(this.resolve(props));
   },
-
   isReady(props) {
     const key = this.resolve(props);
     return !!__webpack_modules__[key];
   },
-
   importAsync: () =>
-    import(
-      /* webpackPrefetch: true, webpackChunkName: "component" */
-      './cmp'
-    ),
-
+    import(/* webpackPrefetch: true, webpackChunkName: "component" */ './cmp'),
   requireAsync(props) {
     const key = this.resolve(props);
     return this.importAsync(props).then((resolved) => {
       return resolved;
     });
   },
-
   resolve() {
     return require.resolveWeak('./cmp');
   },
@@ -202,29 +164,23 @@ lazy({
   chunkName(props) {
     return \`inner-\${props.name}-js\`.replace(/[^a-zA-Z0-9_!§$()=\\-^°]+/g, '-');
   },
-
   requireSync(props) {
     return __webpack_require__(this.resolve(props));
   },
-
   isReady(props) {
     const key = this.resolve(props);
     return !!__webpack_modules__[key];
   },
-
   importAsync: (props) =>
     import(
-      /* webpackChunkName: "inner-[request]" */
-      \`./inner/\${props.name}.js\`
+      /* webpackChunkName: "inner-[request]" */ \`./inner/\${props.name}.js\`
     ),
-
   requireAsync(props) {
     const key = this.resolve(props);
     return this.importAsync(props).then((resolved) => {
       return resolved;
     });
   },
-
   resolve(props) {
     return require.resolveWeak(\`./inner/\${props.name}.js\`);
   },
@@ -247,38 +203,28 @@ const MainPage = lazy(
     chunkName() {
       return 'inner-first';
     },
-
     requireSync(props) {
       return __webpack_require__(this.resolve(props));
     },
-
     isReady(props) {
       const key = this.resolve(props);
       return !!__webpack_modules__[key];
     },
-
     importAsync: () =>
-      import(
-        /* webpackChunkName: "inner-first" */
-        './inner/first'
-      ),
-
+      import(/* webpackChunkName: "inner-first" */ './inner/first'),
     requireAsync(props) {
       const key = this.resolve(props);
       return this.importAsync(props).then((resolved) => {
         return resolved;
       });
     },
-
     resolve() {
       return require.resolveWeak('./inner/first');
     },
   })
 );
 _c2 = MainPage;
-
 var _c, _c2;
-
 $RefreshReg$(_c, 'MainPage$lazy');
 $RefreshReg$(_c2, 'MainPage');
 
@@ -298,29 +244,21 @@ lazy({
   chunkName() {
     return 'inner-path-cmp';
   },
-
   requireSync(props) {
     return __webpack_require__(this.resolve(props));
   },
-
   isReady(props) {
     const key = this.resolve(props);
     return !!__webpack_modules__[key];
   },
-
   importAsync: () =>
-    import(
-      /* webpackChunkName: "inner-path-cmp" */
-      './inner/path/cmp'
-    ),
-
+    import(/* webpackChunkName: "inner-path-cmp" */ './inner/path/cmp'),
   requireAsync(props) {
     const key = this.resolve(props);
     return this.importAsync(props).then((resolved) => {
       return resolved;
     });
   },
-
   resolve() {
     return require.resolveWeak('./inner/path/cmp');
   },
@@ -343,9 +281,7 @@ const load = lazy(() => import('./cmp'));
       ↓ ↓ ↓ ↓ ↓ ↓
 
 const lazy = (imp) => console.log(imp);
-
 const load = lazy(() => import('./cmp'));
-
 (async () => {
   const { default: cmp } = await import('./cmp');
   console.log(cmp.actions);

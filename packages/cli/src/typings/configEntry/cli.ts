@@ -268,4 +268,37 @@ export interface CliConfigEntry extends ConfigEntry {
     client?: Notifications;
     server?: Notifications;
   };
+  /**
+   * @title Specify dependencies that will be shared between application and child-apps
+   * @description Properly defining that dependencies may greatly reduce filesize of loaded js on the client
+   * @default {}
+   */
+  shared: {
+    /**
+     * @title Should default dependencies list be added to shared list
+     * @description It includes the list of commonly used dependencies in the child-apps
+     * By default, it is enabled in application in case of @tramvai/module-child-app is specified in package.json
+     * and for child-apps
+     */
+    defaultTramvaiDependencies?: boolean;
+    /**
+     * @title list of the dependencies that will be shared
+     * @default []
+     */
+    deps: Array<
+      | string
+      | {
+          /**
+           * @title name of the dependency import
+           */
+          name: string;
+          /**
+           * @title if dependency is marked as singleton the dependency will be initialized only once and will not be updated
+           * @description Do not overuse that feature as it may lead to subtle bugs in case of different versions on different sides
+           * @default: false
+           */
+          singleton: boolean;
+        }
+    >;
+  };
 }

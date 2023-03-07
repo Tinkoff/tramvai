@@ -116,7 +116,8 @@ export const createConfigManager = <C extends ConfigEntry = ConfigEntry, E exten
     ...normalizedConfigEntry,
     version:
       (type === 'module' ? moduleVersion(configEntry) : '') ||
-      (type === 'child-app' ? packageVersion(configEntry, env, rootDir) : ''),
+      packageVersion(configEntry, env, rootDir) ||
+      'unknown',
     trace: false,
     host: '0.0.0.0',
     staticHost: 'localhost',

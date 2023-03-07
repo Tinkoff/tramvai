@@ -1,11 +1,20 @@
-import type { PageComponent } from '@tramvai/react';
 import { createBundle } from '@tramvai/core';
 import { ChildApp } from '@tramvai/module-child-app';
+import { createQuery, useQuery } from '@tramvai/react-query';
 
-const Cmp: PageComponent = () => {
+const query = createQuery({
+  key: 'test',
+  async fn() {
+    return 'test';
+  },
+});
+
+const Cmp = () => {
+  const result = useQuery(query);
+
   return (
     <>
-      <div>Content from root</div>
+      <div>Content from root: {result.data}</div>
       <ChildApp name="react-query" />
     </>
   );
@@ -19,4 +28,5 @@ export default createBundle({
   components: {
     pageDefault: Cmp,
   },
+  actions: [query.prefetchAction()],
 });

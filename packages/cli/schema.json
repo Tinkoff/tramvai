@@ -171,177 +171,120 @@
                             "type": "boolean"
                           },
                           "typescript": {
-                            "anyOf": [
-                              {
-                                "type": "object",
-                                "properties": {
-                                  "enabled": {
-                                    "type": "boolean"
-                                  },
-                                  "memoryLimit": {
-                                    "type": "number"
-                                  },
-                                  "configFile": {
-                                    "type": "string"
-                                  },
-                                  "configOverwrite": {
-                                    "type": "object",
-                                    "properties": {
-                                      "extends": {
-                                        "type": "string"
-                                      },
-                                      "compilerOptions": {
-                                        "type": "object",
-                                        "properties": {},
-                                        "additionalProperties": true
-                                      },
-                                      "include": {
-                                        "type": "array",
-                                        "items": {
-                                          "type": "string"
-                                        }
-                                      },
-                                      "exclude": {
-                                        "type": "array",
-                                        "items": {
-                                          "type": "string"
-                                        }
-                                      },
-                                      "files": {
-                                        "type": "array",
-                                        "items": {
-                                          "type": "string"
-                                        }
-                                      },
-                                      "references": {
-                                        "type": "array",
-                                        "items": {
-                                          "type": "object",
-                                          "properties": {
-                                            "path": {
-                                              "type": "string"
-                                            },
-                                            "prepend": {
-                                              "type": "boolean"
-                                            }
-                                          },
-                                          "additionalProperties": false
-                                        }
-                                      }
-                                    },
-                                    "additionalProperties": false
-                                  },
-                                  "context": {
-                                    "type": "string"
-                                  },
-                                  "build": {
-                                    "type": "boolean"
-                                  },
-                                  "mode": {
-                                    "enum": [
-                                      "readonly",
-                                      "write-dts",
-                                      "write-references",
-                                      "write-tsbuildinfo"
-                                    ],
-                                    "type": "string"
-                                  },
-                                  "diagnosticOptions": {
-                                    "type": "object",
-                                    "properties": {
-                                      "syntactic": {
-                                        "type": "boolean"
-                                      },
-                                      "semantic": {
-                                        "type": "boolean"
-                                      },
-                                      "declaration": {
-                                        "type": "boolean"
-                                      },
-                                      "global": {
-                                        "type": "boolean"
-                                      }
-                                    },
-                                    "additionalProperties": false
-                                  },
-                                  "extensions": {
-                                    "type": "object",
-                                    "properties": {
-                                      "vue": {
-                                        "anyOf": [
-                                          {
-                                            "type": "object",
-                                            "properties": {
-                                              "enabled": {
-                                                "type": "boolean"
-                                              },
-                                              "compiler": {
-                                                "type": "string"
-                                              }
-                                            },
-                                            "additionalProperties": false
-                                          },
-                                          {
-                                            "type": "boolean"
-                                          }
-                                        ]
-                                      }
-                                    },
-                                    "additionalProperties": false
-                                  },
-                                  "profile": {
-                                    "type": "boolean"
-                                  },
-                                  "typescriptPath": {
-                                    "type": "string"
-                                  }
-                                },
-                                "additionalProperties": false
-                              },
-                              {
-                                "type": "boolean"
-                              }
-                            ]
-                          },
-                          "eslint": {
                             "type": "object",
                             "properties": {
-                              "files": {
-                                "anyOf": [
-                                  {
-                                    "type": "array",
-                                    "items": {
-                                      "type": "string"
-                                    }
-                                  },
-                                  {
-                                    "type": "string"
-                                  }
-                                ]
-                              },
-                              "enabled": {
-                                "type": "boolean"
-                              },
                               "memoryLimit": {
                                 "type": "number"
                               },
-                              "options": {
+                              "configFile": {
+                                "type": "string"
+                              },
+                              "configOverwrite": {
                                 "type": "object",
                                 "properties": {
-                                  "cwd": {
+                                  "extends": {
                                     "type": "string"
                                   },
-                                  "extensions": {
+                                  "compilerOptions": {},
+                                  "include": {
                                     "type": "array",
                                     "items": {
                                       "type": "string"
                                     }
                                   },
-                                  "fix": {
+                                  "exclude": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "files": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "references": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "path": {
+                                          "type": "string"
+                                        },
+                                        "prepend": {
+                                          "type": "boolean"
+                                        }
+                                      },
+                                      "additionalProperties": false
+                                    }
+                                  }
+                                },
+                                "additionalProperties": false
+                              },
+                              "context": {
+                                "type": "string"
+                              },
+                              "build": {
+                                "type": "boolean"
+                              },
+                              "mode": {
+                                "enum": [
+                                  "readonly",
+                                  "write-dts",
+                                  "write-references",
+                                  "write-tsbuildinfo"
+                                ],
+                                "type": "string"
+                              },
+                              "diagnosticOptions": {
+                                "type": "object",
+                                "properties": {
+                                  "syntactic": {
+                                    "type": "boolean"
+                                  },
+                                  "semantic": {
+                                    "type": "boolean"
+                                  },
+                                  "declaration": {
+                                    "type": "boolean"
+                                  },
+                                  "global": {
                                     "type": "boolean"
                                   }
                                 },
                                 "additionalProperties": false
+                              },
+                              "extensions": {
+                                "type": "object",
+                                "properties": {
+                                  "vue": {
+                                    "anyOf": [
+                                      {
+                                        "type": "object",
+                                        "properties": {
+                                          "enabled": {
+                                            "type": "boolean"
+                                          },
+                                          "compiler": {
+                                            "type": "string"
+                                          }
+                                        },
+                                        "additionalProperties": false
+                                      },
+                                      {
+                                        "type": "boolean"
+                                      }
+                                    ]
+                                  }
+                                },
+                                "additionalProperties": false
+                              },
+                              "profile": {
+                                "type": "boolean"
+                              },
+                              "typescriptPath": {
+                                "type": "string"
                               }
                             },
                             "additionalProperties": false
@@ -356,19 +299,36 @@
                                 "type": "object",
                                 "properties": {
                                   "type": {
-                                    "anyOf": [
-                                      {
-                                        "type": "object",
-                                        "additionalProperties": false
-                                      },
-                                      {
-                                        "enum": [
-                                          "basic",
-                                          "codeframe"
-                                        ],
-                                        "type": "string"
-                                      }
+                                    "type": "string",
+                                    "enum": [
+                                      "basic"
                                     ]
+                                  },
+                                  "pathType": {
+                                    "enum": [
+                                      "absolute",
+                                      "relative"
+                                    ],
+                                    "type": "string"
+                                  }
+                                },
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "codeframe"
+                                    ]
+                                  },
+                                  "pathType": {
+                                    "enum": [
+                                      "absolute",
+                                      "relative"
+                                    ],
+                                    "type": "string"
                                   },
                                   "options": {
                                     "type": "object",
@@ -426,9 +386,6 @@
                                       "file": {
                                         "type": "string"
                                       },
-                                      "origin": {
-                                        "type": "string"
-                                      },
                                       "severity": {
                                         "enum": [
                                           "error",
@@ -454,9 +411,6 @@
                                               "type": "string"
                                             },
                                             "file": {
-                                              "type": "string"
-                                            },
-                                            "origin": {
                                               "type": "string"
                                             },
                                             "severity": {
@@ -489,9 +443,6 @@
                                       "file": {
                                         "type": "string"
                                       },
-                                      "origin": {
-                                        "type": "string"
-                                      },
                                       "severity": {
                                         "enum": [
                                           "error",
@@ -519,9 +470,6 @@
                                             "file": {
                                               "type": "string"
                                             },
-                                            "origin": {
-                                              "type": "string"
-                                            },
                                             "severity": {
                                               "enum": [
                                                 "error",
@@ -541,73 +489,31 @@
                             "additionalProperties": false
                           },
                           "logger": {
-                            "type": "object",
-                            "properties": {
-                              "infrastructure": {
-                                "anyOf": [
-                                  {
+                            "anyOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "log": {
                                     "type": "object",
-                                    "properties": {
-                                      "info": {
-                                        "type": "object",
-                                        "additionalProperties": false
-                                      },
-                                      "log": {
-                                        "type": "object",
-                                        "additionalProperties": false
-                                      },
-                                      "error": {
-                                        "type": "object",
-                                        "additionalProperties": false
-                                      }
-                                    },
                                     "additionalProperties": false
                                   },
-                                  {
-                                    "enum": [
-                                      "console",
-                                      "silent",
-                                      "webpack-infrastructure"
-                                    ],
-                                    "type": "string"
-                                  }
-                                ]
-                              },
-                              "issues": {
-                                "anyOf": [
-                                  {
+                                  "error": {
                                     "type": "object",
-                                    "properties": {
-                                      "info": {
-                                        "type": "object",
-                                        "additionalProperties": false
-                                      },
-                                      "log": {
-                                        "type": "object",
-                                        "additionalProperties": false
-                                      },
-                                      "error": {
-                                        "type": "object",
-                                        "additionalProperties": false
-                                      }
-                                    },
                                     "additionalProperties": false
-                                  },
-                                  {
-                                    "enum": [
-                                      "console",
-                                      "silent",
-                                      "webpack-infrastructure"
-                                    ],
-                                    "type": "string"
                                   }
-                                ]
+                                },
+                                "additionalProperties": false
                               },
-                              "devServer": {
-                                "type": "boolean"
+                              {
+                                "enum": [
+                                  "webpack-infrastructure"
+                                ],
+                                "type": "string"
                               }
-                            },
-                            "additionalProperties": false
+                            ]
+                          },
+                          "devServer": {
+                            "type": "boolean"
                           }
                         },
                         "additionalProperties": false
@@ -1100,6 +1006,48 @@
                   }
                 },
                 "additionalProperties": false
+              },
+              "shared": {
+                "title": "Specify dependencies that will be shared between application and child-apps",
+                "description": "Properly defining that dependencies may greatly reduce filesize of loaded js on the client",
+                "default": {},
+                "type": "object",
+                "properties": {
+                  "defaultTramvaiDependencies": {
+                    "title": "Should default dependencies list be added to shared list",
+                    "description": "It includes the list of commonly used dependencies in the child-apps\nBy default, it is enabled in application in case of",
+                    "type": "boolean"
+                  },
+                  "deps": {
+                    "title": "list of the dependencies that will be shared",
+                    "default": [],
+                    "type": "array",
+                    "items": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "title": "name of the dependency import",
+                              "type": "string"
+                            },
+                            "singleton": {
+                              "title": "if dependency is marked as singleton the dependency will be initialized only once and will not be updated",
+                              "description": "Do not overuse that feature as it may lead to subtle bugs in case of different versions on different sides",
+                              "default": ": false",
+                              "type": "boolean"
+                            }
+                          },
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "additionalProperties": false
               }
             },
             "required": [
@@ -1580,6 +1528,48 @@
                     }
                   },
                   "additionalProperties": false
+                },
+                "shared": {
+                  "title": "Specify dependencies that will be shared between application and child-apps",
+                  "description": "Properly defining that dependencies may greatly reduce filesize of loaded js on the client",
+                  "default": {},
+                  "type": "object",
+                  "properties": {
+                    "defaultTramvaiDependencies": {
+                      "title": "Should default dependencies list be added to shared list",
+                      "description": "It includes the list of commonly used dependencies in the child-apps\nBy default, it is enabled in application in case of",
+                      "type": "boolean"
+                    },
+                    "deps": {
+                      "title": "list of the dependencies that will be shared",
+                      "default": [],
+                      "type": "array",
+                      "items": {
+                        "anyOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "title": "name of the dependency import",
+                                "type": "string"
+                              },
+                              "singleton": {
+                                "title": "if dependency is marked as singleton the dependency will be initialized only once and will not be updated",
+                                "description": "Do not overuse that feature as it may lead to subtle bugs in case of different versions on different sides",
+                                "default": ": false",
+                                "type": "boolean"
+                              }
+                            },
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "string"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "additionalProperties": false
                 }
               },
               "required": [
@@ -2057,6 +2047,48 @@
                           }
                         },
                         "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "shared": {
+                    "title": "Specify dependencies that will be shared between application and child-apps",
+                    "description": "Properly defining that dependencies may greatly reduce filesize of loaded js on the client",
+                    "default": {},
+                    "type": "object",
+                    "properties": {
+                      "defaultTramvaiDependencies": {
+                        "title": "Should default dependencies list be added to shared list",
+                        "description": "It includes the list of commonly used dependencies in the child-apps\nBy default, it is enabled in application in case of",
+                        "type": "boolean"
+                      },
+                      "deps": {
+                        "title": "list of the dependencies that will be shared",
+                        "default": [],
+                        "type": "array",
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "title": "name of the dependency import",
+                                  "type": "string"
+                                },
+                                "singleton": {
+                                  "title": "if dependency is marked as singleton the dependency will be initialized only once and will not be updated",
+                                  "description": "Do not overuse that feature as it may lead to subtle bugs in case of different versions on different sides",
+                                  "default": ": false",
+                                  "type": "boolean"
+                                }
+                              },
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "string"
+                            }
+                          ]
+                        }
                       }
                     },
                     "additionalProperties": false

@@ -105,6 +105,7 @@ export const serverProviders: Provider[] = [
       logger: LOGGER_TOKEN,
       diManager: CHILD_APP_DI_MANAGER_TOKEN,
       resolveFullConfig: CHILD_APP_RESOLVE_CONFIG_TOKEN,
+      loader: CHILD_APP_LOADER_TOKEN,
       preloadManager: CHILD_APP_PRELOAD_MANAGER_TOKEN,
     },
   }),

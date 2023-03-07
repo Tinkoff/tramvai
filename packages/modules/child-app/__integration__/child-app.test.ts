@@ -63,6 +63,9 @@ beforeAll(async () => {
         type: 'child-app',
         root: resolve(__dirname, 'child-app', 'react-query'),
         name: 'react-query',
+        shared: {
+          deps: ['@tramvai/react-query', '@tramvai/module-react-query'],
+        },
       },
     }),
     start({
@@ -93,21 +96,22 @@ beforeAll(async () => {
 
   await mockerApp.get('/*', async (request, reply) => {
     const [_, childAppName, filename] = request.url.split('/');
-    const ext = filename.slice(childAppName.length, Infinity);
 
     switch (childAppName) {
       case 'base':
       case 'base-not-preloaded':
-        return reply.from(`${getStaticUrl(childAppBase)}/base/base${ext}`);
+        return reply.from(
+          `${getStaticUrl(childAppBase)}/base/${filename.replace(/base-not-preloaded/, 'base')}`
+        );
 
       case 'state':
-        return reply.from(`${getStaticUrl(childAppState)}/state/state${ext}`);
+        return reply.from(`${getStaticUrl(childAppState)}/state/${filename}`);
 
       case 'react-query':
-        return reply.from(`${getStaticUrl(childAppReactQuery)}/react-query/react-query${ext}`);
+        return reply.from(`${getStaticUrl(childAppReactQuery)}/react-query/${filename}`);
 
       case 'error':
-        return reply.from(`${getStaticUrl(childAppError)}/error/error${ext}`);
+        return reply.from(`${getStaticUrl(childAppError)}/error/${filename}`);
     }
   });
 
@@ -118,6 +122,9 @@ const { getApp } = testApp(
   {
     name: 'root-app',
     config: {
+      shared: {
+        deps: ['@tramvai/react-query', '@tramvai/module-react-query'],
+      },
       define: {
         development: {
           get 'process.env.CHILD_APP_BASE'() {
@@ -128,6 +135,7 @@ const { getApp } = testApp(
     },
   },
   {
+    rootDir: __dirname,
     env: {
       CHILD_APP_EXTERNAL_URL: `http://localhost:${mockerPort}/`,
     },
@@ -300,12 +308,36 @@ describe('react-query', () => {
 
     expect(await renderApp('/react-query/')).toMatchInlineSnapshot(`
       "
-            <div>Content from root</div>
+            <div>
+              Content from root:
+              <!-- -->test
+            </div>
             <!--$-->
             <div>Hello, Mock!</div>
             <!--/$-->
           "
     `);
+  });
+
+  it('should reuse react-query dependencies from root-app', async () => {
+    const { serverUrl } = getApp();
+    const { page } = await getPageWrapper();
+
+    const loadedScripts: string[] = [];
+
+    page.on('request', (request) => {
+      const url = request.url();
+      const resourceType = request.resourceType();
+
+      if (resourceType === 'script' && url.includes('/react-query/')) {
+        loadedScripts.push(url);
+      }
+    });
+
+    await page.goto(`${serverUrl}/react-query/`);
+
+    // only runtime and main entry chunk should be loaded
+    expect(loadedScripts).toHaveLength(2);
   });
 });
 

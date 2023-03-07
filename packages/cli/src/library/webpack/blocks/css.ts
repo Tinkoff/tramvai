@@ -21,7 +21,7 @@ interface Options {
 export const cssWebpackRulesFactory =
   (configManager: ConfigManager<CliConfigEntry>, options: Options = {}) =>
   (config: Config) => {
-    const { env, sourceMap } = configManager;
+    const { env, sourceMap, buildType } = configManager;
     const {
       postcss: {
         config: postcssConfig,
@@ -34,7 +34,14 @@ export const cssWebpackRulesFactory =
     const localIdentName = options.localIdentName ?? cssLocalIdentName;
 
     const configCssLoader = (cfg) => {
-      cfg.use('extract-css').loader(ExtractCssChunks.loader).options({ esModule: false });
+      cfg
+        .use('extract-css')
+        .loader(ExtractCssChunks.loader)
+        .options({
+          esModule: false,
+          // we don't need the css on server, but it's needed to generate proper classnames in js
+          emit: buildType === 'client',
+        } as ExtractCssChunks.LoaderOptions);
 
       const cssModulesOptions: Record<string, any> = {
         localIdentName,

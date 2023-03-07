@@ -38,4 +38,6 @@ export interface LoadOptions {
   integrity?: string;
 
   codePrefix?: string;
+
+  type?: 'js' | 'json';
 }

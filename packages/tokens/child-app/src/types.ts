@@ -31,6 +31,7 @@ export interface ChildAppExternalConfig {
   client: {
     baseUrl: string;
     entry: string;
+    stats: string;
   };
 
   css?: {

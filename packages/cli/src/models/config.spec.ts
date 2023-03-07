@@ -70,6 +70,9 @@ it('should populate defaults for config', () => {
           "postcss": {},
           "root": "src",
           "serverApiDir": "src/api",
+          "shared": {
+            "deps": [],
+          },
           "sourceMap": false,
           "splitChunks": {
             "commonChunkSplitNumber": 3,
@@ -119,6 +122,9 @@ it('should populate defaults for config', () => {
             "cssLocalIdentName": "[hash:base64:5]",
           },
           "root": "packages/child-app",
+          "shared": {
+            "deps": [],
+          },
           "sourceMap": false,
           "terser": {
             "parallel": true,
@@ -262,6 +268,9 @@ it('should populate defaults for overridable options', () => {
           "postcss": {},
           "root": "src",
           "serverApiDir": "src/api",
+          "shared": {
+            "deps": [],
+          },
           "sourceMap": false,
           "splitChunks": {
             "commonChunkSplitNumber": 3,
@@ -325,6 +334,9 @@ it('should populate defaults for overridable options', () => {
             "cssLocalIdentName": "[hash:base64:5]",
           },
           "root": "packages/child-app",
+          "shared": {
+            "deps": [],
+          },
           "sourceMap": {
             "development": true,
             "production": false,

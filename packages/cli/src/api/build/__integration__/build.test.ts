@@ -40,7 +40,6 @@ describe('@tramvai/cli build command', () => {
 
       expect(normalizeFiles(serverFiles)).toMatchInlineSnapshot(`
         [
-          "server.css",
           "server.js",
           "stats.json",
         ]
@@ -84,7 +83,6 @@ describe('@tramvai/cli build command', () => {
 
       expect(normalizeFiles(serverFiles)).toMatchInlineSnapshot(`
         [
-          "server.css",
           "server.js",
           "stats.json",
         ]
@@ -106,7 +104,6 @@ describe('@tramvai/cli build command', () => {
         [
           "module.css",
           "module_client.js",
-          "module_server.css",
           "module_server.js",
           "stats.json",
         ]
@@ -129,7 +126,6 @@ describe('@tramvai/cli build command', () => {
         [
           "module.css",
           "module_client.js",
-          "module_server.css",
           "module_server.js",
           "stats.json",
         ]

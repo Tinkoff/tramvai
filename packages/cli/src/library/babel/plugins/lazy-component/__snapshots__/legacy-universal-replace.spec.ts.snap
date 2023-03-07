@@ -14,9 +14,7 @@ const load = lazy(() => import('./cmp'));
       ↓ ↓ ↓ ↓ ↓ ↓
 
 const lazy = (imp) => console.log(imp);
-
 const load = lazy(() => import('./cmp'));
-
 (async () => {
   const { default: cmp } = await import('./cmp');
   console.log(cmp.actions);
@@ -39,39 +37,28 @@ import asyncUniversal, {
   asyncUniversalPack,
 } from '@tinkoff/platform-legacy/utils/decorators/asyncUniversal';
 import { lazy as _lazy } from '@tramvai/react';
-
 _lazy({
   chunkName() {
     return 'cmp';
   },
-
   requireSync(props) {
     return __webpack_require__(this.resolve(props));
   },
-
   isReady(props) {
     const key = this.resolve(props);
     return !!__webpack_modules__[key];
   },
-
-  importAsync: () =>
-    import(
-      /* webpackChunkName: "cmp" */
-      './cmp'
-    ),
-
+  importAsync: () => import(/* webpackChunkName: "cmp" */ './cmp'),
   requireAsync(props) {
     const key = this.resolve(props);
     return this.importAsync(props).then((resolved) => {
       return resolved;
     });
   },
-
   resolve() {
     return require.resolveWeak('./cmp');
   },
 });
-
 export const packed = asyncUniversalPack({});
 
 
@@ -86,34 +73,24 @@ universal(import('./cmp'))
       ↓ ↓ ↓ ↓ ↓ ↓
 
 import { lazy as _lazy } from '@tramvai/react';
-
 _lazy({
   chunkName() {
     return 'cmp';
   },
-
   requireSync(props) {
     return __webpack_require__(this.resolve(props));
   },
-
   isReady(props) {
     const key = this.resolve(props);
     return !!__webpack_modules__[key];
   },
-
-  importAsync: () =>
-    import(
-      /* webpackChunkName: "cmp" */
-      './cmp'
-    ),
-
+  importAsync: () => import(/* webpackChunkName: "cmp" */ './cmp'),
   requireAsync(props) {
     const key = this.resolve(props);
     return this.importAsync(props).then((resolved) => {
       return resolved;
     });
   },
-
   resolve() {
     return require.resolveWeak('./cmp');
   },

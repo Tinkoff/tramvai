@@ -3,7 +3,10 @@ import { ServerLoader as LowLevelLoader } from '@tinkoff/module-loader-server';
 import type { ChildAppFinalConfig } from '@tramvai/tokens-child-app';
 import type { CREATE_CACHE_TOKEN, LOGGER_TOKEN, Cache } from '@tramvai/tokens-common';
 import { Loader } from '../shared/loader';
-import type { ModuleFederationContainer } from '../shared/webpack/moduleFederation';
+import type {
+  ModuleFederationContainer,
+  ModuleFederationStats,
+} from '../shared/webpack/moduleFederation';
 import { initModuleFederation } from '../shared/webpack/moduleFederation';
 import { getModuleFederation } from '../shared/webpack/moduleFederation';
 import type { ChildAppModuleWrapper } from '../shared/types/module';
@@ -12,6 +15,7 @@ export class ServerLoader extends Loader {
   private readonly loader: LowLevelLoader;
   private readonly initializedMap = new WeakMap<ModuleFederationContainer, ChildAppModuleWrapper>();
   private internalLoadCache: Cache; // used to clear cache for debug
+  private log: ReturnType<typeof LOGGER_TOKEN>;
   constructor({
     logger,
     createCache,
@@ -26,18 +30,29 @@ export class ServerLoader extends Loader {
     });
 
     this.internalLoadCache = cache;
+    this.log = logger('child-app:loader');
     this.loader = new LowLevelLoader({
       cache,
-      log: logger('child-app:loader'),
+      log: this.log,
     });
   }
 
   async load(config: ChildAppFinalConfig): Promise<ChildApp | void> {
-    await this.loader.resolveByUrl<ModuleFederationContainer>(config.server.entry, {
-      codePrefix: `var ASSETS_PREFIX="${config.client.baseUrl}";`,
-      displayName: config.name,
-      kind: 'child-app',
-    });
+    await Promise.all([
+      this.loader.resolveByUrl<ModuleFederationContainer>(config.server.entry, {
+        codePrefix: `var ASSETS_PREFIX="${config.client.baseUrl}";`,
+        displayName: config.name,
+        kind: 'child-app',
+      }),
+      this.loader
+        .resolveByUrl(config.client.stats, {
+          type: 'json',
+          kind: 'child-app stats',
+          displayName: config.name,
+        })
+        // we can live without stats
+        .catch(() => {}),
+    ]);
 
     await this.init(config);
 
@@ -53,8 +68,16 @@ export class ServerLoader extends Loader {
   async init(config: ChildAppFinalConfig): Promise<void> {
     const container = this.loader.getByUrl<ModuleFederationContainer>(config.server.entry);
 
-    if (container) {
+    if (!container) {
+      return;
+    }
+
+    try {
       await initModuleFederation(container, 'default');
+
+      // copy some logic from https://github.com/module-federation/universe/blob/02221527aa684d2a37773c913bf341748fd34ecf/packages/node/src/plugins/loadScript.ts#L66
+      // to implement the same logic for loading child-app as UniversalModuleFederation
+      global.__remote_scope__._config[config.name] = config.server.entry;
 
       const factory = (await getModuleFederation(
         container,
@@ -63,12 +86,20 @@ export class ServerLoader extends Loader {
       const entry = factory();
 
       this.initializedMap.set(container, entry);
+    } catch (err: any) {
+      this.log.error(err);
+      throw err;
     }
   }
 
   get(config: ChildAppFinalConfig): ChildApp | void {
     const container = this.loader.getByUrl<ModuleFederationContainer>(config.server.entry);
+    const entry = container && this.initializedMap.get(container);
 
-    return container && this.resolve(this.initializedMap.get(container)!);
+    return entry && this.resolve(entry);
+  }
+
+  getStats(config: ChildAppFinalConfig): ModuleFederationStats | void {
+    return this.loader.getByUrl<ModuleFederationStats>(config.client.stats);
   }
 }

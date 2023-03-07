@@ -93,6 +93,9 @@ describe('JSON schema для tramvai.json', () => {
             "postcss": {},
             "root": "src/app",
             "serverApiDir": "src/api",
+            "shared": {
+              "deps": [],
+            },
             "sourceMap": false,
             "splitChunks": {
               "commonChunkSplitNumber": 3,
@@ -142,6 +145,9 @@ describe('JSON schema для tramvai.json', () => {
               "cssLocalIdentName": "[hash:base64:5]",
             },
             "root": "src/module",
+            "shared": {
+              "deps": [],
+            },
             "sourceMap": false,
             "terser": {
               "parallel": true,

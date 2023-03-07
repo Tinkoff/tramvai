@@ -58,7 +58,7 @@ export class ServerLoader {
   loadByUrl<R = any>(url: string, options: LoadOptions = {}): R | Promise<R> {
     const key = this.getCacheKey(url, options);
     const mod: R | void = this.cache.get(key);
-    const { displayName: displayNameIn, kind = 'module' } = options;
+    const { displayName: displayNameIn, kind = 'module', type = 'js' } = options;
     const displayName = displayNameIn ? `${kind} "${displayNameIn}"` : kind;
 
     if (mod) {
@@ -77,20 +77,29 @@ export class ServerLoader {
 
     const { integrity, codePrefix } = options;
 
-    const fetchRequest = this.fetchFromUrl(url)
-      .then((code) => {
-        if (integrity && !ssri.checkData(code, integrity)) {
+    const fetchRequest = this.fetchFromUrl(url, options)
+      .then((response) => {
+        if (integrity && !ssri.checkData(response, integrity)) {
           throw new Error(
             `EINTEGRITY: ${displayName} from ${url} doesn't match integrity ${integrity}`
           );
         }
-        const moduleInstance = this.requireFromString(code, { key, url, codePrefix });
+
+        let parsedResponse;
+
+        if (type === 'json') {
+          parsedResponse = response;
+        }
+
+        if (!parsedResponse) {
+          parsedResponse = this.requireFromString(response, { key, url, codePrefix });
+        }
 
         this.log.debug(`${displayName} ${url} successfully parsed`);
 
-        this.cache.set(key, moduleInstance);
+        this.cache.set(key, parsedResponse);
 
-        return moduleInstance;
+        return parsedResponse;
       })
       .catch((err) => {
         this.log.error({
@@ -120,10 +129,10 @@ export class ServerLoader {
     return url;
   }
 
-  protected fetchFromUrl(url: string) {
+  protected fetchFromUrl(url: string, { type = 'js' }: LoadOptions) {
     return this.request({
       url,
-      responseType: 'buffer',
+      responseType: type === 'json' ? 'json' : 'buffer',
       timeout: this.timeout,
     }).then((response) => {
       this.log.debug(`${url} loaded`);
