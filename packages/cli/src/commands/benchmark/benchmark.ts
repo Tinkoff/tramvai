@@ -5,8 +5,10 @@ import type { Result } from '../../api/benchmark';
 
 import { app } from '../index';
 
+const roundStats = (n: number) => Math.round(100 * n) / 100;
+
 const formatStats = (stats: Result[string]['client']) => {
-  return `${stats.mean}ms ± ${Math.round(100 * stats.variance) / 100}%`;
+  return `${roundStats(stats.mean)}ms ± ${roundStats(stats.variance)}%`;
 };
 
 const formatStatsTable = (stats: Result) => {

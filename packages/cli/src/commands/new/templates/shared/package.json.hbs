@@ -4,6 +4,8 @@
   "scripts": {
     "start": "tramvai start {{configEntry.name}}",
     "build": "tramvai build {{configEntry.name}}",
+    "preview": "tramvai start-prod {{configEntry.name}}",
+    "analyze": "tramvai analyze {{configEntry.name}}",
     "lint": "eslint --ext .ts,.tsx --ignore-path .gitignore ."{{#if isJest}},
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",

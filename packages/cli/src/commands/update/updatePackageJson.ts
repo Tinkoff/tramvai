@@ -10,7 +10,11 @@ const isUnifiedVersion = (name: string) => {
   return name.startsWith('@tramvai');
 };
 
-const getVersionFromDep = (dep: string) => parse(dep)?.version || minVersion(dep)?.version;
+const getVersionFromDep = (dep?: string) => {
+  if (dep) {
+    return parse(dep)?.version || minVersion(dep)?.version;
+  }
+};
 
 const updateDependencies = (
   dependencies: Record<string, string> = {},
@@ -65,7 +69,9 @@ export const updatePackageJson = async (version: string) => {
   const currentVersion = getVersionFromDep(content.dependencies['@tramvai/core']);
 
   if (!currentVersion) {
-    throw new Error("Couldn't resolve current tramvai version");
+    throw new Error(
+      "Couldn't resolve current tramvai version, do you have '@tramvai/core' package in your dependencies?"
+    );
   }
 
   if (currentVersion === version) {

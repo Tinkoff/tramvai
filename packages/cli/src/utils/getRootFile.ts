@@ -12,7 +12,11 @@ export function getRootFile<T>(
       content: require(path),
       isSuccessful: true,
     };
-  } catch (e) {
+  } catch (error) {
+    if (error instanceof SyntaxError) {
+      throw error;
+    }
+
     return {
       path,
       content: undefined,

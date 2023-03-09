@@ -5,7 +5,7 @@ export const checkConfigExists: Validator = ({ config }) => {
 
   if (!configParameters) {
     throw new Error(
-      `[checkConfigExists] Не создан tramvai.json в корне проекта. Для продолжения работы необходимо создать tramvai.json или запустить команду tramvai new myAwesomeApp`
+      `[checkConfigExists] tramvai.json config is missing. To resolve create tramvai.json config manually, or create a new app with command "tramvai new myAwesomeApp"`
     );
   }
 

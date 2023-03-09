@@ -101,7 +101,6 @@ export async function cliInitialized(cliArgs = process.argv) {
       event: 'GLOBAL:ERROR',
       message: e.message || e,
     });
-    console.error(e);
     sentry.captureException(e);
 
     throw e;

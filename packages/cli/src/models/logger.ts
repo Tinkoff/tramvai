@@ -1,3 +1,5 @@
+import chalk from 'chalk';
+
 interface LogEvent {
   type: 'error' | 'warning' | 'info' | 'debug';
   event: string; // уникальный идентификатор
@@ -8,11 +10,26 @@ interface LogEvent {
 export class Logger {
   event(event: LogEvent): void {
     if (event.type === 'error') {
-      console.error(event.type, event.event, event.message, event.payload);
+      console.error(
+        chalk.red(event.type),
+        chalk.bgRed(event.event),
+        event.message,
+        event.payload ?? ''
+      );
     } else if (event.type === 'warning') {
-      console.warn(event.type, event.event, event.message, event.payload);
+      console.warn(
+        chalk.yellow(event.type),
+        chalk.bgYellow(event.event),
+        event.message,
+        event.payload ?? ''
+      );
     } else if (event.type === 'info' || process.env.DEBUG_MODE === 'true') {
-      console.log(event.type, event.event, event.message, event.payload);
+      console.log(
+        chalk.magenta(event.type),
+        chalk.bgMagenta(event.event),
+        event.message,
+        event.payload ?? ''
+      );
     }
   }
 }

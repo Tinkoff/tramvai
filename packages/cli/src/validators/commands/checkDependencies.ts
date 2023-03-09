@@ -2,6 +2,7 @@ import any from '@tinkoff/utils/array/any';
 import eachObj from '@tinkoff/utils/object/each';
 import { sync as resolve } from 'resolve';
 import { diff } from 'semver';
+import chalk from 'chalk';
 import type { Validator } from './validator.h';
 
 const depsToCheck = [/^webpack$/, /^@babel/, /^postcss/];
@@ -38,7 +39,9 @@ export const checkDependencies: Validator = async ({ logger }) => {
             logger.event({
               type: versionDiff === 'major' ? 'error' : 'warning',
               event: 'COMMAND:VALIDATE:DEPENDENCIES',
-              message: `Package ${packageName} has duplicates in @tramvai/cli (${pathFromCli}) and in the process.cwd (${pathFromRoot})`,
+              message: `Package ${chalk.underline(
+                packageName
+              )} has duplicates in @tramvai/cli (${pathFromCli}) and in the process.cwd (${pathFromRoot})`,
             });
           }
         } catch (err) {}
@@ -51,17 +54,18 @@ export const checkDependencies: Validator = async ({ logger }) => {
       name: 'checkDependencies',
       status: hasCriticalMismatch ? 'error' : 'warning',
       message: `
-Некоторые важные пакеты необходимые для работы @tramvai/cli дублируются,
-что может привести к неочевидным багам и проблемам из-за особенностей commonjs по поиску импортируемых модулей.
+Found duplicates of some of the important dependencies for @tramvai/cli.
+That can lead to unexpected problems due to how commonjs resolves imported modules.
 
-Во избежании возможных проблем желательно провести дедупликацию таких пакетов.
-Сам список проблемных пакетов выведен выше.
-Для дедупликации можно предпринять следующие шаги (после каждого шага можно перезапустить сборку для проверки):
-    1. Вызвать команды дедупликации своего пакетного менеджера: npm dedupe; yarn-deduplicate
-    2. Пересобрать lock файл полностью (удалить node_modules, удалить package-lock.json или yarn.lock и запустить установку пакетов)
-    3. Если ничего из выше не помогло, то проверить какие пакеты тянут в сборку проблемные пакеты и постараться реорганизовать работу с ними (npm ls; yarn why)
-    4. Возможно дубликаты ничего не ломают и их можно не трогать, если проблемы всё же есть и их не получается решить обратитесь в чат #tramvai с описанием проблемы
-            `,
+To avoid possible problems it is preferably to do deduplication of the dependencies.
+To do it refer the docs - https://tramvai.dev/docs/mistakes/duplicate-dependencies#using-package-manager
+The exact list of important duplicates is above.
+${
+  hasCriticalMismatch
+    ? ''
+    : 'Please note that duplicates above not necessarily will cause problems, but if you have some cryptic issue with the build consider fixing duplicates first'
+}
+`,
     };
   }
 

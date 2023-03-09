@@ -16,5 +16,5 @@ export const checkVersion = async (_, { to: version = 'latest' }: Params) => {
     };
   }
 
-  throw new Error(`Tramvai version ${version} does not exists`);
+  throw new Error(`Tramvai version ${version} does not exist`);
 };

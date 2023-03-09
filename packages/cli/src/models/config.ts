@@ -33,8 +33,8 @@ export class ConfigManager {
     const entry = this.config.projects[projectName];
 
     if (!entry) {
-      console.error('This repo support projects: ', Object.keys(this.config.projects));
-      throw new Error(`${projectName} not found in platform.json`);
+      console.error('This repo supports following projects: ', Object.keys(this.config.projects));
+      throw new Error(`${projectName} not found in tramvai.json`);
     }
 
     return entry;
@@ -136,7 +136,11 @@ export class ConfigManager {
         })
         .join('\n');
 
-      throw new Error(`[validateConfig] ${errorsMessage}`);
+      throw new Error(`[validateConfig] Config validation failed. Check errors below and make appropriate changes.
+If this errors appeared after updating tramvai dependencies make sure you use command "tramvai update" to make the update or consult the docs to see config changes for your version
+
+${errorsMessage}
+`);
     }
   }
 }

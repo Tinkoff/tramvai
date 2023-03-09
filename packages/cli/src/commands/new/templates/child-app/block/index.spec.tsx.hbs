@@ -12,7 +12,8 @@ describe('testChildApp', () => {
       childApp: { di, Component },
       close,
     } = await testChildApp(childApp);
-    const { render } = testComponent(<Component di={di} props={{}} />);
+    const props = {};
+    const { render } = testComponent(<Component di={di} props={props} />);
 
     expect(render.getAllByText('Child App microfront')).toBeTruthy();
 

@@ -74,7 +74,7 @@ describe('enmasse', () => {
 
           rimraf.sync(resolve(appCwd, 'dist'));
 
-          // На MacOS chulk генерирует дополнительные символы в снапшот тестах,
+          // На MacOS chalk генерирует дополнительные символы в снапшот тестах,
           // принудительно отключаем colorized output https://github.com/chalk/supports-color#info
           process.env = { ...process.env, FORCE_COLOR: '0' };
         });

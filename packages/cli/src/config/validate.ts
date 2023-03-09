@@ -26,7 +26,9 @@ export const isChildApp = <E extends Env>(
 };
 
 const throwErrorMissing = (config: string, path: string) => {
-  throw new Error(`Can not resolve '${path}', check your configuration: '${config}'`);
+  throw new Error(
+    `Can not resolve path '${path}', check your tramvai.json configuration for option '${config}'`
+  );
 };
 
 export const validate = (configManager: ConfigManager<any, any>) => {

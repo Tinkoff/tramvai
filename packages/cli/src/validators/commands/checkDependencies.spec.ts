@@ -1,4 +1,5 @@
 import { sync as mockResolve } from 'resolve';
+import chalk from 'chalk';
 import type { Context } from '../../models/context';
 import { checkDependencies } from './checkDependencies';
 
@@ -38,7 +39,7 @@ describe('validators/checkDependencies', () => {
   });
 
   it('should return ok when all dependecies good', async () => {
-    expect(await checkDependencies(context)).toEqual({
+    expect(await checkDependencies(context, {})).toEqual({
       name: 'checkDependencies',
       status: 'ok',
     });
@@ -61,20 +62,17 @@ describe('validators/checkDependencies', () => {
       return `/app/${name}`;
     });
 
-    expect(await checkDependencies(context)).toMatchInlineSnapshot(`
+    expect(await checkDependencies(context, {})).toMatchInlineSnapshot(`
       {
         "message": "
-      Некоторые важные пакеты необходимые для работы @tramvai/cli дублируются,
-      что может привести к неочевидным багам и проблемам из-за особенностей commonjs по поиску импортируемых модулей.
+      Found duplicates of some of the important dependencies for @tramvai/cli.
+      That can lead to unexpected problems due to how commonjs resolves imported modules.
 
-      Во избежании возможных проблем желательно провести дедупликацию таких пакетов.
-      Сам список проблемных пакетов выведен выше.
-      Для дедупликации можно предпринять следующие шаги (после каждого шага можно перезапустить сборку для проверки):
-          1. Вызвать команды дедупликации своего пакетного менеджера: npm dedupe; yarn-deduplicate
-          2. Пересобрать lock файл полностью (удалить node_modules, удалить package-lock.json или yarn.lock и запустить установку пакетов)
-          3. Если ничего из выше не помогло, то проверить какие пакеты тянут в сборку проблемные пакеты и постараться реорганизовать работу с ними (npm ls; yarn why)
-          4. Возможно дубликаты ничего не ломают и их можно не трогать, если проблемы всё же есть и их не получается решить обратитесь в чат #tramvai с описанием проблемы
-                  ",
+      To avoid possible problems it is preferably to do deduplication of the dependencies.
+      To do it refer the docs - https://tramvai.dev/docs/mistakes/duplicate-dependencies#using-package-manager
+      The exact list of important duplicates is above.
+      Please note that duplicates above not necessarily will cause problems, but if you have some cryptic issue with the build consider fixing duplicates first
+      ",
         "name": "checkDependencies",
         "status": "warning",
       }
@@ -85,22 +83,25 @@ describe('validators/checkDependencies', () => {
     expect(mockLog).toHaveBeenCalledWith({
       type: 'warning',
       event: 'COMMAND:VALIDATE:DEPENDENCIES',
-      message:
-        'Package webpack has duplicates in @tramvai/cli (/app/webpack/package.json) and in the process.cwd (/app/@tramvai/cli/webpack/package.json)',
+      message: `Package ${chalk.underline(
+        'webpack'
+      )} has duplicates in @tramvai/cli (/app/webpack/package.json) and in the process.cwd (/app/@tramvai/cli/webpack/package.json)`,
     });
 
     expect(mockLog).toHaveBeenCalledWith({
       type: 'warning',
       event: 'COMMAND:VALIDATE:DEPENDENCIES',
-      message:
-        'Package @babel/runtime has duplicates in @tramvai/cli (/app/@babel/runtime/package.json) and in the process.cwd (/app/@tramvai/cli/@babel/runtime/package.json)',
+      message: `Package ${chalk.underline(
+        '@babel/runtime'
+      )} has duplicates in @tramvai/cli (/app/@babel/runtime/package.json) and in the process.cwd (/app/@tramvai/cli/@babel/runtime/package.json)`,
     });
 
     expect(mockLog).toHaveBeenCalledWith({
       type: 'warning',
       event: 'COMMAND:VALIDATE:DEPENDENCIES',
-      message:
-        'Package postcss-modules-tilda has duplicates in @tramvai/cli (/app/postcss-modules-tilda/package.json) and in the process.cwd (/app/@tramvai/cli/postcss-modules-tilda/package.json)',
+      message: `Package ${chalk.underline(
+        'postcss-modules-tilda'
+      )} has duplicates in @tramvai/cli (/app/postcss-modules-tilda/package.json) and in the process.cwd (/app/@tramvai/cli/postcss-modules-tilda/package.json)`,
     });
   });
 
@@ -121,20 +122,17 @@ describe('validators/checkDependencies', () => {
       return `/app/${name}`;
     });
 
-    expect(await checkDependencies(context)).toMatchInlineSnapshot(`
+    expect(await checkDependencies(context, {})).toMatchInlineSnapshot(`
       {
         "message": "
-      Некоторые важные пакеты необходимые для работы @tramvai/cli дублируются,
-      что может привести к неочевидным багам и проблемам из-за особенностей commonjs по поиску импортируемых модулей.
+      Found duplicates of some of the important dependencies for @tramvai/cli.
+      That can lead to unexpected problems due to how commonjs resolves imported modules.
 
-      Во избежании возможных проблем желательно провести дедупликацию таких пакетов.
-      Сам список проблемных пакетов выведен выше.
-      Для дедупликации можно предпринять следующие шаги (после каждого шага можно перезапустить сборку для проверки):
-          1. Вызвать команды дедупликации своего пакетного менеджера: npm dedupe; yarn-deduplicate
-          2. Пересобрать lock файл полностью (удалить node_modules, удалить package-lock.json или yarn.lock и запустить установку пакетов)
-          3. Если ничего из выше не помогло, то проверить какие пакеты тянут в сборку проблемные пакеты и постараться реорганизовать работу с ними (npm ls; yarn why)
-          4. Возможно дубликаты ничего не ломают и их можно не трогать, если проблемы всё же есть и их не получается решить обратитесь в чат #tramvai с описанием проблемы
-                  ",
+      To avoid possible problems it is preferably to do deduplication of the dependencies.
+      To do it refer the docs - https://tramvai.dev/docs/mistakes/duplicate-dependencies#using-package-manager
+      The exact list of important duplicates is above.
+
+      ",
         "name": "checkDependencies",
         "status": "error",
       }
@@ -145,22 +143,25 @@ describe('validators/checkDependencies', () => {
     expect(mockLog).toHaveBeenCalledWith({
       type: 'error',
       event: 'COMMAND:VALIDATE:DEPENDENCIES',
-      message:
-        'Package webpack has duplicates in @tramvai/cli (/app/webpack/package.json) and in the process.cwd (/app/@tramvai/cli/webpack/package.json)',
+      message: `Package ${chalk.underline(
+        'webpack'
+      )} has duplicates in @tramvai/cli (/app/webpack/package.json) and in the process.cwd (/app/@tramvai/cli/webpack/package.json)`,
     });
 
     expect(mockLog).toHaveBeenCalledWith({
       type: 'warning',
       event: 'COMMAND:VALIDATE:DEPENDENCIES',
-      message:
-        'Package @babel/runtime has duplicates in @tramvai/cli (/app/@babel/runtime/package.json) and in the process.cwd (/app/@tramvai/cli/@babel/runtime/package.json)',
+      message: `Package ${chalk.underline(
+        '@babel/runtime'
+      )} has duplicates in @tramvai/cli (/app/@babel/runtime/package.json) and in the process.cwd (/app/@tramvai/cli/@babel/runtime/package.json)`,
     });
 
     expect(mockLog).toHaveBeenCalledWith({
       type: 'warning',
       event: 'COMMAND:VALIDATE:DEPENDENCIES',
-      message:
-        'Package postcss-modules-tilda has duplicates in @tramvai/cli (/app/postcss-modules-tilda/package.json) and in the process.cwd (/app/@tramvai/cli/postcss-modules-tilda/package.json)',
+      message: `Package ${chalk.underline(
+        'postcss-modules-tilda'
+      )} has duplicates in @tramvai/cli (/app/postcss-modules-tilda/package.json) and in the process.cwd (/app/@tramvai/cli/postcss-modules-tilda/package.json)`,
     });
   });
 });

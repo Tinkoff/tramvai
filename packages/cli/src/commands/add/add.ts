@@ -12,6 +12,12 @@ export type Params = {
 export default async (context: Context, { packageName, dev }: Params): Promise<CommandResult> => {
   const version = await findTramvaiVersion();
 
+  if (!version) {
+    throw new Error(
+      'Could not resolve tramvai version from package.json. Do you have @tramvai/core installed?'
+    );
+  }
+
   await context.packageManager.install({
     name: packageName,
     version,

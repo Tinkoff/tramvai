@@ -1,5 +1,7 @@
 import * as Sentry from '@sentry/node';
 
+const packageJson = require('../../package.json');
+
 let localSentry;
 
 export function initSentry() {
@@ -14,6 +16,7 @@ export function initSentry() {
     job: process?.env.CI_JOB_URL,
     repo: process?.env.CI_REPOSITORY_URL,
     branch: process?.env.CI_COMMIT_REF_NAME,
+    version: packageJson?.version,
   };
   Sentry.setContext('project', projectContext);
 
