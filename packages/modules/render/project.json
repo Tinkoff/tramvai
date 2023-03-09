@@ -7,7 +7,9 @@
       "outputs": [
         "packages/modules/render/lib",
         "packages/modules/render/__migrations__",
-        "packages/modules/render/package.json"
+        "packages/modules/render/package.json",
+        "packages/modules/render/tests.js",
+        "packages/modules/render/tests.d.ts"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }

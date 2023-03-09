@@ -7,7 +7,9 @@
       "outputs": [
         "packages/modules/http-client/lib",
         "packages/modules/http-client/__migrations__",
-        "packages/modules/http-client/package.json"
+        "packages/modules/http-client/package.json",
+        "packages/modules/http-client/tests.js",
+        "packages/modules/http-client/tests.d.ts"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }
