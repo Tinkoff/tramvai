@@ -234,31 +234,6 @@
                           },
                           "additionalProperties": false
                         },
-                        "extensions": {
-                          "type": "object",
-                          "properties": {
-                            "vue": {
-                              "anyOf": [
-                                {
-                                  "type": "object",
-                                  "properties": {
-                                    "enabled": {
-                                      "type": "boolean"
-                                    },
-                                    "compiler": {
-                                      "type": "string"
-                                    }
-                                  },
-                                  "additionalProperties": false
-                                },
-                                {
-                                  "type": "boolean"
-                                }
-                              ]
-                            }
-                          },
-                          "additionalProperties": false
-                        },
                         "profile": {
                           "type": "boolean"
                         },

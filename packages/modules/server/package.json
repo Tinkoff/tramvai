@@ -30,11 +30,11 @@
     "@tramvai/papi": "0.0.0-stub",
     "@tramvai/tokens-server": "0.0.0-stub",
     "@tramvai/tokens-server-private": "0.0.0-stub",
-    "fastify": "^4.6.0",
-    "@fastify/cookie": "^8.1.0",
-    "@fastify/compress": "^6.1.1",
-    "@fastify/formbody": "^7.2.0",
-    "@fastify/static": "^6.5.0",
+    "fastify": "^4.14.1",
+    "@fastify/cookie": "^8.3.0",
+    "@fastify/compress": "^6.2.0",
+    "@fastify/formbody": "^7.4.0",
+    "@fastify/static": "^6.9.0",
     "http-proxy-middleware": "^2.0.2"
   },
   "peerDependencies": {
