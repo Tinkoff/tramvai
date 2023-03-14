@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 
-interface LogEvent {
-  type: 'error' | 'warning' | 'info' | 'debug';
+export interface LogEvent {
+  type: 'success' | 'error' | 'warning' | 'info' | 'debug';
   event: string; // уникальный идентификатор
   message: string;
   payload?: any;
@@ -9,24 +9,31 @@ interface LogEvent {
 
 export class Logger {
   event(event: LogEvent): void {
-    if (event.type === 'error') {
+    if (event.type === 'success') {
+      console.log(
+        chalk.bgGreen(event.type),
+        chalk.green(event.event),
+        event.message,
+        event.payload ?? ''
+      );
+    } else if (event.type === 'error') {
       console.error(
-        chalk.red(event.type),
-        chalk.bgRed(event.event),
+        chalk.bgRed(event.type),
+        chalk.red(event.event),
         event.message,
         event.payload ?? ''
       );
     } else if (event.type === 'warning') {
       console.warn(
-        chalk.yellow(event.type),
-        chalk.bgYellow(event.event),
+        chalk.bgYellow(event.type),
+        chalk.yellow(event.event),
         event.message,
         event.payload ?? ''
       );
     } else if (event.type === 'info' || process.env.DEBUG_MODE === 'true') {
       console.log(
-        chalk.magenta(event.type),
-        chalk.bgMagenta(event.event),
+        chalk.bgMagenta(event.type),
+        chalk.magenta(event.event),
         event.message,
         event.payload ?? ''
       );

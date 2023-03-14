@@ -41,7 +41,7 @@ export class EnvironmentManagerServer extends EnvironmentManager {
 
     const path = require('path');
     return {
-      ...readFileWithEnv(path.resolve(process.cwd(), 'server', `env.js`)), // env.js убрать в будующем, как переедет платформа
+      ...readFileWithEnv(path.resolve(process.cwd(), 'server', `env.js`)), // env.js убрать в будущем, как переедет платформа
       ...readFileWithEnv(path.resolve(process.cwd(), `env.development.js`)),
       ...readFileWithEnv(path.resolve(process.cwd(), `env.js`)),
     };

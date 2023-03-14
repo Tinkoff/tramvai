@@ -31,9 +31,7 @@ const getResourceUrl = (resource: PageResource) => {
   if (isEmpty(resource.payload) || !isAbsoluteUrl(resource.payload)) {
     return undefined;
   }
-  return resource.payload.startsWith('//')
-    ? `https://${resource.payload.substr(2)}`
-    : resource.payload;
+  return resource.payload.startsWith('//') ? `https:${resource.payload}` : resource.payload;
 };
 
 export interface ResourcesInlinerType {
@@ -118,7 +116,10 @@ export class ResourcesInliner implements ResourcesInlinerType {
           this.scheduleFileLoad(resource, resourceInlineThreshold);
         }
       } catch (error) {
-        this.log.warn({
+        // If the ASSETS_PREFIX variable does not exist,
+        // or static files weren't deployed yet, we can't get
+        // information about files.
+        this.log.debug({
           event: 'file-content-length-load-failed',
           url,
           error,

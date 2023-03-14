@@ -114,6 +114,7 @@
     "ini": "^3.0.1",
     "inquirer": "^7.3.3",
     "inquirer-autocomplete-prompt": "^1.4.0",
+    "env-ci": "^5.0.2",
     "inspectpack": "^4.7.1",
     "latest-version": "^5.0.0",
     "less": "^3.13.1",

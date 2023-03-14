@@ -3,12 +3,20 @@ import { staticApp } from './application';
 import type { CommandResult } from '../../models/command';
 import type { ApplicationConfigEntry } from '../../typings/configEntry/application';
 
-export default (context: Context, parameters): Promise<CommandResult> => {
+export default async (context: Context, parameters): Promise<CommandResult> => {
   const { target } = parameters;
   const configEntry = context.config.getProject(target);
 
   if (configEntry.type === 'application') {
-    return staticApp(context, configEntry as ApplicationConfigEntry, parameters);
+    const result = await staticApp(context, configEntry as ApplicationConfigEntry, parameters);
+
+    context.logger.event({
+      type: 'success',
+      event: 'COMMAND:STATIC:SUCCESS',
+      message: result.message,
+    });
+
+    return result;
   }
 
   throw new Error(`Target '${configEntry.type}' not supported`);

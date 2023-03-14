@@ -4,22 +4,20 @@ import intersection from '@tinkoff/utils/array/intersection';
 import path from 'path';
 import { node } from 'execa';
 import waitOn from 'wait-on';
+import envCi from 'env-ci';
 import type { Context } from '../../models/context';
-import webpackBuild from '../../utils/webpackBuild';
-import { webpackClientConfig } from '../../library/webpack/application/client/prod';
-import { webpackServerConfig } from '../../library/webpack/application/server/prod';
 import type { CommandResult } from '../../models/command';
 import type { ApplicationConfigEntry } from '../../typings/configEntry/application';
 import type { Params } from './command';
 import { createConfigManager } from '../../config/configManager';
 import { request } from './request';
 import { generateStatic } from './generate';
-import { toWebpackConfig } from '../../library/webpack/utils/toWebpackConfig';
 import { copyStatsJsonFileToServerDirectory } from '../../builder/webpack/utils/copyStatsJsonFile';
 import { safeRequire } from '../../utils/safeRequire';
 import { app } from '../index';
 import { startStaticServer } from './staticServer';
 import { startServer } from './server';
+import { handleServerOutput } from './utils/handle-server-output';
 
 // eslint-disable-next-line max-statements
 export const staticApp = async (
@@ -36,18 +34,37 @@ export const staticApp = async (
   const serverConfigManager = clientConfigManager.withSettings({ buildType: 'server' });
 
   if (options.buildType !== 'none') {
+    context.logger.event({
+      type: 'debug',
+      event: 'COMMAND:STATIC:BUILD',
+      message: `message: build step was started`,
+    });
+
     await app.run('build', options);
+
     await copyStatsJsonFileToServerDirectory(clientConfigManager);
   } else {
     context.logger.event({
       type: 'debug',
       event: 'COMMAND:STATIC:BUILD',
-      message: `message: build step skipped`,
+      message: `message: build step was skipped`,
     });
   }
 
   const { name, host, port, staticPort, staticHost, output } = serverConfigManager;
   const root = serverConfigManager.buildPath;
+  const assetsPrefix = process.env.ASSETS_PREFIX;
+
+  if (!assetsPrefix) {
+    context.logger.event({
+      type: 'warning',
+      event: 'COMMAND:STATIC:BUILD',
+      message:
+        'message: ASSETS_PREFIX variable is not defined. It will cause ' +
+        'of incorrect urls for static assets in your files. Also, some features, ' +
+        'like a resources inlining will not work.',
+    });
+  }
 
   context.logger.event({
     type: 'debug',
@@ -57,17 +74,19 @@ export const staticApp = async (
 
   const server = node(path.resolve(root, 'server.js'), [], {
     cwd: root,
-    stdio: 'inherit',
     env: {
-      ...safeRequire(path.resolve(process.cwd(), 'env.development'), true),
-      ...safeRequire(path.resolve(process.cwd(), 'env'), true),
+      ...(process.env.DANGEROUS_UNSAFE_ENV_FILES === 'true' || !envCi().isCi
+        ? {
+            ...safeRequire(path.resolve(process.cwd(), 'env.development'), true),
+            ...safeRequire(path.resolve(process.cwd(), 'env'), true),
+          }
+        : {}),
       ...process.env,
       NODE_ENV: 'production',
       PORT: `${port}`,
       PORT_SERVER: `${port}`,
       ASSETS_PREFIX:
-        process.env.ASSETS_PREFIX ??
-        `http://${staticHost}:${staticPort}/${output.client.replace(/\/$/, '')}/`,
+        assetsPrefix ?? `http://${staticHost}:${staticPort}/${output.client.replace(/\/$/, '')}/`,
     },
   });
 
@@ -78,6 +97,13 @@ export const staticApp = async (
       message: `message: server.js launch failed`,
       payload: reason,
     });
+  });
+  server.stdout.on('data', (chunk: Buffer) => {
+    if (server.killed) {
+      return;
+    }
+
+    handleServerOutput(context.logger, chunk);
   });
 
   const bundleInfoPath = `http://localhost:${port}/${name}/papi/bundleInfo`;
