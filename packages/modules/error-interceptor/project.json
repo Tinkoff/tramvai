@@ -5,9 +5,8 @@
   "targets": {
     "build-publish": {
       "outputs": [
-        "packages/modules/error-interceptor/lib",
-        "packages/modules/error-interceptor/__migrations__",
-        "packages/modules/error-interceptor/package.json"
+        "packages/modules/error-interceptor/package.json",
+        "packages/modules/error-interceptor/lib"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }

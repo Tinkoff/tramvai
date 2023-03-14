@@ -5,9 +5,9 @@
   "targets": {
     "build-publish": {
       "outputs": [
+        "packages/modules/seo/package.json",
         "packages/modules/seo/lib",
         "packages/modules/seo/__migrations__",
-        "packages/modules/seo/package.json",
         "packages/modules/seo/tests.js",
         "packages/modules/seo/tests.d.ts"
       ],

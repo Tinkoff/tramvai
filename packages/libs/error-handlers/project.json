@@ -5,9 +5,8 @@
   "targets": {
     "build-publish": {
       "outputs": [
-        "packages/libs/error-handlers/lib",
-        "packages/libs/error-handlers/__migrations__",
-        "packages/libs/error-handlers/package.json"
+        "packages/libs/error-handlers/package.json",
+        "packages/libs/error-handlers/lib"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }

@@ -5,9 +5,8 @@
   "targets": {
     "build-publish": {
       "outputs": [
-        "packages/modules/cookie/lib",
-        "packages/modules/cookie/__migrations__",
-        "packages/modules/cookie/package.json"
+        "packages/modules/cookie/package.json",
+        "packages/modules/cookie/lib"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }

@@ -5,9 +5,8 @@
   "targets": {
     "build-publish": {
       "outputs": [
-        "packages/modules/autoscroll/lib",
-        "packages/modules/autoscroll/__migrations__",
-        "packages/modules/autoscroll/package.json"
+        "packages/modules/autoscroll/package.json",
+        "packages/modules/autoscroll/lib"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }

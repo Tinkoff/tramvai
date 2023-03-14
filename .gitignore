@@ -35,6 +35,8 @@ _node_modules/
 
 # Compiled sources
 lib
+tests.d.ts
+tests.js
 __migrations__
 **/dist
 stats.json

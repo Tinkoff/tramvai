@@ -5,9 +5,9 @@
   "targets": {
     "build-publish": {
       "outputs": [
-        "packages/libs/meta-tags-generate/lib",
+        "packages/libs/meta-tags-generate/package.json",
         "packages/libs/meta-tags-generate/__migrations__",
-        "packages/libs/meta-tags-generate/package.json"
+        "packages/libs/meta-tags-generate/lib"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }

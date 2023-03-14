@@ -5,9 +5,8 @@
   "targets": {
     "build-publish": {
       "outputs": [
-        "packages/libs/monkeypatch/lib",
-        "packages/libs/monkeypatch/__migrations__",
-        "packages/libs/monkeypatch/package.json"
+        "packages/libs/monkeypatch/package.json",
+        "packages/libs/monkeypatch/lib"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }

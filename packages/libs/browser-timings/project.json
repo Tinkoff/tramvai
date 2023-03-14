@@ -5,9 +5,8 @@
   "targets": {
     "build-publish": {
       "outputs": [
-        "packages/libs/browser-timings/lib",
-        "packages/libs/browser-timings/__migrations__",
-        "packages/libs/browser-timings/package.json"
+        "packages/libs/browser-timings/package.json",
+        "packages/libs/browser-timings/lib"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }

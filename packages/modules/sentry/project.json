@@ -5,9 +5,8 @@
   "targets": {
     "build-publish": {
       "outputs": [
-        "packages/modules/sentry/lib",
-        "packages/modules/sentry/__migrations__",
-        "packages/modules/sentry/package.json"
+        "packages/modules/sentry/package.json",
+        "packages/modules/sentry/lib"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }

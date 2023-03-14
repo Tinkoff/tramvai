@@ -11,8 +11,7 @@
     "./lib/server.js": "./lib/browser.js"
   },
   "files": [
-    "lib",
-    "plugins.js"
+    "lib"
   ],
   "sideEffects": [
     "./lib/index.js",

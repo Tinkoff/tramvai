@@ -33,6 +33,7 @@ export const testsBuild: Build = {
         format: 'cjs',
         exportsField: 'named',
         postfix: '.js',
+        inlineChunks: false,
       }
     );
 

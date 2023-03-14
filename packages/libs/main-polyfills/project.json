@@ -5,9 +5,8 @@
   "targets": {
     "build-publish": {
       "outputs": [
-        "packages/libs/main-polyfills/lib",
-        "packages/libs/main-polyfills/__migrations__",
-        "packages/libs/main-polyfills/package.json"
+        "packages/libs/main-polyfills/package.json",
+        "packages/libs/main-polyfills/lib"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }

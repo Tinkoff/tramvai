@@ -5,9 +5,9 @@
   "targets": {
     "build-publish": {
       "outputs": [
-        "packages/libs/dippy/lib",
+        "packages/libs/dippy/package.json",
         "packages/libs/dippy/__migrations__",
-        "packages/libs/dippy/package.json"
+        "packages/libs/dippy/lib"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }

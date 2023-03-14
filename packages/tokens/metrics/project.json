@@ -5,9 +5,8 @@
   "targets": {
     "build-publish": {
       "outputs": [
-        "packages/tokens/metrics/lib",
-        "packages/tokens/metrics/__migrations__",
-        "packages/tokens/metrics/package.json"
+        "packages/tokens/metrics/package.json",
+        "packages/tokens/metrics/lib"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }

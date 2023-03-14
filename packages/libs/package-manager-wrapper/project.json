@@ -5,9 +5,8 @@
   "targets": {
     "build-publish": {
       "outputs": [
-        "packages/libs/package-manager-wrapper/lib",
-        "packages/libs/package-manager-wrapper/__migrations__",
-        "packages/libs/package-manager-wrapper/package.json"
+        "packages/libs/package-manager-wrapper/package.json",
+        "packages/libs/package-manager-wrapper/lib"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }

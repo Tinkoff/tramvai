@@ -9,9 +9,10 @@
         "script": "build"
       },
       "outputs": [
+        "packages/cli/package.json",
         "packages/cli/lib",
-        "packages/cli/__migrations__",
-        "packages/cli/package.json"
+        "packages/cli/schema.json",
+        "packages/cli/__migrations__"
       ]
     }
   }

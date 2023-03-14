@@ -5,9 +5,8 @@
   "targets": {
     "build-publish": {
       "outputs": [
-        "packages/libs/safe-strings/lib",
-        "packages/libs/safe-strings/__migrations__",
-        "packages/libs/safe-strings/package.json"
+        "packages/libs/safe-strings/package.json",
+        "packages/libs/safe-strings/lib"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }

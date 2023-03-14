@@ -5,9 +5,8 @@
   "targets": {
     "build-publish": {
       "outputs": [
-        "packages/libs/tinkoff-request-http-client-adapter/lib",
-        "packages/libs/tinkoff-request-http-client-adapter/__migrations__",
-        "packages/libs/tinkoff-request-http-client-adapter/package.json"
+        "packages/libs/tinkoff-request-http-client-adapter/package.json",
+        "packages/libs/tinkoff-request-http-client-adapter/lib"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }

@@ -5,9 +5,8 @@
   "targets": {
     "build-publish": {
       "outputs": [
-        "packages/libs/react-hooks/lib",
-        "packages/libs/react-hooks/__migrations__",
-        "packages/libs/react-hooks/package.json"
+        "packages/libs/react-hooks/package.json",
+        "packages/libs/react-hooks/lib"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }

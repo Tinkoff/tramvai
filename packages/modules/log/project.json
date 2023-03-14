@@ -5,9 +5,8 @@
   "targets": {
     "build-publish": {
       "outputs": [
-        "packages/modules/log/lib",
-        "packages/modules/log/__migrations__",
-        "packages/modules/log/package.json"
+        "packages/modules/log/package.json",
+        "packages/modules/log/lib"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }

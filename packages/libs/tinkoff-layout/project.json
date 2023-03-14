@@ -5,9 +5,8 @@
   "targets": {
     "build-publish": {
       "outputs": [
-        "packages/libs/tinkoff-layout/lib",
-        "packages/libs/tinkoff-layout/__migrations__",
-        "packages/libs/tinkoff-layout/package.json"
+        "packages/libs/tinkoff-layout/package.json",
+        "packages/libs/tinkoff-layout/lib"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }

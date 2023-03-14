@@ -5,9 +5,8 @@
   "targets": {
     "build-publish": {
       "outputs": [
-        "packages/modules/request-limiter/lib",
-        "packages/modules/request-limiter/__migrations__",
-        "packages/modules/request-limiter/package.json"
+        "packages/modules/request-limiter/package.json",
+        "packages/modules/request-limiter/lib"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }

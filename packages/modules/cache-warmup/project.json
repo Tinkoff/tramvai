@@ -5,9 +5,8 @@
   "targets": {
     "build-publish": {
       "outputs": [
-        "packages/modules/cache-warmup/lib",
-        "packages/modules/cache-warmup/__migrations__",
-        "packages/modules/cache-warmup/package.json"
+        "packages/modules/cache-warmup/package.json",
+        "packages/modules/cache-warmup/lib"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }

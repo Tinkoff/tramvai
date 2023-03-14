@@ -5,9 +5,8 @@
   "targets": {
     "build-publish": {
       "outputs": [
-        "packages/modules/page-render-mode/lib",
-        "packages/modules/page-render-mode/__migrations__",
-        "packages/modules/page-render-mode/package.json"
+        "packages/modules/page-render-mode/package.json",
+        "packages/modules/page-render-mode/lib"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }

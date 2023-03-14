@@ -5,9 +5,8 @@
   "targets": {
     "build-publish": {
       "outputs": [
-        "packages/libs/measure-express-requests/lib",
-        "packages/libs/measure-express-requests/__migrations__",
-        "packages/libs/measure-express-requests/package.json"
+        "packages/libs/measure-express-requests/package.json",
+        "packages/libs/measure-express-requests/lib"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }

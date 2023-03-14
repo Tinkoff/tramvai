@@ -5,9 +5,8 @@
   "targets": {
     "build-publish": {
       "outputs": [
-        "packages/modules/deps-graph/lib",
-        "packages/modules/deps-graph/__migrations__",
-        "packages/modules/deps-graph/package.json"
+        "packages/modules/deps-graph/package.json",
+        "packages/modules/deps-graph/lib"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }

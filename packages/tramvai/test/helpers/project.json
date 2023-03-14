@@ -5,9 +5,8 @@
   "targets": {
     "build-publish": {
       "outputs": [
-        "packages/tramvai/test/helpers/lib",
-        "packages/tramvai/test/helpers/__migrations__",
-        "packages/tramvai/test/helpers/package.json"
+        "packages/tramvai/test/helpers/package.json",
+        "packages/tramvai/test/helpers/lib"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }

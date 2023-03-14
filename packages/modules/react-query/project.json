@@ -5,9 +5,9 @@
   "targets": {
     "build-publish": {
       "outputs": [
+        "packages/modules/react-query/package.json",
         "packages/modules/react-query/lib",
-        "packages/modules/react-query/__migrations__",
-        "packages/modules/react-query/package.json"
+        "packages/modules/react-query/__migrations__"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }

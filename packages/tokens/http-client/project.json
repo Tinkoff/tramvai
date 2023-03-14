@@ -5,9 +5,8 @@
   "targets": {
     "build-publish": {
       "outputs": [
-        "packages/tokens/http-client/lib",
-        "packages/tokens/http-client/__migrations__",
-        "packages/tokens/http-client/package.json"
+        "packages/tokens/http-client/package.json",
+        "packages/tokens/http-client/lib"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }

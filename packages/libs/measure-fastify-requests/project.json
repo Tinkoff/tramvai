@@ -5,9 +5,8 @@
   "targets": {
     "build-publish": {
       "outputs": [
-        "packages/libs/measure-fastify-requests/lib",
-        "packages/libs/measure-fastify-requests/__migrations__",
-        "packages/libs/measure-fastify-requests/package.json"
+        "packages/libs/measure-fastify-requests/package.json",
+        "packages/libs/measure-fastify-requests/lib"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }

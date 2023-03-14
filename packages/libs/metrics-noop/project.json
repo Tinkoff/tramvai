@@ -5,9 +5,8 @@
   "targets": {
     "build-publish": {
       "outputs": [
-        "packages/libs/metrics-noop/lib",
-        "packages/libs/metrics-noop/__migrations__",
-        "packages/libs/metrics-noop/package.json"
+        "packages/libs/metrics-noop/package.json",
+        "packages/libs/metrics-noop/lib"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }

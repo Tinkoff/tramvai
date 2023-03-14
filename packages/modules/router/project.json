@@ -5,11 +5,11 @@
   "targets": {
     "build-publish": {
       "outputs": [
-        "packages/modules/router/lib",
-        "packages/modules/router/__migrations__",
         "packages/modules/router/package.json",
+        "packages/modules/router/lib",
         "packages/modules/router/tests.js",
-        "packages/modules/router/tests.d.ts"
+        "packages/modules/router/tests.d.ts",
+        "packages/modules/router/__migrations__"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }

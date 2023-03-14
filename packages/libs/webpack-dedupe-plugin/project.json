@@ -5,8 +5,8 @@
   "targets": {
     "build-publish": {
       "outputs": [
-        "packages/libs/webpack-dedupe-plugin/lib",
-        "packages/libs/webpack-dedupe-plugin/package.json"
+        "packages/libs/webpack-dedupe-plugin/package.json",
+        "packages/libs/webpack-dedupe-plugin/lib"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }

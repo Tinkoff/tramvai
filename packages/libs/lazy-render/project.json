@@ -5,9 +5,8 @@
   "targets": {
     "build-publish": {
       "outputs": [
-        "packages/libs/lazy-render/lib",
-        "packages/libs/lazy-render/__migrations__",
-        "packages/libs/lazy-render/package.json"
+        "packages/libs/lazy-render/package.json",
+        "packages/libs/lazy-render/lib"
       ],
       "executor": "@tramvai/nx-plugin:build"
     }

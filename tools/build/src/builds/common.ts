@@ -149,12 +149,14 @@ export const createOutputOptions = (
     exportsField,
     postfix,
     postfixForEntry = true,
+    inlineChunks = true,
   }: {
     file: string;
     format: ModuleFormat;
     exportsField: 'auto' | 'named';
     postfix: Postfix;
     postfixForEntry?: boolean;
+    inlineChunks?: boolean;
   }
 ): OutputOptions => {
   const preserveModules = !!params.options.preserveModules;
@@ -178,12 +180,13 @@ export const createOutputOptions = (
     freeze: false,
     preserveModules,
     preserveModulesRoot: preserveModules ? params.options.sourceDir : undefined,
-    manualChunks: preserveModules
-      ? undefined
-      : (id) => {
-          if (id.match(/\.inline\.\w+$/)) {
-            return 'inline.inline';
-          }
-        },
+    manualChunks:
+      preserveModules || !inlineChunks
+        ? undefined
+        : (id) => {
+            if (id.match(/\.inline\.\w+$/)) {
+              return 'inline.inline';
+            }
+          },
   };
 };
