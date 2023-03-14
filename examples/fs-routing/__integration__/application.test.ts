@@ -34,6 +34,10 @@ describe('fs-routing', () => {
     return app.request('/third/').expect(200);
   });
 
+  it('request to page with dynamic params return status 200', async () => {
+    return app.request('/123/test/456/').expect(200);
+  });
+
   it('request to fourth page return status 500', async () => {
     return app.request('/fourth/').expect(500);
   });

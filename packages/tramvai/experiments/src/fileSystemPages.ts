@@ -46,7 +46,7 @@ export const staticFileSystemPageToPath = (pageComponent: string): string => {
       `${FILE_SYSTEM_PAGES_PREFIX}${process.env.__TRAMVAI_EXPERIMENTAL_FILE_SYSTEM_ROUTES_DIR}/`,
       ''
     )
-    .replace(/\[(.+)\]/g, ':$1')
+    .replace(/\[(.+?)\]/g, ':$1')
     .replace(/index$/g, '')}`;
 };
 

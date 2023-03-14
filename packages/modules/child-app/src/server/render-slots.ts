@@ -1,11 +1,10 @@
 import { extname } from 'path';
-import { coerce, maxSatisfying, gt, eq } from 'semver';
+import { gt, eq } from 'semver';
 import flatten from '@tinkoff/utils/array/flatten';
 import type { ExtractTokenType, ExtractDependencyType } from '@tinkoff/dippy';
 import { resolve } from '@tinkoff/url';
 import type {
   ChildAppDiManager,
-  ChildAppFinalConfig,
   ChildAppLoader,
   ChildAppPreloadManager,
   CHILD_APP_RESOLVE_CONFIG_TOKEN,

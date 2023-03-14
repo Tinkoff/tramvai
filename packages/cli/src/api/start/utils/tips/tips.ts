@@ -139,4 +139,13 @@ Check available render modes in tramvai`,
       return !safeRequireResolve('@tramvai/module-page-render-mode');
     },
   },
+  {
+    text: `Optimize your child-app size by enabling shared dependencies`,
+    docLink: 'references/modules/child-app#module-federation-sharing-dependencies',
+    isApplicable(di) {
+      const { type, shared } = di.get(CONFIG_MANAGER_TOKEN);
+
+      return type === 'child-app' && shared.deps.length === 0;
+    },
+  },
 ];
