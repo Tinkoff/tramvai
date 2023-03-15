@@ -26,12 +26,14 @@ describe('ssr-async-components', () => {
           
 
           
-          <link data-critical="true"
+          <link crossorigin="anonymous"
+            data-critical="true"
             onload="__preloadJS()"
             rel="stylesheet"
             href="\${STATIC_URL}/dist/client/pages-page.chunk.css"
           >
-          <link data-critical="true"
+          <link crossorigin="anonymous"
+            data-critical="true"
             onload="__preloadJS()"
             rel="stylesheet"
             href="\${STATIC_URL}/dist/client/InnerPageInitial.chunk.css"

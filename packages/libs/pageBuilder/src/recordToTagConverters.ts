@@ -107,6 +107,7 @@ const converters = {
   [StorageRecord.style]: ({ payload, attrs }: PageResource) => ({
     tag: 'link',
     attributes: {
+      crossorigin: 'anonymous',
       ...attrs,
       rel: 'stylesheet',
       href: payload,

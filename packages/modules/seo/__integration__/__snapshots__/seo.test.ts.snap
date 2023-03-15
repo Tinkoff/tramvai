@@ -21,7 +21,7 @@ exports[`seo ssr test common meta 1`] = `
     
     
     <style type="text/css"></style>
-    <link data-href="\${STATIC_URL}/dist/client/root.chunk.css" rel="stylesheet" >
+    <link crossorigin="anonymous" data-href="\${STATIC_URL}/dist/client/root.chunk.css" rel="stylesheet" >
     
 
     
@@ -70,7 +70,8 @@ exports[`seo ssr test default meta pack 1`] = `
     
 
     
-    <link data-critical="true"
+    <link crossorigin="anonymous"
+      data-critical="true"
       onload="__preloadJS()"
       rel="stylesheet"
       href="\${STATIC_URL}/dist/client/root.chunk.css"
@@ -234,7 +235,7 @@ exports[`seo ssr test og meta 1`] = `
     
     
     <style type="text/css"></style>
-    <link data-href="\${STATIC_URL}/dist/client/root.chunk.css" rel="stylesheet" >
+    <link crossorigin="anonymous" data-href="\${STATIC_URL}/dist/client/root.chunk.css" rel="stylesheet" >
     
 
     
@@ -291,7 +292,7 @@ exports[`seo ssr test twitter meta 1`] = `
     
     
     <style type="text/css"></style>
-    <link data-href="\${STATIC_URL}/dist/client/root.chunk.css" rel="stylesheet" >
+    <link crossorigin="anonymous" data-href="\${STATIC_URL}/dist/client/root.chunk.css" rel="stylesheet" >
     
 
     

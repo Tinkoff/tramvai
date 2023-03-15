@@ -36,7 +36,7 @@ describe('testPageResources', () => {
     expect(head).toMatchInlineSnapshot(`
       "
           <meta charset="UTF-8" >
-          <link rel="stylesheet" href="https://some-public.style/style.css" >
+          <link crossorigin="anonymous" rel="stylesheet" href="https://some-public.style/style.css" >
           <script>
             console.log("Hello, World!");
           </script>
