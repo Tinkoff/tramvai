@@ -7,7 +7,6 @@ exports[`client: create-token-pure.ts 1`] = `
 /* harmony export */ });
 /* harmony import */ var _tramvai_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/library/swc/__integration__/mocks/tramvai-core.ts");
 /* provided dependency */ var __react_refresh_utils__ = __webpack_require__("../../node_modules/@pmmmwh/react-refresh-webpack-plugin/lib/runtime/RefreshUtils.js");
-/* provided dependency */ var __react_refresh_error_overlay__ = __webpack_require__("../../node_modules/@pmmmwh/react-refresh-webpack-plugin/overlay/index.js");
 __webpack_require__.$Refresh$.runtime = __webpack_require__("../../node_modules/react-refresh/runtime.js");
 
 
@@ -22,8 +21,8 @@ const $ReactRefreshCurrentExports$ = __react_refresh_utils__.getModuleExports(
 function $ReactRefreshModuleRuntime$(exports) {
 	if (true) {
 		let errorOverlay;
-		if (typeof __react_refresh_error_overlay__ !== 'undefined') {
-			errorOverlay = __react_refresh_error_overlay__;
+		if (true) {
+			errorOverlay = false;
 		}
 		let testMode;
 		if (typeof __react_refresh_test__ !== 'undefined') {
@@ -156,7 +155,6 @@ exports[`client: lazy-component.tsx 1`] = `
 /* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _tramvai_react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/library/swc/__integration__/mocks/tramvai-react.ts");
 /* provided dependency */ var __react_refresh_utils__ = __webpack_require__("../../node_modules/@pmmmwh/react-refresh-webpack-plugin/lib/runtime/RefreshUtils.js");
-/* provided dependency */ var __react_refresh_error_overlay__ = __webpack_require__("../../node_modules/@pmmmwh/react-refresh-webpack-plugin/overlay/index.js");
 __webpack_require__.$Refresh$.runtime = __webpack_require__("../../node_modules/react-refresh/runtime.js");
 
 
@@ -215,8 +213,8 @@ const $ReactRefreshCurrentExports$ = __react_refresh_utils__.getModuleExports(
 function $ReactRefreshModuleRuntime$(exports) {
 	if (true) {
 		let errorOverlay;
-		if (typeof __react_refresh_error_overlay__ !== 'undefined') {
-			errorOverlay = __react_refresh_error_overlay__;
+		if (true) {
+			errorOverlay = false;
 		}
 		let testMode;
 		if (typeof __react_refresh_test__ !== 'undefined') {
@@ -247,7 +245,6 @@ exports[`client: node-env.ts 1`] = `
 /* harmony export */   "func": function() { return /* binding */ func; }
 /* harmony export */ });
 /* provided dependency */ var __react_refresh_utils__ = __webpack_require__("../../node_modules/@pmmmwh/react-refresh-webpack-plugin/lib/runtime/RefreshUtils.js");
-/* provided dependency */ var __react_refresh_error_overlay__ = __webpack_require__("../../node_modules/@pmmmwh/react-refresh-webpack-plugin/overlay/index.js");
 __webpack_require__.$Refresh$.runtime = __webpack_require__("../../node_modules/react-refresh/runtime.js");
 
 let internalFunc;
@@ -266,8 +263,8 @@ const $ReactRefreshCurrentExports$ = __react_refresh_utils__.getModuleExports(
 function $ReactRefreshModuleRuntime$(exports) {
 	if (true) {
 		let errorOverlay;
-		if (typeof __react_refresh_error_overlay__ !== 'undefined') {
-			errorOverlay = __react_refresh_error_overlay__;
+		if (true) {
+			errorOverlay = false;
 		}
 		let testMode;
 		if (typeof __react_refresh_test__ !== 'undefined') {
@@ -300,7 +297,6 @@ exports[`client: provider-stack.ts 1`] = `
 /* harmony import */ var _tramvai_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/library/swc/__integration__/mocks/tramvai-core.ts");
 /* harmony import */ var _create_token_pure__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/library/swc/__integration__/create-token-pure.ts");
 /* provided dependency */ var __react_refresh_utils__ = __webpack_require__("../../node_modules/@pmmmwh/react-refresh-webpack-plugin/lib/runtime/RefreshUtils.js");
-/* provided dependency */ var __react_refresh_error_overlay__ = __webpack_require__("../../node_modules/@pmmmwh/react-refresh-webpack-plugin/overlay/index.js");
 __webpack_require__.$Refresh$.runtime = __webpack_require__("../../node_modules/react-refresh/runtime.js");
 
 var _ref0;
@@ -325,8 +321,8 @@ const $ReactRefreshCurrentExports$ = __react_refresh_utils__.getModuleExports(
 function $ReactRefreshModuleRuntime$(exports) {
 	if (true) {
 		let errorOverlay;
-		if (typeof __react_refresh_error_overlay__ !== 'undefined') {
-			errorOverlay = __react_refresh_error_overlay__;
+		if (true) {
+			errorOverlay = false;
 		}
 		let testMode;
 		if (typeof __react_refresh_test__ !== 'undefined') {
@@ -360,7 +356,6 @@ exports[`client: react-svg.tsx 1`] = `
 /* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _images_logo_svg_react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/library/swc/__integration__/images/logo.svg?react");
 /* provided dependency */ var __react_refresh_utils__ = __webpack_require__("../../node_modules/@pmmmwh/react-refresh-webpack-plugin/lib/runtime/RefreshUtils.js");
-/* provided dependency */ var __react_refresh_error_overlay__ = __webpack_require__("../../node_modules/@pmmmwh/react-refresh-webpack-plugin/overlay/index.js");
 __webpack_require__.$Refresh$.runtime = __webpack_require__("../../node_modules/react-refresh/runtime.js");
 
 
@@ -391,8 +386,8 @@ const $ReactRefreshCurrentExports$ = __react_refresh_utils__.getModuleExports(
 function $ReactRefreshModuleRuntime$(exports) {
 	if (true) {
 		let errorOverlay;
-		if (typeof __react_refresh_error_overlay__ !== 'undefined') {
-			errorOverlay = __react_refresh_error_overlay__;
+		if (true) {
+			errorOverlay = false;
 		}
 		let testMode;
 		if (typeof __react_refresh_test__ !== 'undefined') {
@@ -423,7 +418,6 @@ exports[`client: server.inline.ts 1`] = `
 /* harmony export */   "ForBrowser": function() { return /* binding */ ForBrowser; }
 /* harmony export */ });
 /* provided dependency */ var __react_refresh_utils__ = __webpack_require__("../../node_modules/@pmmmwh/react-refresh-webpack-plugin/lib/runtime/RefreshUtils.js");
-/* provided dependency */ var __react_refresh_error_overlay__ = __webpack_require__("../../node_modules/@pmmmwh/react-refresh-webpack-plugin/overlay/index.js");
 __webpack_require__.$Refresh$.runtime = __webpack_require__("../../node_modules/react-refresh/runtime.js");
 
 class ForBrowser {
@@ -442,8 +436,8 @@ const $ReactRefreshCurrentExports$ = __react_refresh_utils__.getModuleExports(
 function $ReactRefreshModuleRuntime$(exports) {
 	if (true) {
 		let errorOverlay;
-		if (typeof __react_refresh_error_overlay__ !== 'undefined') {
-			errorOverlay = __react_refresh_error_overlay__;
+		if (true) {
+			errorOverlay = false;
 		}
 		let testMode;
 		if (typeof __react_refresh_test__ !== 'undefined') {
@@ -474,7 +468,6 @@ exports[`client: typeof-window.ts 1`] = `
 /* harmony export */   "func": function() { return /* binding */ func; }
 /* harmony export */ });
 /* provided dependency */ var __react_refresh_utils__ = __webpack_require__("../../node_modules/@pmmmwh/react-refresh-webpack-plugin/lib/runtime/RefreshUtils.js");
-/* provided dependency */ var __react_refresh_error_overlay__ = __webpack_require__("../../node_modules/@pmmmwh/react-refresh-webpack-plugin/overlay/index.js");
 __webpack_require__.$Refresh$.runtime = __webpack_require__("../../node_modules/react-refresh/runtime.js");
 
 let internalFunc;
@@ -492,8 +485,8 @@ const $ReactRefreshCurrentExports$ = __react_refresh_utils__.getModuleExports(
 function $ReactRefreshModuleRuntime$(exports) {
 	if (true) {
 		let errorOverlay;
-		if (typeof __react_refresh_error_overlay__ !== 'undefined') {
-			errorOverlay = __react_refresh_error_overlay__;
+		if (true) {
+			errorOverlay = false;
 		}
 		let testMode;
 		if (typeof __react_refresh_test__ !== 'undefined') {

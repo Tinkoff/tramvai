@@ -82,17 +82,25 @@ export class ActionPageRunner implements ActionPageRunnerInterface {
                 )
               )
               .catch((error) => {
+                const isCriticalError = stopRunAtError(error);
+
                 if (!isSilentError(error)) {
                   const parameters = isTramvaiAction(action) ? action : action[ACTION_PARAMETERS];
 
                   this.log.error({
                     error,
                     event: `action-execution-error`,
-                    message: `${parameters?.name ?? 'unknown'} execution error`,
+                    message: `${parameters?.name ?? 'unknown'} execution error, ${
+                      isCriticalError
+                        ? `${error.name} error are expected and will stop actions execution and prevent page rendering`
+                        : `this action will be automatically executed on client - https://tramvai.dev/docs/features/data-fetching/action#synchronizing-between-server-and-client
+If the request in this action takes too long, you can move it to the client using "onlyBrowser" condition.
+Also, the necessary network accesses may not be present.`
+                    }`,
                   });
                 }
 
-                if (stopRunAtError(error)) {
+                if (isCriticalError) {
                   clearTimeout(timeoutMarker);
                   reject(error);
                 }

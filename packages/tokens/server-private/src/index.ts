@@ -102,15 +102,6 @@ export const WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN = createToken<FASTIFY_APP_ERROR_
 
 /**
  * @description
- * Subscription to error handler.
- */
-export const WEB_FASTIFY_APP_PROCESS_ERROR_TOKEN = createToken<FASTIFY_APP_ERROR_HANDLER>(
-  'webApp fastify error',
-  { multi: true }
-);
-
-/**
- * @description
  * Subscription to error handler after default handlers.
  */
 export const WEB_FASTIFY_APP_AFTER_ERROR_TOKEN = createToken<FASTIFY_APP_ERROR_HANDLER>(

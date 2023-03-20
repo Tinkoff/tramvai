@@ -16,11 +16,11 @@ import type {
   WEB_FASTIFY_APP_LIMITER_TOKEN,
   WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN,
   WEB_FASTIFY_APP_AFTER_ERROR_TOKEN,
-  WEB_FASTIFY_APP_PROCESS_ERROR_TOKEN,
   WEB_FASTIFY_APP_METRICS_TOKEN,
 } from '@tramvai/tokens-server-private';
 import type { ExtractDependencyType } from '@tinkoff/dippy';
 import { provide } from '@tinkoff/dippy';
+import type { ROOT_ERROR_BOUNDARY_COMPONENT_TOKEN } from '@tramvai/react';
 import { errorHandler } from './error';
 
 export const webAppFactory = ({ server }: { server: typeof SERVER_TOKEN }) => {
@@ -48,8 +48,8 @@ export const webAppInitCommand = ({
   init,
   afterInit,
   beforeError,
-  processError,
   afterError,
+  RootErrorBoundary,
 }: {
   app: ExtractDependencyType<typeof WEB_FASTIFY_APP_TOKEN>;
   logger: ExtractDependencyType<typeof LOGGER_TOKEN>;
@@ -61,8 +61,8 @@ export const webAppInitCommand = ({
   init: ExtractDependencyType<typeof WEB_FASTIFY_APP_INIT_TOKEN>;
   afterInit: ExtractDependencyType<typeof WEB_FASTIFY_APP_AFTER_INIT_TOKEN>;
   beforeError: ExtractDependencyType<typeof WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN>;
-  processError: ExtractDependencyType<typeof WEB_FASTIFY_APP_PROCESS_ERROR_TOKEN>;
   afterError: ExtractDependencyType<typeof WEB_FASTIFY_APP_AFTER_ERROR_TOKEN>;
+  RootErrorBoundary?: ExtractDependencyType<typeof ROOT_ERROR_BOUNDARY_COMPONENT_TOKEN>;
 }) => {
   const log = logger('server:webapp');
 
@@ -74,7 +74,7 @@ export const webAppInitCommand = ({
   };
 
   return async function webAppInit() {
-    errorHandler(app, { log, beforeError, processError, afterError });
+    errorHandler(app, { log, beforeError, afterError, RootErrorBoundary });
 
     await app.register(async (instance) => {
       await runHandlers(instance, beforeInit);

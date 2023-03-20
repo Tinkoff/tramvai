@@ -24,6 +24,7 @@
     "@loadable/server": "^5.15.0",
     "@tinkoff/htmlpagebuilder": "0.0.0-stub",
     "@tinkoff/layout-factory": "0.0.0-stub",
+    "@tinkoff/errors": "0.0.0-stub",
     "@tinkoff/url": "0.0.0-stub",
     "@tinkoff/user-agent": "0.0.0-stub",
     "@tramvai/module-client-hints": "0.0.0-stub",

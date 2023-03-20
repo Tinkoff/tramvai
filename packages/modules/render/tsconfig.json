@@ -1,74 +1,77 @@
 {
-  "extends": "../../../tsconfig.lib.json",
-  "include": [
-    "./src"
-  ],
-  "compilerOptions": {
-    "declarationDir": "./lib",
-    "outDir": "./lib",
-    "rootDir": "./src",
-    "strict": false
-  },
-  "references": [
-    {
-      "path": "../../tramvai/core"
+    "extends": "../../../tsconfig.lib.json",
+    "include": [
+        "./src"
+    ],
+    "compilerOptions": {
+        "declarationDir": "./lib",
+        "outDir": "./lib",
+        "rootDir": "./src",
+        "strict": false
     },
-    {
-      "path": "../../libs/pageBuilder"
-    },
-    {
-      "path": "../../tramvai/state"
-    },
-    {
-      "path": "../../libs/dippy"
-    },
-    {
-      "path": "../../libs/user-agent"
-    },
-    {
-      "path": "../common"
-    },
-    {
-      "path": "../../tramvai/react"
-    },
-    {
-      "path": "../../tokens/common"
-    },
-    {
-      "path": "../../tokens/render"
-    },
-    {
-      "path": "../client-hints"
-    },
-    {
-      "path": "../../tokens/router"
-    },
-    {
-      "path": "../router"
-    },
-    {
-      "path": "../../libs/safe-strings"
-    },
-    {
-      "path": "../../libs/url"
-    },
-    {
-      "path": "../../tramvai/test/helpers"
-    },
-    {
-      "path": "../../cli"
-    },
-    {
-      "path": "../../libs/tinkoff-layout"
-    },
-    {
-      "path": "../../tramvai/experiments"
-    },
-    {
-      "path": "../../libs/react-hooks"
-    },
-    {
-      "path": "../../tokens/server-private"
-    }
-  ]
+    "references": [
+        {
+            "path": "../../tramvai/core"
+        },
+        {
+            "path": "../../libs/pageBuilder"
+        },
+        {
+            "path": "../../tramvai/state"
+        },
+        {
+            "path": "../../libs/dippy"
+        },
+        {
+            "path": "../../libs/user-agent"
+        },
+        {
+            "path": "../common"
+        },
+        {
+            "path": "../../tramvai/react"
+        },
+        {
+            "path": "../../tokens/common"
+        },
+        {
+            "path": "../../tokens/render"
+        },
+        {
+            "path": "../client-hints"
+        },
+        {
+            "path": "../../tokens/router"
+        },
+        {
+            "path": "../router"
+        },
+        {
+            "path": "../../libs/safe-strings"
+        },
+        {
+            "path": "../../libs/url"
+        },
+        {
+            "path": "../../tramvai/test/helpers"
+        },
+        {
+            "path": "../../cli"
+        },
+        {
+            "path": "../../libs/tinkoff-layout"
+        },
+        {
+            "path": "../../tramvai/experiments"
+        },
+        {
+            "path": "../../libs/react-hooks"
+        },
+        {
+            "path": "../../tokens/server-private"
+        },
+        {
+            "path": "../../libs/errors"
+        }
+    ]
 }

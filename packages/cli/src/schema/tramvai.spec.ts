@@ -81,6 +81,9 @@ describe('JSON schema для tramvai.json', () => {
             "generateDataQaTag": false,
             "hotRefresh": {
               "enabled": true,
+              "options": {
+                "overlay": false,
+              },
             },
             "modern": true,
             "name": "test-app",
@@ -137,6 +140,9 @@ describe('JSON schema для tramvai.json', () => {
             "generateDataQaTag": false,
             "hotRefresh": {
               "enabled": true,
+              "options": {
+                "overlay": false,
+              },
             },
             "name": "test-module",
             "notifications": {},

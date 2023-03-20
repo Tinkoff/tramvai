@@ -254,8 +254,12 @@ export interface CliConfigEntry extends ConfigEntry {
     enabled?: boolean;
     /**
      * @title Configure react hot-refresh https://github.com/pmmmwh/react-refresh-webpack-plugin#options
+     * @default {}
      */
     options?: {
+      /**
+       * @default false
+       */
       overlay?: boolean | Record<string, any>;
       [key: string]: any;
     };

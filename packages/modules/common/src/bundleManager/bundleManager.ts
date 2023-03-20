@@ -87,6 +87,14 @@ export class BundleManager implements Interface {
         event: 'create default bundle with file-system pages',
         components: Object.keys(components),
       });
+    } else {
+      this.bundles[FS_PAGES_DEFAULT_BUNDLE] = () =>
+        Promise.resolve({
+          default: createBundle({
+            name: FS_PAGES_DEFAULT_BUNDLE,
+            components: {},
+          }),
+        });
     }
   }
 

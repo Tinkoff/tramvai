@@ -17,7 +17,6 @@ import {
   WEB_FASTIFY_APP_LIMITER_TOKEN,
   WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN,
   WEB_FASTIFY_APP_AFTER_ERROR_TOKEN,
-  WEB_FASTIFY_APP_PROCESS_ERROR_TOKEN,
   SERVER_FACTORY_TOKEN,
   WEB_FASTIFY_APP_FACTORY_TOKEN,
   WEB_FASTIFY_APP_METRICS_TOKEN,
@@ -30,6 +29,7 @@ import {
 } from '@tramvai/tokens-common';
 import { MetricsModule } from '@tramvai/module-metrics';
 import { CacheWarmupModule } from '@tramvai/module-cache-warmup';
+import { ROOT_ERROR_BOUNDARY_COMPONENT_TOKEN } from '@tramvai/react';
 import { serverFactory, serverListenCommand } from './server/server';
 import { webAppFactory, webAppInitCommand } from './server/webApp';
 import { staticAppCommand } from './server/static';
@@ -104,8 +104,8 @@ EventEmitter.defaultMaxListeners = 50;
         requestMetrics: { token: WEB_FASTIFY_APP_METRICS_TOKEN, optional: true },
         limiterRequest: { token: WEB_FASTIFY_APP_LIMITER_TOKEN, optional: true },
         beforeError: { token: WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN, optional: true },
-        processError: { token: WEB_FASTIFY_APP_PROCESS_ERROR_TOKEN, optional: true },
         afterError: { token: WEB_FASTIFY_APP_AFTER_ERROR_TOKEN, optional: true },
+        RootErrorBoundary: { token: ROOT_ERROR_BOUNDARY_COMPONENT_TOKEN, optional: true },
       },
     },
     {

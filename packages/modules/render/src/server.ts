@@ -1,5 +1,3 @@
-import { createElement } from 'react';
-import { renderToString } from 'react-dom/server';
 import { Module, commandLineListTokens, DI_TOKEN, provide } from '@tramvai/core';
 import {
   LOGGER_TOKEN,
@@ -24,10 +22,8 @@ import {
   REACT_SERVER_RENDER_MODE,
 } from '@tramvai/tokens-render';
 import { Scope } from '@tinkoff/dippy';
-import { WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN } from '@tramvai/tokens-server-private';
-import { ROOT_ERROR_BOUNDARY_COMPONENT_TOKEN } from '@tramvai/react';
-import { parse } from '@tinkoff/url';
 import { satisfies } from '@tinkoff/user-agent';
+import { isRedirectFoundError } from '@tinkoff/errors';
 import { PageErrorStore, setPageErrorEvent, deserializeError } from '@tramvai/module-router';
 import { RESOURCE_INLINER, RESOURCES_REGISTRY_CACHE, ResourcesInliner } from './resourcesInliner';
 import { ResourcesRegistry } from './resourcesRegistry';
@@ -83,49 +79,100 @@ export const DEFAULT_POLYFILL_CONDITION =
     }),
     provide({
       provide: commandLineListTokens.generatePage,
-      useFactory: ({ htmlBuilder, logger, requestManager, responseManager, context }) => {
+      useFactory: ({
+        htmlBuilder,
+        logger,
+        requestManager,
+        responseManager,
+        context,
+        pageService,
+      }) => {
         const log = logger('module-render');
 
+        // eslint-disable-next-line max-statements
         return async function render() {
+          const pageErrorBoundary = pageService.resolveComponentFromConfig('errorBoundary');
           let html: string;
 
           try {
             html = await htmlBuilder.flow();
           } catch (error) {
-            // assuming that there was an error when rendering the page, try to render again with ErrorBoundary
-            try {
-              log.info({ event: 'render-page-boundary-start' });
+            // if there is no Page Error Boundary, will try to render Root Error Boundary later in error handler
+            if (!pageErrorBoundary) {
+              throw error;
+            }
 
+            // assuming that there was an error when rendering the page, try to render again with Page Error Boundary
+            try {
               context.dispatch(setPageErrorEvent(error));
+
               html = await htmlBuilder.flow();
 
-              log.info({ event: 'render-page-boundary-success' });
+              log.info({
+                event: 'render-page-error-boundary',
+                message: 'Render Page Error Boundary for the client',
+              });
             } catch (e) {
-              log.warn({ event: 'render-page-boundary-error', error: e });
-              // pass page render error to default error handler,
-              // send-server-error event will be logged with this error
+              log.warn({
+                event: 'failed-page-error-boundary',
+                message: 'Page Error Boundary rendering failed',
+                error: e,
+              });
+
+              // pass page render error to default error handler
               throw error;
             }
           }
 
           const pageRenderError = context.getState(PageErrorStore);
 
+          // if there is no Page Error Boundary and page error exists, that means that page render was interrupted and current `html` is invalid
+          // if it is RedirectFoundError, also pass it to default error handler
+          if (
+            pageRenderError &&
+            (!pageErrorBoundary || isRedirectFoundError(pageRenderError as Error))
+          ) {
+            throw pageRenderError;
+          }
+
           // log send-server-error only after successful Page Boundary render,
           // otherwise this event will be logged in default error handler
           if (pageRenderError) {
-            const status = pageRenderError.status || pageRenderError.httpStatus || 500;
+            const status = pageRenderError.httpStatus || 500;
+            const error = deserializeError(pageRenderError);
+            const requestInfo = {
+              ip: requestManager.getClientIp(),
+              requestId: requestManager.getHeader('x-request-id'),
+              url: requestManager.getUrl(),
+            };
 
-            if (status >= 500) {
-              const requestInfo = {
-                ip: requestManager.getClientIp(),
-                requestId: requestManager.getHeader('x-request-id'),
-                url: requestManager.getUrl(),
-              };
-
+            if ('httpStatus' in pageRenderError) {
+              if (pageRenderError.httpStatus >= 500) {
+                log.error({
+                  event: 'send-server-error',
+                  message: `This is expected server error, here is most common cases:
+- Forced Page Error Boundary render with 5xx code in Guard or Action - https://tramvai.dev/docs/features/error-boundaries#force-render-page-error-boundary-in-action.
+Page Error Boundary will be rendered for the client`,
+                  error,
+                  requestInfo,
+                });
+              } else {
+                log.info({
+                  event: 'http-error',
+                  message: `This is expected server error, here is most common cases:
+- Forced Page Error Boundary render with 4xx code in Guard or Action - https://tramvai.dev/docs/features/error-boundaries#force-render-page-error-boundary-in-action.
+Page Error Boundary will be rendered for the client`,
+                  error,
+                  requestInfo,
+                });
+              }
+            } else {
               log.error({
                 event: 'send-server-error',
-                message: 'Page render error, switch to page boundary',
-                error: deserializeError(pageRenderError),
+                message: `Unexpected server error. Error cause will be in "error" parameter.
+Most likely an error has occurred in the rendering of the current React page component.
+Page Error Boundary will be rendered for the client`,
+                error,
                 requestInfo,
               });
             }
@@ -148,6 +195,7 @@ export const DEFAULT_POLYFILL_CONDITION =
         responseManager: RESPONSE_MANAGER_TOKEN,
         htmlBuilder: 'htmlBuilder',
         context: CONTEXT_TOKEN,
+        pageService: PAGE_SERVICE_TOKEN,
       },
       multi: true,
     }),
@@ -218,64 +266,6 @@ export const DEFAULT_POLYFILL_CONDITION =
       useValue: {
         threshold: 40960, // 40kb before gzip, +-10kb after gzip
         types: [ResourceType.style],
-      },
-    }),
-    provide({
-      provide: WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN,
-      multi: true,
-      useFactory: ({ RootErrorBoundary, logger }) => {
-        const log = logger('module-render:error-handler');
-
-        return (error: any, request, reply) => {
-          if (!RootErrorBoundary) {
-            return;
-          }
-
-          let body: string;
-
-          try {
-            log.info({ event: 'render-root-boundary-start' });
-
-            body = renderToString(
-              createElement(RootErrorBoundary, { error, url: parse(request.url) })
-            );
-
-            log.info({ event: 'render-root-boundary-success' });
-
-            const status = error.status || error.httpStatus || 500;
-
-            // log send-server-error only after successful Root Boundary render,
-            // otherwise this event will be logged in default error handler
-            if (status >= 500) {
-              const requestInfo = {
-                ip: request.headers['x-real-ip'],
-                requestId: request.headers['x-request-id'],
-                url: request.url,
-              };
-
-              log.error({
-                event: 'send-server-error',
-                message: 'Page render error, switch to root boundary',
-                error,
-                requestInfo,
-              });
-            }
-
-            reply.status(status);
-
-            reply.header('Content-Type', 'text/html; charset=utf-8');
-            reply.header('Content-Length', Buffer.byteLength(body, 'utf8'));
-            reply.header('Cache-Control', 'no-cache, no-store, must-revalidate');
-
-            return body;
-          } catch (e) {
-            log.warn({ event: 'render-root-boundary-error', error: e });
-          }
-        };
-      },
-      deps: {
-        RootErrorBoundary: { token: ROOT_ERROR_BOUNDARY_COMPONENT_TOKEN, optional: true },
-        logger: LOGGER_TOKEN,
       },
     }),
     provide({

@@ -58,6 +58,9 @@ it('should populate defaults for config', () => {
           "generateDataQaTag": false,
           "hotRefresh": {
             "enabled": true,
+            "options": {
+              "overlay": false,
+            },
           },
           "modern": true,
           "name": "test-app",
@@ -114,6 +117,9 @@ it('should populate defaults for config', () => {
           "generateDataQaTag": false,
           "hotRefresh": {
             "enabled": true,
+            "options": {
+              "overlay": false,
+            },
           },
           "name": "test-child-app",
           "notifications": {},
@@ -256,6 +262,9 @@ it('should populate defaults for overridable options', () => {
           "generateDataQaTag": false,
           "hotRefresh": {
             "enabled": true,
+            "options": {
+              "overlay": false,
+            },
           },
           "modern": true,
           "name": "test-app",
@@ -326,6 +335,9 @@ it('should populate defaults for overridable options', () => {
           "generateDataQaTag": false,
           "hotRefresh": {
             "enabled": true,
+            "options": {
+              "overlay": false,
+            },
           },
           "name": "test-child-app",
           "notifications": {},

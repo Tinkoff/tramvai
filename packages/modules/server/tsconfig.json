@@ -1,70 +1,73 @@
 {
-  "extends": "../../../tsconfig.lib.json",
-  "include": [
-    "./src"
-  ],
-  "compilerOptions": {
-    "outDir": "./lib",
-    "declarationDir": "./lib",
-    "rootDir": "./src",
-    "strict": false,
-    "types": [
-      "node",
-      "jest",
-      "webpack-env"
+    "extends": "../../../tsconfig.lib.json",
+    "include": [
+        "./src"
+    ],
+    "compilerOptions": {
+        "outDir": "./lib",
+        "declarationDir": "./lib",
+        "rootDir": "./src",
+        "strict": false,
+        "types": [
+            "node",
+            "jest",
+            "webpack-env"
+        ]
+    },
+    "references": [
+        {
+            "path": "../../tramvai/core"
+        },
+        {
+            "path": "../metrics"
+        },
+        {
+            "path": "../../tramvai/papi"
+        },
+        {
+            "path": "../common"
+        },
+        {
+            "path": "../../tokens/server"
+        },
+        {
+            "path": "../../libs/url"
+        },
+        {
+            "path": "../../libs/monkeypatch"
+        },
+        {
+            "path": "../../tokens/common"
+        },
+        {
+            "path": "../env"
+        },
+        {
+            "path": "../cache-warmup"
+        },
+        {
+            "path": "../../libs/errors"
+        },
+        {
+            "path": "../../libs/dippy"
+        },
+        {
+            "path": "../../cli"
+        },
+        {
+            "path": "../../tokens/server-private"
+        },
+        {
+            "path": "../../libs/terminus"
+        },
+        {
+            "path": "../../tokens/core-private"
+        },
+        {
+            "path": "../../tokens/render"
+        },
+        {
+            "path": "../../tramvai/react"
+        }
     ]
-  },
-  "references": [
-    {
-      "path": "../../tramvai/core"
-    },
-    {
-      "path": "../metrics"
-    },
-    {
-      "path": "../../tramvai/papi"
-    },
-    {
-      "path": "../common"
-    },
-    {
-      "path": "../../tokens/server"
-    },
-    {
-      "path": "../../libs/url"
-    },
-    {
-      "path": "../../libs/monkeypatch"
-    },
-    {
-      "path": "../../tokens/common"
-    },
-    {
-      "path": "../env"
-    },
-    {
-      "path": "../cache-warmup"
-    },
-    {
-      "path": "../../libs/errors"
-    },
-    {
-      "path": "../../libs/dippy"
-    },
-    {
-      "path": "../../cli"
-    },
-    {
-      "path": "../../tokens/server-private"
-    },
-    {
-      "path": "../../libs/terminus"
-    },
-    {
-      "path": "../../tokens/core-private"
-    },
-    {
-      "path": "../../tokens/render"
-    }
-  ]
 }

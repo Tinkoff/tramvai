@@ -64,8 +64,10 @@ const composeOptions = (multiOptions, defaultOptions?) =>
       provide: WEB_FASTIFY_APP_AFTER_ERROR_TOKEN,
       multi: true,
       useFactory: ({ sentry, requestOptions, enableDefaultHandlers }) => {
-        return (error, request, reply) => {
-          if (enableDefaultHandlers) {
+        return (error: any, request, reply) => {
+          const status = error.httpStatus || error.statusCode || 500;
+
+          if (enableDefaultHandlers && status >= 500) {
             const options = composeOptions(requestOptions, {
               // code from https://github.com/getsentry/sentry-javascript/blob/4e722eb8778e27d7910e96ccb1aac108bcbea146/packages/node/src/handlers.ts#L309
               ip: false,

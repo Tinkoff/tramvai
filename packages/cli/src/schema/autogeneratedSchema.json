@@ -871,9 +871,11 @@
             },
             "options": {
               "title": "Configure react hot-refresh https://github.com/pmmmwh/react-refresh-webpack-plugin#options",
+              "default": {},
               "type": "object",
               "properties": {
                 "overlay": {
+                  "default": false,
                   "anyOf": [
                     {
                       "type": "object",
@@ -1385,9 +1387,11 @@
             },
             "options": {
               "title": "Configure react hot-refresh https://github.com/pmmmwh/react-refresh-webpack-plugin#options",
+              "default": {},
               "type": "object",
               "properties": {
                 "overlay": {
+                  "default": false,
                   "anyOf": [
                     {
                       "type": "object",
@@ -1899,9 +1903,11 @@
             },
             "options": {
               "title": "Configure react hot-refresh https://github.com/pmmmwh/react-refresh-webpack-plugin#options",
+              "default": {},
               "type": "object",
               "properties": {
                 "overlay": {
+                  "default": false,
                   "anyOf": [
                     {
                       "type": "object",

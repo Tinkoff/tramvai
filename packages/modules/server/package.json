@@ -42,11 +42,14 @@
     "@tinkoff/utils": "^2.1.2",
     "@tramvai/cli": "0.0.0-stub",
     "@tramvai/core": "0.0.0-stub",
+    "@tramvai/react": "0.0.0-stub",
     "@tramvai/module-common": "0.0.0-stub",
     "@tramvai/module-environment": "0.0.0-stub",
     "@tramvai/tokens-common": "0.0.0-stub",
     "@tramvai/tokens-core-private": "0.0.0-stub",
     "@tramvai/tokens-render": "0.0.0-stub",
+    "react": ">=16.14.0",
+    "react-dom": ">=16.14.0",
     "tslib": "^2.4.0"
   },
   "devDependencies": {

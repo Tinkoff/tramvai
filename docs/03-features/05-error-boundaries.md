@@ -18,59 +18,15 @@ Runtime errors, both on server in browser, can be critical and require send erro
 
 This guide will be focused how to customize and show error pages for the users in different scenarios.
 
-## Root Error Boundary (aka `5xx` page)
-
-If a critical error occurred during the request handling, e.g. Page Error Boundary rendering was unsuccessful, or an exception has been thrown out in any [CommandLineRunner](concepts/command-line-runner.md) stages before rendering, `tramvai` provides an opportunity to render custom `5xx` page. Root Boundary works only on server side.
-
-:::info
-
-Root Error Boundary works only server-side
-
-:::
-
-You can provide this boundary by using token `ROOT_ERROR_BOUNDARY_COMPONENT_TOKEN`:
-
-```ts
-import { ROOT_ERROR_BOUNDARY_COMPONENT_TOKEN } from '@tramvai/react';
-
-const provider = {
-  provide: ROOT_ERROR_BOUNDARY_COMPONENT_TOKEN,
-  useValue: RootErrorBoundary,
-};
-```
-
-This components will have access to `error` and `url` in properties, and need to render complete HTML page, e.g.:
-
-```tsx title="components/RootErrorBoundary.tsx"
-import React from 'react';
-
-export const RootErrorBoundary = ({ error, url }) => {
-  return (
-    <html lang="ru">
-      <head>
-        <title>
-          Error {error.message} at {url.path}
-        </title>
-      </head>
-      <body>
-        <h1>Root Error Boundary</h1>
-      </body>
-    </html>
-  );
-};
-```
-
-:::caution
-
-If this component also crashes at the rendering stage, in case of `HttpError` user will get an empty `response.body`, otherwise [finalhandler library](https://github.com/pillarjs/finalhandler) will send default HTML page with some information about error.
-
-:::
-
 ## Page Error Boundary
 
 If the first rendering of the page on the server fails, `tramvai` will try to render the page a second time, but already using the Error Boundary with fallback component. Also, we use [React Error Boundaries](https://reactjs.org/docs/error-boundaries.html) under the hood, so the error fallback will render in case of any rendering errors in the browser.
 
 Error Boundary only wrap Page Component, and Nested Layout with Root Layout will be rendered as usual.
+
+Here is a list of cases when Page Error Boundary will be rendered with priority over [Root Error Boundary](#root-error-boundary):
+- Error Boundary [forced render in Guard or Action](#force-render-page-error-boundary-in-action)
+- React page component rendering failed
 
 You can provide default fallback for all pages, and specific fallback to concrete page. In this fallback components `tramvai` will pass `url` and `error` properties:
 
@@ -172,6 +128,64 @@ createApp({
   ],
 });
 ```
+
+## Root Error Boundary
+
+If a critical error occurred during the request handling, e.g. Page Error Boundary rendering was unsuccessful, or an exception has been thrown out in any [CommandLineRunner](concepts/command-line-runner.md) stages before rendering, `tramvai` provides an opportunity to render both custom `5xx` and `4xx` page. Root Boundary works only on server side.
+
+Here is a list of cases when Root Error Boundary will be rendered:
+- when `NotFoundError` thrown out in Actions (4xx)
+- when `HttpError` thrown out in Actions (4xx or 5xx)
+- Router Guard block navigation (500)
+- Route is not found (404)
+- Error Boundary [forced render in Guard or Action](#force-render-page-error-boundary-in-action) (4xx or 5xx)
+- Request Limiter blocked request (429)
+- React page component rendering failed (500)
+- Other unexpected server-side errors, for example [Fastify Errors](https://www.fastify.io/docs/latest/Reference/Errors/) (4xx or 5xx)
+
+:::info
+
+Root Error Boundary works only server-side
+
+:::
+
+You can provide this boundary by using token `ROOT_ERROR_BOUNDARY_COMPONENT_TOKEN`:
+
+```ts
+import { ROOT_ERROR_BOUNDARY_COMPONENT_TOKEN } from '@tramvai/react';
+
+const provider = {
+  provide: ROOT_ERROR_BOUNDARY_COMPONENT_TOKEN,
+  useValue: RootErrorBoundary,
+};
+```
+
+This components will have access to `error` and `url` in properties, and need to render complete HTML page, e.g.:
+
+```tsx title="components/RootErrorBoundary.tsx"
+import React from 'react';
+
+export const RootErrorBoundary = ({ error, url }) => {
+  return (
+    <html lang="ru">
+      <head>
+        <title>
+          Error {error.message} at {url.path}
+        </title>
+      </head>
+      <body>
+        <h1>Root Error Boundary</h1>
+      </body>
+    </html>
+  );
+};
+```
+
+:::caution
+
+If this component also crashes at the rendering stage, in case of `HttpError` user will get an empty `response.body`, otherwise [finalhandler library](https://github.com/pillarjs/finalhandler) will send default HTML page with some information about error.
+
+:::
 
 ## How to
 
