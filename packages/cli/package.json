@@ -135,7 +135,7 @@
     "postcss-image-set-polyfill": "^1.0.0",
     "postcss-loader": "^7.0.1",
     "postcss-modules-tilda": "^2.0.0",
-    "postcss-modules-values-replace": "^3.3.0",
+    "postcss-modules-values-replace": "^4.0.0",
     "prettyoutput": "^1.2.0",
     "process": "^0.11.10",
     "promise-queue": "^2.2.5",
