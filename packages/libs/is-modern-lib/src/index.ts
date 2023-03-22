@@ -45,6 +45,7 @@ export const modernLibs = [
   'parse5',
   'async-mutex',
   'xlsx',
+  'react-swipeable',
   '@react-hook',
 ];
 
