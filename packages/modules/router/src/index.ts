@@ -7,6 +7,14 @@ export { generateForRoot } from './modules/utils/forRoot';
 export * from './stores/RouterStore';
 export * from './stores/PageErrorStore';
 export * from './hooks/usePageService';
+export {
+  onChangeHooksToken,
+  beforeNavigateHooksToken,
+  afterNavigateHooksToken,
+  beforeResolveHooksToken,
+  beforeUpdateCurrentHooksToken,
+  afterUpdateCurrentHooksToken,
+} from './modules/tokens';
 
 type RouteConfig = {
   [key: string]: any;

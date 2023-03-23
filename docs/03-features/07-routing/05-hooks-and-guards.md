@@ -50,6 +50,13 @@ The behaviour of routing depends on the result of executing guards functions and
 
 ## Hooks
 
+:::info
+
+Hooks are not recommended to usage because you can easy slow down application response time.
+Always prefer commandLineRunner, Actions or Guards if it is possible.
+
+:::
+
 Transition hooks allow you to perform your asynchronous actions at different stages of the transition.
 
 There is a few steps to add transition hooks:
@@ -62,19 +69,12 @@ Example:
 
 ```ts
 import { provide, commandLineListTokens } from '@tramvai/core';
-import { ROUTER_TOKEN } from '@tramvai/module-router';
+import { beforeNavigateHooksToken } from '@tramvai/module-router';
 
 const provider = provide({
-  provide: commandLineListTokens.customerStart,
-  useFactory: ({ router }) => {
-    return function addRouterHook() {
-      router.registerHook('beforeNavigate', async ({ from, to, url, fromUrl }) => {
-        console.log(`navigating from ${from} to route ${to}`);
-      });
-    };
-  },
-  deps: {
-    router: ROUTER_TOKEN,
+  provide: beforeNavigateHooksToken,
+  useValue: async ({ from, to, url, fromUrl }) => {
+    console.log(`navigating from ${from} to route ${to}`);
   },
 });
 ```

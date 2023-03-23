@@ -8,8 +8,7 @@ import {
   RENDERER_CALLBACK,
   USE_REACT_STRICT_MODE,
 } from '@tramvai/tokens-render';
-import { ROUTER_TOKEN } from '@tramvai/tokens-router';
-import { PageErrorStore, setPageErrorEvent } from '@tramvai/module-router';
+import { PageErrorStore, setPageErrorEvent, beforeResolveHooksToken } from '@tramvai/module-router';
 import { rendering as renderInBrowser } from './client';
 import type { RenderModuleConfig } from './shared/types';
 import { LayoutModule } from './shared/LayoutModule';
@@ -31,19 +30,16 @@ const throwErrorInDev = (logger: typeof LOGGER_TOKEN) => {
   providers: [
     ...sharedProviders,
     provide({
-      provide: commandLineListTokens.customerStart,
+      provide: beforeResolveHooksToken,
       multi: true,
-      useFactory: ({ router, store }) => {
-        return function clearPageError() {
-          router.registerHook('beforeResolve', async () => {
-            if (store.getState(PageErrorStore)) {
-              store.dispatch(setPageErrorEvent(null));
-            }
-          });
+      useFactory: ({ store }) => {
+        return async () => {
+          if (store.getState(PageErrorStore)) {
+            store.dispatch(setPageErrorEvent(null));
+          }
         };
       },
       deps: {
-        router: ROUTER_TOKEN,
         store: STORE_TOKEN,
       },
     }),
