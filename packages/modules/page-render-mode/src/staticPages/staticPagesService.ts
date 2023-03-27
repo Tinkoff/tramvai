@@ -49,8 +49,8 @@ export class StaticPagesService {
   private options: Options;
   private cache5xxResponse: Cache5xxResponse;
 
-  public shouldUseCache: ShouldUseCache;
-  public shouldSetToCache: ShouldSetToCache;
+  public shouldUseCache: () => boolean;
+  public shouldSetToCache: () => boolean;
 
   constructor({
     getCacheKey,
@@ -95,8 +95,8 @@ export class StaticPagesService {
     this.response = response;
     this.cache = cache;
     this.modifyCache = modifyCache;
-    this.shouldUseCache = shouldUseCache;
-    this.shouldSetToCache = shouldSetToCache;
+    this.shouldUseCache = () => shouldUseCache.every((fn) => fn());
+    this.shouldSetToCache = () => shouldSetToCache.every((fn) => fn());
     this.backgroundFetchService = backgroundFetchService;
     this.options = options;
     this.cache5xxResponse = cache5xxResponse;
@@ -104,6 +104,10 @@ export class StaticPagesService {
 
   respond(onSuccess: () => void) {
     if (!this.hasCache()) {
+      this.log.debug({
+        event: 'no-cache',
+        key: this.key,
+      });
       return;
     }
 

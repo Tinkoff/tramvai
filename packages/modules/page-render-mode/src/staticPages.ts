@@ -71,8 +71,9 @@ export const staticPagesProviders = [
   provide({
     provide: STATIC_PAGES_OPTIONS_TOKEN,
     useValue: {
-      // @TODO: свой ttl для отдельных страниц
+      // @TODO: unique ttl per pages
       ttl: 60 * 1000,
+      // @TODO: too much, better save to file-system
       maxSize: 1000,
     },
   }),

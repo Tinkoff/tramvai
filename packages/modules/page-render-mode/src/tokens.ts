@@ -45,11 +45,13 @@ export const STATIC_PAGES_CACHE_TOKEN =
   createToken<Cache<Map<string, StaticPagesCacheEntry>>>('static pages cache');
 
 export const STATIC_PAGES_SHOULD_USE_CACHE = createToken<() => boolean>(
-  'static pages should use cache'
+  'static pages should use cache',
+  { multi: true }
 );
 
 export const STATIC_PAGES_SHOULD_SET_TO_CACHE = createToken<() => boolean>(
-  'static pages should set to cache'
+  'static pages should set to cache',
+  { multi: true }
 );
 
 export const STATIC_PAGES_BACKGROUND_FETCH_ENABLED = createToken<() => boolean>(
