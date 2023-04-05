@@ -6,6 +6,9 @@ export interface Route {
   name: string;
   path: string;
   redirect?: string | NavigateOptions;
+  // TODO: alias purpose in unclear. Seems like it isn't used
+  // in the router code actually, but the alias field
+  // is used in router-extension-dco just as a marker for dynamic route
   alias?: string;
   config?: Record<string, any>;
 }

@@ -27,17 +27,34 @@ const routes = [
 ];
 ```
 
-Route interface:
+Route interface (this is a config that is defined for route somewhere when application starts):
 
 ```ts
 interface Route {
+  // name of the route
   name: string;
+  // path in route config. Might not be equal to the actual path in browser as
+  // it may have a dynamic parts
   path: string;
-  actualPath: string;
+  // additional config for route, that is not used by router library, but
+  // might be used by router dependents
   config?: Record<string, any>;
-  params: Record<string, string>;
-  alias?: string;
+  // redirect options that should happed when navigating to current route
   redirect?: string | NavigateOptions;
+}
+```
+
+NavigationRoute interface (this is an instance that created on every navigation from base route by adding additional parameters related to specific navigation):
+
+```ts
+interface NavigationRoute extends Route {
+  // actual path that was resolved from requested url. Unlike `path` actualPath
+  // won't contain any dynamic parts and will be equal to path in browser
+  actualPath: string;
+  // resolved parts of the dynamic routes, where key is the name of dynamic part
+  // and value is the actual value from the current url
+  params: Record<string, string>;
+  // additional state that can be passed by caller side on navigation
   navigateState?: any;
 }
 ```

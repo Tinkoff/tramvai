@@ -23,13 +23,19 @@ yarn add @tinkoff/logger
 You can create child loggers using method `.child` of the current logger instance.
 Child logger will inherit parent logger settings and can override these settings.
 
+:::info
+
+Logger name always will be in lower case, e.g. `myLogger` will be converted to `mylogger`
+
+:::
+
 ```tsx
 const log = logger({ name: 'test' });
 
 const childLog = log.child('child'); // as this logger is child logger the result name will be 'test.child'
 
 const childLogWithDefaults = log.child({
-  name: 'withDefaults',
+  name: 'with-defaults',
   defaults: {
     // defaults might be used to specify properties which will be merged to log objects logged with this logger
     child: true,

@@ -4,6 +4,7 @@ import {
   HISTORY_FALLBACK_REGEXP,
   WILDCARD_REGEXP,
   PARAM_PARSER_REGEXP,
+  PARAM_MATCH_REGEXP,
 } from './constants';
 import type { Parameter, ParsedPath } from './types';
 import { PartType } from './types';
@@ -24,7 +25,7 @@ export const isWildcard = (part: string) => {
 };
 
 export const isParameterized = (part: string) => {
-  return part.includes(PARAMETER_DELIMITER);
+  return part.match(PARAM_MATCH_REGEXP);
 };
 
 const parseParameter = (part: string): Parameter => {

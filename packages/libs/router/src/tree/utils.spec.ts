@@ -70,6 +70,17 @@ describe('router/tree/utils', () => {
         optional: false,
       });
     });
+
+    it('literal looks like parameter', () => {
+      expect(parse('test:')).toEqual({
+        type: PartType.literal,
+        value: 'test:',
+      });
+      expect(parse(':')).toEqual({
+        type: PartType.literal,
+        value: ':',
+      });
+    });
   });
 
   describe('makePath', () => {
