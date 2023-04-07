@@ -23,7 +23,6 @@ import {
   STATIC_PAGES_COMMAND_LINE,
   STATIC_PAGES_BACKGROUND_FETCH_ENABLED,
   STATIC_PAGES_SHOULD_USE_CACHE,
-  STATIC_PAGES_SHOULD_SET_TO_CACHE,
   STATIC_PAGES_MODIFY_CACHE,
   STATIC_PAGES_CACHE_5xx_RESPONSE,
 } from './tokens';
@@ -99,17 +98,6 @@ export const staticPagesProviders = [
     },
   }),
   provide({
-    provide: STATIC_PAGES_SHOULD_SET_TO_CACHE,
-    useFactory: ({ requestManager }) => {
-      return () => {
-        return isEmpty(requestManager.getCookies());
-      };
-    },
-    deps: {
-      requestManager: REQUEST_MANAGER_TOKEN,
-    },
-  }),
-  provide({
     provide: STATIC_PAGES_SHOULD_USE_CACHE,
     useFactory: ({ requestManager }) => {
       return () => {
@@ -134,7 +122,7 @@ export const staticPagesProviders = [
   }),
   provide({
     provide: STATIC_PAGES_BACKGROUND_FETCH_SERVICE,
-    scope: Scope.REQUEST,
+    scope: Scope.SINGLETON,
     useClass: BackgroundFetchService,
     deps: {
       logger: LOGGER_TOKEN,
@@ -157,7 +145,6 @@ export const staticPagesProviders = [
       cache: STATIC_PAGES_CACHE_TOKEN,
       modifyCache: { token: STATIC_PAGES_MODIFY_CACHE, optional: true },
       shouldUseCache: STATIC_PAGES_SHOULD_USE_CACHE,
-      shouldSetToCache: STATIC_PAGES_SHOULD_SET_TO_CACHE,
       backgroundFetchService: STATIC_PAGES_BACKGROUND_FETCH_SERVICE,
       options: STATIC_PAGES_OPTIONS_TOKEN,
       cache5xxResponse: STATIC_PAGES_CACHE_5xx_RESPONSE,
@@ -210,11 +197,7 @@ export const staticPagesProviders = [
           return;
         }
 
-        if (staticPagesService.shouldSetToCache()) {
-          staticPagesService.saveResponse();
-        } else {
-          staticPagesService.revalidate();
-        }
+        staticPagesService.revalidate();
       };
     },
     deps: {

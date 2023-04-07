@@ -14,7 +14,6 @@ import type {
 } from '../staticPages';
 import type {
   STATIC_PAGES_SHOULD_USE_CACHE,
-  STATIC_PAGES_SHOULD_SET_TO_CACHE,
   StaticPagesCacheEntry,
   STATIC_PAGES_CACHE_TOKEN,
   STATIC_PAGES_MODIFY_CACHE,
@@ -26,12 +25,15 @@ type ResponseManager = ExtractDependencyType<typeof RESPONSE_MANAGER_TOKEN>;
 type Response = ExtractDependencyType<typeof FASTIFY_RESPONSE>;
 type Logger = ExtractDependencyType<typeof LOGGER_TOKEN>;
 type ShouldUseCache = ExtractDependencyType<typeof STATIC_PAGES_SHOULD_USE_CACHE>;
-type ShouldSetToCache = ExtractDependencyType<typeof STATIC_PAGES_SHOULD_SET_TO_CACHE>;
 type BackgroundFetchService = ExtractDependencyType<typeof STATIC_PAGES_BACKGROUND_FETCH_SERVICE>;
 type Cache = ExtractDependencyType<typeof STATIC_PAGES_CACHE_TOKEN>;
 type ModifyCache = ExtractDependencyType<typeof STATIC_PAGES_MODIFY_CACHE> | null;
 type Options = ExtractDependencyType<typeof STATIC_PAGES_OPTIONS_TOKEN>;
 type Cache5xxResponse = ExtractDependencyType<typeof STATIC_PAGES_CACHE_5xx_RESPONSE>;
+
+// It is critical to ignore cached Set-Cookie header and use fresh one from current request
+// COMMAND_LINE_EXECUTION_END_TOKEN with fresh server timings will not works for responses from cache
+const HEADERS_BLACKLIST = ['Set-Cookie', 'server-timing'];
 
 export class StaticPagesService {
   readonly key: string;
@@ -50,7 +52,6 @@ export class StaticPagesService {
   private cache5xxResponse: Cache5xxResponse;
 
   public shouldUseCache: () => boolean;
-  public shouldSetToCache: () => boolean;
 
   constructor({
     getCacheKey,
@@ -64,7 +65,6 @@ export class StaticPagesService {
     cache,
     modifyCache,
     shouldUseCache,
-    shouldSetToCache,
     backgroundFetchService,
     options,
     cache5xxResponse,
@@ -80,7 +80,6 @@ export class StaticPagesService {
     cache: Cache;
     modifyCache: ModifyCache;
     shouldUseCache: ShouldUseCache;
-    shouldSetToCache: ShouldSetToCache;
     backgroundFetchService: BackgroundFetchService;
     options: Options;
     cache5xxResponse: Cache5xxResponse;
@@ -96,7 +95,6 @@ export class StaticPagesService {
     this.cache = cache;
     this.modifyCache = modifyCache;
     this.shouldUseCache = () => shouldUseCache.every((fn) => fn());
-    this.shouldSetToCache = () => shouldSetToCache.every((fn) => fn());
     this.backgroundFetchService = backgroundFetchService;
     this.options = options;
     this.cache5xxResponse = cache5xxResponse;
@@ -111,7 +109,6 @@ export class StaticPagesService {
       return;
     }
 
-    const { ttl } = this.options;
     let cacheEntry = this.getCache();
 
     if (Array.isArray(this.modifyCache)) {
@@ -120,13 +117,23 @@ export class StaticPagesService {
       }, cacheEntry);
     }
 
-    const { updatedAt, status, headers, body } = cacheEntry;
-    const isOutdated = updatedAt + ttl <= Date.now();
+    const { status, headers, body } = cacheEntry;
+    const isOutdated = this.cacheOutdated(cacheEntry);
+    const currentHeaders = this.responseManager.getHeaders();
 
     if (!isOutdated) {
       this.log.debug({
         event: 'cache-hit',
         key: this.key,
+      });
+
+      HEADERS_BLACKLIST.forEach((header) => {
+        if (headers[header]) {
+          delete headers[header];
+        }
+        if (currentHeaders[header]) {
+          headers[header] = currentHeaders[header];
+        }
       });
 
       this.response
@@ -145,30 +152,18 @@ export class StaticPagesService {
     }
   }
 
-  saveResponse() {
-    if (!this.cache5xxResponse() && this.responseManager.getStatus() >= 500) {
-      this.log.debug({
-        event: 'cache-set-5xx',
-        key: this.key,
-      });
-      return;
-    }
-
-    this.log.debug({
-      event: 'cache-set',
-      key: this.key,
-    });
-
-    this.setCache({
-      status: this.responseManager.getStatus(),
-      headers: this.responseManager.getHeaders(),
-      body: this.responseManager.getBody() as string,
-    });
-  }
-
   async revalidate() {
     if (!this.backgroundFetchService.enabled()) {
       return;
+    }
+
+    if (this.hasCache()) {
+      const cacheEntry = this.getCache();
+      const isOutdated = this.cacheOutdated(cacheEntry);
+
+      if (!isOutdated) {
+        return;
+      }
     }
 
     await this.backgroundFetchService
@@ -184,6 +179,10 @@ export class StaticPagesService {
           return;
         }
         if (!this.cache5xxResponse() && response.status >= 500) {
+          this.log.debug({
+            event: 'cache-set-5xx',
+            key: this.key,
+          });
           return;
         }
         this.setCache(response);
@@ -199,6 +198,11 @@ export class StaticPagesService {
   }
 
   private setCache(cacheEntry: Omit<StaticPagesCacheEntry, 'updatedAt'>) {
+    this.log.debug({
+      event: 'cache-set',
+      key: this.key,
+    });
+
     if (!this.cache.has(this.path)) {
       this.cache.set(this.path, new Map());
     }
@@ -207,5 +211,14 @@ export class StaticPagesService {
       ...cacheEntry,
       updatedAt: Date.now(),
     });
+  }
+
+  private cacheOutdated(cacheEntry: StaticPagesCacheEntry): boolean {
+    const { ttl } = this.options;
+    const { updatedAt } = cacheEntry;
+
+    const isOutdated = updatedAt + ttl <= Date.now();
+
+    return isOutdated;
   }
 }

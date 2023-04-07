@@ -72,6 +72,9 @@
         },
         {
             "path": "../../libs/errors"
+        },
+        {
+            "path": "../page-render-mode"
         }
     ]
 }

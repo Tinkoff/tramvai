@@ -55,6 +55,7 @@ export interface PlatformAction<
 export type TramvaiActionType = 'page' | 'standalone';
 
 export interface TramvaiActionContext<CurrentDeps> {
+  // @TODO: AbortController and AbortSignal from dom typings - for now it is incompatible with @tramvai/http-client
   abortController: AbortController;
   abortSignal: AbortSignal;
   executeAction<Params extends any[], Result, Deps>(

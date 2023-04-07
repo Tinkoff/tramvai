@@ -22,6 +22,9 @@ describe('page-render-mode', () => {
   beforeAll(async () => {
     app = await startCli('page-render-mode', {
       rootDir: path.resolve(__dirname, '../'),
+      env: {
+        LOG_ENABLE: 'trace:static-pages',
+      },
     });
   }, 80000);
 
@@ -152,14 +155,14 @@ describe('page-render-mode', () => {
       // @TODO: перейти на app.request('/static/') после мержа MR с переработкой papi
       const res1 = await fetch(`${app.serverUrl}/static/`, { headers: { cookie: 'foo=bar' } });
       // time to background fetch unpersonalized page
-      await sleep(100);
+      await sleep(150);
       const res2 = await fetch(`${app.serverUrl}/static/?a=1`, { headers: { cookie: 'foo=bar' } });
       const res3 = await fetch(`${app.serverUrl}/static/?b=2`, { headers: { cookie: 'foo=bar' } });
       const res4 = await fetch(`${app.serverUrl}/static-second/`, {
         headers: { cookie: 'foo=bar' },
       });
       // time to background fetch unpersonalized page
-      await sleep(100);
+      await sleep(150);
       const res5 = await fetch(`${app.serverUrl}/static-second/?a=1`, {
         headers: { cookie: 'foo=bar' },
       });
@@ -180,7 +183,7 @@ describe('page-render-mode', () => {
         headers: { 'x-original-host': 'foo.com', cookie: 'foo=bar' },
       });
       // time to background fetch unpersonalized page
-      await sleep(100);
+      await sleep(150);
       const res2 = await fetch(`${app.serverUrl}/static/`, {
         headers: { 'x-original-host': 'foo.com', cookie: 'foo=bar' },
       });
@@ -188,7 +191,7 @@ describe('page-render-mode', () => {
         headers: { 'x-original-host': 'bar.com', cookie: 'foo=bar' },
       });
       // time to background fetch unpersonalized page
-      await sleep(100);
+      await sleep(150);
       const res4 = await fetch(`${app.serverUrl}/static/`, {
         headers: { 'x-original-host': 'bar.com', cookie: 'foo=bar' },
       });
@@ -204,7 +207,7 @@ describe('page-render-mode', () => {
         headers: { 'User-Agent': desktopModernUA, cookie: 'foo=bar' },
       });
       // time to background fetch unpersonalized page
-      await sleep(100);
+      await sleep(150);
       const res2 = await fetch(`${app.serverUrl}/static/`, {
         headers: { 'User-Agent': desktopModernUA, cookie: 'foo=bar' },
       });
@@ -212,7 +215,7 @@ describe('page-render-mode', () => {
         headers: { 'User-Agent': mobileModernUA, cookie: 'foo=bar' },
       });
       // time to background fetch unpersonalized page
-      await sleep(100);
+      await sleep(150);
       const res4 = await fetch(`${app.serverUrl}/static/`, {
         headers: { 'User-Agent': mobileModernUA, cookie: 'foo=bar' },
       });
@@ -228,7 +231,7 @@ describe('page-render-mode', () => {
         headers: { 'User-Agent': desktopModernUA, cookie: 'foo=bar' },
       });
       // time to background fetch unpersonalized page
-      await sleep(100);
+      await sleep(150);
       const res2 = await fetch(`${app.serverUrl}/static/`, {
         headers: { 'User-Agent': desktopModernUA, cookie: 'foo=bar' },
       });
@@ -236,7 +239,7 @@ describe('page-render-mode', () => {
         headers: { 'User-Agent': desktopDefaultUA, cookie: 'foo=bar' },
       });
       // time to background fetch unpersonalized page
-      await sleep(100);
+      await sleep(150);
       const res4 = await fetch(`${app.serverUrl}/static/`, {
         headers: { 'User-Agent': desktopDefaultUA, cookie: 'foo=bar' },
       });
@@ -245,16 +248,6 @@ describe('page-render-mode', () => {
       expect(res2.headers.get('x-tramvai-static-page-from-cache')).toBe('true');
       expect(res3.headers.get('x-tramvai-static-page-from-cache')).toBe(null);
       expect(res4.headers.get('x-tramvai-static-page-from-cache')).toBe('true');
-    });
-
-    it('Requests without cookies will be cached directly', async () => {
-      const res1 = await fetch(`${app.serverUrl}/static/`);
-      const res2 = await fetch(`${app.serverUrl}/static/`);
-      const res3 = await fetch(`${app.serverUrl}/static/`);
-
-      expect(res1.headers.get('x-tramvai-static-page-from-cache')).toBe(null);
-      expect(res2.headers.get('x-tramvai-static-page-from-cache')).toBe('true');
-      expect(res3.headers.get('x-tramvai-static-page-from-cache')).toBe('true');
     });
 
     it('/papi/revalidate by path', async () => {
@@ -287,7 +280,7 @@ describe('page-render-mode', () => {
         const res1 = await fetch(`${app.serverUrl}/static-error/`, {
           headers: { cookie: 'foo=bar' },
         });
-        await sleep(100);
+        await sleep(150);
         const res2 = await fetch(`${app.serverUrl}/static-error/`, {
           headers: { cookie: 'foo=bar' },
         });
@@ -298,7 +291,7 @@ describe('page-render-mode', () => {
 
       it('Direct cache disabled', async () => {
         const res1 = await fetch(`${app.serverUrl}/static-error/`);
-        await sleep(100);
+        await sleep(150);
         const res2 = await fetch(`${app.serverUrl}/static-error/`);
 
         expect(res1.headers.get('x-tramvai-static-page-from-cache')).toBe(null);

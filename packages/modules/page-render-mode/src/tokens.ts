@@ -49,11 +49,6 @@ export const STATIC_PAGES_SHOULD_USE_CACHE = createToken<() => boolean>(
   { multi: true }
 );
 
-export const STATIC_PAGES_SHOULD_SET_TO_CACHE = createToken<() => boolean>(
-  'static pages should set to cache',
-  { multi: true }
-);
-
 export const STATIC_PAGES_BACKGROUND_FETCH_ENABLED = createToken<() => boolean>(
   'static pages can fetch page'
 );

@@ -15,7 +15,7 @@ SSR mode - `ssr` - provides default `tramvai` behaviour, [render full page on se
 
 Static mode - `static` - in-memory cache for page HTML markup.
 
-Response for first request for specific page, without `Cookie` header, will be cached directly, and sended as response to next requests for this page. Otherwise, unpersonalized request for the same page will be triggered at background, and result will be cached.
+All requests for application pages will trigger background unpersonalized request for the same page, without query parameters and cookies, and result will be cached.
 
 5xx responses will not be cached by default, but this behaviour are configurable.
 
@@ -26,6 +26,8 @@ Additional metric with name `static_pages_cache_hit` will be added with cache hi
 Response from cache will be sent from `customer_start` command line, and next lines execution will be aborted.
 
 Cache will be segmented by page path and method, request hostname, device type and browser (modern or default group).
+
+All headers will be cached and sended with response, except `Set-Cookie` - this header will be always fresh, from current response.
 
 ![Diagram](/img/features/rendering/static-mode.drawio.svg)
 
