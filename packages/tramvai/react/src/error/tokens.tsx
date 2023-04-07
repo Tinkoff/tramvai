@@ -11,6 +11,10 @@ export const ERROR_BOUNDARY_TOKEN = createToken<ErrorBoundaryHandler>(
   }
 );
 
+/**
+ * @deprecated
+ * Use a file-based root error boundary instead.
+ */
 export const ROOT_ERROR_BOUNDARY_COMPONENT_TOKEN = createToken<
   React.ComponentType<UniversalErrorBoundaryFallbackProps>
 >('rootErrorBoundaryComponent');

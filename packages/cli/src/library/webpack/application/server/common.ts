@@ -22,34 +22,39 @@ import { extractCssPluginFactory } from '../../blocks/extractCssPlugin';
 export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config: Config) => {
   const { output, fileSystemPages } = configManager;
 
-  config.name('server');
-
-  config.batch(common(configManager));
-  config.batch(commonApplication(configManager));
-  config.batch(files(configManager));
-  config.batch(apiResolve(configManager));
-
-  if (fileSystemPages.enabled) {
-    config.batch(pagesResolve(configManager));
-  }
-
-  config.target('node');
-  config.output.libraryTarget('commonjs2');
-
-  config.node.set('__dirname', false);
+  config
+    .name('server')
+    .target('node')
+    .entry('server')
+    .add(path.resolve(configManager.rootDir, `${configManager.root}/index`));
 
   config
-    .entry('server')
-    .add(path.resolve(configManager.rootDir, `${configManager.root}/index`))
-    .end()
-    .resolve.extensions.merge(['.node']);
+    .batch(common(configManager))
+    .batch(commonApplication(configManager))
+    .batch(configToEnv(configManager))
+    .batch(files(configManager))
+    .batch(apiResolve(configManager))
+    .batch(js(configManager))
+    .batch(ts(configManager))
+    .batch(serverInline(configManager))
+    .batch(browserslistConfigResolve(configManager))
+    .batch(
+      extractCssPluginFactory(configManager, {
+        filename: 'server.[contenthash].css',
+        chunkFilename: null,
+      })
+    )
+    .batch(css(configManager))
+    .when(fileSystemPages.enabled, (cfg) => cfg.batch(pagesResolve(configManager)));
 
   config.output
     .path(configManager.buildPath)
     .publicPath(path.posix.join('/', output.server))
-    .filename('server.js');
+    .filename('server.js')
+    .libraryTarget('commonjs2');
 
-  config.optimization.splitChunks(false).removeAvailableModules(false);
+  config.resolve.extensions.merge(['.node']);
+  config.node.set('__dirname', false);
 
   config.module
     .rule('less')
@@ -57,37 +62,24 @@ export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config
     .use('ignore')
     .loader('null-loader');
 
-  config.batch(configToEnv(configManager));
-
-  config.plugin('define').tap((args) => [
-    {
-      ...args[0],
-      'global.GENTLY': false,
-      'process.env.MODULE': true, // mimic module to bundle svg's inside js and prevent errors from iconLoader
-      'process.env.BROWSER': false,
-      'process.env.SERVER': true,
-    },
-  ]);
-
-  config.batch(
-    extractCssPluginFactory(configManager, {
-      filename: 'server.[contenthash].css',
-      chunkFilename: null,
-    })
-  );
-
-  config.plugin('limit-chunk').use(webpack.optimize.LimitChunkCountPlugin, [
-    {
-      maxChunks: 1,
-    },
-  ]);
-
   config
-    .batch(js(configManager))
-    .batch(ts(configManager))
-    .batch(serverInline(configManager))
-    .batch(browserslistConfigResolve(configManager))
-    .batch(css(configManager));
+    .plugin('define')
+    .tap((args) => [
+      {
+        ...args[0],
+        'global.GENTLY': false,
+        'process.env.MODULE': true, // mimic module to bundle svg's inside js and prevent errors from iconLoader
+        'process.env.BROWSER': false,
+        'process.env.SERVER': true,
+      },
+    ])
+    .end()
+    .plugin('limit-chunk')
+    .use(webpack.optimize.LimitChunkCountPlugin, [
+      {
+        maxChunks: 1,
+      },
+    ]);
 
   return config;
 };

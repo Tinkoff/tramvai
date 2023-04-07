@@ -20,6 +20,7 @@ import {
   RENDER_FLOW_AFTER_TOKEN,
   MODERN_SATISFIES_TOKEN,
   REACT_SERVER_RENDER_MODE,
+  FETCH_WEBPACK_STATS_TOKEN,
 } from '@tramvai/tokens-render';
 import { Scope } from '@tinkoff/dippy';
 import { satisfies } from '@tinkoff/user-agent';
@@ -33,6 +34,7 @@ import { ReactRenderServer } from './server/ReactRenderServer';
 import type { RenderModuleConfig } from './shared/types';
 import { LayoutModule } from './shared/LayoutModule';
 import { providers as sharedProviders } from './shared/providers';
+import { fetchWebpackStats } from './server/blocks/utils/fetchWebpackStats';
 
 export { PageErrorStore, setPageErrorEvent };
 export * from '@tramvai/tokens-render';
@@ -214,6 +216,7 @@ Page Error Boundary will be rendered for the client`,
         modern: MODERN_SATISFIES_TOKEN,
         renderFlowAfter: { token: RENDER_FLOW_AFTER_TOKEN, optional: true },
         logger: LOGGER_TOKEN,
+        fetchWebpackStats: FETCH_WEBPACK_STATS_TOKEN,
       },
     }),
     provide({
@@ -294,6 +297,10 @@ Page Error Boundary will be rendered for the client`,
       deps: {
         createCache: CREATE_CACHE_TOKEN,
       },
+    }),
+    provide({
+      provide: FETCH_WEBPACK_STATS_TOKEN,
+      useValue: fetchWebpackStats,
     }),
   ],
 })

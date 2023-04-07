@@ -5,12 +5,13 @@ import { renderToString } from 'react-dom/server';
 import { parse } from '@tinkoff/url';
 import { isNotFoundError, isRedirectFoundError, isHttpError } from '@tinkoff/errors';
 import type { LOGGER_TOKEN } from '@tramvai/module-common';
+import type { FETCH_WEBPACK_STATS_TOKEN } from '@tramvai/tokens-render';
 import type {
   WEB_FASTIFY_APP_AFTER_ERROR_TOKEN,
   WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN,
 } from '@tramvai/tokens-server-private';
 import type { ExtractDependencyType } from '@tinkoff/dippy';
-import type { ROOT_ERROR_BOUNDARY_COMPONENT_TOKEN } from '@tramvai/react';
+import { ChunkExtractor } from '@loadable/server';
 
 export const errorHandler = (
   app: FastifyInstance,
@@ -18,12 +19,12 @@ export const errorHandler = (
     log,
     beforeError,
     afterError,
-    RootErrorBoundary,
+    fetchWebpackStats,
   }: {
     log: ReturnType<typeof LOGGER_TOKEN>;
     beforeError: ExtractDependencyType<typeof WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN>;
     afterError: ExtractDependencyType<typeof WEB_FASTIFY_APP_AFTER_ERROR_TOKEN>;
-    RootErrorBoundary?: ExtractDependencyType<typeof ROOT_ERROR_BOUNDARY_COMPONENT_TOKEN>;
+    fetchWebpackStats: ExtractDependencyType<typeof FETCH_WEBPACK_STATS_TOKEN>;
   }
 ) => {
   // eslint-disable-next-line max-statements
@@ -53,6 +54,17 @@ export const errorHandler = (
       requestId: request.headers['x-request-id'],
       url: request.url,
     };
+    let RootErrorBoundary = null;
+
+    try {
+      // In case of direct `require` by path, e.g.
+      // `require(path.resolve(process.cwd(), 'src', 'error.tsx'))` file
+      // doesn't include in the bundle, that is why we are using a
+      // path alias here along with webpack config option.
+      // See usage of `ROOT_ERROR_BOUNDARY_ALIAS`.
+      // eslint-disable-next-line import/no-unresolved, import/extensions
+      RootErrorBoundary = require('@/__private__/error').default;
+    } catch {}
 
     if (isRedirectFoundError(error)) {
       log.info({
@@ -125,7 +137,7 @@ Not Found page is common use-case with this error - https://tramvai.dev/docs/fea
 
     logMessage = `${logMessage}
 ${
-  RootErrorBoundary
+  RootErrorBoundary !== null
     ? 'Root Error Boundary will be rendered for the client'
     : 'You can add Error Boundary for better UX - https://tramvai.dev/docs/features/error-boundaries'
 }'`;
@@ -145,10 +157,33 @@ ${
 
     reply.status(httpStatus);
 
-    if (RootErrorBoundary) {
+    if (RootErrorBoundary !== null) {
       try {
+        const stats = await fetchWebpackStats();
+        const extractor = new ChunkExtractor({ stats, entrypoints: ['rootErrorBoundary'] });
+        const url = parse(requestInfo.url);
+        const serializedError = {
+          status: httpStatus,
+          message: error.message,
+          stack: error.stack,
+        };
+
         const body = renderToString(
-          createElement(RootErrorBoundary, { error, url: parse(request.url) })
+          createElement(RootErrorBoundary, { error: serializedError, url })
+        ).replace(
+          '</head>',
+          [
+            '<script>' +
+              `window.serverUrl = ${JSON.stringify(url)};` +
+              `window.serverError = new Error("${serializedError.message}");` +
+              `Object.assign(window.serverError, ${JSON.stringify(serializedError)});` +
+              '</script>',
+            extractor.getStyleTags(),
+            extractor.getScriptTags(),
+            '</head>',
+          ]
+            .filter(Boolean)
+            .join('\n')
         );
 
         log.info({

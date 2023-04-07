@@ -6,6 +6,7 @@ import type { ConfigManager } from '../../../config/configManager';
 import type { ApplicationConfigEntry } from '../../../typings/configEntry/application';
 import type { ModuleFederationIgnoreEntriesOptions } from '../plugins/ModuleFederationIgnoreEntries';
 import { ModuleFederationIgnoreEntries } from '../plugins/ModuleFederationIgnoreEntries';
+import { rootErrorBoundaryFactory } from '../blocks/rootErrorBoundary';
 
 export const commonApplication =
   (configManager: ConfigManager<ApplicationConfigEntry>) => (config: Config) => {
@@ -21,4 +22,6 @@ export const commonApplication =
       .use(ModuleFederationIgnoreEntries, [
         { entries: ['polyfill'] } as ModuleFederationIgnoreEntriesOptions,
       ]);
+
+    config.batch(rootErrorBoundaryFactory(configManager));
   };

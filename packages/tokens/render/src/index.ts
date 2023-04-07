@@ -190,3 +190,15 @@ export const MODERN_SATISFIES_TOKEN = createToken<boolean>('modernSatisfies');
 export type ReactServerRenderMode = 'sync' | 'streaming';
 
 export const REACT_SERVER_RENDER_MODE = createToken<ReactServerRenderMode>('reactServerRenderMode');
+
+export interface WebpackStats {
+  assetsByChunkName: Record<string, string[]>;
+  namedChunkGroups?: Record<string, { name: string; chunks: string[]; assets: string[] }>;
+  entrypoints: Record<string, { name: string; chunks: string[]; assets: string[] }>;
+  publicPath: string;
+  [key: string]: any;
+}
+
+type FetchWebpackStatsFn = (payload?: { modern?: boolean }) => Promise<WebpackStats>;
+
+export const FETCH_WEBPACK_STATS_TOKEN = createToken<FetchWebpackStatsFn>('fetchWebpackStatsFn');

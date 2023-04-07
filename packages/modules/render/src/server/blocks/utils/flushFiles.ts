@@ -1,6 +1,7 @@
 import uniq from '@tinkoff/utils/array/uniq';
 import flatten from '@tinkoff/utils/array/flatten';
-import type { WebpackStats } from './fetchWebpackStats';
+
+import type { WebpackStats } from '@tramvai/tokens-render';
 
 export const isJs = (file: string): boolean =>
   /\.js$/.test(file) && !/\.hot-update\.js$/.test(file);

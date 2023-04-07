@@ -35,6 +35,7 @@
     "@fastify/compress": "^6.2.0",
     "@fastify/formbody": "^7.4.0",
     "@fastify/static": "^6.9.0",
+    "@loadable/server": "^5.15.0",
     "http-proxy-middleware": "^2.0.2"
   },
   "peerDependencies": {

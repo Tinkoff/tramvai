@@ -1,5 +1,7 @@
 import * as path from 'path';
 import fetch from 'node-fetch';
+
+import type { WebpackStats, FETCH_WEBPACK_STATS_TOKEN } from '@tramvai/tokens-render';
 import type { appConfig as AppConfig } from '@tramvai/cli/lib/external/config';
 
 import { requireFunc } from './requireFunc';
@@ -9,13 +11,6 @@ let appConfig: typeof AppConfig;
 try {
   appConfig = require('@tramvai/cli/lib/external/config').appConfig;
 } catch (e) {}
-
-export type WebpackStats = {
-  assetsByChunkName: Record<string, string[]>;
-  namedChunkGroups?: Record<string, { name: string; chunks: string[] }>;
-  publicPath: string;
-  [key: string]: any;
-};
 
 let fetchStats: (modern: boolean) => Promise<WebpackStats> = async () => {
   throw new Error(`Unknown environment`);
@@ -45,7 +40,11 @@ if (process.env.NODE_ENV === 'development') {
 if (process.env.NODE_ENV === 'test') {
   fetchStats = () => {
     // mock for unit-testing as there is no real static return something just to make server render work
-    return Promise.resolve({ publicPath: 'http://localhost:4000/', assetsByChunkName: {} });
+    return Promise.resolve({
+      publicPath: 'http://localhost:4000/',
+      assetsByChunkName: {},
+      entrypoints: {},
+    });
   };
 }
 
@@ -111,10 +110,6 @@ if (process.env.NODE_ENV === 'production') {
   };
 }
 
-export const fetchWebpackStats = async ({
-  modern,
-}: {
-  modern?: boolean;
-} = {}): Promise<WebpackStats> => {
+export const fetchWebpackStats: typeof FETCH_WEBPACK_STATS_TOKEN = async ({ modern } = {}) => {
   return fetchStats(modern);
 };

@@ -49,7 +49,7 @@ createApp({
       provide: DEFAULT_FOOTER_COMPONENT,
       useValue: Footer,
     },
-    // регистрируем meta viewport, который будет добавлятся на каждую страницу
+    // регистрируем meta viewport, который будет добавляться на каждую страницу
     {
       provide: RENDER_SLOTS,
       multi: true,

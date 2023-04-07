@@ -1,14 +1,15 @@
-import type { PageResource } from '@tramvai/tokens-render';
+import type { PageResource, FETCH_WEBPACK_STATS_TOKEN } from '@tramvai/tokens-render';
 import { ResourceSlot, ResourceType } from '@tramvai/tokens-render';
-import { fetchWebpackStats } from './utils/fetchWebpackStats';
 import { flushFiles } from './utils/flushFiles';
 
 export const polyfillResources = async ({
   condition,
   modern,
+  fetchWebpackStats,
 }: {
   condition: string;
   modern: boolean;
+  fetchWebpackStats: typeof FETCH_WEBPACK_STATS_TOKEN;
 }) => {
   const webpackStats = await fetchWebpackStats({ modern });
 

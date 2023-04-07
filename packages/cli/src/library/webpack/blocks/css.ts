@@ -51,7 +51,7 @@ export const cssWebpackRulesFactory =
         cssModulesOptions.auto = new RegExp(cssModulePattern);
       }
 
-      // TODO: можно будет избавиться от проверки и сотавить всё в minicss-плагине, когда зарелизят эти изменения
+      // TODO: можно будет избавиться от проверки и оставить всё в minicss-плагине, когда зарелизят эти изменения
       // https://github.com/webpack-contrib/css-loader/blob/master/src/utils.js#L310
       if (/\[minicss]/.test(localIdentName)) {
         cssModulesOptions.getLocalIdent = createGenerator();

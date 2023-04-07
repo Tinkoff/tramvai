@@ -2,8 +2,7 @@ import fastify from 'fastify';
 import { fastifyCookie } from '@fastify/cookie';
 import fastifyFormBody from '@fastify/formbody';
 import type { EXECUTION_CONTEXT_MANAGER_TOKEN, LOGGER_TOKEN } from '@tramvai/tokens-common';
-import { ROOT_EXECUTION_CONTEXT_TOKEN } from '@tramvai/tokens-common';
-import { RESPONSE_MANAGER_TOKEN } from '@tramvai/tokens-common';
+import { ROOT_EXECUTION_CONTEXT_TOKEN, RESPONSE_MANAGER_TOKEN } from '@tramvai/tokens-common';
 import type { COMMAND_LINE_RUNNER_TOKEN } from '@tramvai/core';
 import { Scope } from '@tramvai/core';
 import type { SERVER_TOKEN } from '@tramvai/tokens-server';
@@ -18,9 +17,10 @@ import type {
   WEB_FASTIFY_APP_AFTER_ERROR_TOKEN,
   WEB_FASTIFY_APP_METRICS_TOKEN,
 } from '@tramvai/tokens-server-private';
+import type { FETCH_WEBPACK_STATS_TOKEN } from '@tramvai/tokens-render';
 import type { ExtractDependencyType } from '@tinkoff/dippy';
 import { provide } from '@tinkoff/dippy';
-import type { ROOT_ERROR_BOUNDARY_COMPONENT_TOKEN } from '@tramvai/react';
+
 import { errorHandler } from './error';
 
 export const webAppFactory = ({ server }: { server: typeof SERVER_TOKEN }) => {
@@ -49,7 +49,7 @@ export const webAppInitCommand = ({
   afterInit,
   beforeError,
   afterError,
-  RootErrorBoundary,
+  fetchWebpackStats,
 }: {
   app: ExtractDependencyType<typeof WEB_FASTIFY_APP_TOKEN>;
   logger: ExtractDependencyType<typeof LOGGER_TOKEN>;
@@ -62,7 +62,7 @@ export const webAppInitCommand = ({
   afterInit: ExtractDependencyType<typeof WEB_FASTIFY_APP_AFTER_INIT_TOKEN>;
   beforeError: ExtractDependencyType<typeof WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN>;
   afterError: ExtractDependencyType<typeof WEB_FASTIFY_APP_AFTER_ERROR_TOKEN>;
-  RootErrorBoundary?: ExtractDependencyType<typeof ROOT_ERROR_BOUNDARY_COMPONENT_TOKEN>;
+  fetchWebpackStats: ExtractDependencyType<typeof FETCH_WEBPACK_STATS_TOKEN>;
 }) => {
   const log = logger('server:webapp');
 
@@ -74,7 +74,7 @@ export const webAppInitCommand = ({
   };
 
   return async function webAppInit() {
-    errorHandler(app, { log, beforeError, afterError, RootErrorBoundary });
+    errorHandler(app, { log, beforeError, afterError, fetchWebpackStats });
 
     await app.register(async (instance) => {
       await runHandlers(instance, beforeInit);

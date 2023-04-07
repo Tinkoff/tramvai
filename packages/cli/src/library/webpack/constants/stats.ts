@@ -8,6 +8,7 @@ export const DEFAULT_STATS_OPTIONS: Configuration['stats'] = {
   outputPath: true, // выводит информацию о том в какой папке хранится билд на диске
   chunkGroups: true, // позволяет получить в stats поле namedChunkGroups которое потом используется в webpack-flush-chunks для получения чанков-зависимостей
   ids: true, // необходимо чтобы в chunksGroups были выставлены связи между модулями
+  entrypoints: true, // нужно, чтобы узнать чанки для каждой точки входа
 };
 
 export const DEFAULT_STATS_FIELDS: string[] = [
@@ -15,4 +16,5 @@ export const DEFAULT_STATS_FIELDS: string[] = [
   'outputPath',
   'assetsByChunkName',
   'namedChunkGroups',
+  'entrypoints',
 ];

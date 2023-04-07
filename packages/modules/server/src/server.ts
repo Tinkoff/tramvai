@@ -9,6 +9,7 @@ import {
   provide,
 } from '@tramvai/core';
 import { SERVER_TOKEN } from '@tramvai/tokens-server';
+import { FETCH_WEBPACK_STATS_TOKEN } from '@tramvai/tokens-render';
 import {
   WEB_FASTIFY_APP_TOKEN,
   WEB_FASTIFY_APP_BEFORE_INIT_TOKEN,
@@ -105,9 +106,30 @@ EventEmitter.defaultMaxListeners = 50;
         limiterRequest: { token: WEB_FASTIFY_APP_LIMITER_TOKEN, optional: true },
         beforeError: { token: WEB_FASTIFY_APP_BEFORE_ERROR_TOKEN, optional: true },
         afterError: { token: WEB_FASTIFY_APP_AFTER_ERROR_TOKEN, optional: true },
-        RootErrorBoundary: { token: ROOT_ERROR_BOUNDARY_COMPONENT_TOKEN, optional: true },
+        fetchWebpackStats: FETCH_WEBPACK_STATS_TOKEN,
       },
     },
+    provide({
+      provide: commandLineListTokens.init,
+      multi: true,
+      useFactory:
+        ({ rootErrorBoundary, logger }) =>
+        () => {
+          if (process.env.NODE_ENV === 'development' && rootErrorBoundary) {
+            logger.error({
+              event: 'tramvai-app-init',
+              message:
+                'You are using `ROOT_ERROR_BOUNDARY_COMPONENT_TOKEN`, which was deprecated. Your boundary will not work.' +
+                'Use an `error.tsx` component instead. See more: ' +
+                'https://tramvai.dev/docs/features/error-boundaries/#root-error-boundary',
+            });
+          }
+        },
+      deps: {
+        logger: LOGGER_TOKEN,
+        rootErrorBoundary: { token: ROOT_ERROR_BOUNDARY_COMPONENT_TOKEN, optional: true },
+      },
+    }),
     {
       provide: commandLineListTokens.listen,
       multi: true,

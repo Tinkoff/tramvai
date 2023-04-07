@@ -9,6 +9,7 @@ import type {
   RENDER_SLOTS,
   RESOURCES_REGISTRY,
   RENDER_FLOW_AFTER_TOKEN,
+  FETCH_WEBPACK_STATS_TOKEN,
 } from '@tramvai/tokens-render';
 import { ResourceSlot, ResourceType } from '@tramvai/tokens-render';
 import { safeStringify } from '@tramvai/safe-strings';
@@ -19,7 +20,6 @@ import { polyfillResources } from './blocks/polyfill';
 import { addPreloadForCriticalJS } from './blocks/preload/preloadBlock';
 import type { ReactRenderServer } from './ReactRenderServer';
 import { formatAttributes } from './utils';
-import { fetchWebpackStats } from './blocks/utils/fetchWebpackStats';
 
 type NarrowToArray<T> = T extends any[] ? T : T[];
 
@@ -57,6 +57,8 @@ export class PageBuilder {
 
   private log: ReturnType<ExtractDependencyType<typeof LOGGER_TOKEN>>;
 
+  private fetchWebpackStats: typeof FETCH_WEBPACK_STATS_TOKEN;
+
   constructor({
     renderSlots,
     pageService,
@@ -69,6 +71,7 @@ export class PageBuilder {
     modern,
     renderFlowAfter,
     logger,
+    fetchWebpackStats,
   }) {
     this.htmlAttrs = htmlAttrs;
     this.renderSlots = flatten(renderSlots || []);
@@ -81,10 +84,11 @@ export class PageBuilder {
     this.modern = modern;
     this.renderFlowAfter = renderFlowAfter || [];
     this.log = logger('page-builder');
+    this.fetchWebpackStats = fetchWebpackStats;
   }
 
   async flow(): Promise<string> {
-    const stats = await fetchWebpackStats({ modern: this.modern });
+    const stats = await this.fetchWebpackStats({ modern: this.modern });
     const extractor = new ChunkExtractor({ stats, entrypoints: [] });
 
     // first we render the application, because we need to extract information about the data used by the components
@@ -124,12 +128,19 @@ export class PageBuilder {
     const { bundle, pageComponent } = this.pageService.getConfig();
 
     this.resourcesRegistry.register(
-      await bundleResource({ bundle, modern, extractor, pageComponent })
+      await bundleResource({
+        bundle,
+        modern,
+        extractor,
+        pageComponent,
+        fetchWebpackStats: this.fetchWebpackStats,
+      })
     );
     this.resourcesRegistry.register(
       await polyfillResources({
         condition: this.polyfillCondition,
         modern,
+        fetchWebpackStats: this.fetchWebpackStats,
       })
     );
   }

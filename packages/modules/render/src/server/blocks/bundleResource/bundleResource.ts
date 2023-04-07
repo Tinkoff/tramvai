@@ -1,23 +1,24 @@
 import has from '@tinkoff/utils/object/has';
 import last from '@tinkoff/utils/array/last';
 import type { ChunkExtractor } from '@loadable/server';
-import type { PageResource } from '@tramvai/tokens-render';
+import type { PageResource, FETCH_WEBPACK_STATS_TOKEN } from '@tramvai/tokens-render';
 import { ResourceType, ResourceSlot } from '@tramvai/tokens-render';
 import { isFileSystemPageComponent, fileSystemPageToWebpackChunkName } from '@tramvai/experiments';
 import { PRELOAD_JS } from '../../constants/performance';
 import { flushFiles } from '../utils/flushFiles';
-import { fetchWebpackStats } from '../utils/fetchWebpackStats';
 
 export const bundleResource = async ({
   bundle,
   modern,
   extractor,
   pageComponent,
+  fetchWebpackStats,
 }: {
   bundle: string;
   modern: boolean;
   extractor: ChunkExtractor;
   pageComponent?: string;
+  fetchWebpackStats: typeof FETCH_WEBPACK_STATS_TOKEN;
 }) => {
   // for file-system pages preload page chunk against bundle chunk
   const chunkNameFromBundle = isFileSystemPageComponent(pageComponent)

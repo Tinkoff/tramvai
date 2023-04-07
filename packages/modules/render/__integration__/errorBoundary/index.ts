@@ -4,15 +4,11 @@ import { CommonModule, REQUEST_MANAGER_TOKEN, STORE_TOKEN } from '@tramvai/modul
 import { SpaRouterModule, ROUTER_GUARD_TOKEN, setPageErrorEvent } from '@tramvai/module-router';
 import { RenderModule } from '@tramvai/module-render';
 import { ServerModule } from '@tramvai/module-server';
-import {
-  ERROR_BOUNDARY_FALLBACK_COMPONENT_TOKEN,
-  ROOT_ERROR_BOUNDARY_COMPONENT_TOKEN,
-} from '@tramvai/react';
+import { ERROR_BOUNDARY_FALLBACK_COMPONENT_TOKEN } from '@tramvai/react';
 import { HttpError, throwHttpError } from '@tinkoff/errors';
 import { parse } from '@tinkoff/url';
 import { DEFAULT_ERROR_BOUNDARY_COMPONENT } from '@tramvai/tokens-render';
 import { LegacyErrorBoundary } from './components/LegacyErrorBoundary';
-import { RootErrorBoundary } from './components/RootErrorBoundary';
 import { TokenDefaultErrorBoundary } from './components/TokenDefaultErrorBoundary';
 
 createApp({
@@ -119,10 +115,6 @@ createApp({
     provide({
       provide: ERROR_BOUNDARY_FALLBACK_COMPONENT_TOKEN,
       useValue: React.createElement(LegacyErrorBoundary),
-    }),
-    provide({
-      provide: ROOT_ERROR_BOUNDARY_COMPONENT_TOKEN,
-      useValue: RootErrorBoundary,
     }),
     ...(process.env.TEST_DEFAULT_ERROR_BOUNDARY
       ? [
