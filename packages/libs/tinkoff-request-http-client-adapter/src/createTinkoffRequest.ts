@@ -24,7 +24,6 @@ const defaultAgent = createAgent();
 export type RequestValidator = {
   (state: ContextState): any;
 };
-
 export interface TinkoffRequestOptions extends HttpClientBaseOptions {
   name?: string;
   logger?: typeof LOGGER_TOKEN;
@@ -69,6 +68,7 @@ export function createTinkoffRequest(options: TinkoffRequestOptions): MakeReques
     agent,
     querySerializer,
     retryOptions,
+    interceptors,
     ...defaults
   } = options;
 

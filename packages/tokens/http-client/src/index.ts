@@ -1,5 +1,5 @@
 import { createToken } from '@tinkoff/dippy';
-import type { BaseHttpClient, HttpClient } from '@tramvai/http-client';
+import type { BaseHttpClient, HttpClient, HttpClientInterceptor } from '@tramvai/http-client';
 import type { TinkoffRequestOptions, Agent } from '@tramvai/tinkoff-request-http-client-adapter';
 
 export type HttpClientFactoryOptions = TinkoffRequestOptions & { name: string };
@@ -17,6 +17,15 @@ export const HTTP_CLIENT_FACTORY =
  */
 export const DEFAULT_HTTP_CLIENT_FACTORY_OPTIONS = createToken<Partial<HttpClientFactoryOptions>>(
   'DEFAULT_HTTP_CLIENT_FACTORY_OPTIONS'
+);
+
+/**
+ * @description
+ * Interceptors will be added to default options for factory of HTTP clients
+ */
+export const DEFAULT_HTTP_CLIENT_INTERCEPTORS = createToken<HttpClientInterceptor>(
+  'DEFAULT_HTTP_CLIENT_INTERCEPTORS',
+  { multi: true }
 );
 
 /**

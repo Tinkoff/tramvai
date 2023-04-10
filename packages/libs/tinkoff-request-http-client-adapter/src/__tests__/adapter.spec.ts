@@ -633,6 +633,111 @@ describe('@tinkoff/request to HttpClient adapter', () => {
       await terminate();
     });
 
+    describe('interceptors', () => {
+      it('modify request', async () => {
+        const applyMockHandlers = (app: Express) => {
+          app.get('/fake', async (req, res) => {
+            if (req.query.wuid === '12345') {
+              return res.send('ok');
+            }
+            res.status(404).send('Not Found');
+          });
+        };
+
+        const { port, terminate } = await startMockServer(applyMockHandlers);
+
+        const httpClient = createAdapter({
+          logger: loggerFactoryMock,
+          baseUrl: `http://localhost:${port}/`,
+          interceptors: [
+            (req, next) => {
+              return next({
+                ...req,
+                query: {
+                  ...req.query,
+                  wuid: '123',
+                },
+              });
+            },
+            (req, next) => {
+              return next({
+                ...req,
+                query: {
+                  ...req.query,
+                  wuid: `${req?.query?.wuid}45`,
+                },
+              });
+            },
+          ],
+        });
+
+        const { payload } = await httpClient.get('fake');
+
+        expect(payload).toBe('ok');
+
+        await terminate();
+      });
+
+      it('rewrite response', async () => {
+        const applyMockHandlers = (app: Express) => {
+          app.get('/fake', async (req, res) => {
+            res.json({ result: 'ok' });
+          });
+        };
+
+        const { port, terminate } = await startMockServer(applyMockHandlers);
+
+        const httpClient = createAdapter({
+          logger: loggerFactoryMock,
+          baseUrl: `http://localhost:${port}/`,
+          interceptors: [
+            async (_res, _next) => {
+              return {
+                status: 200,
+                headers: {},
+                payload: 'intercepted',
+              };
+            },
+          ],
+        });
+
+        const { payload } = await httpClient.get('fake');
+
+        expect(payload).toBe('intercepted');
+
+        await terminate();
+      });
+
+      it('modify response', async () => {
+        const applyMockHandlers = (app: Express) => {
+          app.get('/fake', async (req, res) => {
+            res.json({ result: 'ok' });
+          });
+        };
+
+        const { port, terminate } = await startMockServer(applyMockHandlers);
+
+        const httpClient = createAdapter({
+          logger: loggerFactoryMock,
+          baseUrl: `http://localhost:${port}/`,
+          interceptors: [
+            (req, next) => {
+              return next(req).then((res) => ({
+                ...res,
+                payload: (res.payload as any).result,
+              }));
+            },
+          ],
+        });
+
+        const { payload } = await httpClient.get('fake');
+
+        expect(payload).toBe('ok');
+
+        await terminate();
+      });
+    });
+
     it('modifyRequest', async () => {
       const applyMockHandlers = (app: Express) => {
         app.get('/fake', async (req, res) => {

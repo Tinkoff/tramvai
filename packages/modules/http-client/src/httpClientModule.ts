@@ -8,6 +8,7 @@ import {
   HTTP_CLIENT_AGENT,
   DISABLE_CIRCUIT_BREAKER,
   DEFAULT_HTTP_CLIENT_FACTORY_OPTIONS,
+  DEFAULT_HTTP_CLIENT_INTERCEPTORS,
 } from '@tramvai/tokens-http-client';
 import {
   LOGGER_TOKEN,
@@ -54,6 +55,10 @@ export const HttpClientModule = /* @__PURE__ */ Module({
           token: DEFAULT_HTTP_CLIENT_FACTORY_OPTIONS,
           optional: true,
         },
+        defaultInterceptors: {
+          token: DEFAULT_HTTP_CLIENT_INTERCEPTORS,
+          optional: true,
+        },
         commandLineExecutionContext: {
           token: COMMAND_LINE_EXECUTION_CONTEXT_TOKEN,
           optional: true,
@@ -66,6 +71,7 @@ export const HttpClientModule = /* @__PURE__ */ Module({
         return factory({
           name: 'http-client',
           disableCache: true,
+          enableCircuitBreaker: false,
         });
       },
       deps: {

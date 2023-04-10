@@ -1,7 +1,11 @@
 import isNil from '@tinkoff/utils/is/nil';
 import compose from '@tinkoff/utils/function/compose';
 import type { MakeRequest } from '@tinkoff/request-core';
-import type { HttpClient, HttpClientBaseOptions } from '@tramvai/http-client';
+import type {
+  HttpClient,
+  HttpClientBaseOptions,
+  HttpClientInterceptor,
+} from '@tramvai/http-client';
 import type { TinkoffRequestOptions } from '@tramvai/tinkoff-request-http-client-adapter';
 import {
   mergeOptions,
@@ -51,6 +55,7 @@ export const httpClientFactory = ({
   querySerializer,
   disableCircuitBreaker = false,
   defaultOptions,
+  defaultInterceptors,
   commandLineExecutionContext,
 }: {
   logger: ExtractDependencyType<typeof LOGGER_TOKEN>;
@@ -64,6 +69,7 @@ export const httpClientFactory = ({
   querySerializer?: QuerySerializer;
   disableCircuitBreaker: ExtractDependencyType<typeof DISABLE_CIRCUIT_BREAKER> | null;
   defaultOptions: Partial<HttpClientFactoryOptions> | null;
+  defaultInterceptors: HttpClientInterceptor[] | null;
   commandLineExecutionContext: ExtractDependencyType<
     typeof COMMAND_LINE_EXECUTION_CONTEXT_TOKEN
   > | null;
@@ -75,6 +81,7 @@ export const httpClientFactory = ({
 
     const forceDisableCache = envManager.get('HTTP_CLIENT_CACHE_DISABLED');
     const forceDisabledCircuitBreaker = envManager.get('HTTP_CLIENT_CIRCUIT_BREAKER_DISABLED');
+    const interceptors = { interceptors: defaultInterceptors || [] };
 
     const adapterOptions = mergeOptions(
       mergeOptions(
@@ -99,7 +106,7 @@ export const httpClientFactory = ({
           signal: commandLineExecutionContext?.()?.abortSignal as any,
           ...environmentDependentOptions,
         },
-        defaultOptions ?? {}
+        defaultOptions ? mergeOptions(defaultOptions, interceptors) : interceptors
       ),
       options
     ) as TinkoffRequestOptions & { name: string };

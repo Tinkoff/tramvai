@@ -28,6 +28,7 @@ export function mergeOptions(
       ...options.headers,
       ...nextOptions.headers,
     },
+    interceptors: [...(options.interceptors || []), ...(nextOptions.interceptors || [])],
   };
 
   const composeModifier = (modifier: 'modifyRequest' | 'modifyResponse' | 'modifyError') => {

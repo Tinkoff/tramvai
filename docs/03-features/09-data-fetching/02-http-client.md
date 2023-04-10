@@ -60,7 +60,7 @@ New HTTP clients / API services should not be created with `scope: Scope.SINGLET
 
 #### Basic HTTP client
 
-The `HTTP_CLIENT_FACTORY` token - provides a factory for creating new HTTP clients. The options are preinstalled with a logger and a cache factory.
+The `HTTP_CLIENT_FACTORY` token - provides a factory for creating new HTTP clients. The options are preinstalled with a logger and a cache factory. `HTTP_CLIENT_FACTORY` default options [will be applied to child HTTP clients](#global-configuration).
 
 ##### Peculiarities
 
@@ -128,9 +128,9 @@ export const fetchAction = declareAction({
 });
 ```
 
-### Adding custom data to requests
+### Adding custom data to all requests
 
-Let's consider a case using the abstract service `WHATEVER_API_SERVICE` as an example. Let's say we want to add an `X-Real-Ip` header to every request:
+Let's consider a case using the abstract service `WHATEVER_API_SERVICE` as an example. Let's say we want to add an `X-Real-Ip` header to every request, [interceptors](#httpclientinterceptor) allow this:
 
 ```tsx
 import { provide } from '@tramvai/core';
@@ -151,15 +151,17 @@ const provider = provide({
     return factory({
       name: 'whatever-api',
       baseUrl: envManager.get('WHATEVER_API'),
-      modifyRequest: (request: HttpClientRequest) => {
-        return {
-          ...request,
-          headers: {
-            ...request.headers,
-            'X-real-ip': requestManager.getClientIp(),
-          },
-        };
-      },
+      interceptors: [
+        (req, next) => {
+          return next({
+            ...request,
+            headers: {
+              ...request.headers,
+              'X-real-ip': requestManager.getClientIp(),
+            },
+          });
+        },
+      ],
     });
   },
   deps: {
@@ -170,11 +172,90 @@ const provider = provide({
 });
 ```
 
+### Global configuration
+
+All HTTP clients, created from `HTTP_CLIENT_FACTORY`, will have this factory default configuration. All of this options can be overridden when creating a new client, but sometimes it is very useful to set some global parameters for all clients, for example [interceptors](#interceptors).
+
+#### Interceptors
+
+You can provide multi token `DEFAULT_HTTP_CLIENT_INTERCEPTORS` with interceptor, that will be applied to all HTTP clients:
+
+```tsx
+import { DEFAULT_HTTP_CLIENT_INTERCEPTORS } from '@tramvai/tokens-http-client';
+
+const provider = provide({
+  provide: DEFAULT_HTTP_CLIENT_INTERCEPTORS,
+  useValue: (req, next) => next(req),
+});
+```
+
 ## How to
 
 ### How to disable HTTP request caching?
 
 To disable caching for all HTTP clients, pass the env variable `HTTP_CLIENT_CACHE_DISABLED: true` to the application
+
+### How to modify request?
+
+Interceptor example:
+
+```ts
+const interceptor = (req, next) => next({
+  ...req,
+  headers: {
+    ...req.headers,
+    'X-custom-header': 'intercepted',
+  },
+});
+```
+
+### How to modify response?
+
+Interceptor example:
+
+```ts
+const interceptor = (req, next) => {
+  return next(req)
+    .then((res) => ({
+      ...res,
+      payload: `${res.payload}-intercepted`,
+    }));
+};
+```
+
+### How to mock response?
+
+Interceptor example:
+
+```ts
+const interceptor = (req, next) => {
+  return Promise.resolve({
+    status: 200,
+    headers: {},
+    payload: 'mocked',
+  });
+};
+```
+
+### How catch all request stages?
+
+Interceptor example:
+
+```ts
+const interceptor = (req, next) => {
+  console.log('start');
+
+  return next(req)
+    .then((res) => {
+      console.log('success');
+      return res;
+    })
+    .catch((reason) => {
+      console.log('failure');
+      throw reason;
+    });
+};
+```
 
 ### Testing
 
@@ -311,11 +392,16 @@ type HttpClientRequest = {
   cache?: boolean;
   // if `abortPromise` is resolved, the request will be canceled
   abortPromise?: Promise<void>;
+  // will intercept all requests
+  interceptors?: HttpClientInterceptor[];
   // method to modify request data
+  // @deprecated - use interceptors instead
   modifyRequest?: (req: HttpClientRequest) => HttpClientRequest;
   // method to modify response data
+  // @deprecated - use interceptors instead
   modifyResponse?: <P = any>(res: HttpClientResponse<P>) => HttpClientResponse<P>;
   // method to modify the error object
+  // @deprecated - use interceptors instead
   modifyError?: (error: HttpClientError, req: HttpClientRequest) => HttpClientError;
   [key: string]: any;
 };
@@ -344,6 +430,15 @@ type HttpClientError = Error & {
   headers?: Record<string, any>;
   [key: string]: any;
 };
+```
+
+### HttpClientInterceptor
+
+```tsx
+type HttpClientInterceptor = (
+  request: HttpClientRequest,
+  next: (request: HttpClientRequest) => Promise<HttpClientResponse>
+) => Promise<HttpClientResponse>;
 ```
 
 ### ApiService

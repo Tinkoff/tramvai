@@ -4,7 +4,7 @@ jest.mock('node-fetch');
 import fetch from 'node-fetch';
 import { testModule } from '@tramvai/test-unit';
 import { ENV_MANAGER_TOKEN, LOGGER_TOKEN, REQUEST_MANAGER_TOKEN } from '@tramvai/tokens-common';
-import { HTTP_CLIENT_FACTORY } from '@tramvai/tokens-http-client';
+import { DEFAULT_HTTP_CLIENT_INTERCEPTORS, HTTP_CLIENT_FACTORY } from '@tramvai/tokens-http-client';
 import { APP_INFO_TOKEN } from '@tramvai/core';
 import { CommonModule } from '@tramvai/module-common';
 import type { Provider } from '@tinkoff/dippy';
@@ -23,6 +23,7 @@ import { HttpClientModule } from '../httpClientModule';
 const { loggerMock, loggerFactoryMock } = createLoggerMocks();
 const requestManagerMock = createRequestManagerMock();
 const envManagerMock = createEnvManagerMock();
+const interceptorMock = jest.fn((r, n) => n(r));
 
 const mockHttpClientFactory = (providers: Provider[] = []) => {
   const { di } = testModule(HttpClientModule, {
@@ -46,6 +47,10 @@ const mockHttpClientFactory = (providers: Provider[] = []) => {
           appName: 'example',
         },
       },
+      {
+        provide: DEFAULT_HTTP_CLIENT_INTERCEPTORS,
+        useValue: interceptorMock,
+      },
       ...providers,
     ],
   });
@@ -65,6 +70,7 @@ describe('httpClientFactory', () => {
     clearRequestManagerMock(requestManagerMock);
     clearEnvManagerMock(envManagerMock);
     (fetch as any).mockClear();
+    interceptorMock.mockClear();
   });
 
   it('cache enabled by default', async () => {
@@ -225,6 +231,21 @@ describe('httpClientFactory', () => {
 
     // so, we will have 9 failed requests from CIRCUIT_BREAKER
     expect(circuitBreakerErrorLogs.length).toBe(9);
+  });
+
+  it('DEFAULT_HTTP_CLIENT_INTERCEPTORS used', async () => {
+    (fetch as any).mockImplementation(() =>
+      createJsonResponse({
+        resultCode: 'OK',
+        payload: 'payload',
+      })
+    );
+
+    const httpClient = factory({ name: 'test-api' });
+
+    await httpClient.request({ path: 'fake', headers: { foo: 'bar' } });
+
+    expect(interceptorMock).toHaveBeenCalledTimes(1);
   });
 });
 /* eslint-enable import/first */

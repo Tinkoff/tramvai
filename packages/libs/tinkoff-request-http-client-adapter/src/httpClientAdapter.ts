@@ -26,15 +26,51 @@ export class HttpClientAdapter extends BaseHttpClient implements HttpClient {
     this.makeRequest = makeRequest;
   }
 
-  async request<R = any>(req: HttpClientRequest): Promise<HttpClientResponse<R>> {
+  request<R = any>(req: HttpClientRequest): Promise<HttpClientResponse<R>> {
     // применяем дефолтные опции до вызова modifyRequest на объекте запроса
     const optionsWithDefaults = mergeOptions(this.options, req);
 
-    const { modifyRequest, modifyResponse, modifyError, ...reqWithDefaults } = optionsWithDefaults;
+    const { modifyRequest, modifyResponse, modifyError, interceptors, ...reqWithDefaults } =
+      optionsWithDefaults;
 
+    let _next = (_req: HttpClientRequest): Promise<HttpClientResponse<R>> =>
+      this._processMakeRequest(_req, { modifyRequest, modifyResponse, modifyError });
+
+    if (interceptors) {
+      Array.from(interceptors)
+        .reverse()
+        .forEach((interceptor) => {
+          const _prevNext = _next;
+          _next = (_req) => interceptor(_req, _prevNext as any);
+        });
+    }
+
+    return _next(reqWithDefaults);
+  }
+
+  fork(forkOptions: HttpClientRequest = {}, mergeOptionsConfig: { replace?: boolean } = {}) {
+    return new HttpClientAdapter({
+      options: mergeOptions(this.options, forkOptions, mergeOptionsConfig),
+      makeRequest: this.makeRequest,
+    });
+  }
+
+  // eslint-disable-next-line sort-class-members/sort-class-members
+  private _processMakeRequest = async (
+    reqAfterInterceptors: HttpClientRequest,
+    {
+      modifyRequest,
+      modifyResponse,
+      modifyError,
+    }: {
+      modifyRequest: HttpClientBaseOptions['modifyRequest'];
+      modifyResponse: HttpClientBaseOptions['modifyResponse'];
+      modifyError: HttpClientBaseOptions['modifyError'];
+    }
+  ): Promise<HttpClientResponse> => {
     const { method, body, requestType, ...adaptedReq } = modifyRequest
-      ? modifyRequest(reqWithDefaults)
-      : reqWithDefaults;
+      ? modifyRequest(reqAfterInterceptors)
+      : reqAfterInterceptors;
 
     if (method) {
       adaptedReq.httpMethod = method;
@@ -46,7 +82,7 @@ export class HttpClientAdapter extends BaseHttpClient implements HttpClient {
       adaptedReq.type = requestType;
     }
 
-    const res = this.makeRequest<R>(adaptedReq);
+    const res = this.makeRequest(adaptedReq);
 
     try {
       const payload = await res;
@@ -74,12 +110,5 @@ export class HttpClientAdapter extends BaseHttpClient implements HttpClient {
 
       throw modifyError ? modifyError(errorWithMeta, adaptedReq) : errorWithMeta;
     }
-  }
-
-  fork(forkOptions: HttpClientRequest = {}, mergeOptionsConfig: { replace?: boolean } = {}) {
-    return new HttpClientAdapter({
-      options: mergeOptions(this.options, forkOptions, mergeOptionsConfig),
-      makeRequest: this.makeRequest,
-    });
-  }
+  };
 }

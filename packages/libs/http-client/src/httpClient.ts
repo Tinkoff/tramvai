@@ -17,9 +17,19 @@ export type RequestContentType = 'form' | 'json' | 'xml' | 'urlencoded';
 export type ResponseContentType = 'json' | 'blob' | 'text' | 'buffer' | 'arrayBuffer';
 
 export interface HttpClientBaseOptions extends HttpClientRequest {
+  /**
+   * @deprecated use interceptors instead
+   */
   modifyRequest?: (req: HttpClientRequest) => HttpClientRequest;
+  /**
+   * @deprecated use interceptors instead
+   */
   modifyResponse?: <P = any, R = P>(res: HttpClientResponse<P>) => HttpClientResponse<R>;
+  /**
+   * @deprecated use interceptors instead
+   */
   modifyError?: (error: HttpClientError, req: HttpClientRequest) => HttpClientError;
+  interceptors?: HttpClientInterceptor[];
 }
 
 export type HttpClientRequest = {
@@ -51,6 +61,11 @@ export type HttpClientError = Error & {
   headers?: Record<string, any>;
   [key: string]: any;
 };
+
+export type HttpClientInterceptor = (
+  request: HttpClientRequest,
+  next: HttpClient['request']
+) => Promise<HttpClientResponse>;
 
 export type HttpClient = {
   fork(options?: HttpClientBaseOptions, mergeOptionsConfig?: { replace?: boolean }): HttpClient;
