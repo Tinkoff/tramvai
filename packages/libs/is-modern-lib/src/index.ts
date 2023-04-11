@@ -47,6 +47,8 @@ export const modernLibs = [
   'xlsx',
   'react-swipeable',
   '@react-hook',
+  '@tui-react',
+  '@tui-react-mobile',
 ];
 
 const regexStringFactory = ({ except }: { except?: boolean } = {}) =>
