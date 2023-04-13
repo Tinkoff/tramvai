@@ -1,10 +1,10 @@
 import { resolve, join } from 'path';
 import PQueue from 'promise-queue';
 import { outputFile } from 'fs-extra';
-import { request } from './request';
 import type { Context } from '../../models/context';
 import type { ConfigManager } from '../../config/configManager';
 import type { ApplicationConfigEntry } from '../../typings/configEntry/application';
+import { appRequest } from '../../utils/dev-app/request';
 
 const MAX_CONCURRENT = 10;
 const DYNAMIC_PAGE_REGEX = /\/:.+\//g;
@@ -17,9 +17,8 @@ export const generateStatic = async (
   const q = new PQueue(MAX_CONCURRENT);
   const promises = [];
 
-  const { host, port, rootDir, output } = configManager;
+  const { rootDir, output } = configManager;
   const staticPath = resolve(rootDir, output.static);
-  const serverPath = `http://${host}:${port}`;
 
   for (const path of paths) {
     promises.push(
@@ -41,7 +40,7 @@ export const generateStatic = async (
             message: `path: ${path}, message: start fetching page`,
           });
 
-          const html = await request({ url: `${serverPath}${path}` });
+          const html = await appRequest(configManager, path);
 
           await outputFile(join(staticPath, path, 'index.html'), html);
 

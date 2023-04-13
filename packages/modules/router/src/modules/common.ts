@@ -40,6 +40,12 @@ import { commonTokens } from './tokens/common';
 import { PageService } from '../services/page';
 import { providers as fsPagesProviders } from './fileSystemPages';
 
+declare module '@tinkoff/router' {
+  export interface RouteConfig {
+    forceRouteResolve?: boolean;
+  }
+}
+
 export const providers: Provider[] = [
   ...commonGuards,
   ...commonHooks,
@@ -69,7 +75,11 @@ export const providers: Provider[] = [
 
       if (routeResolve) {
         router.registerHook('beforeResolve', async (navigation) => {
-          if (!router.resolve(navigation.url.href)) {
+          const existingRoute = router.resolve(navigation.url.href);
+
+          // forceRouteResolve exists as a fallback property in case we have any conflicts
+          // in external routes definition and we need to force route resolving is some cases
+          if (!existingRoute || existingRoute.config?.forceRouteResolve) {
             const route = await routeResolve(navigation);
 
             if (route) {

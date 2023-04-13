@@ -8,6 +8,7 @@ import { COMMAND_PARAMETERS_TOKEN, CONFIG_ROOT_DIR_TOKEN } from '../../../../../
 export const ThreadWorkerBridge: WorkerBridgeFactory<Worker> = (di) => {
   const { env } = di.get(COMMAND_PARAMETERS_TOKEN);
   const configManager = di.get(SERVER_CONFIG_MANAGER_TOKEN);
+  let firstWorker = true;
 
   return {
     async setup() {},
@@ -37,8 +38,11 @@ export const ThreadWorkerBridge: WorkerBridgeFactory<Worker> = (di) => {
           // https://nodejs.org/dist/latest-v15.x/docs/api/all.html#cluster_how_it_works
           PORT: `${configManager.port}`,
           PORT_SERVER: `${configManager.port}`,
+          TRAMVAI_CLI_WATCH_INITIAL_BUILD: firstWorker,
         },
       });
+
+      firstWorker = false;
 
       return worker;
     },

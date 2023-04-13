@@ -2,6 +2,10 @@ import type { Url, Query } from '@tinkoff/url';
 
 export type Params = Record<string, string>;
 
+export interface RouteConfig {
+  [key: string]: any;
+}
+
 export interface Route {
   name: string;
   path: string;
@@ -10,7 +14,7 @@ export interface Route {
   // in the router code actually, but the alias field
   // is used in router-extension-dco just as a marker for dynamic route
   alias?: string;
-  config?: Record<string, any>;
+  config?: RouteConfig;
 }
 
 export interface NavigationRoute extends Route {

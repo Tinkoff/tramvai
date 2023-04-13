@@ -25,7 +25,7 @@ export const isWildcard = (part: string) => {
 };
 
 export const isParameterized = (part: string) => {
-  return part.match(PARAM_MATCH_REGEXP);
+  return !!part.match(PARAM_MATCH_REGEXP);
 };
 
 const parseParameter = (part: string): Parameter => {

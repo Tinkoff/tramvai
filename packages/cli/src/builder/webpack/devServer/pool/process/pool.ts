@@ -16,10 +16,11 @@ export const ProcessWorkerBridge: WorkerBridgeFactory<Worker> = (di) => {
   const configManager = di.get(SERVER_CONFIG_MANAGER_TOKEN);
   const stdout = di.get(STDOUT_TOKEN);
   const stderr = di.get(STDERR_TOKEN);
+  let firstWorker = true;
 
   return {
     async setup() {
-      cluster.setupMaster({
+      cluster.setupPrimary({
         // указываем другой файл для работы cluster.fork
         exec: path.resolve(__dirname, './worker.js'),
         execArgv: ([] as string[]).concat(
@@ -41,7 +42,10 @@ export const ProcessWorkerBridge: WorkerBridgeFactory<Worker> = (di) => {
         // https://nodejs.org/dist/latest-v15.x/docs/api/all.html#cluster_how_it_works
         PORT: `${configManager.port}`,
         PORT_SERVER: `${configManager.port}`,
+        TRAMVAI_CLI_WATCH_INITIAL_BUILD: firstWorker,
       });
+
+      firstWorker = false;
 
       worker.process.stdout?.pipe(stdout);
       worker.process.stderr?.pipe(stderr);

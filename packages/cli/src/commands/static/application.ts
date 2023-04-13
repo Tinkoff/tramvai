@@ -1,4 +1,3 @@
-import propOr from '@tinkoff/utils/object/propOr';
 import intersection from '@tinkoff/utils/array/intersection';
 
 import path from 'path';
@@ -10,7 +9,6 @@ import type { CommandResult } from '../../models/command';
 import type { ApplicationConfigEntry } from '../../typings/configEntry/application';
 import type { Params } from './command';
 import { createConfigManager } from '../../config/configManager';
-import { request } from './request';
 import { generateStatic } from './generate';
 import { copyStatsJsonFileToServerDirectory } from '../../builder/webpack/utils/copyStatsJsonFile';
 import { safeRequire } from '../../utils/safeRequire';
@@ -18,6 +16,7 @@ import { app } from '../index';
 import { startStaticServer } from './staticServer';
 import { startServer } from './server';
 import { handleServerOutput } from './utils/handle-server-output';
+import { appBundleInfo } from '../../utils/dev-app/request';
 
 // eslint-disable-next-line max-statements
 export const staticApp = async (
@@ -124,7 +123,7 @@ export const staticApp = async (
     message: `message: server started, fetch application routes`,
   });
 
-  let paths = propOr('payload', [], await request({ url: bundleInfoPath }));
+  let paths = await appBundleInfo(serverConfigManager);
 
   if (options.onlyPages) {
     paths = intersection(paths, options.onlyPages);
