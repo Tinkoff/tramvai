@@ -4,6 +4,7 @@ import { createCacheKeyFromNMFResult } from './DedupePlugin';
 const resourceWithoutData: NMFResult = {};
 
 const resourceWithoutVersion: NMFResult = {
+  loaders: [],
   resourceResolveData: {
     descriptionFileData: {
       name: 'app',
@@ -12,6 +13,7 @@ const resourceWithoutVersion: NMFResult = {
 };
 
 const resourceMajorLongRequest: NMFResult = {
+  loaders: [],
   resourceResolveData: {
     descriptionFileData: {
       name: '@tinkoff/utils',
@@ -22,6 +24,7 @@ const resourceMajorLongRequest: NMFResult = {
 };
 
 const resourceMinorLongRequest: NMFResult = {
+  loaders: [],
   resourceResolveData: {
     descriptionFileData: {
       name: '@tinkoff/utils',
@@ -32,6 +35,7 @@ const resourceMinorLongRequest: NMFResult = {
 };
 
 const resourcePatchLongRequest: NMFResult = {
+  loaders: [],
   resourceResolveData: {
     descriptionFileData: {
       name: '@tinkoff/utils',
@@ -53,34 +57,35 @@ describe('DedupePlugin', () => {
 
     it('Генерирует корректный ключ для ресурса с major версией', () => {
       expect(createCacheKeyFromNMFResult(resourceMajorLongRequest)).toBe(
-        '@tinkoff/utils@1.0.0:./is/array.js'
+        '@tinkoff/utils@1.0.0:./is/array.js!'
       );
       expect(createCacheKeyFromNMFResult(resourceMajorLongRequest, true)).toBe(
-        '@tinkoff/utils@1:./is/array.js'
+        '@tinkoff/utils@1:./is/array.js!'
       );
     });
 
     it('Генерирует корректный ключ для ресурса с minor версией', () => {
       expect(createCacheKeyFromNMFResult(resourceMinorLongRequest)).toBe(
-        '@tinkoff/utils@0.1.0:./is/array.js'
+        '@tinkoff/utils@0.1.0:./is/array.js!'
       );
       expect(createCacheKeyFromNMFResult(resourceMinorLongRequest, true)).toBe(
-        '@tinkoff/utils@0.1:./is/array.js'
+        '@tinkoff/utils@0.1:./is/array.js!'
       );
     });
 
     it('Генерирует корректный ключ для ресурса с patch версией', () => {
       expect(createCacheKeyFromNMFResult(resourcePatchLongRequest)).toBe(
-        '@tinkoff/utils@0.0.1:./is/array.js'
+        '@tinkoff/utils@0.0.1:./is/array.js!'
       );
       expect(createCacheKeyFromNMFResult(resourcePatchLongRequest, true)).toBe(
-        '@tinkoff/utils@0.0.1:./is/array.js'
+        '@tinkoff/utils@0.0.1:./is/array.js!'
       );
     });
 
     it('[bugfix] генерирует корректный ключ для ресурса с вложенной библиотекой, при пересечении названий', () => {
       expect(
         createCacheKeyFromNMFResult({
+          loaders: [],
           resourceResolveData: {
             descriptionFileData: {
               name: 'bar',
@@ -89,7 +94,7 @@ describe('DedupePlugin', () => {
             relativePath: './bar/index.js',
           },
         })
-      ).toBe('bar@1.0.0:./bar/index.js');
+      ).toBe('bar@1.0.0:./bar/index.js!');
     });
   });
 });

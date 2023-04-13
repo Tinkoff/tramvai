@@ -818,6 +818,11 @@
               "default": true,
               "type": "boolean"
             },
+            "enabledDev": {
+              "title": "Does DedupePlugin should be enabled in development mode\nWhy it might be useful see [issue](https://github.com/Tinkoff/tramvai/issues/11)",
+              "default": false,
+              "type": "boolean"
+            },
             "strategy": {
               "title": "Strategy for DedupePlugin",
               "default": "equality",
@@ -1334,6 +1339,11 @@
               "default": true,
               "type": "boolean"
             },
+            "enabledDev": {
+              "title": "Does DedupePlugin should be enabled in development mode\nWhy it might be useful see [issue](https://github.com/Tinkoff/tramvai/issues/11)",
+              "default": false,
+              "type": "boolean"
+            },
             "strategy": {
               "title": "Strategy for DedupePlugin",
               "default": "equality",
@@ -1848,6 +1858,11 @@
             "enabled": {
               "title": "Strategy for DedupePlugin",
               "default": true,
+              "type": "boolean"
+            },
+            "enabledDev": {
+              "title": "Does DedupePlugin should be enabled in development mode\nWhy it might be useful see [issue](https://github.com/Tinkoff/tramvai/issues/11)",
+              "default": false,
               "type": "boolean"
             },
             "strategy": {

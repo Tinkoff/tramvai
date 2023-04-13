@@ -214,6 +214,12 @@ export interface CliConfigEntry extends ConfigEntry {
      */
     enabled: boolean;
     /**
+     * @title Does DedupePlugin should be enabled in development mode
+     * Why it might be useful see [issue](https://github.com/Tinkoff/tramvai/issues/11)
+     * @default false
+     */
+    enabledDev: boolean;
+    /**
      * @title Strategy for DedupePlugin
      * @default "equality"
      */

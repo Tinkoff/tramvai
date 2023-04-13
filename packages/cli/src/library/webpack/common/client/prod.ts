@@ -3,9 +3,9 @@ import type Config from 'webpack-chain';
 import chalk from 'chalk';
 import { DuplicatesPlugin } from 'inspectpack/plugin';
 import type { DedupePluginOptions } from '@tinkoff/webpack-dedupe-plugin';
-import { DedupePlugin } from '@tinkoff/webpack-dedupe-plugin';
 import type { ConfigManager } from '../../../../config/configManager';
 import type { CliConfigEntry } from '../../../../typings/configEntry/cli';
+import { dedupe } from '../../blocks/dedupe';
 
 const onDedupeInfo = once<DedupePluginOptions['onDedupeInfo']>((logInfo) => {
   if (logInfo.size > 0) {
@@ -27,14 +27,12 @@ export default (configManager: ConfigManager<CliConfigEntry>) => (config: Config
   ]);
 
   if (configManager.dedupe.enabled) {
-    config.plugin('dedupe-plugin').use(DedupePlugin, [
-      {
-        strategy: configManager.dedupe.strategy,
-        ignorePackages: configManager.dedupe.ignore?.map((ignore) => new RegExp(`^${ignore}`)),
+    config.batch(
+      dedupe(configManager, {
         showLogs: !configManager.modern,
         onDedupeInfo,
-      } as DedupePluginOptions,
-    ]);
+      })
+    );
   } else {
     config.plugin('duplicates-plugin').use(DuplicatesPlugin, [
       {

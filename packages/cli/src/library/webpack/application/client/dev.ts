@@ -34,7 +34,7 @@ export const webpackClientConfig = ({
   const config = new Config();
 
   config.batch(common(configManager));
-  config.batch(commonDev());
+  config.batch(commonDev(configManager));
   config.batch(
     commonApplicationDev({
       entry: path.resolve(configManager.rootDir, `${configManager.root}/index`),

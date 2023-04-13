@@ -4,11 +4,5 @@
   "main": "index.js",
   "license": "Apache-2.0",
   "private": true,
-  "dependencies": {},
-  "scripts": {
-    "build": "tramvai build dedupe-no -t client",
-    "build-eq": "tramvai build dedupe-eq -t client",
-    "build-sem": "tramvai build dedupe-sem -t client",
-    "build-ignore": "tramvai build dedupe-ignore -t client"
-  }
+  "dependencies": {}
 }

@@ -15,6 +15,7 @@ declare module 'webpack' {
 }
 
 export interface NMFResult {
+  loaders?: Array<{ loader: string }>;
   // описание package.json либы, из которой импортим какой-то модуль
   resourceResolveData?: {
     // само описание package.json
@@ -194,17 +195,9 @@ export class DedupePlugin {
   }
 
   apply(compiler: Compiler) {
-    let called = false;
-
     // этот хук будет вызываться при каждом создании компилятора, но это создает дубли модулей,
     // с которыми пока непонятно что делать, поэтому просто игнорируем childCompiler
     compiler.hooks.normalModuleFactory.tap(PLUGIN_NAME, (nmf) => {
-      if (called) {
-        return;
-      }
-
-      called = true;
-
       nmf.hooks.module.tap(PLUGIN_NAME, (module: Module, result: NMFResult) => {
         // игнорируем все что вне node_modules, т.к. вряд-ли это нужно дедуплицировать или если модуль игнорируем
         if (!module.resource.includes('node_modules') || this.isIgnoredModule(result)) {
@@ -301,14 +294,18 @@ export function createCacheKeyFromNMFResult(
 ): string | null {
   const name = getResourceName(nmfResult);
   const version = getResourceVersion(nmfResult);
+
   if (!name || !version) {
     return null;
   }
+
+  const loaders = getResourceLoaders(nmfResult);
+
   // если semver то используем только мажорную версию пакета
   // если нет, то оставляем полную версию
   const versionForCache = useSemver ? buildCacheVersionFromNMFResult(nmfResult) : version;
   // ключ = имя + версия + путь к исходному файлу относительно корня либы
-  return `${name}@${versionForCache}:${nmfResult.resourceResolveData.relativePath}`;
+  return `${name}@${versionForCache}:${nmfResult.resourceResolveData.relativePath}!${loaders}`;
 }
 
 /**
@@ -335,6 +332,10 @@ function getResourceName(nmfResult: NMFResult) {
 // получаем поле `version` из package.json
 function getResourceVersion(nmfResult: NMFResult) {
   return nmfResult?.resourceResolveData?.descriptionFileData?.version;
+}
+
+function getResourceLoaders(nmfResult: NMFResult) {
+  return nmfResult.loaders?.map((loader) => loader.loader).join('!');
 }
 
 // получаем относительный путь от корня вместо абсолютного

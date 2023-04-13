@@ -28,6 +28,7 @@ it('should populate defaults for config', () => {
           "cssMinimize": "css-minimizer",
           "dedupe": {
             "enabled": true,
+            "enabledDev": false,
             "strategy": "equality",
           },
           "define": {
@@ -94,6 +95,7 @@ it('should populate defaults for config', () => {
           "cssMinimize": "css-minimizer",
           "dedupe": {
             "enabled": true,
+            "enabledDev": false,
             "strategy": "equality",
           },
           "define": {
@@ -225,6 +227,7 @@ it('should populate defaults for overridable options', () => {
           "cssMinimize": "css-minimizer",
           "dedupe": {
             "enabled": true,
+            "enabledDev": false,
             "strategy": "semver",
           },
           "define": {
@@ -305,6 +308,7 @@ it('should populate defaults for overridable options', () => {
           "cssMinimize": "css-minimizer",
           "dedupe": {
             "enabled": true,
+            "enabledDev": false,
             "strategy": "equality",
           },
           "define": {

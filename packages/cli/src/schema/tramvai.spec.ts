@@ -51,6 +51,7 @@ describe('JSON schema для tramvai.json', () => {
             "cssMinimize": "css-minimizer",
             "dedupe": {
               "enabled": true,
+              "enabledDev": false,
               "strategy": "equality",
             },
             "define": {
@@ -117,6 +118,7 @@ describe('JSON schema для tramvai.json', () => {
             "cssMinimize": "css-minimizer",
             "dedupe": {
               "enabled": true,
+              "enabledDev": false,
               "strategy": "equality",
             },
             "define": {

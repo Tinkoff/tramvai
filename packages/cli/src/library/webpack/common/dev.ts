@@ -1,8 +1,10 @@
 import type Config from 'webpack-chain';
 import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
 import { ignoreWarnings } from '../utils/warningsFilter';
+import type { CliConfigEntry, ConfigManager } from '../../../api';
+import { dedupe } from '../blocks/dedupe';
 
-export default () => (config: Config) => {
+export default (configManager: ConfigManager<CliConfigEntry>) => (config: Config) => {
   config.plugin('case-sensitive-path').use(CaseSensitivePathsPlugin);
 
   config.stats({
@@ -18,6 +20,10 @@ export default () => (config: Config) => {
   config.output.pathinfo(false);
 
   config.module.set('unsafeCache', true);
+
+  if (configManager.dedupe.enabledDev) {
+    config.batch(dedupe(configManager));
+  }
 
   return config;
 };
