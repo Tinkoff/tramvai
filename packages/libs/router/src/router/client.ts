@@ -17,7 +17,26 @@ export abstract class ClientRouter extends AbstractRouter {
     this.history.listen(async ({ type, url, navigateState, replace, history }) => {
       const currentUrl = this.getCurrentUrl();
       const { pathname, query } = this.resolveUrl({ url });
-      const isSameUrlNavigation = currentUrl.pathname === pathname;
+      const isSameUrlNavigation =
+        (currentUrl ? currentUrl.pathname : window.location.pathname) === pathname;
+      const isUpdateCurrentRoute = type === 'updateCurrentRoute' || (!type && isSameUrlNavigation);
+
+      //
+      // When history was changed before rehydration, we need to pass this change if url is the same,
+      // because current route will be the same with any of this type changes, and while rehydration fresh url will be used.
+      // Another case is navigation, and it is okay to run `internalNavigate`, because we support this case before rehydration.
+      //
+      // @todo: find a better solution. We can monkeypatch window.history later, in `history.init` method,
+      // but it can lead to inconsistent state between current route and page url, if updated url is not the same.
+      //
+      if (isUpdateCurrentRoute && !currentUrl) {
+        if (replace) {
+          (window.history as any).__originalHistory.replaceState(navigateState, '', url);
+        } else {
+          (window.history as any).__originalHistory.pushState(navigateState, '', url);
+        }
+        return;
+      }
 
       if (type === 'updateCurrentRoute' || (!type && isSameUrlNavigation)) {
         const route = this.tree?.getRoute(pathname);

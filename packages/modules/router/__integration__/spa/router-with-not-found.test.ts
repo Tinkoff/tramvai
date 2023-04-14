@@ -394,6 +394,27 @@ describe('router/spa', () => {
 
       expect(await page.evaluate(() => window.history.length)).toBe(3);
     });
+
+    it('replace state before rehydrate, same url, route is the same and fresh url is used', async () => {
+      const { serverUrl } = getApp();
+      const { waitForUrl, router } = await getPageWrapper('/history-before-init-same-url/');
+
+      await waitForUrl(`${serverUrl}/history-before-init-same-url/?test=a`);
+
+      expect((await router.getCurrentRoute()).name).toBe('history-before-init-same-url');
+      expect((await router.getCurrentUrl()).pathname).toBe('/history-before-init-same-url/');
+      expect((await router.getCurrentUrl()).search).toBe('?test=a');
+    });
+
+    it('replace state before rehydrate, new url, navigation is delayed and new route is used', async () => {
+      const { serverUrl } = getApp();
+      const { waitForUrl, router } = await getPageWrapper('/history-before-init-new-url/');
+
+      await waitForUrl(`${serverUrl}/`);
+
+      expect((await router.getCurrentRoute()).name).toBe('root');
+      expect((await router.getCurrentUrl()).pathname).toBe('/');
+    });
   });
 
   describe('navigate through dom api', () => {

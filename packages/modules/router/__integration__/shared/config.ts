@@ -167,6 +167,22 @@ export const routes: Route[] = [
     },
   },
   {
+    name: 'history-before-init-same-url',
+    path: '/history-before-init-same-url/',
+    config: {
+      bundle: 'history',
+      pageComponent: 'EmptyCmp',
+    },
+  },
+  {
+    name: 'history-before-init-same-url',
+    path: '/history-before-init-new-url/',
+    config: {
+      bundle: 'history',
+      pageComponent: 'EmptyCmp',
+    },
+  },
+  {
     name: 'dom-navigate-link-query',
     path: '/dom/navigate/query/',
     config: {

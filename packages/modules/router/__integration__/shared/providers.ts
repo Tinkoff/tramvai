@@ -56,4 +56,32 @@ export const providers: Provider[] = [
       pageService: PAGE_SERVICE_TOKEN,
     },
   }),
+  provide({
+    provide: commandLineListTokens.listen,
+    multi: true,
+    useFactory: () => {
+      return () => {
+        if (
+          typeof window !== 'undefined' &&
+          window.location.pathname === '/history-before-init-same-url/'
+        ) {
+          window.history.replaceState({}, '', '/history-before-init-same-url/?test=a');
+        }
+      };
+    },
+  }),
+  provide({
+    provide: commandLineListTokens.listen,
+    multi: true,
+    useFactory: () => {
+      return () => {
+        if (
+          typeof window !== 'undefined' &&
+          window.location.pathname === '/history-before-init-new-url/'
+        ) {
+          window.history.replaceState({}, '', '/');
+        }
+      };
+    },
+  }),
 ];

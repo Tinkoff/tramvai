@@ -56,6 +56,14 @@ export const PushStateExternal = () => {
   );
 };
 
+export const EmptyCmp = () => {
+  return (
+    <>
+      <div id="page">Empty Component</div>
+    </>
+  );
+};
+
 // eslint-disable-next-line import/no-default-export
 export default createBundle({
   name: 'history',
@@ -65,5 +73,6 @@ export default createBundle({
     ReplaceStateExternal,
     PushStateInternal,
     PushStateExternal,
+    EmptyCmp,
   },
 });

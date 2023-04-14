@@ -31,9 +31,23 @@ export const wrapRouter = (page: Page) => {
     }, options);
   };
 
+  const getCurrentRoute = async () => {
+    return page.evaluate(() => {
+      return (window as any).contextExternal.di.get('router pageService').getCurrentRoute();
+    });
+  };
+
+  const getCurrentUrl = async () => {
+    return page.evaluate(() => {
+      return (window as any).contextExternal.di.get('router pageService').getCurrentUrl();
+    });
+  };
+
   return {
     navigate,
     navigateThenWaitForReload,
     updateCurrentRoute,
+    getCurrentRoute,
+    getCurrentUrl,
   };
 };
