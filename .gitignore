@@ -32,6 +32,8 @@ _node_modules/
 
 # test
 /coverage
+playwright-report
+test-results
 
 # Compiled sources
 lib
