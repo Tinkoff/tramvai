@@ -114,7 +114,7 @@ export const registerChildAppRenderSlots = ({
       addChunk(config.css.entry);
     }
 
-    if (stats) {
+    if (stats && stats.federatedModules) {
       for (const federatedModule of stats.federatedModules) {
         // entries are duplicated in the `exposes` field of federated stats for some reason
         // for now there anyway should be only one exposed entry so took the first available
