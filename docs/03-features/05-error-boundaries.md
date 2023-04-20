@@ -257,5 +257,3 @@ const provider = {
   },
 };
 ```
-
-##### - [Next: App Lifecycle](03-features/06-app-lifecycle.md)

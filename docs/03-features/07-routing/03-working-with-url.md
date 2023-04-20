@@ -245,5 +245,3 @@ If you pass undefined as the value for a specific query key, then this value wil
 ```ts
 pageService.navigate({ query: { a: undefined, b: 'b' }, preserveQuery: true });
 ```
-
-##### - [Next: Routing - Links and Navigation](03-features/07-routing/04-links-and-navigation.md)

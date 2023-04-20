@@ -44,5 +44,3 @@ title: Overview
 - 🕊️ **Migrations**
 
   Automatic migrations with `jscodeshift` codemodes
-
-##### - [Next: Quick Start](01-get-started/02-quick-start.md)

@@ -749,7 +749,3 @@ export function Component() {
   );
 }
 ```
-
-##### - [Next: Server-Side Rendering](03-features/010-rendering/01-ssr.md)
-
-##### - [Next: Static Site Generation](03-features/010-rendering/04-ssg.md)

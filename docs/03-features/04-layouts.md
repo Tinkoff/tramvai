@@ -319,5 +319,3 @@ createApp({
 ```
 
 After this, layout will be rendered at application main page.
-
-##### - [Next: Error Boundaries](03-features/05-error-boundaries.md)

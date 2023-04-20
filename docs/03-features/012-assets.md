@@ -1,6 +1,6 @@
 ---
 id: assets
-title: Assets
+title: Images and Fonts
 ---
 
 ## Images

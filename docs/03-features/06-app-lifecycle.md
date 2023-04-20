@@ -198,7 +198,3 @@ _For what_: To update meta information on the current page
 When `spaMode` is `after`, page actions will be executed at this stage.
 
 _For what_: This is more of an internal stage and should not be used in ordinary cases.
-
-##### - [Next: Routing - Overview](03-features/07-routing/01-overview.md)
-
-##### - [Next: State Management](03-features/08-state-management.md)

@@ -70,51 +70,7 @@ module.exports = {
             },
           ],
         },
-        {
-          type: 'category',
-          label: 'API routes',
-          items: [
-            'features/papi/introduction',
-            {
-              type: 'ref',
-              label: 'Recipes',
-              id: 'how-to/how-create-papi',
-            },
-            {
-              type: 'ref',
-              label: 'Library @tramvai/papi',
-              id: 'references/tramvai/papi',
-            },
-          ],
-        },
         'features/migration',
-        {
-          type: 'category',
-          label: 'Child App',
-          items: [
-            'features/child-app/overview',
-            {
-              type: 'ref',
-              label: 'How to create Child App?',
-              id: 'how-to/how-create-child-app',
-            },
-            {
-              type: 'ref',
-              label: 'Module to connect Child App',
-              id: 'references/modules/child-app',
-            },
-            {
-              type: 'ref',
-              label: 'Test Child App',
-              id: 'references/tramvai/test/child-app',
-            },
-            {
-              type: 'ref',
-              label: 'Интеграция с админкой',
-              id: 'references/tinkoff-modules/child-app',
-            },
-          ],
-        },
       ],
     },
     {

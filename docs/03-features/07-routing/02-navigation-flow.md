@@ -48,5 +48,3 @@ And as you can see, actions behaviour depends on `SPA actions mode`. This mode a
 This flow is simple - just a hard reload for any navigations:
 
 ![Diagram](/img/router/navigate-flow-client-no-spa.drawio.svg)
-
-##### - [Next: Routing - Working with Url](03-features/07-routing/03-working-with-url.md)

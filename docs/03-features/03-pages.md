@@ -277,5 +277,3 @@ createApp({
 ```
 
 Dynamic parameter available in current route params, more information in [Working with Url documentation](03-features/07-routing/03-working-with-url.md#route-params).
-
-##### - [Next: Layouts](03-features/04-layouts.md)

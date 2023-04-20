@@ -41,5 +41,3 @@ describe('router guards', () => {
   });
 });
 ```
-
-##### - [Next: State Management](03-features/08-state-management.md)

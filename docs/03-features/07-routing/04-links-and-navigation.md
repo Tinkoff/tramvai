@@ -163,5 +163,3 @@ Object that allows to specify transition options both to [navigate](#navigation)
 
 - `code` - redirect code that is returned on server in case of redirects
 - `navigateState` - any additional data that is stored with route
-
-##### - [Next: Routing - Hooks and Guards](03-features/07-routing/05-hooks-and-guards.md)

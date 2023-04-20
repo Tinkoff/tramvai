@@ -115,7 +115,7 @@ Module will not serve the newly added file on the filesystem, works only for all
 
 ### PAPI
 
-Papi - API routes for the `tramvai` application. More information is available in [Papi](features/papi/introduction.md)
+Papi - API routes for the `tramvai` application. More information is available in [Papi](03-features/016-papi.md)
 
 ### Emulation of network/backends problems in the application
 

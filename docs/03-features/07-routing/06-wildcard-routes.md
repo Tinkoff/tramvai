@@ -139,5 +139,3 @@ createApp({
   ],
 });
 ```
-
-##### - [Next: Routing - Redirects](03-features/07-routing/07-redirects.md)

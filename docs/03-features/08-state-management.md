@@ -668,5 +668,3 @@ Since the entire state of the application with all the actions is quite large, t
 ## Testing
 
 You can find examples how to test reducers or mock store in our complete [Testing Guide](guides/testing.md)!
-
-##### - [Next: Actions](03-features/09-data-fetching/01-action.md)

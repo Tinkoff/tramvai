@@ -23,5 +23,3 @@ SSR also brings some challenges:
 - High server load when generating HTML
 
 To be able to better handle high loads, `tramvai` provides a few additional page render modes, which allow the server to do less work when generating HTML - [static](03-features/010-rendering/02-page-render-mode.md#static-mode) and [client](03-features/010-rendering/02-page-render-mode.md#client-mode) modes. Also, [lazy hydration](03-features/010-rendering/03-hydration.md) is available to improve client-side loading performance.
-
-##### - [Next: Page Render Mode](03-features/010-rendering/02-page-render-mode.md)

@@ -86,5 +86,3 @@ Router doesn't support proxy setup directly. But proxy still can be used with so
 
 - setup proxy server to pass requests to app with rewriting request and response paths. (E.g. for [nginx](http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_redirect))
 - it wont work as expected on spa navigation on client, so only option in this case is use the `NoSpaRouter`
-
-##### - [Next: Routing - Testing](03-features/07-routing/09-testing.md)

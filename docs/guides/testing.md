@@ -817,7 +817,7 @@ it('should work with mocker', async () => {
 
 ### Papi testing
 
-For [papi](features/papi/introduction.md) methods testing you can use `app.papi` wrapper methods `publicPapi` and `privatePapi` with all `supertest` features.
+For [papi](03-features/016-papi.md) methods testing you can use `app.papi` wrapper methods `publicPapi` and `privatePapi` with all `supertest` features.
 
 For example, let's make request to built-in papi method which returns all application routes in payload:
 

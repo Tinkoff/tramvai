@@ -79,5 +79,3 @@ app-directory
 ├── shared - reused modules of the application
 └── routes - application pages
 ```
-
-##### - [Next: Tutorial](02-tutorial/01-new-app.md)

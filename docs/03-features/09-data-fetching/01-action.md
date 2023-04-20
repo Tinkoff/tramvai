@@ -471,5 +471,3 @@ const preparePageAction = creareAction({
 
 ConcertVenuePage.actions = [preparePageAction];
 ```
-
-##### - [Next: HTTP Client](03-features/09-data-fetching/02-http-client.md)

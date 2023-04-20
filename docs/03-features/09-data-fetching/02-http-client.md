@@ -321,8 +321,6 @@ NODE_DEBUG=request tramvai start <appName>
 - `HTTP_CLIENT_CACHE_DISABLED` - disable caching for all HTTP clients
 - `HTTP_CLIENT_CIRCUIT_BREAKER_DISABLED` - disable plugin https://tinkoff.github.io/tinkoff-request/docs/plugins/circuit-breaker.html
 
-##### - [Next: React Query](03-features/09-data-fetching/04-react-query.md)
-
 ## API Reference
 
 You can find `HttpClient` and `ApiService` interfaces in [`@tramvai/http-client` package documentation](references/libs/http-client.md)
@@ -465,5 +463,3 @@ const service = new CustomApiService({ httpClient });
 service.request({ path: 'fake' }); // show alert
 service.get('fake'); // also show alert
 ```
-
-##### - [Next: React Query](03-features/09-data-fetching/04-react-query.md)

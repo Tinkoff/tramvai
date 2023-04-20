@@ -242,4 +242,4 @@ That's all for now!
 
 We learned how to create a new `tramvai` application, work with `depencency injection`, routing and global state, load data and style the application.
 
-You can familiarize yourself with framework features like [API routing](features/papi/introduction.md), try integration with [react-query](references/modules/react-query.md), integrate our awesome test utilities for [unit](references/tramvai/test/unit.md) and [e2e](references/tramvai/test/integration.md) testing into the application.
+You can familiarize yourself with framework features like [API routing](03-features/016-papi.md), try integration with [react-query](references/modules/react-query.md), integrate our awesome test utilities for [unit](references/tramvai/test/unit.md) and [e2e](references/tramvai/test/integration.md) testing into the application.

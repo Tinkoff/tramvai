@@ -149,5 +149,3 @@ export const Header = () => (
   </LazyRender>
 );
 ```
-
-##### - [Next: Static Site Generation](03-features/010-rendering/04-ssg.md)

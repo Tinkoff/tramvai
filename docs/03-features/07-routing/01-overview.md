@@ -53,5 +53,3 @@ Router will force all urls to end with slash, e.g. `/foo` path will be redirecte
 ### Merge Slashes
 
 Router will replace several consecutive slashes by single slashes (slashes after protocol are still be with `//` after protocol name), e.g. `/foo///bar/` path will be redirected to `/foo/bar/`.
-
-##### - [Next: Routing - Navigation Flow](03-features/07-routing/02-navigation-flow.md)

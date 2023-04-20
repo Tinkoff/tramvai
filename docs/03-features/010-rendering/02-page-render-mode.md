@@ -237,5 +237,3 @@ const provider = {
   useValue: 'myOwnRenderFallback',
 };
 ```
-
-##### - [Next: Lazy Hydration](03-features/010-rendering/03-hydration.md)

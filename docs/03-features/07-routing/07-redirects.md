@@ -77,5 +77,3 @@ RedirectPage.actions = [redirectAction];
 
 export default RedirectPage;
 ```
-
-##### - [Next: Routing - How-to](03-features/07-routing/08-how-to.md)
