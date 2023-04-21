@@ -55,6 +55,7 @@ export const testPageResources = (options: Options) => {
           inlineResource() {
             return [];
           },
+          async prefetchResource() {},
         },
       }),
     ],

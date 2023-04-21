@@ -144,6 +144,7 @@ export interface PageResource {
 export interface ResourcesRegistry {
   register(resource: PageResource | PageResource[]): void;
   getPageResources(): PageResource[];
+  prefetchInlinePageResources(): Promise<any>;
 }
 
 export type HtmlAttrs = {

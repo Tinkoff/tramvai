@@ -71,6 +71,12 @@ export const staticApp = async (
     message: `message: start application server on http://${host}:${port}`,
   });
 
+  const staticServer = await startStaticServer(clientConfigManager);
+  const staticAssetsPrefix = `http://${staticHost}:${staticPort}/${output.client.replace(
+    /\/$/,
+    ''
+  )}/`;
+
   const server = node(path.resolve(root, 'server.js'), [], {
     cwd: root,
     env: {
@@ -82,10 +88,12 @@ export const staticApp = async (
         : {}),
       ...process.env,
       NODE_ENV: 'production',
+      TRAMVAI_CLI_COMMAND: 'static',
+      CACHE_WARMUP_DISABLED: 'true',
       PORT: `${port}`,
       PORT_SERVER: `${port}`,
-      ASSETS_PREFIX:
-        assetsPrefix ?? `http://${staticHost}:${staticPort}/${output.client.replace(/\/$/, '')}/`,
+      TRAMVAI_CLI_ASSETS_PREFIX: staticAssetsPrefix,
+      ASSETS_PREFIX: assetsPrefix ?? staticAssetsPrefix,
     },
   });
 
@@ -159,7 +167,6 @@ export const staticApp = async (
       server.on('exit', () => resolve());
     });
 
-    const staticServer = await startStaticServer(clientConfigManager);
     const htmlServer = await startServer(serverConfigManager);
 
     await new Promise<void>((resolve) => {
@@ -167,6 +174,8 @@ export const staticApp = async (
         staticServer.close(() => resolve());
       });
     });
+  } else {
+    staticServer.close();
   }
 
   return {

@@ -31,4 +31,12 @@ export class ResourcesRegistry implements ResourceRegistry {
       }, [])
       .filter((resource: PageResource) => this.resourceInliner.shouldAddResource(resource));
   }
+
+  prefetchInlinePageResources(): Promise<any> {
+    const promises = Array.from(this.resources.values()).map((resource) => {
+      return this.resourceInliner.prefetchResource(resource);
+    });
+
+    return Promise.all(promises);
+  }
 }

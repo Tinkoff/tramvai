@@ -107,6 +107,10 @@ export class PageBuilder {
 
     this.dehydrateState();
 
+    if (process.env.TRAMVAI_CLI_COMMAND === 'static') {
+      await this.resourcesRegistry.prefetchInlinePageResources();
+    }
+
     this.preloadBlock();
 
     return this.generateHtml();
