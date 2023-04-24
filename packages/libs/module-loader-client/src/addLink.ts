@@ -4,7 +4,12 @@
  * @param type rel attribute of link-element
  * @param href href attribute of link-element
  */
-export const addLink = (type: string, href: string, attrs = {}, options: { resolveOnFailed?: boolean } = {}) => {
+export const addLink = (
+  type: string,
+  href: string,
+  attrs = {},
+  options: { resolveOnFailed?: boolean } = {}
+) => {
   const link = document.createElement('link');
 
   Object.assign(link, attrs, {
