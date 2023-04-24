@@ -1,38 +1,41 @@
 {
-  "extends": "../../../tsconfig.lib.json",
-  "include": [
-    "./src"
-  ],
-  "compilerOptions": {
-    "declarationDir": "./lib",
-    "outDir": "./lib",
-    "rootDir": "./src",
-    "strict": false
-  },
-  "references": [
-    {
-      "path": "../../tramvai/core"
+    "extends": "../../../tsconfig.lib.json",
+    "include": [
+        "./src"
+    ],
+    "compilerOptions": {
+        "declarationDir": "./lib",
+        "outDir": "./lib",
+        "rootDir": "./src",
+        "strict": false
     },
-    {
-      "path": "../../libs/meta-tags-generate"
-    },
-    {
-      "path": "../common"
-    },
-    {
-      "path": "../../libs/dippy"
-    },
-    {
-      "path": "../../tramvai/state"
-    },
-    {
-      "path": "../../tokens/router"
-    },
-    {
-      "path": "../../tramvai/test/helpers"
-    },
-    {
-      "path": "../../tokens/render"
-    }
-  ]
+    "references": [
+        {
+            "path": "../../tramvai/core"
+        },
+        {
+            "path": "../../libs/meta-tags-generate"
+        },
+        {
+            "path": "../common"
+        },
+        {
+            "path": "../../libs/dippy"
+        },
+        {
+            "path": "../../tramvai/state"
+        },
+        {
+            "path": "../../tokens/router"
+        },
+        {
+            "path": "../../tramvai/test/helpers"
+        },
+        {
+            "path": "../../tokens/render"
+        },
+        {
+            "path": "../../tokens/core-private"
+        }
+    ]
 }

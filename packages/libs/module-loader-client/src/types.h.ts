@@ -10,4 +10,5 @@ export interface Logger {
 
 export interface LoadModuleOptions {
   cssUrl?: string;
+  resolveOnCssFailed?: boolean;
 }

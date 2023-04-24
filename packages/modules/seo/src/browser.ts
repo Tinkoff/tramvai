@@ -1,8 +1,8 @@
 import flatten from '@tinkoff/utils/array/flatten';
 import isArray from '@tinkoff/utils/is/array';
-import debounce from '@tinkoff/utils/function/debounce';
-import { Module, commandLineListTokens, provide } from '@tramvai/core';
+import { Module, provide } from '@tramvai/core';
 import { Meta, Update } from '@tinkoff/meta-tags-generate';
+import { COMMAND_LINE_EXECUTION_END_TOKEN } from '@tramvai/tokens-core-private';
 import { transformValue } from './transformValue';
 import type { PageSeoProperty } from './shared';
 import { sharedProviders } from './shared';
@@ -23,7 +23,7 @@ declare module '@tramvai/react' {
   providers: [
     ...sharedProviders,
     provide({
-      provide: commandLineListTokens.spaTransition,
+      provide: COMMAND_LINE_EXECUTION_END_TOKEN,
       multi: true,
       useFactory: ({ metaWalk, metaUpdaters }) => {
         const meta = new Meta({
@@ -33,35 +33,15 @@ declare module '@tramvai/react' {
           metaWalk,
         });
 
-        let ignore = false;
-
-        const update = () => {
-          ignore = true;
-          new Update(meta).update();
-          ignore = false;
-        };
-        const debounced = debounce(500, update);
-
-        // TODO: костыль для MetaWalk, чтобы можно было обновлять мету в экшенах
-        // надо сделать нормально на уровне самой меты или типо того
-        metaWalk.subscribe(
-          // если произошло изменение в metaWalk мы должны отреагировать на него
-          // и обновить мету на странице
-          () => {
-            if (!ignore) {
-              debounced();
-            }
+        return function updateMeta(di, type, status) {
+          if (type === 'client' && status === 'afterSpa') {
+            new Update(meta).update();
           }
-        );
-
-        return function updateMeta() {
-          metaWalk.reset();
-          update();
         };
       },
       deps: {
         metaWalk: META_WALK_TOKEN,
-        metaUpdaters: { token: META_UPDATER_TOKEN, optional: true as const, multi: true as const },
+        metaUpdaters: { token: META_UPDATER_TOKEN, optional: true, multi: true },
       },
     }),
   ],

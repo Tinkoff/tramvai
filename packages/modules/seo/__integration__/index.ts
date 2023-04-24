@@ -1,8 +1,6 @@
-import { createApp, createBundle, declareAction, provide } from '@tramvai/core';
-// eslint-disable-next-line import/no-extraneous-dependencies
+import { createApp, createBundle, declareAction } from '@tramvai/core';
 import { SeoModule, META_WALK_TOKEN } from '@tramvai/module-seo';
 import { ROUTES_TOKEN } from '@tramvai/tokens-router';
-import { RESOURCE_INLINE_OPTIONS, ResourceType } from '@tramvai/tokens-render';
 import { modules, bundles } from '../../../../test/shared/common';
 import { jsonLd } from './data/jsonLd';
 

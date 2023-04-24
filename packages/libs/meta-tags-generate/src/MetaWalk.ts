@@ -5,6 +5,7 @@ export type WalkItem = { value: string | TagRecord; priority: number };
 
 export class MetaWalk {
   state: Map<string, WalkItem>;
+
   constructor() {
     this.state = new Map();
   }

@@ -42,7 +42,8 @@ export class BrowserLoader extends Loader {
         moduleName,
       });
 
-      await loadModule(config.client.entry, { cssUrl: config.css?.entry });
+      // `resolveOnCssFailed: true` - allow to load module without server preloading on the client-side
+      await loadModule(config.client.entry, { cssUrl: config.css?.entry, resolveOnCssFailed: true });
 
       container = getModuleFromGlobal(config.client.entry);
 

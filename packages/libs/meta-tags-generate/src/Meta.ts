@@ -14,7 +14,7 @@ export class Meta {
 
   private converters: Record<string, Converter>;
 
-  metaWalk?: MetaWalk;
+  metaWalk: MetaWalk;
 
   constructor({
     list,
@@ -31,17 +31,15 @@ export class Meta {
     this.transformValue = transformValue;
     this.converters = converters;
 
-    this.metaWalk = metaWalk;
+    this.metaWalk = metaWalk ?? new MetaWalk();
   }
 
   dataCollection(...args: any[]) {
-    const metaWalk = this.metaWalk ?? new MetaWalk();
-
-    this.listSources.map((fn) => fn(metaWalk, ...args));
+    this.listSources.map((fn) => fn(this.metaWalk, ...args));
 
     let result: TagRecord[] = [];
 
-    metaWalk.eachMeta((val, key) => {
+    this.metaWalk.eachMeta((val, key) => {
       const value = this.transformValue(val);
       const converter = this.converters[key];
       const res = (converter || defaultConverter)(value.value);
@@ -50,6 +48,8 @@ export class Meta {
         result = result.concat(isArray(res) ? res.filter(identity) : res);
       }
     });
+
+    this.metaWalk.reset();
 
     return result;
   }

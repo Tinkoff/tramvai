@@ -74,7 +74,11 @@ export class PreloadManager implements ChildAppPreloadManager {
 
             await this.run('customer', config);
             await this.run('clear', config);
-          } catch (error) {}
+          } catch (error) {
+            if (process.env.NODE_ENV === 'development') {
+              console.error('Child App loading error', error);
+            }
+          }
 
           this.hasPreloadBefore.add(key);
         })();

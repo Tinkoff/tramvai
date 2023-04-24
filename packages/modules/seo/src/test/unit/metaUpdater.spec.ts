@@ -29,7 +29,7 @@ describe('testMetaUpdater', () => {
 
     const { render, metaWalk } = renderMeta();
 
-    expect(metaWalk.get('title').value).toBe('test title');
+    expect(metaWalk.get('title')).toBe(undefined);
     expect(render).toMatch('<title data-meta-dynamic="true">test title</title>');
   });
 

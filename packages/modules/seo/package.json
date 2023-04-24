@@ -29,6 +29,7 @@
     "@tramvai/module-common": "0.0.0-stub",
     "@tramvai/state": "0.0.0-stub",
     "@tramvai/test-helpers": "0.0.0-stub",
+    "@tramvai/tokens-core-private": "0.0.0-stub",
     "@tramvai/tokens-render": "0.0.0-stub",
     "@tramvai/tokens-router": "0.0.0-stub",
     "@tinkoff/dippy": "0.0.0-stub",

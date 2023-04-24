@@ -4,7 +4,7 @@
  * @param type rel attribute of link-element
  * @param href href attribute of link-element
  */
-export const addLink = (type: string, href: string, attrs = {}) => {
+export const addLink = (type: string, href: string, attrs = {}, options: { resolveOnFailed?: boolean } = {}) => {
   const link = document.createElement('link');
 
   Object.assign(link, attrs, {
@@ -15,7 +15,12 @@ export const addLink = (type: string, href: string, attrs = {}) => {
   link.dataset.critical = 'true';
 
   return new Promise((resolve, reject) => {
-    link.onerror = () => reject(new Error(`could not load link ${href}`));
+    link.onerror = (error) => {
+      if (options.resolveOnFailed) {
+        return resolve(error);
+      }
+      return reject(new Error(`could not load link ${href}`));
+    };
 
     if ('onload' in link) {
       link.onload = resolve;

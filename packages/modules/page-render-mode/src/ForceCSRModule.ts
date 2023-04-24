@@ -76,16 +76,5 @@ export const ForceCSRModule = declareModule({
         envManager: ENV_MANAGER_TOKEN,
       },
     }),
-    // tramvai static will not generate CSR fallback if /bundleInfo is not contains this route
-    {
-      provide: 'router bundleInfoAdditional',
-      useFactory:
-        ({ envManager }) =>
-        () =>
-          envManager.get(FORCE_RENDER_ENV_KEY) === 'true' ? FALLBACK_ROUTE : null,
-      deps: {
-        envManager: ENV_MANAGER_TOKEN,
-      },
-    },
   ],
 });

@@ -59,7 +59,7 @@ describe('seo', () => {
       await router.navigate('../common/');
       expect(await page.title()).toBe('common seo');
       await router.navigate('../dynamic/');
-      await sleep(1000);
+      await sleep(300);
       expect(await page.title()).toBe('WoW, such dynamic!');
     });
   });

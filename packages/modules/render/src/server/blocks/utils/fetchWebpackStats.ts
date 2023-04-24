@@ -10,7 +10,11 @@ let appConfig: typeof AppConfig;
 
 try {
   appConfig = require('@tramvai/cli/lib/external/config').appConfig;
-} catch (e) {}
+} catch (e) {
+  if (process.env.NODE_ENV === 'development') {
+    console.error('Error while reading app config', e);
+  }
+}
 
 let fetchStats: (modern: boolean) => Promise<WebpackStats> = async () => {
   throw new Error(`Unknown environment`);

@@ -40,7 +40,7 @@ export function loadModule(jsUrl: string, options: LoadModuleOptions = {}): Prom
   return Promise.all([
     addScript(jsUrl, { crossOrigin: 'anonymous' }, addHandlers),
     options.cssUrl && !findLoadingStyle(options.cssUrl) && !findLazyLoadingStyle(options.cssUrl)
-      ? addLink('stylesheet', options.cssUrl)
+      ? addLink('stylesheet', options.cssUrl, {}, { resolveOnFailed: options.resolveOnCssFailed })
       : Promise.resolve(),
   ]);
 }
