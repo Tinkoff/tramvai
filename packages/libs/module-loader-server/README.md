@@ -58,6 +58,12 @@ if (result !== void 0) {
 }
 ```
 
+## Особенности
+
+- [Circuit Breaker](https://tinkoff.github.io/tinkoff-request/docs/plugins/circuit-breaker.html) для запросов.
+  На каждый урл будет создан отдельный Circuit Breaker, который будет отслеживать падения именно этого JS файла.
+  Это нужно для быстрой отдачи ошибки вместо завершения запроса по таймаутам, что может ухудшить общее время ответа приложения.
+
 ## Интерфейс и типы
 
 @inline src/types.h.ts
