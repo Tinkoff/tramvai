@@ -26,7 +26,7 @@ export * from '@tramvai/tokens-metrics';
     provide({
       provide: METRICS_MODULE_CONFIG_TOKEN,
       useValue: {
-        enableConnectionResolveMetrics: false,
+        enableConnectionResolveMetrics: true,
       },
     }),
     provide({
