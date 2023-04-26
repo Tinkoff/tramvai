@@ -109,7 +109,7 @@ export const splitChunksConfig =
             },
           },
         };
-      // eslint-disable-next-line no-fallthrough
+        break;
       case 'commonChunk':
         webpackSplitChunks = {
           cacheGroups: {
@@ -122,6 +122,7 @@ export const splitChunksConfig =
             },
           },
         };
+        break;
     }
 
     config.optimization
