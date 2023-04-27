@@ -7,7 +7,7 @@ import { transformValue } from './transformValue';
 import type { PageSeoProperty } from './shared';
 import { sharedProviders } from './shared';
 import { converters } from './converters/converters';
-import { META_UPDATER_TOKEN, META_WALK_TOKEN, META_DEFAULT_TOKEN } from './tokens';
+import { META_UPDATER_TOKEN, META_DEFAULT_TOKEN, META_WALK_TOKEN } from './tokens';
 import type { SeoModuleOptions } from './types';
 
 export * from './constants';
@@ -25,23 +25,23 @@ declare module '@tramvai/react' {
     provide({
       provide: COMMAND_LINE_EXECUTION_END_TOKEN,
       multi: true,
-      useFactory: ({ metaWalk, metaUpdaters }) => {
-        const meta = new Meta({
-          list: flatten(metaUpdaters || []),
-          transformValue,
-          converters,
-          metaWalk,
-        });
-
+      useFactory: () => {
         return function updateMeta(di, type, status) {
           if (type === 'client' && status === 'afterSpa') {
+            // We can't use dependencies below as factory provider dependencies
+            // due to dependency cycle when using `@tramvai-tinkoff/module-router`.
+            const meta = new Meta({
+              list: flatten(
+                di.get({ token: META_UPDATER_TOKEN, optional: true, multi: true }) || []
+              ),
+              metaWalk: di.get(META_WALK_TOKEN),
+              transformValue,
+              converters,
+            });
+
             new Update(meta).update();
           }
         };
-      },
-      deps: {
-        metaWalk: META_WALK_TOKEN,
-        metaUpdaters: { token: META_UPDATER_TOKEN, optional: true, multi: true },
       },
     }),
   ],
