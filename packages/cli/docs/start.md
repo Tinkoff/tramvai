@@ -64,7 +64,9 @@ In `tramvai.json`
 }
 ```
 
-## modern build and dev-mode
+It is equivalent to `devtool: 'source-map'` in webpack config with `source-map-loader`.
+
+## Modern build and dev-mode
 
 In dev-mode may work only single build mode: either `modern` or `legacy`. By default `modern` is used. If you want to use legacy build in dev mode, add next lines to the `tramvai.json`:
 

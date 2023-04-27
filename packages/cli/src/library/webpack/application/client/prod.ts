@@ -94,7 +94,7 @@ export const webpackClientConfig = ({
     config.plugin('fork-ts-checker').use(require('fork-ts-checker-webpack-plugin'), [options]);
   }
 
-  if (sourceMap || debug) {
+  if (sourceMap) {
     config.batch(sourcemaps(configManager));
   }
 

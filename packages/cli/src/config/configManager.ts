@@ -142,10 +142,7 @@ export const createConfigManager = <C extends ConfigEntry = ConfigEntry, E exten
       settings.staticPort ?? (type === 'module' ? DEFAULT_STATIC_MODULE_PORT : DEFAULT_STATIC_PORT)
     ),
     modern,
-    sourceMap:
-      buildType === 'server' && debug
-        ? true
-        : getOption('sourceMap', [settings, normalizedConfigEntry], false),
+    sourceMap: debug ? true : getOption('sourceMap', [settings, normalizedConfigEntry], false),
     target,
     buildPath: '',
     withSettings(overrideSettings) {

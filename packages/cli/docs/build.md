@@ -44,3 +44,15 @@ Library settings should be specified in the `package.json` of the library itself
 ```
 
 See the complete documentation about output targets, configuration and many reciepes in [@tramvai/build documentation](references/tools/build.md).
+
+## Enable sourcemaps in production mode
+
+In `tramvai.json`
+
+```json
+"sourceMap": {
+  "production": true
+}
+```
+
+It is equivalent to `devtool: 'hidden-source-map'` in webpack config.

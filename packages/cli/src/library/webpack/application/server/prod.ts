@@ -57,7 +57,7 @@ export const webpackServerConfig = ({
     },
   ]);
 
-  if (sourceMap || debug) {
+  if (sourceMap) {
     config.batch(sourcemaps(configManager));
   }
 

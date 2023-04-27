@@ -157,19 +157,19 @@ For development source maps for transformed or generated code is used as it is m
 
 ##### Development
 
-By default, for browser is used the fastest sourcemaps, while for server no sourcemaps is used.
+By default in development mode for browser is used the fastest sourcemaps (`devtool: "eval"` in webpack config), while for server no sourcemaps is used.
 
-Flag `--debug` enables sourcemap generation for the server bundle.
+Flag `--debug` enables sourcemap generation for the client and server code.
 
-Option `sourceMap` enables sourcemap generation both for browser and server code.
+Also, `tramvai.json` option [`sourceMap`](references/cli/start.md#enable-sourcemaps-in-dev-mode) enables sourcemap generation both for browser and server code.
 
 ##### Production
 
-By default, sourcemaps are disabled both for the client and server code.
+By default, sourcemaps are disabled both for the client and server code in production mode.
 
-Flag `--debug` enables sourcemaps generation for the client and server bundles.
+Flag `--debug` enables sourcemaps generation for the client and server code.
 
-Option `sourceMap` enables sourcemap generation for bundle.
+Also, `tramvai.json` option [`sourceMap`](references/cli/build.md#enable-sourcemaps-in-production-mode) enables sourcemap generation both for browser and server code.
 
 ## Configuration
 
