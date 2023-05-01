@@ -2,7 +2,10 @@ import { createToken } from '@tinkoff/dippy';
 import type { NavigationHook, AbstractRouter, NavigationSyncHook, Route } from '@tinkoff/router';
 import type { RouteTransform } from '@tramvai/tokens-router';
 
-export const routerClassToken = createToken<AbstractRouter>('router routerClassToken');
+export const routerClassToken =
+  createToken<new (...args: ConstructorParameters<typeof AbstractRouter>) => AbstractRouter>(
+    'router routerClassToken'
+  );
 export const additionalRouterParameters = createToken<Record<string, any>>(
   'router additionalParameters'
 );

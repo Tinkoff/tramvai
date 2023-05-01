@@ -1,19 +1,24 @@
-import { Module } from '@tramvai/core';
+import { declareModule, provide } from '@tramvai/core';
 import { NoSpaRouter } from '@tinkoff/router';
+import { ROUTER_MODE_TOKEN } from '@tramvai/tokens-router';
 import { providers } from './clientCommon';
-import { generateForRoot } from './utils/forRoot';
+import { routerForRoot } from './utils/forRoot';
 import { routerClassToken } from './tokens';
 
-export const NoSpaRouterModule = /* @__PURE__ */ Module({
+export const NoSpaRouterModule = /* @__PURE__ */ declareModule({
+  name: 'NoSpaRouterModule',
   providers: [
     ...providers,
-    {
+    provide({
       provide: routerClassToken,
       useValue: NoSpaRouter,
-    },
+    }),
+    provide({
+      provide: ROUTER_MODE_TOKEN,
+      useValue: 'no-spa',
+    }),
   ],
-})(
-  class NoSpaRouterModule {
-    static forRoot = generateForRoot(NoSpaRouterModule);
-  }
-);
+  extend: {
+    forRoot: routerForRoot,
+  },
+});

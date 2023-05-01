@@ -1,4 +1,4 @@
-import { commandLineListTokens, Module } from '@tramvai/core';
+import { commandLineListTokens, declareModule, provide } from '@tramvai/core';
 import { Router } from '@tinkoff/router';
 import {
   REQUEST_MANAGER_TOKEN,
@@ -7,7 +7,7 @@ import {
   STORE_TOKEN,
 } from '@tramvai/tokens-common';
 
-import { ROUTER_TOKEN } from '@tramvai/tokens-router';
+import { ROUTER_MODE_TOKEN, ROUTER_TOKEN } from '@tramvai/tokens-router';
 import { providers } from './common';
 import { routerClassToken } from './tokens';
 
@@ -16,19 +16,20 @@ import { runActionsFactory } from './hooks/runActions';
 import { serverHooks } from './hooks/server';
 import { serverTokens } from './tokens/server/index';
 
-import { generateForRoot } from './utils/forRoot';
+import { routerForRoot } from './utils/forRoot';
 
-@Module({
+export const NoSpaRouterModule = declareModule({
+  name: 'NoSpaRouterModule',
   providers: [
     ...providers,
     ...serverGuards,
     ...serverHooks,
     ...serverTokens,
-    {
+    provide({
       provide: routerClassToken,
       useValue: Router,
-    },
-    {
+    }),
+    provide({
       provide: commandLineListTokens.resolveUserDeps,
       multi: true,
       useFactory: ({ router, requestManager }) => {
@@ -40,8 +41,8 @@ import { generateForRoot } from './utils/forRoot';
         router: ROUTER_TOKEN,
         requestManager: REQUEST_MANAGER_TOKEN,
       },
-    },
-    {
+    }),
+    provide({
       // запускаем экшены отдельно от самого роутинга, чтобы распараллелить задачи
       provide: commandLineListTokens.resolvePageDeps,
       multi: true,
@@ -52,11 +53,27 @@ import { generateForRoot } from './utils/forRoot';
         actionRegistry: ACTION_REGISTRY_TOKEN,
         actionPageRunner: ACTION_PAGE_RUNNER_TOKEN,
       },
-    },
+    }),
+    provide({
+      provide: ROUTER_MODE_TOKEN,
+      useValue: 'no-spa',
+    }),
   ],
-})
-export class NoSpaRouterModule {
-  static forRoot = generateForRoot(NoSpaRouterModule);
-}
+  extend: {
+    forRoot: routerForRoot,
+  },
+});
 
-export const SpaRouterModule = NoSpaRouterModule;
+export const SpaRouterModule = declareModule({
+  name: 'SpaRouterModule',
+  imports: [NoSpaRouterModule],
+  providers: [
+    provide({
+      provide: ROUTER_MODE_TOKEN,
+      useValue: 'spa',
+    }),
+  ],
+  extend: {
+    forRoot: routerForRoot,
+  },
+});

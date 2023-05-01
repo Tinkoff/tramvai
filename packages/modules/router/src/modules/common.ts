@@ -2,14 +2,7 @@ import flatten from '@tinkoff/utils/array/flatten';
 
 import type { Provider } from '@tinkoff/dippy';
 import { commandLineListTokens, provide } from '@tramvai/core';
-import type {
-  AbstractRouter,
-  Route,
-  Options,
-  NavigationHook,
-  NavigationSyncHook,
-  NavigationGuard,
-} from '@tinkoff/router';
+import type { NavigationHook, NavigationSyncHook, NavigationGuard } from '@tinkoff/router';
 import { setLogger } from '@tinkoff/router';
 
 import { COMBINE_REDUCERS, LOGGER_TOKEN, COMPONENT_REGISTRY_TOKEN } from '@tramvai/tokens-common';
@@ -51,21 +44,9 @@ export const providers: Provider[] = [
   ...commonHooks,
   ...commonTokens,
   ...fsPagesProviders,
-  {
+  provide({
     provide: ROUTER_TOKEN,
-    useFactory: ({
-      RouterClass,
-      routes,
-      routeTransform,
-      routeResolve,
-      additionalParameters,
-    }: {
-      RouterClass: new (opts: Options) => AbstractRouter;
-      routes?: Route[];
-      additionalParameters?: Record<string, any>;
-      routeTransform: typeof routeTransformToken;
-      routeResolve?: typeof ROUTE_RESOLVE_TOKEN;
-    }) => {
+    useFactory: ({ RouterClass, routes, routeTransform, routeResolve, additionalParameters }) => {
       const router = new RouterClass({
         ...additionalParameters,
         trailingSlash: true,
@@ -107,8 +88,8 @@ export const providers: Provider[] = [
         optional: true,
       },
     },
-  },
-  {
+  }),
+  provide({
     provide: commandLineListTokens.customerStart,
     multi: true,
     useFactory: ({
@@ -120,15 +101,6 @@ export const providers: Provider[] = [
       afterNavigate,
       beforeUpdateCurrent,
       afterUpdateCurrent,
-    }: {
-      router: AbstractRouter;
-      guards?: NavigationGuard[];
-      onChange?: NavigationSyncHook[];
-      beforeResolve: NavigationHook[];
-      beforeNavigate?: NavigationHook[];
-      afterNavigate?: NavigationHook[];
-      beforeUpdateCurrent?: NavigationHook[];
-      afterUpdateCurrent?: NavigationHook[];
     }) => {
       return function routerInit() {
         flatten<NavigationGuard>(guards ?? []).forEach((guard) => router.registerGuard(guard));
@@ -183,8 +155,8 @@ export const providers: Provider[] = [
         optional: true,
       },
     },
-  },
-  {
+  }),
+  provide({
     provide: commandLineListTokens.init,
     multi: true,
     useFactory: ({ logger }: { logger: typeof LOGGER_TOKEN }) => {
@@ -195,14 +167,14 @@ export const providers: Provider[] = [
     deps: {
       logger: LOGGER_TOKEN,
     },
-  },
-  {
+  }),
+  provide({
     provide: ROUTER_SPA_ACTIONS_RUN_MODE_TOKEN,
     // TODO: пока делаем after т.к. на это рассчитывает большинство приложений и у нас пока нет механизма контроля выполнения экшенов, чтобы
     // избежать случаев зависания перехода из-за долгих экшенов
     // рассмотреть возможность замены после доработок экшенов
     useValue: 'after',
-  },
+  }),
   provide({
     provide: PAGE_SERVICE_TOKEN,
     useClass: PageService,
@@ -211,9 +183,9 @@ export const providers: Provider[] = [
       componentRegistry: COMPONENT_REGISTRY_TOKEN,
     },
   }),
-  {
+  provide({
     provide: COMBINE_REDUCERS,
     multi: true,
     useValue: RouterStore,
-  },
+  }),
 ];

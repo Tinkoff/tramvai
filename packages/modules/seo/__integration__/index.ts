@@ -1,6 +1,6 @@
-import { createApp, createBundle, declareAction } from '@tramvai/core';
-import { SeoModule, META_WALK_TOKEN } from '@tramvai/module-seo';
-import { ROUTES_TOKEN } from '@tramvai/tokens-router';
+import { createApp, createBundle, declareAction, provide } from '@tramvai/core';
+import { SeoModule, META_WALK_TOKEN, META_DEFAULT_TOKEN } from '@tramvai/module-seo';
+import { PAGE_SERVICE_TOKEN, ROUTES_TOKEN } from '@tramvai/tokens-router';
 import { modules, bundles } from '../../../../test/shared/common';
 import { jsonLd } from './data/jsonLd';
 
@@ -163,5 +163,24 @@ createApp({
         },
       })),
     },
+    provide({
+      provide: META_DEFAULT_TOKEN,
+      useFactory: ({ pageService }) => {
+        const { origin, pathname } = pageService.getCurrentUrl();
+
+        return {
+          metaFromPageService: {
+            tag: 'meta',
+            attributes: {
+              name: 'attrFromPageService',
+              content: `${origin}${pathname}`,
+            },
+          },
+        };
+      },
+      deps: {
+        pageService: PAGE_SERVICE_TOKEN,
+      },
+    }),
   ],
 });

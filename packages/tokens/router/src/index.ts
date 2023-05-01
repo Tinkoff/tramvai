@@ -59,6 +59,8 @@ export const ROUTER_SPA_ACTIONS_RUN_MODE_TOKEN = createToken<'before' | 'after'>
 export const LINK_PREFETCH_MANAGER_TOKEN =
   createToken<LinkPrefetchManager>('link prefetch manager');
 
+export const ROUTER_MODE_TOKEN = createToken<'spa' | 'no-spa'>('router mode');
+
 export type PageServiceComponentType =
   | 'page'
   | 'layout'

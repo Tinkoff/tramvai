@@ -4,12 +4,13 @@ exports[`seo ssr test common meta 1`] = `
 "
     <meta charset="UTF-8" >
     
-    <title data-meta-dynamic="true">common seo</title>
+    <meta name="attrFromPageService" content="\${SERVER_URL}/seo/common/" data-meta-dynamic="true" >
     <link rel="canonical" href="test-canonical" data-meta-dynamic="true" >
     <meta name="keywords" content="test,common,seo" data-meta-dynamic="true" >
     <meta name="robots" content="none" data-meta-dynamic="true" >
     <meta name="robots" content="noindex, nofollow" data-meta-dynamic="true" >
     <meta name="robots" content="noarchive" data-meta-dynamic="true" >
+    <title data-meta-dynamic="true">common seo</title>
     <meta name="viewport" content="test seo" data-meta-dynamic="true" >
     <meta name="metaCustomNameAttribute" content="metaCustomContent" data-meta-dynamic="true" >
     
@@ -61,7 +62,7 @@ exports[`seo ssr test default meta pack 1`] = `
 "
     <meta charset="UTF-8" >
     
-    <title data-meta-dynamic="true">Tramvai</title>
+    <meta name="attrFromPageService" content="\${SERVER_URL}/seo/default/" data-meta-dynamic="true" >
     <meta name="metaCustomNameAttribute" content="metaCustomContent" data-meta-dynamic="true" >
     
 
@@ -212,6 +213,7 @@ exports[`seo ssr test og meta 1`] = `
 "
     <meta charset="UTF-8" >
     
+    <meta name="attrFromPageService" content="\${SERVER_URL}/seo/og/" data-meta-dynamic="true" >
     <title data-meta-dynamic="true">og seo</title>
     <meta property="og:description" content="og desc" data-meta-dynamic="true" >
     <meta property="og:image" content="og img" data-meta-dynamic="true" >
@@ -275,6 +277,7 @@ exports[`seo ssr test twitter meta 1`] = `
 "
     <meta charset="UTF-8" >
     
+    <meta name="attrFromPageService" content="\${SERVER_URL}/seo/twitter/" data-meta-dynamic="true" >
     <title data-meta-dynamic="true">twitter seo</title>
     <meta name="twitter:card" content="twitter card" data-meta-dynamic="true" >
     <meta name="twitter:creator" content="creat" data-meta-dynamic="true" >

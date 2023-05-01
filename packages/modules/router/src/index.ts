@@ -3,7 +3,7 @@ export { RouterChildAppModule } from './modules/child-app';
 export { Provider, useNavigate, useRoute, useRouter, useUrl } from '@tinkoff/router';
 export { Link } from './components/link';
 export * from '@tramvai/tokens-router';
-export { generateForRoot } from './modules/utils/forRoot';
+export { routerForRoot, generateForRoot } from './modules/utils/forRoot';
 export * from './stores/RouterStore';
 export * from './stores/PageErrorStore';
 export * from './hooks/usePageService';
