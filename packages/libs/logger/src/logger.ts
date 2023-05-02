@@ -207,7 +207,6 @@ class Logger implements LoggerInterface {
 
   addExtension(extension: Extension) {
     this.extensions = this.extensions.concat(extension);
-    this.extensions.push(extension);
   }
 
   setExtensions(extensions: Extension | Extension[]) {
