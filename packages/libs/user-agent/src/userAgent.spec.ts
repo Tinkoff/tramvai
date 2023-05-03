@@ -207,7 +207,7 @@ describe('supported browsers', () => {
     expect(parseUserAgentHeader(ua)).toMatchInlineSnapshot(`
       {
         "browser": {
-          "browserEngine": "chrome",
+          "browserEngine": "safari",
           "major": "13",
           "name": "mobile safari",
           "version": "13.1",
@@ -228,6 +228,39 @@ describe('supported browsers', () => {
         "os": {
           "name": "iOS",
           "version": "13.4",
+        },
+        "sameSiteNoneCompatible": true,
+      }
+    `);
+  });
+
+  it('mobile opera', () => {
+    const ua =
+      'Opera/9.80 (Android 2.3.5; Linux; Opera Mobi/ADR-1111101157; U; de) Presto/2.9.201 Version/11.50';
+    expect(parseUserAgentHeader(ua)).toMatchInlineSnapshot(`
+      {
+        "browser": {
+          "browserEngine": "other",
+          "major": "11",
+          "name": "opera mobi",
+          "version": "11.50",
+        },
+        "cpu": {
+          "architecture": undefined,
+        },
+        "device": {
+          "model": undefined,
+          "type": "mobile",
+          "vendor": undefined,
+        },
+        "engine": {
+          "name": "Presto",
+          "version": "2.9.201",
+        },
+        "mobileOS": "android",
+        "os": {
+          "name": "Android",
+          "version": "2.3.5",
         },
         "sameSiteNoneCompatible": true,
       }

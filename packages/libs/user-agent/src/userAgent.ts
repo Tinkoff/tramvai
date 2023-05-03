@@ -31,28 +31,24 @@ const uaParserExtensions = [
 ];
 
 export const parseUserAgentHeader = (userAgent: string): UserAgent => {
-  const uaParser = new UAParser('', { browser: uaParserExtensions });
-  const { ua, ...result } = uaParser.setUA(userAgent).getResult();
+  const { ua, ...result } = new UAParser(userAgent, { browser: uaParserExtensions }).getResult();
   const { browser, os, engine } = result;
+
   const browserName = toLowerName(browser);
   const engineName = toLowerName(engine);
   const sameSiteNoneCompatible = isSameSiteNoneCompatible(result);
-
-  const mobileOS = getMobileOs(os.name);
 
   if (browserName === 'opera mobi') {
     result.device.type = 'mobile';
   }
 
-  const browserEngine = getBrowserEngine(browserName, engineName);
-
   return {
     ...result,
-    mobileOS,
+    mobileOS: getMobileOs(os.name),
     sameSiteNoneCompatible,
     browser: {
       ...browser,
-      browserEngine,
+      browserEngine: getBrowserEngine(browserName, engineName),
       name: browserName,
     },
   };

@@ -16,9 +16,15 @@ export const getBrowserEngine = (browserName?: string, engineName?: string): str
   switch (true) {
     case browserName === 'firefox':
       return 'firefox';
-    case browserName === 'safari':
+    // If an `engineName` is webkit, and it's not Safari,
+    // then define the `browserName` as `safari`, because all browsers
+    // on iOS use webkit. Also, we are not handling mobile Safari separately,
+    // as it webkit too. See https://en.wikipedia.org/wiki/WebKit
+    case browserName === 'safari' || engineName === 'webkit':
       return 'safari';
-    case engineName === 'webkit' || engineName === 'blink' || engineName === 'chromium':
+    // We aren't using something like `browserName === 'chrome'` here,
+    // because there are a lot of browsers based on chromium.
+    case engineName === 'blink' || engineName === 'chromium':
       return 'chrome';
   }
 
