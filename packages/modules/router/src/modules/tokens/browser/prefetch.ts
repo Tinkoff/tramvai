@@ -10,8 +10,9 @@ import {
   ROUTE_RESOLVE_TOKEN,
   LINK_PREFETCH_MANAGER_TOKEN,
 } from '@tramvai/tokens-router';
-import { addQuery } from '@tinkoff/url';
+import { parse } from '@tinkoff/url';
 import { resolveLazyComponent } from '@tramvai/react';
+import { scheduling } from '@tramvai/state';
 import { isFileSystemPageComponent } from '@tramvai/experiments';
 import { routeTransformToken } from '../../tokens';
 
@@ -28,11 +29,21 @@ export const prefetchProviders = [
   provide({
     provide: PREFETCHED_LINKS_QUEUE_TOKEN,
     useFactory: () => {
+      const schedule = scheduling();
       let queue = Promise.resolve();
 
       return {
         add(run: () => Promise<void>): Promise<void> {
-          queue = queue.then(run);
+          queue = queue.then(() => {
+            return new Promise((resolve, reject) => {
+              // break microtask queue
+              schedule(() => {
+                // eslint-disable-next-line promise/no-nesting
+                run().then(resolve).catch(reject);
+              });
+            });
+          });
+
           return queue;
         },
       };
@@ -68,9 +79,7 @@ export const prefetchProviders = [
         // if route not found, try to resolve dynamic route,
         // logic from `ROUTER_TOKEN` provider factory, without `router.addRoute` method call
         if (!route && routeResolve) {
-          // add query `prefetchRoute` to indicate to any `routeResolve` implementation
-          // that this route request no need to be cached or have any personalization
-          const parsedUrl = addQuery(url, { prefetchRoute: 'true' });
+          const parsedUrl = parse(url);
 
           route = await routeResolve({
             url: parsedUrl,
@@ -79,6 +88,8 @@ export const prefetchProviders = [
 
           if (route) {
             route = routeTransform(route);
+            // warmup route for possible navigation
+            router.addRoute(route);
           }
         }
 

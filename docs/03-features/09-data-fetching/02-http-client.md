@@ -257,6 +257,25 @@ const interceptor = (req, next) => {
 };
 ```
 
+### How to use any HTTP Client in interceptor?
+
+For prevent cycle dependencies, you need to resolve HTTP Client from DI in runtime:
+
+```ts
+const provider = provide({
+  provide: DEFAULT_HTTP_CLIENT_INTERCEPTORS,
+  useFactory: ({ di }): ExtractTokenType<typeof DEFAULT_HTTP_CLIENT_INTERCEPTORS> => {
+    return (req, next) => {
+      const httpClient = di.get(HTTP_CLIENT);
+      return next(req);
+    };
+  },
+  deps: {
+    di: DI_TOKEN,
+  },
+});
+```
+
 ### Testing
 
 #### Testing your api clients

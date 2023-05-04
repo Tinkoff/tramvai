@@ -15,4 +15,5 @@ export { BaseStore } from './stores/BaseStore';
 
 export * from './connect/index';
 export { Subscription } from './connect/Subscription';
+export { scheduling } from './connect/scheduling';
 export { devTools };
