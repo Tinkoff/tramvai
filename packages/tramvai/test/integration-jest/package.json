@@ -22,7 +22,7 @@
     "@swc/helpers": "^0.4.14",
     "@tinkoff/utils": "^2.1.2",
     "@tramvai/test-pw": "0.0.0-stub",
-    "jest-watcher": "^29.0.2",
+    "jest-watcher": "^29.5.0",
     "tslib": "^2.4.0",
     "utility-types": "^3.10.0"
   },
@@ -32,7 +32,7 @@
     "playwright-core": "*"
   },
   "devDependencies": {
-    "@jest/types": "^29.0.2"
+    "@jest/types": "^29.5.0"
   },
   "license": "Apache-2.0"
 }
