@@ -18,8 +18,9 @@ export const formatError = (error: Error | string) => {
     // хотим чтобы всегда был единый формат для error.body и error.code [text]
     // игнор потому что в error нет поля body и code
     body: safeStringifyJSON(error.body),
-    // @ts-ignore
-    code: safeStringifyJSON(error.code),
+    // если code уже строка - то не делаем stringify т.к. получим экранирование кавычек. Например "\"ABORT_ERR\""
+    // @ts-expect-error потому что в error нет поля code
+    code: typeof error.code === 'string' ? error.code : safeStringifyJSON(error.code),
     message: error.message,
     stack: error.stack,
   };
