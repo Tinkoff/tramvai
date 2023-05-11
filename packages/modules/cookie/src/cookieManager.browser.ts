@@ -4,13 +4,16 @@ import type { USER_AGENT_TOKEN } from '@tramvai/module-client-hints';
 import type { CookieManager as Interface, CookieSetOptions } from './tokens';
 import { prepareCookieOptions } from './utils';
 
-const checkCookieEnabled = () => {
+const checkCookieEnabled = (setSameSiteNone = false) => {
   const testCookieName = 'testcookiesenabled';
 
-  document.cookie = testCookieName;
+  // В cross-site iframe нельзя записать куки без явного указания SameSite=None
+  // источник: https://bugs.chromium.org/p/chromium/issues/detail?id=1062162#c3
+  const testCookie = setSameSiteNone ? `${testCookieName}; SameSite=None; Secure` : testCookieName;
+  document.cookie = testCookie;
 
   if (document.cookie.indexOf(testCookieName) > -1) {
-    document.cookie = `${testCookieName}; expires=Thu, 01 Jan 1970 00:00:01 GMT'`;
+    document.cookie = `${testCookie}; expires=Thu, 01 Jan 1970 00:00:01 GMT`;
     return true;
   }
 
@@ -54,12 +57,14 @@ export class CookieManager implements Interface {
   }) {
     const isSecure = window.location.protocol === 'https:';
 
-    this.cookies = checkCookieEnabled()
-      ? new Cookies({
-          sameSite: userAgent.sameSiteNoneCompatible && isSecure ? 'none' : 'lax',
-          secure: isSecure,
-          ...cookieOptions,
-        })
+    const finalCookieOptions: CookieOptions = {
+      sameSite: userAgent.sameSiteNoneCompatible && isSecure ? 'none' : 'lax',
+      secure: isSecure,
+      ...cookieOptions,
+    };
+
+    this.cookies = checkCookieEnabled(finalCookieOptions.sameSite === 'none')
+      ? new Cookies(finalCookieOptions)
       : new CookiesFallback();
 
     this.userAgent = userAgent;
