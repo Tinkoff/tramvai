@@ -27,6 +27,10 @@ export const getAllFileSystemErrorBoundaries = () => {
   return fsPagesAndRoutes.errorBoundaries;
 };
 
+export const getAllFileSystemWildcards = () => {
+  return fsPagesAndRoutes.wildcards;
+};
+
 export const isFileSystemPageComponent = (pageComponent: string): boolean => {
   return (
     fileSystemPagesEnabled() &&
@@ -91,6 +95,17 @@ export const fileSystemPageToErrorBoundaryKey = (pageComponent: string): string 
   return `${pageComponent}__errorBoundary`;
 };
 
+/**
+ * @example
+ * @/routes/index to /routes/*
+ */
+export const fileSystemPageToWildcardPath = (pageComponent: string): string => {
+  const normalizedName = pageComponent.replace(/__wildcard$/g, '');
+  const path = staticFileSystemPageToPath(normalizedName);
+
+  return `${path}*`;
+};
+
 export const fileSystemPageToRoute = (pageComponent: string): Route => {
   const name = pageComponent;
   const path = staticFileSystemPageToPath(pageComponent);
@@ -128,4 +143,16 @@ export const fileSystemPageComponentExists = (pageComponent: string): boolean =>
  */
 export const fileSystemPageToWebpackChunkName = (pageComponent: string): string => {
   return pageComponent.replace(/\//g, '_');
+};
+
+export const getFileSystemWildcardRoutes = (): Route[] => {
+  const wildcards = getAllFileSystemWildcards();
+
+  return Object.keys(wildcards).map((name) => ({
+    name,
+    path: fileSystemPageToWildcardPath(name),
+    config: {
+      pageComponent: name,
+    },
+  }));
 };

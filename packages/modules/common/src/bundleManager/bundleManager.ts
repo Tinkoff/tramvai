@@ -1,6 +1,7 @@
 import eachObj from '@tinkoff/utils/object/each';
 import isObject from '@tinkoff/utils/is/object';
 import isArray from '@tinkoff/utils/is/array';
+import identity from '@tinkoff/utils/function/identity';
 import { createBundle } from '@tramvai/core';
 import { resolveLazyComponent, __lazyErrorHandler } from '@tramvai/react';
 import type {
@@ -18,6 +19,7 @@ import {
   getAllFileSystemErrorBoundaries,
   fileSystemPageToLayoutKey,
   fileSystemPageToErrorBoundaryKey,
+  getAllFileSystemWildcards,
 } from '@tramvai/experiments';
 import type { ComponentRegistry } from '../componentRegistry/componentRegistry';
 
@@ -53,6 +55,7 @@ export class BundleManager implements Interface {
       const components = getAllFileSystemPages();
       const layouts = getAllFileSystemLayouts();
       const errorBoundaries = getAllFileSystemErrorBoundaries();
+      const wildcards = getAllFileSystemWildcards();
 
       const getComponentsFor = (mapping: Record<any, any>, getKey: (name: string) => string) =>
         Object.keys(mapping).reduce<Record<string, any>>((result, key) => {
@@ -66,6 +69,7 @@ export class BundleManager implements Interface {
         components: {
           ...getComponentsFor(layouts, fileSystemPageToLayoutKey),
           ...getComponentsFor(errorBoundaries, fileSystemPageToErrorBoundaryKey),
+          ...getComponentsFor(wildcards, identity),
           ...components,
         },
       });

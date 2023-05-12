@@ -202,4 +202,36 @@ describe('fs-routing', () => {
 
     await browser.close();
   });
+
+  it('root wildcard route should be registered correctly', async () => {
+    const { browser } = await initPlaywright(app.serverUrl);
+
+    const page = await browser.newPage();
+    await page.goto(`${app.serverUrl}/unknown`);
+
+    expect(await page.$eval('.application', (node) => (node as HTMLElement).innerText))
+      .toMatchInlineSnapshot(`
+      "Tramvai 🥳
+      Root Wildcard Route
+      this Footer in fs-routing"
+    `);
+
+    await browser.close();
+  });
+
+  it('nested wildcard route should be registered correctly', async () => {
+    const { browser } = await initPlaywright(app.serverUrl);
+
+    const page = await browser.newPage();
+    await page.goto(`${app.serverUrl}/second/unknown`);
+
+    expect(await page.$eval('.application', (node) => (node as HTMLElement).innerText))
+      .toMatchInlineSnapshot(`
+      "Tramvai 🥳
+      Nested Wildcard Route
+      this Footer in fs-routing"
+    `);
+
+    await browser.close();
+  });
 });

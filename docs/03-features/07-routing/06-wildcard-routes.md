@@ -5,12 +5,6 @@ title: Wildcard Routes
 
 Wildcard routes (aka catch-all, splats routes) - this is a routes with dynamic segment which used if no exact matches were found for the current page.
 
-:::info
-
-Working only with `pages` directory and manual routes configuration, File-System Routing not supported for this moment.
-
-:::
-
 ## Usage
 
 The `path` property of this route must end in an asterisk - `*`, in example below the route will match any path, for which no other routes were found:
@@ -20,13 +14,15 @@ import { SpaRouterModule } from '@tramvai/modules-router';
 
 createApp({
   modules: [
-    SpaRouterModule.forRoot([{
-      name: 'route-name',
-      path: '*',
-      config: {
-        pageComponent: '@/pages/page-name',
+    SpaRouterModule.forRoot([
+      {
+        name: 'route-name',
+        path: '*',
+        config: {
+          pageComponent: '@/pages/page-name',
+        },
       },
-    }]),
+    ]),
   ],
 });
 ```
@@ -44,15 +40,17 @@ import { SpaRouterModule } from '@tramvai/modules-router';
 
 createApp({
   modules: [
-    SpaRouterModule.forRoot([{
-      name: 'not-found',
-      path: '*',
-      config: {
-        pageComponent: '@/pages/not-found',
-        // highlight-next-line
-        httpStatus: 404,
+    SpaRouterModule.forRoot([
+      {
+        name: 'not-found',
+        path: '*',
+        config: {
+          pageComponent: '@/pages/not-found',
+          // highlight-next-line
+          httpStatus: 404,
+        },
       },
-    }]),
+    ]),
   ],
 });
 ```
@@ -72,7 +70,7 @@ import type { ErrorBoundaryComponent } from '@tramvai/react';
 const ProductErrorBoundary: ErrorBoundaryComponent = ({ url, error }) => {
   // handle custom NotFoundError
   if (isNotFoundError(error)) {
-    return <ProductNotFoundPage url={url} error={error} />
+    return <ProductNotFoundPage url={url} error={error} />;
   }
   // handle unexpected errors
   return <ProductErrorPage url={url} error={error} />;
@@ -129,13 +127,27 @@ import { SpaRouterModule } from '@tramvai/modules-router';
 
 createApp({
   modules: [
-    SpaRouterModule.forRoot([{
-      name: 'comments-not-found',
-      path: '/comments/*',
-      config: {
-        pageComponent: '@/pages/comments-not-found',
+    SpaRouterModule.forRoot([
+      {
+        name: 'comments-not-found',
+        path: '/comments/*',
+        config: {
+          pageComponent: '@/pages/comments-not-found',
+        },
       },
-    }]),
+    ]),
   ],
 });
+```
+
+### File system Wildcard Routes
+
+You can register a wildcard route using the file system. To do so you must create a file called `*.tsx` in the desirable directory. Note, that nested paths are also supported. For example if you need wildcard for path `/profile/*`, then create following folder structure:
+
+```
+src
+└── routes
+    └── profile
+        └── index.tsx
+        └── *.tsx
 ```
