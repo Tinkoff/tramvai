@@ -5,6 +5,10 @@ import { useIsomorphicLayoutEffect } from '@tinkoff/react-hooks';
 import type { FC } from 'react';
 import type { Renderer } from './types';
 
+const reactMinifiedErrorRegex = /Minified React error #(\d+);/;
+const shortenErrorStackTrace = (stackTrace: string) =>
+  stackTrace.split('\n').slice(0, 15).join('\n');
+
 let hydrateRoot;
 let startTransition;
 
@@ -48,8 +52,19 @@ const renderer: Renderer = ({ element, container, callback, log }) => {
     return startTransition(() => {
       hydrateRoot(container, wrappedElement, {
         onRecoverableError: (error, errorInfo) => {
-          // deduplicate by unique important string values
-          allErrors.set(error?.message + errorInfo?.componentStack, { error, errorInfo });
+          const match = (error?.message ?? '').match(reactMinifiedErrorRegex);
+          const key = match?.[1] ?? error?.message;
+
+          // deduplicate by error type - too much noise otherwise
+          if (!allErrors.has(key)) {
+            // also too long stack traces are not very helpful but heavy for log collection
+            if (typeof errorInfo?.componentStack === 'string') {
+              // eslint-disable-next-line no-param-reassign
+              errorInfo.componentStack = shortenErrorStackTrace(errorInfo.componentStack);
+            }
+            allErrors.set(key, { error, errorInfo });
+          }
+
           logHydrateRecoverableError();
         },
       });
