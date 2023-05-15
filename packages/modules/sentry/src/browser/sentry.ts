@@ -42,7 +42,7 @@ export function createSentry({
         errorsCount += 1;
       };
 
-      window.addEventListener('unload', () => {
+      window.addEventListener('pagehide', () => {
         errorsCount && sendGlobalErrorsCount(errorsCount);
       });
     }

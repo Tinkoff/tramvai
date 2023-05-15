@@ -28,7 +28,6 @@
     "@tinkoff/url": "0.0.0-stub",
     "@tinkoff/user-agent": "0.0.0-stub",
     "@tramvai/module-client-hints": "0.0.0-stub",
-    "@tramvai/module-page-render-mode": "0.0.0-stub",
     "@tramvai/module-router": "0.0.0-stub",
     "@tramvai/react": "0.0.0-stub",
     "@tramvai/safe-strings": "0.0.0-stub",

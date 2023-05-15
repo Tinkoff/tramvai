@@ -248,7 +248,7 @@ describe('errorBoundary', () => {
 
       expect(statusCode).toBe(503);
       expect(headers).toMatchObject({
-        'cache-control': 'no-cache, no-store, must-revalidate',
+        'cache-control': 'no-store, no-cache, must-revalidate',
         'content-type': 'text/html; charset=utf-8',
       });
     });

@@ -75,7 +75,7 @@ More information about redirects - https://tramvai.dev/docs/features/routing/red
         requestInfo,
       });
 
-      reply.header('cache-control', 'no-cache, no-store, must-revalidate');
+      reply.header('cache-control', 'no-store, no-cache, must-revalidate');
       reply.redirect(error.httpStatus || 307, error.nextUrl);
       return;
     }
@@ -193,7 +193,7 @@ ${
 
         reply.header('Content-Type', 'text/html; charset=utf-8');
         reply.header('Content-Length', Buffer.byteLength(body, 'utf8'));
-        reply.header('Cache-Control', 'no-cache, no-store, must-revalidate');
+        reply.header('Cache-Control', 'no-store, no-cache, must-revalidate');
 
         return body;
       } catch (e) {

@@ -19,6 +19,7 @@ import {
   ResourceType,
   RENDER_FLOW_AFTER_TOKEN,
   MODERN_SATISFIES_TOKEN,
+  BACK_FORWARD_CACHE_ENABLED,
   REACT_SERVER_RENDER_MODE,
   FETCH_WEBPACK_STATS_TOKEN,
 } from '@tramvai/tokens-render';
@@ -88,6 +89,7 @@ export const DEFAULT_POLYFILL_CONDITION =
         requestManager,
         responseManager,
         context,
+        bfcacheEnabled,
         pageService,
       }) => {
         const log = logger('module-render');
@@ -187,7 +189,10 @@ Page Error Boundary will be rendered for the client`,
           // TODO Заменить после выкатки на прод и прохода всех тестов на cache-control = no-cache,no-store,max-age=0,must-revalidate
           responseManager.setHeader('expires', '0');
           responseManager.setHeader('pragma', 'no-cache');
-          responseManager.setHeader('cache-control', 'no-cache, no-store, must-revalidate');
+          responseManager.setHeader(
+            'cache-control',
+            `${bfcacheEnabled ? '' : 'no-store, '}no-cache, must-revalidate`
+          );
 
           responseManager.setBody(html);
         };
@@ -199,6 +204,7 @@ Page Error Boundary will be rendered for the client`,
         htmlBuilder: 'htmlBuilder',
         context: CONTEXT_TOKEN,
         pageService: PAGE_SERVICE_TOKEN,
+        bfcacheEnabled: BACK_FORWARD_CACHE_ENABLED,
       },
       multi: true,
     }),
@@ -309,6 +315,10 @@ Page Error Boundary will be rendered for the client`,
     provide({
       provide: FETCH_WEBPACK_STATS_TOKEN,
       useValue: fetchWebpackStats,
+    }),
+    provide({
+      provide: BACK_FORWARD_CACHE_ENABLED,
+      useValue: true,
     }),
   ],
 })

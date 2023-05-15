@@ -188,6 +188,8 @@ export const RENDER_FLOW_AFTER_TOKEN = createToken<() => Promise<void>>('render 
 
 export const MODERN_SATISFIES_TOKEN = createToken<boolean>('modernSatisfies');
 
+export const BACK_FORWARD_CACHE_ENABLED = createToken<boolean>('back forward cache');
+
 export type ReactServerRenderMode = 'sync' | 'streaming';
 
 export const REACT_SERVER_RENDER_MODE = createToken<ReactServerRenderMode>('reactServerRenderMode');
