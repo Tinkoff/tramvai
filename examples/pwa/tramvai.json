@@ -1,0 +1,48 @@
+{
+  "$schema": "../../node_modules/@tramvai/cli/schema.json",
+  "projects": {
+    "pwa": {
+      "name": "pwa",
+      "root": "src",
+      "type": "application",
+      "modern": true,
+      "fileSystemPages": {
+        "enabled": true,
+        "pagesDir": false
+      },
+      "splitChunks": {
+        "mode": "granularChunks"
+      },
+      "sourceMap": true,
+      "postcss": {
+        "config": "src/postcss",
+        "cssLocalIdentName": {}
+      },
+      "hotRefresh": {
+        "enabled": true
+      },
+      "experiments": {
+        "pwa": {
+          "workbox": {
+            "enabled": {
+              "production": true,
+              "development": true
+            }
+          },
+          "webmanifest": {
+            "enabled": true,
+            "dest": "/manifest.[hash].webmanifest",
+            "name": "my manifest"
+          },
+          "icon": {
+            "src": "images/pwa-icon.png"
+          },
+          "meta": {
+            "themeColor": "#ffdd2d",
+            "viewport": "width=device-width, initial-scale=1"
+          }
+        }
+      }
+    }
+  }
+}

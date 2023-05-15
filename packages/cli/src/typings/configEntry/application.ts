@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-restricted-imports
 import type { ForkTsCheckerWebpackPluginOptions } from 'fork-ts-checker-webpack-plugin/lib/plugin-options';
+import type { PwaIconOptions, PwaMetaOptions, WebManifestOptions } from '../pwa';
 import type { CliConfigEntry, Experiments } from './cli';
 import type { OverridableOption } from './common';
 
@@ -22,6 +23,60 @@ export interface ApplicationExperiments extends Experiments {
    * @default "process"
    */
   serverRunner?: 'process' | 'thread';
+  /**
+   * @title PWA configuration (works with `TramvaiPwaModule` from `@tramvai/module-progressive-web-app` library)
+   * @default {}
+   */
+  pwa: {
+    /**
+     * @title Service-Worker configuration
+     * @default {}
+     */
+    sw?: {
+      /**
+       * @title Path to sw.ts file (relative to "root" directory)
+       * @default "sw.ts"
+       */
+      src?: string;
+      /**
+       * @title Name of generated SW file (will be placed in "output.client" directory)
+       * @default "sw.js"
+       */
+      dest?: string;
+      /**
+       * @title Scope of SW (see https://developers.google.com/web/ilt/pwa/introduction-to-service-worker#registration_and_scope)
+       * @default "/"
+       */
+      scope?: string;
+    };
+    // @todo optional workbox-window?
+    /**
+     * @title Workbox configuration
+     * @default {}
+     */
+    workbox?: {
+      /**
+       * @title Connect `InjectManifest` from `workbox-webpack-plugin` library
+       * @default false
+       */
+      enabled?: OverridableOption<boolean>;
+    };
+    /**
+     * @title WebManifest content (manifest.json or webmanifest will be generated based on this options)
+     * @default {}
+     */
+    webmanifest?: WebManifestOptions;
+    /**
+     * @title PWA icons options
+     * @default {}
+     */
+    icon?: PwaIconOptions;
+    /**
+     * @title PWA meta options
+     * @default {}
+     */
+    meta?: PwaMetaOptions;
+  };
 }
 
 export interface ApplicationConfigEntry extends CliConfigEntry {

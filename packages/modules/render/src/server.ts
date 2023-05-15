@@ -26,6 +26,7 @@ import { Scope } from '@tinkoff/dippy';
 import { satisfies } from '@tinkoff/user-agent';
 import { isRedirectFoundError } from '@tinkoff/errors';
 import { PageErrorStore, setPageErrorEvent, deserializeError } from '@tramvai/module-router';
+import { COOKIE_MANAGER_TOKEN } from '@tramvai/module-common';
 import { RESOURCE_INLINER, RESOURCES_REGISTRY_CACHE, ResourcesInliner } from './resourcesInliner';
 import { ResourcesRegistry } from './resourcesRegistry';
 import { PageBuilder } from './server/PageBuilder';
@@ -273,19 +274,26 @@ Page Error Boundary will be rendered for the client`,
     }),
     provide({
       provide: MODERN_SATISFIES_TOKEN,
-      useFactory: ({ requestManager, userAgent, cache }) => {
+      useFactory: ({ requestManager, userAgent, cache, cookieManager }) => {
         const reqUserAgent = requestManager.getHeader('user-agent') as string;
+        let result: boolean;
+
         if (cache.has(reqUserAgent)) {
-          return cache.get(reqUserAgent);
+          result = cache.get(reqUserAgent);
+        } else {
+          result = satisfies(userAgent, null, { env: 'modern' });
+          cache.set(reqUserAgent, result);
         }
-        const result = satisfies(userAgent, null, { env: 'modern' });
-        cache.set(reqUserAgent, result);
+
+        cookieManager.set({ name: '_t_modern', value: JSON.stringify(result) });
+
         return result;
       },
       deps: {
         requestManager: REQUEST_MANAGER_TOKEN,
         userAgent: USER_AGENT_TOKEN,
         cache: 'modernSatisfiesLruCache',
+        cookieManager: COOKIE_MANAGER_TOKEN,
       },
     }),
     provide({

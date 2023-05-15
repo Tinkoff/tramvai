@@ -72,10 +72,7 @@ export const staticApp = async (
   });
 
   const staticServer = await startStaticServer(clientConfigManager);
-  const staticAssetsPrefix = `http://${staticHost}:${staticPort}/${output.client.replace(
-    /\/$/,
-    ''
-  )}/`;
+  const staticAssetsPrefix = serverConfigManager.assetsPrefix;
 
   const server = node(path.resolve(root, 'server.js'), [], {
     cwd: root,

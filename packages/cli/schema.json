@@ -546,6 +546,189 @@
                     ],
                     "type": "string"
                   },
+                  "pwa": {
+                    "title": "PWA configuration (works with `TramvaiPwaModule` from `@tramvai/module-progressive-web-app` library)",
+                    "default": {},
+                    "type": "object",
+                    "properties": {
+                      "sw": {
+                        "title": "Service-Worker configuration",
+                        "default": {},
+                        "type": "object",
+                        "properties": {
+                          "src": {
+                            "title": "Path to sw.ts file (relative to \"root\" directory)",
+                            "default": "sw.ts",
+                            "type": "string"
+                          },
+                          "dest": {
+                            "title": "Name of generated SW file (will be placed in \"output.client\" directory)",
+                            "default": "sw.js",
+                            "type": "string"
+                          },
+                          "scope": {
+                            "title": "Scope of SW (see https://developers.google.com/web/ilt/pwa/introduction-to-service-worker#registration_and_scope)",
+                            "default": "/",
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      "workbox": {
+                        "title": "Workbox configuration",
+                        "default": {},
+                        "type": "object",
+                        "properties": {
+                          "enabled": {
+                            "cli_overridable": "",
+                            "title": "Connect `InjectManifest` from `workbox-webpack-plugin` library",
+                            "default": false,
+                            "anyOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "development": {
+                                    "type": "boolean"
+                                  },
+                                  "production": {
+                                    "type": "boolean"
+                                  }
+                                },
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "boolean"
+                              }
+                            ]
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      "webmanifest": {
+                        "title": "WebManifest content (manifest.json or webmanifest will be generated based on this options)",
+                        "default": {},
+                        "type": "object",
+                        "properties": {
+                          "enabled": {
+                            "title": "Create webmanifest file",
+                            "default": false,
+                            "type": "boolean"
+                          },
+                          "dest": {
+                            "title": "Name of generated manifest file (will be placed in \"output.client\" directory). You can use `[hash]` placeholder for manifest cache busting",
+                            "default": "/manifest.[hash].json",
+                            "type": "string"
+                          },
+                          "scope": {
+                            "title": "prefer to use \"pwa.sw.scope\" instead, this field will be generated automatically",
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "short_name": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "start_url": {
+                            "type": "string"
+                          },
+                          "display": {
+                            "type": "string"
+                          },
+                          "theme_color": {
+                            "title": "prefer to use \"pwa.meta.themeColor\" instead, this field will be generated automatically",
+                            "type": "string"
+                          },
+                          "background_color": {
+                            "type": "string"
+                          },
+                          "icons": {
+                            "title": "prefer to use \"pwa.icon\" instead, this field will be generated automatically",
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "src": {
+                                  "type": "string"
+                                },
+                                "sizes": {
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "type": "string"
+                                }
+                              },
+                              "additionalProperties": false
+                            }
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      "icon": {
+                        "title": "PWA icons options",
+                        "default": {},
+                        "type": "object",
+                        "properties": {
+                          "src": {
+                            "title": "Path to icon file (relative to \"root\" directory)",
+                            "type": "string"
+                          },
+                          "dest": {
+                            "title": "Folder for generated icons (will be placed in \"output.client\" directory)",
+                            "default": "pwa-icons",
+                            "type": "string"
+                          },
+                          "sizes": {
+                            "title": "Icon sizes",
+                            "default": [
+                              36,
+                              48,
+                              72,
+                              96,
+                              144,
+                              192,
+                              512
+                            ],
+                            "type": "array",
+                            "items": {
+                              "type": "number"
+                            }
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      "meta": {
+                        "title": "PWA meta options",
+                        "default": {},
+                        "type": "object",
+                        "properties": {
+                          "viewport": {
+                            "type": "string"
+                          },
+                          "themeColor": {
+                            "type": "string"
+                          },
+                          "mobileApp": {
+                            "type": "string"
+                          },
+                          "mobileAppIOS": {
+                            "type": "string"
+                          },
+                          "appleTitle": {
+                            "type": "string"
+                          },
+                          "appleStatusBarStyle": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
                   "webpack": {
                     "title": "experiments configuration for [webpack](https://webpack.js.org/configuration/experiments/)",
                     "default": {},

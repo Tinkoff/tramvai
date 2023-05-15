@@ -1,0 +1,37 @@
+{
+  "name": "@tramvai/module-progressive-web-app",
+  "version": "0.0.0-stub",
+  "description": "Pwa integration - SW, manifest, icons and meta",
+  "browser": "lib/browser.js",
+  "main": "lib/server.js",
+  "module": "lib/server.es.js",
+  "typings": "lib/server.d.ts",
+  "files": [
+    "lib"
+  ],
+  "sideEffects": false,
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Tinkoff/tramvai.git"
+  },
+  "scripts": {
+    "build": "tramvai-build --forPublish --preserveModules",
+    "watch": "tsc -w"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "@tramvai/tokens-render": "0.0.0-stub",
+    "@tramvai/tokens-server": "0.0.0-stub",
+    "workbox-window": "^6.4.1"
+  },
+  "devDependencies": {},
+  "peerDependencies": {
+    "@tramvai/cli": "0.0.0-stub",
+    "@tramvai/core": "0.0.0-stub",
+    "@tinkoff/dippy": "0.0.0-stub",
+    "tslib": "^2.4.0"
+  }
+}

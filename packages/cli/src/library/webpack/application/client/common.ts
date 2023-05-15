@@ -19,6 +19,7 @@ import nodeClient from '../../blocks/nodeClient';
 import { pagesResolve } from '../../blocks/pagesResolve';
 import { configToEnv } from '../../blocks/configToEnv';
 import { DEFAULT_STATS_OPTIONS, DEFAULT_STATS_FIELDS } from '../../constants/stats';
+import { pwaBlock } from '../../blocks/pwa/client';
 
 export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config: Config) => {
   const { polyfill, fileSystemPages } = configManager;
@@ -41,6 +42,7 @@ export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config
     .batch(css(configManager))
     .batch(nodeClient(configManager))
     .batch(postcssAssets(configManager))
+    .batch(pwaBlock(configManager))
     .when(fileSystemPages.enabled, (cfg) => cfg.batch(pagesResolve(configManager)));
 
   config

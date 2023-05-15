@@ -7,3 +7,5 @@ export interface ImageObject {
 }
 
 export type SvgComponent = ComponentType<SVGProps<SVGElement>>;
+
+export * from './pwa/index';

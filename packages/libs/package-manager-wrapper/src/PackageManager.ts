@@ -1,5 +1,3 @@
-import fs from 'fs';
-import path from 'path';
 import type { Options } from 'execa';
 import { command } from 'execa';
 
@@ -51,12 +49,13 @@ export abstract class PackageManager {
   abstract getLockFileName(): string;
 
   async exists(options: ExistsOptions): Promise<boolean> {
-    const { name, cwd } = options;
+    const { name } = options;
 
     try {
-      await fs.promises.access(
-        path.join(cwd || this.rootDir, 'node_modules', name, 'package.json')
-      );
+      // for tramvai repository and potentially for other monorepos,
+      // we can check package availability with Node.js resolve algorithm
+      require.resolve(name);
+
       return true;
     } catch (e) {
       return false;

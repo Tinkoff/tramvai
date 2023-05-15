@@ -1,0 +1,6 @@
+{
+  "name": "pwa",
+  "sourceRoot": "examples/pwa/src",
+  "projectType": "library",
+  "targets": {}
+}

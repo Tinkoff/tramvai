@@ -1,0 +1,14 @@
+{
+  "name": "@tramvai/module-progressive-web-app",
+  "sourceRoot": "packages/modules/pwa/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/modules/pwa/package.json",
+        "packages/modules/pwa/lib"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

@@ -17,6 +17,7 @@ import { browserslistConfigResolve } from '../../blocks/browserslistConfig';
 import { configToEnv } from '../../blocks/configToEnv';
 import { commonApplication } from '../common';
 import { extractCssPluginFactory } from '../../blocks/extractCssPlugin';
+import { pwaBlock } from '../../blocks/pwa/server';
 
 // eslint-disable-next-line import/no-default-export
 export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config: Config) => {
@@ -45,6 +46,7 @@ export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config
       })
     )
     .batch(css(configManager))
+    .batch(pwaBlock(configManager))
     .when(fileSystemPages.enabled, (cfg) => cfg.batch(pagesResolve(configManager)));
 
   config.output

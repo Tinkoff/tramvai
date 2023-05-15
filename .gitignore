@@ -16,6 +16,7 @@ _node_modules/
 !tools/monorepo/depscheck/src/__fixtures__/**/node_modules
 !tools/check-versions/__integration__/__fixtures__/**/node_modules
 .yarn-offline-cache
+.npm
 
 # IDE
 .DS_Store

@@ -1,6 +1,7 @@
 import { CLICommand } from '../../models/command';
 import { checkApplication } from '../../validators/commands/checkBuild';
 import { checkConfigExists } from '../../validators/commands/checkConfigExists';
+import { checkPwaDependencies } from '../../validators/commands/checkPwaDependencies';
 import { runMigrationsAndCheckVersions } from '../../validators/commands/runMigrationsAndCheckVersions';
 
 export type Params = {
@@ -38,7 +39,12 @@ class AnalyzeCommand extends CLICommand<Params> {
 
   alias = 'a';
 
-  validators = [checkConfigExists, checkApplication, runMigrationsAndCheckVersions];
+  validators = [
+    checkConfigExists,
+    checkApplication,
+    runMigrationsAndCheckVersions,
+    checkPwaDependencies,
+  ];
 
   action(parameters: Params) {
     // used require for lazy code execution

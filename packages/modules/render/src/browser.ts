@@ -7,8 +7,10 @@ import {
   RENDER_MODE,
   RENDERER_CALLBACK,
   USE_REACT_STRICT_MODE,
+  MODERN_SATISFIES_TOKEN,
 } from '@tramvai/tokens-render';
 import { PageErrorStore, setPageErrorEvent, beforeResolveHooksToken } from '@tramvai/module-router';
+import { COOKIE_MANAGER_TOKEN } from '@tramvai/module-common';
 import { rendering as renderInBrowser } from './client';
 import type { RenderModuleConfig } from './shared/types';
 import { LayoutModule } from './shared/LayoutModule';
@@ -101,6 +103,17 @@ const throwErrorInDev = (logger: typeof LOGGER_TOKEN) => {
     provide({
       provide: RENDER_MODE,
       useValue: 'legacy',
+    }),
+    provide({
+      provide: MODERN_SATISFIES_TOKEN,
+      useFactory: ({ cookieManager }) => {
+        const result = cookieManager.get('_t_modern');
+
+        return result === 'true' || result === 'false' ? JSON.parse(result) : false;
+      },
+      deps: {
+        cookieManager: COOKIE_MANAGER_TOKEN,
+      },
     }),
   ],
 })

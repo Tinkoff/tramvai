@@ -2,6 +2,7 @@ import { CLICommand } from '../../models/command';
 import { checkConfigExists } from '../../validators/commands/checkConfigExists';
 import { checkApplication } from '../../validators/commands/checkBuild';
 import { runMigrationsAndCheckVersions } from '../../validators/commands/runMigrationsAndCheckVersions';
+import { checkPwaDependencies } from '../../validators/commands/checkPwaDependencies';
 
 export interface Params {
   target: string;
@@ -82,7 +83,12 @@ export class StartProdCommand extends CLICommand<Params> {
 
   alias = 'sp';
 
-  validators = [checkConfigExists, checkApplication, runMigrationsAndCheckVersions];
+  validators = [
+    checkConfigExists,
+    checkApplication,
+    runMigrationsAndCheckVersions,
+    checkPwaDependencies,
+  ];
 
   action(parameters: Params) {
     // used require for lazy code execution

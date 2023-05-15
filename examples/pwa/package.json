@@ -1,0 +1,49 @@
+{
+  "name": "pwa",
+  "version": "0.0.0-stub",
+  "private": true,
+  "scripts": {
+    "start": "tramvai start pwa",
+    "start:prod": "tramvai start-prod pwa",
+    "build": "tramvai build pwa",
+    "lint": "eslint --ext .ts,.tsx --ignore-path .gitignore .",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:integration": "jest -w=3 --config ./jest.integration.config.js",
+    "test:integration:watch": "jest --runInBand --watch --config ./jest.integration.config.js"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.0",
+    "@types/jest": "^28.1.6",
+    "@tramvai/cli": "0.0.0-stub",
+    "@tramvai/test-integration": "0.0.0-stub",
+    "@tramvai/test-integration-jest": "0.0.0-stub",
+    "postcss-custom-media": "^8.0.0",
+    "postcss-modules-values-replace": "^4.0.0",
+    "postcss-custom-properties": "^11.0.0",
+    "postcss-nested": "^5.0.5",
+    "sharp": "^0.32.1",
+    "jest": "^29.0.2",
+    "jest-circus": "^29.0.2"
+  },
+  "dependencies": {
+    "@tramvai/core": "0.0.0-stub",
+    "@tramvai/react": "0.0.0-stub",
+    "@tramvai/state": "0.0.0-stub",
+    "@tramvai/module-common": "0.0.0-stub",
+    "@tramvai/module-error-interceptor": "0.0.0-stub",
+    "@tramvai/module-render": "0.0.0-stub",
+    "@tramvai/module-router": "0.0.0-stub",
+    "@tramvai/module-seo": "0.0.0-stub",
+    "@tramvai/module-server": "0.0.0-stub",
+    "@tramvai/module-progressive-web-app": "0.0.0-stub",
+    "@tramvai/tokens-common": "0.0.0-stub",
+    "@tramvai/tokens-render": "0.0.0-stub",
+    "@tramvai/tokens-router": "0.0.0-stub",
+    "workbox-core": "^6.5.4",
+    "workbox-precaching": "^6.5.4",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "tslib": "^2.4.0"
+  }
+}

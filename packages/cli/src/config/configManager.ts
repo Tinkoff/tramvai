@@ -86,12 +86,14 @@ export type ConfigManager<
     buildPath: string;
     withSettings(settings: Settings<E>): ConfigManager<C, E>;
     dehydrate(): [C, Settings<E>];
+    assetsPrefix?: string;
   };
 
 export const DEFAULT_PORT = 3000;
 export const DEFAULT_STATIC_PORT = 4000;
 export const DEFAULT_STATIC_MODULE_PORT = 4040;
 
+// eslint-disable-next-line max-statements, complexity
 export const createConfigManager = <C extends ConfigEntry = ConfigEntry, E extends Env = Env>(
   configEntry: C,
   settings: Settings<E>
@@ -165,10 +167,45 @@ export const createConfigManager = <C extends ConfigEntry = ConfigEntry, E exten
   };
 
   if (isApplication(config)) {
+    config.assetsPrefix =
+      process.env.ASSETS_PREFIX && process.env.ASSETS_PREFIX !== 'static'
+        ? process.env.ASSETS_PREFIX
+        : `http://${config.staticHost}:${config.staticPort}/${config.output.client.replace(
+            /\/$/,
+            ''
+          )}/`;
     config.buildPath = resolve(
       rootDir,
       buildType === 'server' ? config.output.server : config.output.client
     );
+
+    const pwa = config.experiments?.pwa;
+
+    if (pwa.webmanifest?.enabled) {
+      pwa.webmanifest = {
+        icons: pwa.icon?.src
+          ? pwa.icon.sizes.map((size) => ({
+              src: `${config.assetsPrefix}${pwa.icon.dest}/${size}x${size}.png`,
+              sizes: `${size}x${size}`,
+              type: 'image/png',
+            }))
+          : [],
+        ...pwa.webmanifest,
+        scope: pwa.webmanifest.scope ?? pwa.sw?.scope,
+        name: pwa.webmanifest.name ?? config.name,
+        short_name: pwa.webmanifest.name ?? config.name,
+        theme_color: pwa.webmanifest.theme_color ?? pwa.meta.themeColor,
+      };
+
+      if (pwa.webmanifest.dest.includes('[hash]')) {
+        const crypto = require('crypto');
+        const hashSum = crypto.createHash('sha256');
+        hashSum.update(JSON.stringify(pwa.webmanifest));
+        const currentHash = hashSum.digest('hex');
+
+        pwa.webmanifest.dest = pwa.webmanifest.dest.replace('[hash]', currentHash.substr(0, 8));
+      }
+    }
   } else if (isChildApp(config)) {
     config.buildPath = resolve(rootDir, ...config.output.split('/'));
   } else if (isModule(config)) {

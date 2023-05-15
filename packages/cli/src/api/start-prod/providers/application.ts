@@ -46,7 +46,7 @@ export const applicationsProviders: readonly Provider[] = [
       ).withSettings({
         buildType: 'server',
       });
-      const { debug, port, staticPort, staticHost, output } = serverConfigManager;
+      const { debug, port, assetsPrefix } = serverConfigManager;
       const root = serverConfigManager.buildPath;
 
       return fork(path.resolve(root, 'server.js'), [], {
@@ -58,11 +58,10 @@ export const applicationsProviders: readonly Provider[] = [
           ...env,
           ...process.env,
           NODE_ENV: 'production',
+          TRAMVAI_CLI_COMMAND: 'start-prod',
           PORT: `${port}`,
           PORT_SERVER: `${port}`,
-          ASSETS_PREFIX:
-            process.env.ASSETS_PREFIX ??
-            `http://${staticHost}:${staticPort}/${output.client.replace(/\/$/, '')}/`,
+          ASSETS_PREFIX: assetsPrefix,
         },
       });
     },
