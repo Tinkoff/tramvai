@@ -1,7 +1,12 @@
-import { commandLineListTokens, declareModule, provide, Scope } from '@tramvai/core';
+import { commandLineListTokens, declareModule, optional, provide, Scope } from '@tramvai/core';
 import { MODERN_SATISFIES_TOKEN } from '@tramvai/tokens-render';
 import type { Workbox } from 'workbox-window';
-import { PWA_SW_SCOPE_TOKEN, PWA_SW_URL_TOKEN, PWA_WORKBOX_TOKEN } from '../tokens';
+import {
+  PWA_SW_PARAMS_TOKEN,
+  PWA_SW_SCOPE_TOKEN,
+  PWA_SW_URL_TOKEN,
+  PWA_WORKBOX_TOKEN,
+} from '../tokens';
 import { providers } from './shared';
 
 export const TramvaiPwaWorkboxModule = declareModule({
@@ -11,7 +16,7 @@ export const TramvaiPwaWorkboxModule = declareModule({
     provide({
       provide: PWA_WORKBOX_TOKEN,
       scope: Scope.SINGLETON,
-      useFactory: ({ swUrl, swScope, modern }) => {
+      useFactory: ({ swUrl, swScope, modern, swParams }) => {
         let workbox: null | Workbox = null;
 
         return async () => {
@@ -21,8 +26,24 @@ export const TramvaiPwaWorkboxModule = declareModule({
           }
 
           const { Workbox } = await import('workbox-window/Workbox');
+          let finalSwUrl = modern ? swUrl.replace(/\.js$/, '.modern.js') : swUrl;
 
-          workbox = new Workbox(modern ? swUrl.replace(/\.js$/, '.modern.js') : swUrl, {
+          if (swParams && swParams.length) {
+            const params = swParams
+              .filter(Boolean)
+              .reduce((acc, p) => {
+                return acc.concat(
+                  Object.keys(p).map((k) => `${encodeURIComponent(k)}=${encodeURIComponent(p[k])}`)
+                );
+              }, [] as string[])
+              .join('&');
+
+            if (params) {
+              finalSwUrl += `?${params}`;
+            }
+          }
+
+          workbox = new Workbox(finalSwUrl, {
             scope: swScope,
           });
 
@@ -41,6 +62,7 @@ export const TramvaiPwaWorkboxModule = declareModule({
         swUrl: PWA_SW_URL_TOKEN,
         swScope: PWA_SW_SCOPE_TOKEN,
         modern: MODERN_SATISFIES_TOKEN,
+        swParams: optional(PWA_SW_PARAMS_TOKEN),
       },
     }),
     provide({

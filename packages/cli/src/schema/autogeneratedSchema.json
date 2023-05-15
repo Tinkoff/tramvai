@@ -638,6 +638,9 @@
                           },
                           "type": {
                             "type": "string"
+                          },
+                          "density": {
+                            "type": "number"
                           }
                         },
                         "additionalProperties": false

@@ -34,6 +34,7 @@ export type PwaIconItem = {
   src: string;
   sizes: string;
   type?: string;
+  density?: number;
 };
 
 export type PwaIconOptions = {

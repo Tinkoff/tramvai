@@ -22,6 +22,13 @@ export const PWA_SW_URL_TOKEN = createToken<string>('pwa sw url');
 export const PWA_SW_SCOPE_TOKEN = createToken<string>('pwa sw scope');
 
 /**
+ * @description Token to add query params to sw url
+ */
+export const PWA_SW_PARAMS_TOKEN = createToken<Record<string, string>>('pwa sw params', {
+  multi: true,
+});
+
+/**
  * @description Token to owerwrite default - `${pwa.webmanifest.path}manifest.${pwa.webmanifest.ext}`
  */
 export const PWA_MANIFEST_URL_TOKEN = createToken<string>('pwa manifest url');

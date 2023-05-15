@@ -5,7 +5,7 @@ export const checkPwaDependencies: Validator = async ({ packageManager, config }
   const { target } = parameters;
   const cfg = config.getProject(target) as ApplicationConfigEntry;
 
-  if (cfg.experiments?.pwa?.icon && packageManager.name !== 'unknown') {
+  if (cfg.experiments?.pwa?.icon?.src && packageManager.name !== 'unknown') {
     const sharpInstalled = await packageManager.exists({ name: 'sharp' });
 
     if (!sharpInstalled) {
