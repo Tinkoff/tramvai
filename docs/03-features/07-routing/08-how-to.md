@@ -5,9 +5,7 @@ title: How-to
 
 ### Setting when actions should be performed during SPA transitions
 
-By default, SPA transitions execute actions after defining the next route, but before the actual transition, which allows the page to be displayed immediately with new data, but can cause a noticeable visual lag if the actions are taken long enough.
-
-It is possible to change the behavior and make the execution of actions after the transition itself. Then, when developing components, you will need to take into account that data will be loaded as it becomes available.
+By default, SPA transitions execute actions after defining the next route and after the actual transition. It is possible to change this behavior and make the execution of actions before a transition itself. Note, that in this case a page will be displayed immediately with new data, but it can cause a noticeable visual lag if actions are taken long enough.
 
 Configurable explicitly when using the routing module:
 
@@ -18,7 +16,7 @@ import { SpaRouterModule } from '@tramvai/module-router';
 createApp({
   modules: [
     SpaRouterModule.forRoot([], {
-      spaActionsMode: 'after', // default is 'before'
+      spaActionsMode: 'before', // default is 'after'
     }),
   ],
 });
@@ -34,7 +32,7 @@ const providers = [
   // ...,
   provide({
     provide: ROUTER_SPA_ACTIONS_RUN_MODE_TOKEN,
-    useValue: 'after',
+    useValue: 'before',
   }),
 ];
 ```

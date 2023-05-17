@@ -142,12 +142,18 @@ createApp({
 
 ### File system Wildcard Routes
 
-You can register a wildcard route using the file system. To do so you must create a file called `*.tsx` in the desirable directory. Note, that nested paths are also supported. For example if you need wildcard for path `/profile/*`, then create following folder structure:
+You can register a wildcard route using the file system. To do so you must create a file called `[...path].tsx` in the desirable directory. Note, that nested paths are also supported. For example if you need wildcard for path `/profile/*`, then create following folder structure:
+
+:::tip
+
+There is can be any name in the pattern, not only `...path`
+
+:::
 
 ```
 src
 └── routes
     └── profile
         └── index.tsx
-        └── *.tsx
+        └── [...path].tsx
 ```

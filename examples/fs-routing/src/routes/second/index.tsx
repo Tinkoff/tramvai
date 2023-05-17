@@ -1,4 +1,4 @@
-import { PageComponent } from '@tramvai/react';
+import type { PageComponent } from '@tramvai/react';
 import { useActions } from '@tramvai/state';
 import { useUrl } from '@tramvai/module-router';
 import { Button } from '../../components/shared/Button/Button';

@@ -31,4 +31,4 @@ export const Provider: FunctionComponent<{
   );
 };
 
-Provider.displayName = 'Provider';
+Provider.displayName = 'TinkoffRouterProvider';

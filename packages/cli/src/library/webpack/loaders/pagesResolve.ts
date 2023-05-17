@@ -6,7 +6,7 @@ import type { ApplicationConfigEntry } from '../../../api';
 
 const LAYOUT_FILENAME = '_layout.tsx';
 const ERROR_BOUNDARY_FILENAME = '_error.tsx';
-const WILDCARD_FILENAME = '*.tsx';
+const WILDCARD_TOKEN = '[...';
 
 interface Options {
   rootDir: string;
@@ -42,10 +42,10 @@ const pagesResolve: LoaderDefinitionFunction<Options> = function () {
 
     this.addContextDependency(pagesDir);
 
-    // skip files whose name starts with dot, asterisk or underscore symbols
+    // skip service files
     const pagesFiles = readDir(
       pagesDir,
-      (name: string) => name[0] !== '.' && name[0] !== '*' && name[0] !== '_'
+      (name: string) => name[0] !== '.' && name[0] !== '_' && !name.startsWith(WILDCARD_TOKEN)
     );
     const fsPages = [];
 
@@ -68,7 +68,12 @@ const pagesResolve: LoaderDefinitionFunction<Options> = function () {
 
           const layoutPath = path.join(pageDirname, LAYOUT_FILENAME);
           const errorBoundaryPath = path.join(pageDirname, ERROR_BOUNDARY_FILENAME);
-          const wildcardPath = path.join(pageDirname, WILDCARD_FILENAME);
+
+          const routeContent = fs
+            .readdirSync(pageDirname, { withFileTypes: true })
+            .filter((item) => item.isFile())
+            .map((item) => item.name);
+          const wildcardPath = routeContent.find((item) => item.includes(WILDCARD_TOKEN));
 
           if (fs.existsSync(layoutPath)) {
             const filename = removeExtension(layoutPath);
@@ -87,9 +92,9 @@ const pagesResolve: LoaderDefinitionFunction<Options> = function () {
             );
           }
 
-          if (fs.existsSync(wildcardPath)) {
+          if (wildcardPath !== undefined) {
             const componentName = `${pageComponentName}__wildcard`;
-            const filename = removeExtension(wildcardPath);
+            const filename = removeExtension(path.join(pageDirname, wildcardPath));
 
             // @example '@/pages/MainPage': lazy(() => import(/* webpackChunkName: "@_pages_MainPage__wildcard" */ '/tramvai-app/src/pages/MainPage_wildcard'))
             fsWildcards.push(
