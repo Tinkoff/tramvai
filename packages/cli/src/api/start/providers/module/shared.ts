@@ -21,6 +21,7 @@ export const sharedProviders: readonly Provider[] = [
     useFactory: ({ configEntry, parameters }) =>
       createConfigManager(configEntry as ModuleConfigEntry, {
         ...parameters,
+        appEnv: parameters.env,
         env: 'development',
         port: detectPortSync(parameters.port ?? DEFAULT_STATIC_MODULE_PORT),
       }),

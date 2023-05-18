@@ -20,6 +20,7 @@ export const sharedProviders: readonly Provider[] = [
     }) => {
       return createConfigManager(configEntry, {
         ...parameters,
+        appEnv: parameters.env,
         env: 'production',
         buildType: 'client',
       });

@@ -5,6 +5,8 @@
   "scripts": {
     "start": "tramvai start pwa",
     "start:prod": "tramvai start-prod pwa",
+    "start:csr": "TRAMVAI_FORCE_CLIENT_SIDE_RENDERING=true tramvai start pwa",
+    "start:csr:prod": "TRAMVAI_FORCE_CLIENT_SIDE_RENDERING=true tramvai start-prod pwa",
     "build": "tramvai build pwa",
     "lint": "eslint --ext .ts,.tsx --ignore-path .gitignore .",
     "test": "jest",
@@ -36,6 +38,7 @@
     "@tramvai/module-router": "0.0.0-stub",
     "@tramvai/module-seo": "0.0.0-stub",
     "@tramvai/module-server": "0.0.0-stub",
+    "@tramvai/module-page-render-mode": "0.0.0-stub",
     "@tramvai/module-progressive-web-app": "0.0.0-stub",
     "@tramvai/tokens-common": "0.0.0-stub",
     "@tramvai/tokens-render": "0.0.0-stub",

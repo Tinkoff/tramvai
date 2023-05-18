@@ -16,6 +16,9 @@ import type { Target } from '../typings/target';
 
 // @TODO: maybe split settings depending on env?
 export interface Settings<E extends Env> {
+  // env variables from @tramvai/cli JS api commands (not exists in process.env)
+  appEnv?: Record<string, any>;
+  // build environment
   env?: E;
   rootDir?: string;
   version?: string;
@@ -104,7 +107,17 @@ export const createConfigManager = <C extends ConfigEntry = ConfigEntry, E exten
   const { type } = configEntry;
   const rootDir = settings.rootDir ?? process.cwd();
   const debug = settings.debug ?? false;
-  const modern = getOption('modern', [settings, configEntry], true);
+  const appEnv = settings.appEnv ?? {};
+  // First problem, modern build is not supported for CSR mode.
+  // Second, in development mode with enabled modern, only modern JS chunks will be generated.
+  // With PWA module, only sw.modern.js file exists - but in CSR mode application needs sw.js, which is not generated.
+  // In production mode with enabled modern, everything is ok - all type of chunks generated in parallel.
+  const disableModernForCsrInDevMode =
+    (process.env.TRAMVAI_FORCE_CLIENT_SIDE_RENDERING ||
+      appEnv.TRAMVAI_FORCE_CLIENT_SIDE_RENDERING) === 'true' && env === 'development';
+  const modern = disableModernForCsrInDevMode
+    ? false
+    : getOption('modern', [settings, configEntry], true);
   const buildType = settings.buildType ?? 'client';
   let target: Target = 'defaults';
 
@@ -135,6 +148,7 @@ export const createConfigManager = <C extends ConfigEntry = ConfigEntry, E exten
     showConfig: false,
     csr: false,
     ...settings,
+    appEnv,
     env,
     rootDir,
     buildType,

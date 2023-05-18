@@ -2,7 +2,7 @@ import { commandLineListTokens, declareModule, provide, Scope } from '@tramvai/c
 import { ResourceType, ResourceSlot, RESOURCES_REGISTRY } from '@tramvai/tokens-render';
 import { PROXY_CONFIG_TOKEN } from '@tramvai/tokens-server';
 import { appConfig } from '@tramvai/cli/lib/external/config';
-import { PWA_MANIFEST_URL_TOKEN } from '../tokens';
+import { PWA_MANIFEST_URL_TOKEN, PWA_SW_SCOPE_TOKEN } from '../tokens';
 
 export const TramvaiPwaManifestModule = declareModule({
   name: 'TramvaiPwaManifestModule',
@@ -10,12 +10,18 @@ export const TramvaiPwaManifestModule = declareModule({
     provide({
       provide: PROXY_CONFIG_TOKEN,
       scope: Scope.SINGLETON,
-      useFactory: ({ manifestUrl }) => ({
-        context: [manifestUrl],
-        target: appConfig.assetsPrefix ?? process.env.ASSETS_PREFIX ?? '',
-      }),
+      useFactory: ({ manifestUrl, swScope }) => {
+        return {
+          context: [manifestUrl],
+          target: appConfig.assetsPrefix ?? process.env.ASSETS_PREFIX ?? '',
+          pathRewrite: (path: string) => {
+            return path.replace(swScope, '/');
+          },
+        };
+      },
       deps: {
         manifestUrl: PWA_MANIFEST_URL_TOKEN,
+        swScope: PWA_SW_SCOPE_TOKEN,
       },
     }),
     provide({
@@ -41,13 +47,18 @@ export const TramvaiPwaManifestModule = declareModule({
     }),
     provide({
       provide: PWA_MANIFEST_URL_TOKEN,
-      useFactory: () => {
+      useFactory: ({ swScope }) => {
         const manifestDest = process.env.TRAMVAI_PWA_MANIFEST_DEST as string;
-        const finalUrl = manifestDest.startsWith('/') ? manifestDest : `/${manifestDest}`;
+        const normalizedUrl = manifestDest.startsWith('/') ? manifestDest : `/${manifestDest}`;
+        const normalizedScope = swScope.replace(/\/$/, '');
+        const finalUrl = `${normalizedScope}${normalizedUrl}`;
 
-        // @todo check that finalUrl is relative and ends with .json or .webmanifest
+        // @todo check that finalUrl is relative and ends with .json or .webmanifest and no slash duplicates
 
         return finalUrl;
+      },
+      deps: {
+        swScope: PWA_SW_SCOPE_TOKEN,
       },
     }),
   ],

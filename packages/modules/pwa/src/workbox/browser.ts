@@ -1,5 +1,6 @@
 import { commandLineListTokens, declareModule, optional, provide, Scope } from '@tramvai/core';
 import { MODERN_SATISFIES_TOKEN } from '@tramvai/tokens-render';
+import { ENV_MANAGER_TOKEN } from '@tramvai/tokens-common';
 import type { Workbox } from 'workbox-window';
 import {
   PWA_SW_PARAMS_TOKEN,
@@ -16,7 +17,7 @@ export const TramvaiPwaWorkboxModule = declareModule({
     provide({
       provide: PWA_WORKBOX_TOKEN,
       scope: Scope.SINGLETON,
-      useFactory: ({ swUrl, swScope, modern, swParams }) => {
+      useFactory: ({ swUrl, swScope, modern, swParams, envManager }) => {
         let workbox: null | Workbox = null;
 
         return async () => {
@@ -26,7 +27,12 @@ export const TramvaiPwaWorkboxModule = declareModule({
           }
 
           const { Workbox } = await import('workbox-window/Workbox');
-          let finalSwUrl = modern ? swUrl.replace(/\.js$/, '.modern.js') : swUrl;
+          const hasModernBuild = !!process.env.TRAMVAI_MODERN_BUILD;
+          const isCsrMode = envManager.get('TRAMVAI_FORCE_CLIENT_SIDE_RENDERING') === 'true';
+
+          // tramvai modern build is not supported for CSR and not compatible with PWA module in CSR mode
+          let finalSwUrl =
+            modern && hasModernBuild && !isCsrMode ? swUrl.replace(/\.js$/, '.modern.js') : swUrl;
 
           if (swParams && swParams.length) {
             const params = swParams
@@ -63,6 +69,7 @@ export const TramvaiPwaWorkboxModule = declareModule({
         swScope: PWA_SW_SCOPE_TOKEN,
         modern: MODERN_SATISFIES_TOKEN,
         swParams: optional(PWA_SW_PARAMS_TOKEN),
+        envManager: ENV_MANAGER_TOKEN,
       },
     }),
     provide({
@@ -74,14 +81,14 @@ export const TramvaiPwaWorkboxModule = declareModule({
             return;
           }
 
-          const wb = await workbox();
-
-          if (!wb) {
-            // @todo: logs
-            return;
-          }
-
           try {
+            const wb = await workbox();
+
+            if (!wb) {
+              // @todo: logs
+              return;
+            }
+
             // @todo unregister when Workbox is disabled in config !!!
             // https://github.com/nuxt-community/pwa-module/blob/main/templates/workbox/workbox.unregister.js
 

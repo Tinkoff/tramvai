@@ -15,6 +15,7 @@ export const childAppProviders: readonly Provider[] = [
     useFactory: ({ configEntry, parameters }) =>
       createConfigManager(configEntry as ChildAppConfigEntry, {
         ...parameters,
+        appEnv: parameters.env,
         env: 'production',
         staticPort: detectPortSync(parameters.staticPort ?? DEFAULT_STATIC_MODULE_PORT),
         buildType: 'client',

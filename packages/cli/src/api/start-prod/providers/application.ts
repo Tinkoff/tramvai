@@ -27,6 +27,7 @@ export const applicationsProviders: readonly Provider[] = [
     useFactory: ({ configEntry, parameters }: { configEntry: ConfigEntry; parameters: Params }) =>
       createConfigManager(configEntry, {
         ...parameters,
+        appEnv: parameters.env,
         env: 'production',
         buildType: 'client',
         port: detectPortSync(parameters.port ?? DEFAULT_PORT),
