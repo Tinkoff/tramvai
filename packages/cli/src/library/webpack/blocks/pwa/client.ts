@@ -8,6 +8,7 @@ import { WebManifestPlugin } from '../../plugins/WebManifestPlugin';
 import { pwaSharedBlock } from './shared';
 
 export const pwaBlock =
+  // eslint-disable-next-line max-statements
   (configManager: ConfigManager<ApplicationConfigEntry>) => (config: Config) => {
     const {
       experiments: { pwa },
@@ -35,7 +36,19 @@ export const pwaBlock =
         maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
       };
 
+      if (pwa.workbox.include) {
+        workboxOptions.include = pwa.workbox.include.map((expr) => new RegExp(expr));
+      }
+      if (pwa.workbox.exclude) {
+        workboxOptions.exclude = [
+          ...workboxOptions.exclude,
+          ...pwa.workbox.exclude.map((expr) => new RegExp(expr)),
+        ];
+      }
+
       if (env === 'production') {
+        workboxOptions.dontCacheBustURLsMatching = /\/\w+?\.[\w\d]+?\.(js|css|gif|png|jpe?g|svg)$/;
+
         workboxOptions.modifyURLPrefix = {
           '': assetsPrefix,
         };

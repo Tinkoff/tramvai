@@ -7,12 +7,12 @@ import type { ERROR_BOUNDARY_TOKEN } from './tokens';
 type AnyError = Error & { [key: string]: any };
 
 export interface UniversalErrorBoundaryFallbackProps {
-  url: Url;
   error: AnyError;
+  url?: Url;
 }
 
 export interface UniversalErrorBoundaryProps {
-  url: Url;
+  url?: Url;
   error?: AnyError | null;
   fallback?: React.ComponentType<UniversalErrorBoundaryFallbackProps>;
   errorHandlers?: ExtractDependencyType<typeof ERROR_BOUNDARY_TOKEN> | null;
@@ -25,7 +25,7 @@ export interface UniversalErrorBoundaryProps {
 
 interface State {
   error: AnyError | null;
-  url: Url;
+  url?: Url;
 }
 
 type Props = UniversalErrorBoundaryProps;
@@ -44,9 +44,14 @@ export class UniversalErrorBoundary extends Component<Props, State> {
 
   // Reference and explanation here - https://github.com/remix-run/remix/blob/main/packages/remix-react/errorBoundaries.tsx#L35
   static getDerivedStateFromProps(props: Props, state: State) {
+    if (props.url === undefined) {
+      return { error: props.error || state.error };
+    }
+
     if (props.url !== state.url) {
       return { error: props.error || null, url: props.url };
     }
+
     return { error: props.error || state.error, url: state.url };
   }
 

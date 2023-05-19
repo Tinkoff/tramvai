@@ -4,7 +4,6 @@ import type { ChildAppReactConfig } from '@tramvai/tokens-child-app';
 import { CHILD_APP_INTERNAL_RENDER_TOKEN } from '@tramvai/tokens-child-app';
 import { LOGGER_TOKEN } from '@tramvai/tokens-common';
 import { useDi, UniversalErrorBoundary } from '@tramvai/react';
-import { useUrl } from '@tramvai/module-router';
 import { RenderContext } from './render-context';
 
 const FailedChildAppFallback = ({
@@ -120,10 +119,9 @@ const ChildAppWrapper = ({
 
 export const ChildApp = memo((config: ChildAppReactConfig) => {
   const { fallback } = config;
-  const url = useUrl();
 
   const result = (
-    <UniversalErrorBoundary url={url} fallback={fallback as any}>
+    <UniversalErrorBoundary fallback={fallback as any}>
       <ChildAppWrapper {...config} />
     </UniversalErrorBoundary>
   );

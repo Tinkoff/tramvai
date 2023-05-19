@@ -60,6 +60,14 @@ export interface ApplicationExperiments extends Experiments {
        * @default false
        */
       enabled?: OverridableOption<boolean>;
+      /**
+       * @title Array of regexp specifiers used to exclude assets from the precache manifest
+       */
+      exclude?: string[];
+      /**
+       * @title Array of regexp specifiers used to include assets in the precache manifest
+       */
+      include?: string[];
     };
     /**
      * @title WebManifest content (manifest.json or webmanifest will be generated based on this options)

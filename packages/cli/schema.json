@@ -600,6 +600,20 @@
                                 "type": "boolean"
                               }
                             ]
+                          },
+                          "exclude": {
+                            "title": "Array of regexp specifiers used to exclude assets from the precache manifest",
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "include": {
+                            "title": "Array of regexp specifiers used to include assets in the precache manifest",
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
                           }
                         },
                         "additionalProperties": false
@@ -662,6 +676,9 @@
                                 },
                                 "density": {
                                   "type": "number"
+                                },
+                                "purpose": {
+                                  "type": "string"
                                 }
                               },
                               "additionalProperties": false

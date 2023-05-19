@@ -32,7 +32,6 @@
     "@tinkoff/module-loader-server": "0.0.0-stub",
     "@tinkoff/url": "0.0.0-stub",
     "@tramvai/child-app-core": "0.0.0-stub",
-    "@tramvai/module-router": "0.0.0-stub",
     "@tramvai/safe-strings": "0.0.0-stub",
     "@tramvai/tokens-child-app": "0.0.0-stub"
   },

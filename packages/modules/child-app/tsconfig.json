@@ -50,9 +50,6 @@
             "path": "../../tokens/router"
         },
         {
-            "path": "../router"
-        },
-        {
             "path": "../../libs/url"
         }
     ]
