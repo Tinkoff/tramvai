@@ -23,6 +23,7 @@
     "@tramvai/tokens-core": "0.0.0-stub",
     "@tramvai/types-actions-state-context": "0.0.0-stub",
     "@tinkoff/dippy": "0.0.0-stub",
+    "node-abort-controller": "^3.0.1",
     "tslib": "^2.4.0"
   },
   "peerDependencies": {

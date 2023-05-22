@@ -1,0 +1,19 @@
+.menu {
+  text-align: center;
+}
+
+.menu_item {
+  display: inline;
+  padding: 5px;
+  border: solid 1px yellow;
+}
+
+.menu_item > a {
+  text-decoration: none;
+  color: black;
+}
+
+.menu_logo {
+  display: inline;
+  margin: 0 0 0 20%;
+}

@@ -7,7 +7,7 @@ describe('declareAction', () => {
       fn: jest.fn(),
     });
 
-    expect(action).toMatchObject({
+    expect({ ...action }).toMatchObject({
       name: 'testAction',
       fn: expect.any(Function),
     });

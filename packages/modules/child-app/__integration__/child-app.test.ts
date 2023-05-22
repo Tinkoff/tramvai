@@ -1,19 +1,66 @@
 import { resolve } from 'path';
 import { outputFile } from 'fs-extra';
-import { start } from '@tramvai/cli';
 import { fastify } from 'fastify';
 import { fastifyReplyFrom } from '@fastify/reply-from';
-import { testApp } from '@tramvai/internal-test-utils/testApp';
 import { testAppInBrowser } from '@tramvai/internal-test-utils/browser';
 import { getStaticUrl, sleep } from '@tramvai/test-integration';
+import { renderFactory, requestFactory } from '@tramvai/test-helpers';
 import type { PromiseType } from 'utility-types';
 import { getPort } from '@tramvai/internal-test-utils/utils/getPort';
+import type { start } from '@tramvai/cli';
 
-const normalizeSuspense = (html: string) => {
-  return html.replace(/<template .+><\/template>/gs, '<Suspense />');
+jest.setTimeout(3 * 60 * 1000);
+
+type TestVersion = 'latest' | 'v2.0.0';
+type TestCase = {
+  rootAppVersion: TestVersion;
+  childAppsVersion: TestVersion;
+  reactQuery: { scriptsCount: number };
 };
 
-const REFRESH_CMP_PATH = resolve(__dirname, 'child-app', 'base', '__temp__', 'cmp.tsx');
+const TEST_CASES: TestCase[] = [
+  {
+    rootAppVersion: 'latest',
+    childAppsVersion: 'latest',
+    reactQuery: {
+      scriptsCount: 2, // only runtime and main entry chunk should be loaded
+    },
+  },
+  ...(process.env.CHILD_APP_TEST_CROSS_VERSION
+    ? ([
+        {
+          rootAppVersion: 'v2.0.0',
+          childAppsVersion: 'latest',
+          reactQuery: {
+            scriptsCount: 7, // no dependencies are shared so every dep should be loaded for child-app
+          },
+        },
+        {
+          rootAppVersion: 'latest',
+          childAppsVersion: 'v2.0.0',
+          reactQuery: {
+            scriptsCount: 1, // old child-app are built in single file
+          },
+        },
+      ] as TestCase[])
+    : []),
+];
+
+const normalizeSuspense = (html: string) => {
+  return (
+    html
+      .replace(/<template .+><\/template>/gs, '<Suspense />')
+      // Remove any comments that are coming from the suspense usage
+      // as not every version is using Suspense and snapshots will be different
+      // without such normalization
+      // TODO: remove after dropping compatibility with v2.0.0
+      .replace(/^\s+<!?--\/?\$!?-->\n/gm, '')
+      .replace(/<!?--\/?\$!?-->/g, '')
+  );
+};
+
+const EXAMPLE_DIR = resolve(__dirname, '..', '..', '..', '..', 'examples', 'child-app');
+const REFRESH_CMP_PATH = resolve(EXAMPLE_DIR, 'child-apps', 'base', '__temp__', 'cmp.tsx');
 
 const REFRESH_CMP_CONTENT_START = `import React from 'react';
 
@@ -29,222 +76,198 @@ export const Cmp = () => {
 };
 `;
 
-let childAppBase: PromiseType<ReturnType<typeof start>>;
-let childAppState: PromiseType<ReturnType<typeof start>>;
-let childAppReactQuery: PromiseType<ReturnType<typeof start>>;
-let childAppError: PromiseType<ReturnType<typeof start>>;
+describe.each(TEST_CASES)(
+  'Cross version test: { rootAppVersion: $rootAppVersion, childAppsVersion: $childAppsVersion }',
+  ({ rootAppVersion, childAppsVersion, reactQuery }) => {
+    let childAppBase: PromiseType<ReturnType<typeof start>>;
+    let childAppState: PromiseType<ReturnType<typeof start>>;
+    let childAppReactQuery: PromiseType<ReturnType<typeof start>>;
+    let childAppError: PromiseType<ReturnType<typeof start>>;
+    let rootApp: any;
 
-beforeAll(async () => {
-  await outputFile(REFRESH_CMP_PATH, REFRESH_CMP_CONTENT_START);
+    beforeAll(async () => {
+      const { startChildApp } = await import(`./cross-version-tests/${childAppsVersion}/cli`);
 
-  [childAppBase, childAppState, childAppReactQuery, childAppError] = await Promise.all([
-    start({
-      port: 0,
-      config: {
-        type: 'child-app',
-        root: resolve(__dirname, 'child-app', 'base'),
-        name: 'base',
-        hotRefresh: {
-          enabled: true,
-        },
-      },
-    }),
-    start({
-      port: 0,
-      config: {
-        type: 'child-app',
-        root: resolve(__dirname, 'child-app', 'state'),
-        name: 'state',
-      },
-    }),
-    start({
-      port: 0,
-      config: {
-        type: 'child-app',
-        root: resolve(__dirname, 'child-app', 'react-query'),
-        name: 'react-query',
-        shared: {
-          deps: ['@tramvai/react-query', '@tramvai/module-react-query'],
-        },
-      },
-    }),
-    start({
-      port: 0,
-      config: {
-        type: 'child-app',
-        root: resolve(__dirname, 'child-app', 'error'),
-        name: 'error',
-      },
-    }),
-  ]);
-});
+      await outputFile(REFRESH_CMP_PATH, REFRESH_CMP_CONTENT_START);
 
-const mockerApp = fastify({
-  logger: true,
-});
+      [childAppBase, childAppState, childAppReactQuery, childAppError] = await Promise.all([
+        startChildApp('base'),
+        startChildApp('state'),
+        startChildApp('react-query', {
+          shared: {
+            deps: ['@tramvai/react-query', '@tramvai/module-react-query'],
+          },
+        }),
+        startChildApp('error'),
+      ]);
+    });
 
-const mockerPort = getPort();
-const mockerHandlerMock = jest.fn();
+    const mockerApp = fastify({
+      logger: true,
+    });
 
-beforeAll(async () => {
-  await mockerApp.register(fastifyReplyFrom);
+    const mockerPort = getPort();
+    const mockerHandlerMock = jest.fn();
 
-  await mockerApp.addHook('onRequest', async (req, reply) => {
-    reply.header('Access-Control-Allow-Origin', '*');
-  });
-  await mockerApp.addHook('preHandler', async (...args) => mockerHandlerMock(...args));
+    beforeAll(async () => {
+      await mockerApp.register(fastifyReplyFrom);
 
-  await mockerApp.get('/*', async (request, reply) => {
-    const [_, childAppName, filename] = request.url.split('/');
+      await mockerApp.addHook('onRequest', async (req, reply) => {
+        reply.header('Access-Control-Allow-Origin', '*');
+      });
+      await mockerApp.addHook('preHandler', async (...args) => mockerHandlerMock(...args));
 
-    switch (childAppName) {
-      case 'base':
-      case 'base-not-preloaded':
-        return reply.from(
-          `${getStaticUrl(childAppBase)}/base/${filename.replace(/base-not-preloaded/, 'base')}`
-        );
+      await mockerApp.get('/*', async (request, reply) => {
+        const [_, childAppName, filename] = request.url.split('/');
 
-      case 'state':
-        return reply.from(`${getStaticUrl(childAppState)}/state/${filename}`);
+        switch (childAppName) {
+          case 'base':
+          case 'base-not-preloaded':
+            return reply.from(
+              `${getStaticUrl(childAppBase)}/base/${filename.replace(/base-not-preloaded/, 'base')}`
+            );
 
-      case 'react-query':
-        return reply.from(`${getStaticUrl(childAppReactQuery)}/react-query/${filename}`);
+          case 'state':
+            return reply.from(`${getStaticUrl(childAppState)}/state/${filename}`);
 
-      case 'error':
-        return reply.from(`${getStaticUrl(childAppError)}/error/${filename}`);
-    }
-  });
+          case 'react-query':
+            return reply.from(`${getStaticUrl(childAppReactQuery)}/react-query/${filename}`);
 
-  await mockerApp.listen({ port: mockerPort });
-});
+          case 'error':
+            return reply.from(`${getStaticUrl(childAppError)}/error/${filename}`);
+        }
+      });
 
-const { getApp } = testApp(
-  {
-    name: 'root-app',
-    config: {
-      shared: {
-        deps: ['@tramvai/react-query', '@tramvai/module-react-query'],
-      },
-      define: {
-        development: {
+      await mockerApp.listen({ port: mockerPort });
+    });
+
+    beforeAll(async () => {
+      const { startRootApp } = await import(`./cross-version-tests/${rootAppVersion}/cli`);
+
+      rootApp = await startRootApp({
+        define: {
           get 'process.env.CHILD_APP_BASE'() {
             return `"${getStaticUrl(childAppBase)}/"`;
           },
         },
-      },
-    },
-  },
-  {
-    rootDir: __dirname,
-    env: {
-      CHILD_APP_EXTERNAL_URL: `http://localhost:${mockerPort}/`,
-    },
-  }
-);
-const { getPageWrapper } = testAppInBrowser(getApp);
+        env: {
+          CHILD_APP_EXTERNAL_URL: `http://localhost:${mockerPort}/`,
+        },
+      });
+    });
 
-const renderApp = async (page: string) => {
-  const { application } = await getApp().render(page, { parserOptions: { comment: true } });
+    const { getPageWrapper } = testAppInBrowser(() => rootApp);
 
-  return normalizeSuspense(application);
-};
+    const renderApp = async (page: string) => {
+      const request = requestFactory(rootApp.serverUrl);
+      const render = renderFactory(
+        request,
+        // remove wrong </link> tag that was appearing in the old tramvai versions
+        // TODO: remove after dropping compatibility with v2.0.0
+        { replaceDynamicStrings: { '</link>': '' } }
+      );
+      const { application } = await render(page, { parserOptions: { comment: true } });
 
-afterAll(async () => {
-  await Promise.all([
-    mockerApp.close(),
-    childAppBase.close(),
-    childAppState.close(),
-    childAppReactQuery.close(),
-    childAppError.close(),
-  ]);
-});
+      return normalizeSuspense(application);
+    };
 
-beforeEach(() => {
-  mockerHandlerMock.mockReset();
-});
+    afterAll(async () => {
+      await Promise.all([
+        mockerApp.close(),
+        childAppBase.close(),
+        childAppState.close(),
+        childAppReactQuery.close(),
+        childAppError.close(),
+        rootApp.close(),
+      ]);
+    });
 
-describe('base', () => {
-  afterAll(async () => {
-    await outputFile(REFRESH_CMP_PATH, REFRESH_CMP_CONTENT_START);
-  });
+    beforeEach(() => {
+      mockerHandlerMock.mockReset();
+    });
 
-  it('should resolve child-app', async () => {
-    const { request } = getApp();
+    describe('base', () => {
+      afterAll(async () => {
+        await outputFile(REFRESH_CMP_PATH, REFRESH_CMP_CONTENT_START);
+      });
 
-    await request('/base/').expect(200);
+      it('should resolve child-app', async () => {
+        const { request } = rootApp;
 
-    expect(await renderApp('/base/')).toMatchInlineSnapshot(`
+        await request('/base/').expect(200);
+
+        expect(await renderApp('/base/')).toMatchInlineSnapshot(`
       "
             <div>Content from root</div>
-            <!--$-->
             <div id="base">
               Child App:
               <!-- -->I&#x27;m little child app
             </div>
             <div id="cmp">Cmp test: start</div>
-            <!--/$-->
           "
     `);
-  });
+      });
 
-  it('react-refresh should work', async () => {
-    const { page } = await getPageWrapper('/base/');
+      it('react-refresh should work', async () => {
+        const { page } = await getPageWrapper('/base/');
 
-    expect(
-      await page.$eval('#cmp', (node) => (node as HTMLElement).innerText)
-    ).toMatchInlineSnapshot(`"Cmp test: start"`);
+        expect(
+          await page.$eval('#cmp', (node) => (node as HTMLElement).innerText)
+        ).toMatchInlineSnapshot(`"Cmp test: start"`);
 
-    await outputFile(REFRESH_CMP_PATH, REFRESH_CMP_CONTENT_UPDATE);
+        await outputFile(REFRESH_CMP_PATH, REFRESH_CMP_CONTENT_UPDATE);
 
-    await page.waitForFunction(
-      () => {
-        return document.getElementById('cmp')?.innerHTML !== 'Cmp test: start';
-      },
-      { polling: 2000, timeout: 10000 }
-    );
+        await page.waitForFunction(
+          () => {
+            return document.getElementById('cmp')?.innerHTML !== 'Cmp test: start';
+          },
+          { polling: 2000, timeout: 10000 }
+        );
 
-    expect(
-      await page.$eval('#cmp', (node) => (node as HTMLElement).innerText)
-    ).toMatchInlineSnapshot(`"Cmp test: update"`);
-  });
-});
-
-describe('base-not-preloaded', () => {
-  it('should render child app only after page load', async () => {
-    const { request } = getApp();
-
-    await request('/base-not-preloaded/').expect(200);
-
-    expect(await renderApp('/base-not-preloaded/')).not.toContain('Child App');
-
-    const { page, router } = await getPageWrapper('/base-not-preloaded/');
-
-    const getActionCount = () =>
-      page.evaluate(() => (window as any).TRAMVAI_TEST_CHILD_APP_NOT_PRELOADED_ACTION_CALL_NUMBER);
-
-    await page.waitForSelector('#base', {
-      state: 'visible',
+        expect(
+          await page.$eval('#cmp', (node) => (node as HTMLElement).innerText)
+        ).toMatchInlineSnapshot(`"Cmp test: update"`);
+      });
     });
 
-    expect(await page.evaluate(() => document.querySelector('.application')?.innerHTML)).toContain(
-      'Child App'
-    );
+    describe('base-not-preloaded', () => {
+      it('should render child app only after page load', async () => {
+        const { request } = rootApp;
 
-    expect(await getActionCount()).toBe(1);
+        await request('/base-not-preloaded/').expect(200);
 
-    router.navigate('/base/');
+        expect(await renderApp('/base-not-preloaded/')).not.toContain('Child App');
 
-    expect(await getActionCount()).toBe(1);
-  });
-});
+        const { page, router } = await getPageWrapper('/base-not-preloaded/');
 
-describe('state', () => {
-  it('should resolve child-app', async () => {
-    const { request } = getApp();
+        const getActionCount = () =>
+          page.evaluate(
+            () => (window as any).TRAMVAI_TEST_CHILD_APP_NOT_PRELOADED_ACTION_CALL_NUMBER
+          );
 
-    await request('/state/').expect(200);
+        await page.waitForSelector('#base', {
+          state: 'visible',
+        });
 
-    expect(await renderApp('/state/')).toMatchInlineSnapshot(`
+        expect(
+          await page.evaluate(() => document.querySelector('.application')?.innerHTML)
+        ).toContain('Child App');
+
+        expect(await getActionCount()).toBe(1);
+
+        router.navigate('/base/');
+
+        expect(await getActionCount()).toBe(1);
+      });
+    });
+
+    describe('state', () => {
+      it('should resolve child-app', async () => {
+        const { request } = rootApp;
+
+        await request('/state/').expect(200);
+
+        expect(await renderApp('/state/')).toMatchInlineSnapshot(`
       "
             <h2>Root</h2>
             <div>
@@ -253,440 +276,433 @@ describe('state', () => {
             </div>
             <button id="button" type="button">Update Root State</button>
             <h3>Child</h3>
-            <!--$-->
             <div id="child-state">
+              Current Value from Store:
+              <!-- -->server
+            </div>
+            <hr>
+            <div id="root-state">
               Current Value from Root Store:
               <!-- -->1
             </div>
-            <!--/$-->
           "
     `);
-  });
+      });
 
-  it('should update internal state based on root', async () => {
-    const { page } = await getPageWrapper('/state/');
-    const childCmp = await page.$('#child-state');
+      it('should update internal state based on root', async () => {
+        const { page } = await getPageWrapper('/state/');
+        const childCmp = await page.$('#root-state');
 
-    expect(
-      await childCmp?.evaluate((node) => (node as HTMLElement).innerText)
-    ).toMatchInlineSnapshot(`"Current Value from Root Store: 1"`);
+        expect(
+          await childCmp?.evaluate((node) => (node as HTMLElement).innerText)
+        ).toMatchInlineSnapshot(`"Current Value from Root Store: 1"`);
 
-    const button = await page.$('#button');
+        const button = await page.$('#button');
 
-    await button?.click();
+        await button?.click();
 
-    await sleep(100);
+        await sleep(100);
 
-    expect(
-      await childCmp?.evaluate((node) => (node as HTMLElement).innerText)
-    ).toMatchInlineSnapshot(`"Current Value from Root Store: 2"`);
-  });
+        expect(
+          await childCmp?.evaluate((node) => (node as HTMLElement).innerText)
+        ).toMatchInlineSnapshot(`"Current Value from Root Store: 2"`);
+      });
 
-  it('should execute action for every transition', async () => {
-    const { page, router } = await getPageWrapper('/state/');
+      it('should execute action for every transition', async () => {
+        const { page, router } = await getPageWrapper('/state/');
 
-    const getActionCount = () =>
-      page.evaluate(() => (window as any).TRAMVAI_TEST_CHILD_APP_ACTION_CALLED_TIMES);
+        const getActionCount = () =>
+          page.evaluate(() => (window as any).TRAMVAI_TEST_CHILD_APP_ACTION_CALLED_TIMES);
 
-    expect(await getActionCount()).toBe(1);
+        expect(await getActionCount()).toBe(1);
 
-    await router.navigate('/base/');
+        await router.navigate('/base/');
 
-    expect(await getActionCount()).toBe(1);
+        expect(await getActionCount()).toBe(1);
 
-    await router.navigate('/state/');
+        await router.navigate('/state/');
 
-    expect(await getActionCount()).toBe(2);
-  });
-});
+        expect(await getActionCount()).toBe(2);
+      });
+    });
 
-describe('react-query', () => {
-  it('should work with react-query', async () => {
-    const { request } = getApp();
+    describe('react-query', () => {
+      it('should work with react-query', async () => {
+        const { request } = rootApp;
 
-    await request('/react-query/').expect(200);
+        await request('/react-query/').expect(200);
 
-    expect(await renderApp('/react-query/')).toMatchInlineSnapshot(`
+        expect(await renderApp('/react-query/')).toMatchInlineSnapshot(`
       "
             <div>
               Content from root:
               <!-- -->test
             </div>
-            <!--$-->
             <div>Hello, Mock!</div>
-            <!--/$-->
           "
     `);
-  });
+      });
 
-  it('should reuse react-query dependencies from root-app', async () => {
-    const { serverUrl } = getApp();
-    const { page } = await getPageWrapper();
+      it('should reuse react-query dependencies from root-app', async () => {
+        const { serverUrl } = rootApp;
+        const { page } = await getPageWrapper();
 
-    const loadedScripts: string[] = [];
+        const loadedScripts: string[] = [];
 
-    page.on('request', (request) => {
-      const url = request.url();
-      const resourceType = request.resourceType();
+        page.on('request', (request) => {
+          const url = request.url();
+          const resourceType = request.resourceType();
 
-      if (resourceType === 'script' && url.includes('/react-query/')) {
-        loadedScripts.push(url);
-      }
-    });
+          if (resourceType === 'script' && url.includes('/react-query/')) {
+            loadedScripts.push(url);
+          }
+        });
 
-    await page.goto(`${serverUrl}/react-query/`);
+        await page.goto(`${serverUrl}/react-query/`);
 
-    // only runtime and main entry chunk should be loaded
-    expect(loadedScripts).toHaveLength(2);
-  });
-});
-
-describe('errors', () => {
-  describe('error during loading child-app code', () => {
-    beforeEach(() => {
-      mockerHandlerMock.mockImplementation(() => {
-        throw new Error('blocked');
+        expect(loadedScripts).toHaveLength(reactQuery.scriptsCount);
       });
     });
 
-    it('should render nothing', async () => {
-      const { request } = getApp();
+    // error handling was added after v2.0.0
+    if (rootAppVersion !== 'v2.0.0') {
+      describe('errors', () => {
+        describe('error during loading child-app code', () => {
+          beforeEach(() => {
+            mockerHandlerMock.mockImplementation(() => {
+              throw new Error('blocked');
+            });
+          });
 
-      const [_, application, { page }] = await Promise.all([
-        request('/error/').expect(200),
-        renderApp('/error/'),
-        getPageWrapper('/error/'),
-      ]);
+          it('should render nothing', async () => {
+            const { request } = rootApp;
 
-      expect(application).toMatchInlineSnapshot(`
+            const [_, application, { page }] = await Promise.all([
+              request('/error/').expect(200),
+              renderApp('/error/'),
+              getPageWrapper('/error/'),
+            ]);
+
+            expect(application).toMatchInlineSnapshot(`
         "
               <div>Error page still works</div>
-              <!--$!--><Suspense /><!--/$-->
+              <Suspense />
             "
       `);
 
-      expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
-        `"<div>Error page still works</div><div><div style="text-align: center; margin-bottom: 11px; padding-top: 26px; font-size: 30px; line-height: 36px; font-weight: 200;">An error occurred :(</div><div style="text-align: center; margin-bottom: 17px; color: rgb(146, 153, 162); font-size: 20px; line-height: 24px;">Try <a href="">reloading the page</a></div></div>"`
-      );
-    });
+            expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
+              `"<div>Error page still works</div><div><div style="text-align: center; margin-bottom: 11px; padding-top: 26px; font-size: 30px; line-height: 36px; font-weight: 200;">An error occurred :(</div><div style="text-align: center; margin-bottom: 17px; color: rgb(146, 153, 162); font-size: 20px; line-height: 24px;">Try <a href="">reloading the page</a></div></div>"`
+            );
+          });
 
-    it('should render fallback', async () => {
-      const { request } = getApp();
+          it('should render fallback', async () => {
+            const { request } = rootApp;
 
-      const [_, application, { page }] = await Promise.all([
-        request('/error/?fallback=').expect(200),
-        renderApp('/error/?fallback='),
-        getPageWrapper('/error/?fallback='),
-      ]);
+            const [_, application, { page }] = await Promise.all([
+              request('/error/?fallback=').expect(200),
+              renderApp('/error/?fallback='),
+              getPageWrapper('/error/?fallback='),
+            ]);
 
-      expect(application).toMatchInlineSnapshot(`
+            expect(application).toMatchInlineSnapshot(`
         "
               <div>Error page still works</div>
-              <!--$!--><Suspense />
+              <Suspense />
               <div id="fallback">Fallback component</div>
-              <!--/$-->
             "
       `);
 
-      expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
-        `"<div>Error page still works</div><div id="fallback">Error fallback</div>"`
-      );
-    });
+            expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
+              `"<div>Error page still works</div><div id="fallback">Error fallback</div>"`
+            );
+          });
 
-    it('should render error on spa transition', async () => {
-      const { page, router } = await getPageWrapper('/base/');
+          it('should render error on spa transition', async () => {
+            const { page, router } = await getPageWrapper('/base/');
 
-      await router.navigate('/error/');
+            await router.navigate('/error/');
 
-      expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
-        `"<!--$--><!--/$--><div>Error page still works</div><div><div style="text-align: center; margin-bottom: 11px; padding-top: 26px; font-size: 30px; line-height: 36px; font-weight: 200;">An error occurred :(</div><div style="text-align: center; margin-bottom: 17px; color: rgb(146, 153, 162); font-size: 20px; line-height: 24px;">Try <a href="">reloading the page</a></div></div>"`
-      );
-    });
+            expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
+              `"<div>Error page still works</div><div><div style="text-align: center; margin-bottom: 11px; padding-top: 26px; font-size: 30px; line-height: 36px; font-weight: 200;">An error occurred :(</div><div style="text-align: center; margin-bottom: 17px; color: rgb(146, 153, 162); font-size: 20px; line-height: 24px;">Try <a href="">reloading the page</a></div></div>"`
+            );
+          });
 
-    it('should render error fallback on spa transition', async () => {
-      const { page, router } = await getPageWrapper('/base/');
+          it('should render error fallback on spa transition', async () => {
+            const { page, router } = await getPageWrapper('/base/');
 
-      await router.navigate('/error/?fallback=');
+            await router.navigate('/error/?fallback=');
 
-      expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
-        `"<!--$--><!--/$--><div>Error page still works</div><div id="fallback">Error fallback</div>"`
-      );
-    });
-  });
+            expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
+              `"<div>Error page still works</div><div id="fallback">Error fallback</div>"`
+            );
+          });
+        });
 
-  describe('error during loading child-app code on server side', () => {
-    beforeEach(() => {
-      mockerHandlerMock.mockImplementation((req) => {
-        if (req.url === '/error/error_server@0.0.0-stub.js') {
-          throw new Error('blocked');
-        }
+        describe('error during loading child-app code on server side', () => {
+          beforeEach(() => {
+            mockerHandlerMock.mockImplementation((req) => {
+              if (req.url === '/error/error_server@0.0.0-stub.js') {
+                throw new Error('blocked');
+              }
+            });
+          });
+
+          it('should render nothing', async () => {
+            const { request } = rootApp;
+
+            const [_, application, { page }] = await Promise.all([
+              request('/error/').expect(200),
+              renderApp('/error/'),
+              getPageWrapper('/error/'),
+            ]);
+
+            expect(application).toMatchInlineSnapshot(`
+        "
+              <div>Error page still works</div>
+              <Suspense />
+            "
+      `);
+
+            expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
+              `"<div>Error page still works</div><div id="error">Child App</div>"`
+            );
+          });
+
+          it('should render fallback', async () => {
+            const { request } = rootApp;
+
+            const [_, application, { page }] = await Promise.all([
+              request('/error/?fallback=').expect(200),
+              renderApp('/error/?fallback='),
+              getPageWrapper('/error/?fallback='),
+            ]);
+
+            expect(application).toMatchInlineSnapshot(`
+        "
+              <div>Error page still works</div>
+              <Suspense />
+              <div id="fallback">Fallback component</div>
+            "
+      `);
+
+            expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
+              `"<div>Error page still works</div><div id="error">Child App</div>"`
+            );
+          });
+
+          it('should render component on spa transition', async () => {
+            const { page, router } = await getPageWrapper('/base/');
+
+            await router.navigate('/error/');
+
+            expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
+              `"<!--$--><!--/$--><div>Error page still works</div><div id="error">Child App</div>"`
+            );
+          });
+        });
+
+        describe('error during loading child-app code on client side', () => {
+          beforeEach(() => {
+            mockerHandlerMock.mockImplementation((req) => {
+              if (req.url === '/error/error_client@0.0.0-stub.js') {
+                throw new Error('blocked');
+              }
+            });
+          });
+
+          it('should render nothing', async () => {
+            const { request } = rootApp;
+
+            const [_, application, { page }] = await Promise.all([
+              request('/error/').expect(200),
+              renderApp('/error/'),
+              getPageWrapper('/error/'),
+            ]);
+
+            expect(application).toMatchInlineSnapshot(`
+        "
+              <div>Error page still works</div>
+              <div id="error">Child App</div>
+            "
+      `);
+
+            expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
+              `"<div>Error page still works</div><div><div style="text-align: center; margin-bottom: 11px; padding-top: 26px; font-size: 30px; line-height: 36px; font-weight: 200;">An error occurred :(</div><div style="text-align: center; margin-bottom: 17px; color: rgb(146, 153, 162); font-size: 20px; line-height: 24px;">Try <a href="">reloading the page</a></div></div>"`
+            );
+          });
+
+          it('should render fallback', async () => {
+            const { request } = rootApp;
+
+            const [_, application, { page }] = await Promise.all([
+              request('/error/?fallback=').expect(200),
+              renderApp('/error/?fallback='),
+              getPageWrapper('/error/?fallback='),
+            ]);
+
+            expect(application).toMatchInlineSnapshot(`
+        "
+              <div>Error page still works</div>
+              <div id="error">Child App</div>
+            "
+      `);
+
+            expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
+              `"<div>Error page still works</div><div id="fallback">Error fallback</div>"`
+            );
+          });
+
+          it('should render error on spa transition', async () => {
+            const { page, router } = await getPageWrapper('/base/');
+
+            await router.navigate('/error/');
+
+            expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
+              `"<!--$--><!--/$--><div>Error page still works</div><div><div style="text-align: center; margin-bottom: 11px; padding-top: 26px; font-size: 30px; line-height: 36px; font-weight: 200;">An error occurred :(</div><div style="text-align: center; margin-bottom: 17px; color: rgb(146, 153, 162); font-size: 20px; line-height: 24px;">Try <a href="">reloading the page</a></div></div>"`
+            );
+          });
+
+          it('should render error fallback on spa transition', async () => {
+            const { page, router } = await getPageWrapper('/base/');
+
+            await router.navigate('/error/?fallback=');
+
+            expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
+              `"<!--$--><!--/$--><div>Error page still works</div><div id="fallback">Error fallback</div>"`
+            );
+          });
+        });
+
+        describe('error during render', () => {
+          it('error both on server and client', async () => {
+            const { request } = rootApp;
+
+            const [_, application, { page }] = await Promise.all([
+              request('/error/?renderError=all').expect(200),
+              renderApp('/error/?renderError=all'),
+              getPageWrapper('/error/?renderError=all'),
+            ]);
+
+            expect(application).toMatchInlineSnapshot(`
+        "
+              <div>Error page still works</div>
+              <Suspense />
+            "
+      `);
+
+            expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
+              `"<div>Error page still works</div><div><div style="text-align: center; margin-bottom: 11px; padding-top: 26px; font-size: 30px; line-height: 36px; font-weight: 200;">An error occurred :(</div><div style="text-align: center; margin-bottom: 17px; color: rgb(146, 153, 162); font-size: 20px; line-height: 24px;">Try <a href="">reloading the page</a></div></div>"`
+            );
+          });
+
+          it('error both on server and client with fallback', async () => {
+            const { request } = rootApp;
+
+            const [_, application, { page }] = await Promise.all([
+              request('/error/?renderError=all&fallback=').expect(200),
+              renderApp('/error/?renderError=all&fallback='),
+              getPageWrapper('/error/?renderError=all&fallback='),
+            ]);
+
+            expect(application).toMatchInlineSnapshot(`
+        "
+              <div>Error page still works</div>
+              <Suspense />
+              <div id="fallback">Fallback component</div>
+            "
+      `);
+
+            expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
+              `"<div>Error page still works</div><div id="fallback">Error fallback</div>"`
+            );
+          });
+
+          it('error only on server-side', async () => {
+            const { request } = rootApp;
+
+            const [_, application, { page }] = await Promise.all([
+              request('/error/?renderError=server').expect(200),
+              renderApp('/error/?renderError=server'),
+              getPageWrapper('/error/?renderError=server'),
+            ]);
+
+            expect(application).toMatchInlineSnapshot(`
+        "
+              <div>Error page still works</div>
+              <Suspense />
+            "
+      `);
+
+            expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
+              `"<div>Error page still works</div><div id="error">Child App</div>"`
+            );
+          });
+
+          it('error only on server-side with fallback', async () => {
+            const { request } = rootApp;
+
+            const [_, application, { page }] = await Promise.all([
+              request('/error/?renderError=server&fallback=').expect(200),
+              renderApp('/error/?renderError=server&fallback='),
+              getPageWrapper('/error/?renderError=server&fallback='),
+            ]);
+
+            expect(application).toMatchInlineSnapshot(`
+        "
+              <div>Error page still works</div>
+              <Suspense />
+              <div id="fallback">Fallback component</div>
+            "
+      `);
+
+            expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
+              `"<div>Error page still works</div><div id="error">Child App</div>"`
+            );
+          });
+
+          it('error only on client-side', async () => {
+            const { request } = rootApp;
+
+            const [_, application, { page }] = await Promise.all([
+              request('/error/?renderError=client').expect(200),
+              renderApp('/error/?renderError=client'),
+              getPageWrapper('/error/?renderError=client'),
+            ]);
+
+            expect(application).toMatchInlineSnapshot(`
+        "
+              <div>Error page still works</div>
+              <div id="error">Child App</div>
+            "
+      `);
+
+            expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
+              `"<div>Error page still works</div><div><div style="text-align: center; margin-bottom: 11px; padding-top: 26px; font-size: 30px; line-height: 36px; font-weight: 200;">An error occurred :(</div><div style="text-align: center; margin-bottom: 17px; color: rgb(146, 153, 162); font-size: 20px; line-height: 24px;">Try <a href="">reloading the page</a></div></div>"`
+            );
+          });
+
+          it('error only on client-side with fallback', async () => {
+            const { request } = rootApp;
+
+            const [_, application, { page }] = await Promise.all([
+              request('/error/?renderError=client&fallback=').expect(200),
+              renderApp('/error/?renderError=client&fallback='),
+              getPageWrapper('/error/?renderError=client&fallback='),
+            ]);
+
+            expect(application).toMatchInlineSnapshot(`
+        "
+              <div>Error page still works</div>
+              <div id="error">Child App</div>
+            "
+      `);
+
+            expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
+              `"<div>Error page still works</div><div id="fallback">Error fallback</div>"`
+            );
+          });
+        });
       });
-    });
-
-    it('should render nothing', async () => {
-      const { request } = getApp();
-
-      const [_, application, { page }] = await Promise.all([
-        request('/error/').expect(200),
-        renderApp('/error/'),
-        getPageWrapper('/error/'),
-      ]);
-
-      expect(application).toMatchInlineSnapshot(`
-        "
-              <div>Error page still works</div>
-              <!--$!--><Suspense /><!--/$-->
-            "
-      `);
-
-      expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
-        `"<div>Error page still works</div><div id="error">Child App</div>"`
-      );
-    });
-
-    it('should render fallback', async () => {
-      const { request } = getApp();
-
-      const [_, application, { page }] = await Promise.all([
-        request('/error/?fallback=').expect(200),
-        renderApp('/error/?fallback='),
-        getPageWrapper('/error/?fallback='),
-      ]);
-
-      expect(application).toMatchInlineSnapshot(`
-        "
-              <div>Error page still works</div>
-              <!--$!--><Suspense />
-              <div id="fallback">Fallback component</div>
-              <!--/$-->
-            "
-      `);
-
-      expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
-        `"<div>Error page still works</div><div id="error">Child App</div>"`
-      );
-    });
-
-    it('should render component on spa transition', async () => {
-      const { page, router } = await getPageWrapper('/base/');
-
-      await router.navigate('/error/');
-
-      expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
-        `"<!--$--><!--/$--><div>Error page still works</div><div id="error">Child App</div>"`
-      );
-    });
-  });
-
-  describe('error during loading child-app code on client side', () => {
-    beforeEach(() => {
-      mockerHandlerMock.mockImplementation((req) => {
-        if (req.url === '/error/error_client@0.0.0-stub.js') {
-          throw new Error('blocked');
-        }
-      });
-    });
-
-    it('should render nothing', async () => {
-      const { request } = getApp();
-
-      const [_, application, { page }] = await Promise.all([
-        request('/error/').expect(200),
-        renderApp('/error/'),
-        getPageWrapper('/error/'),
-      ]);
-
-      expect(application).toMatchInlineSnapshot(`
-        "
-              <div>Error page still works</div>
-              <!--$-->
-              <div id="error">Child App</div>
-              <!--/$-->
-            "
-      `);
-
-      expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
-        `"<div>Error page still works</div><div><div style="text-align: center; margin-bottom: 11px; padding-top: 26px; font-size: 30px; line-height: 36px; font-weight: 200;">An error occurred :(</div><div style="text-align: center; margin-bottom: 17px; color: rgb(146, 153, 162); font-size: 20px; line-height: 24px;">Try <a href="">reloading the page</a></div></div>"`
-      );
-    });
-
-    it('should render fallback', async () => {
-      const { request } = getApp();
-
-      const [_, application, { page }] = await Promise.all([
-        request('/error/?fallback=').expect(200),
-        renderApp('/error/?fallback='),
-        getPageWrapper('/error/?fallback='),
-      ]);
-
-      expect(application).toMatchInlineSnapshot(`
-        "
-              <div>Error page still works</div>
-              <!--$-->
-              <div id="error">Child App</div>
-              <!--/$-->
-            "
-      `);
-
-      expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
-        `"<div>Error page still works</div><div id="fallback">Error fallback</div>"`
-      );
-    });
-
-    it('should render error on spa transition', async () => {
-      const { page, router } = await getPageWrapper('/base/');
-
-      await router.navigate('/error/');
-
-      expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
-        `"<!--$--><!--/$--><div>Error page still works</div><div><div style="text-align: center; margin-bottom: 11px; padding-top: 26px; font-size: 30px; line-height: 36px; font-weight: 200;">An error occurred :(</div><div style="text-align: center; margin-bottom: 17px; color: rgb(146, 153, 162); font-size: 20px; line-height: 24px;">Try <a href="">reloading the page</a></div></div>"`
-      );
-    });
-
-    it('should render error fallback on spa transition', async () => {
-      const { page, router } = await getPageWrapper('/base/');
-
-      await router.navigate('/error/?fallback=');
-
-      expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
-        `"<!--$--><!--/$--><div>Error page still works</div><div id="fallback">Error fallback</div>"`
-      );
-    });
-  });
-
-  describe('error during render', () => {
-    it('error both on server and client', async () => {
-      const { request } = getApp();
-
-      const [_, application, { page }] = await Promise.all([
-        request('/error/?renderError=all').expect(200),
-        renderApp('/error/?renderError=all'),
-        getPageWrapper('/error/?renderError=all'),
-      ]);
-
-      expect(application).toMatchInlineSnapshot(`
-        "
-              <div>Error page still works</div>
-              <!--$!--><Suspense /><!--/$-->
-            "
-      `);
-
-      expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
-        `"<div>Error page still works</div><div><div style="text-align: center; margin-bottom: 11px; padding-top: 26px; font-size: 30px; line-height: 36px; font-weight: 200;">An error occurred :(</div><div style="text-align: center; margin-bottom: 17px; color: rgb(146, 153, 162); font-size: 20px; line-height: 24px;">Try <a href="">reloading the page</a></div></div>"`
-      );
-    });
-
-    it('error both on server and client with fallback', async () => {
-      const { request } = getApp();
-
-      const [_, application, { page }] = await Promise.all([
-        request('/error/?renderError=all&fallback=').expect(200),
-        renderApp('/error/?renderError=all&fallback='),
-        getPageWrapper('/error/?renderError=all&fallback='),
-      ]);
-
-      expect(application).toMatchInlineSnapshot(`
-        "
-              <div>Error page still works</div>
-              <!--$!--><Suspense />
-              <div id="fallback">Fallback component</div>
-              <!--/$-->
-            "
-      `);
-
-      expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
-        `"<div>Error page still works</div><div id="fallback">Error fallback</div>"`
-      );
-    });
-
-    it('error only on server-side', async () => {
-      const { request } = getApp();
-
-      const [_, application, { page }] = await Promise.all([
-        request('/error/?renderError=server').expect(200),
-        renderApp('/error/?renderError=server'),
-        getPageWrapper('/error/?renderError=server'),
-      ]);
-
-      expect(application).toMatchInlineSnapshot(`
-        "
-              <div>Error page still works</div>
-              <!--$!--><Suspense /><!--/$-->
-            "
-      `);
-
-      expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
-        `"<div>Error page still works</div><div id="error">Child App</div>"`
-      );
-    });
-
-    it('error only on server-side with fallback', async () => {
-      const { request } = getApp();
-
-      const [_, application, { page }] = await Promise.all([
-        request('/error/?renderError=server&fallback=').expect(200),
-        renderApp('/error/?renderError=server&fallback='),
-        getPageWrapper('/error/?renderError=server&fallback='),
-      ]);
-
-      expect(application).toMatchInlineSnapshot(`
-        "
-              <div>Error page still works</div>
-              <!--$!--><Suspense />
-              <div id="fallback">Fallback component</div>
-              <!--/$-->
-            "
-      `);
-
-      expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
-        `"<div>Error page still works</div><div id="error">Child App</div>"`
-      );
-    });
-
-    it('error only on client-side', async () => {
-      const { request } = getApp();
-
-      const [_, application, { page }] = await Promise.all([
-        request('/error/?renderError=client').expect(200),
-        renderApp('/error/?renderError=client'),
-        getPageWrapper('/error/?renderError=client'),
-      ]);
-
-      expect(application).toMatchInlineSnapshot(`
-        "
-              <div>Error page still works</div>
-              <!--$-->
-              <div id="error">Child App</div>
-              <!--/$-->
-            "
-      `);
-
-      expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
-        `"<div>Error page still works</div><div><div style="text-align: center; margin-bottom: 11px; padding-top: 26px; font-size: 30px; line-height: 36px; font-weight: 200;">An error occurred :(</div><div style="text-align: center; margin-bottom: 17px; color: rgb(146, 153, 162); font-size: 20px; line-height: 24px;">Try <a href="">reloading the page</a></div></div>"`
-      );
-    });
-
-    it('error only on client-side with fallback', async () => {
-      const { request } = getApp();
-
-      const [_, application, { page }] = await Promise.all([
-        request('/error/?renderError=client&fallback=').expect(200),
-        renderApp('/error/?renderError=client&fallback='),
-        getPageWrapper('/error/?renderError=client&fallback='),
-      ]);
-
-      expect(application).toMatchInlineSnapshot(`
-        "
-              <div>Error page still works</div>
-              <!--$-->
-              <div id="error">Child App</div>
-              <!--/$-->
-            "
-      `);
-
-      expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
-        `"<div>Error page still works</div><div id="fallback">Error fallback</div>"`
-      );
-    });
-  });
-});
+    }
+  }
+);

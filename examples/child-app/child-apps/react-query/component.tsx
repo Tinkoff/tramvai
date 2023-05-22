@@ -1,3 +1,4 @@
+import React from 'react';
 import { useQuery } from '@tramvai/react-query';
 import { query } from './query';
 

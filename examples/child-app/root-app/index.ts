@@ -3,12 +3,13 @@ import { CommonModule, ENV_MANAGER_TOKEN, ENV_USED_TOKEN } from '@tramvai/module
 import { RenderModule } from '@tramvai/module-render';
 import { SpaRouterModule } from '@tramvai/module-router';
 import { ServerModule } from '@tramvai/module-server';
-import { ReactQueryModule } from '@tramvai/module-react-query';
-import { ApiClientsModule, HTTP_CLIENT_FACTORY } from '@tramvai/module-api-clients';
-import { MockerModule } from '@tramvai/module-mocker';
 import { ChildAppModule, CHILD_APP_RESOLUTION_CONFIGS_TOKEN } from '@tramvai/module-child-app';
+import { HTTP_CLIENT_FACTORY, HttpClientModule } from '@tramvai/module-http-client';
+import { ReactQueryModule } from '@tramvai/module-react-query';
+import { MockerModule } from '@tramvai/module-mocker';
+import { ClientHintsModule } from '@tramvai/module-client-hints';
 import { routes } from './routes';
-import { FAKE_API_CLIENT } from './tokens';
+import { FAKE_API_CLIENT } from '../shared/tokens';
 
 createApp({
   name: 'root-app',
@@ -16,17 +17,21 @@ createApp({
     base: () => import(/* webpackChunkName: "base" */ './bundles/base'),
     'base-not-preloaded': () =>
       import(/* webpackChunkName: "base-not-preloaded" */ './bundles/base-not-preloaded'),
-    state: () => import(/* webpackChunkName: "state" */ './bundles/state'),
-    'react-query': () => import(/* webpackChunkName: "react-query" */ './bundles/react-query'),
+    'client-hints': () => import(/* webpackChunkName: "client-hints" */ './bundles/client-hints'),
+    commandline: () => import(/* webpackChunkName: "commandline" */ './bundles/commandline'),
     error: () => import(/* webpackChunkName: "error" */ './bundles/error'),
+    'react-query': () => import(/* webpackChunkName: "react-query" */ './bundles/react-query'),
+    router: () => import(/* webpackChunkName: "router" */ './bundles/router'),
+    state: () => import(/* webpackChunkName: "state" */ './bundles/state'),
   },
   modules: [
     CommonModule,
     RenderModule,
     SpaRouterModule.forRoot(routes),
     ServerModule,
-    ApiClientsModule,
+    HttpClientModule,
     ChildAppModule,
+    ClientHintsModule,
     ReactQueryModule,
     MockerModule,
   ],
@@ -60,7 +65,6 @@ createApp({
       useValue: [
         {
           name: 'base',
-          baseUrl: process.env.CHILD_APP_BASE,
           byTag: {
             latest: {
               version: '0.0.0-stub',
@@ -78,7 +82,7 @@ createApp({
           },
         },
         {
-          name: 'state',
+          name: 'client-hints',
           byTag: {
             latest: {
               version: '0.0.0-stub',
@@ -87,7 +91,7 @@ createApp({
           },
         },
         {
-          name: 'react-query',
+          name: 'commandline',
           byTag: {
             latest: {
               version: '0.0.0-stub',
@@ -101,6 +105,50 @@ createApp({
             latest: {
               version: '0.0.0-stub',
               withoutCss: true,
+            },
+          },
+        },
+        {
+          name: 'header',
+          byTag: {
+            latest: {
+              version: '0.0.0-stub',
+            },
+          },
+        },
+        {
+          name: 'react-query',
+          byTag: {
+            latest: {
+              version: '0.0.0-stub',
+              withoutCss: true,
+            },
+          },
+        },
+        {
+          name: 'router',
+          byTag: {
+            latest: {
+              version: '0.0.0-stub',
+              withoutCss: true,
+            },
+          },
+        },
+        {
+          name: 'state',
+          byTag: {
+            latest: {
+              version: '0.0.0-stub',
+              withoutCss: true,
+            },
+          },
+        },
+        {
+          name: 'footer',
+          byTag: {
+            latest: {
+              version: '0.0.0-stub',
+              baseUrl: 'http://localhost:5041/',
             },
           },
         },

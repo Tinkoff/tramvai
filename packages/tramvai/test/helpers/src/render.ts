@@ -40,7 +40,7 @@ export const renderFactory =
     return {
       ...parsed,
       get initialState() {
-        const parsedWithScripts = parseHtml(response.text, {})?.parsed;
+        const parsedWithScripts = parseHtml(text, {})?.parsed;
 
         if (!parsedWithScripts) {
           return;

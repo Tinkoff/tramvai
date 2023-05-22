@@ -1,5 +1,5 @@
 import { createQuery } from '@tramvai/react-query';
-import { FAKE_API_CLIENT } from '../../tokens';
+import { FAKE_API_CLIENT } from '../../shared/tokens';
 
 export const query = createQuery({
   key: 'base',

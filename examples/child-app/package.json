@@ -1,0 +1,47 @@
+{
+  "name": "@tramvai-test-app/child-app",
+  "version": "0.0.0-stub",
+  "private": true,
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Tinkoff/tramvai.git"
+  },
+  "scripts": {
+    "start:root": "cross-env MOCKER_ENABLED=true tramvai start root-app --resolveSymlinks=false",
+    "start:children": "ts-node shared/serverResolver.ts"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "@tinkoff/dippy": "0.0.0-stub",
+    "@tinkoff/utils": "^2.2.1",
+    "@tramvai/child-app-core": "0.0.0-stub",
+    "@tramvai/core": "0.0.0-stub",
+    "@tramvai/module-child-app": "0.0.0-stub",
+    "@tramvai/module-client-hints": "0.0.0-stub",
+    "@tramvai/module-common": "0.0.0-stub",
+    "@tramvai/module-http-client": "0.0.0-stub",
+    "@tramvai/module-mocker": "0.0.0-stub",
+    "@tramvai/module-react-query": "0.0.0-stub",
+    "@tramvai/module-render": "0.0.0-stub",
+    "@tramvai/module-router": "0.0.0-stub",
+    "@tramvai/module-server": "0.0.0-stub",
+    "@tramvai/react": "0.0.0-stub",
+    "@tramvai/react-query": "0.0.0-stub",
+    "@tramvai/state": "0.0.0-stub",
+    "@tramvai/tokens-child-app": "0.0.0-stub",
+    "@tramvai/tokens-common": "0.0.0-stub"
+  },
+  "peerDependencies": {
+    "react": ">=16.14.0",
+    "react-dom": ">=16.14.0"
+  },
+  "devDependencies": {
+    "@tramvai/cli": "0.0.0-stub",
+    "fastify": "^4.14.1",
+    "@fastify/http-proxy": "^8.4.0",
+    "ts-node": "^10.3.0"
+  }
+}
