@@ -48,3 +48,35 @@ function Component() {
   return <Button onClick={navigateToWithoutScroll} />;
 }
 ```
+
+### Scroll behavior change
+
+#### Global
+
+```tsx
+import { AUTOSCROLL_BEHAVIOR_MODE_TOKEN } from '@tramvai/module-autoscroll';
+import { provide } from '@tramvai/core';
+
+const providers = [
+  // ...,
+  provide({
+    provide: AUTOSCROLL_BEHAVIOR_MODE_TOKEN,
+    useValue: 'auto', // default is 'smooth'
+  }),
+];
+```
+
+#### Local
+
+```tsx
+import { useNavigate } from '@tramvai/module-router';
+
+function Component() {
+  const navigateToWithAutoBehavior = useNavigate({
+    url: '/url/',
+    navigateState: { autoscrollBehavior: 'auto' },
+  });
+
+  return <Button onClick={navigateToWithAutoBehavior} />;
+}
+```

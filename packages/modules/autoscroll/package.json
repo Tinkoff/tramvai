@@ -17,10 +17,11 @@
     "watch": "tsc -w"
   },
   "peerDependencies": {
+    "@tramvai/react": "0.0.0-stub",
+    "@tinkoff/dippy": "0.0.0-stub",
     "@tramvai/core": "0.0.0-stub",
     "@tramvai/module-router": "0.0.0-stub",
     "@tramvai/tokens-render": "0.0.0-stub",
-    "@tinkoff/dippy": "0.0.0-stub",
     "react": ">=16.14.0",
     "tslib": "^2.4.0"
   },

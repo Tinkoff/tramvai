@@ -2,6 +2,8 @@ import { Module } from '@tramvai/core';
 import { LAYOUT_OPTIONS } from '@tramvai/tokens-render';
 import { Autoscroll } from './components/Autoscroll';
 
+export * from './tokens';
+
 export { Autoscroll };
 
 @Module({
