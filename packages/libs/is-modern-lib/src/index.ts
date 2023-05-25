@@ -49,6 +49,7 @@ export const modernLibs = [
   '@react-hook',
   '@tui-react',
   '@tui-react-mobile',
+  'tinkoff-push-web',
 ];
 
 const regexStringFactory = ({ except }: { except?: boolean } = {}) =>
