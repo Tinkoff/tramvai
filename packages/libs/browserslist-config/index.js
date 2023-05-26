@@ -39,6 +39,7 @@ const modern = [
   'FirefoxAndroid >= 60',
 ];
 
+// TODO: replace but more sane version based on TCORE-4597 investigation
 const node = ['Node >= 14'];
 
 module.exports = {

@@ -9,7 +9,7 @@ Tramvai provides a powerful CLI for build and development processes - `@tramvai/
 
 ## Prerequisites
 
-- [Node.js version `14+`](https://nodejs.org/en/download)
+- [Node.js version `16+`](https://nodejs.org/en/download)
 
 ## New application
 
