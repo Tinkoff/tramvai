@@ -56,6 +56,7 @@ When Root App will start this command lines can be different depending on the Ch
 ## Usage
 
 Command line stages is a good place to make common actions for current page, for example:
+
 - add new assets (scripts, fonts, etc.)
 - services configuration
 - fetch some global data
@@ -66,6 +67,7 @@ For other cases, especially API calls, prefer to use [Actions](03-features/015-c
 :::tip
 
 It is important to make command line stages as fast as possible, because they are directly delaying response for user. Few tips how to make page response fast:
+
 - Use [Actions](03-features/015-child-app/07-data-fetching.md#actions) for requests - they are executed in parallel with Root App Actions
 - If you still need to fetch data in command line and use it in different Actions / services, try to cache this data at [HTTP Client](03-features/015-child-app/07-data-fetching.md#http-client) level - this cache can be shared between all Child Apps and requests
 
@@ -123,11 +125,11 @@ export default createChildApp({
         return function customerStart() {
           log.info('fancy-child command line started');
         };
-      }
+      },
     }),
     // highlight-end
   ],
 });
 ```
 
-You can see this log both on server-side and cliend-side, when page with `fancy-child` Child App will be rendered.
+You can see this log both on server-side and client-side, when page with `fancy-child` Child App will be rendered.

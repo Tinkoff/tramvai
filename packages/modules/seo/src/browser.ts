@@ -23,6 +23,7 @@ declare module '@tramvai/react' {
   providers: [
     ...sharedProviders,
     provide({
+      // Update meta only when all actions were completed.
       provide: COMMAND_LINE_EXECUTION_END_TOKEN,
       multi: true,
       useFactory: () => {

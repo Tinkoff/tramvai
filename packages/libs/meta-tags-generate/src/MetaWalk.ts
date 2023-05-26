@@ -10,8 +10,6 @@ export class MetaWalk {
     this.state = new Map();
   }
 
-  onChange?: () => void;
-
   eachMeta(func: (value: WalkItem, key: string) => void) {
     this.state.forEach((value, key) => func(value, key));
   }
@@ -33,8 +31,6 @@ export class MetaWalk {
       }
     }, metaObj);
 
-    this.onChange?.();
-
     return this;
   }
 
@@ -44,9 +40,5 @@ export class MetaWalk {
 
   reset() {
     this.state.clear();
-  }
-
-  subscribe(listener: () => void) {
-    this.onChange = listener;
   }
 }

@@ -51,18 +51,20 @@ createApp({
     }),
     provide({
       provide: CHILD_APP_RESOLUTION_CONFIGS_TOKEN,
-      useValue: [{
-        // name of the child-app
-        name: 'fancy-child',
-        byTag: {
-          latest: {
-            // current version for the child app for tag `latest`
-            version: '1.0.0',
-            // remove this property if you already add CSS for this Child App
-            withoutCss: true,
+      useValue: [
+        {
+          // name of the child-app
+          name: 'fancy-child',
+          byTag: {
+            latest: {
+              // current version for the child app for tag `latest`
+              version: '1.0.0',
+              // remove this property if you already add CSS for this Child App
+              withoutCss: true,
+            },
           },
         },
-      }],
+      ],
     }),
   ],
 });
@@ -83,24 +85,28 @@ In this case, it is important to cache this requests for short time, because it 
 You can provide global base url for all Child Apps, and unique base url for any of Child Apps.
 
 Global url can be provided with few methods:
+
 - `CHILD_APP_RESOLVE_BASE_URL_TOKEN` provider in Root App code
 - `CHILD_APP_EXTERNAL_URL` env variable, passed to Root App
 
 Specific url can be provided in Child App configuration in `baseUrl` property:
+
 ```ts
 const provider = provide({
   provide: CHILD_APP_RESOLUTION_CONFIGS_TOKEN,
-  useValue: [{
-    name: 'fancy-child',
-    byTag: {
-      latest: {
-        version: '1.0.0',
-        withoutCss: true,
+  useValue: [
+    {
+      name: 'fancy-child',
+      byTag: {
+        latest: {
+          version: '1.0.0',
+          withoutCss: true,
+        },
       },
+      // highlight-next-line
+      baseUrl: 'https://my.cdn.dev/fancy-child/',
     },
-    // highlight-next-line
-    baseUrl: 'https://my.cdn.dev/fancy-child/',
-  }],
+  ],
 });
 ```
 
@@ -118,7 +124,7 @@ const MainPage: PageComponent = () => {
       <h1>Main Page</h1>
       <ChildApp name="fancy-child" />
     </>
-  )
+  );
 };
 
 export default MainPage;
@@ -126,7 +132,7 @@ export default MainPage;
 
 ## Preloading
 
-By default, this Child App will be rendered only client-side, because we don't know about this microfrontend before started rendering page component server-side. It is not optimal for SEO, UX and performance, so we need to provide list of Child Apps for preloading. This can be done at page level or globally.
+By default, this Child App will be rendered only client-side, because we don't know about this microfrontend before started rendering page component server-side. It is not optimal for SEO, UX and performance, so we need to provide list of Child Apps for preloading. This can be done automatically or manually. The same logic is applied for running `spa` line list while transitioning by spa navigation on client - `spa` line list will be executed only for Child Apps that were preloaded on the next page of navigation.
 
 :::tip
 
@@ -134,7 +140,9 @@ If you really need to render Child App client-side only, you can render `<ChildA
 
 :::
 
-You can provide list of Child Apps for preloading in `childApps` property of page component:
+### Preload automatically for page or layout
+
+You can provide list of Child Apps for preloading in `childApps` property of page or layout component:
 
 ```tsx title="routes/index.tsx"
 import type { PageComponent } from '@tramvai/react';
@@ -146,7 +154,7 @@ const MainPage: PageComponent = () => {
       <h1>Main Page</h1>
       <ChildApp name="fancy-child" />
     </>
-  )
+  );
 };
 
 // highlight-next-line
@@ -155,16 +163,16 @@ MainPage.childApps = [{ name: 'fancy-child' }];
 export default MainPage;
 ```
 
-### Preload Child App globally
+### Preload manually
 
-If we are using some Child Apps on all application pages, simple way to preload them is to use `CHILD_APP_PRELOAD_MANAGER_TOKEN` and command line:
+You can preload any child-app manually with the help of `CHILD_APP_PRELOAD_MANAGER_TOKEN`:
 
 ```ts
 import { provide, commandLineListTokens } from '@tramvai/core';
 import { CHILD_APP_PRELOAD_MANAGER_TOKEN } from '@tramvai/module-child-app';
 
 const provider = provide({
-  provide: commandLineListTokens.customerStart,
+  provide: commandLineListTokens.resolvePageDeps,
   useFactory: ({ preloadManager }) => {
     return function preloadFancyChildApp() {
       return preloadManager.preload({ name: 'fancy-child' });
@@ -182,15 +190,15 @@ By default, Child App assets in development mode will be served on `http://local
 
 1. Run child-app using cli
 
-    ```sh
-    yarn tramvai start child-app
-    ```
+   ```sh
+   yarn tramvai start child-app
+   ```
 
 1. Run Root App with `CHILD_APP_DEBUG` environment variable
 
-    ```sh
-    CHILD_APP_DEBUG=child-app npx tramvai start root-app
-    ```
+   ```sh
+   CHILD_APP_DEBUG=child-app npx tramvai start root-app
+   ```
 
 ### Multiple Child Apps
 
@@ -198,43 +206,46 @@ By default, Child App assets in development mode will be served on `http://local
 
 1. And either pass `Base Url` showed from `tramvai` CLI in terminal (after `start` command) as url to debug every Child App
 
-    ```sh
-    CHILD_APP_DEBUG=child-app1=baseUrl1;child-app2=baseUrl2 npx tramvai start root-app
-    ```
+   ```sh
+   CHILD_APP_DEBUG=child-app1=baseUrl1;child-app2=baseUrl2 npx tramvai start root-app
+   ```
 
 1. Or implement proxy on default `http:://localhost:4040/` yourself which redirects to concrete server by url
 
-    ```sh
-    CHILD_APP_DEBUG=child-app1;child-app2 npx tramvai start root-app
-    ```
+   ```sh
+   CHILD_APP_DEBUG=child-app1;child-app2 npx tramvai start root-app
+   ```
 
 ### Custom debug configuration
 
 You may specify a full config to debug to a specific Child App:
 
 1. Provide token `CHILD_APP_RESOLUTION_CONFIGS_TOKEN` for needed Child Apps add special tag `debug`:
-    ```ts
-    const provider = provide({
-      provide: CHILD_APP_RESOLUTION_CONFIGS_TOKEN,
-      useValue: [{
-        name: 'fancy-child',
-        byTag: {
-          latest: {
-            version: '1.0.0',
-            withoutCss: true,
-          },
-          // highlight-start
-          debug: {
-            baseUrl: '...url',
-            version: '...version',
-            client: {},
-            server: {},
-            css: {},
-          },
-          // highlight-end
-        },
-      }],
-    });
-    ```
+
+   ```ts
+   const provider = provide({
+     provide: CHILD_APP_RESOLUTION_CONFIGS_TOKEN,
+     useValue: [
+       {
+         name: 'fancy-child',
+         byTag: {
+           latest: {
+             version: '1.0.0',
+             withoutCss: true,
+           },
+           // highlight-start
+           debug: {
+             baseUrl: '...url',
+             version: '...version',
+             client: {},
+             server: {},
+             css: {},
+           },
+           // highlight-end
+         },
+       },
+     ],
+   });
+   ```
 
 1. Run Root App with `CHILD_APP_DEBUG` environment variable with value of Child App names needed to debug
