@@ -49,6 +49,9 @@ export const testPageResources = (options: Options) => {
           shouldInline() {
             return false;
           },
+          canInline() {
+            return false;
+          },
           shouldAddResource() {
             return true;
           },

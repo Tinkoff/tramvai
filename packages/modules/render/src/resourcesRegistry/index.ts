@@ -33,9 +33,11 @@ export class ResourcesRegistry implements ResourceRegistry {
   }
 
   prefetchInlinePageResources(): Promise<any> {
-    const promises = Array.from(this.resources.values()).map((resource) => {
-      return this.resourceInliner.prefetchResource(resource);
-    });
+    const promises = Array.from(this.resources.values())
+      .filter((resource) => this.resourceInliner.canInline(resource))
+      .map((resource) => {
+        return this.resourceInliner.prefetchResource(resource);
+      });
 
     return Promise.all(promises);
   }

@@ -46,7 +46,7 @@ const getResourceUrl = (resource: PageResource) => {
 export interface ResourcesInlinerType {
   shouldAddResource(resource: PageResource): boolean;
   shouldInline(resource: PageResource): boolean;
-
+  canInline(resource: PageResource): boolean;
   inlineResource(resource: PageResource): PageResource[];
   prefetchResource(resource: PageResource): Promise<void>;
 }
@@ -188,7 +188,7 @@ export class ResourcesInliner implements ResourcesInlinerType {
 
   // method for check is passed resource should be inlined in HTML-page
   shouldInline(resource: PageResource) {
-    if (!(this.resourceInlineThreshold?.types || []).includes(resource.type)) {
+    if (!this.canInline(resource)) {
       return false;
     }
     const resourceInlineThreshold = this.resourceInlineThreshold.threshold;
@@ -230,6 +230,14 @@ export class ResourcesInliner implements ResourcesInlinerType {
 
     this.scheduleFileLoad(resource, resourceInlineThreshold);
     return false;
+  }
+
+  // method for filtering resources that can be inlined in HTML-page
+  canInline(resource: PageResource) {
+    if (!(this.resourceInlineThreshold?.types || []).includes(resource.type)) {
+      return false;
+    }
+    return true;
   }
 
   inlineResource(resource: PageResource): PageResource[] {
