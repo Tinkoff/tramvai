@@ -78,3 +78,6 @@ examples-standalone/**/.env
 examples-standalone/**/.tramvai-migrate-applied.json
 examples-standalone/**/.yalc
 examples-standalone/**/yalc.lock
+
+*.pem
+*.key
