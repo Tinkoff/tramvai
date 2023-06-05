@@ -409,6 +409,10 @@ type HttpClientRequest = {
   cache?: boolean;
   // if `abortPromise` is resolved, the request will be canceled
   abortPromise?: Promise<void>;
+  // AbortController signal, will be passed to fetch
+  signal?: AbortSignal;
+  // request credentials mode, default is `same-origin`, will be passed to fetch
+  credentials?: RequestCredentials;
   // will intercept all requests
   interceptors?: HttpClientInterceptor[];
   // method to modify request data

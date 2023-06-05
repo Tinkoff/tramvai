@@ -47,6 +47,7 @@ export type HttpClientRequest = {
   cache?: boolean;
   abortPromise?: Promise<void>;
   signal?: AbortSignal;
+  credentials?: RequestCredentials;
   [key: string]: any;
 };
 
