@@ -53,14 +53,31 @@ export type PwaIconOptions = {
    * @default [36, 48, 72, 96, 144, 192, 512]
    */
   sizes?: number[];
-  // @todo: dest directory
 };
 
 export type PwaMetaOptions = {
+  /**
+   * @title "viewport" meta tag
+   */
   viewport?: string;
+  /**
+   * @title "theme-color" meta tag
+   */
   themeColor?: string;
+  /**
+   * @title "mobile-web-app-capable" meta tag
+   */
   mobileApp?: string;
+  /**
+   * @title "apple-mobile-web-app-capable" meta tag
+   */
   mobileAppIOS?: string;
+  /**
+   * @title "apple-mobile-web-app-title" meta tag
+   */
   appleTitle?: string;
+  /**
+   * @title "apple-mobile-web-app-status-bar-style" meta tag
+   */
   appleStatusBarStyle?: string;
 };

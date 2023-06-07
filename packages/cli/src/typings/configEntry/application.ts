@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-restricted-imports
 import type { ForkTsCheckerWebpackPluginOptions } from 'fork-ts-checker-webpack-plugin/lib/plugin-options';
+import type { ManifestEntry } from 'workbox-build';
 import type { PwaIconOptions, PwaMetaOptions, WebManifestOptions } from '../pwa';
 import type { CliConfigEntry, Experiments } from './cli';
 import type { OverridableOption } from './common';
@@ -68,6 +69,18 @@ export interface ApplicationExperiments extends Experiments {
        * @title Array of regexp specifiers used to include assets in the precache manifest
        */
       include?: string[];
+      /**
+       * @title Array of chunk names used to include in the precache manifest
+       */
+      chunks?: string[];
+      /**
+       * @title Array of chunk names used to exclude from the precache manifest
+       */
+      excludeChunks?: string[];
+      /**
+       * @title A list of entries to be included in the precache manifest, in addition to any entries that are generated as part of the build configuration
+       */
+      additionalManifestEntries?: Array<string | ManifestEntry>;
     };
     /**
      * @title WebManifest content (manifest.json or webmanifest will be generated based on this options)

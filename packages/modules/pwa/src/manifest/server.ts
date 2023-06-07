@@ -4,6 +4,15 @@ import { PROXY_CONFIG_TOKEN } from '@tramvai/tokens-server';
 import { appConfig } from '@tramvai/cli/lib/external/config';
 import { PWA_MANIFEST_URL_TOKEN, PWA_SW_SCOPE_TOKEN } from '../tokens';
 
+const validateRelativeUrl = (url: string) => {
+  if (!url.startsWith('/')) {
+    throw new Error(`Webmanifest url should start from "/", got ${url}`);
+  }
+  if (!(url.endsWith('.json') || url.endsWith('.webmanifest'))) {
+    throw new Error(`Webmanifest url should has .json or .webmanifest extension, got ${url}`);
+  }
+};
+
 export const TramvaiPwaManifestModule = declareModule({
   name: 'TramvaiPwaManifestModule',
   providers: [
@@ -53,12 +62,24 @@ export const TramvaiPwaManifestModule = declareModule({
         const normalizedScope = swScope.replace(/\/$/, '');
         const finalUrl = `${normalizedScope}${normalizedUrl}`;
 
-        // @todo check that finalUrl is relative and ends with .json or .webmanifest and no slash duplicates
-
         return finalUrl;
       },
       deps: {
         swScope: PWA_SW_SCOPE_TOKEN,
+      },
+    }),
+    provide({
+      provide: commandLineListTokens.init,
+      useFactory: ({ manifestUrl }) =>
+        function validateSwUrlAndScope() {
+          if (!process.env.TRAMVAI_PWA_WORKBOX_ENABLED) {
+            return;
+          }
+
+          validateRelativeUrl(manifestUrl);
+        },
+      deps: {
+        manifestUrl: PWA_MANIFEST_URL_TOKEN,
       },
     }),
   ],

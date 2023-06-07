@@ -1,8 +1,10 @@
 import path from 'path';
 import type Config from 'webpack-chain';
 import { InjectManifest } from 'workbox-webpack-plugin';
+import fs from 'fs';
 import type { ConfigManager } from '../../../../config/configManager';
 import type { ApplicationConfigEntry } from '../../../../typings/configEntry/application';
+import { safeRequireResolve } from '../../../../utils/safeRequire';
 import { PwaIconsPlugin } from '../../plugins/PwaIconsPlugin';
 import { WebManifestPlugin } from '../../plugins/WebManifestPlugin';
 import { pwaSharedBlock } from './shared';
@@ -23,17 +25,35 @@ export const pwaBlock =
 
     config.batch(pwaSharedBlock(configManager));
 
-    // @todo check `@tramvai/module-progressive-web-app` is installed
+    if (
+      !safeRequireResolve('@tramvai/module-progressive-web-app') &&
+      (pwa.workbox?.enabled || pwa.webmanifest?.enabled)
+    ) {
+      throw Error('PWA functional requires @tramvai/module-progressive-web-app installed');
+    }
 
     if (pwa.workbox?.enabled) {
-      // @todo check `sw.ts` exists
+      const swSrc = path.join(rootDir, root, pwa.sw?.src);
+      const swDest = path.join(rootDir, output.client, pwa.sw?.dest);
+
+      if (!fs.existsSync(swSrc)) {
+        throw Error(
+          `PWA workbox enabled but Service Worker source file not found by path ${swSrc}`
+        );
+      }
+
       // @todo: static HTML caching ??? full offline mode for tramvai static ???
       const workboxOptions: InjectManifest['config'] = {
-        swSrc: path.join(rootDir, root, pwa.sw?.src),
-        swDest: path.join(rootDir, output.client, pwa.sw?.dest),
+        swSrc,
+        swDest,
         exclude: [/hmr\.js$/, /\.map$/, /\.hot-update\./],
-        // @todo maybe less for production?
-        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
+        maximumFileSizeToCacheInBytes: env === 'production' ? 5 * 1024 * 1024 : 10 * 1024 * 1024,
+        chunks: pwa.workbox.chunks,
+        excludeChunks: pwa.workbox.excludeChunks,
+        additionalManifestEntries: [
+          // @todo CSR fallback or all static pages?
+          // do not forget about revision and possible conflict with modifyURLPrefix
+        ],
       };
 
       if (pwa.workbox.include) {
@@ -43,6 +63,12 @@ export const pwaBlock =
         workboxOptions.exclude = [
           ...workboxOptions.exclude,
           ...pwa.workbox.exclude.map((expr) => new RegExp(expr)),
+        ];
+      }
+      if (pwa.workbox.additionalManifestEntries) {
+        workboxOptions.additionalManifestEntries = [
+          ...workboxOptions.additionalManifestEntries,
+          ...pwa.workbox.additionalManifestEntries,
         ];
       }
 

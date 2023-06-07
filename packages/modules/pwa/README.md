@@ -1,56 +1,25 @@
-# Pwa
+# @tramvai/module-progressive-web-app
 
-Pwa integration sw manifest icons meta
+Progressiwe Web App module.
 
-## Подключение
+Complete documentation is available in [PWA page](03-features/017-pwa.md).
 
-Необходимо установить `@tramvai/module-progressive-web-app`
+## Installation
+
+You need to install `@tramvai/module-progressive-web-app` module:
 
 ```bash
-yarn add @tramvai/module-progressive-web-app
+npx tramvai add @tramvai/module-progressive-web-app
 ```
 
-И подключить в проекте
+Then, connect `TramvaiPwaModule` from this package to `createApp` function:
 
-```tsx
+```ts
 import { createApp } from '@tramvai/core';
 import { TramvaiPwaModule } from '@tramvai/module-progressive-web-app';
 
 createApp({
   name: 'tincoin',
-  modules: [ TramvaiPwaModule ],
+  modules: [TramvaiPwaModule],
 });
 ```
-
-## Переменные окружения
-
-- `SOME_ENV` - описание
-
-## Explanation
-<!-- Цель: Рассказать подробно про доступные фичи в этой библиотеке -->
-<!-- О чем написать: Рассмотреть подробно основные фичи которые есть в библиотеке и рассказать как они работают и их особенности. Лучше акцентировать внимание на самих фичах, а не на том, как можно проинтегрировать или использовать (для этого есть раздел How to) -->
-
-### Супер фича
-
-Что делает эта фича и как эта фича будет полезна пользователю?
-
-
-## API
-<!-- Цель: Подробно расписать интерфейс библиотеки -->
-<!-- О чем написать: Описать интерфейс библиотеки какие есть поля и что они означают. -->
-
-### createApp
-
-Описание интерфейсов и способ использований
-
-## How to
-<!-- Цель: ответить на вопрос как сделать что-то или как решить определенную проблему -->
-<!-- О чем написать: рассмотреть основные вопросы, которые могут возниктуь у нового пользователя -->
-### Как можно сделать что-то и решить проблему?
-
-Стоит описывать различные кейсы пользователей и как их можно решить
-
-##  Экспортируемые токены
-<!-- Цель: Вывести все доступные токены -->
-
-@inline src/tokens.ts

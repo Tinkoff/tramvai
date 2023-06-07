@@ -7,8 +7,6 @@ export const providers = [
     useFactory: () => {
       const swScope = process.env.TRAMVAI_PWA_SW_SCOPE as string;
 
-      // @todo validate
-
       return swScope;
     },
   }),
@@ -19,8 +17,6 @@ export const providers = [
       const normalizedUrl = swDest.startsWith('/') ? swDest : `/${swDest}`;
       const normalizedScope = swScope.replace(/\/$/, '');
       const finalUrl = `${normalizedScope}${normalizedUrl}`;
-
-      // @todo check that finalUrl is relative and ends with .js and no slash duplicates
 
       return finalUrl;
     },

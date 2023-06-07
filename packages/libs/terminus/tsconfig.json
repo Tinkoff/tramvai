@@ -12,6 +12,6 @@
   },
   "exclude": [
     "**/*.spec.js",
-    "standalone-tests"
+    "**/standalone-tests"
   ]
 }

@@ -593,6 +593,46 @@
                       "items": {
                         "type": "string"
                       }
+                    },
+                    "chunks": {
+                      "title": "Array of chunk names used to include in the precache manifest",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "excludeChunks": {
+                      "title": "Array of chunk names used to exclude from the precache manifest",
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalManifestEntries": {
+                      "title": "A list of entries to be included in the precache manifest, in addition to any entries that are generated as part of the build configuration",
+                      "type": "array",
+                      "items": {
+                        "anyOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "integrity": {
+                                "type": "string"
+                              },
+                              "revision": {
+                                "type": "string"
+                              },
+                              "url": {
+                                "type": "string"
+                              }
+                            },
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "string"
+                          }
+                        ]
+                      }
                     }
                   },
                   "additionalProperties": false
@@ -705,21 +745,27 @@
                   "type": "object",
                   "properties": {
                     "viewport": {
+                      "title": "\"viewport\" meta tag",
                       "type": "string"
                     },
                     "themeColor": {
+                      "title": "\"theme-color\" meta tag",
                       "type": "string"
                     },
                     "mobileApp": {
+                      "title": "\"mobile-web-app-capable\" meta tag",
                       "type": "string"
                     },
                     "mobileAppIOS": {
+                      "title": "\"apple-mobile-web-app-capable\" meta tag",
                       "type": "string"
                     },
                     "appleTitle": {
+                      "title": "\"apple-mobile-web-app-title\" meta tag",
                       "type": "string"
                     },
                     "appleStatusBarStyle": {
+                      "title": "\"apple-mobile-web-app-status-bar-style\" meta tag",
                       "type": "string"
                     }
                   },

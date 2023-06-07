@@ -1,6 +1,6 @@
 import { commandLineListTokens, declareModule, optional, provide, Scope } from '@tramvai/core';
 import { MODERN_SATISFIES_TOKEN } from '@tramvai/tokens-render';
-import { ENV_MANAGER_TOKEN } from '@tramvai/tokens-common';
+import { ENV_MANAGER_TOKEN, LOGGER_TOKEN } from '@tramvai/tokens-common';
 import type { Workbox } from 'workbox-window';
 import {
   PWA_SW_PARAMS_TOKEN,
@@ -17,16 +17,23 @@ export const TramvaiPwaWorkboxModule = declareModule({
     provide({
       provide: PWA_WORKBOX_TOKEN,
       scope: Scope.SINGLETON,
-      useFactory: ({ swUrl, swScope, modern, swParams, envManager }) => {
+      useFactory: ({ swUrl, swScope, modern, swParams, envManager, logger }) => {
+        const log = logger('pwa:workbox');
         let workbox: null | Workbox = null;
 
         return async () => {
           if (!('serviceWorker' in navigator)) {
-            // @todo: logs
+            log.info('Service Worker is not supported');
             return workbox;
           }
 
-          const { Workbox } = await import('workbox-window/Workbox');
+          if (workbox) {
+            return workbox;
+          }
+
+          const { Workbox } = await import(
+            /* webpackChunkName: "tramvai-workbox-window" */ 'workbox-window/Workbox'
+          );
           const hasModernBuild = !!process.env.TRAMVAI_MODERN_BUILD;
           const isCsrMode = envManager.get('TRAMVAI_FORCE_CLIENT_SIDE_RENDERING') === 'true';
 
@@ -70,13 +77,15 @@ export const TramvaiPwaWorkboxModule = declareModule({
         modern: MODERN_SATISFIES_TOKEN,
         swParams: optional(PWA_SW_PARAMS_TOKEN),
         envManager: ENV_MANAGER_TOKEN,
+        logger: LOGGER_TOKEN,
       },
     }),
     provide({
       provide: commandLineListTokens.init,
-      useFactory: ({ workbox }) =>
-        async function registerWorkbox() {
-          // @todo why boolean here?
+      useFactory: ({ workbox, logger }) => {
+        const log = logger('pwa:workbox');
+
+        return async function registerWorkbox() {
           if (!process.env.TRAMVAI_PWA_WORKBOX_ENABLED) {
             return;
           }
@@ -85,7 +94,7 @@ export const TramvaiPwaWorkboxModule = declareModule({
             const wb = await workbox();
 
             if (!wb) {
-              // @todo: logs
+              log.info('Service Worker registration stopped');
               return;
             }
 
@@ -98,12 +107,18 @@ export const TramvaiPwaWorkboxModule = declareModule({
             if (process.env.NODE_ENV === 'development') {
               await wb.update();
             }
-          } catch (e) {
-            // @todo: logs
+          } catch (error: any) {
+            log.error({
+              event: 'register-failed',
+              message: 'Service Worker registration failed',
+              error,
+            });
           }
-        },
+        };
+      },
       deps: {
         workbox: PWA_WORKBOX_TOKEN,
+        logger: LOGGER_TOKEN,
       },
     }),
   ],

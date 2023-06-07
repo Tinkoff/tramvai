@@ -22,9 +22,9 @@ export class WebManifestPlugin implements webpack.WebpackPluginInstance {
           stage: Compilation.PROCESS_ASSETS_STAGE_ADDITIONS,
         },
         () => {
-          const manifestFilename = dest;
+          const manifestFilename = dest.replace(/^\//, '');
 
-          compilation.emitAsset(manifestFilename, new RawSource(JSON.stringify(content)));
+          compilation.emitAsset(manifestFilename, new RawSource(JSON.stringify(content, null, 2)));
         }
       );
     });
