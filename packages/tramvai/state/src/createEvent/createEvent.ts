@@ -99,6 +99,7 @@ export function createEvent(
     return {
       type,
       payload: (payloadCreator as any)(...args),
+      store: eventCreator.store,
     };
   };
 
@@ -107,3 +108,7 @@ export function createEvent(
 
   return eventCreator;
 }
+
+export const isEventCreator = (eventCreator: any): eventCreator is AnyEventCreator => {
+  return typeof eventCreator === 'function' && 'getType' in eventCreator;
+};

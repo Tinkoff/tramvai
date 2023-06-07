@@ -17,6 +17,7 @@
     "watch": "tsc -w"
   },
   "dependencies": {
+    "node-abort-controller": "^3.0.1",
     "tslib": "^2.4.0"
   },
   "peerDependencies": {

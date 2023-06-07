@@ -282,10 +282,10 @@ describe('dispatcher/childDispatcherContext', () => {
 
       it('should not call parent handlers', () => {
         dc.dispatch(parentEvent1(2));
-        dc.dispatch(parentEvent2(2));
+        dc.dispatch(parentEvent2(3));
 
-        expect(parentHandler1).not.toHaveBeenCalled();
-        expect(parentHandler2).not.toHaveBeenCalled();
+        expect(parentDispatcherContext.getState(parentStore1)).toEqual({ parent: true, value: 1 });
+        expect(parentDispatcherContext.getState(parentStore2)).toEqual({ parent: true, value: 2 });
       });
     });
 

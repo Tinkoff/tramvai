@@ -1,31 +1,31 @@
 import { createReducer } from './createReducer';
 import { createEvent } from '../createEvent/createEvent';
 
-describe('stores/createReducer', () => {
-  it('Провека инициализации initial state', () => {
-    const initState = { a: 1, b: 2 };
+describe('args initializer', () => {
+  it('should initialize initial state', () => {
+    const initialState = { a: 1, b: 2 };
 
-    const StoreClass = createReducer('test', initState);
+    const StoreClass = createReducer('test', initialState);
     const store = new StoreClass();
 
     expect((StoreClass as any).storeName).toBe('test');
-    expect(store.getState()).toBe(initState);
+    expect(store.getState()).toBe(initialState);
   });
 
-  it('Проверка работы с примитивами в качестве стейта', () => {
-    const initState = 123;
+  it('store methods should work', () => {
+    const initialState = 123;
 
-    const StoreClass = createReducer('test', initState);
+    const StoreClass = createReducer('test', initialState);
     const store = new StoreClass();
 
-    expect(store.getState()).toBe(initState);
-    expect(store.dehydrate()).toBe(initState);
+    expect(store.getState()).toBe(initialState);
+    expect(store.dehydrate()).toBe(initialState);
 
     store.rehydrate(456);
     expect(store.getState()).toBe(456);
   });
 
-  it('Вызов редьюсеров на эвенты reducers', () => {
+  it('call reducers on events', () => {
     const action1 = createEvent('test');
     const action2 = createEvent('test2');
     const reducer1 = jest.fn((state) => ({ ...state, a: 1, b: 5 }));
@@ -52,23 +52,28 @@ describe('stores/createReducer', () => {
     });
   });
 
-  it('Создаем множество эвентов через метод eventCreators', () => {
-    const reducer = createReducer('countStore', 0);
-    const actions = reducer.createEvents({
-      add: (state, payload: number) => state + payload,
-      decrease: (state, payload: number) => state - payload,
+  it('many events with createEvents', () => {
+    const reducer = createReducer({
+      name: 'countStore',
+      initialState: 0,
+      events: {
+        add: (state, payload: number) => state + payload,
+        decrease: (state, payload: number) => state - payload,
+      },
     });
 
-    expect(typeof actions.add).toBe('function');
-    expect(typeof actions.decrease).toBe('function');
+    const { events } = reducer;
 
-    expect(actions.add(10)).toEqual({
+    expect(typeof events.add).toBe('function');
+    expect(typeof events.decrease).toBe('function');
+
+    expect(events.add(10)).toMatchObject({
       payload: 10,
-      type: 'add',
+      type: 'countStore_add',
     });
   });
 
-  it('Проверяем множественный матчинг эвентов для 1 редьюсера', () => {
+  it('same reducer for multiple events', () => {
     const upAction = createEvent<number>('up');
     const decAction = createEvent<number>('dec');
     const reducer = jest.fn((state, payload) => state + payload);
@@ -91,5 +96,45 @@ describe('stores/createReducer', () => {
       dec: 'handle',
       up: 'handle',
     });
+  });
+});
+
+describe('option initializer', () => {
+  it('should initialize initial state', () => {
+    const initialState = { a: 1, b: 2 };
+
+    const StoreClass = createReducer({
+      name: 'test',
+      initialState,
+    });
+    const store = new StoreClass();
+
+    expect((StoreClass as any).storeName).toBe('test');
+    expect(store.getState()).toBe(initialState);
+  });
+
+  it('call reducers on events', () => {
+    const reducer1 = jest.fn((state) => ({ ...state, a: 1, b: 5 }));
+    const reducer2 = jest.fn((state) => ({ ...state, b: 3, c: 4 }));
+    const payload = { c: 5 };
+
+    const StoreClass = createReducer({
+      name: 'test',
+      initialState: {},
+      events: {
+        test: reducer1,
+        test2: reducer2,
+      },
+    });
+
+    const store = new StoreClass();
+
+    store.handle(payload, StoreClass.events.test.toString());
+    expect(reducer1).toHaveBeenCalledWith({}, payload);
+    expect(store.getState()).toEqual({ a: 1, b: 5 });
+
+    store.handle(payload, StoreClass.events.test2.toString());
+    expect(reducer2).toHaveBeenCalledWith({ a: 1, b: 5 }, payload);
+    expect(store.getState()).toEqual({ a: 1, b: 3, c: 4 });
   });
 });

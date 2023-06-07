@@ -1,4 +1,3 @@
-import React from 'react';
 import { createApp, createBundle, declareAction } from '@tramvai/core';
 import { createEvent, createReducer, useStoreSelector, connect, useActions } from '@tramvai/state';
 import { COMBINE_REDUCERS, CommonModule } from '@tramvai/module-common';
@@ -18,11 +17,31 @@ const childStore = createReducer('childStore', { id: 0 }).on(childEvent, ({ id }
 });
 (rootStore as any).dependencies = [childStore];
 
+const nonRegisteredStore = createReducer({
+  name: 'nonRegistered',
+  initialState: { value: 'initial' },
+  events: {
+    registerStore: () => ({ value: 'registered' }),
+  },
+});
+
+const { registerStore } = nonRegisteredStore.events;
+
 const action = declareAction({
   name: 'action',
   fn() {
     this.dispatch(childEvent());
     this.dispatch(rootEvent());
+  },
+});
+
+const actionRegister = declareAction({
+  name: 'register',
+  fn() {
+    this.dispatch(registerStore());
+  },
+  conditions: {
+    always: true,
   },
 });
 
@@ -38,10 +57,12 @@ const Child = connect([childStore], ({ childStore: { id } }) => ({ id }))((props
 
 const Root = () => {
   const state = useStoreSelector(rootStore, selector);
+  const registeredState = useStoreSelector(nonRegisteredStore, ({ value }) => value);
   const act = useActions(action);
 
   return (
     <div>
+      <div id="registered">{registeredState}</div>
       <div id="content">{state}</div>
       {state === 0 ? (
         <div>
@@ -62,6 +83,7 @@ const bundle = createBundle({
   components: {
     pageDefault: Root,
   },
+  actions: [actionRegister],
 });
 
 createApp({

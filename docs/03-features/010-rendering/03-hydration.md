@@ -149,3 +149,54 @@ export const Header = () => (
   </LazyRender>
 );
 ```
+
+#### Server cache
+
+For maximum rendering performance on server-side, `LazyRender` has ability to cache rendering result (HTML string), and reuse them for subsequent renders.
+
+It is very useful for static blocks, but may not be practical for units with different levels of dynamics.
+
+Example, how to enable server cache:
+
+```tsx
+import React from 'react';
+// can be any other cache library
+import LRU from '@tinkoff/lru-cache-nano';
+import { LazyRender } from '@tramvai/react-lazy-hydration-render';
+
+const serverCache = new LRU({ max: 20, ttl: 60000 });
+
+const HeavyHeader = () => <header>1</header>;
+
+export const Header = () => (
+  <LazyRender
+    cacheEnabled={true}
+    cacheKey="header"
+    serverCache={serverCache}
+  >
+    <HeavyHeader />
+  </LazyRender>
+);
+```
+
+##### Cache keys
+
+If you have a limited set of dynamic options with low cardinality, just use them in `cacheKey` property:
+
+```tsx
+export const Header = ({ isMobile }) => {
+  const cacheKey = isMobile ? "header:mobile" : "header:desktop";
+
+  return (
+    <LazyRender
+      cacheEnabled={true}
+      cacheKey={cacheKey}
+      serverCache={serverCache}
+    >
+      <HeavyHeader
+        isMobile={isMobile}
+      />
+    </LazyRender>
+  );
+};
+```

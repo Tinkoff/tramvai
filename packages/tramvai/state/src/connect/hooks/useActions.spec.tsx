@@ -1,7 +1,6 @@
 /**
  * @jest-environment jsdom
  */
-import React from 'react';
 import { declareAction } from '@tramvai/core';
 import { createMockContext } from '@tramvai/test-mocks';
 import { testComponent } from '@tramvai/test-react';

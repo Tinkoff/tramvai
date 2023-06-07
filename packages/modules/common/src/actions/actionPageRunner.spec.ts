@@ -108,6 +108,7 @@ describe('errors', () => {
             "status": "success",
           },
         },
+        "store": [Function],
         "type": "action state execution in server",
       }
     `);
@@ -247,6 +248,7 @@ describe('limits', () => {
               "status": "success",
             },
           },
+          "store": [Function],
           "type": "action state execution in server",
         }
       `);
@@ -331,6 +333,7 @@ describe('limits', () => {
               "status": "success",
             },
           },
+          "store": [Function],
           "type": "action state execution in server",
         }
       `);

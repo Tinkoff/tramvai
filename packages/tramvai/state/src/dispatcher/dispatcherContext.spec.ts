@@ -49,6 +49,23 @@ describe('dispatcher/dispatcherContext', () => {
       expect(handler2).toHaveBeenCalledWith({}, payload);
     });
 
+    it('should auto register store when dispatching bound event', () => {
+      const handler = jest.fn((state, arg) => arg);
+      const reducer = createReducer({
+        name: 'store',
+        initialState: {},
+        events: {
+          event: handler,
+        },
+      });
+      const { event } = reducer.events;
+      const dispatcher = createDispatcher();
+      const dc = new DispatcherContext(dispatcher, {}, {} as any);
+
+      dc.dispatch(event('test'));
+      expect(handler).toHaveBeenCalledWith({}, 'test');
+    });
+
     describe('middlewares', () => {
       const apiCheck = expect.objectContaining({
         subscribe: expect.any(Function),

@@ -1,7 +1,19 @@
 import type { AnyEventCreator, EmptyEventCreator, EventCreator1, Event } from './events';
 import type { AnyAction, TramvaiAction } from './actions';
 
+export type EmptyEventHandler<State> = (state: State) => State;
 export type EventHandler<State, Payload = void> = (state: State, payload: Payload) => State;
+
+export type EventHandlersToEventCreators<
+  State,
+  Model extends { [K: string]: EventHandler<State, any> }
+> = {
+  [K in keyof Model]: Model[K] extends EmptyEventHandler<State>
+    ? EmptyEventCreator
+    : Model[K] extends EventHandler<State, infer Payload>
+    ? EventCreator1<Payload>
+    : null;
+};
 
 /**
  * @deprecated
@@ -36,10 +48,12 @@ export interface ReduceBaseStore<State> {
   handle(payload: any, eventName: string, meta?: any): any;
 }
 
-export interface Reducer<State, Name extends string = string> {
+export interface Reducer<State, Name extends string = string, Events = any> {
   storeName: Name;
 
   handlers: Record<string, Function | string>;
+
+  events: Events;
 
   new (): ReduceBaseStore<State>;
 
@@ -48,15 +62,12 @@ export interface Reducer<State, Name extends string = string> {
     handler: EventHandler<State, Payload>
   ): this;
 
+  /**
+   * @deprecated Use object initializer for the createReducer call to define events
+   */
   createEvents<Model extends { [K: string]: EventHandler<State, any> }>(
     model: Model
-  ): {
-    [K in keyof Model]: Model[K] extends EventHandler<State, void>
-      ? EmptyEventCreator
-      : Model[K] extends EventHandler<State, infer Payload>
-      ? EventCreator1<Payload, Payload>
-      : null;
-  };
+  ): EventHandlersToEventCreators<State, Model>;
 }
 
 export type StoreInstance = InstanceType<StoreClass>;

@@ -63,17 +63,23 @@ export class DispatcherContext<TContext> extends SimpleEmitter {
   protected fullState: Record<string, any>;
 
   applyDispatch = <Payload>(event: Event<Payload>) => {
-    const eventHandlers = this.dispatcher.handlers[event.type] || [];
+    let eventHandlers = this.dispatcher.handlers[event.type] || [];
 
     if (!eventHandlers.length) {
-      if (process.env.NODE_ENV === 'development') {
-        console.warn(`
+      if (event.store) {
+        this.registerStore(event.store);
+        eventHandlers = this.dispatcher.handlers[event.type] || [];
+      } else {
+        if (process.env.NODE_ENV === 'development') {
+          // fallback to previous versions of createEvent
+          console.warn(`
 The event "${event.type}" has been dispatched, but no reducers for this event were registered.
 Have you forgot to register reducer or add event handler in existing reducer?
 `);
-      }
+        }
 
-      return event.payload;
+        return event.payload;
+      }
     }
 
     this.applyHandlers(event, eventHandlers);

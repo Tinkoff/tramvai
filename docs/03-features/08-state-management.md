@@ -65,25 +65,20 @@ createApp({
 :hourglass: Read and update reducer in component:
 
 ```tsx
-import { useStore } from '@tramvai/state';
-import { useDi } from '@tramvai/react';
-import { STORE_TOKEN } from '@tramvai/tokens-common';
+import { useStore, useEvents } from '@tramvai/state';
 
 export const Component = () => {
-  // get Store instance from DI
-  const store = useDi(STORE_TOKEN);
   // subscribe to counter reducer state
   const counter = useStore(CounterStore);
 
   // bind events to dispatch
-  const handleIncrement = () => store.dispatch(increment());
-  const handleDecrement = () => store.dispatch(decrement());
+  const [dispatchIncrement, dispatchDecrement] = useEvents([increment, decrement]);
 
   return (
     <>
       <h1>Count is: {counter}</h1>
-      <button onClick={handleIncrement}>increment</button>
-      <button onClick={handleDecrement}>decrement</button>
+      <button onClick={() => dispatchIncrement()}>increment</button>
+      <button onClick={() => dispatchDecrement()}>decrement</button>
     </>
   );
 };
@@ -194,8 +189,19 @@ The working principle and api is built based on [Redux reducers](https://redux.j
 
 `createReducer(name, initialState): Reducer`
 
+or
+
+```js
+createReducer({
+  name,
+  initialState,
+  events,
+});
+```
+
 - `name` - unique name of the reducer. Should not overlap with other reducers
 - `initialState` - default reducer state
+- `events` - event handlers
 
 ### Typing
 
@@ -204,11 +210,10 @@ By default, the reducer state type and name are displayed automatically:
 ```tsx
 import { createReducer } from '@tramvai/state';
 
-const userReducer = createReducer('user', { name: 'anonymus' });
+const userReducer = createReducer('user', { name: 'anonymous' });
 ```
 
-Why do we need typing for the name of the reducer at all?
-Then this reducer will be more convenient to use together with `useSelector`.
+Why do we need typing for the name of the reducer at all? Then this reducer will be more convenient to use together with `useSelector`.
 
 If you pass the state type manually, it is desirable to specify the name as the second argument of the generic:
 
@@ -217,7 +222,7 @@ import { createReducer } from '@tramvai/state';
 
 type UserState = { name: string };
 
-const userReducer = createReducer<UserState, 'user'>('user', { name: 'anonymus' });
+const userReducer = createReducer<UserState, 'user'>('user', { name: 'anonymous' });
 ```
 
 But, you can simply set the desired type for `initialState`:
@@ -242,8 +247,8 @@ Example of using the `.on` method:
 ```javascript
 import { createReducer, createEvent } from '@tramvai/state';
 
-export const userLoadInformation = createEvent<{ status: string }> 'user load information';
-export const userAddInformation = createEvent<{ name: string, info: {} }> 'user add information';
+export const userLoadInformation = createEvent < { status: string } > 'user load information';
+export const userAddInformation = createEvent < { name: string, info: {} } > 'user add information';
 
 const userReducer = createReducer('user', {
   info: {},
@@ -260,29 +265,29 @@ const userReducer = createReducer('user', {
 
 ### Automatic creation of events
 
-`.createEvents(model)` method that removes the need to create and explicitly bind events
-
-- `model` - an object in which the key is the event identifier, which will then be passed to `createEvent`, and the value is the reducer function, which will get into the `.on()` method and will be called when the events are triggered
-
-Example of using the `.createEvents` method:
+To automatically create events create the reducer with option object:
 
 ```tsx
 import { createReducer } from '@tramvai/state';
 
-const userReducer = createReducer('user', {
-  info: {},
+const userReducer = createReducer({
+  name: 'user',
+  initialState: {
+    info: {},
+  },
+  events: {
+    userLoadInformation: (state, info: { status: string }) => ({ info }),
+    userAddInformation: (state, { name, info }: { name: string; info: {} }) => ({
+      ...state,
+      state: {
+        ...state.info,
+        [name]: info,
+      },
+    }),
+  },
 });
 
-export const { userLoadInformation, userAddInformation } = userReducer.createEvents({
-  userLoadInformation: (state, info: { status: string }) => ({ info }),
-  userAddInformation: (state, { name, info }: { name: string; info: {} }) => ({
-    ...state,
-    state: {
-      ...state.info,
-      [name]: info,
-    },
-  }),
-});
+export const { userLoadInformation, userAddInformation } = userReducer.events;
 ```
 
 It is imperative to describe the types of the `payload` argument in reducers, otherwise type inference for events will not work.
@@ -356,11 +361,11 @@ itemPrice('car', 3000);
 
 In this example we will create an action in which, after loading the information, we create an event and pass it into `context.dispatch`:
 
-```javascript
+```ts
 import { declareAction } from '@tramvai/core';
 import { createEvent } from '@tramvai/state';
 
-const userInformation = createEvent < { age: number, name: string } > 'user information';
+const userInformation = createEvent<{ age: number; name: string }>('user information');
 
 const action = declareAction({
   name: 'userLoadInformation',
@@ -369,6 +374,53 @@ const action = declareAction({
     this.dispatch(userInformation(result));
   },
 });
+```
+
+#### Using Events in React components
+
+The simplest way to dispatch events in React components is to use hook `useEvents`:
+
+```tsx
+import { useEvents } from '@tramvai/state';
+import { event1, event2, event3 } from './events';
+
+const Component = () => {
+  // bind single event
+  const dispatchEvent1 = useEvents(event1);
+
+  // bind multiple events
+  const [dispatchEvent2, dispatchEvent3] = useEvents([event2, event3]);
+
+  return (
+    <div>
+      <button onClick={() => dispatchEvent1()}>Event 1</button>
+      <button onClick={() => dispatchEvent2()}>Event 2</button>
+      <button onClick={() => dispatchEvent3()}>Event 3</button>
+    </div>
+  );
+};
+```
+
+Another way to do it is by getting the global store instance from di and manually call dispatch function on it:
+
+```tsx
+import { useDi } from '@tramvai/react';
+import { useEvents } from '@tramvai/state';
+import { STORE_TOKEN } from '@tramvai/tokens-common';
+import { event } from './events';
+
+const Component = () => {
+  // get the global store from di
+  const store = useDi(STORE_TOKEN);
+  // bind single event
+  const dispatchEvent = () => store.dispatch(event());
+
+  return (
+    <div>
+      <button onClick={() => dispatchEvent}>Event</button>
+    </div>
+  );
+};
 ```
 
 ## Context
@@ -429,7 +481,7 @@ import { declareAction } from '@tramvai/core';
 import { createEvent, createReducer } from '@tramvai/state';
 
 const loadUser = createEvent('load user');
-const userReducer = createReducer('user', { name: 'anonymus' });
+const userReducer = createReducer('user', { name: 'anonymous' });
 
 userReducer.on(loadUser, (state, payload) => payload);
 
@@ -439,7 +491,7 @@ const fetchUserAction = declareAction({
     // highlight-next-line
     const { name } = this.getState(userReducer);
 
-    if (name !== 'anonymus') {
+    if (name !== 'anonymous') {
       return;
     }
 
@@ -570,8 +622,7 @@ Allows to execute tramvai [actions](concepts/action.md) in React components
 
 #### Interface
 
-`useActions(actions: Action): Function`
-`useActions(actions: Action[]): Function[]`
+`useActions(actions: Action): Function` `useActions(actions: Action[]): Function[]`
 
 - `actions` - one or an array of tramvai actions
 
@@ -634,6 +685,7 @@ export const Component = () => {
 ### `connect`
 
 `connect` is deprecated for couple of reasons:
+
 - `connect` forces you to use decorators, which will have to be significantly changed in the future
 - increases bundle size for 2-3 kb gzip
 - unsafe with React concurrent features at the risk of [stale props](https://kaihao.dev/posts/Stale-props-and-zombie-children-in-Redux)
@@ -663,7 +715,6 @@ Since the entire state of the application with all the actions is quite large, t
 
 - [Devtools repository](https://github.com/zalmoxisus/redux-devtools-extension)
 - [Getting Started with Redux DevTools Extension ](https://egghead.io/lessons/javascript-getting-started-with-redux-dev-tools)
-
 
 ## Testing
 

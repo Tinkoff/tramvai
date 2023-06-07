@@ -1,10 +1,14 @@
+import type { Reducer } from './state';
+
 export type Event<Payload = void> = {
   readonly type: string;
   readonly payload: Payload;
+  store?: Reducer<any, any>;
 };
 
 export type BaseEventCreator<Payload> = {
   getType(): string;
+  store?: Reducer<any, any>;
 };
 
 export type EmptyEventCreator = BaseEventCreator<void> & (() => Event<void>);
@@ -53,4 +57,8 @@ export type AnyPayloadTransformer =
 
 export type EventCreators = {
   [K: string]: AnyEventCreator;
+};
+
+export const isEvent = (event: any): event is Event => {
+  return typeof event === 'object' && typeof event.type === 'string';
 };
