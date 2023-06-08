@@ -1,15 +1,7 @@
-import eachObj from '@tinkoff/utils/object/each';
-import isObject from '@tinkoff/utils/is/object';
-import isArray from '@tinkoff/utils/is/array';
 import identity from '@tinkoff/utils/function/identity';
 import { createBundle } from '@tramvai/core';
-import { resolveLazyComponent, __lazyErrorHandler } from '@tramvai/react';
-import type {
-  BUNDLE_MANAGER_TOKEN,
-  DISPATCHER_TOKEN,
-  ActionsRegistry,
-  LOGGER_TOKEN,
-} from '@tramvai/tokens-common';
+import { __lazyErrorHandler } from '@tramvai/react';
+import type { BUNDLE_MANAGER_TOKEN, LOGGER_TOKEN } from '@tramvai/tokens-common';
 import type { Bundle, ExtractDependencyType } from '@tramvai/core';
 import {
   fileSystemPagesEnabled,
@@ -30,25 +22,17 @@ const FS_PAGES_DEFAULT_BUNDLE = '__default';
 type Deps = {
   bundleList: Record<string, () => Promise<{ default: Bundle }>>;
   componentRegistry: ComponentRegistry;
-  actionRegistry: ActionsRegistry;
-  dispatcher: ExtractDependencyType<typeof DISPATCHER_TOKEN>;
   logger: ExtractDependencyType<typeof LOGGER_TOKEN>;
 };
 
 export class BundleManager implements Interface {
   bundles: Deps['bundleList'];
 
-  actionRegistry: Deps['actionRegistry'];
-
   componentRegistry: Deps['componentRegistry'];
 
-  dispatcher: Deps['dispatcher'];
-
-  constructor({ bundleList, componentRegistry, actionRegistry, dispatcher, logger }: Deps) {
+  constructor({ bundleList, componentRegistry, logger }: Deps) {
     this.bundles = bundleList;
     this.componentRegistry = componentRegistry;
-    this.actionRegistry = actionRegistry;
-    this.dispatcher = dispatcher;
 
     if (fileSystemPagesEnabled()) {
       const log = logger('file-system-pages:bundle-manager');
@@ -108,8 +92,8 @@ export class BundleManager implements Interface {
       // eslint-disable-next-line no-param-reassign
       name = FS_PAGES_DEFAULT_BUNDLE;
     }
-    return this.loadBundle(name, pageComponent).then((bundle: { default: Bundle }) =>
-      this.resolve(bundle.default, pageComponent)
+    return this.loadBundle(name, pageComponent).then(
+      (bundle: { default: Bundle }) => bundle.default
     );
   }
 
@@ -120,52 +104,6 @@ export class BundleManager implements Interface {
       name = FS_PAGES_DEFAULT_BUNDLE;
     }
     return !!this.bundles[name];
-  }
-
-  private async resolve(bundle: Bundle, pageComponent: string) {
-    // preload `lazy` components then register actions and reducers
-    if (pageComponent && bundle.components[pageComponent]) {
-      const componentOrLoader = bundle.components[pageComponent];
-
-      const component = await resolveLazyComponent(componentOrLoader);
-
-      if (!component) {
-        return;
-      }
-
-      // allow page components to register any other components
-      if ('components' in component && isObject(component.components)) {
-        eachObj((cmp, name: string) => {
-          this.componentRegistry.add(name, cmp, pageComponent);
-        }, component.components);
-      }
-
-      if ('actions' in component && isArray(component.actions)) {
-        this.actionRegistry.add(pageComponent, component.actions);
-      }
-
-      if ('reducers' in component && isArray(component.reducers)) {
-        component.reducers.forEach((reducer) => {
-          this.dispatcher.registerStore(reducer);
-        });
-      }
-    }
-
-    eachObj((component, name) => {
-      this.componentRegistry.add(name, component, bundle.name);
-    }, bundle.components);
-
-    if (bundle.actions) {
-      this.actionRegistry.add(bundle.name, bundle.actions);
-    }
-
-    if (bundle.reducers) {
-      bundle.reducers.forEach((reducer) => {
-        this.dispatcher.registerStore(reducer);
-      });
-    }
-
-    return bundle;
   }
 
   private loadBundle(name: string, pageComponent: string) {

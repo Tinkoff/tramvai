@@ -8,6 +8,7 @@ import { renderFactory, requestFactory } from '@tramvai/test-helpers';
 import type { PromiseType } from 'utility-types';
 import { getPort } from '@tramvai/internal-test-utils/utils/getPort';
 import type { start } from '@tramvai/cli';
+import type { startCli } from '@tramvai/test-integration';
 
 jest.setTimeout(3 * 60 * 1000);
 
@@ -15,6 +16,7 @@ type TestVersion = 'latest' | 'v2.0.0';
 type TestCase = {
   rootAppVersion: TestVersion;
   childAppsVersion: TestVersion;
+  router: { prefetchScriptsCount: number };
   reactQuery: { scriptsCount: number };
 };
 
@@ -22,6 +24,9 @@ const TEST_CASES: TestCase[] = [
   {
     rootAppVersion: 'latest',
     childAppsVersion: 'latest',
+    router: {
+      prefetchScriptsCount: 2, // main file and entry point
+    },
     reactQuery: {
       scriptsCount: 2, // only runtime and main entry chunk should be loaded
     },
@@ -31,6 +36,9 @@ const TEST_CASES: TestCase[] = [
         {
           rootAppVersion: 'v2.0.0',
           childAppsVersion: 'latest',
+          router: {
+            prefetchScriptsCount: 0, // there is not available prefetch manager in root-app so not prefetching at all
+          },
           reactQuery: {
             scriptsCount: 7, // no dependencies are shared so every dep should be loaded for child-app
           },
@@ -38,6 +46,9 @@ const TEST_CASES: TestCase[] = [
         {
           rootAppVersion: 'latest',
           childAppsVersion: 'v2.0.0',
+          router: {
+            prefetchScriptsCount: 0, // there is no router link with prefetch in old child-app
+          },
           reactQuery: {
             scriptsCount: 1, // old child-app are built in single file
           },
@@ -60,46 +71,45 @@ const normalizeSuspense = (html: string) => {
 };
 
 const EXAMPLE_DIR = resolve(__dirname, '..', '..', '..', '..', 'examples', 'child-app');
-const REFRESH_CMP_PATH = resolve(EXAMPLE_DIR, 'child-apps', 'base', '__temp__', 'cmp.tsx');
+const REFRESH_CMP_PATH = resolve(EXAMPLE_DIR, 'child-apps', 'base', 'innerCmp.tsx');
 
-const REFRESH_CMP_CONTENT_START = `import React from 'react';
-
-export const Cmp = () => {
+const REFRESH_CMP_CONTENT_START = `export const InnerCmp = () => {
   return <div id="cmp">Cmp test: start</div>;
 };
 `;
 
-const REFRESH_CMP_CONTENT_UPDATE = `import React from 'react';
-
-export const Cmp = () => {
+const REFRESH_CMP_CONTENT_UPDATE = `export const InnerCmp = () => {
   return <div id="cmp">Cmp test: update</div>;
 };
 `;
 
 describe.each(TEST_CASES)(
   'Cross version test: { rootAppVersion: $rootAppVersion, childAppsVersion: $childAppsVersion }',
-  ({ rootAppVersion, childAppsVersion, reactQuery }) => {
+  ({ rootAppVersion, childAppsVersion, router, reactQuery }) => {
     let childAppBase: PromiseType<ReturnType<typeof start>>;
     let childAppState: PromiseType<ReturnType<typeof start>>;
+    let childAppRouter: PromiseType<ReturnType<typeof start>>;
     let childAppReactQuery: PromiseType<ReturnType<typeof start>>;
     let childAppError: PromiseType<ReturnType<typeof start>>;
-    let rootApp: any;
+    let rootApp: PromiseType<ReturnType<typeof startCli>>;
 
     beforeAll(async () => {
       const { startChildApp } = await import(`./cross-version-tests/${childAppsVersion}/cli`);
 
       await outputFile(REFRESH_CMP_PATH, REFRESH_CMP_CONTENT_START);
 
-      [childAppBase, childAppState, childAppReactQuery, childAppError] = await Promise.all([
-        startChildApp('base'),
-        startChildApp('state'),
-        startChildApp('react-query', {
-          shared: {
-            deps: ['@tramvai/react-query', '@tramvai/module-react-query'],
-          },
-        }),
-        startChildApp('error'),
-      ]);
+      [childAppBase, childAppState, childAppRouter, childAppReactQuery, childAppError] =
+        await Promise.all([
+          startChildApp('base'),
+          startChildApp('state'),
+          startChildApp('router'),
+          startChildApp('react-query', {
+            shared: {
+              deps: ['@tramvai/react-query', '@tramvai/module-react-query'],
+            },
+          }),
+          startChildApp('error'),
+        ]);
     });
 
     const mockerApp = fastify({
@@ -129,6 +139,9 @@ describe.each(TEST_CASES)(
 
           case 'state':
             return reply.from(`${getStaticUrl(childAppState)}/state/${filename}`);
+
+          case 'router':
+            return reply.from(`${getStaticUrl(childAppRouter)}/router/${filename}`);
 
           case 'react-query':
             return reply.from(`${getStaticUrl(childAppReactQuery)}/react-query/${filename}`);
@@ -176,6 +189,7 @@ describe.each(TEST_CASES)(
         mockerApp.close(),
         childAppBase.close(),
         childAppState.close(),
+        childAppRouter.close(),
         childAppReactQuery.close(),
         childAppError.close(),
         rootApp.close(),
@@ -197,15 +211,15 @@ describe.each(TEST_CASES)(
         await request('/base/').expect(200);
 
         expect(await renderApp('/base/')).toMatchInlineSnapshot(`
-      "
-            <div>Content from root</div>
-            <div id="base">
-              Child App:
-              <!-- -->I&#x27;m little child app
-            </div>
-            <div id="cmp">Cmp test: start</div>
           "
-    `);
+                <div>Content from root</div>
+                <div id="base">
+                  Child App:
+                  <!-- -->I&#x27;m little child app
+                </div>
+                <div id="cmp">Cmp test: start</div>
+              "
+        `);
       });
 
       it('react-refresh should work', async () => {
@@ -268,25 +282,25 @@ describe.each(TEST_CASES)(
         await request('/state/').expect(200);
 
         expect(await renderApp('/state/')).toMatchInlineSnapshot(`
-      "
-            <h2>Root</h2>
-            <div>
-              Content from root, state:
-              <!-- -->1
-            </div>
-            <button id="button" type="button">Update Root State</button>
-            <h3>Child</h3>
-            <div id="child-state">
-              Current Value from Store:
-              <!-- -->server
-            </div>
-            <hr>
-            <div id="root-state">
-              Current Value from Root Store:
-              <!-- -->1
-            </div>
-          "
-    `);
+                "
+                      <h2>Root</h2>
+                      <div>
+                        Content from root, state:
+                        <!-- -->1
+                      </div>
+                      <button id="button" type="button">Update Root State</button>
+                      <h3>Child</h3>
+                      <div id="child-state">
+                        Current Value from Store:
+                        <!-- -->server
+                      </div>
+                      <hr>
+                      <div id="root-state">
+                        Current Value from Root Store:
+                        <!-- -->1
+                      </div>
+                    "
+            `);
       });
 
       it('should update internal state based on root', async () => {
@@ -326,6 +340,33 @@ describe.each(TEST_CASES)(
       });
     });
 
+    describe('router', () => {
+      it('should prefetch childApps based on link to another route', async () => {
+        const reactQueryStaticUrl = `http://localhost:${mockerPort}/react-query/`;
+        const reactQueryAssets: string[] = [];
+        const { page } = await getPageWrapper();
+
+        page.on('request', (request) => {
+          if (
+            request.resourceType() === 'script' &&
+            request.url().startsWith(reactQueryStaticUrl)
+          ) {
+            reactQueryAssets.push(request.url());
+          }
+        });
+
+        await page.goto(`${rootApp.serverUrl}/router/`);
+
+        expect(reactQueryAssets).toHaveLength(0);
+        await page.evaluate(() => {
+          window.scrollTo(0, document.body.scrollHeight);
+        });
+
+        await sleep(100);
+
+        expect(reactQueryAssets).toHaveLength(router.prefetchScriptsCount);
+      });
+    });
     describe('react-query', () => {
       it('should work with react-query', async () => {
         const { request } = rootApp;
@@ -333,14 +374,14 @@ describe.each(TEST_CASES)(
         await request('/react-query/').expect(200);
 
         expect(await renderApp('/react-query/')).toMatchInlineSnapshot(`
-      "
-            <div>
-              Content from root:
-              <!-- -->test
-            </div>
-            <div>Hello, Mock!</div>
-          "
-    `);
+                "
+                      <div>
+                        Content from root:
+                        <!-- -->test
+                      </div>
+                      <div>Hello, Mock!</div>
+                    "
+            `);
       });
 
       it('should reuse react-query dependencies from root-app', async () => {
@@ -384,11 +425,11 @@ describe.each(TEST_CASES)(
             ]);
 
             expect(application).toMatchInlineSnapshot(`
-        "
-              <div>Error page still works</div>
-              <Suspense />
-            "
-      `);
+                      "
+                            <div>Error page still works</div>
+                            <Suspense />
+                          "
+                  `);
 
             expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
               `"<div>Error page still works</div><div><div style="text-align: center; margin-bottom: 11px; padding-top: 26px; font-size: 30px; line-height: 36px; font-weight: 200;">An error occurred :(</div><div style="text-align: center; margin-bottom: 17px; color: rgb(146, 153, 162); font-size: 20px; line-height: 24px;">Try <a href="">reloading the page</a></div></div>"`
@@ -405,12 +446,12 @@ describe.each(TEST_CASES)(
             ]);
 
             expect(application).toMatchInlineSnapshot(`
-        "
-              <div>Error page still works</div>
-              <Suspense />
-              <div id="fallback">Fallback component</div>
-            "
-      `);
+                      "
+                            <div>Error page still works</div>
+                            <Suspense />
+                            <div id="fallback">Fallback component</div>
+                          "
+                  `);
 
             expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
               `"<div>Error page still works</div><div id="fallback">Error fallback</div>"`
@@ -457,11 +498,11 @@ describe.each(TEST_CASES)(
             ]);
 
             expect(application).toMatchInlineSnapshot(`
-        "
-              <div>Error page still works</div>
-              <Suspense />
-            "
-      `);
+                      "
+                            <div>Error page still works</div>
+                            <Suspense />
+                          "
+                  `);
 
             expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
               `"<div>Error page still works</div><div id="error">Child App</div>"`
@@ -478,12 +519,12 @@ describe.each(TEST_CASES)(
             ]);
 
             expect(application).toMatchInlineSnapshot(`
-        "
-              <div>Error page still works</div>
-              <Suspense />
-              <div id="fallback">Fallback component</div>
-            "
-      `);
+                      "
+                            <div>Error page still works</div>
+                            <Suspense />
+                            <div id="fallback">Fallback component</div>
+                          "
+                  `);
 
             expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
               `"<div>Error page still works</div><div id="error">Child App</div>"`
@@ -520,11 +561,11 @@ describe.each(TEST_CASES)(
             ]);
 
             expect(application).toMatchInlineSnapshot(`
-        "
-              <div>Error page still works</div>
-              <div id="error">Child App</div>
-            "
-      `);
+                      "
+                            <div>Error page still works</div>
+                            <div id="error">Child App</div>
+                          "
+                  `);
 
             expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
               `"<div>Error page still works</div><div><div style="text-align: center; margin-bottom: 11px; padding-top: 26px; font-size: 30px; line-height: 36px; font-weight: 200;">An error occurred :(</div><div style="text-align: center; margin-bottom: 17px; color: rgb(146, 153, 162); font-size: 20px; line-height: 24px;">Try <a href="">reloading the page</a></div></div>"`
@@ -541,11 +582,11 @@ describe.each(TEST_CASES)(
             ]);
 
             expect(application).toMatchInlineSnapshot(`
-        "
-              <div>Error page still works</div>
-              <div id="error">Child App</div>
-            "
-      `);
+                      "
+                            <div>Error page still works</div>
+                            <div id="error">Child App</div>
+                          "
+                  `);
 
             expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
               `"<div>Error page still works</div><div id="fallback">Error fallback</div>"`
@@ -584,11 +625,11 @@ describe.each(TEST_CASES)(
             ]);
 
             expect(application).toMatchInlineSnapshot(`
-        "
-              <div>Error page still works</div>
-              <Suspense />
-            "
-      `);
+                      "
+                            <div>Error page still works</div>
+                            <Suspense />
+                          "
+                  `);
 
             expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
               `"<div>Error page still works</div><div><div style="text-align: center; margin-bottom: 11px; padding-top: 26px; font-size: 30px; line-height: 36px; font-weight: 200;">An error occurred :(</div><div style="text-align: center; margin-bottom: 17px; color: rgb(146, 153, 162); font-size: 20px; line-height: 24px;">Try <a href="">reloading the page</a></div></div>"`
@@ -605,12 +646,12 @@ describe.each(TEST_CASES)(
             ]);
 
             expect(application).toMatchInlineSnapshot(`
-        "
-              <div>Error page still works</div>
-              <Suspense />
-              <div id="fallback">Fallback component</div>
-            "
-      `);
+                      "
+                            <div>Error page still works</div>
+                            <Suspense />
+                            <div id="fallback">Fallback component</div>
+                          "
+                  `);
 
             expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
               `"<div>Error page still works</div><div id="fallback">Error fallback</div>"`
@@ -627,11 +668,11 @@ describe.each(TEST_CASES)(
             ]);
 
             expect(application).toMatchInlineSnapshot(`
-        "
-              <div>Error page still works</div>
-              <Suspense />
-            "
-      `);
+                      "
+                            <div>Error page still works</div>
+                            <Suspense />
+                          "
+                  `);
 
             expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
               `"<div>Error page still works</div><div id="error">Child App</div>"`
@@ -648,12 +689,12 @@ describe.each(TEST_CASES)(
             ]);
 
             expect(application).toMatchInlineSnapshot(`
-        "
-              <div>Error page still works</div>
-              <Suspense />
-              <div id="fallback">Fallback component</div>
-            "
-      `);
+                      "
+                            <div>Error page still works</div>
+                            <Suspense />
+                            <div id="fallback">Fallback component</div>
+                          "
+                  `);
 
             expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
               `"<div>Error page still works</div><div id="error">Child App</div>"`
@@ -670,11 +711,11 @@ describe.each(TEST_CASES)(
             ]);
 
             expect(application).toMatchInlineSnapshot(`
-        "
-              <div>Error page still works</div>
-              <div id="error">Child App</div>
-            "
-      `);
+                      "
+                            <div>Error page still works</div>
+                            <div id="error">Child App</div>
+                          "
+                  `);
 
             expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
               `"<div>Error page still works</div><div><div style="text-align: center; margin-bottom: 11px; padding-top: 26px; font-size: 30px; line-height: 36px; font-weight: 200;">An error occurred :(</div><div style="text-align: center; margin-bottom: 17px; color: rgb(146, 153, 162); font-size: 20px; line-height: 24px;">Try <a href="">reloading the page</a></div></div>"`
@@ -691,11 +732,11 @@ describe.each(TEST_CASES)(
             ]);
 
             expect(application).toMatchInlineSnapshot(`
-        "
-              <div>Error page still works</div>
-              <div id="error">Child App</div>
-            "
-      `);
+                      "
+                            <div>Error page still works</div>
+                            <div id="error">Child App</div>
+                          "
+                  `);
 
             expect(await page.locator('.application').innerHTML()).toMatchInlineSnapshot(
               `"<div>Error page still works</div><div id="fallback">Error fallback</div>"`

@@ -5,6 +5,7 @@ import type {
   NavigateOptions,
   UpdateCurrentRouteOptions,
   HistoryOptions,
+  Route,
 } from '@tinkoff/router';
 import type { COMPONENT_REGISTRY_TOKEN } from '@tramvai/tokens-common';
 import type { TramvaiComponent } from '@tramvai/react';
@@ -30,16 +31,16 @@ export class PageService implements PageServiceInterface {
     return this.router.getCurrentUrl();
   }
 
-  getConfig(): Record<string, any> {
-    return this.getCurrentRoute()?.config ?? {};
+  getConfig(route: Route = this.getCurrentRoute()): Record<string, any> {
+    return route?.config ?? {};
   }
 
-  getContent(): Record<string, any> {
-    return this.getConfig().content ?? {};
+  getContent(route?: Route): Record<string, any> {
+    return this.getConfig(route).content ?? {};
   }
 
-  getMeta() {
-    return this.getConfig().meta ?? {};
+  getMeta(route?: Route) {
+    return this.getConfig(route).meta ?? {};
   }
 
   navigate(options: NavigateOptions | string): Promise<void> {
@@ -62,27 +63,27 @@ export class PageService implements PageServiceInterface {
     return this.router.go(to, options);
   }
 
-  addComponent(name: string, component: TramvaiComponent): void {
-    const group = this.getComponentsGroupName();
+  addComponent(name: string, component: TramvaiComponent, route?: Route): void {
+    const group = this.getComponentsGroupName(route);
     return this.componentRegistry.add(name, component, group);
   }
 
-  getComponent(name: string): TramvaiComponent | undefined {
-    const group = this.getComponentsGroupName();
+  getComponent(name: string, route?: Route): TramvaiComponent | undefined {
+    const group = this.getComponentsGroupName(route);
     return this.componentRegistry.get(name, group);
   }
 
-  resolveComponentFromConfig(property: PageServiceComponentType) {
+  resolveComponentFromConfig(property: PageServiceComponentType, route?: Route) {
     const configName = `${property}Component`;
     const defaultComponent = `${property}Default`;
 
-    const componentName = this.getConfig()[configName] ?? defaultComponent;
+    const componentName = this.getConfig(route)[configName] ?? defaultComponent;
 
-    return this.getComponent(componentName) || this.getComponent(defaultComponent);
+    return this.getComponent(componentName, route) || this.getComponent(defaultComponent, route);
   }
 
-  private getComponentsGroupName(): string {
-    const { bundle, pageComponent } = this.getConfig();
+  private getComponentsGroupName(route?: Route): string {
+    const { bundle, pageComponent } = this.getConfig(route);
     const group = isFileSystemPageComponent(pageComponent) ? pageComponent : bundle;
 
     return group;

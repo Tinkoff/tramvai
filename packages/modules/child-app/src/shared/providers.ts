@@ -23,8 +23,6 @@ import {
   REGISTER_CLEAR_CACHE_TOKEN,
 } from '@tramvai/tokens-common';
 import { EXTEND_RENDER } from '@tramvai/tokens-render';
-import { PAGE_SERVICE_TOKEN } from '@tramvai/tokens-router';
-import { resolveLazyComponent } from '@tramvai/react';
 import { SingletonDiManager } from './singletonDi';
 import { DiManager } from './di';
 import { CommandLineRunner } from './command';
@@ -32,8 +30,10 @@ import { ChildAppStore } from './store';
 import { extendRender } from './render';
 import { initModuleFederation } from './webpack/moduleFederation';
 import { ChildAppResolutionConfigManager } from './resolutionConfigManager';
+import { pagePreloadProviders } from './pagePreload';
 
 export const sharedProviders: Provider[] = [
+  ...pagePreloadProviders,
   provide({
     provide: COMBINE_REDUCERS,
     multi: true,
@@ -161,30 +161,6 @@ export const sharedProviders: Provider[] = [
       logger: LOGGER_TOKEN,
       rootCommandLineRunner: COMMAND_LINE_RUNNER_TOKEN,
       diManager: CHILD_APP_DI_MANAGER_TOKEN,
-    },
-  }),
-  provide({
-    provide: commandLineListTokens.resolvePageDeps,
-    useFactory: ({ pageService, preloadManager }) => {
-      return async function preloadChildAppByComponent() {
-        const [layoutComponent, nestedLayoutComponent, pageComponent] = await Promise.all([
-          resolveLazyComponent(pageService.resolveComponentFromConfig('layout')),
-          resolveLazyComponent(pageService.resolveComponentFromConfig('nestedLayout')),
-          resolveLazyComponent(pageService.resolveComponentFromConfig('page')),
-        ]);
-
-        await Promise.all([
-          ...(layoutComponent?.childApps?.map((request) => preloadManager.preload(request)) ?? []),
-          ...(nestedLayoutComponent?.childApps?.map((request) => preloadManager.preload(request)) ??
-            []),
-          ...(pageComponent?.childApps?.map((request) => preloadManager.preload(request)) ?? []),
-        ]);
-      };
-    },
-    multi: true,
-    deps: {
-      pageService: PAGE_SERVICE_TOKEN,
-      preloadManager: CHILD_APP_PRELOAD_MANAGER_TOKEN,
     },
   }),
   provide({

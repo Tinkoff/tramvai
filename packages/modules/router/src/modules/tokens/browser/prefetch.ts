@@ -1,19 +1,15 @@
-import { createToken, provide } from '@tramvai/core';
+import { createToken, optional, provide } from '@tramvai/core';
 import type { Route } from '@tinkoff/router';
-import {
-  LOGGER_TOKEN,
-  COMPONENT_REGISTRY_TOKEN,
-  BUNDLE_MANAGER_TOKEN,
-} from '@tramvai/tokens-common';
+import { LOGGER_TOKEN } from '@tramvai/tokens-common';
 import {
   ROUTER_TOKEN,
   ROUTE_RESOLVE_TOKEN,
   LINK_PREFETCH_MANAGER_TOKEN,
+  LINK_PREFETCH_HANDLER_TOKEN,
+  PAGE_REGISTRY_TOKEN,
 } from '@tramvai/tokens-router';
 import { parse } from '@tinkoff/url';
-import { resolveLazyComponent } from '@tramvai/react';
 import { scheduling } from '@tramvai/state';
-import { isFileSystemPageComponent } from '@tramvai/experiments';
 import { routeTransformToken } from '../../tokens';
 
 const PREFETCHED_LINKS_CACHE_TOKEN = createToken<Set<string>>();
@@ -55,11 +51,11 @@ export const prefetchProviders = [
       router,
       routeTransform,
       routeResolve,
-      componentRegistry,
-      bundleManager,
       logger,
       prefetchedLinksCache,
       prefetchedLinksQueue,
+      pageRegistry,
+      prefetchHandlers,
     }) => {
       const log = logger('link-prefetch-manager');
 
@@ -69,6 +65,7 @@ export const prefetchProviders = [
         if (prefetchedLinksCache.has(url)) {
           return;
         }
+
         prefetchedLinksCache.add(url);
 
         log.info({ event: 'prefetch-route-init', url });
@@ -99,47 +96,19 @@ export const prefetchProviders = [
         }
 
         // @todo: очередь запросов!
+        try {
+          await pageRegistry.resolve(route);
 
-        // get name of everything what we need to prefetch,
-        // @loadable will load all scripts and styles for us
-        const {
-          config: { pageComponent, bundle, nestedLayoutComponent },
-        } = route;
+          await Promise.all(prefetchHandlers.map((handler) => handler(route as Route)));
 
-        const promises = [];
-
-        // no need for bundle and page component actions amd reducers initialization,
-        // so copy only part of `modules/guards/common/loadBundle.ts` logic,
-        // all relative assets will be fetched
-        if (bundleManager.has(bundle, pageComponent)) {
-          promises.push(bundleManager.get(bundle, pageComponent));
-        }
-
-        // no need for nestedLayoutComponent actions amd reducers initialization,
-        // so copy only part of `modules/guards/common/loadBundle.ts` logic,
-        // all relative assets will be fetched
-        if (nestedLayoutComponent) {
-          promises.push(
-            resolveLazyComponent(
-              componentRegistry.get(
-                nestedLayoutComponent,
-                isFileSystemPageComponent(pageComponent) ? '__default' : bundle
-              )
-            )
-          );
-        }
-
-        await Promise.all(promises)
-          .then(() => {
-            log.info({ event: 'prefetch-route-success', url });
-          })
-          .catch((error) => {
-            log.warn({
-              event: 'prefetch-fail',
-              url,
-              error,
-            });
+          log.info({ event: 'prefetch-route-success', url });
+        } catch (error) {
+          log.warn({
+            event: 'prefetch-fail',
+            url,
+            error,
           });
+        }
       };
 
       return {
@@ -152,15 +121,12 @@ export const prefetchProviders = [
     deps: {
       router: ROUTER_TOKEN,
       routeTransform: routeTransformToken,
-      routeResolve: {
-        token: ROUTE_RESOLVE_TOKEN,
-        optional: true,
-      },
-      componentRegistry: COMPONENT_REGISTRY_TOKEN,
-      bundleManager: BUNDLE_MANAGER_TOKEN,
+      routeResolve: optional(ROUTE_RESOLVE_TOKEN),
       logger: LOGGER_TOKEN,
       prefetchedLinksCache: PREFETCHED_LINKS_CACHE_TOKEN,
       prefetchedLinksQueue: PREFETCHED_LINKS_QUEUE_TOKEN,
+      pageRegistry: PAGE_REGISTRY_TOKEN,
+      prefetchHandlers: optional(LINK_PREFETCH_HANDLER_TOKEN),
     },
   }),
 ];

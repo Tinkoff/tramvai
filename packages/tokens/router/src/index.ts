@@ -36,6 +36,12 @@ export const PAGE_SERVICE_TOKEN = createToken<PageService>('router pageService')
 
 /**
  * @description
+ * Managers registration for additions related to pages and bundles
+ */
+export const PAGE_REGISTRY_TOKEN = createToken<PageRegistry>('router pageRegistry');
+
+/**
+ * @description
  * Hook to resolve route dynamically
  */
 export const ROUTE_RESOLVE_TOKEN = createToken<RouteResolve>('router routeResolve');
@@ -59,6 +65,11 @@ export const ROUTER_SPA_ACTIONS_RUN_MODE_TOKEN = createToken<'before' | 'after'>
 export const LINK_PREFETCH_MANAGER_TOKEN =
   createToken<LinkPrefetchManager>('link prefetch manager');
 
+export const LINK_PREFETCH_HANDLER_TOKEN = createToken<(route: Route) => Promise<void>>(
+  'link prefetch handler',
+  { multi: true }
+);
+
 export const ROUTER_MODE_TOKEN = createToken<'spa' | 'no-spa'>('router mode');
 
 export type PageServiceComponentType =
@@ -68,12 +79,13 @@ export type PageServiceComponentType =
   | 'header'
   | 'footer'
   | 'errorBoundary';
+
 export interface PageService {
   getCurrentRoute(): NavigationRoute;
   getCurrentUrl(): ReturnType<AbstractRouter['getCurrentUrl']>;
-  getConfig(): Route['config'];
-  getContent(): Record<string, any>;
-  getMeta(): { seo: Record<string, string>; analytics: Record<string, string> };
+  getConfig(route?: Route): Route['config'];
+  getContent(route?: Route): Record<string, any>;
+  getMeta(route?: Route): { seo: Record<string, string>; analytics: Record<string, string> };
 
   navigate(options: string | NavigateOptions): Promise<void>;
   updateCurrentRoute(options: UpdateCurrentRouteOptions): Promise<void>;
@@ -81,10 +93,17 @@ export interface PageService {
   forward(): Promise<void>;
   go(to: number, options?: HistoryOptions): Promise<void>;
 
-  addComponent(name: string, component: TramvaiComponent): void;
-  getComponent(name: string): TramvaiComponent | undefined;
+  addComponent(name: string, component: TramvaiComponent, route?: Route): void;
+  getComponent(name: string, route?: Route): TramvaiComponent | undefined;
 
-  resolveComponentFromConfig(property: PageServiceComponentType): TramvaiComponent | undefined;
+  resolveComponentFromConfig(
+    property: PageServiceComponentType,
+    route?: Route
+  ): TramvaiComponent | undefined;
+}
+
+export interface PageRegistry {
+  resolve(route: Route): Promise<void>;
 }
 
 export type RouteResolve = (navigation: Navigation) => Promise<Route | void>;

@@ -1,7 +1,6 @@
 import { useDi } from '@tramvai/react';
 import { CHILD_APP_BASE_TOKEN } from './tokens';
-// @ts-ignore
-import { Cmp } from './__temp__/cmp';
+import { InnerCmp } from './innerCmp';
 
 export const BaseCmp = ({ fromRoot }: { fromRoot: string }) => {
   const val = useDi(CHILD_APP_BASE_TOKEN);
@@ -9,7 +8,7 @@ export const BaseCmp = ({ fromRoot }: { fromRoot: string }) => {
   return (
     <>
       <div id="base">Child App: {val}</div>
-      <Cmp />
+      <InnerCmp />
     </>
   );
 };

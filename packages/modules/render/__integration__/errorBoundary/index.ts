@@ -19,7 +19,9 @@ createApp({
       {
         name: 'success',
         path: '/',
-        config: {},
+        config: {
+          pageComponent: 'pageComponent',
+        },
       },
       {
         name: 'page-error-default-fallback',

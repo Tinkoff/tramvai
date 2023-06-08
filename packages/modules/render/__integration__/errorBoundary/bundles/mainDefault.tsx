@@ -79,7 +79,7 @@ const PageGuardErrorComponent = () => {
 export default createBundle({
   name: 'mainDefault',
   components: {
-    pageDefault: PageComponent,
+    pageComponent: PageComponent,
     errorPageComponent: ErrorPageComponentSSR,
     errorBoundaryDefault: DefaultErrorBoundary,
     pageErrorBoundaryComponent: PageErrorBoundary,

@@ -5,12 +5,11 @@ import { commandLineListTokens, provide } from '@tramvai/core';
 import type { NavigationHook, NavigationSyncHook, NavigationGuard } from '@tinkoff/router';
 import { setLogger } from '@tinkoff/router';
 
-import { COMBINE_REDUCERS, LOGGER_TOKEN, COMPONENT_REGISTRY_TOKEN } from '@tramvai/tokens-common';
+import { COMBINE_REDUCERS, LOGGER_TOKEN } from '@tramvai/tokens-common';
 import {
   ROUTER_TOKEN,
   ROUTES_TOKEN,
   ROUTER_GUARD_TOKEN,
-  PAGE_SERVICE_TOKEN,
   ROUTE_RESOLVE_TOKEN,
   ROUTER_SPA_ACTIONS_RUN_MODE_TOKEN,
 } from '@tramvai/tokens-router';
@@ -30,11 +29,14 @@ import { RouterStore } from '../stores/RouterStore';
 import { commonGuards } from './guards/common';
 import { commonHooks } from './hooks/common';
 import { commonTokens } from './tokens/common';
-import { PageService } from '../services/page';
 import { providers as fsPagesProviders } from './fileSystemPages';
 
 declare module '@tinkoff/router' {
   export interface RouteConfig {
+    bundle?: string;
+    pageComponent?: string;
+    layoutComponent?: string;
+    nestedLayoutComponent?: string;
     forceRouteResolve?: boolean;
   }
 }
@@ -174,14 +176,6 @@ export const providers: Provider[] = [
     // избежать случаев зависания перехода из-за долгих экшенов
     // рассмотреть возможность замены после доработок экшенов
     useValue: 'after',
-  }),
-  provide({
-    provide: PAGE_SERVICE_TOKEN,
-    useClass: PageService,
-    deps: {
-      router: ROUTER_TOKEN,
-      componentRegistry: COMPONENT_REGISTRY_TOKEN,
-    },
   }),
   provide({
     provide: COMBINE_REDUCERS,

@@ -38,6 +38,7 @@
   "devDependencies": {},
   "peerDependencies": {
     "@tinkoff/dippy": "0.0.0-stub",
+    "@tinkoff/router": "0.0.0-stub",
     "@tinkoff/utils": "^2.1.2",
     "@tramvai/core": "0.0.0-stub",
     "@tramvai/state": "0.0.0-stub",

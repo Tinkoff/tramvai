@@ -42,6 +42,6 @@
     "@tramvai/cli": "0.0.0-stub",
     "fastify": "^4.14.1",
     "@fastify/http-proxy": "^8.4.0",
-    "ts-node": "^10.3.0"
+    "ts-node": "^10.9.1"
   }
 }

@@ -2,11 +2,14 @@
   "private": true,
   "scripts": {
     "start:root": "cross-env MOCKER_ENABLED=true tramvai start root-app --resolveSymlinks=false",
-    "start:children": "ts-node shared/serverResolver.ts"
+    "start:children": "node -r ts-node/register --preserve-symlinks --preserve-symlinks-main shared/serverResolver.ts"
   },
   "devDependencies": {
     "@tramvai/test-integration": "2.0.0",
-    "cross-env": "^7.0.3"
+    "cross-env": "^7.0.3",
+    "fastify": "^4.14.1",
+    "@fastify/http-proxy": "^8.4.0",
+    "ts-node": "^10.9.1"
   },
   "dependencies": {
     "@tinkoff/dippy": "0.7.41",

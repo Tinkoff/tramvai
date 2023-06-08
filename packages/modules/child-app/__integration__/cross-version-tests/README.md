@@ -23,7 +23,7 @@ By creating different apps and by specifying proper cli execution we may run dif
    - `root-app`
    - `shared`
 5. Additionally copy next files to new directory from `examples/child-app`: `tramvai.json`, `env.development.js` with appropriate modifications if required by specific version
-6. Copy the file `./latest/cli.ts` to new directory and make modification to it if required by specific versions
+6. Copy the files `./latest/cli.ts`, `./latest/tsconfig.json` to new directory and make modification to it if required by specific versions
 7. Add new version to test cases inside `child-app.test.ts`
 8. Add installation for new deps in ci
 
