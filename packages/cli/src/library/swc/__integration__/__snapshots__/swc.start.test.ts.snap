@@ -248,7 +248,9 @@ exports[`client: node-env.ts 1`] = `
 __webpack_require__.$Refresh$.runtime = __webpack_require__("../../node_modules/react-refresh/runtime.js");
 
 let internalFunc;
-if (true) internalFunc = ()=>"Are you developer, for sure?";
+if (true) {
+    internalFunc = ()=>"Are you developer, for sure?";
+}
 if (false) {}
 const func = ()=>{
     return internalFunc();
@@ -471,7 +473,10 @@ exports[`client: typeof-window.ts 1`] = `
 __webpack_require__.$Refresh$.runtime = __webpack_require__("../../node_modules/react-refresh/runtime.js");
 
 let internalFunc;
-internalFunc = ()=>"Hello, I'm in browser";
+if (true) {
+    internalFunc = ()=>"Hello, I'm in browser";
+}
+if (false) {}
 const func = ()=>{
     return internalFunc();
 };
@@ -613,7 +618,7 @@ exports[`server: lazy-component.tsx 1`] = `
 /* harmony export */ });
 /* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("webpack/sharing/consume/default/react/jsx-dev-runtime/react/jsx-dev-runtime");
 /* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _swc_helpers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("../../node_modules/@swc/helpers/src/_interop_require_wildcard.mjs");
+/* harmony import */ var _swc_helpers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("../../node_modules/@swc/helpers/esm/_interop_require_wildcard.js");
 /* harmony import */ var _tramvai_react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/library/swc/__integration__/mocks/tramvai-react.ts");
 
 
@@ -629,7 +634,7 @@ const LazyComponent = (0,_tramvai_react__WEBPACK_IMPORTED_MODULE_1__.lazy)({
         const key = this.resolve(props);
         return !!__webpack_require__.m[key];
     },
-    importAsync: ()=>Promise.resolve().then(()=>(0,_swc_helpers__WEBPACK_IMPORTED_MODULE_2__["default"])(__webpack_require__(/* webpackChunkName: "components-lazy-inner" */ "./src/library/swc/__integration__/components/lazy-inner.tsx"))),
+    importAsync: ()=>Promise.resolve().then(()=>(0,_swc_helpers__WEBPACK_IMPORTED_MODULE_2__._interop_require_wildcard)(__webpack_require__(/* webpackChunkName: "components-lazy-inner" */ "./src/library/swc/__integration__/components/lazy-inner.tsx"))),
     requireAsync (props) {
         return this.importAsync(props).then((resolved)=>{
             return resolved;
@@ -668,7 +673,9 @@ exports[`server: node-env.ts 1`] = `
 /* harmony export */   "func": function() { return /* binding */ func; }
 /* harmony export */ });
 let internalFunc;
-if (true) internalFunc = ()=>"Are you developer, for sure?";
+if (true) {
+    internalFunc = ()=>"Are you developer, for sure?";
+}
 if (false) {}
 const func = ()=>{
     return internalFunc();
@@ -756,7 +763,10 @@ exports[`server: typeof-window.ts 1`] = `
 /* harmony export */   "func": function() { return /* binding */ func; }
 /* harmony export */ });
 let internalFunc;
-internalFunc = ()=>"I'm a big server";
+if (false) {}
+if (true) {
+    internalFunc = ()=>"I'm a big server";
+}
 const func = ()=>{
     return internalFunc();
 };

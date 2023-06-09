@@ -44,6 +44,7 @@ Refer to docs of [`@tramvai/cli`](references/cli/experiments.md#transpilation)
 
 - To run all tests for all plugins run `cargo test` from the swc folder
 - To run tests for single plugin either run `cargo test` from plugin directory or run `cargo test <plugin_name>`
+- To update snapshots in tests run tests with `UPDATE` env i.e. `UPDATE=1 cargo test`
 
 ### Formatting
 
@@ -63,5 +64,15 @@ Refer to docs of [`@tramvai/cli`](references/cli/experiments.md#transpilation)
 1. Make changes to the source code
 2. Make sure the tests are passing with `cargo test`
 3. Commit a release version of swc plugins, you can do it either:
-   - by building it locally with command `cargo build-wasi --release`. But this requires specific os and rust versions, and therefore should be done inside docker container, using image `rust:1.65.0`
+   - by building it locally with command `cargo build-wasi --release`. But this requires specific os and rust versions, and therefore should be done inside docker container, using image `rust:1.70.0`
    - pushing your code changes and creating merge request. Merge request will fail because it'll detect changes in built files but it'll provide these built files through gitlab artifacts for job `swc-integration build check`. You can download this artifact and commit files from it to your branch.
+
+#### Upgrade swc version
+
+Rust crate `swc_core` and npm package `@swc/core` must be in sync to be able to work properly.
+
+To update either rust swc dependencies or npm swc dependencies:
+
+1. Pick the required version of core swc dependency from either side
+2. Follow the [docs](https://swc.rs/docs/plugin/selecting-swc-core) to pick up right counterpart version
+3. Upgrade to both versions (they should be strict even by patch version) and rebuild wasm plugins

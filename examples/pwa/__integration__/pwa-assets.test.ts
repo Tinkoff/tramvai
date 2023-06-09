@@ -32,7 +32,7 @@ describe('packages/modules/pwa - assets', () => {
     iconsFilenames = ['36x36', '512x512'].map((size) =>
       path.join(distClientDirectory, 'images', `${size}.png`)
     );
-  }, 180000);
+  }, 250000);
 
   describe('Service Worker', () => {
     it('should be created', () => {

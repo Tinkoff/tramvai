@@ -18,8 +18,6 @@ export class Router extends AbstractRouter {
     this.history = new ServerHistory();
   }
 
-  protected onRedirect: (navigation: Navigation) => Promise<void>;
-
   async dehydrate() {
     logger.debug({
       event: 'dehydrate',

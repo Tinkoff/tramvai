@@ -29,6 +29,30 @@ export const webpackServerConfig = ({
     config.optimization.set('moduleIds', 'named');
     // prevent modules from concatenation in single module to easier debug
     config.optimization.set('concatenateModules', false);
+
+    config.plugin('terser').use(TerserPlugin, [
+      {
+        extractComments: false,
+        terserOptions: {
+          ecma: 5, // на сервере в страницу встраивается код, который может подключаться через import и terser его соптимизирует в es6
+          mangle: false,
+          // сохраняем имена функций, чтобы легче было найти ошибку в трамвае
+          keep_fnames: true,
+          compress: {
+            passes: 2,
+            drop_debugger: !debug,
+            dead_code: true,
+          },
+          output: {
+            comments: true,
+            semicolons: false,
+            preserve_annotations: true,
+            indent_start: 2,
+            beautify: true,
+          },
+        },
+      },
+    ]);
   } else {
     config.plugin('terser').use(TerserPlugin, [
       {
@@ -39,6 +63,7 @@ export const webpackServerConfig = ({
           // сохраняем имена функций, чтобы легче было найти ошибку в трамвае
           keep_fnames: true,
           compress: {
+            passes: 2,
             drop_debugger: !debug,
             dead_code: true,
           },

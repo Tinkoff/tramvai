@@ -1,4 +1,4 @@
-import { interopRequireWildcard as _interopRequireWildcard } from "@swc/helpers";
+import { _interop_require_wildcard as _interopRequireWildcard } from "@swc/helpers";
 import({
     'answer': 42
 });

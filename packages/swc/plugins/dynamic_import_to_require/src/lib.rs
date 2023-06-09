@@ -46,7 +46,7 @@ impl VisitMut for ReplaceDynamicImport {
                         span: DUMMY_SP,
                         local: self.helper_ref.clone(),
                         imported: Some(ModuleExportName::Ident(quote_ident!(
-                            "interopRequireWildcard"
+                            "_interop_require_wildcard"
                         ))),
                         is_type_only: false,
                     })],

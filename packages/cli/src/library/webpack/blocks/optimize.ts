@@ -27,6 +27,10 @@ export default (configManager: ConfigManager<CliConfigEntry>) => (config: Config
             indent_start: 2,
             beautify: true,
           },
+          compress: {
+            passes: 2,
+            drop_debugger: !debug,
+          },
         },
       },
     ]);
