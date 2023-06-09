@@ -20,24 +20,24 @@ export const getSharedModules = (
   } = configManager;
   const isChild = type === 'child-app';
 
-  let defaultDependenicesList = defaultTramvaiDependencies ? DEFAULT_DEPENDENCIES_LIST : [];
+  let defaultDependenciesList = defaultTramvaiDependencies ? DEFAULT_DEPENDENCIES_LIST : [];
 
   if (typeof defaultTramvaiDependencies === 'undefined') {
     if (type === 'child-app') {
-      defaultDependenicesList = DEFAULT_DEPENDENCIES_LIST;
+      defaultDependenciesList = DEFAULT_DEPENDENCIES_LIST;
     } else if (type === 'application') {
       const packageJson = safeRequire(path.resolve(rootDir, 'package.json'), true);
 
       // add default dependencies only if child-app is in use to minimize bundle size for apps
       // without child-apps
       if (packageJson?.dependencies?.['@tramvai/module-child-app']) {
-        defaultDependenicesList = DEFAULT_DEPENDENCIES_LIST;
+        defaultDependenciesList = DEFAULT_DEPENDENCIES_LIST;
       }
     }
   }
 
   return {
-    ...defaultDependenicesList.concat(deps).reduce((acc, dep) => {
+    ...defaultDependenciesList.concat(deps).reduce((acc, dep) => {
       const { name, singleton = false } = typeof dep === 'string' ? { name: dep } : dep;
 
       acc[name] = {

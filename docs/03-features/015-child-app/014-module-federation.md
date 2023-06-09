@@ -86,3 +86,9 @@ In order to choose what dependencies should be shared:
 - use `tramvai analyze` command to explore the output bundle and how different options affects it
 - try different dependencies and see what is loading on the page when child-app is used
 - validate how adding shared dependency affects root-app bundle size through `trmavai analyze`
+
+### How to manage dependencies?
+
+- in child-app prefer to use flexible restrictions for dependencies in package.json i.e. use `^`, `~`, `>=` prefixes instead of strict versions (for tramvai dependencies the restrictions will be converted to flexible anyway by default, it's controlled by options `shared.flexibleTramvaiVersions`). It will increase chances to share dependencies with root-apps and minimize size of loaded code in browsers
+- in child-app prefer to not to upgrade dependencies as long as possible to make possible to load less code in browser by reusing shared dependencies from root-apps. As root-app will eventually have higher versions of dependencies such shared dependencies will be reused by child-apps
+- when you need to upgrade dependencies both in root-app and child-app usually it is better to upgrade first the every root-app then the child apps to minimize the size of loaded code to clients browsers

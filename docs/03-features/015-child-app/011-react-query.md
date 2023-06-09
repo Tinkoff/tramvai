@@ -95,4 +95,4 @@ export default createChildApp({
 
 For example, you will use React Query in Root App and few Child Apps in same page. In this case, total JS amount will be increased significantly.
 
-To avoid this, you can share React Query libraries through [Module Federation](03-features/015-child-app/012-advanced/02-module-federation.md)
+To avoid this, you can share React Query libraries through [Module Federation](03-features/015-child-app/014-module-federation.md)

@@ -20,9 +20,11 @@ import { pagesResolve } from '../../blocks/pagesResolve';
 import { configToEnv } from '../../blocks/configToEnv';
 import { DEFAULT_STATS_OPTIONS, DEFAULT_STATS_FIELDS } from '../../constants/stats';
 import { pwaBlock } from '../../blocks/pwa/client';
+import type { ModuleFederationFixRangeOptions } from '../../plugins/ModuleFederationFixRange';
+import { ModuleFederationFixRange } from '../../plugins/ModuleFederationFixRange';
 
 export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config: Config) => {
-  const { polyfill, fileSystemPages } = configManager;
+  const { polyfill, fileSystemPages, shared } = configManager;
 
   const portal = path.resolve(configManager.rootDir, `packages/${process.env.APP_ID}/portal.js`);
   const polyfillPath = path.resolve(configManager.rootDir, polyfill ?? 'src/polyfill');
@@ -51,6 +53,12 @@ export default (configManager: ConfigManager<ApplicationConfigEntry>) => (config
     .end()
     .when(portalExists, (cfg) => cfg.entry('portal').add(portal))
     .when(polyfillExists, (cfg) => cfg.entry('polyfill').add(polyfillPath));
+
+  config.plugin('module-federation-validate-duplicates').use(ModuleFederationFixRange, [
+    {
+      flexibleTramvaiVersions: shared.flexibleTramvaiVersions,
+    } as ModuleFederationFixRangeOptions,
+  ]);
 
   config
     .plugin('stats-plugin')

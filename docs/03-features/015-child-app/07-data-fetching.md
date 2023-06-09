@@ -63,7 +63,7 @@ export default createChildApp({
 
 :::tip
 
-Perfect alternative to Action and State combination is awesome [React Query](03-features/015-child-app/012-advanced/03-react-query.md) library
+Perfect alternative to Action and State combination is awesome [React Query](03-features/015-child-app/011-react-query.md) library
 
 :::
 

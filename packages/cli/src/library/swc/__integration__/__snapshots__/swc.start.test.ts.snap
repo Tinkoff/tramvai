@@ -3,7 +3,7 @@
 exports[`client: create-token-pure.ts 1`] = `
 "__webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "TEST_TOKEN": function() { return /* binding */ TEST_TOKEN; }
+/* harmony export */   TEST_TOKEN: function() { return /* binding */ TEST_TOKEN; }
 /* harmony export */ });
 /* harmony import */ var _tramvai_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/library/swc/__integration__/mocks/tramvai-core.ts");
 /* provided dependency */ var __react_refresh_utils__ = __webpack_require__("../../node_modules/@pmmmwh/react-refresh-webpack-plugin/lib/runtime/RefreshUtils.js");
@@ -149,7 +149,7 @@ __webpack_require__.$Refresh$.register(_c, "SvgLogo");
 exports[`client: lazy-component.tsx 1`] = `
 "__webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Component": function() { return /* binding */ Component; }
+/* harmony export */   Component: function() { return /* binding */ Component; }
 /* harmony export */ });
 /* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("webpack/sharing/consume/default/react/jsx-dev-runtime/react/jsx-dev-runtime");
 /* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__);
@@ -242,7 +242,7 @@ if (typeof Promise !== 'undefined' && $ReactRefreshCurrentExports$ instanceof Pr
 exports[`client: node-env.ts 1`] = `
 "__webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "func": function() { return /* binding */ func; }
+/* harmony export */   func: function() { return /* binding */ func; }
 /* harmony export */ });
 /* provided dependency */ var __react_refresh_utils__ = __webpack_require__("../../node_modules/@pmmmwh/react-refresh-webpack-plugin/lib/runtime/RefreshUtils.js");
 __webpack_require__.$Refresh$.runtime = __webpack_require__("../../node_modules/react-refresh/runtime.js");
@@ -294,7 +294,7 @@ if (typeof Promise !== 'undefined' && $ReactRefreshCurrentExports$ instanceof Pr
 exports[`client: provider-stack.ts 1`] = `
 "__webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "providers": function() { return /* binding */ providers; }
+/* harmony export */   providers: function() { return /* binding */ providers; }
 /* harmony export */ });
 /* harmony import */ var _tramvai_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/library/swc/__integration__/mocks/tramvai-core.ts");
 /* harmony import */ var _create_token_pure__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/library/swc/__integration__/create-token-pure.ts");
@@ -352,7 +352,7 @@ if (typeof Promise !== 'undefined' && $ReactRefreshCurrentExports$ instanceof Pr
 exports[`client: react-svg.tsx 1`] = `
 "__webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Component": function() { return /* binding */ Component; }
+/* harmony export */   Component: function() { return /* binding */ Component; }
 /* harmony export */ });
 /* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("webpack/sharing/consume/default/react/jsx-dev-runtime/react/jsx-dev-runtime");
 /* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__);
@@ -417,7 +417,7 @@ if (typeof Promise !== 'undefined' && $ReactRefreshCurrentExports$ instanceof Pr
 exports[`client: server.inline.ts 1`] = `
 "__webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "ForBrowser": function() { return /* binding */ ForBrowser; }
+/* harmony export */   ForBrowser: function() { return /* binding */ ForBrowser; }
 /* harmony export */ });
 /* provided dependency */ var __react_refresh_utils__ = __webpack_require__("../../node_modules/@pmmmwh/react-refresh-webpack-plugin/lib/runtime/RefreshUtils.js");
 __webpack_require__.$Refresh$.runtime = __webpack_require__("../../node_modules/react-refresh/runtime.js");
@@ -467,7 +467,7 @@ if (typeof Promise !== 'undefined' && $ReactRefreshCurrentExports$ instanceof Pr
 exports[`client: typeof-window.ts 1`] = `
 "__webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "func": function() { return /* binding */ func; }
+/* harmony export */   func: function() { return /* binding */ func; }
 /* harmony export */ });
 /* provided dependency */ var __react_refresh_utils__ = __webpack_require__("../../node_modules/@pmmmwh/react-refresh-webpack-plugin/lib/runtime/RefreshUtils.js");
 __webpack_require__.$Refresh$.runtime = __webpack_require__("../../node_modules/react-refresh/runtime.js");
@@ -519,7 +519,7 @@ if (typeof Promise !== 'undefined' && $ReactRefreshCurrentExports$ instanceof Pr
 exports[`server: create-token-pure.ts 1`] = `
 "__webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "TEST_TOKEN": function() { return /* binding */ TEST_TOKEN; }
+/* harmony export */   TEST_TOKEN: function() { return /* binding */ TEST_TOKEN; }
 /* harmony export */ });
 /* harmony import */ var _tramvai_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/library/swc/__integration__/mocks/tramvai-core.ts");
 
@@ -614,7 +614,7 @@ const SvgLogo = (props)=>/*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTE
 exports[`server: lazy-component.tsx 1`] = `
 "__webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Component": function() { return /* binding */ Component; }
+/* harmony export */   Component: function() { return /* binding */ Component; }
 /* harmony export */ });
 /* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("webpack/sharing/consume/default/react/jsx-dev-runtime/react/jsx-dev-runtime");
 /* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__);
@@ -670,7 +670,7 @@ const Component = ()=>{
 exports[`server: node-env.ts 1`] = `
 "__webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "func": function() { return /* binding */ func; }
+/* harmony export */   func: function() { return /* binding */ func; }
 /* harmony export */ });
 let internalFunc;
 if (true) {
@@ -688,7 +688,7 @@ const func = ()=>{
 exports[`server: provider-stack.ts 1`] = `
 "__webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "providers": function() { return /* binding */ providers; }
+/* harmony export */   providers: function() { return /* binding */ providers; }
 /* harmony export */ });
 /* harmony import */ var _tramvai_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/library/swc/__integration__/mocks/tramvai-core.ts");
 /* harmony import */ var _create_token_pure__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/library/swc/__integration__/create-token-pure.ts");
@@ -712,7 +712,7 @@ const providers = [
 exports[`server: react-svg.tsx 1`] = `
 "__webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Component": function() { return /* binding */ Component; }
+/* harmony export */   Component: function() { return /* binding */ Component; }
 /* harmony export */ });
 /* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("webpack/sharing/consume/default/react/jsx-dev-runtime/react/jsx-dev-runtime");
 /* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__);
@@ -740,7 +740,7 @@ const Component = ()=>{
 exports[`server: server.inline.ts 1`] = `
 "__webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "ForBrowser": function() { return /* binding */ ForBrowser; }
+/* harmony export */   ForBrowser: function() { return /* binding */ ForBrowser; }
 /* harmony export */ });
 var ForBrowser = /*#__PURE__*/ function() {
     "use strict";
@@ -760,7 +760,7 @@ ForBrowser.prop = "static";
 exports[`server: typeof-window.ts 1`] = `
 "__webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "func": function() { return /* binding */ func; }
+/* harmony export */   func: function() { return /* binding */ func; }
 /* harmony export */ });
 let internalFunc;
 if (false) {}

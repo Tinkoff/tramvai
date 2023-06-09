@@ -4,11 +4,8 @@ import pMap from 'p-map';
 import type { Ora } from 'ora';
 import ora from 'ora';
 import { packageHasVersion } from '../../utils/commands/dependencies/packageHasVersion';
-import { getLibPackageVersion, isDependantLib } from './dependantLibs';
-
-const isUnifiedVersion = (name: string) => {
-  return name.startsWith('@tramvai');
-};
+import { getLibPackageVersion } from './dependantLibs';
+import { isDependantLib, isUnifiedVersion } from '../../utils/tramvaiVersions';
 
 const getVersionFromDep = (dep?: string) => {
   if (dep) {

@@ -103,6 +103,7 @@ it('should populate defaults for config', () => {
           "serverApiDir": "src/api",
           "shared": {
             "deps": [],
+            "flexibleTramvaiVersions": true,
           },
           "sourceMap": false,
           "splitChunks": {
@@ -159,6 +160,7 @@ it('should populate defaults for config', () => {
           "root": "packages/child-app",
           "shared": {
             "deps": [],
+            "flexibleTramvaiVersions": true,
           },
           "sourceMap": false,
           "terser": {
@@ -336,6 +338,7 @@ it('should populate defaults for overridable options', () => {
           "serverApiDir": "src/api",
           "shared": {
             "deps": [],
+            "flexibleTramvaiVersions": true,
           },
           "sourceMap": false,
           "splitChunks": {
@@ -406,6 +409,7 @@ it('should populate defaults for overridable options', () => {
           "root": "packages/child-app",
           "shared": {
             "deps": [],
+            "flexibleTramvaiVersions": true,
           },
           "sourceMap": {
             "development": true,

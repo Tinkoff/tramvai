@@ -287,10 +287,16 @@ export interface CliConfigEntry extends ConfigEntry {
     /**
      * @title Should default dependencies list be added to shared list
      * @description It includes the list of commonly used dependencies in the child-apps
-     * By default, it is enabled in application in case of @tramvai/module-child-app is specified in package.json
+     * By default, it is enabled in application in case of tramvai/module-child-app is specified in package.json
      * and for child-apps
      */
     defaultTramvaiDependencies?: boolean;
+    /**
+     * @title add caret range specifier for tramvai dependencies
+     * @description minimal versions are inferred from package.json
+     * @default true
+     */
+    flexibleTramvaiVersions: boolean;
     /**
      * @title list of the dependencies that will be shared
      * @default []

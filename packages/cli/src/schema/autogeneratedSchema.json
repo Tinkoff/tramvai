@@ -1225,7 +1225,13 @@
           "properties": {
             "defaultTramvaiDependencies": {
               "title": "Should default dependencies list be added to shared list",
-              "description": "It includes the list of commonly used dependencies in the child-apps\nBy default, it is enabled in application in case of",
+              "description": "It includes the list of commonly used dependencies in the child-apps\nBy default, it is enabled in application in case of tramvai/module-child-app is specified in package.json\nand for child-apps",
+              "type": "boolean"
+            },
+            "flexibleTramvaiVersions": {
+              "title": "add caret range specifier for tramvai dependencies",
+              "description": "minimal versions are inferred from package.json",
+              "default": true,
               "type": "boolean"
             },
             "deps": {
@@ -1746,7 +1752,13 @@
           "properties": {
             "defaultTramvaiDependencies": {
               "title": "Should default dependencies list be added to shared list",
-              "description": "It includes the list of commonly used dependencies in the child-apps\nBy default, it is enabled in application in case of",
+              "description": "It includes the list of commonly used dependencies in the child-apps\nBy default, it is enabled in application in case of tramvai/module-child-app is specified in package.json\nand for child-apps",
+              "type": "boolean"
+            },
+            "flexibleTramvaiVersions": {
+              "title": "add caret range specifier for tramvai dependencies",
+              "description": "minimal versions are inferred from package.json",
+              "default": true,
               "type": "boolean"
             },
             "deps": {
@@ -2267,7 +2279,13 @@
           "properties": {
             "defaultTramvaiDependencies": {
               "title": "Should default dependencies list be added to shared list",
-              "description": "It includes the list of commonly used dependencies in the child-apps\nBy default, it is enabled in application in case of",
+              "description": "It includes the list of commonly used dependencies in the child-apps\nBy default, it is enabled in application in case of tramvai/module-child-app is specified in package.json\nand for child-apps",
+              "type": "boolean"
+            },
+            "flexibleTramvaiVersions": {
+              "title": "add caret range specifier for tramvai dependencies",
+              "description": "minimal versions are inferred from package.json",
+              "default": true,
               "type": "boolean"
             },
             "deps": {
