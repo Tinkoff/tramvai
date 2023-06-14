@@ -30,8 +30,11 @@ export const applicationsProviders: readonly Provider[] = [
         appEnv: parameters.env,
         env: 'production',
         buildType: 'client',
-        port: detectPortSync(parameters.port ?? DEFAULT_PORT),
-        staticPort: detectPortSync(parameters.staticPort ?? DEFAULT_STATIC_PORT),
+        port: detectPortSync({ request: parameters.port, fallback: DEFAULT_PORT }),
+        staticPort: detectPortSync({
+          request: parameters.staticPort,
+          fallback: DEFAULT_STATIC_PORT,
+        }),
       }),
     deps: {
       configEntry: CONFIG_ENTRY_TOKEN,

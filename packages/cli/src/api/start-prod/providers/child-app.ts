@@ -17,8 +17,11 @@ export const childAppProviders: readonly Provider[] = [
         ...parameters,
         appEnv: parameters.env,
         env: 'production',
-        staticPort: detectPortSync(parameters.staticPort ?? DEFAULT_STATIC_MODULE_PORT),
         buildType: 'client',
+        staticPort: detectPortSync({
+          request: parameters.staticPort,
+          fallback: DEFAULT_STATIC_MODULE_PORT,
+        }),
       }),
     deps: {
       configEntry: CONFIG_ENTRY_TOKEN,

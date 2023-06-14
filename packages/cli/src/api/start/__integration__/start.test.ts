@@ -10,6 +10,7 @@ import { createServer } from '../utils/createServer';
 import { listenServer } from '../utils/listenServer';
 import { getListeningPort } from '../utils/getListeningPort';
 import { stopServer } from '../utils/stopServer';
+import { DEFAULT_PORT, DEFAULT_STATIC_PORT } from '../../../config/configManager';
 
 const FIXTURES_DIR = resolve(__dirname, '__fixtures__');
 
@@ -261,7 +262,7 @@ describe('@tramvai/cli start command', () => {
       return close();
     });
 
-    it('should start the app on the next available port, if default port is busy', async () => {
+    it('should NOT try to launch app on the next available port if it was provided via config', async () => {
       const testServerStub = createServer();
       const testStaticServerStub = createServer();
 
@@ -270,12 +271,30 @@ describe('@tramvai/cli start command', () => {
       await listenServer(testServerStub, '0.0.0.0', getPort() + 50);
       await listenServer(testStaticServerStub, '0.0.0.0', getPort());
 
+      await expect(
+        start({
+          rootDir: FIXTURES_DIR,
+          target: 'app',
+          resolveSymlinks: false,
+          port: getListeningPort(testServerStub),
+          staticPort: getListeningPort(testStaticServerStub),
+        })
+      ).rejects.toThrow('listen EADDRINUSE: address already in use');
+
+      return Promise.all([stopServer(testServerStub), stopServer(testStaticServerStub)]);
+    });
+
+    it('should try to launch app on the next available port if it was NOT provided via config', async () => {
+      const testServerStub = createServer();
+      const testStaticServerStub = createServer();
+
+      await listenServer(testServerStub, '0.0.0.0', DEFAULT_PORT);
+      await listenServer(testStaticServerStub, '0.0.0.0', DEFAULT_STATIC_PORT);
+
       const { server, staticServer, close } = await start({
         rootDir: FIXTURES_DIR,
         target: 'app',
         resolveSymlinks: false,
-        port: getListeningPort(testServerStub),
-        staticPort: getListeningPort(testStaticServerStub),
       });
 
       const testServer = supertestByPort(getListeningPort(server));

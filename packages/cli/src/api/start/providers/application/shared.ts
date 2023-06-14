@@ -27,8 +27,11 @@ export const sharedProviders: readonly Provider[] = [
         ...parameters,
         appEnv: parameters.env,
         env: 'development',
-        port: detectPortSync(parameters.port ?? DEFAULT_PORT),
-        staticPort: detectPortSync(parameters.staticPort ?? DEFAULT_STATIC_PORT),
+        port: detectPortSync({ request: parameters.port, fallback: DEFAULT_PORT }),
+        staticPort: detectPortSync({
+          request: parameters.staticPort,
+          fallback: DEFAULT_STATIC_PORT,
+        }),
       }),
     deps: {
       configEntry: CONFIG_ENTRY_TOKEN,
