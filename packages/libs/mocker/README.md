@@ -42,7 +42,7 @@ const options = {
   passUnhandledRequests: true,
 };
 
-const mocker = new Mocker({ options, repository, logger: console });
+const mocker = new Mocker({ repositories: [repository], logger: console, ...options });
 
 (async () => {
   // with this call mocker reads mocks from repository and creates according routes

@@ -4,8 +4,7 @@ const contextRe = /[\\/](Client)?Context.[jt]s$/;
 /** @deprecated */
 module.exports = function plugin({ types }) {
   function getAssignStatement(node) {
-    // eslint-disable-line max-params
-    if (!node.name) {
+    if (!node || !node.name) {
       return;
     }
 

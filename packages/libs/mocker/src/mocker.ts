@@ -258,7 +258,7 @@ export class Mocker {
         res.status(status);
       }
       Object.keys(headers).forEach((key) => {
-        res.header[key] = headers[key];
+        res.header(key, headers[key]);
       });
       res.json(payload);
     };
