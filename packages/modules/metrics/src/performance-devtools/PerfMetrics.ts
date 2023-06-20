@@ -9,7 +9,7 @@ export function startMeasurePerformance<T extends string>(
   startLabels: Labels<T> = {} as Labels<T>
 ) {
   if (!supportsUserTiming) {
-    return () => {};
+    return () => 0;
   }
 
   const endMeasure = startMeasure(name, uniqueId());
@@ -21,7 +21,7 @@ export function startMeasurePerformance<T extends string>(
       .map((key) => `${key}="${labels[key]}"`)
       .join(',');
 
-    endMeasure(labelsNames && `${name}{${labelsNames}}`);
+    return endMeasure(labelsNames && `${name}{${labelsNames}}`);
   };
 }
 
@@ -41,8 +41,13 @@ export class PerfHistogram extends Histogram {
     const endMeasure = startMeasurePerformance(this.name, startLabels);
 
     return (endLabels?: Labels<string>) => {
-      endMeasure(endLabels);
+      return endMeasure(endLabels);
     };
+  }
+
+  zero(labels?: Labels<string>) {
+    // need to set metric for labels to 0
+    this.startTimer(labels)();
   }
 }
 
@@ -58,7 +63,7 @@ export class PerfSummary extends Summary {
     const endMeasure = startMeasurePerformance(this.name);
 
     return (endLabels?: Labels<string>) => {
-      endMeasure(endLabels);
+      return endMeasure(endLabels);
     };
   }
 }
@@ -75,7 +80,7 @@ export class PerfGauge extends Gauge {
     const endMeasure = startMeasurePerformance(this.name, startLabels);
 
     return (endLabels?: Labels<string>) => {
-      endMeasure(endLabels);
+      return endMeasure(endLabels);
     };
   }
 }

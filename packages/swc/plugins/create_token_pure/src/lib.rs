@@ -1,5 +1,3 @@
-#![allow(clippy::not_unsafe_ptr_arg_deref)] // TODO: issue comes from swc and its macro plugin_transform
-
 use swc_core::plugin::{plugin_transform, proxies::TransformPluginProgramMetadata};
 use swc_core::{
     common::comments::Comments,

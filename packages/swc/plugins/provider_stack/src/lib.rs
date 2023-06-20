@@ -1,8 +1,8 @@
-#![allow(clippy::not_unsafe_ptr_arg_deref)] // TODO: issue comes from swc and its macro plugin_transform
+use std::mem;
 
 use if_chain::if_chain;
 use swc_common::DUMMY_SP;
-use swc_core::ecma::utils::private_ident;
+use swc_core::ecma::utils::{prepend_stmt, private_ident, StmtLike};
 use swc_core::ecma::{
     ast::*,
     visit::{as_folder, FoldWith, VisitMut, VisitMutWith},
@@ -12,7 +12,6 @@ use swc_core::quote;
 
 #[derive(Default)]
 pub struct TransformVisitor {
-    ref_counter: usize,
     ref_list: Vec<Ident>,
 }
 
@@ -48,9 +47,7 @@ impl VisitMut for TransformVisitor {
             }
 
             if has_provide_key && has_use_key {
-                let uniq_ref = format!("_ref{}", self.ref_counter);
-                let uniq_ref = private_ident!(uniq_ref);
-                self.ref_counter += 1;
+                let uniq_ref = private_ident!("_ref");
                 self.ref_list.push(uniq_ref.clone());
 
                 *expr = quote!(
@@ -67,36 +64,49 @@ impl VisitMut for TransformVisitor {
         }
     }
 
-    fn visit_mut_module(&mut self, module: &mut Module) {
-        module.visit_mut_children_with(self);
+    fn visit_mut_stmts(&mut self, stmts: &mut Vec<Stmt>) {
+        self.visit_mut_stmt_like(stmts);
+    }
 
-        if self.ref_list.is_empty() {
-            return;
+    fn visit_mut_module_items(&mut self, stmts: &mut Vec<ModuleItem>) {
+        self.visit_mut_stmt_like(stmts);
+    }
+}
+
+impl TransformVisitor {
+    fn visit_mut_stmt_like<T>(&mut self, stmts: &mut Vec<T>)
+    where
+        T: Send + Sync + StmtLike + VisitMutWith<Self> + std::fmt::Debug,
+        Vec<T>: VisitMutWith<Self>,
+    {
+        let prev_ref_list = mem::take(&mut self.ref_list);
+        stmts.visit_mut_children_with(self);
+
+        if !self.ref_list.is_empty() {
+            let ref_list = mem::take(&mut self.ref_list);
+
+            let ref_declaration = VarDecl {
+                span: DUMMY_SP,
+                kind: VarDeclKind::Var,
+                declare: false,
+                decls: ref_list
+                    .into_iter()
+                    .map(|ref_ident| VarDeclarator {
+                        span: DUMMY_SP,
+                        name: Pat::Ident(ref_ident.into()),
+                        init: Option::None,
+                        definite: false,
+                    })
+                    .collect(),
+            };
+
+            prepend_stmt(
+                stmts,
+                T::from_stmt(Stmt::Decl(Decl::Var(Box::new(ref_declaration)))),
+            );
         }
 
-        let ref_declaration = VarDecl {
-            span: DUMMY_SP,
-            kind: VarDeclKind::Var,
-            declare: false,
-            decls: self
-                .ref_list
-                .iter()
-                .map(|ref_ident| VarDeclarator {
-                    span: DUMMY_SP,
-                    name: Pat::Ident(BindingIdent {
-                        id: ref_ident.clone(),
-                        type_ann: Option::None,
-                    }),
-                    init: Option::None,
-                    definite: false,
-                })
-                .collect(),
-        };
-
-        module.body.insert(
-            0,
-            ModuleItem::Stmt(Stmt::Decl(Decl::Var(Box::new(ref_declaration)))),
-        );
+        self.ref_list = prev_ref_list;
     }
 }
 
@@ -119,7 +129,7 @@ mod tests {
     use super::*;
 
     #[testing::fixture("tests/__fixtures__/*.ts")]
-    fn fixture_create_token_pure(input: PathBuf) {
+    fn fixture_provider_stack(input: PathBuf) {
         let output = input.with_extension("js");
 
         test_fixture(

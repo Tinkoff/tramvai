@@ -1,0 +1,34 @@
+{
+  "private": true,
+  "scripts": {
+    "start:root": "cross-env MOCKER_ENABLED=true tramvai start root-app --resolveSymlinks=false",
+    "start:children": "node -r ts-node/register --preserve-symlinks --preserve-symlinks-main shared/serverResolver.ts"
+  },
+  "devDependencies": {
+    "@tramvai/test-integration": "2.111.1",
+    "cross-env": "^7.0.3",
+    "fastify": "^4.14.1",
+    "@fastify/http-proxy": "^8.4.0",
+    "ts-node": "^10.9.1"
+  },
+  "dependencies": {
+    "@tinkoff/dippy": "0.8.15",
+    "@tinkoff/utils": "^2.1.3",
+    "@tramvai/child-app-core": "2.111.1",
+    "@tramvai/cli": "2.111.1",
+    "@tramvai/core": "2.111.1",
+    "@tramvai/module-api-clients": "2.111.1",
+    "@tramvai/module-child-app": "2.111.1",
+    "@tramvai/module-common": "2.111.1",
+    "@tramvai/module-http-client": "2.111.1",
+    "@tramvai/module-mocker": "2.111.1",
+    "@tramvai/module-react-query": "2.111.1",
+    "@tramvai/module-render": "2.111.1",
+    "@tramvai/module-router": "2.111.1",
+    "@tramvai/module-server": "2.111.1",
+    "@tramvai/react": "2.111.1",
+    "@tramvai/react-query": "2.111.1",
+    "@tramvai/state": "2.111.1",
+    "@tramvai/tokens-child-app": "2.111.1"
+  }
+}

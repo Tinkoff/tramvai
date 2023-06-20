@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 export class Counter {
   constructor(configurator: unknown) {}
+  get(): any {}
   inc() {}
   reset() {}
   remove() {}
@@ -13,6 +14,7 @@ export class Counter {
 
 export class Gauge {
   constructor(configurator: unknown) {}
+  get(): any {}
   inc() {}
   dec() {}
   set() {}
@@ -20,7 +22,7 @@ export class Gauge {
   reset() {}
   remove() {}
   startTimer(labels: unknown) {
-    return (endLabels: unknown) => {};
+    return (endLabels: unknown) => 0;
   }
 
   labels() {
@@ -30,7 +32,7 @@ export class Gauge {
       set() {},
       setToCurrentTime() {},
       startTimer() {
-        return (endLabels: unknown) => {};
+        return (endLabels: unknown) => 0;
       },
     };
   }
@@ -38,9 +40,10 @@ export class Gauge {
 
 export class Histogram {
   constructor(configurator: unknown) {}
+  get(): any {}
   observe() {}
   startTimer(labels: unknown) {
-    return (endLabels: unknown) => {};
+    return (endLabels: unknown) => 0;
   }
 
   reset() {}
@@ -49,17 +52,20 @@ export class Histogram {
     return {
       observe() {},
       startTimer() {
-        return () => {};
+        return () => 0;
       },
     };
   }
+
+  zero() {}
 }
 
 export class Summary {
   constructor(configurator: unknown) {}
+  get(): any {}
   observe() {}
   startTimer() {
-    return (labels: unknown) => {};
+    return (labels: unknown) => 0;
   }
 
   reset() {}
@@ -68,7 +74,7 @@ export class Summary {
     return {
       observe() {},
       startTimer() {
-        return (endLabels: unknown) => {};
+        return (endLabels: unknown) => 0;
       },
     };
   }

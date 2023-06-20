@@ -7,7 +7,7 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-swc_core = { version = "0.76.44", features = ["ecma_plugin_transform", "testing"] }
-swc_common = { version = "0.31.12" }
-swc_ecma_parser = { version = "0.134.12" }
-if_chain = { version = "1.0.2" }
+swc_core = { workspace = true }
+swc_common = { workspace = true }
+swc_ecma_parser = { workspace = true }
+if_chain = { workspace = true }

@@ -24,7 +24,7 @@
   },
   "peerDependencies": {
     "fastify": ">=3.0.0",
-    "prom-client": "12.x"
+    "prom-client": "14.x"
   },
   "devDependencies": {},
   "sideEffects": false,

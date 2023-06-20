@@ -301,17 +301,17 @@ exports[`client: provider-stack.ts 1`] = `
 /* provided dependency */ var __react_refresh_utils__ = __webpack_require__("../../node_modules/@pmmmwh/react-refresh-webpack-plugin/lib/runtime/RefreshUtils.js");
 __webpack_require__.$Refresh$.runtime = __webpack_require__("../../node_modules/react-refresh/runtime.js");
 
-var _ref0;
+var _ref;
 
 
 const providers = [
-    (0,_tramvai_core__WEBPACK_IMPORTED_MODULE_0__.provide)((_ref0 = {
+    (0,_tramvai_core__WEBPACK_IMPORTED_MODULE_0__.provide)((_ref = {
         provide: _create_token_pure__WEBPACK_IMPORTED_MODULE_1__.TEST_TOKEN,
         useValue: "test"
-    }, Object.defineProperty(_ref0, "__stack", {
+    }, Object.defineProperty(_ref, "__stack", {
         enumerable: false,
         value: new globalThis.Error().stack
-    }), _ref0))
+    }), _ref))
 ];
 
 
@@ -692,17 +692,17 @@ exports[`server: provider-stack.ts 1`] = `
 /* harmony export */ });
 /* harmony import */ var _tramvai_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/library/swc/__integration__/mocks/tramvai-core.ts");
 /* harmony import */ var _create_token_pure__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/library/swc/__integration__/create-token-pure.ts");
-var _ref0;
+var _ref;
 
 
 const providers = [
-    (0,_tramvai_core__WEBPACK_IMPORTED_MODULE_0__.provide)((_ref0 = {
+    (0,_tramvai_core__WEBPACK_IMPORTED_MODULE_0__.provide)((_ref = {
         provide: _create_token_pure__WEBPACK_IMPORTED_MODULE_1__.TEST_TOKEN,
         useValue: "test"
-    }, Object.defineProperty(_ref0, "__stack", {
+    }, Object.defineProperty(_ref, "__stack", {
         enumerable: false,
         value: new globalThis.Error().stack
-    }), _ref0))
+    }), _ref))
 ];
 
 

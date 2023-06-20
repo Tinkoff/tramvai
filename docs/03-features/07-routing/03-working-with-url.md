@@ -22,6 +22,8 @@ const routes = [
       nestedLayoutComponent: 'page-layout',
       // global layout component name
       layoutComponent: 'layout',
+      // page error boundary component name
+      errorBoundaryComponent: 'error-boundary',
     },
   },
 ];

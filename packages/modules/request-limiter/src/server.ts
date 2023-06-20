@@ -20,30 +20,16 @@ export * from './tokens';
         {
           key: 'REQUEST_LIMITER_MELD',
           optional: true,
-          value: String(DEFAULT_OPTIONS.maxEventLoopDelay),
         },
         {
           key: 'REQUEST_LIMITER_QUEUE',
           optional: true,
-          value: String(DEFAULT_OPTIONS.queue),
         },
         {
           key: 'REQUEST_LIMITER_LIMIT',
           optional: true,
-          value: String(DEFAULT_OPTIONS.limit),
         },
       ],
-    }),
-    provide({
-      provide: REQUESTS_LIMITER_OPTIONS_TOKEN,
-      useFactory: ({ envManager }) => ({
-        maxEventLoopDelay: Number(envManager.get('REQUEST_LIMITER_MELD')),
-        queue: Number(envManager.get('REQUEST_LIMITER_QUEUE')),
-        limit: Number(envManager.get('REQUEST_LIMITER_LIMIT')),
-      }),
-      deps: {
-        envManager: ENV_MANAGER_TOKEN,
-      },
     }),
 
     provide({

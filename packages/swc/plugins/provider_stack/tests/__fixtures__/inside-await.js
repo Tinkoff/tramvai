@@ -1,13 +1,13 @@
-var _ref0, _ref1;
 export const func = async ()=>{
+    var _ref, _ref1;
     await Promise.resolve([
-        (_ref0 = {
+        (_ref = {
             provide: 'a',
             useValue: 'a'
-        }, Object.defineProperty(_ref0, '__stack', {
+        }, Object.defineProperty(_ref, '__stack', {
             enumerable: false,
             value: new globalThis.Error().stack
-        }), _ref0),
+        }), _ref),
         (_ref1 = {
             provide: 'b',
             useValue: 'b'

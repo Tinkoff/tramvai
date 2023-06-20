@@ -1,6 +1,3 @@
-[workspace]
-members = ["plugins/*"]
-
 [profile.release]
 # This removes more dead code
 codegen-units = 1
@@ -12,3 +9,23 @@ opt-level = "s"
 
 # Strip debug symbols
 strip = "symbols"
+
+[workspace]
+members = ["plugins/*"]
+
+[workspace.dependencies]
+swc_common = { version = "0.31.12" }
+swc_ecma_parser = { version = "0.134.12" }
+if_chain = { version = "1.0.2" }
+
+[workspace.dependencies.swc_core]
+version = "0.76.44"
+features = [
+  "ecma_plugin_transform",
+  "ecma_utils",
+  "ecma_visit",
+  "ecma_ast",
+  "common",
+  "ecma_quote",
+  "testing"
+]

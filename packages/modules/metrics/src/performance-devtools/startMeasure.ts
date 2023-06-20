@@ -4,11 +4,15 @@ function startMeasure(markName: string, uniqueMarkId: number) {
   performance.mark(uniqueMarkName);
 
   function endMeasure(measureName?: string) {
+    let duration = 0;
+
     try {
-      performance.measure(measureName || markName, uniqueMarkName);
+      duration = performance.measure(measureName || markName, uniqueMarkName).duration;
     } catch (e) {}
 
     performance.clearMarks(uniqueMarkName);
+
+    return duration;
   }
 
   return endMeasure;

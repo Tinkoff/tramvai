@@ -39,7 +39,7 @@ All client navigations with SPA router have a lifecycle, similar to server-side 
 
 Router will run `commandLineRunner` stages `resolve_user_deps`, `resolve_page_deps` and `spa_transition` sequentially at `beforeNavigate` hook, and stage `after_spa_transition` on `afterNavigate` hook.
 
-And as you can see, actions behaviour depends on `SPA actions mode`. This mode allows you to control when to execute actions - before target page rendering or after. More information about SPA Mode in [Documentation how to change SPA actions mode](03-features/07-routing/08-how-to.md#setting-when-actions-should-be-performed-during-spa-transitions)
+And as you can see, actions behaviour depends on `SPA actions mode`. This mode allows you to control when to execute actions - before target page rendering or after. More information about SPA Mode in [Documentation how to change SPA actions mode](03-features/07-routing/09-how-to.md#setting-when-actions-should-be-performed-during-spa-transitions)
 
 :::
 

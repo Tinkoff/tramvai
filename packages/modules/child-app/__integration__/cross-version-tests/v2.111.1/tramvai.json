@@ -1,0 +1,56 @@
+{
+  "$schema": "./node_modules/@tramvai/cli/schema.json",
+  "projects": {
+    "root-app": {
+      "name": "root-app",
+      "root": "root-app",
+      "type": "application",
+      "hotRefresh": {
+        "enabled": true
+      }
+    },
+    "base": {
+      "name": "base",
+      "root": "child-apps/base",
+      "type": "child-app",
+      "hotRefresh": {
+        "enabled": true
+      }
+    },
+    "client-hints": {
+      "name": "client-hints",
+      "root": "child-apps/client-hints",
+      "type": "child-app"
+    },
+    "commandline": {
+      "name": "commandline",
+      "root": "child-apps/commandline",
+      "type": "child-app"
+    },
+    "error": {
+      "name": "error",
+      "root": "child-apps/error",
+      "type": "child-app"
+    },
+    "header": {
+      "name": "header",
+      "root": "child-apps/header",
+      "type": "child-app"
+    },
+    "react-query": {
+      "name": "react-query",
+      "root": "child-apps/react-query",
+      "type": "child-app"
+    },
+    "router": {
+      "name": "router",
+      "root": "child-apps/router",
+      "type": "child-app"
+    },
+    "state": {
+      "name": "state",
+      "root": "child-apps/state",
+      "type": "child-app"
+    }
+  }
+}

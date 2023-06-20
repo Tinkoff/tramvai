@@ -12,7 +12,10 @@ import type { startCli } from '@tramvai/test-integration';
 
 jest.setTimeout(3 * 60 * 1000);
 
-type TestVersion = 'latest' | 'v2.0.0';
+type TestVersion =
+  | 'latest' // latest dev version from the current tramvai repo state
+  | 'v2.0.0' // for checking compatibility with the most outdated version
+  | 'v2.111.1'; // version that introduced more flexible tramvai versions for module federation sharing
 type TestCase = {
   rootAppVersion: TestVersion;
   childAppsVersion: TestVersion;
@@ -28,7 +31,7 @@ const TEST_CASES: TestCase[] = [
       prefetchScriptsCount: 2, // main file and entry point
     },
     reactQuery: {
-      scriptsCount: 2, // only runtime and main entry chunk should be loaded
+      scriptsCount: 2, // only runtime and main entry chunk should be loaded, while others should be shared
     },
   },
   ...(process.env.CHILD_APP_TEST_CROSS_VERSION
@@ -51,6 +54,17 @@ const TEST_CASES: TestCase[] = [
           },
           reactQuery: {
             scriptsCount: 1, // old child-app are built in single file
+          },
+        },
+        {
+          rootAppVersion: 'latest',
+          childAppsVersion: 'v2.111.1',
+          router: {
+            prefetchScriptsCount: 2, // versions that has support for prefetch in routing
+          },
+          reactQuery: {
+            // NOTE: it requires to have semver versions in package.jsons in repo not stub versions
+            scriptsCount: 2, // only runtime and main entry chunk should be loaded, while others should be shared
           },
         },
       ] as TestCase[])

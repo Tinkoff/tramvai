@@ -25,17 +25,17 @@ static WEBPACK_MATCH_PADDED_HYPHENS_REPLACE_REGEX: Lazy<regex::Regex> =
 static MATCH_LEFT_HYPHENS_REPLACE_REGEX: Lazy<regex::Regex> =
     Lazy::new(|| regex::Regex::new(r"^-").unwrap());
 
-fn combine_expression(node: &Tpl) -> Box<Expr> {
+fn combine_expression(node: &Tpl) -> Expr {
     if node.exprs.len() == 1 {
-        return node.exprs[0].clone();
+        return node.exprs[0].as_ref().clone();
     }
 
     node.exprs
         .iter()
         .skip(1)
         .cloned()
-        .fold(node.exprs[0].clone(), |r, p| {
-            Box::new(r.make_bin(op!(bin, "+"), *p))
+        .fold(node.exprs[0].as_ref().clone(), |r, p| {
+            r.make_bin(op!(bin, "+"), *p)
         })
 }
 
@@ -47,7 +47,7 @@ fn is_aggressive_import(import: &CallExpr) -> bool {
     }
 }
 
-fn sanitize_chunk_name_template_literal(node: Box<Expr>) -> Expr {
+fn sanitize_chunk_name_template_literal(node: Expr) -> Expr {
     Expr::Call(CallExpr {
         span: DUMMY_SP,
         callee: node.make_member(quote_ident!("replace")).as_callee(),
@@ -251,9 +251,11 @@ impl<'a, C: Comments> CommentParser<'a, C> {
             })
             .unwrap_or_default();
 
-        if !aggressive_import && values.is_some() {
-            self.add_or_replace_chunk_name_comment(import, values.unwrap());
-            return webpack_chunk_name.unwrap().into();
+        if !aggressive_import {
+            if let Some(values) = values {
+                self.add_or_replace_chunk_name_comment(import, values);
+                return webpack_chunk_name.unwrap().into();
+            }
         }
 
         let mut chunk_name_node = self
@@ -261,7 +263,7 @@ impl<'a, C: Comments> CommentParser<'a, C> {
 
         if chunk_name_node.is_tpl() {
             webpack_chunk_name = Some(chunk_name_from_template_literal(&chunk_name_node));
-            chunk_name_node = sanitize_chunk_name_template_literal(Box::new(chunk_name_node));
+            chunk_name_node = sanitize_chunk_name_template_literal(chunk_name_node);
         } else if let Expr::Lit(Lit::Str(s)) = &chunk_name_node {
             webpack_chunk_name = Some(s.value.to_string());
         }

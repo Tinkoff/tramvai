@@ -18,7 +18,7 @@
     "watch": "tsc -w"
   },
   "dependencies": {
-    "prom-client": "^12.0.0"
+    "prom-client": "^14.2.0"
   },
   "peerDependencies": {
     "@tinkoff/dippy": "0.0.0-stub",

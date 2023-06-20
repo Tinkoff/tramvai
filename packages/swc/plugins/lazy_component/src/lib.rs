@@ -1,6 +1,3 @@
-#![allow(clippy::boxed_local)]
-#![allow(clippy::not_unsafe_ptr_arg_deref)]
-
 mod properties;
 mod util;
 mod webpack;

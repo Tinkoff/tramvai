@@ -1,13 +1,13 @@
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
-var _ref0;
+var _ref;
 import { Provider } from '@tramvai/core';
 export const providers: Provider[] = [
-    (_ref0 = {
+    (_ref = {
         provide: 'a',
         useFactory: ()=>{}
-    }, Object.defineProperty(_ref0, '__stack', {
+    }, Object.defineProperty(_ref, '__stack', {
         enumerable: false,
         value: new globalThis.Error().stack
-    }), _ref0)
+    }), _ref)
 ];

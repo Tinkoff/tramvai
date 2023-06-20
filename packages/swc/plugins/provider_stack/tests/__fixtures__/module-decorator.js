@@ -1,21 +1,21 @@
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
-var _ref0, _ref1, _ref2;
+var _ref, _ref1, _ref2;
 import { Module, Scope } from '@tramvai/core';
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 @Module({
     providers: [
-        (_ref0 = {
+        (_ref = {
             provide: 'provide',
             // eslint-disable-next-line @typescript-eslint/no-extraneous-class
             useClass: class {
             },
             multi: true,
             deps: {}
-        }, Object.defineProperty(_ref0, '__stack', {
+        }, Object.defineProperty(_ref, '__stack', {
             enumerable: false,
             value: new globalThis.Error().stack
-        }), _ref0),
+        }), _ref),
         (_ref1 = {
             provide: 'test',
             useFactory: ()=>{},
