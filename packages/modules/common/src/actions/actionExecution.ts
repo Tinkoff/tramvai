@@ -22,7 +22,6 @@ import { actionType } from './constants';
 import { actionTramvaiReducer } from './actionTramvaiReducer';
 
 const EMPTY_DEPS = {};
-const DEFAULT_PAYLOAD = {};
 
 export const getParameters = (action: Action): ActionParameters<any, any> =>
   action[ACTION_PARAMETERS];
@@ -89,7 +88,7 @@ export class ActionExecution implements Interface {
     ...params: any[]
   ): Promise<any> {
     let parameters: AnyActionParameters;
-    const payload = params[0] ?? DEFAULT_PAYLOAD;
+    const payload = params[0];
     // TODO: replace type with pure context usage
     const type =
       executionContext?.values.pageActions === true ? actionType.global : actionType.local;

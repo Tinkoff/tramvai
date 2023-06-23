@@ -13,6 +13,8 @@ import { isSilentError } from '@tinkoff/errors';
 import { actionServerStateEvent } from './actionTramvaiReducer';
 import type { ActionExecution } from './actionExecution';
 
+const DEFAULT_PAYLOAD = {};
+
 declare module '@tramvai/tokens-common' {
   interface ExecutionContextValues {
     pageActions?: boolean;
@@ -78,7 +80,8 @@ export class ActionPageRunner implements ActionPageRunnerInterface {
               .then(() =>
                 this.deps.actionExecution.runInContext(
                   executionContext,
-                  action as TramvaiAction<any[], any, any>
+                  action as TramvaiAction<any[], any, any>,
+                  DEFAULT_PAYLOAD
                 )
               )
               .catch((error) => {

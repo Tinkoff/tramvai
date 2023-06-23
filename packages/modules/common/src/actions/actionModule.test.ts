@@ -73,7 +73,7 @@ describe('action module integration tests', () => {
 
       expect(result).toEqual([
         ['action1', {}],
-        ['action2', undefined],
+        ['action2', {}],
       ]);
 
       //
@@ -181,7 +181,7 @@ describe('action module integration tests', () => {
 
       expect(result).toEqual([
         ['action1', {}],
-        ['action2', undefined],
+        ['action2', {}],
       ]);
 
       //

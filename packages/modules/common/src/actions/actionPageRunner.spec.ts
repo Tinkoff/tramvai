@@ -59,7 +59,7 @@ describe('execution', () => {
 
     expect(result).toEqual([
       ['action1', {}],
-      ['action2', undefined],
+      ['action2', {}],
       ['action1', 1],
       ['action1', 2],
     ]);

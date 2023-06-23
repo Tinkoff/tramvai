@@ -9,6 +9,8 @@ import type {
 } from '@tramvai/tokens-common';
 import type { ActionExecution } from './actionExecution';
 
+const DEFAULT_PAYLOAD = {};
+
 export class ActionPageRunner {
   log: ReturnType<typeof LOGGER_TOKEN>;
 
@@ -33,7 +35,9 @@ export class ActionPageRunner {
       async (executionContext) => {
         const actionMapper = (action: Action | TramvaiAction<any[], any, any>) => {
           return Promise.resolve()
-            .then(() => this.deps.actionExecution.runInContext(executionContext, action))
+            .then(() =>
+              this.deps.actionExecution.runInContext(executionContext, action, DEFAULT_PAYLOAD)
+            )
             .catch((error) => {
               if (!isSilentError(error)) {
                 const parameters = isTramvaiAction(action) ? action : action[ACTION_PARAMETERS];
