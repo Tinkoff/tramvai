@@ -113,9 +113,10 @@ ${criticalDuplicates
   .join('\n')}`
         );
 
-        throw new Error(
-          'ModuleFederation: Different major versions have resolved to the same path for shared modules, please review errors above'
-        );
+        // @todo Not ending build, just freezing it. Also is not obvious what to do
+        // throw new Error(
+        //   'ModuleFederation: Different major versions have resolved to the same path for shared modules, please review errors above'
+        // );
       }
     });
   }
