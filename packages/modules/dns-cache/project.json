@@ -1,0 +1,14 @@
+{
+  "name": "@tramvai/module-dns-cache",
+  "sourceRoot": "packages/modules/dns-cache/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/modules/dns-cache/package.json",
+        "packages/modules/dns-cache/lib"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

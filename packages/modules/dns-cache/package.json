@@ -1,0 +1,35 @@
+{
+  "name": "@tramvai/module-dns-cache",
+  "version": "0.0.0-stub",
+  "description": "DNS lookup cache",
+  "browser": "lib/browser.js",
+  "main": "lib/server.js",
+  "module": "lib/server.es.js",
+  "typings": "lib/server.d.ts",
+  "files": [
+    "lib"
+  ],
+  "sideEffects": false,
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Tinkoff/tramvai.git"
+  },
+  "scripts": {
+    "build": "tramvai-build --forPublish --preserveModules",
+    "watch": "tsc -w"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "@tinkoff/utils": "^2.1.2",
+    "@tramvai/core": "0.0.0-stub",
+    "@tramvai/tokens-common": "0.0.0-stub",
+    "cacheable-lookup": "^7.0.0"
+  },
+  "devDependencies": {},
+  "peerDependencies": {
+    "tslib": "^2.4.0"
+  }
+}

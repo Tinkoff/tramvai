@@ -6,10 +6,16 @@ import type { LoadModuleOptions } from './types.h';
 const normalizeUrl = (url: string) => url?.replace(/^https?:/, '');
 
 const findLoadingScript = (url: string) =>
-  find((script) => !!script.src && normalizeUrl(script.src) === url, document.scripts);
+  find(
+    (script) => !!script.src && (script.src === url || normalizeUrl(script.src) === url),
+    document.scripts
+  );
 
 const findLoadingStyle = (url: string) =>
-  find((style) => !!style.href && normalizeUrl(style.href) === url, document.styleSheets);
+  find(
+    (style) => !!style.href && (style.href === url || normalizeUrl(style.href) === url),
+    document.styleSheets
+  );
 
 // если найден тег link с url в атрибуте data-href,
 // это означает что стили были загружены inline, и не нужно грузить файл стилей повторно

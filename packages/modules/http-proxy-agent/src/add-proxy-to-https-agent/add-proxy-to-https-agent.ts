@@ -67,9 +67,9 @@ export const addProxyToHttpsAgent = ({
   });
 
   // @ts-expect-error
-  const originalCreateConnection = https.Agent.prototype.createConnection;
+  const originalCreateConnection = https.globalAgent.createConnection;
   // @ts-expect-error
-  https.Agent.prototype.createConnection = createConnection;
+  https.globalAgent.createConnection = createConnection;
 
   function createConnection(options: ConnectOptions, cb) {
     const { hostname, href, method, headers } = options;
