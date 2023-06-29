@@ -25,7 +25,7 @@ Refer to the [FAQ](#faq-about-shared-dependencies) about the details. In summary
 
 The issue happens when `@tinkoff/dippy` library is shared due to fact that root-app and child-apps will have separate instances of the same tokens packages with the same naming.
 
-For now, just ignore that kind of warnings during development. In producation these warnings won't be shown
+For now, just ignore that kind of warnings during development. In production these warnings won't be shown
 
 ### Possible problems with shared dependency
 
