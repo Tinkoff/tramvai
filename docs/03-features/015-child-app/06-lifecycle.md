@@ -9,16 +9,14 @@ Child Apps have their own `CommandLineRunner` flow, which is very similar to the
 
 Root Application controls when Child Apps command lines will be executed, it will be done in own command line stages, and Root App will try to execute all used on current page Child Apps command lines in parallel.
 
-Both for server and client, the flow mostly the same, and can be visualized as follows:
-
-![command-line-runner](/img/child-app/command-line-runner.drawio.svg)
-
 ### Server flow
 
 Used when page is processed on server.
 
 - `customer` command line: [`customerStart` -> `resolveUserDeps` -> `resolvePageDeps`]
 - `clear` command line: [`clear`]
+
+![command-line-runner](/img/child-app/command-line-runner-server.drawio.svg)
 
 Stage when Root App will start this command lines can be different depending on the Child App was preloading or not:
 
@@ -33,25 +31,28 @@ Used when page is hydrated on client.
 - `customer` command line: [`customerStart` -> `resolveUserDeps` -> `resolvePageDeps`]
 - `clear` command line: [`clear`]
 
-Stage when Root App will start this command lines can be different depending on the Child App was preloading or not:
+If specific child-app was preloaded on server then it behaves identical to server flow:
 
-- If Child App was preloaded on server `customer` line list is executed on Root App `resolvePageDeps` line
-- If Child App was not preloaded on server but was preloaded on client then `customer` line list is executed on Root App `clear` line
-- Child-app `clear` line list is executed on Root App `clear` line for every Child App that was preloaded on previous lines
+![command-line-runner](/img/child-app/command-line-runner-client-loaded.drawio.svg)
+
+If specific child-app was not preloaded on server but used on current page then the flow will be:
+
+![command-line-runner](/img/child-app/command-line-runner-client-not-loaded.drawio.svg)
 
 ### SPA transition flow
 
-SPA transition stages is different:
-
-![command-line-runner](/img/child-app/command-line-runner-spa.drawio.svg)
+Used on client for subsequent navigations without page reloading.
 
 - `spa` command line: [`resolveUserDeps` -> `resolvePageDeps` -> `spaTransition`]
 - `afterSpa` command line: [`afterSpaTransition`]
 
-When Root App will start this command lines can be different depending on the Child App was preloading or not:
+If specific child-app was preloaded before and was preloaded for the next page:
 
-- If Child App was not preloaded on any previous pages before but was preloaded on next page then `customer` line list is executed as soon as Child App is loaded
-- If Child App was preloaded on next page then Child App `spa` line list is executed on Root App `spaTransition` line
+![command-line-runner](/img/child-app/command-line-runner-spa-loaded.drawio.svg)
+
+If specific child-app was not preloaded before and was preloaded for the next page:
+
+![command-line-runner](/img/child-app/command-line-runner-spa-not-loaded.drawio.svg)
 
 ## Usage
 

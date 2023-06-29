@@ -1,13 +1,22 @@
-import React from 'react';
 import { createBundle } from '@tramvai/core';
 import { ChildApp } from '@tramvai/module-child-app';
+import { useRoute } from '@tramvai/module-router';
 import { LayoutComponent } from '../components/layout';
 
+const FallbackCmp = () => {
+  return <div>Loading...</div>;
+};
+
 const Cmp = () => {
+  const route = useRoute();
+
   return (
     <>
       <div>Content from root</div>
-      <ChildApp name="router" />
+      <div id="root-route">Current route: {route.actualPath}</div>
+      <div id="router">
+        <ChildApp name="router" fallback={FallbackCmp} />
+      </div>
     </>
   );
 };

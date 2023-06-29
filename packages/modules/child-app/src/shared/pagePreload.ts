@@ -53,8 +53,14 @@ export const pagePreloadProviders: Provider[] = [
   provide({
     provide: commandLineListTokens.resolvePageDeps,
     useFactory: (deps) => {
+      let isSpaNavigation = false;
       return function preloadChildApps() {
-        return pagePreload(deps);
+        const promise = pagePreload(deps);
+
+        if (!isSpaNavigation) {
+          isSpaNavigation = true;
+          return promise;
+        }
       };
     },
     multi: true,

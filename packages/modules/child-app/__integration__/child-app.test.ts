@@ -19,7 +19,7 @@ type TestVersion =
 type TestCase = {
   rootAppVersion: TestVersion;
   childAppsVersion: TestVersion;
-  router: { prefetchScriptsCount: number };
+  router: { prefetchScriptsCount: number; nonBlockingSpa: boolean };
   reactQuery: { scriptsCount: number };
 };
 
@@ -29,6 +29,7 @@ const TEST_CASES: TestCase[] = [
     childAppsVersion: 'latest',
     router: {
       prefetchScriptsCount: 2, // main file and entry point
+      nonBlockingSpa: true, // latest root-app has updated code to support non-blocking loading on spa navigations
     },
     reactQuery: {
       scriptsCount: 2, // only runtime and main entry chunk should be loaded, while others should be shared
@@ -41,6 +42,7 @@ const TEST_CASES: TestCase[] = [
           childAppsVersion: 'latest',
           router: {
             prefetchScriptsCount: 0, // there is not available prefetch manager in root-app so not prefetching at all
+            nonBlockingSpa: false, // old versions will block on spa while child-app is loading
           },
           reactQuery: {
             scriptsCount: 7, // no dependencies are shared so every dep should be loaded for child-app
@@ -51,6 +53,7 @@ const TEST_CASES: TestCase[] = [
           childAppsVersion: 'v2.0.0',
           router: {
             prefetchScriptsCount: 0, // there is no router link with prefetch in old child-app
+            nonBlockingSpa: true, // latest root-app has updated code to support non-blocking loading on spa navigations
           },
           reactQuery: {
             scriptsCount: 1, // old child-app are built in single file
@@ -61,6 +64,7 @@ const TEST_CASES: TestCase[] = [
           childAppsVersion: 'v2.111.1',
           router: {
             prefetchScriptsCount: 2, // versions that has support for prefetch in routing
+            nonBlockingSpa: true, // latest root-app has updated code to support non-blocking loading on spa navigations
           },
           reactQuery: {
             // NOTE: it requires to have semver versions in package.jsons in repo not stub versions
@@ -155,6 +159,8 @@ describe.each(TEST_CASES)(
             return reply.from(`${getStaticUrl(childAppState)}/state/${filename}`);
 
           case 'router':
+            // imitate long loading for child-app files
+            await new Promise((resolve) => setTimeout(resolve, 2000));
             return reply.from(`${getStaticUrl(childAppRouter)}/router/${filename}`);
 
           case 'react-query':
@@ -380,6 +386,27 @@ describe.each(TEST_CASES)(
 
         expect(reactQueryAssets).toHaveLength(router.prefetchScriptsCount);
       });
+
+      if (router.nonBlockingSpa) {
+        it('should not block spa navigations with child-app preload', async () => {
+          const { page, router } = await getPageWrapper('/base');
+
+          const navigatePromise = router.navigate('/router');
+
+          await sleep(100);
+
+          expect(await page.innerText('#root-route')).toBe('Current route: /router/');
+          expect(await page.innerText('#router')).toBe('Loading...');
+
+          await navigatePromise;
+
+          expect(await page.innerText('#root-route')).toBe('Current route: /router/');
+          expect(await page.innerText('#router')).toMatchInlineSnapshot(`
+            "Actual Path: /router/
+            Link to /react-query"
+          `);
+        });
+      }
     });
     describe('react-query', () => {
       it('should work with react-query', async () => {

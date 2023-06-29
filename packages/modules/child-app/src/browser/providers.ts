@@ -61,11 +61,11 @@ export const browserProviders: Provider[] = [
     provide: commandLineListTokens.resolvePageDeps,
     multi: true,
     useFactory: ({ preloader }) => {
-      let hasCalled = false;
+      let isSpaNavigation = false;
       return function childAppRunPreloaded() {
-        if (hasCalled) return;
+        if (isSpaNavigation) return;
 
-        hasCalled = true;
+        isSpaNavigation = true;
         return preloader.runPreloaded();
       };
     },
@@ -96,6 +96,7 @@ export const browserProviders: Provider[] = [
           preloader,
           runner,
           status: 'spa',
+          forcePreload: false,
         });
       };
     },
@@ -113,6 +114,7 @@ export const browserProviders: Provider[] = [
           preloader,
           runner,
           status: 'afterSpa',
+          forcePreload: true,
         });
       };
     },
