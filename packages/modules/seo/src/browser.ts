@@ -28,7 +28,7 @@ declare module '@tramvai/react' {
       multi: true,
       useFactory: () => {
         return function updateMeta(di, type, status) {
-          if (type === 'client' && status === 'afterSpa') {
+          if (type === 'client' && (status === 'afterSpa' || status === 'customer')) {
             // We can't use dependencies below as factory provider dependencies
             // due to dependency cycle when using `@tramvai-tinkoff/module-router`.
             const meta = new Meta({

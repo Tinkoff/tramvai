@@ -62,5 +62,19 @@ describe('seo', () => {
       await sleep(300);
       expect(await page.title()).toBe('WoW, such dynamic!');
     });
+
+    it.only('should allow to update meta in browser page actions on first render', async () => {
+      const { page, router } = await getPageWrapper('/seo/dynamic-client/');
+
+      await sleep(300);
+      expect(await page.title()).toBe('WoW, such dynamic!');
+
+      await router.navigate('../common/');
+      expect(await page.title()).toBe('common seo');
+
+      await router.navigate('../dynamic-client/');
+      await sleep(300);
+      expect(await page.title()).toBe('WoW, such dynamic!');
+    });
   });
 });

@@ -33,6 +33,24 @@ const dynamicAction = declareAction({
   },
 });
 
+const dynamicClientAction = declareAction({
+  name: 'dynamicMeta',
+  async fn() {
+    await new Promise((res) => setTimeout(res, 200));
+
+    this.deps.meta.updateMeta(20, {
+      title: 'WoW, such dynamic!',
+    });
+  },
+  deps: {
+    meta: META_WALK_TOKEN,
+  },
+  conditions: {
+    always: true,
+    onlyBrowser: true,
+  },
+});
+
 const dynamicBundle = createBundle({
   name: 'dynamic',
   components: {
@@ -42,12 +60,22 @@ const dynamicBundle = createBundle({
   actions: [dynamicAction],
 });
 
+const dynamicClientBundle = createBundle({
+  name: 'dynamic-client',
+  components: {
+    page: () => 'dynamic client page',
+    layout: ({ children }) => children,
+  },
+  actions: [dynamicClientAction],
+});
+
 createApp({
   name: 'seo',
   modules: [...modules, SeoModule.forRoot([metaSpecial] as any)],
   bundles: {
     ...bundles,
     dynamic: () => Promise.resolve({ default: dynamicBundle }),
+    'dynamic-client': () => Promise.resolve({ default: dynamicClientBundle }),
   },
   providers: [
     {
@@ -149,6 +177,15 @@ createApp({
           path: '/seo/dynamic/',
           config: {
             bundle: 'dynamic',
+            pageComponent: 'page',
+            layoutComponent: 'layout',
+          },
+        },
+        {
+          name: 'seo-dynamic-client',
+          path: '/seo/dynamic-client/',
+          config: {
+            bundle: 'dynamic-client',
             pageComponent: 'page',
             layoutComponent: 'layout',
           },

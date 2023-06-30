@@ -18,5 +18,8 @@ export const wrapPapi = ({ serverUrl, appName }: Options) => {
     bundleInfo: () => {
       return publicPapi('bundleInfo').expect(200);
     },
+    apiList: () => {
+      return publicPapi('apiList').expect(200);
+    },
   };
 };

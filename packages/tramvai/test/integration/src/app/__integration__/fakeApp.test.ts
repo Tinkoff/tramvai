@@ -1,7 +1,6 @@
 import { initPlaywright, wrapPlaywrightPage } from '@tramvai/test-pw';
 import { runFakeApp } from '../startCliFakeApp';
 import type { StartCliResult } from '../startCli';
-import { wrapPapi } from '../papi';
 
 describe('test/integration/app/runFakeApp', () => {
   jest.setTimeout(10000);

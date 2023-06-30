@@ -16,7 +16,7 @@ npm i --save-dev @tramvai/test-integration
 
 For testing requests to the tramvai app libraries [superagent](https://github.com/visionmedia/superagent) and [node-html-parser](https://github.com/taoqf/node-html-parser) are used under hood.
 
-Call of `app.request` sends requests to the app. All of the features of `superagent` are available.
+Call of `app.request` sends requests to the app. All features of `superagent` are available.
 
 Call of `app.render` resolves to the HTML render that is returned from server while serving the request.
 
@@ -75,5 +75,37 @@ it('should work with mocker', async () => {
   await app.mocker.removeMocks('CONFIG_API', ['GET /test/']);
 
   await app.request('/api/').expect(500);
+});
+```
+
+### Papi methods
+
+All papi methods can be used in tests, for example:
+
+```ts
+import { startCli } from '@tramvai/test-integration';
+
+it('environment list', async () => {
+  const { papi } = await startCli('papi-example');
+
+  const response = await papi.apiList();
+});
+```
+
+Available methods are:
+
+- clearCache;
+- bundleInfo;
+- apiList;
+
+Also, you can use `publicPapi` (passes to `${serverUrl}/${appName}/papi/`) and `privatePapi` (passes to `${serverUrl}/${appName}/private/papi/`) properties to work with your own papi methods:
+
+```ts
+import { startCli } from '@tramvai/test-integration';
+
+it('custom method', async () => {
+  const { papi } = await startCli('papi-example');
+
+  const response = await papi.publicPapi('whatever');
 });
 ```
