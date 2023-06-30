@@ -50,6 +50,7 @@ export const modernLibs = [
   '@tui-react',
   '@tui-react-mobile',
   'tinkoff-push-web',
+  'cacheable-lookup',
 ];
 
 const regexStringFactory = ({ except }: { except?: boolean } = {}) =>
@@ -113,7 +114,11 @@ export const modernLibsFilter = (filePath: string): boolean => {
   }
 
   // https://gist.github.com/developit/80a6926679ac33570f66ca8184a249d2#file-auto-babel-loader-js-L10
-  const packageJsonLooksLikeModern = !!(packageJson.exports || packageJson.modern);
+  const packageJsonLooksLikeModern = !!(
+    packageJson.exports ||
+    packageJson.modern ||
+    packageJson.type === 'module'
+  );
 
   if (packageJsonLooksLikeModern) {
     cache[cacheKey] = true;
