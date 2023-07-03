@@ -44,6 +44,13 @@ createApp({
           layoutComponent: 'second-page/layout',
         },
       },
+      {
+        name: 'missing-page',
+        path: '/missing-page/',
+        config: {
+          pageComponent: '@/pages/components/content',
+        },
+      },
       // задаем статичный роут для приложения, который будет доступен по https://localhost:3000/old/
       // загружаем на нем компонент страницы из бандла
       {

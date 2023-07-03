@@ -30,6 +30,10 @@ describe('fs-pages', () => {
     return app.request('/old/').expect(200);
   });
 
+  it('request to missing-page return status 500', async () => {
+    return app.request('/missing-page/').expect(500);
+  });
+
   it('file-system pages server actions', async () => {
     const { initialState } = await app.render('/');
     const actionsServerState = initialState.stores.actionTramvai.serverState;

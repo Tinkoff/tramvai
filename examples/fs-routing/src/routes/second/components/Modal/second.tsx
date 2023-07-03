@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from './second.css';
 
 export const SecondModal = () => {

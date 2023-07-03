@@ -1,4 +1,4 @@
-export const extensions = ['.js', '.jsx', '.ts', '.tsx'];
+export const extensions = ['.mjs', '.js', '.jsx', '.ts', '.tsx'];
 
 export const DEBUG_ARGV = ['--inspect', '-r', 'source-map-support/register'];
 

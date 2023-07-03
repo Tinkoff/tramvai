@@ -3,26 +3,13 @@ import type { Params as OriginalBuildParams, Result as OriginalBuildResult } fro
 import { COMMAND_PARAMETERS_TOKEN, COMMAND_RUNNER_TOKEN } from '../../di/tokens';
 import type { Params, Result } from './index';
 import type { Samples, RunStats } from './types';
-import { getSamplesStats } from './utils/stats';
 import { clearCacheDirectory } from './utils/clearCache';
+import { getResultStats } from './utils/stats';
 
 export interface BuildParams extends Params {
   command: 'build';
   commandOptions: OriginalBuildParams;
 }
-
-const getResultStats = ({
-  clientSamples,
-  serverSamples,
-}: {
-  clientSamples: number[];
-  serverSamples: number[];
-}): RunStats => {
-  return {
-    client: getSamplesStats(clientSamples),
-    server: getSamplesStats(serverSamples),
-  };
-};
 
 export interface BuildResult extends Result {
   noCache?: RunStats;
@@ -41,6 +28,7 @@ const runBuildCommand = async (
 ): Promise<Samples> => {
   const clientSamples: number[] = Array(times);
   const serverSamples: number[] = Array(times);
+  const maxMemoryRssSamples: number[] = Array(times);
 
   const { commandOptions } = di.get(COMMAND_PARAMETERS_TOKEN) as BuildParams;
 
@@ -56,11 +44,13 @@ const runBuildCommand = async (
 
     clientSamples[i] = stats.clientBuildTime;
     serverSamples[i] = stats.serverBuildTime;
+    maxMemoryRssSamples[i] = stats.maxMemoryRss;
   }
 
   return {
     clientSamples,
     serverSamples,
+    maxMemoryRssSamples,
   };
 };
 

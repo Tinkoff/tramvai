@@ -5,7 +5,7 @@ import browserslist from 'browserslist';
 import envTargets from '@tinkoff/browserslist-config';
 import { sync as resolve } from 'resolve';
 import findCacheDir from 'find-cache-dir';
-import type { Config } from '@swc/core';
+import type { Options as SwcOptions } from '@swc/core';
 import type { TranspilerConfig } from '../webpack/utils/transpiler';
 
 const TRAMVAI_SWC_TARGET_PATH = '@tramvai/swc-integration/target/wasm32-wasi';
@@ -13,7 +13,7 @@ const TRAMVAI_SWC_TARGET_PATH = '@tramvai/swc-integration/target/wasm32-wasi';
 const NOT_SUPPORTED_FIELDS = ['alias', 'generateDataQaTag', 'enableFillActionNamePlugin'];
 let warningWasShown = false;
 
-export const getSwcOptions = (config: TranspilerConfig): Config => {
+export const getSwcOptions = (config: TranspilerConfig): SwcOptions => {
   const {
     env = 'development',
     target,
@@ -109,9 +109,9 @@ Having swc config may conflict with @tramvai/cli configuration`
     module: {
       type: modules || 'es6',
     },
+    isModule: 'unknown',
     jsc: {
-      // TODO: should trim output size, but doesn't work well with some libs
-      // externalHelpers: true,
+      externalHelpers: true,
       parser: {
         syntax: typescript ? 'typescript' : 'ecmascript',
         decorators: true,
@@ -129,8 +129,6 @@ Having swc config may conflict with @tramvai/cli configuration`
           globals: {
             // let the webpack replace NODE_ENV as replacement with swc may mess up with tests
             envs: [],
-            // @ts-ignore
-            // TODO: there is not typings for typeofs, but the field is mentioned in docs
             typeofs: removeTypeofWindow
               ? {
                   window: isServer ? 'undefined' : 'object',

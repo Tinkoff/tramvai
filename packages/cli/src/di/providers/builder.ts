@@ -7,6 +7,7 @@ import {
   ABSTRACT_BUILDER_FACTORY_TOKEN,
   BUILDER_FACTORY_TOKEN,
 } from '../tokens/builder';
+import { COMMAND_PARAMETERS_TOKEN, WITH_BUILD_STATS_TOKEN } from '../tokens';
 
 export const builderProviders: Provider[] = [
   provide({
@@ -61,4 +62,13 @@ next builders are available: "${[...builderMap.keys()]}"`);
       builderFactories: BUILDER_MODULE_TOKEN as any as typeof BUILDER_MODULE_TOKEN[],
     },
   }),
+  {
+    provide: WITH_BUILD_STATS_TOKEN,
+    useFactory: ({ params }) => {
+      return !!params.withBuildStats;
+    },
+    deps: {
+      params: COMMAND_PARAMETERS_TOKEN,
+    },
+  },
 ];

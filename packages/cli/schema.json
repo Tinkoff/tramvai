@@ -117,6 +117,10 @@
                         "type": "string"
                       }
                     ]
+                  },
+                  "componentsPattern": {
+                    "title": "Test Regexp to add only files with specific name to list of FS Components",
+                    "type": "string"
                   }
                 },
                 "additionalProperties": false

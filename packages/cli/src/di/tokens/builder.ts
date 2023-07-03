@@ -15,3 +15,5 @@ export const BUILDER_MODULE_TOKEN = createToken<BuilderModule<any>>('builder mod
 
 export const ABSTRACT_BUILDER_FACTORY_TOKEN =
   createToken<AbstractBuilderFactory>('builder abstractFactory');
+
+export const WITH_BUILD_STATS_TOKEN = createToken<boolean>('builder withBuildStats');

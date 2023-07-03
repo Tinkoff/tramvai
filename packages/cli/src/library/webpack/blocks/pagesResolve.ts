@@ -1,5 +1,6 @@
 import path from 'path';
 import type Config from 'webpack-chain';
+import type { PagesResolveOptions } from '../loaders/pagesResolve';
 import type { ConfigManager } from '../../../config/configManager';
 import type { ApplicationConfigEntry } from '../../../typings/configEntry/application';
 
@@ -20,7 +21,7 @@ export const pagesResolve =
         rootDir: configManager.rootDir,
         root: configManager.root,
         extensions: config.resolve.extensions.values(),
-      })
+      } as PagesResolveOptions)
       .end()
       // babel-loader is required to process this file
       .enforce('pre');

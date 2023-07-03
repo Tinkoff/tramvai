@@ -9,6 +9,6 @@ export function removeRules({
 }) {
   // eslint-disable-next-line no-param-reassign
   baseConfig.module!.rules = baseConfig.module?.rules?.filter(
-    (rule) => typeof rule !== 'string' && !String(rule.test?.toString()).match(extensions)
+    (rule) => typeof rule === 'object' && !String(rule?.test?.toString()).match(extensions)
   );
 }

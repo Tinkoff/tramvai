@@ -1,4 +1,5 @@
 import mdtable from 'mdtable';
+import prettyBytes from 'pretty-bytes';
 import type { Context } from '../../models/context';
 import type { CommandResult } from '../../models/command';
 import type { Result } from '../../api/benchmark';
@@ -7,29 +8,38 @@ import { app } from '../index';
 
 const roundStats = (n: number) => Math.round(100 * n) / 100;
 
-const formatStats = (stats: Result[string]['client']) => {
+const formatTimeStats = (stats: Result[string]['client']) => {
   return `${roundStats(stats.mean)}ms ± ${roundStats(stats.variance)}%`;
 };
 
+const formatMemoryStats = (stats: Result[string]['client']) => {
+  const value = prettyBytes(stats.mean, {
+    maximumFractionDigits: 2,
+  });
+
+  return `${value} ± ${roundStats(stats.variance)}%`;
+};
+
 const formatStatsTable = (stats: Result) => {
-  const header = [] as string[];
-  const alignment = [] as string[];
-  const row = [] as string[];
+  const header = [''] as string[];
+  const alignment = ['C'] as string[];
+  const rows = [['time'], ['mem']] as string[][];
 
   for (const key in stats) {
     header.push(key);
     alignment.push('C');
 
-    const { client, server } = stats[key];
+    const { client, server, maxMemoryRss } = stats[key];
 
-    row.push(`${formatStats(client)} / ${formatStats(server)}`);
+    rows[0].push(`${formatTimeStats(client)} / ${formatTimeStats(server)}`);
+    rows[1].push(formatMemoryStats(maxMemoryRss));
   }
 
   return mdtable(
     {
       header,
       alignment,
-      rows: [row],
+      rows,
     },
     {
       borders: true,

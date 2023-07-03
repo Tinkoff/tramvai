@@ -234,4 +234,20 @@ describe('fs-routing', () => {
 
     await browser.close();
   });
+
+  it('should show wildcard route for non index files', async () => {
+    const { browser } = await initPlaywright(app.serverUrl);
+
+    const page = await browser.newPage();
+    await page.goto(`${app.serverUrl}/second/components/Modal/second`);
+
+    expect(await page.$eval('.application', (node) => (node as HTMLElement).innerText))
+      .toMatchInlineSnapshot(`
+      "Tramvai 🥳
+      Nested Wildcard Route
+      this Footer in fs-routing"
+    `);
+
+    await browser.close();
+  });
 });

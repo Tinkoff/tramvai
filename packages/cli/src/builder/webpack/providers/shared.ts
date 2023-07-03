@@ -1,7 +1,7 @@
 import type { Provider } from '@tinkoff/dippy';
 import { provide } from '@tinkoff/dippy';
 import { EventEmitter } from 'events';
-import { CONFIG_MANAGER_TOKEN } from '../../../di/tokens';
+import { CONFIG_MANAGER_TOKEN, WITH_BUILD_STATS_TOKEN } from '../../../di/tokens';
 import { closeWorkerPoolTranspiler } from '../../../library/webpack/utils/workersPool';
 import {
   CLOSE_HANDLER_TOKEN,
@@ -14,23 +14,34 @@ import {
 } from '../tokens';
 import { calculateBuildTime } from '../utils/calculateBuildTime';
 import { emitWebpackEvents } from '../utils/webpackEvents';
+import { maxMemoryRss } from '../utils/maxMemoryRss';
 
 export const sharedProviders: Provider[] = [
   provide({
     provide: GET_BUILD_STATS_TOKEN,
-    useFactory: ({ clientCompiler, clientModernCompiler, serverCompiler }) => {
+    useFactory: ({ withBuildStats, clientCompiler, clientModernCompiler, serverCompiler }) => {
+      if (!withBuildStats) {
+        return () => {
+          return {};
+        };
+      }
+
       const getClientTime = clientCompiler && calculateBuildTime(clientCompiler);
       const getClientModernTime = clientModernCompiler && calculateBuildTime(clientModernCompiler);
       const getServerTime = serverCompiler && calculateBuildTime(serverCompiler);
-      return (() => {
+
+      const getMaxMemoryRss = maxMemoryRss();
+      return () => {
         return {
           clientBuildTime: getClientTime?.(),
           clientModernBuildTime: getClientModernTime?.(),
           serverBuildTime: getServerTime?.(),
+          maxMemoryRss: getMaxMemoryRss?.(),
         };
-      }) as typeof GET_BUILD_STATS_TOKEN;
+      };
     },
     deps: {
+      withBuildStats: { token: WITH_BUILD_STATS_TOKEN, optional: true },
       clientCompiler: { token: WEBPACK_CLIENT_COMPILER_TOKEN, optional: true },
       clientModernCompiler: { token: WEBPACK_CLIENT_MODERN_COMPILER_TOKEN, optional: true },
       serverCompiler: { token: WEBPACK_SERVER_COMPILER_TOKEN, optional: true },

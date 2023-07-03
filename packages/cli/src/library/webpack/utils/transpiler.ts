@@ -25,29 +25,27 @@ export type TranspilerConfig = {
   rootDir: string;
 };
 
-export const addTranspilerLoader = (
-  configManager: ConfigManager<CliConfigEntry>,
-  rule: Config.Use,
-  transpilerConfig: TranspilerConfig
-) => {
-  const { loader } = configManager.experiments.transpilation;
+export const addTranspilerLoader =
+  (configManager: ConfigManager<CliConfigEntry>, transpilerConfig: TranspilerConfig) =>
+  (rule: Config.Use) => {
+    const { loader } = configManager.experiments.transpilation;
 
-  if (loader === 'swc') {
-    try {
-      resolve('@tramvai/swc-integration/package.json', { basedir: configManager.rootDir });
-    } catch (error) {
-      throw new Error(`You are using swc loader for the transpilation, but required module is not installed.
+    if (loader === 'swc') {
+      try {
+        resolve('@tramvai/swc-integration/package.json', { basedir: configManager.rootDir });
+      } catch (error) {
+        throw new Error(`You are using swc loader for the transpilation, but required module is not installed.
 Please run "npx tramvai add --dev @tramvai/swc-integration" to fix the problem
       `);
+      }
+
+      return rule.loader('swc-loader').options(getSwcOptions(transpilerConfig)).end();
     }
 
-    return rule.loader('swc-loader').options(getSwcOptions(transpilerConfig)).end();
-  }
-
-  if (loader === 'babel') {
-    return rule.loader('babel-loader').options(babelConfig(transpilerConfig)).end();
-  }
-};
+    if (loader === 'babel') {
+      return rule.loader('babel-loader').options(babelConfig(transpilerConfig)).end();
+    }
+  };
 
 export const getTranspilerConfig = (
   configManager: ConfigManager<CliConfigEntry>,

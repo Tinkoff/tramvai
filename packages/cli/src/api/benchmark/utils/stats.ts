@@ -1,4 +1,4 @@
-import type { Stats } from '../types';
+import type { RunStats, Stats } from '../types';
 
 export const getSamplesStats = (samples: number[]): Stats => {
   const n = samples.length;
@@ -25,5 +25,21 @@ export const getSamplesStats = (samples: number[]): Stats => {
     mean,
     std,
     variance,
+  };
+};
+
+export const getResultStats = ({
+  clientSamples,
+  serverSamples,
+  maxMemoryRssSamples,
+}: {
+  clientSamples: number[];
+  serverSamples: number[];
+  maxMemoryRssSamples: number[];
+}): RunStats => {
+  return {
+    client: getSamplesStats(clientSamples),
+    server: getSamplesStats(serverSamples),
+    maxMemoryRss: getSamplesStats(maxMemoryRssSamples),
   };
 };

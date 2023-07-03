@@ -41,6 +41,7 @@ export type GetBuildStats = () => {
   clientBuildTime?: number;
   clientModernBuildTime?: number;
   serverBuildTime?: number;
+  maxMemoryRss?: number;
 };
 
 export type BuildType = 'client' | 'server' | 'clientModern';

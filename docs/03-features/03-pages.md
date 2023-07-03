@@ -56,7 +56,7 @@ const MainPage: PageComponent = () => {
       <h1>Main Page</h1>
       <ModalBox />
     </>
-  )
+  );
 };
 
 MainPage.components = {
@@ -118,27 +118,32 @@ Every page will be wrapped in dynamic import statement with `lazy` from [`@tramv
 Under hood, `tramvai` will create this list of routes:
 
 ```ts
-[{
-  path: '/',
-  config: {
-    pageComponent: '@/routes/index',
+[
+  {
+    path: '/',
+    config: {
+      pageComponent: '@/routes/index',
+    },
   },
-}, {
-  path: '/login/',
-  config: {
-    pageComponent: '@/routes/login/index',
+  {
+    path: '/login/',
+    config: {
+      pageComponent: '@/routes/login/index',
+    },
   },
-}, {
-  path: '/comments/',
-  config: {
-    pageComponent: '@/routes/comments/index',
+  {
+    path: '/comments/',
+    config: {
+      pageComponent: '@/routes/comments/index',
+    },
   },
-}, {
-  path: '/comments/:id/',
-  config: {
-    pageComponent: '@/routes/comments/[id]/index',
+  {
+    path: '/comments/:id/',
+    config: {
+      pageComponent: '@/routes/comments/[id]/index',
+    },
   },
-}];
+];
 ```
 
 :::info
@@ -182,19 +187,22 @@ import { SpaRouterModule } from '@tramvai/modules-router';
 
 createApp({
   modules: [
-    SpaRouterModule.forRoot([{
-      name: 'main',
-      path: '/',
-      config: {
-        pageComponent: '@/pages/index',
+    SpaRouterModule.forRoot([
+      {
+        name: 'main',
+        path: '/',
+        config: {
+          pageComponent: '@/pages/index',
+        },
       },
-    }, {
-      name: 'comments',
-      path: '/comments/',
-      config: {
-        pageComponent: '@/pages/comments',
+      {
+        name: 'comments',
+        path: '/comments/',
+        config: {
+          pageComponent: '@/pages/comments',
+        },
       },
-    }]),
+    ]),
   ],
 });
 ```
@@ -211,17 +219,39 @@ import { SpaRouterModule } from '@tramvai/modules-router';
   providers: [
     provide({
       provide: ROUTES_TOKEN,
-      useValue: [{
-        name: 'comments',
-        path: '/comments/',
-        config: {
-          pageComponent: '@/pages/comments',
+      useValue: [
+        {
+          name: 'comments',
+          path: '/comments/',
+          config: {
+            pageComponent: '@/pages/comments',
+          },
         },
-      }]
+      ],
     }),
   ],
 })
 export class CommentsModule {}
+```
+
+### Colocate non-components files
+
+File-System pages by default will add every file inside `pagesDir` directory including test files, actions, inner components. Although it doesn't bring behaviour issues as these files are just registered as components with different names it can cause higher time builds and higher memory consumption as it requires more handling in build system internally.
+
+To bypass mentioned issues and to make registering of components more explicit you can specify `componentsPattern` option for cli with the regex of the files that should be registered as components. If you provide this setting the files that is not satisfy the regexp will not be registered as File-System Components.
+
+```json title="tramvai.json"
+{
+  "projects": {
+    "awesome-app": {
+      "fileSystemPages": {
+        "enabled": true,
+        "pagesDir": "pages",
+        "componentsPattern": "(Page|Layout)\\.tsx?"
+      }
+    }
+  }
+}
 ```
 
 ## Configuration
@@ -265,13 +295,15 @@ import { SpaRouterModule } from '@tramvai/modules-router';
 
 createApp({
   modules: [
-    SpaRouterModule.forRoot([{
-      name: 'single-comment',
-      path: '/comments/:id/',
-      config: {
-        pageComponent: '@/pages/single-comment',
+    SpaRouterModule.forRoot([
+      {
+        name: 'single-comment',
+        path: '/comments/:id/',
+        config: {
+          pageComponent: '@/pages/single-comment',
+        },
       },
-    }]),
+    ]),
   ],
 });
 ```

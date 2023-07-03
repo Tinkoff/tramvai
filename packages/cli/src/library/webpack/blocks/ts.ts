@@ -7,13 +7,12 @@ import type { CliConfigEntry } from '../../../typings/configEntry/cli';
 export default (configManager: ConfigManager<CliConfigEntry>) => (config: Config) => {
   const transpilerConfig = getTranspilerConfig(configManager, { typescript: true });
 
-  const cfg = config.module
-    .rule('ts:project')
+  config.module
+    .rule('ts')
     .test(/\.ts[x]?$/)
     .exclude.add(/node_modules/)
     .end()
-    .oneOf('default')
-    // TODO разобраться почему на винде все плохо с thread-loader
+    // TODO: разобраться почему на винде все плохо с thread-loader
     .when(process.platform !== 'win32', (cfg) =>
       cfg
         .use('thread')
@@ -21,7 +20,7 @@ export default (configManager: ConfigManager<CliConfigEntry>) => (config: Config
         .options(createWorkerPoolTranspiler(configManager))
         .end()
     )
-    .use('transpiler');
-
-  return addTranspilerLoader(configManager, cfg, transpilerConfig);
+    .oneOf('project')
+    .use('transpiler')
+    .batch(addTranspilerLoader(configManager, transpilerConfig));
 };

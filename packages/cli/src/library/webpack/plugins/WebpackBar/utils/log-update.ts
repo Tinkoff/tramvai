@@ -69,6 +69,7 @@ export default class LogUpdate {
         }
 
         this._onData(data);
+        return stream.write[originalWrite].call(stream, data, ...args);
       };
 
       // Backup original write fn
@@ -93,7 +94,12 @@ export default class LogUpdate {
   }
 
   _onData(data) {
-    this.extraLines += data;
+    const str = String(data);
+    const lines = str.split('\n').length - 1;
+    if (lines > 0) {
+      this.prevLineCount += lines;
+      this.extraLines += data;
+    }
   }
 
   render(lines) {

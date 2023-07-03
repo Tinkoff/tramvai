@@ -14,12 +14,15 @@ export const addSvgrLoader = (
     .rule('svgr')
     .test(/\.svg$/)
     // @todo: `issuer: /\.tsx?$/` нужен или нет?
-    .set('resourceQuery', /react/);
-
-  addTranspilerLoader(configManager, svgrConfig.use('svgr-transpiler'), {
-    ...transpilerConfig,
-    typescript: true,
-  });
+    .set('resourceQuery', /react/)
+    .use('svgr-transpiler')
+    .batch(
+      addTranspilerLoader(configManager, {
+        ...transpilerConfig,
+        typescript: true,
+      })
+    )
+    .end();
 
   svgrConfig.use('svgr').loader('@svgr/webpack').options({ babel: false, svgo: svgoOptions }).end();
 };

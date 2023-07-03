@@ -1,10 +1,8 @@
 import type webpack from 'webpack';
 import type { Compiler, NormalModule } from 'webpack';
-import { sync as resolve } from 'resolve';
-import type packageJson from 'package-json';
-import chalk from 'chalk';
+import { WebpackError } from 'webpack';
 // eslint-disable-next-line no-restricted-imports
-import { parseRange } from 'webpack/lib/util/semver';
+import { parseRange, satisfy } from 'webpack/lib/util/semver';
 import { isDependantLib, isUnifiedVersion } from '../../../utils/tramvaiVersions';
 
 const PLUGIN_NAME = 'ModuleFederationValidateDuplicates';
@@ -22,19 +20,6 @@ interface SharedModule extends NormalModule {
   options?: SharedModuleOptions;
 }
 
-const resolvePackageVersion = (name: string, basedir: string) => {
-  try {
-    const packageJsonPath = resolve(`${name}/package.json`, {
-      basedir,
-    });
-    const packageJson: packageJson.FullMetadataOptions = require(packageJsonPath);
-
-    return packageJson.version;
-  } catch (error: any) {
-    console.warn(`ModuleFederation: could not infer version for package "${name}"`);
-  }
-};
-
 export interface ModuleFederationFixRangeOptions {
   flexibleTramvaiVersions: boolean;
 }
@@ -42,14 +27,14 @@ export interface ModuleFederationFixRangeOptions {
 export class ModuleFederationFixRange implements webpack.WebpackPluginInstance {
   private flexibleTramvaiVersions: boolean;
   // { name: { importResolved: { number }} }
-  private sharedModules: Map<string, Map<string, Set<number>>> = new Map();
+  private sharedModules: Map<string, Map<string, Set<SharedModule>>> = new Map();
 
   constructor({ flexibleTramvaiVersions }: ModuleFederationFixRangeOptions) {
     this.flexibleTramvaiVersions = flexibleTramvaiVersions ?? false;
   }
 
   apply(compiler: Compiler) {
-    compiler.hooks.thisCompilation.tap(PLUGIN_NAME, (_, { normalModuleFactory }) => {
+    compiler.hooks.thisCompilation.tap(PLUGIN_NAME, (compilation, { normalModuleFactory }) => {
       normalModuleFactory.hooks.factorize.intercept({
         register: (tap) => {
           if (tap.name === 'ConsumeSharedPlugin') {
@@ -59,7 +44,24 @@ export class ModuleFederationFixRange implements webpack.WebpackPluginInstance {
               const module: SharedModule | undefined = await originalFn(...args);
 
               if (module?.options) {
-                this.fixVersionRange(module);
+                const { shareKey: name, importResolved } = module.options;
+
+                let shared = this.sharedModules.get(name);
+
+                if (!shared) {
+                  shared = new Map();
+                  this.sharedModules.set(name, shared);
+                }
+
+                let modules = shared.get(importResolved);
+
+                if (!modules) {
+                  modules = new Set();
+                  shared.set(importResolved, modules);
+                }
+
+                // save major version of the semver array
+                modules.add(module);
               }
 
               return module;
@@ -69,72 +71,91 @@ export class ModuleFederationFixRange implements webpack.WebpackPluginInstance {
           return tap;
         },
       });
-    });
 
-    compiler.hooks.done.tap(PLUGIN_NAME, () => {
-      const duplicates: Array<{ name: string; paths: string[] }> = [];
-      const criticalDuplicates: Array<{ name: string; path: string }> = [];
+      // eslint-disable-next-line max-statements
+      compilation.hooks.optimizeDependencies.tap(PLUGIN_NAME, () => {
+        for (const [name, sharedModulesByName] of this.sharedModules.entries()) {
+          const hasDuplicates = sharedModulesByName.size > 1;
 
-      for (const [name, shared] of this.sharedModules) {
-        if (shared.size > 1) {
-          duplicates.push({
-            name,
-            paths: [...shared.keys()],
-          });
-        }
+          for (const [importResolved, sharedModulesByPath] of sharedModulesByName.entries()) {
+            if (hasDuplicates) {
+              const error = new WebpackError(
+                `This file is a duplicate for a module "${name}" that resolved to different path`
+              );
+              error.file = importResolved;
+              compilation.warnings.push(error);
+            }
 
-        for (const [path, versions] of shared) {
-          if (versions.size > 1) {
-            criticalDuplicates.push({ name, path });
+            let validModule: SharedModule;
+            let validVersion: string;
+            const invalidModules = new Set<SharedModule>();
+
+            for (const sharedModule of sharedModulesByPath) {
+              const connections = compilation.moduleGraph.getOutgoingConnections(sharedModule);
+
+              for (const { module } of connections) {
+                const resolvedVersion = module.resourceResolveData?.descriptionFileData?.version;
+                this.fixVersionRange(sharedModule, resolvedVersion);
+
+                const requiredVersion = sharedModule?.options?.requiredVersion;
+
+                if (requiredVersion && resolvedVersion) {
+                  if (satisfy(requiredVersion, resolvedVersion)) {
+                    validModule = sharedModule;
+                    validVersion = resolvedVersion;
+                  } else {
+                    invalidModules.add(sharedModule);
+                  }
+                }
+                // there should by only one outgoing module for ConsumeSharedModule
+                break;
+              }
+            }
+
+            if (invalidModules.size > 0 && validModule) {
+              for (const sharedModule of invalidModules) {
+                const error = new WebpackError(
+                  `Shared module has been actually resolved to ${validVersion} instead of the expected`
+                );
+                error.module = sharedModule;
+                compilation.warnings.push(error);
+
+                // replace invalid module with valid version (invalid anyway are resolved to wrong version)
+                // to prevent any issues with shared dependencies
+                compilation.moduleGraph.moveModuleConnections(
+                  sharedModule,
+                  validModule,
+                  (connection) => {
+                    // ignore any outgoing connections as we want to ignore that module entirely and all its dependencies
+                    return connection.originModule !== sharedModule;
+                  }
+                );
+              }
+            }
           }
         }
-      }
 
-      // reset sharedModules info after compilation has ended
-      this.sharedModules = new Map();
-
-      if (duplicates.length) {
-        console.warn(`⚠️  ModuleFederation: Found duplicates for next shared modules:
-${duplicates
-  .map(({ name, paths }) => {
-    return `\t${chalk.yellowBright(name)}: ${paths.join(', ')}`;
-  })
-  .join('\n')}
-        `);
-      }
-
-      if (criticalDuplicates.length) {
-        console.error(
-          `❗ ModuleFederation: Found duplicates for shared modules with different major versions that are resolved to the same path:
-${criticalDuplicates
-  .map(({ name, path }) => {
-    return `\t${chalk.red(name)}: ${path}`;
-  })
-  .join('\n')}`
-        );
-
-        // @todo Not ending build, just freezing it. Also is not obvious what to do
-        // throw new Error(
-        //   'ModuleFederation: Different major versions have resolved to the same path for shared modules, please review errors above'
-        // );
-      }
+        // reset sharedModules info after validation
+        this.sharedModules = new Map();
+      });
     });
   }
 
-  fixVersionRange(module: SharedModule) {
+  fixVersionRange(sharedModule: SharedModule, resolvedVersion?: string) {
     const {
       options,
-      options: { shareKey: name, singleton, importResolved },
+      options: { shareKey: name, singleton },
       context,
-    } = module;
+    } = sharedModule;
     let { requiredVersion } = options;
 
+    // if version was not resolved automatically then get the version
+    // from actual module
     // ignore singletons as the actual version won't change anything
     // and usually it is just a react and co libraries
     if (!requiredVersion && context && !singleton) {
-      const version = resolvePackageVersion(name, context);
-      if (version) {
-        requiredVersion = parseRange(version);
+      if (resolvedVersion) {
+        requiredVersion = parseRange(resolvedVersion);
       }
     }
 
@@ -154,22 +175,5 @@ ${criticalDuplicates
 
     // change version in webpack module
     options.requiredVersion = requiredVersion;
-
-    let shared = this.sharedModules.get(name);
-
-    if (!shared) {
-      shared = new Map();
-      this.sharedModules.set(name, shared);
-    }
-
-    let versions = shared.get(importResolved);
-
-    if (!versions) {
-      versions = new Set();
-      shared.set(importResolved, versions);
-    }
-
-    // save major version of the semver array
-    versions.add(requiredVersion[1]);
   }
 }

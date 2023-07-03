@@ -8,7 +8,8 @@
       "modern": true,
       "fileSystemPages": {
         "enabled": true,
-        "routesDir": false
+        "routesDir": false,
+        "componentsPattern": "(Page|Layout)\\.tsx?"
       },
       "splitChunks": {
         "mode": "granularChunks"

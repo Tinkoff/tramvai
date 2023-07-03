@@ -3,8 +3,8 @@ import type { Params as OriginalStartParams, Result as OriginalStartResult } fro
 import { COMMAND_PARAMETERS_TOKEN, COMMAND_RUNNER_TOKEN } from '../../di/tokens';
 import type { Params, Result } from './index';
 import type { Samples, RunStats } from './types';
-import { getSamplesStats } from './utils/stats';
 import { clearCacheDirectory } from './utils/clearCache';
+import { getResultStats } from './utils/stats';
 
 const REBUILD_WARMUP_TIMES = 3;
 
@@ -12,19 +12,6 @@ export interface StartParams extends Params {
   command: 'start';
   commandOptions: OriginalStartParams;
 }
-
-const getResultStats = ({
-  clientSamples,
-  serverSamples,
-}: {
-  clientSamples: number[];
-  serverSamples: number[];
-}): RunStats => {
-  return {
-    client: getSamplesStats(clientSamples),
-    server: getSamplesStats(serverSamples),
-  };
-};
 
 export interface StartResult extends Result {
   noCache?: RunStats;
@@ -44,6 +31,7 @@ const runStartCommand = async (
 ): Promise<Samples> => {
   const clientSamples: number[] = Array(times);
   const serverSamples: number[] = Array(times);
+  const maxMemoryRssSamples: number[] = Array(times);
 
   const { commandOptions } = di.get(COMMAND_PARAMETERS_TOKEN) as StartParams;
 
@@ -61,17 +49,20 @@ const runStartCommand = async (
 
     clientSamples[i] = stats.clientBuildTime;
     serverSamples[i] = stats.serverBuildTime;
+    maxMemoryRssSamples[i] = stats.maxMemoryRss;
   }
 
   return {
     clientSamples,
     serverSamples,
+    maxMemoryRssSamples,
   };
 };
 
 const runRebuild = async (di: Container, { times }: { times: number }): Promise<Samples> => {
   const clientSamples: number[] = Array(times);
   const serverSamples: number[] = Array(times);
+  const maxMemoryRssSamples: number[] = Array(times);
   const { commandOptions } = di.get(COMMAND_PARAMETERS_TOKEN) as StartParams;
 
   const { close, invalidate, getBuildStats } = await (di
@@ -90,6 +81,7 @@ const runRebuild = async (di: Container, { times }: { times: number }): Promise<
 
     clientSamples[i] = stats.clientBuildTime;
     serverSamples[i] = stats.serverBuildTime;
+    maxMemoryRssSamples[i] = stats.maxMemoryRss;
   }
 
   await close();
@@ -97,6 +89,7 @@ const runRebuild = async (di: Container, { times }: { times: number }): Promise<
   return {
     clientSamples,
     serverSamples,
+    maxMemoryRssSamples,
   };
 };
 

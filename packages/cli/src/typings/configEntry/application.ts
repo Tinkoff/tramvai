@@ -158,6 +158,10 @@ export interface ApplicationConfigEntry extends CliConfigEntry {
      * @default "pages"
      */
     pagesDir: string | false;
+    /**
+     * @title Test Regexp to add only files with specific name to list of FS Components
+     */
+    componentsPattern: string;
   };
   /**
    * @title Configure the options on webpack splitChunks

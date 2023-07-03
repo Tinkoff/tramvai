@@ -4,7 +4,7 @@ import { useUrl } from '@tramvai/module-router';
 import { Button } from '../../components/shared/Button/Button';
 import { navigateAction } from '../../actions/navigateAction';
 import { bundleClientOnlyAction, bundleServerOnlyAction } from '../../actions/bundleActions';
-import { SecondModal } from '../../components/features/Modal/second';
+import { SecondModal } from './components/Modal/second';
 
 export const SecondPage: PageComponent = () => {
   // Получаем текущий роут

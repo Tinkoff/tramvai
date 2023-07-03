@@ -120,8 +120,8 @@ describe('@tramvai/cli start command', () => {
 
         expect(pagesConfig).toEqual({
           routes: {
-            '@/routes/about': {},
-            '@/routes/home': {},
+            '@/routes/about/index': {},
+            '@/routes/home/index': {},
           },
           pages: {},
           layouts: {},

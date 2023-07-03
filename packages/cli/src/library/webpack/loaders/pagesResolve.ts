@@ -8,7 +8,7 @@ const LAYOUT_FILENAME = '_layout.tsx';
 const ERROR_BOUNDARY_FILENAME = '_error.tsx';
 const WILDCARD_TOKEN = '[...';
 
-interface Options {
+export interface PagesResolveOptions {
   rootDir: string;
   root: string;
   extensions: string[];
@@ -22,8 +22,9 @@ const removeExtension = (filename: string): string => {
 };
 
 // eslint-disable-next-line func-style
-const pagesResolve: LoaderDefinitionFunction<Options> = function () {
+const pagesResolve: LoaderDefinitionFunction<PagesResolveOptions> = function () {
   const { fileSystemPages, rootDir, root, extensions } = this.getOptions();
+  const extensionsRegexp = new RegExp(`\\.(${extensions.map((ext) => ext.slice(1)).join('|')})$`);
   const fsLayouts: string[] = [];
   const fsErrorBoundaries: string[] = [];
   const fsWildcards: string[] = [];
@@ -34,9 +35,11 @@ const pagesResolve: LoaderDefinitionFunction<Options> = function () {
   const filesToPages = ({
     pagesRootDirectory,
     isRoutes = false,
+    test,
   }: {
     pagesRootDirectory: string;
     isRoutes?: boolean;
+    test: RegExp;
   }) => {
     const pagesDir = path.resolve(rootDir, root, pagesRootDirectory);
 
@@ -51,9 +54,10 @@ const pagesResolve: LoaderDefinitionFunction<Options> = function () {
 
     for (const file of pagesFiles) {
       const extname = path.extname(file);
-      const name = file.replace(new RegExp(`\\${extname}$`), '').replace(/\\/g, '/');
+      const normalizedFile = file.replace(/\\/g, '/');
 
-      if (extensions.indexOf(extname) !== -1) {
+      if (test.test(normalizedFile)) {
+        const name = normalizedFile.replace(new RegExp(`\\${extname}$`), '');
         const pageComponentName = `@/${pagesRootDirectory}/${name}`;
         const pageComponentPath = path.resolve(pagesDir, name).replace(/\\/g, '\\\\');
         const chunkname = pageComponentName.replace(/\//g, '_');
@@ -112,11 +116,15 @@ const pagesResolve: LoaderDefinitionFunction<Options> = function () {
     ? filesToPages({
         pagesRootDirectory: fileSystemPages.routesDir,
         isRoutes: true,
+        test: new RegExp(`index${extensionsRegexp.source}`),
       })
     : [];
   const fsPages = fileSystemPages.pagesDir
     ? filesToPages({
         pagesRootDirectory: fileSystemPages.pagesDir,
+        test: fileSystemPages.componentsPattern
+          ? new RegExp(fileSystemPages.componentsPattern)
+          : extensionsRegexp,
       })
     : [];
 
