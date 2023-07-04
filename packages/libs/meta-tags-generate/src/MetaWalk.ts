@@ -1,7 +1,7 @@
 import eachObj from '@tinkoff/utils/object/each';
 import type { TagRecord } from './Meta.h';
 
-export type WalkItem = { value: string | TagRecord; priority: number };
+export type WalkItem = { value: string | TagRecord | null; priority: number };
 
 export class MetaWalk {
   state: Map<string, WalkItem>;
@@ -14,7 +14,7 @@ export class MetaWalk {
     this.state.forEach((value, key) => func(value, key));
   }
 
-  updateMeta(priority: number, metaObj: Record<string, string | TagRecord>) {
+  updateMeta(priority: number, metaObj: Record<string, string | TagRecord | null>) {
     eachObj((value, name) => {
       if (!value && value !== null) {
         return;
@@ -23,11 +23,7 @@ export class MetaWalk {
       const stateMeta = this.state.get(name);
 
       if (!stateMeta || priority >= stateMeta.priority) {
-        if (value === null) {
-          this.state.delete(name);
-        } else {
-          this.state.set(name, { value, priority });
-        }
+        this.state.set(name, { value, priority });
       }
     }, metaObj);
 

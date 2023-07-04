@@ -78,4 +78,15 @@ describe('meta - integrate tests', () => {
 
     expect(document.head).toMatchSnapshot();
   });
+
+  it('Не перетираем null значения с высоким приоритетом', () => {
+    const meta = generateMeta();
+    meta.metaWalk.updateMeta(20, { test: null });
+    meta.metaWalk.updateMeta(10, { test: 'string' });
+
+    expect(meta.metaWalk.state).toMatchSnapshot();
+
+    const render = new Render(meta);
+    expect(render.render()).toMatchSnapshot();
+  });
 });

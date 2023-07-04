@@ -60,6 +60,22 @@ exports[`meta - integrate tests Наполнение данными и прео�
 <link rel="canonical" href="l" data-meta-dynamic="true">"
 `;
 
+exports[`meta - integrate tests Не перетираем null значения с высоким приоритетом 1`] = `
+Map {
+  "test" => {
+    "priority": 20,
+    "value": null,
+  },
+}
+`;
+
+exports[`meta - integrate tests Не перетираем null значения с высоким приоритетом 2`] = `
+"<title data-meta-dynamic="true">g</title>
+<meta property="og:title" content="d" data-meta-dynamic="true">
+<meta k="s" data-meta-dynamic="true">
+<link rel="canonical" href="l" data-meta-dynamic="true">"
+`;
+
 exports[`meta - integrate tests Очистка дефолтных meta параметров 1`] = `
 [
   {

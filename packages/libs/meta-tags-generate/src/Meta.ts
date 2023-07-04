@@ -40,12 +40,14 @@ export class Meta {
     let result: TagRecord[] = [];
 
     this.metaWalk.eachMeta((val, key) => {
-      const value = this.transformValue(val);
-      const converter = this.converters[key];
-      const res = (converter || defaultConverter)(value.value);
+      if (val.value !== null) {
+        const value = this.transformValue(val);
+        const converter = this.converters[key];
+        const res = (converter || defaultConverter)(value.value);
 
-      if (res) {
-        result = result.concat(isArray(res) ? res.filter(identity) : res);
+        if (res) {
+          result = result.concat(isArray(res) ? res.filter(identity) : res);
+        }
       }
     });
 
