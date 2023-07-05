@@ -8,7 +8,6 @@ import {
   STATIC_SERVER_TOKEN,
 } from '../../../../di/tokens';
 import type { ChildAppConfigEntry } from '../../../../typings/configEntry/child-app';
-import { closeWorkerPoolTranspiler } from '../../../../library/webpack/utils/workersPool';
 import { stopServer } from '../../utils/stopServer';
 import { createServer } from '../../utils/createServer';
 import { listenServer } from '../../utils/listenServer';
@@ -59,18 +58,6 @@ export const sharedProviders: readonly Provider[] = [
     },
     deps: {
       staticServer: STATIC_SERVER_TOKEN,
-    },
-  }),
-  provide({
-    provide: CLOSE_HANDLER_TOKEN,
-    multi: true,
-    useFactory: ({ configManager }) => {
-      return async () => {
-        await closeWorkerPoolTranspiler(configManager);
-      };
-    },
-    deps: {
-      configManager: CONFIG_MANAGER_TOKEN,
     },
   }),
 ] as const;

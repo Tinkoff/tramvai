@@ -1,6 +1,6 @@
 import type Config from 'webpack-chain';
 import { modernLibsFilter } from '@tinkoff/is-modern-lib';
-import { createWorkerPoolTranspiler } from '../utils/workersPool';
+import { applyThreadLoader } from '../utils/threadLoader';
 import type { ConfigManager } from '../../../config/configManager';
 import { getTranspilerConfig, addTranspilerLoader } from '../utils/transpiler';
 import type { CliConfigEntry } from '../../../typings/configEntry/cli';
@@ -12,14 +12,7 @@ export default (configManager: ConfigManager<CliConfigEntry>) => (config: Config
   const rule = config.module
     .rule('js')
     .test(/\.[cm]?js[x]?$/)
-    // TODO: разобраться почему на винде все плохо с thread-loader
-    .when(process.platform !== 'win32' && !configManager.debug, (cfg) =>
-      cfg
-        .use('thread')
-        .loader('thread-loader')
-        .options(createWorkerPoolTranspiler(configManager))
-        .end()
-    );
+    .batch(applyThreadLoader(configManager));
 
   rule
     .oneOf('project')

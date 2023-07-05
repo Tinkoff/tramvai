@@ -1,6 +1,5 @@
 import express from 'express';
 import type { MultiCompiler } from 'webpack';
-import type Config from 'webpack-chain';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import type { Container } from '@tinkoff/dippy';
@@ -49,13 +48,11 @@ export const createDevServer = ({
   di,
   compiler,
   configManager,
-  clientConfig,
   staticServer,
 }: {
   di: Container;
   compiler: MultiCompiler;
   configManager: ConfigManager<ApplicationConfigEntry>;
-  clientConfig: Config | null;
   staticServer: typeof STATIC_SERVER_TOKEN;
 }) => {
   return async function devServer() {

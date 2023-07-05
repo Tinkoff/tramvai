@@ -1,7 +1,9 @@
 [profile.release]
 # This removes more dead code
 codegen-units = 1
-lto = true
+# TODO: enabling lto enables some optimizations to generate lightweighted wasm files
+# but this causes problems on big source files, see https://github.com/swc-project/swc/issues/7429
+# lto = true
 # Optimize for size
 opt-level = "s"
 # Optimize for performance, this is default so you don't need to specify it
@@ -27,5 +29,5 @@ features = [
   "ecma_ast",
   "common",
   "ecma_quote",
-  "testing"
+  "testing",
 ]

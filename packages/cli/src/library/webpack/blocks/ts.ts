@@ -1,5 +1,5 @@
 import type Config from 'webpack-chain';
-import { createWorkerPoolTranspiler } from '../utils/workersPool';
+import { applyThreadLoader } from '../utils/threadLoader';
 import type { ConfigManager } from '../../../config/configManager';
 import { addTranspilerLoader, getTranspilerConfig } from '../utils/transpiler';
 import type { CliConfigEntry } from '../../../typings/configEntry/cli';
@@ -12,14 +12,7 @@ export default (configManager: ConfigManager<CliConfigEntry>) => (config: Config
     .test(/\.ts[x]?$/)
     .exclude.add(/node_modules/)
     .end()
-    // TODO: разобраться почему на винде все плохо с thread-loader
-    .when(process.platform !== 'win32', (cfg) =>
-      cfg
-        .use('thread')
-        .loader('thread-loader')
-        .options(createWorkerPoolTranspiler(configManager))
-        .end()
-    )
+    .batch(applyThreadLoader(configManager))
     .oneOf('project')
     .use('transpiler')
     .batch(addTranspilerLoader(configManager, transpilerConfig));

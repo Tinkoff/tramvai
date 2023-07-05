@@ -51,9 +51,7 @@ Having swc config may conflict with @tramvai/cli configuration`
   }
 
   const resolveWasmFile = (pluginName: string, type: 'debug' | 'release') => {
-    return resolve(`${TRAMVAI_SWC_TARGET_PATH}/${type}/${pluginName}.wasm`, {
-      basedir: rootDir,
-    });
+    return resolve(`${TRAMVAI_SWC_TARGET_PATH}/${type}/${pluginName}.wasm`);
   };
 
   const resolveTramvaiSwcPlugin = (pluginName: string) => {
@@ -117,6 +115,7 @@ Having swc config may conflict with @tramvai/cli configuration`
         decorators: true,
         tsx: true,
         jsx: true,
+        exportDefaultFrom: true,
       },
       transform: {
         legacyDecorator: true,
