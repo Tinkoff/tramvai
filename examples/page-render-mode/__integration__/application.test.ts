@@ -127,6 +127,64 @@ describe('page-render-mode', () => {
     await browser.close();
   });
 
+  it('page render mode can be changed by condition', async () => {
+    let renderResult = await app.render('/auth-client/', {});
+
+    // first render - ssr
+
+    expect(renderResult.application).toMatchInlineSnapshot(`
+      "
+            <div>
+              <h1>
+                Tramvai
+                <span role="img" aria-label="Salute">🥳</span>
+              </h1>
+            </div>
+            <div>Auth Client Page <button type="button">to main page</button></div>
+            <div class="Footer__footer_adktz"><div>this Footer in page-render-mode</div></div>
+          "
+    `);
+
+    const { browser } = await initPlaywright(app.serverUrl);
+
+    const page = await browser.newPage();
+
+    await page.goto(`${app.serverUrl}/auth-client/`);
+
+    await sleep(500);
+
+    expect(await page.$eval('.application', (node) => (node as HTMLElement).innerText))
+      .toMatchInlineSnapshot(`
+      "Tramvai 🥳
+      Auth Client Page to main page
+      this Footer in page-render-mode"
+    `);
+
+    renderResult = await app.render('/auth-client/', {});
+
+    // second render with cookie - csr
+
+    await page.reload();
+
+    expect(await page.$eval('.application', (node) => (node as HTMLElement).innerText))
+      .toMatchInlineSnapshot(`
+      "Tramvai 🥳
+      Loading...
+      this Footer in page-render-mode"
+    `);
+
+    await sleep(500);
+
+    expect(await page.$eval('.application', (node) => (node as HTMLElement).innerText))
+      .toMatchInlineSnapshot(`
+      "Tramvai 🥳
+      Auth Client Page to main page
+      this Footer in page-render-mode"
+    `);
+
+    await browser.close();
+  });
+
   describe('static pages', () => {
     afterEach(() => {
       return fetch(`${app.serverUrl}/page-render-mode/private/papi/revalidate`, {

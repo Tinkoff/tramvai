@@ -1,6 +1,6 @@
-import { createApp } from '@tramvai/core';
-import { CommonModule } from '@tramvai/module-common';
-import { SpaRouterModule } from '@tramvai/module-router';
+import { commandLineListTokens, createApp, provide } from '@tramvai/core';
+import { COOKIE_MANAGER_TOKEN, CommonModule } from '@tramvai/module-common';
+import { PAGE_SERVICE_TOKEN, SpaRouterModule } from '@tramvai/module-router';
 import { RenderModule } from '@tramvai/module-render';
 import { ServerModule } from '@tramvai/module-server';
 import { ErrorInterceptorModule } from '@tramvai/module-error-interceptor';
@@ -11,6 +11,7 @@ import {
   RENDER_SLOTS,
   ResourceType,
   ResourceSlot,
+  TRAMVAI_RENDER_MODE,
 } from '@tramvai/tokens-render';
 import {
   PageRenderModeModule,
@@ -59,5 +60,31 @@ createApp({
       provide: PAGE_RENDER_WRAPPER_TYPE,
       useValue: 'page',
     },
+    {
+      provide: TRAMVAI_RENDER_MODE,
+      useFactory: ({ cookieManager }) => {
+        return cookieManager.get('test-auth-client') === 'true' ? 'client' : 'ssr';
+      },
+      deps: {
+        cookieManager: COOKIE_MANAGER_TOKEN,
+      },
+    },
+    // delay client hydration for auth-client page
+    provide({
+      provide: commandLineListTokens.resolvePageDeps,
+      useFactory: ({ pageService }) => {
+        return async () => {
+          if (
+            typeof window !== 'undefined' &&
+            pageService.getCurrentRoute().actualPath === '/auth-client/'
+          ) {
+            await new Promise((resolve) => setTimeout(resolve, 500));
+          }
+        };
+      },
+      deps: {
+        pageService: PAGE_SERVICE_TOKEN,
+      },
+    }),
   ],
 });

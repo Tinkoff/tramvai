@@ -11,7 +11,9 @@ export const PAGE_RENDER_FALLBACK_COMPONENT_PREFIX = createToken<string>(
 /**
  * @deprecated Use token `TRAMVAI_RENDER_MODE` from `@tramvai/tokens-render`
  */
-export const PAGE_RENDER_DEFAULT_MODE = createToken<TramvaiRenderMode>('pageRenderDefaultMode');
+export const PAGE_RENDER_DEFAULT_MODE = createToken<TramvaiRenderMode | (() => TramvaiRenderMode)>(
+  'pageRenderDefaultMode'
+);
 
 export const PAGE_RENDER_WRAPPER_TYPE = createToken<'layout' | 'content' | 'page'>(
   'pageRenderWrapperType'

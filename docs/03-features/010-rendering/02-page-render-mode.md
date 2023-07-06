@@ -223,6 +223,22 @@ const provider = {
 };
 ```
 
+### How ti change page render mode at runtime
+
+You can provide function to `TRAMVAI_RENDER_MODE` token:
+
+```ts
+const provider = {
+  provide: TRAMVAI_RENDER_MODE,
+  useFactory: ({ cookieManager }) => {
+    return () => cookieManager.get('some-auth-cookie') ? 'client' : 'ssr';
+  },
+  deps: {
+    cookieManager: COOKIE_MANAGER_TOKEN,
+  },
+};
+```
+
 ## Troubleshooting
 
 ### Fallback name conflicts

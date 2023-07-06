@@ -175,7 +175,9 @@ export const RESOURCE_INLINE_OPTIONS =
  * @description
  * Experimental switcher from ssr to client-side rendering mode
  */
-export const TRAMVAI_RENDER_MODE = createToken<TramvaiRenderMode>('tramvaiRenderMode');
+export const TRAMVAI_RENDER_MODE = createToken<TramvaiRenderMode | (() => TramvaiRenderMode)>(
+  'tramvaiRenderMode'
+);
 
 export type TramvaiRenderMode = 'ssr' | 'client' | 'static';
 

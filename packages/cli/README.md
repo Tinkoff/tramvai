@@ -95,7 +95,7 @@ IF you want to disable Modules for some files, for example with global styles, y
 {
   "postcss": {
     // CSS Modules processing will be skipped for *.global.css files
-    "cssModulePattern": "/^(?!.global.css$).$/"
+    "cssModulePattern": "^(?!.*global\\.css$).*$"
   }
 }
 ```
