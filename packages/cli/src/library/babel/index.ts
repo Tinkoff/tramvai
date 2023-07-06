@@ -78,6 +78,15 @@ export const babelConfigFactory = ({
     // основе добавлять соответствующие импорты
     sourceType: 'unambiguous' as const,
 
+    // Это необходимо для того, чтобы деструктуризация array-like сущностей, например, Set
+    // не приводила к невалидному коду при сборке для старых браузеров:
+    // [...new Set()] => [].concat(new Set())
+    // https://babeljs.io/docs/assumptions#arraylikeisiterable
+    assumptions: {
+      arrayLikeIsIterable: true,
+      iterableIsArray: false,
+    },
+
     presets: [
       [
         '@babel/preset-env',

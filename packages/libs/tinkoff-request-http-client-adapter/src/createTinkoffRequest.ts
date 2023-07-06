@@ -178,16 +178,16 @@ export function createTinkoffRequest(options: TinkoffRequestOptions): MakeReques
     );
   }
 
+  if (retryOptions) {
+    plugins.push(retry(retryOptions));
+  }
+
   plugins.push(
     http({
       agent: agent || defaultAgent,
       querySerializer: querySerializer || undefined,
     })
   );
-
-  if (retryOptions) {
-    plugins.push(retry(retryOptions));
-  }
 
   const makeRequest = request(plugins);
 
