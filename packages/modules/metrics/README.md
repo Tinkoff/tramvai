@@ -18,6 +18,10 @@ Next labels are added to metrics:
 
 Name of the service calculates by comparing request urls with values in `MetricsServicesRegistry`. Initially the register is bootstrapped with the inverted content of env variables, e.g. if some url from env is a substring of the request url, then the name of the env become the service name. If several envs matches this logic then the env with the longest url is used.
 
+### Event Loop Lag
+
+This module has their own implementation of Event Loop Lag metric - `nodejs_eventloop_setinterval_lag_seconds` histogram, this metric implemented with `setTimeout`.
+
 ### Client metrics
 
 Module implements feature to collect metrics from the clients and share it with Prometheus by sending metrics from the client to server papi-route.
@@ -64,6 +68,32 @@ provide({
   },
 }),
 ```
+
+## Metrics list
+
+### Application metrics
+
+- `http_requests_total` counter - application response count by status code
+- `http_requests_execution_time` histogram - application response time
+- `command_line_runner_execution_time` histogram - (measure application lifecycle)[03-features/06-app-lifecycle.md]
+
+### Outgoing requests
+
+- `http_sent_requests_total` counter - request count from application to external APIs
+- `http_sent_requests_duration` histogram - request time from application to external APIs
+- `http_sent_requests_errors` counter - request from application to external APIs errors count
+- `dns_resolve_duration` histogram - DNS resolve time
+- `tcp_connect_duration` histogram - TCP connect time
+- `tls_handshake_duration` histogram - TLS handshake time
+
+### Node.js metrics
+
+- `nodejs_eventloop_lag_p90_seconds` gauge - event loop lag in 90 percentile from `prom-client`
+- `nodejs_eventloop_setinterval_lag_seconds` histogram - event loop lag from custom `setTimeout` measurement
+- `nodejs_heap_space_size_used_bytes` gauge - used memory size from `prom-client`
+- `nodejs_gc_duration_seconds` histogram - GC duration from `prom-client`
+- `nodejs_active_handles` gauge - total number of active handles from `prom-client`
+- `nodejs_active_requests` gauge - total number of active requests from `prom-client`
 
 ## How to
 
