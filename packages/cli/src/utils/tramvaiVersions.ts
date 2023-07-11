@@ -15,6 +15,15 @@ export const DEPENDANT_LIBS_MAP = new Map([
   ['@tinkoff/meta-tags-generate', '@tramvai/module-render'],
   ['@tinkoff/pack-polyfills', ''],
   ['@tinkoff/browserslist-config', '@tramvai/cli'],
+  ['@tramvai/http-client', '@tramvai/module-http-client'],
+  ['@tramvai/safe-strings', '@tramvai/module-render'],
+  ['@tramvai-tinkoff/safe-strings', '@tramvai-tinkoff/module-router-extension-dco'],
+  ['@tramvai-tinkoff/dco-client', '@tramvai-tinkoff/module-router-extension-dco'],
+  ['@tramvai-tinkoff/dynamic-components', '@tramvai/module-dynamic-components'],
+  ['@tramvai-tinkoff/media-checkers', ''],
+  ['@tramvai-tinkoff/ui-container', ''],
+  ['@tramvai-tinkoff/ui-grid', ''],
+  ['@tramvai-tinkoff/ui-bp-desktop-md', ''],
 ]);
 
 export const isUnifiedVersion = (name: string) => {

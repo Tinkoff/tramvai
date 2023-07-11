@@ -1057,6 +1057,112 @@
               "title": "Browser packages to provide with ProvidePlugin. E.g. { \"Buffer\": [\"buffer\", \"Buffer\"] }",
               "additionalProperties": true,
               "type": "object"
+            },
+            "watchOptions": {
+              "title": "Configure https://webpack.js.org/configuration/watch/#watchoptions",
+              "description": "For OSX users and big projects it's recommended to enable watch polling, e.g. `{ poll: 1000 }`, more info - https://github.com/webpack/watchpack/issues/222",
+              "type": "object",
+              "properties": {
+                "aggregateTimeout": {
+                  "description": "Delay the rebuilt after the first change. Value is a time in ms.",
+                  "type": "number"
+                },
+                "followSymlinks": {
+                  "description": "Resolve symlinks and watch symlink and real file. This is usually not needed as webpack already resolves symlinks ('resolve.symlinks').",
+                  "type": "boolean"
+                },
+                "ignored": {
+                  "description": "Ignore some files from watching (glob pattern or regexp).",
+                  "anyOf": [
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "exec": {
+                          "type": "object",
+                          "additionalProperties": false
+                        },
+                        "test": {
+                          "type": "object",
+                          "additionalProperties": false
+                        },
+                        "source": {
+                          "type": "string"
+                        },
+                        "global": {
+                          "type": "boolean"
+                        },
+                        "ignoreCase": {
+                          "type": "boolean"
+                        },
+                        "multiline": {
+                          "type": "boolean"
+                        },
+                        "lastIndex": {
+                          "type": "number"
+                        },
+                        "compile": {
+                          "type": "object",
+                          "additionalProperties": false
+                        },
+                        "flags": {
+                          "type": "string"
+                        },
+                        "sticky": {
+                          "type": "boolean"
+                        },
+                        "unicode": {
+                          "type": "boolean"
+                        },
+                        "dotAll": {
+                          "type": "boolean"
+                        },
+                        "__@match@5998": {
+                          "type": "object",
+                          "additionalProperties": false
+                        },
+                        "__@replace@6000": {
+                          "type": "object",
+                          "additionalProperties": false
+                        },
+                        "__@search@6003": {
+                          "type": "object",
+                          "additionalProperties": false
+                        },
+                        "__@split@6005": {
+                          "type": "object",
+                          "additionalProperties": false
+                        },
+                        "__@matchAll@6007": {
+                          "type": "object",
+                          "additionalProperties": false
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "poll": {
+                  "description": "Enable polling mode for watching.",
+                  "type": [
+                    "number",
+                    "boolean"
+                  ]
+                },
+                "stdin": {
+                  "description": "Stop watching when stdin stream has ended.",
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false
             }
           },
           "additionalProperties": false
@@ -1584,6 +1690,112 @@
               "title": "Browser packages to provide with ProvidePlugin. E.g. { \"Buffer\": [\"buffer\", \"Buffer\"] }",
               "additionalProperties": true,
               "type": "object"
+            },
+            "watchOptions": {
+              "title": "Configure https://webpack.js.org/configuration/watch/#watchoptions",
+              "description": "For OSX users and big projects it's recommended to enable watch polling, e.g. `{ poll: 1000 }`, more info - https://github.com/webpack/watchpack/issues/222",
+              "type": "object",
+              "properties": {
+                "aggregateTimeout": {
+                  "description": "Delay the rebuilt after the first change. Value is a time in ms.",
+                  "type": "number"
+                },
+                "followSymlinks": {
+                  "description": "Resolve symlinks and watch symlink and real file. This is usually not needed as webpack already resolves symlinks ('resolve.symlinks').",
+                  "type": "boolean"
+                },
+                "ignored": {
+                  "description": "Ignore some files from watching (glob pattern or regexp).",
+                  "anyOf": [
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "exec": {
+                          "type": "object",
+                          "additionalProperties": false
+                        },
+                        "test": {
+                          "type": "object",
+                          "additionalProperties": false
+                        },
+                        "source": {
+                          "type": "string"
+                        },
+                        "global": {
+                          "type": "boolean"
+                        },
+                        "ignoreCase": {
+                          "type": "boolean"
+                        },
+                        "multiline": {
+                          "type": "boolean"
+                        },
+                        "lastIndex": {
+                          "type": "number"
+                        },
+                        "compile": {
+                          "type": "object",
+                          "additionalProperties": false
+                        },
+                        "flags": {
+                          "type": "string"
+                        },
+                        "sticky": {
+                          "type": "boolean"
+                        },
+                        "unicode": {
+                          "type": "boolean"
+                        },
+                        "dotAll": {
+                          "type": "boolean"
+                        },
+                        "__@match@5998": {
+                          "type": "object",
+                          "additionalProperties": false
+                        },
+                        "__@replace@6000": {
+                          "type": "object",
+                          "additionalProperties": false
+                        },
+                        "__@search@6003": {
+                          "type": "object",
+                          "additionalProperties": false
+                        },
+                        "__@split@6005": {
+                          "type": "object",
+                          "additionalProperties": false
+                        },
+                        "__@matchAll@6007": {
+                          "type": "object",
+                          "additionalProperties": false
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "poll": {
+                  "description": "Enable polling mode for watching.",
+                  "type": [
+                    "number",
+                    "boolean"
+                  ]
+                },
+                "stdin": {
+                  "description": "Stop watching when stdin stream has ended.",
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false
             }
           },
           "additionalProperties": false
@@ -2111,6 +2323,112 @@
               "title": "Browser packages to provide with ProvidePlugin. E.g. { \"Buffer\": [\"buffer\", \"Buffer\"] }",
               "additionalProperties": true,
               "type": "object"
+            },
+            "watchOptions": {
+              "title": "Configure https://webpack.js.org/configuration/watch/#watchoptions",
+              "description": "For OSX users and big projects it's recommended to enable watch polling, e.g. `{ poll: 1000 }`, more info - https://github.com/webpack/watchpack/issues/222",
+              "type": "object",
+              "properties": {
+                "aggregateTimeout": {
+                  "description": "Delay the rebuilt after the first change. Value is a time in ms.",
+                  "type": "number"
+                },
+                "followSymlinks": {
+                  "description": "Resolve symlinks and watch symlink and real file. This is usually not needed as webpack already resolves symlinks ('resolve.symlinks').",
+                  "type": "boolean"
+                },
+                "ignored": {
+                  "description": "Ignore some files from watching (glob pattern or regexp).",
+                  "anyOf": [
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "exec": {
+                          "type": "object",
+                          "additionalProperties": false
+                        },
+                        "test": {
+                          "type": "object",
+                          "additionalProperties": false
+                        },
+                        "source": {
+                          "type": "string"
+                        },
+                        "global": {
+                          "type": "boolean"
+                        },
+                        "ignoreCase": {
+                          "type": "boolean"
+                        },
+                        "multiline": {
+                          "type": "boolean"
+                        },
+                        "lastIndex": {
+                          "type": "number"
+                        },
+                        "compile": {
+                          "type": "object",
+                          "additionalProperties": false
+                        },
+                        "flags": {
+                          "type": "string"
+                        },
+                        "sticky": {
+                          "type": "boolean"
+                        },
+                        "unicode": {
+                          "type": "boolean"
+                        },
+                        "dotAll": {
+                          "type": "boolean"
+                        },
+                        "__@match@5998": {
+                          "type": "object",
+                          "additionalProperties": false
+                        },
+                        "__@replace@6000": {
+                          "type": "object",
+                          "additionalProperties": false
+                        },
+                        "__@search@6003": {
+                          "type": "object",
+                          "additionalProperties": false
+                        },
+                        "__@split@6005": {
+                          "type": "object",
+                          "additionalProperties": false
+                        },
+                        "__@matchAll@6007": {
+                          "type": "object",
+                          "additionalProperties": false
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "poll": {
+                  "description": "Enable polling mode for watching.",
+                  "type": [
+                    "number",
+                    "boolean"
+                  ]
+                },
+                "stdin": {
+                  "description": "Stop watching when stdin stream has ended.",
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false
             }
           },
           "additionalProperties": false

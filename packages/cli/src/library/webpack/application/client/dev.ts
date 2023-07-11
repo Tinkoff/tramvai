@@ -54,6 +54,13 @@ export const webpackClientConfig = ({
     config.watchOptions({
       ignored: /.*/,
     });
+  } else {
+    config.watchOptions(
+      configManager.webpack.watchOptions ?? {
+        aggregateTimeout: 5,
+        ignored: ['**/node_modules/**', '**/.git/**'],
+      }
+    );
   }
 
   config.output

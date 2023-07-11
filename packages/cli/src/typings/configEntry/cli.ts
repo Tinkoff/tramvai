@@ -200,6 +200,11 @@ export interface CliConfigEntry extends ConfigEntry {
      * @additionalProperties true
      */
     provide?: Record<string, any>;
+    /**
+     * @title Configure https://webpack.js.org/configuration/watch/#watchoptions
+     * @description For OSX users and big projects it's recommended to enable watch polling, e.g. `{ poll: 1000 }`, more info - https://github.com/webpack/watchpack/issues/222
+     */
+    watchOptions?: Configuration['watchOptions'];
   };
 
   // options that affect only production builds
