@@ -67,11 +67,11 @@ export const addProxyToHttpsAgent = ({
   });
 
   // @ts-expect-error
-  const originalCreateConnection = https.globalAgent.createConnection;
+  const originalCreateConnection = https.Agent.prototype.createConnection;
   // @ts-expect-error
-  https.globalAgent.createConnection = createConnection;
+  https.Agent.prototype.createConnection = createProxiedConnection;
 
-  function createConnection(options: ConnectOptions, cb) {
+  function createProxiedConnection(options: ConnectOptions, cb) {
     const { hostname, href, method, headers } = options;
     const connectionMustBeProxied = !noProxyEnv || !matchNoProxyWithCache({ hostname });
 

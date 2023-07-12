@@ -13,7 +13,7 @@ First main optimization of HTTP connections is already used in `tramvai` [HTTP c
 
 Because of that, DNS cache it's a nice and cheap optimization, but don't expect some huge performance boost.
 
-Potential disadvantages - external services can change their IP addresses, and HTTP requests will use outdated DNS cache, you can detect this by search `ENOTFOUND` errors is server logs, so long cache TTL is not recommended.
+Potential disadvantages - external services can change their IP addresses, and HTTP requests will use outdated DNS cache, you can detect some of this errors by search `ECONNRESET` errors is server logs, so long cache TTL is not recommended.
 
 ## Installation
 
