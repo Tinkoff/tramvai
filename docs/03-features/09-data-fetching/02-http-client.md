@@ -189,6 +189,32 @@ const provider = provide({
 });
 ```
 
+#### Send files with FormData
+
+You can send files with FormData by adding a few options to the request:
+
+```tsx
+import { declareAction } from '@tramvai/core';
+
+const action = declareAction({
+  name: 'my-action',
+  async fn(file: File) {
+    const data = await this.deps.myApi.post(
+        '/example/uploadFile',
+        {},
+        // add requestType: 'form' and put your files in the attaches array
+        // Note that there's no need to append files to the FormData, it will be done internally
+        { requestType: 'form', attaches: [file] }
+      );
+
+    return data.payload;
+  },
+  deps: {
+    myApi: 'WHATEVER_API_SERVICE'
+  },
+});
+```
+
 ## How to
 
 ### How to disable HTTP request caching?
