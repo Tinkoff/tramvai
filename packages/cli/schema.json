@@ -1143,23 +1143,23 @@
                               "dotAll": {
                                 "type": "boolean"
                               },
-                              "__@match@5998": {
+                              "__@match@5999": {
                                 "type": "object",
                                 "additionalProperties": false
                               },
-                              "__@replace@6000": {
+                              "__@replace@6001": {
                                 "type": "object",
                                 "additionalProperties": false
                               },
-                              "__@search@6003": {
+                              "__@search@6004": {
                                 "type": "object",
                                 "additionalProperties": false
                               },
-                              "__@split@6005": {
+                              "__@split@6006": {
                                 "type": "object",
                                 "additionalProperties": false
                               },
-                              "__@matchAll@6007": {
+                              "__@matchAll@6008": {
                                 "type": "object",
                                 "additionalProperties": false
                               }
@@ -1364,6 +1364,15 @@
                     "description": "minimal versions are inferred from package.json",
                     "default": true,
                     "type": "boolean"
+                  },
+                  "criticalChunks": {
+                    "title": "add chunks to preload as critical in-parallel with \"platform.js\"",
+                    "description": "this option is useful when you need to create async boundary for app dependencies.\nMore info - https://webpack.js.org/concepts/module-federation/#uncaught-error-shared-module-is-not-available-for-eager-consumption",
+                    "default": [],
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
                   },
                   "deps": {
                     "title": "list of the dependencies that will be shared",
@@ -1784,23 +1793,23 @@
                                 "dotAll": {
                                   "type": "boolean"
                                 },
-                                "__@match@5998": {
+                                "__@match@5999": {
                                   "type": "object",
                                   "additionalProperties": false
                                 },
-                                "__@replace@6000": {
+                                "__@replace@6001": {
                                   "type": "object",
                                   "additionalProperties": false
                                 },
-                                "__@search@6003": {
+                                "__@search@6004": {
                                   "type": "object",
                                   "additionalProperties": false
                                 },
-                                "__@split@6005": {
+                                "__@split@6006": {
                                   "type": "object",
                                   "additionalProperties": false
                                 },
-                                "__@matchAll@6007": {
+                                "__@matchAll@6008": {
                                   "type": "object",
                                   "additionalProperties": false
                                 }
@@ -2005,6 +2014,15 @@
                       "description": "minimal versions are inferred from package.json",
                       "default": true,
                       "type": "boolean"
+                    },
+                    "criticalChunks": {
+                      "title": "add chunks to preload as critical in-parallel with \"platform.js\"",
+                      "description": "this option is useful when you need to create async boundary for app dependencies.\nMore info - https://webpack.js.org/concepts/module-federation/#uncaught-error-shared-module-is-not-available-for-eager-consumption",
+                      "default": [],
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
                     },
                     "deps": {
                       "title": "list of the dependencies that will be shared",
@@ -2425,23 +2443,23 @@
                                   "dotAll": {
                                     "type": "boolean"
                                   },
-                                  "__@match@5998": {
+                                  "__@match@5999": {
                                     "type": "object",
                                     "additionalProperties": false
                                   },
-                                  "__@replace@6000": {
+                                  "__@replace@6001": {
                                     "type": "object",
                                     "additionalProperties": false
                                   },
-                                  "__@search@6003": {
+                                  "__@search@6004": {
                                     "type": "object",
                                     "additionalProperties": false
                                   },
-                                  "__@split@6005": {
+                                  "__@split@6006": {
                                     "type": "object",
                                     "additionalProperties": false
                                   },
-                                  "__@matchAll@6007": {
+                                  "__@matchAll@6008": {
                                     "type": "object",
                                     "additionalProperties": false
                                   }
@@ -2646,6 +2664,15 @@
                         "description": "minimal versions are inferred from package.json",
                         "default": true,
                         "type": "boolean"
+                      },
+                      "criticalChunks": {
+                        "title": "add chunks to preload as critical in-parallel with \"platform.js\"",
+                        "description": "this option is useful when you need to create async boundary for app dependencies.\nMore info - https://webpack.js.org/concepts/module-federation/#uncaught-error-shared-module-is-not-available-for-eager-consumption",
+                        "default": [],
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
                       },
                       "deps": {
                         "title": "list of the dependencies that will be shared",

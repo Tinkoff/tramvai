@@ -125,6 +125,7 @@ describe('JSON schema для tramvai.json', () => {
             "root": "src/app",
             "serverApiDir": "src/api",
             "shared": {
+              "criticalChunks": [],
               "deps": [],
               "flexibleTramvaiVersions": true,
             },
@@ -182,6 +183,7 @@ describe('JSON schema для tramvai.json', () => {
             },
             "root": "src/module",
             "shared": {
+              "criticalChunks": [],
               "deps": [],
               "flexibleTramvaiVersions": true,
             },

@@ -7,6 +7,14 @@ import { isFileSystemPageComponent, fileSystemPageToWebpackChunkName } from '@tr
 import { PRELOAD_JS } from '../../constants/performance';
 import { flushFiles } from '../utils/flushFiles';
 
+let criticalChunks = [];
+
+try {
+  criticalChunks = JSON.parse(process.env.__TRAMVAI_CRITICAL_CHUNKS);
+} catch (e) {
+  // do nothing
+}
+
 export const bundleResource = async ({
   bundle,
   modern,
@@ -36,7 +44,10 @@ export const bundleResource = async ({
   const { scripts: baseScripts } = flushFiles(['vendor'], webpackStats, {
     ignoreDependencies: true,
   });
-  const { scripts, styles } = flushFiles([...bundles, ...lazyChunks, 'platform'], webpackStats);
+  const { scripts, styles } = flushFiles(
+    [...bundles, ...lazyChunks, ...criticalChunks, 'platform'],
+    webpackStats
+  );
 
   const genHref = (href) => `${publicPath}${href}`;
 

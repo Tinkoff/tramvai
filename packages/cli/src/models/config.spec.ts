@@ -102,6 +102,7 @@ it('should populate defaults for config', () => {
           "root": "src",
           "serverApiDir": "src/api",
           "shared": {
+            "criticalChunks": [],
             "deps": [],
             "flexibleTramvaiVersions": true,
           },
@@ -159,6 +160,7 @@ it('should populate defaults for config', () => {
           },
           "root": "packages/child-app",
           "shared": {
+            "criticalChunks": [],
             "deps": [],
             "flexibleTramvaiVersions": true,
           },
@@ -337,6 +339,7 @@ it('should populate defaults for overridable options', () => {
           "root": "src",
           "serverApiDir": "src/api",
           "shared": {
+            "criticalChunks": [],
             "deps": [],
             "flexibleTramvaiVersions": true,
           },
@@ -408,6 +411,7 @@ it('should populate defaults for overridable options', () => {
           },
           "root": "packages/child-app",
           "shared": {
+            "criticalChunks": [],
             "deps": [],
             "flexibleTramvaiVersions": true,
           },

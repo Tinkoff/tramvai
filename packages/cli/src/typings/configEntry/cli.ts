@@ -303,6 +303,13 @@ export interface CliConfigEntry extends ConfigEntry {
      */
     flexibleTramvaiVersions: boolean;
     /**
+     * @title add chunks to preload as critical in-parallel with "platform.js"
+     * @description this option is useful when you need to create async boundary for app dependencies.
+     * More info - https://webpack.js.org/concepts/module-federation/#uncaught-error-shared-module-is-not-available-for-eager-consumption
+     * @default []
+     */
+    criticalChunks: string[];
+    /**
      * @title list of the dependencies that will be shared
      * @default []
      */
