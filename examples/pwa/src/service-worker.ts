@@ -1,7 +1,12 @@
 /// <reference lib="webworker" />
 
 import { clientsClaim } from 'workbox-core';
-import { precacheAndRoute } from 'workbox-precaching';
+import {
+  cacheApplicationImages,
+  cacheApplicationStaticAssets,
+  cacheApplicationFonts,
+  cacheApplicationPages,
+} from '@tramvai/pwa-recipes';
 
 declare const self: ServiceWorkerGlobalScope;
 
@@ -13,7 +18,19 @@ self.addEventListener('message', (event) => {
   }
 });
 
-precacheAndRoute(self.__WB_MANIFEST);
+const precacheManifest = self.__WB_MANIFEST;
+
+console.error('[sw] precacheManifest', precacheManifest);
+
+// @todo integration tests
+cacheApplicationStaticAssets({ precacheManifest });
+cacheApplicationImages({ precacheManifest });
+cacheApplicationFonts({ precacheManifest });
+cacheApplicationPages({ precacheManifest, networkTimeoutSeconds: 1 });
+
+// @todo
+// cacheApplicationAdminRoutes();
+// cacheApplicationCSRFallback();
 
 // https://web.dev/service-worker-lifecycle/#skip-the-waiting-phase
 self.addEventListener('install', () => {

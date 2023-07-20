@@ -1,0 +1,14 @@
+{
+  "name": "@tramvai/pwa-recipes",
+  "sourceRoot": "packages/tramvai/pwa-recipes/src",
+  "projectType": "library",
+  "targets": {
+    "build-publish": {
+      "outputs": [
+        "packages/tramvai/pwa-recipes/package.json",
+        "packages/tramvai/pwa-recipes/lib"
+      ],
+      "executor": "@tramvai/nx-plugin:build"
+    }
+  }
+}

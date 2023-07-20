@@ -5,7 +5,7 @@ export type WebManifestOptions = {
    */
   enabled?: boolean;
   /**
-   * @title Name of generated manifest file (will be placed in "output.client" directory). You can use `[hash]` placeholder for manifest cache busting
+   * @title Name of generated manifest file (will be placed in "output.client" directory). You can use `[hash]` placeholder for manifest cache busting in production mode
    * @default "/manifest.[hash].json"
    */
   dest?: string;

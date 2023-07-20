@@ -99,7 +99,9 @@ export default (configManager: ConfigManager<CliConfigEntry>) => (config: Config
         ...configManager.define[configManager.env],
 
         'process.env.APP_ID': JSON.stringify(configManager.name || 'common'),
-        'process.env.APP_VERSION': JSON.stringify(process.env.APP_VERSION),
+        'process.env.APP_VERSION': process.env.APP_VERSION
+          ? JSON.stringify(process.env.APP_VERSION)
+          : undefined,
 
         'process.env.ENABLE_DEVTOOLS':
           process.env.ENABLE_DEVTOOLS || configManager.env === 'development',

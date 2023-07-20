@@ -79,6 +79,7 @@ describe('@tramvai/cli start command', () => {
 
         expect(responseServer.text)
           .toMatch(`<link rel="stylesheet" href="http://localhost:${staticServerPort}/dist/client/platform.css">
+      <script src="http://localhost:${staticServerPort}/dist/client/react.js" defer></script>
       <script src="http://localhost:${staticServerPort}/dist/client/hmr.js" defer></script>
       <script src="http://localhost:${staticServerPort}/dist/client/platform.js" defer></script>`);
         expect(responseServer.text).toMatch(`this is App`);
@@ -188,6 +189,7 @@ describe('@tramvai/cli start command', () => {
 
       expect(responseServer.text)
         .toMatch(`<link rel="stylesheet" href="http://localhost:${staticServerPort}/dist/client/platform.css">
+      <script src="http://localhost:${staticServerPort}/dist/client/react.js" defer></script>
       <script src="http://localhost:${staticServerPort}/dist/client/hmr.js" defer></script>
       <script src="http://localhost:${staticServerPort}/dist/client/platform.js" defer></script>`);
       expect(responseServer.text).toMatch(`this is App`);

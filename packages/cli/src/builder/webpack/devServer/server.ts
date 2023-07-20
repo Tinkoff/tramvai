@@ -86,6 +86,7 @@ export const serverRunner = ({
     let resolveWorkerPort: () => void | null;
     let workerPortPromise: Promise<void> | null;
     let hasExitedUnexpectedly = false;
+    let proxyErrorCount = 0;
 
     const proxy = createProxyServer({
       // указываем, что сами обработаем ответ
@@ -157,6 +158,8 @@ export const serverRunner = ({
     // делаем запросы к дочернему процессу и пытаемся полностью получить его ответ
     // если всё ок, то просто отправляем полученные данные клиенту
     proxy.on('proxyRes', (proxyRes, req, res) => {
+      proxyErrorCount--;
+
       if (!res.headersSent) {
         // дублируем всю логику прокси и отправляем ответ
         // немного костыль по мотивам https://github.com/http-party/node-http-proxy/issues/1263#issuecomment-394758768
@@ -197,7 +200,17 @@ export const serverRunner = ({
         return;
       }
 
+      if (proxyErrorCount > 10) {
+        console.error('[dev-server-error] looping of request proxying to worker', err);
+        // @ts-ignore
+        res.statusCode = 500;
+        res.end(EXITED_UNEXPECTEDLY);
+        return;
+      }
+
       if (pool.state !== PoolState.CLOSED) {
+        proxyErrorCount++;
+
         await waitWorkerPort();
 
         proxy.web(req, res as any, { target: `http://localhost:${workerPort}` });

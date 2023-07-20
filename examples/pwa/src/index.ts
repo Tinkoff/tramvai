@@ -11,6 +11,8 @@ import { DEFAULT_HEADER_COMPONENT } from '@tramvai/tokens-render';
 
 import { Header } from './components/features/Header/Header';
 
+import './app.module.css';
+
 createApp({
   name: 'pwa',
   modules: [

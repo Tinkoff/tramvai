@@ -21,7 +21,7 @@ test.describe('packages/modules/pwa', () => {
 
       const url = await Pwa.getWebmanifestUrl();
 
-      test.expect(/\/scope\/manifest\.[\w\d]+?\.webmanifest$/.test(url)).toBe(true);
+      test.expect(/\/scope\/manifest\.webmanifest$/.test(url)).toBe(true);
     });
 
     test('proxy should work', async ({ app, I, Pwa }) => {
@@ -44,6 +44,33 @@ test.describe('packages/modules/pwa', () => {
       await I.gotoPage(`${app.serverUrl}/scope/`);
 
       test.expect(await Pwa.getViewport()).toBe('width=device-width, initial-scale=1');
+    });
+  });
+
+  test.describe('PWA recipes', () => {
+    test('should cache static assets and pages', async ({ app, I, Pwa }) => {
+      await I.gotoPage(`${app.serverUrl}/scope/`);
+
+      const swResponses = await Pwa.getSWResponsesAfterReload();
+
+      test
+        .expect(
+          swResponses
+            .map((response) =>
+              response
+                .url()
+                .replace(app.serverUrl, `\${SERVER_URL}`)
+                .replace(app.staticUrl, `\${STATIC_URL}`)
+            )
+            .sort()
+        )
+        .toEqual([
+          `\${SERVER_URL}/scope/`,
+          `\${STATIC_URL}/dist/client/@_routes_scope_index.chunk.js`,
+          `\${STATIC_URL}/dist/client/platform.js`,
+          `\${STATIC_URL}/dist/client/react.js`,
+          `\${STATIC_URL}/dist/client/tramvai-workbox-window.chunk.js`,
+        ]);
     });
   });
 });

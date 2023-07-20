@@ -1,4 +1,5 @@
 import path from 'path';
+import type { Page } from '@playwright/test';
 import { test as base } from '@playwright/test';
 import type { CreateApp } from '@tramvai/internal-test-utils/fixtures/create-app';
 import { createApp, app, settingApp } from '@tramvai/internal-test-utils/fixtures/create-app';
@@ -9,6 +10,7 @@ import type { PwaComponentObject } from './pwa-fixture';
 import { PwaFixture } from './pwa-fixture';
 
 type TestFixture = {
+  page: Page;
   app: CreateApp.App;
   buildAllureTree: void;
   I: IAction;

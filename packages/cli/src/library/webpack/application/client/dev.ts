@@ -21,7 +21,7 @@ import sourcemaps from '../../blocks/sourcemaps';
 import FancyReporter from '../../plugins/WebpackBar/reporters/fancy';
 import { extendEntry } from '../../utils/extendEntry';
 import { extractCssPluginFactory } from '../../blocks/extractCssPlugin';
-import type { SplitChunksOptions } from '../../types/webpack';
+import { splitChunksConfig } from './prod/optimization/splitChunks';
 
 // eslint-disable-next-line max-statements
 export const webpackClientConfig = ({
@@ -78,7 +78,12 @@ export const webpackClientConfig = ({
 
   config.optimization.set('emitOnErrors', false);
 
-  config.batch(extractCssPluginFactory(configManager));
+  config.batch(
+    extractCssPluginFactory(configManager, {
+      filename: '[name].css',
+      chunkFilename: '[name].chunk.css',
+    })
+  );
 
   if (showProgress) {
     config.plugin('progress').use(WebpackBar, [
@@ -136,24 +141,11 @@ export const webpackClientConfig = ({
     },
   ]);
 
+  config.batch(splitChunksConfig(configManager));
+
   const { hotRefresh } = configManager;
 
   if (hotRefresh?.enabled) {
-    const splitChunks: SplitChunksOptions = {
-      cacheGroups: {
-        default: false,
-        defaultVendors: false,
-        commons: {
-          name: 'hmr',
-          enforce: true,
-          test: /[\\/]node_modules[\\/](react-refresh|webpack-hot-middleware|@pmmmwh[\\/]react-refresh-webpack-plugin)[\\/]/,
-          chunks: 'all',
-        },
-      },
-    };
-
-    config.optimization.splitChunks(splitChunks).set('chunkIds', 'named');
-
     extendEntry(config.entry('platform'), {
       import: [
         'webpack-hot-middleware/client?name=client&dynamicPublicPath=true&path=__webpack_hmr',

@@ -26,7 +26,7 @@
     "@tramvai/tokens-common": "0.0.0-stub",
     "@tramvai/tokens-render": "0.0.0-stub",
     "@tramvai/tokens-server": "0.0.0-stub",
-    "workbox-window": "^6.4.1"
+    "workbox-window": "^6.6.1"
   },
   "devDependencies": {},
   "peerDependencies": {

@@ -32,6 +32,7 @@
     "@tramvai/core": "0.0.0-stub",
     "@tramvai/react": "0.0.0-stub",
     "@tramvai/state": "0.0.0-stub",
+    "@tramvai/pwa-recipes": "0.0.0-stub",
     "@tramvai/module-common": "0.0.0-stub",
     "@tramvai/module-error-interceptor": "0.0.0-stub",
     "@tramvai/module-render": "0.0.0-stub",
@@ -43,8 +44,7 @@
     "@tramvai/tokens-common": "0.0.0-stub",
     "@tramvai/tokens-render": "0.0.0-stub",
     "@tramvai/tokens-router": "0.0.0-stub",
-    "workbox-core": "^6.5.4",
-    "workbox-precaching": "^6.5.4",
+    "workbox-core": "^6.6.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "tslib": "^2.4.0"

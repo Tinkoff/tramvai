@@ -54,6 +54,25 @@ export const pwaBlock =
           // @todo CSR fallback or all static pages?
           // do not forget about revision and possible conflict with modifyURLPrefix
         ],
+        manifestTransforms: [
+          (manifest, compilation: any) => {
+            return {
+              // we need to have a relative webmanifest url for precaching
+              manifest: manifest.map((asset) => {
+                const assetName = asset.url.replace(assetsPrefix, '');
+                const assetInfo = compilation.assetsInfo.get(asset.url.replace(assetsPrefix, ''));
+
+                if (assetInfo._webmanifestFilename) {
+                  return {
+                    ...asset,
+                    url: `${pwa.sw.scope}${assetName}`,
+                  };
+                }
+                return asset;
+              }),
+            };
+          },
+        ],
       };
 
       if (pwa.workbox.include) {
@@ -104,18 +123,33 @@ export const pwaBlock =
         config.output.set('devtoolNamespace', 'tramvai');
       }
 
+      config.plugin('define').tap((args) => [
+        {
+          ...args[0],
+          'process.env.ASSETS_PREFIX': JSON.stringify(assetsPrefix),
+        },
+      ]);
+
       config.plugin('workbox').use(workboxPlugin);
     }
 
     if (pwa.webmanifest?.enabled) {
-      const webmanifestPlugin = new WebManifestPlugin(pwa.webmanifest);
+      const webmanifestPlugin = new WebManifestPlugin({
+        manifest: pwa.webmanifest,
+        icon: pwa.icon,
+        assetsPrefix,
+      });
 
       config.plugin('webmanifest').use(webmanifestPlugin);
     }
 
     if (pwa.icon?.src) {
       const iconSrc = path.join(rootDir, root, pwa.icon.src);
-      const pwaIconsPlugin = new PwaIconsPlugin({ ...pwa.icon, src: iconSrc });
+      const pwaIconsPlugin = new PwaIconsPlugin({
+        ...pwa.icon,
+        src: iconSrc,
+        mode: configManager.env,
+      });
 
       config.plugin('pwa-icons').use(pwaIconsPlugin);
     }

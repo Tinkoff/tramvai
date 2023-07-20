@@ -73,7 +73,10 @@ export const splitChunksConfig =
           return false;
         }
 
-        return topLevelFrameworkPaths.some((packagePath) => resource.startsWith(packagePath));
+        return (
+          !resource.startsWith('react-refresh') &&
+          topLevelFrameworkPaths.some((packagePath) => resource.startsWith(packagePath))
+        );
       },
       priority: 40,
       // Don't let webpack eliminate this chunk (prevents this chunk from becoming a part of the commons chunk)
@@ -96,6 +99,7 @@ export const splitChunksConfig =
               minChunks: splitChunks.granularChunksSplitNumber,
               minSize: splitChunks.granularChunksMinSize,
               reuseExistingChunk: true,
+              priority: 30,
               name(module: any, chunks: webpack.Chunk[]) {
                 return crypto
                   .createHash('sha1')
@@ -119,10 +123,23 @@ export const splitChunksConfig =
             commons: {
               name: 'common-chunk',
               minChunks: splitChunks.commonChunkSplitNumber,
+              priority: 30,
             },
           },
         };
         break;
+    }
+
+    const { hotRefresh } = configManager;
+
+    if (hotRefresh?.enabled && webpackSplitChunks) {
+      webpackSplitChunks.cacheGroups.hmr = {
+        name: 'hmr',
+        enforce: true,
+        test: /[\\/]node_modules[\\/](react-refresh|webpack-hot-middleware|@pmmmwh[\\/]react-refresh-webpack-plugin)[\\/]/,
+        chunks: 'all',
+        priority: 20,
+      };
     }
 
     config.optimization

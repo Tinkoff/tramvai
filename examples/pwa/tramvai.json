@@ -37,7 +37,10 @@
               "platform\\.([\\w\\d]+?\\.)?(js|css)$",
               "react\\.([\\w\\d]+?\\.)?js$",
               "tramvai-workbox-window\\.([\\w\\d]+?\\.)?chunk.js$",
-              "manifest\\.[\\w\\d]+?\\.webmanifest$"
+              "manifest\\.([\\w\\d]+?\\.)?webmanifest$"
+            ],
+            "additionalManifestEntries": [
+              "/scope/"
             ]
           },
           "webmanifest": {

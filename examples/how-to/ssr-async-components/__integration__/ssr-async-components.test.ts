@@ -65,6 +65,12 @@ describe('ssr-async-components', () => {
             charset="utf-8"
             crossorigin="anonymous"
             data-critical="true"
+            src="\${STATIC_URL}/dist/client/react.js"
+          ></script>
+          <script defer="defer"
+            charset="utf-8"
+            crossorigin="anonymous"
+            data-critical="true"
             src="\${STATIC_URL}/dist/client/hmr.js"
           ></script>
           <script defer="defer"

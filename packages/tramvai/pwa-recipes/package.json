@@ -1,0 +1,31 @@
+{
+  "name": "@tramvai/pwa-recipes",
+  "version": "0.0.0-stub",
+  "description": "",
+  "main": "lib/index.js",
+  "module": "lib/index.es.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "sideEffects": false,
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Tinkoff/tramvai.git"
+  },
+  "scripts": {
+    "build": "tramvai-build --forPublish --preserveModules",
+    "watch": "tsc -w"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "workbox-routing": "^6.6.1",
+    "workbox-strategies": "^6.6.1",
+    "workbox-expiration": "^6.6.1",
+    "workbox-cacheable-response": "^6.6.1",
+    "workbox-precaching": "^6.6.1"
+  }
+}

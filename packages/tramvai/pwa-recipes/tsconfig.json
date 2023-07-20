@@ -1,0 +1,14 @@
+{
+  "extends": "../../../tsconfig.lib.json",
+  "include": [
+    "./src"
+  ],
+  "compilerOptions": {
+    "declarationDir": "./lib",
+    "outDir": "./lib",
+    "rootDir": "./src",
+    "strict": true,
+    "lib": ["esnext", "webworker"]
+  },
+  "references": []
+}

@@ -1,4 +1,4 @@
-import type { TestFixture, BrowserContext, Page } from '@playwright/test';
+import type { TestFixture, BrowserContext, Page, Response } from '@playwright/test';
 import type { CreateApp } from '@tramvai/internal-test-utils/fixtures/create-app';
 
 export class PwaComponentObject {
@@ -26,6 +26,25 @@ export class PwaComponentObject {
           .then((registration) => (registration?.scope ?? '').replace(serverUrl, '')),
       this.app.serverUrl
     );
+  }
+
+  async getSWResponsesAfterReload(): Promise<Response[]> {
+    const responses: Response[] = [];
+
+    // webmanifest and icons not intercepted, can't find any issues
+    this.page.on('response', (response) => {
+      if (!response.fromServiceWorker()) {
+        return;
+      }
+
+      responses.push(response);
+    });
+
+    await this.waitForSWRegistration();
+
+    await this.page.reload({ waitUntil: 'networkidle' });
+
+    return responses;
   }
 
   // @todo switch to https://playwright.dev/docs/service-workers-experimental after stable release

@@ -197,13 +197,6 @@ export const createConfigManager = <C extends ConfigEntry = ConfigEntry, E exten
 
     if (pwa.webmanifest?.enabled) {
       pwa.webmanifest = {
-        icons: pwa.icon?.src
-          ? pwa.icon.sizes.map((size) => ({
-              src: `${config.assetsPrefix}${pwa.icon.dest}/${size}x${size}.png`,
-              sizes: `${size}x${size}`,
-              type: 'image/png',
-            }))
-          : [],
         ...pwa.webmanifest,
         scope: pwa.webmanifest.scope ?? pwa.sw?.scope,
         name: pwa.webmanifest.name ?? config.name,
@@ -212,12 +205,16 @@ export const createConfigManager = <C extends ConfigEntry = ConfigEntry, E exten
       };
 
       if (pwa.webmanifest.dest.includes('[hash]')) {
-        const crypto = require('crypto');
-        const hashSum = crypto.createHash('sha256');
-        hashSum.update(JSON.stringify(pwa.webmanifest));
-        const currentHash = hashSum.digest('hex');
+        if (env === 'production') {
+          const crypto = require('crypto');
+          const hashSum = crypto.createHash('sha256');
+          hashSum.update(JSON.stringify(pwa.webmanifest));
+          const currentHash = hashSum.digest('hex');
 
-        pwa.webmanifest.dest = pwa.webmanifest.dest.replace('[hash]', currentHash.substr(0, 8));
+          pwa.webmanifest.dest = pwa.webmanifest.dest.replace('[hash]', currentHash.substr(0, 8));
+        } else {
+          pwa.webmanifest.dest = pwa.webmanifest.dest.replace('.[hash]', '').replace('[hash].', '');
+        }
       }
     }
   } else if (isChildApp(config)) {

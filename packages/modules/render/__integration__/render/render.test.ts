@@ -58,6 +58,7 @@ describe('render', () => {
 
     expect(scripts).toEqual([
       `${staticUrl}/dist/client/root.chunk.js`,
+      `${staticUrl}/dist/client/react.js`,
       `${staticUrl}/dist/client/platform.js`,
     ]);
     expect(styles).toEqual(['']);

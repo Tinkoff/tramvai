@@ -1,6 +1,9 @@
 import path from 'path';
 import fs from 'fs';
+import { readJson } from 'fs-extra';
 import { build } from '@tramvai/cli';
+
+const contenthashPngRegexp = /\.([\w\d]+?)\.png/;
 
 describe('packages/modules/pwa - assets', () => {
   let swFilename: string;
@@ -29,9 +32,9 @@ describe('packages/modules/pwa - assets', () => {
         filename.endsWith('.webmanifest')
       )!
     );
-    iconsFilenames = ['36x36', '512x512'].map((size) =>
-      path.join(distClientDirectory, 'images', `${size}.png`)
-    );
+    iconsFilenames = (await readJson(webmanifestFilename)).icons.map((icon: any) => {
+      return icon.src.replace('http://localhost:4000/dist/client', distClientDirectory);
+    });
   }, 250000);
 
   describe('Service Worker', () => {
@@ -101,14 +104,21 @@ describe('packages/modules/pwa - assets', () => {
     });
 
     it('should contain generated icons', () => {
-      expect(webmanifestContent.icons).toEqual([
+      expect(
+        webmanifestContent.icons.map((icon: any) => {
+          return {
+            ...icon,
+            src: icon.src.replace(contenthashPngRegexp, '.[contenthash].png'),
+          };
+        })
+      ).toEqual([
         {
-          src: 'http://localhost:4000/dist/client/images/36x36.png',
+          src: 'http://localhost:4000/dist/client/images/36x36.[contenthash].png',
           sizes: '36x36',
           type: 'image/png',
         },
         {
-          src: 'http://localhost:4000/dist/client/images/512x512.png',
+          src: 'http://localhost:4000/dist/client/images/512x512.[contenthash].png',
           sizes: '512x512',
           type: 'image/png',
         },

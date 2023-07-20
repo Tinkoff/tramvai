@@ -14,16 +14,17 @@ describe('router/link-prefetch', () => {
     const assetsRequests: string[] = [];
 
     const initialChunks = [
-      `${staticUrl}/dist/client/mainDefault.chunk.js`,
-      `${staticUrl}/dist/client/pages-main.chunk.js`,
-      `${staticUrl}/dist/client/platform.js`,
+      `\${STATIC_URL}/dist/client/mainDefault.chunk.js`,
+      `\${STATIC_URL}/dist/client/pages-main.chunk.js`,
+      `\${STATIC_URL}/dist/client/platform.js`,
+      `\${STATIC_URL}/dist/client/react.js`,
     ];
     const inViewportChunks = [
-      `${staticUrl}/dist/client/pages-third.chunk.js`,
-      `${staticUrl}/dist/client/pages-second.chunk.css`,
-      `${staticUrl}/dist/client/pages-second.chunk.js`,
+      `\${STATIC_URL}/dist/client/pages-third.chunk.js`,
+      `\${STATIC_URL}/dist/client/pages-second.chunk.css`,
+      `\${STATIC_URL}/dist/client/pages-second.chunk.js`,
     ];
-    const outOfViewportChunks = [`${staticUrl}/dist/client/pages-out-of-viewport.chunk.js`];
+    const outOfViewportChunks = [`\${STATIC_URL}/dist/client/pages-out-of-viewport.chunk.js`];
 
     const { parsed } = await render('/');
 
@@ -37,13 +38,14 @@ describe('router/link-prefetch', () => {
       [
         "\${STATIC_URL}/dist/client/mainDefault.chunk.js",
         "\${STATIC_URL}/dist/client/pages-main.chunk.js",
+        "\${STATIC_URL}/dist/client/react.js",
         "\${STATIC_URL}/dist/client/platform.js",
       ]
     `);
 
     page.on('request', (request) => {
       if (request.url().startsWith(staticUrl)) {
-        assetsRequests.push(request.url());
+        assetsRequests.push(replaceStaticUrl(staticUrl, request.url()));
       }
     });
 
@@ -64,3 +66,8 @@ describe('router/link-prefetch', () => {
     );
   });
 });
+
+function replaceStaticUrl(staticUrl: string, url: string) {
+  // eslint-disable-next-line no-template-curly-in-string
+  return url.replace(staticUrl, '${STATIC_URL}');
+}

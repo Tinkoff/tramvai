@@ -50,6 +50,7 @@ app.get<{ Querystring: Querystring }>(
     return `<html>
     <head>
       <link rel="stylesheet" href="http://localhost:${appConfig.staticPort}/dist/client/platform.css">
+      <script src="http://localhost:${appConfig.staticPort}/dist/client/react.js" defer></script>
       <script src="http://localhost:${appConfig.staticPort}/dist/client/hmr.js" defer></script>
       <script src="http://localhost:${appConfig.staticPort}/dist/client/platform.js" defer></script>
     </head>
