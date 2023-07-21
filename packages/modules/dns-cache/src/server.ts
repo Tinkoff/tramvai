@@ -1,13 +1,12 @@
 import noop from '@tinkoff/utils/function/noop';
-import monkeypatch from '@tinkoff/monkeypatch';
 import http from 'http';
 import https from 'https';
 import dns from 'dns';
 import CacheableLookup from 'cacheable-lookup';
 import { declareModule, provide, commandLineListTokens, Scope, createToken } from '@tramvai/core';
 import type { Cache } from '@tramvai/tokens-common';
+import { DEFAULT_HTTP_CLIENT_INTERCEPTORS } from '@tramvai/tokens-http-client';
 import { CREATE_CACHE_TOKEN, ENV_MANAGER_TOKEN, ENV_USED_TOKEN } from '@tramvai/tokens-common';
-import { getUrlAndOptions } from '@tramvai/module-metrics';
 
 const DNS_LOOKUP_CACHE_TOKEN = createToken<Cache>('dnsLookupCache');
 
@@ -79,42 +78,27 @@ export const TramvaiDnsCacheModule = declareModule({
       },
     }),
     provide({
-      provide: commandLineListTokens.init,
-      multi: true,
+      provide: DEFAULT_HTTP_CLIENT_INTERCEPTORS,
       useFactory: ({ envManager, cache }) => {
-        if (envManager.get('DNS_LOOKUP_CACHE_ENABLE') !== 'true') {
-          return noop;
-        }
-        // if dns cache is stale, we can get any error, so it's safe to always clear dns cache on request error,
-        // except aborted requests and timeouts - this errors shoud be expected
-        return function addPossibleStaleDnsErrorsHandler() {
-          function handlePossibleStaleDnsErrors(originalReq: any, ...args: any) {
-            // @ts-expect-error
-            const req = originalReq.apply(this, args);
+        const dnsLookupEnabled = envManager.get('DNS_LOOKUP_CACHE_ENABLE') === 'true';
 
-            req.on('error', (e: Error & { code?: string; type?: string }) => {
-              if (e?.type === 'aborted' || e?.code === 'ETIMEDOUT') {
-                return;
+        return (req, next) => {
+          if (dnsLookupEnabled) {
+            return next(req).catch((e: any) => {
+              // expected HTTP errors - https://github.com/Tinkoff/tinkoff-request/blob/master/packages/plugin-protocol-http/src/errors.ts
+              const isExpectedError =
+                e.code === 'ERR_HTTP_REQUEST_TIMEOUT' || e.code === 'ABORT_ERR';
+
+              if (!isExpectedError) {
+                if (req.baseUrl) {
+                  // clear DNS lookup cache for all unexpected HTTP errors
+                  cache.delete(new URL(req.baseUrl).hostname);
+                }
               }
-
-              const [_, __, url] = getUrlAndOptions(args);
-
-              cache.delete((url as URL)?.hostname);
+              throw e;
             });
-
-            return req;
           }
-
-          monkeypatch({
-            obj: http,
-            method: 'request',
-            handler: handlePossibleStaleDnsErrors,
-          });
-          monkeypatch({
-            obj: https,
-            method: 'request',
-            handler: handlePossibleStaleDnsErrors,
-          });
+          return next(req);
         };
       },
       deps: {

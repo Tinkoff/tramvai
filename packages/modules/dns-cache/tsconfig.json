@@ -16,10 +16,7 @@
             "path": "../../tokens/common"
         },
         {
-            "path": "../metrics"
-        },
-        {
-            "path": "../../libs/monkeypatch"
+            "path": "../../tokens/http-client"
         }
     ]
 }

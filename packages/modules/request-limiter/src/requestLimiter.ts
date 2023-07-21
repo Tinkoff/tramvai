@@ -113,10 +113,14 @@ export class RequestLimiter {
   }
 }
 
-export const fastifyRequestsLimiter = fp<{ requestsLimiter: RequestLimiter }>(
-  async (fastify, { requestsLimiter }) => {
-    fastify.addHook('onRequest', (req, res, next) => {
-      requestsLimiter.add({ req, res, next });
-    });
+declare module 'fastify' {
+  interface FastifyPluginOptions {
+    requestsLimiter: RequestLimiter;
   }
-);
+}
+
+export const fastifyRequestsLimiter = fp(async (fastify, { requestsLimiter }) => {
+  fastify.addHook('onRequest', (req, res, next) => {
+    requestsLimiter.add({ req, res, next });
+  });
+});
