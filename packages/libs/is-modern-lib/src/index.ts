@@ -51,6 +51,7 @@ export const modernLibs = [
   '@tui-react-mobile',
   'tinkoff-push-web',
   'cacheable-lookup',
+  'node-abort-controller',
 ];
 
 const regexStringFactory = ({ except }: { except?: boolean } = {}) =>
