@@ -13,6 +13,41 @@ For the most part, it is the rendering time to HTML string that limits the throu
 
 ### Running the application
 
+#### Run server manually
+
+:::tip
+
+Use this recipe for any server performance tests, results will be more stable than with `start-prod` command
+
+:::
+
+Before, you need to made a production build:
+
+```bash
+tramvai build <appName>
+```
+
+After, with default options, application server bundle will be placed here - `dist/server/server.js`, and client code in `dist/client` directory.
+
+Use this command to run application server:
+
+```bash
+DANGEROUS_UNSAFE_ENV_FILES='true' DEV_STATIC='true' ASSETS_PREFIX='http://localhost:4000/dist/client/' node --inspect dist/server/server.js
+```
+
+About env variables:
+- `DANGEROUS_UNSAFE_ENV_FILES` force server to read env variables from `env.development.js`
+- `DEV_STATIC` force server to run static server on `4000` port (all folders from current directory will be served)
+- `ASSETS_PREFIX` points to client code folder on static server
+
+#### Run start-prod command
+
+:::tip
+
+Fastest way to run production server, but not suitable for performance tests due to inaccuracies
+
+:::
+
 To debug the production version of the application, the `tramvai start-prod <appName>` command with the `--debug` flag is used.
 
 :hourglass: Run the application:

@@ -85,35 +85,38 @@ export const TramvaiPwaWorkboxModule = declareModule({
       useFactory: ({ workbox, logger }) => {
         const log = logger('pwa:workbox');
 
-        return async function registerWorkbox() {
+        return function registerWorkbox() {
           if (!process.env.TRAMVAI_PWA_WORKBOX_ENABLED) {
             return;
           }
 
-          try {
-            const wb = await workbox();
+          // load workbox-window early but in non-blocking way
+          (async () => {
+            try {
+              const wb = await workbox();
 
-            if (!wb) {
-              log.info('Service Worker registration stopped');
-              return;
+              if (!wb) {
+                log.info('Service Worker registration stopped');
+                return;
+              }
+
+              // @todo unregister when Workbox is disabled in config !!!
+              // https://github.com/nuxt-community/pwa-module/blob/main/templates/workbox/workbox.unregister.js
+
+              await wb.register();
+
+              // @todo support force update strategies?
+              if (process.env.NODE_ENV === 'development') {
+                await wb.update();
+              }
+            } catch (error: any) {
+              log.error({
+                event: 'register-failed',
+                message: 'Service Worker registration failed',
+                error,
+              });
             }
-
-            // @todo unregister when Workbox is disabled in config !!!
-            // https://github.com/nuxt-community/pwa-module/blob/main/templates/workbox/workbox.unregister.js
-
-            await wb.register();
-
-            // @todo support force update strategies?
-            if (process.env.NODE_ENV === 'development') {
-              await wb.update();
-            }
-          } catch (error: any) {
-            log.error({
-              event: 'register-failed',
-              message: 'Service Worker registration failed',
-              error,
-            });
-          }
+          })();
         };
       },
       deps: {

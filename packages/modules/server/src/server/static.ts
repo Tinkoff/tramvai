@@ -36,13 +36,11 @@ export const staticAppCommand = ({
       root: process.cwd(),
       prefix: '/',
       setHeaders: (res) => {
-        res.headers({
-          'Access-Control-Allow-Origin': '*',
-          'Timing-Allow-Origin': '*',
-          'X-App-Id': appInfo.appName,
-          'X-App-Version': appVersion,
-          'X-Host': os.hostname(),
-        });
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Timing-Allow-Origin', '*');
+        res.setHeader('X-App-Id', appInfo.appName);
+        res.setHeader('X-App-Version', appVersion);
+        res.setHeader('X-Host', os.hostname());
       },
     });
     appStatic.listen({ port }, () => log.info(`Running static server on port: ${port}`));

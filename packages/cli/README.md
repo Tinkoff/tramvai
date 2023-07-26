@@ -257,3 +257,11 @@ More details and examples you can find in typescript documentation:
 - [path mapping](https://www.typescriptlang.org/docs/handbook/module-resolution.html#path-mapping)
 
 @tramvai/cli will reuse options `baseUrl` and `paths` from the app's `tsconfig.json` to provide path mapping functionality.
+
+### How to pass Node.js options
+
+You can use `NODE_OPTIONS` env variable, e.g.:
+
+```bash
+NODE_OPTIONS="--max_semi_space_size=64" tramvai start-prod {appName}
+```
