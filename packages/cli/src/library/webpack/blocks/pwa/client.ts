@@ -60,9 +60,11 @@ export const pwaBlock =
               // we need to have a relative webmanifest url for precaching
               manifest: manifest.map((asset) => {
                 const assetName = asset.url.replace(assetsPrefix, '');
-                const assetInfo = compilation.assetsInfo.get(asset.url.replace(assetsPrefix, ''));
+                // in development build `publicPath` is localhost, in production is empty string
+                const publicPath = compilation.outputOptions?.publicPath || assetsPrefix;
+                const assetInfo = compilation.assetsInfo.get(asset.url.replace(publicPath, ''));
 
-                if (assetInfo._webmanifestFilename) {
+                if (assetInfo?._webmanifestFilename) {
                   return {
                     ...asset,
                     url: `${pwa.sw.scope}${assetName}`,
