@@ -56,4 +56,46 @@ describe('initContainer', () => {
 
     expect(di.get(loggerToken)).toBe('log');
   });
+
+  it('module override initialProvider token value', () => {
+    const token = createToken('logger');
+
+    const LoggerModule = Module({
+      providers: [{ provide: token, useValue: 'module log' }],
+    })(class LoggerModule {});
+
+    const di = initContainer({
+      initialProviders: [{ provide: token, useValue: 'initial log' }],
+      modules: [LoggerModule],
+    });
+
+    expect(di.get(token)).toBe('module log');
+  });
+
+  it('provider override initialProvider token value', () => {
+    const token = createToken('logger');
+
+    const di = initContainer({
+      initialProviders: [{ provide: token, useValue: 'initial log' }],
+      providers: [{ provide: token, useValue: 'provider log' }],
+    });
+
+    expect(di.get(token)).toBe('provider log');
+  });
+
+  it('provider override module and initialProvider tokens value', () => {
+    const token = createToken('logger');
+
+    const LoggerModule = Module({
+      providers: [{ provide: token, useValue: 'module log' }],
+    })(class LoggerModule {});
+
+    const di = initContainer({
+      initialProviders: [{ provide: token, useValue: 'initial log' }],
+      providers: [{ provide: token, useValue: 'provider log' }],
+      modules: [LoggerModule],
+    });
+
+    expect(di.get(token)).toBe('provider log');
+  });
 });

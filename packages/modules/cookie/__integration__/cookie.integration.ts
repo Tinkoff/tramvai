@@ -1,6 +1,6 @@
 import { testChrome, testSafari, testSafariHttps } from './test-fixture';
 
-testChrome.describe('tinkoff-packages/modules/cookie', async () => {
+testChrome.describe('packages/modules/cookie', async () => {
   testChrome('Check that the cookie module in Chrome is working', async ({ app, I, Cookie }) => {
     await I.gotoPage(app.serverUrl);
 
@@ -25,7 +25,7 @@ testChrome.describe('tinkoff-packages/modules/cookie', async () => {
   );
 });
 
-testSafari.describe('tinkoff-packages/modules/cookie', async () => {
+testSafari.describe('packages/modules/cookie', async () => {
   testSafari('Check that the cookie module in Safari is working', async ({ app, I, Cookie }) => {
     await I.gotoPage(app.serverUrl);
 
@@ -37,7 +37,7 @@ testSafari.describe('tinkoff-packages/modules/cookie', async () => {
   });
 });
 
-testSafariHttps.describe('tinkoff-packages/modules/cookie', async () => {
+testSafariHttps.describe('packages/modules/cookie', async () => {
   testSafariHttps(
     'Check that the cookie module in Safari is working, secure',
     async ({ app, I, proxyServer, proxyStaticServer, Cookie }) => {
