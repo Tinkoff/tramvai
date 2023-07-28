@@ -230,7 +230,7 @@ Our new `PokemonPreview` component will only update when this particular pokemon
 :hourglass: Create an entry point into the Pokemon entity:
 
 ```tsx title="entities/pokemon/index.ts"
-import { Module } from '@tramvai/core';
+import { Module, provide } from '@tramvai/core';
 import { COMBINE_REDUCERS } from '@tramvai/tokens-common';
 // highlight-next-line
 import { PokemonsStore } from './model';
@@ -241,12 +241,12 @@ export * from './ui';
 @Module({
   providers: [
     // register reducer in the application
-    {
+    provide({
       provide: COMBINE_REDUCERS,
       multi: true,
       // highlight-next-line
       useValue: PokemonsStore,
-    },
+    }),
   ],
 })
 // highlight-next-line
