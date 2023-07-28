@@ -58,7 +58,7 @@ Modular framework for universal React applications
 
 ## Tutorials
 
-[Pokedex application](https://tramvai.dev/docs/tutorials/pokedex-app/new-app)
+[Pokedex application](https://tramvai.dev/docs/tutorial/new-app)
 
 ## Sandboxes
 
