@@ -44,7 +44,7 @@ export class PreloadManager implements ChildAppPreloadManager {
     this.resolveExternalConfig = resolveExternalConfig;
   }
 
-  async preload(request: ChildAppRequestConfig): Promise<void> {
+  async preload(request: ChildAppRequestConfig, onlyPrefetch = false): Promise<void> {
     await this.init();
 
     const config = this.resolveExternalConfig(request);
@@ -72,8 +72,10 @@ export class PreloadManager implements ChildAppPreloadManager {
           try {
             await this.loader.load(config);
 
-            await this.run('customer', config);
-            await this.run('clear', config);
+            if (!onlyPrefetch) {
+              await this.run('customer', config);
+              await this.run('clear', config);
+            }
           } catch (error) {
             if (process.env.NODE_ENV === 'development') {
               console.error('Child App loading error', error);
@@ -88,6 +90,10 @@ export class PreloadManager implements ChildAppPreloadManager {
         return promise;
       }
     }
+  }
+
+  async prefetch(request: ChildAppRequestConfig): Promise<void> {
+    return this.preload(request, true);
   }
 
   isPreloaded(request: ChildAppRequestConfig): boolean {

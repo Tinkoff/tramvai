@@ -26,7 +26,7 @@ const pagePreload = async (
       if (component?.childApps) {
         await Promise.all(
           component.childApps.map((request) =>
-            preloadManager.preload(request).catch(() => {
+            preloadManager.prefetch(request).catch(() => {
               // actual error will be logged internally
             })
           )

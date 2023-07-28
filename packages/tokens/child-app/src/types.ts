@@ -66,6 +66,7 @@ export interface ChildAppFinalConfig
 }
 export interface ChildAppPreloadManager {
   preload(config: ChildAppRequestConfig): Promise<void>;
+  prefetch(config: ChildAppRequestConfig): Promise<void>;
   isPreloaded(config: ChildAppRequestConfig): boolean;
   runPreloaded(): Promise<void>;
   pageRender(): void;

@@ -76,6 +76,10 @@ export class PreloadManager implements ChildAppPreloadManager {
     }
   }
 
+  async prefetch(request: ChildAppRequestConfig): Promise<void> {
+    return this.preload(request);
+  }
+
   isPreloaded(request: ChildAppRequestConfig): boolean {
     const config = this.resolveFullConfig(request);
 
