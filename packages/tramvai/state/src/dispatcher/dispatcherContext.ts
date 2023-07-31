@@ -307,12 +307,13 @@ Have you forgot to register reducer or add event handler in existing reducer?
       const storeName = keys[i];
 
       const store = this.storeInstances[storeName];
+      const dehydrateResult = store.dehydrate();
 
-      if (!store.dehydrate()) {
+      if (typeof dehydrateResult === 'undefined') {
         continue;
       }
 
-      stores[storeName] = store.dehydrate();
+      stores[storeName] = dehydrateResult;
     }
 
     return {

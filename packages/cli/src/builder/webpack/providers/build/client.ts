@@ -1,18 +1,11 @@
 import type { Provider } from '@tinkoff/dippy';
 import { provide } from '@tinkoff/dippy';
-import rimraf from 'rimraf';
 import webpack from 'webpack';
-import {
-  CLI_PACKAGE_MANAGER,
-  CLI_ROOT_DIR_TOKEN,
-  CONFIG_MANAGER_TOKEN,
-} from '../../../../di/tokens';
+import { CONFIG_MANAGER_TOKEN } from '../../../../di/tokens';
 import { toWebpackConfig } from '../../../../library/webpack/utils/toWebpackConfig';
-import { npmRequire } from '../../../../utils/npmRequire';
 import {
   CLIENT_CONFIG_MANAGER_TOKEN,
   CLOSE_HANDLER_TOKEN,
-  INIT_HANDLER_TOKEN,
   PROCESS_HANDLER_TOKEN,
   WEBPACK_CLIENT_COMPILER_TOKEN,
   WEBPACK_CLIENT_CONFIG_TOKEN,
@@ -40,39 +33,6 @@ export const buildClientProviders: Provider[] = [
     },
     deps: {
       webpackConfig: WEBPACK_CLIENT_CONFIG_TOKEN,
-    },
-  }),
-  provide({
-    provide: INIT_HANDLER_TOKEN,
-    multi: true,
-    useFactory: ({ configManager }) => {
-      return function clearBuildDir() {
-        return rimraf.sync(`${configManager.buildPath}/**`, {});
-      };
-    },
-    deps: {
-      configManager: CLIENT_CONFIG_MANAGER_TOKEN,
-    },
-  }),
-  provide({
-    provide: INIT_HANDLER_TOKEN,
-    multi: true,
-    useFactory: ({ configManager, rootDir, packageManager }) => {
-      return async function prepareImageOptimization() {
-        if (configManager.imageOptimization?.enabled) {
-          await npmRequire({
-            cliRootDir: rootDir,
-            packageManager,
-            packageName: 'image-webpack-loader',
-            description: 'Устанавливаем зависимости для опции imageOptimization',
-          });
-        }
-      };
-    },
-    deps: {
-      configManager: CLIENT_CONFIG_MANAGER_TOKEN,
-      rootDir: CLI_ROOT_DIR_TOKEN,
-      packageManager: CLI_PACKAGE_MANAGER,
     },
   }),
   provide({

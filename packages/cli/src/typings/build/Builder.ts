@@ -4,6 +4,7 @@ export interface BuilderCustomOptions {
 
 export interface BuilderOptions {
   shouldBuildClient: boolean;
+  onlyModern?: boolean;
   shouldBuildServer: boolean;
 }
 

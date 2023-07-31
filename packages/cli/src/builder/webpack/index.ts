@@ -22,6 +22,7 @@ import {
 } from './tokens';
 import { resolveDone } from './utils/resolveDone';
 import { registerProviders } from '../../utils/di';
+import { buildClientSharedProviders } from './providers/build/clientShared';
 import { buildClientProviders } from './providers/build/client';
 import { buildClientModernProviders } from './providers/build/clientModern';
 import { buildServerProviders } from './providers/build/server';
@@ -37,7 +38,7 @@ export const webpackProviders: Provider[] = [
     useFactory: ({ di }) => {
       return {
         name: BUILDER_NAME,
-        createBuilder({ options: { shouldBuildClient, shouldBuildServer } }) {
+        createBuilder({ options: { shouldBuildClient, shouldBuildServer, onlyModern } }) {
           registerProviders(di, [
             ...sharedProviders,
             ...(shouldBuildClient ? clientProviders : []),
@@ -84,7 +85,8 @@ export const webpackProviders: Provider[] = [
             },
             async build({ modern }) {
               registerProviders(di, [
-                ...(shouldBuildClient ? buildClientProviders : []),
+                ...(shouldBuildClient ? buildClientSharedProviders : []),
+                ...(shouldBuildClient && !onlyModern ? buildClientProviders : []),
                 ...(shouldBuildClient && modern ? buildClientModernProviders : []),
                 ...(shouldBuildServer ? buildServerProviders : []),
               ]);
