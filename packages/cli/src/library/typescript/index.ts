@@ -1,7 +1,7 @@
 import path from 'path';
 import omit from '@tinkoff/utils/object/omit';
 import type { Env } from '../../typings/Env';
-import babelConfig from '../babel';
+import { babelConfigFactory } from '../babel';
 
 const rootDir = process.cwd();
 
@@ -24,7 +24,7 @@ export default (options: Options) => {
     // для лоадера конфиг отличается от plain babel config, нужно преобразовывать
     babelOptions: omit(
       ['cacheDirectory', 'cacheIdentifier'],
-      babelConfig({
+      babelConfigFactory({
         env,
         isServer,
         modern,

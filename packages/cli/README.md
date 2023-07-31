@@ -265,3 +265,15 @@ You can use `NODE_OPTIONS` env variable, e.g.:
 ```bash
 NODE_OPTIONS="--max_semi_space_size=64" tramvai start-prod {appName}
 ```
+
+### How to get CPU profile of @tramvai/cli work?
+
+Run application server or production buid with env variable `TRAMVAI_CPU_PROFILE`:
+
+```bash
+TRAMVAI_CPU_PROFILE=1 tramvai build {appName}
+```
+
+Then, file with `tramvai-cli.${Date.now()}.cpuprofile` name will be generated in current working directory.
+
+You can open this trace in Chrome DevTools - `chrome://inspect`, "Open dedicated DevTools for Node", `Performance` tab.

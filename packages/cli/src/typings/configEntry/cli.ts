@@ -163,7 +163,11 @@ export interface CliConfigEntry extends ConfigEntry {
     /**
      * @title svgo plugins
      */
-    plugins?: Array<any>;
+    plugins?: Array<{
+      name: string;
+      active: boolean;
+      [key: string]: any;
+    }>;
   };
 
   /**

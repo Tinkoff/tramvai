@@ -1017,7 +1017,18 @@
             "plugins": {
               "title": "svgo plugins",
               "type": "array",
-              "items": {}
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "active": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false
+              }
             }
           },
           "additionalProperties": false
@@ -1122,23 +1133,23 @@
                         "dotAll": {
                           "type": "boolean"
                         },
-                        "__@match@5999": {
+                        "__@match@6003": {
                           "type": "object",
                           "additionalProperties": false
                         },
-                        "__@replace@6001": {
+                        "__@replace@6005": {
                           "type": "object",
                           "additionalProperties": false
                         },
-                        "__@search@6004": {
+                        "__@search@6008": {
                           "type": "object",
                           "additionalProperties": false
                         },
-                        "__@split@6006": {
+                        "__@split@6010": {
                           "type": "object",
                           "additionalProperties": false
                         },
-                        "__@matchAll@6008": {
+                        "__@matchAll@6012": {
                           "type": "object",
                           "additionalProperties": false
                         }
@@ -1659,7 +1670,18 @@
             "plugins": {
               "title": "svgo plugins",
               "type": "array",
-              "items": {}
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "active": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false
+              }
             }
           },
           "additionalProperties": false
@@ -1764,23 +1786,23 @@
                         "dotAll": {
                           "type": "boolean"
                         },
-                        "__@match@5999": {
+                        "__@match@6003": {
                           "type": "object",
                           "additionalProperties": false
                         },
-                        "__@replace@6001": {
+                        "__@replace@6005": {
                           "type": "object",
                           "additionalProperties": false
                         },
-                        "__@search@6004": {
+                        "__@search@6008": {
                           "type": "object",
                           "additionalProperties": false
                         },
-                        "__@split@6006": {
+                        "__@split@6010": {
                           "type": "object",
                           "additionalProperties": false
                         },
-                        "__@matchAll@6008": {
+                        "__@matchAll@6012": {
                           "type": "object",
                           "additionalProperties": false
                         }
@@ -2301,7 +2323,18 @@
             "plugins": {
               "title": "svgo plugins",
               "type": "array",
-              "items": {}
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "active": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false
+              }
             }
           },
           "additionalProperties": false
@@ -2406,23 +2439,23 @@
                         "dotAll": {
                           "type": "boolean"
                         },
-                        "__@match@5999": {
+                        "__@match@6003": {
                           "type": "object",
                           "additionalProperties": false
                         },
-                        "__@replace@6001": {
+                        "__@replace@6005": {
                           "type": "object",
                           "additionalProperties": false
                         },
-                        "__@search@6004": {
+                        "__@search@6008": {
                           "type": "object",
                           "additionalProperties": false
                         },
-                        "__@split@6006": {
+                        "__@split@6010": {
                           "type": "object",
                           "additionalProperties": false
                         },
-                        "__@matchAll@6008": {
+                        "__@matchAll@6012": {
                           "type": "object",
                           "additionalProperties": false
                         }

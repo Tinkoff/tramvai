@@ -2,7 +2,11 @@ const { spawnSync } = require('child_process');
 
 const args = process.argv.slice(2);
 const maxMemory = process.env.MAX_USED_MEMORY || '3000';
-const defaultArgs = [`--max_old_space_size=${maxMemory}`];
+const maxSemiSpaceSize = process.env.MAX_SEMI_SPACE_SIZE || '128';
+const defaultArgs = [
+  `--max_old_space_size=${maxMemory}`,
+  `--max_semi_space_size=${maxSemiSpaceSize}`,
+];
 
 const paramsIndex = args.findIndex((x) => !x.startsWith('-'));
 const nodeArgs = paramsIndex > 0 ? args.slice(0, paramsIndex) : [];

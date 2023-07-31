@@ -50,6 +50,7 @@ test/tramvai.json
 tinkoff-examples/granular/src/bundles
 tinkoff-examples/granular/src/pages
 tinkoff-examples/granular/src/deps
+**/*.cpuprofile
 
 # package-lock
 examples/*/package-lock.json

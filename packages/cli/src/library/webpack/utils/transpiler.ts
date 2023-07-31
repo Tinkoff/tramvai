@@ -2,7 +2,7 @@ import type Config from 'webpack-chain';
 import { sync as resolve } from 'resolve';
 import type { ConfigManager } from '../../../config/configManager';
 import { getSwcOptions } from '../../swc';
-import babelConfig from '../../babel';
+import { babelConfigFactory } from '../../babel';
 import type { Env } from '../../../typings/Env';
 import type { Target } from '../../../typings/target';
 import type { CliConfigEntry } from '../../../typings/configEntry/cli';
@@ -18,7 +18,6 @@ export type TranspilerConfig = {
   modules: 'es6' | 'commonjs' | false;
   loader: boolean;
   removeTypeofWindow: boolean;
-  alias: Record<string, any>;
   tramvai: boolean;
   hot: boolean;
   excludesPresetEnv: string[];
@@ -43,7 +42,7 @@ Please run "npx tramvai add --dev @tramvai/swc-integration" to fix the problem
     }
 
     if (loader === 'babel') {
-      return rule.loader('babel-loader').options(babelConfig(transpilerConfig)).end();
+      return rule.loader('babel-loader').options(babelConfigFactory(transpilerConfig)).end();
     }
   };
 
@@ -54,12 +53,16 @@ export const getTranspilerConfig = (
   const { generateDataQaTag, alias, enableFillActionNamePlugin, excludesPresetEnv } = configManager;
   const { env, modern } = configManager;
 
+  if (alias) {
+    console.warn(`"alias" option deprecated and ignored as cli now supports baseUrl and paths from the app's tsconfig.json file.
+Just check or add configuration to your tsconfig file and remove alias from tramvai.json`);
+  }
+
   return {
     isServer: configManager.buildType === 'server',
     env,
     generateDataQaTag,
     modern,
-    alias,
     tramvai: true,
     removeTypeofWindow: true,
     hot: !!configManager.hotRefresh.enabled,

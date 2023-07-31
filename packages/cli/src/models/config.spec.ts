@@ -211,7 +211,7 @@ it('should populate defaults for overridable options', () => {
         svgo: {
           plugins: [
             {
-              'test-plugin': true,
+              name: 'test-plugin',
             },
           ],
         },
@@ -353,7 +353,7 @@ it('should populate defaults for overridable options', () => {
           "svgo": {
             "plugins": [
               {
-                "test-plugin": true,
+                "name": "test-plugin",
               },
             ],
           },

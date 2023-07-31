@@ -29,12 +29,15 @@ export const addSvgrLoader = (
 
 export const getSvgoOptions = (configManager: ConfigManager<CliConfigEntry>) => {
   return {
+    configFile: false,
     plugins: configManager.svgo?.plugins ?? [
       {
-        cleanupIDs: false,
+        name: 'cleanupIds',
+        active: false,
       },
       {
-        collapseGroups: false,
+        name: 'collapseGroups',
+        active: false,
       },
     ],
   };

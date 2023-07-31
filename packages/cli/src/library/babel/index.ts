@@ -42,7 +42,6 @@ export const babelConfigFactory = ({
   typescript = false,
   loader = true,
   removeTypeofWindow,
-  alias,
   tramvai = false,
   hot = false,
   excludesPresetEnv,
@@ -125,14 +124,6 @@ export const babelConfigFactory = ({
       enableFillActionNamePlugin && path.resolve(__dirname, './plugins/fill-action-name'), // Собственный плагин. Необходимо удалить в будущем
       markCreateTokenAsPure && path.resolve(__dirname, './plugins/create-token-pure'),
       ['lodash', { id: ['ramda'] }],
-      [
-        'module-resolver',
-        {
-          root: ['./'],
-          extensions: ['.js', '.jsx', '.ts', '.tsx'],
-          alias,
-        },
-      ],
       isServer && 'babel-plugin-dynamic-import-node',
       [
         '@babel/plugin-proposal-decorators',
