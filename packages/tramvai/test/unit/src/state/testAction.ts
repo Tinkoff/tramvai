@@ -10,6 +10,7 @@ type Options = OptionsContext & {
 
 interface Runner<Params extends any[], Result> {
   run: (...params: Params) => Result;
+  context: typeof CONTEXT_TOKEN;
 }
 
 /**
