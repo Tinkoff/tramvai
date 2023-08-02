@@ -1,5 +1,5 @@
 import { createApp } from './createApp';
-import { UI_SHOW_BANNER_TOKEN, UI_OS_NOTIFY_TOKEN, UI_SHOW_PROGRESS_TOKEN } from '../di/tokens';
+import { UI_SHOW_BANNER_TOKEN, UI_SHOW_PROGRESS_TOKEN } from '../di/tokens';
 
 export const app = createApp({
   commands: {
@@ -16,10 +16,6 @@ export const app = createApp({
     },
     {
       provide: UI_SHOW_BANNER_TOKEN,
-      useValue: true,
-    },
-    {
-      provide: UI_OS_NOTIFY_TOKEN,
       useValue: true,
     },
   ],

@@ -1,5 +1,4 @@
 import path from 'path';
-import readDir from 'fs-readdir-recursive';
 import fs from 'fs';
 import type { LoaderDefinitionFunction } from 'webpack';
 import type { ApplicationConfigEntry } from '../../../api';
@@ -21,8 +20,26 @@ const removeExtension = (filename: string): string => {
   return path.join(parsed.dir, parsed.name);
 };
 
+const readdirAsync = async (dir, prefix = '', filelist = [], filter = (file: string) => true) => {
+  const files = await fs.promises.readdir(dir).catch(() => []);
+
+  for (const file of files) {
+    const filepath = path.join(dir, file);
+    const stat = await fs.promises.stat(filepath);
+
+    if (stat.isDirectory()) {
+      // eslint-disable-next-line no-param-reassign
+      filelist = await readdirAsync(filepath, path.join(prefix, file), filelist, filter);
+    } else if (filter(file)) {
+      filelist.push(path.join(prefix, file));
+    }
+  }
+
+  return filelist;
+};
+
 // eslint-disable-next-line func-style
-const pagesResolve: LoaderDefinitionFunction<PagesResolveOptions> = function () {
+const pagesResolve: LoaderDefinitionFunction<PagesResolveOptions> = async function () {
   const { fileSystemPages, rootDir, root, extensions } = this.getOptions();
   const extensionsRegexp = new RegExp(`\\.(${extensions.map((ext) => ext.slice(1)).join('|')})$`);
   const fsLayouts: string[] = [];
@@ -32,7 +49,7 @@ const pagesResolve: LoaderDefinitionFunction<PagesResolveOptions> = function () 
   this.cacheable(false);
 
   // eslint-disable-next-line max-statements
-  const filesToPages = ({
+  const filesToPages = async ({
     pagesRootDirectory,
     isRoutes = false,
     test,
@@ -46,8 +63,10 @@ const pagesResolve: LoaderDefinitionFunction<PagesResolveOptions> = function () 
     this.addContextDependency(pagesDir);
 
     // skip service files
-    const pagesFiles = readDir(
+    const pagesFiles = await readdirAsync(
       pagesDir,
+      '',
+      [],
       (name: string) => name[0] !== '.' && name[0] !== '_' && !name.startsWith(WILDCARD_TOKEN)
     );
     const fsPages = [];
@@ -73,8 +92,7 @@ const pagesResolve: LoaderDefinitionFunction<PagesResolveOptions> = function () 
           const layoutPath = path.join(pageDirname, LAYOUT_FILENAME);
           const errorBoundaryPath = path.join(pageDirname, ERROR_BOUNDARY_FILENAME);
 
-          const routeContent = fs
-            .readdirSync(pageDirname, { withFileTypes: true })
+          const routeContent = (await fs.promises.readdir(pageDirname, { withFileTypes: true }))
             .filter((item) => item.isFile())
             .map((item) => item.name);
           const wildcardPath = routeContent.find((item) => item.includes(WILDCARD_TOKEN));
@@ -113,14 +131,14 @@ const pagesResolve: LoaderDefinitionFunction<PagesResolveOptions> = function () 
   };
 
   const fsRoutes = fileSystemPages.routesDir
-    ? filesToPages({
+    ? await filesToPages({
         pagesRootDirectory: fileSystemPages.routesDir,
         isRoutes: true,
         test: new RegExp(`index${extensionsRegexp.source}`),
       })
     : [];
   const fsPages = fileSystemPages.pagesDir
-    ? filesToPages({
+    ? await filesToPages({
         pagesRootDirectory: fileSystemPages.pagesDir,
         test: fileSystemPages.componentsPattern
           ? new RegExp(fileSystemPages.componentsPattern)

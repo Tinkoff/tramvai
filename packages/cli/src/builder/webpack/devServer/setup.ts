@@ -3,11 +3,10 @@ import type { MultiCompiler } from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import type { Container } from '@tinkoff/dippy';
-import { notifier } from './notifier';
 import type { ConfigManager } from '../../../config/configManager';
 import type { ApplicationConfigEntry } from '../../../typings/configEntry/application';
 import type { STATIC_SERVER_TOKEN } from '../../../di/tokens';
-import { CONFIG_ROOT_DIR_TOKEN, UI_OS_NOTIFY_TOKEN } from '../../../di/tokens';
+import { CONFIG_ROOT_DIR_TOKEN } from '../../../di/tokens';
 import { WEBPACK_WATCHING_TOKEN, CLOSE_HANDLER_TOKEN } from '../tokens';
 import { close } from '../../../utils/close';
 import { isApplication, isChildApp, isModule } from '../../../config/validate';
@@ -88,10 +87,6 @@ export const createDevServer = ({
 
     const rootDir = di.get(CONFIG_ROOT_DIR_TOKEN);
     app.use(express.static(rootDir));
-
-    if (di.get({ token: UI_OS_NOTIFY_TOKEN, optional: true })) {
-      notifier(compiler, configManager);
-    }
 
     staticServer.on('request', app);
   };

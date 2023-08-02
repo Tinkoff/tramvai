@@ -68,7 +68,7 @@ it('should populate defaults for config', () => {
                 "enabled": false,
               },
             },
-            "serverRunner": "process",
+            "serverRunner": "thread",
             "transpilation": {
               "loader": "babel",
             },
@@ -300,7 +300,7 @@ it('should populate defaults for overridable options', () => {
                 "enabled": false,
               },
             },
-            "serverRunner": "process",
+            "serverRunner": "thread",
             "transpilation": {
               "loader": {
                 "development": "swc",

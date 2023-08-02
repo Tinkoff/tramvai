@@ -37,11 +37,11 @@ Experimental flags are provided in `tramvai.json` and should be passed separatel
 
 ### serverRunner
 
-- `serverRunner="process"|"thread"` - use different ways to run the server app in development mode. "thread" most of the time is little faster, but might lead to some bugs, especially when running cli though nodejs api
+- `serverRunner="process"|"thread"` - use different ways to run the server app in development mode. "thread" most of the time is faster, but might lead to some bugs, especially when running cli though nodejs api
 
 #### Defaults
 
-- `serverRunner="process"` - "process" is not experimental and can be safely used
+- `serverRunner="thread"` - if you get any problems, can switch to "process", it is not experimental and can be safely used
 
 ## Webpack settings
 

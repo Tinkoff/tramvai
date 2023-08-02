@@ -91,7 +91,7 @@ describe('JSON schema для tramvai.json', () => {
                   "enabled": false,
                 },
               },
-              "serverRunner": "process",
+              "serverRunner": "thread",
               "transpilation": {
                 "loader": "babel",
               },

@@ -76,6 +76,8 @@ export default (configManager: ConfigManager<CliConfigEntry>) => (config: Config
           ),
         ]),
       },
+      // https://github.com/vercel/next.js/commit/ff5338ce03a3240a97a5c84f5ad5c31c0f53a6ce
+      compression: false,
     });
   }
 

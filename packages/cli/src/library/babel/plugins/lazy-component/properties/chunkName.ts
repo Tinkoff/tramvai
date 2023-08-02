@@ -8,8 +8,8 @@ import type {
   TemplateLiteral,
 } from '@babel/types';
 import type { ImportPath, PropertyFactory } from './types';
-import type { WebpackComments } from '../../utils/webpackComments';
-import { generateWebpackComments, parseWebpackComments } from '../../utils/webpackComments';
+import type { WebpackComments } from './utils/webpackComments';
+import { generateWebpackComments, parseWebpackComments } from './utils/webpackComments';
 
 const JS_PATH_REGEXP = /^[./]+|(\.js$)/g;
 const MATCH_LEFT_HYPHENS_REPLACE_REGEX = /^-/g;

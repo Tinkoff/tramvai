@@ -21,7 +21,7 @@ export interface CheckAsyncTsConfig {
 export interface ApplicationExperiments extends Experiments {
   /**
    * @title How to run server build
-   * @default "process"
+   * @default "thread"
    */
   serverRunner?: 'process' | 'thread';
   /**

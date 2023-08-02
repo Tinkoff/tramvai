@@ -522,7 +522,7 @@
           "properties": {
             "serverRunner": {
               "title": "How to run server build",
-              "default": "process",
+              "default": "thread",
               "enum": [
                 "process",
                 "thread"
