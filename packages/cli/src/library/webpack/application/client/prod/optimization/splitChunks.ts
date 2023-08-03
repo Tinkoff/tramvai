@@ -57,7 +57,7 @@ const resolveFrameworksPaths = (rootDir: string, frameworksList: string[]) => {
 // eslint-disable-next-line max-statements
 export const splitChunksConfig =
   (configManager: ConfigManager<ApplicationConfigEntry>) => (config: Config) => {
-    const { rootDir, splitChunks } = configManager;
+    const { rootDir, splitChunks, env } = configManager;
 
     const topLevelFrameworkPaths = resolveFrameworksPaths(rootDir, ['react', 'react-dom']);
 
@@ -85,7 +85,29 @@ export const splitChunksConfig =
     let webpackSplitChunks: SplitChunksOptions = false;
 
     switch (splitChunks.mode) {
-      case 'granularChunks':
+      case 'granularChunks': {
+        const shared: any = {
+          chunks: 'async',
+          minChunks: splitChunks.granularChunksSplitNumber,
+          minSize: splitChunks.granularChunksMinSize,
+          reuseExistingChunk: true,
+          priority: 30,
+        };
+
+        // for development, default name implementation is faster and readable
+        if (env === 'production') {
+          shared.name = (module: any, chunks: webpack.Chunk[] = []) => {
+            return crypto
+              .createHash('sha1')
+              .update(
+                chunks.reduce((acc: string, chunk: webpack.Chunk) => {
+                  return acc + chunk.name;
+                }, '')
+              )
+              .digest('hex');
+          };
+        }
+
         webpackSplitChunks = {
           chunks: 'all',
           maxInitialRequests: 10,
@@ -94,27 +116,12 @@ export const splitChunksConfig =
             default: false,
             defaultVendors: false,
             reactCacheGroup,
-            shared: {
-              chunks: 'async',
-              minChunks: splitChunks.granularChunksSplitNumber,
-              minSize: splitChunks.granularChunksMinSize,
-              reuseExistingChunk: true,
-              priority: 30,
-              name(module: any, chunks: webpack.Chunk[]) {
-                return crypto
-                  .createHash('sha1')
-                  .update(
-                    chunks.reduce((acc: string, chunk: webpack.Chunk) => {
-                      return acc + chunk.name;
-                    }, '')
-                  )
-                  .digest('hex');
-              },
-            },
+            shared,
           },
         };
         break;
-      case 'commonChunk':
+      }
+      case 'commonChunk': {
         webpackSplitChunks = {
           cacheGroups: {
             default: false,
@@ -128,6 +135,7 @@ export const splitChunksConfig =
           },
         };
         break;
+      }
     }
 
     const { hotRefresh } = configManager;
