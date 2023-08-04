@@ -1,6 +1,6 @@
 # Client Hints
 
-Modules provides various parameters from the client device, e.g. type of the device, screen size, etc.
+Module provides various parameters from the client device, e.g. type of the device, screen size, etc.
 
 ## Installation
 
@@ -10,7 +10,7 @@ First, install `@tramvai/module-client-hints`
 npm i --save @tramvai/module-client-hints
 ```
 
-Then add `ClientHintsModule` to the modules list
+Then add `ClientHintsModule` to the modules list:
 
 ```tsx
 import { createApp } from '@tramvai/core';
@@ -21,25 +21,49 @@ createApp({
 });
 ```
 
+It will enable server side user agent parsing. If you are using [CSR fallback](03-features/010-rendering/05-csr.md#csr-fallback) feature, then you should use `ClientHintsCSRModule` from this package instead.
+
 ## Explanation
 
-### User agent details parsing
+### The problem with media on server and on client
 
-Parsing is implemented with library [@tinkoff/user-agent](../libs/user-agent.md) that may use either user-agent header or client-hints headers.
+One of the SSR problem is render of the component which depends on current screen size, e.g. image carousel that should render specific number of images depending on screen width. By default, the exact screen size can be figured out only on client-side and we can't render such content on server identical to the client render. If this content is not important for the SEO we can use skeletons and spinners, but they are not suitable for every case.
+
+Client Hints modules provides the way to solve this problem in some way. It stores data about client devices in cookies and then use these cookies on server in next page loading.
+
+### Server-side rendering
+
+Module will parse client hints/user agent only on the server by default. Parsing is implemented with library [@tinkoff/user-agent](../libs/user-agent.md) that may use either user-agent header or client-hints headers.
 
 If there is a `sec-ch-ua` header in request than user agent parsing will be based on [Client Hints](https://developer.mozilla.org/en-US/docs/Web/HTTP/Client_hints) headers. If there is no such header than old school parsing of user-agent string will be used.
 
 This logic implies next things worth to mention:
+
 - by default, only part of client-hints is sent by browser and you can get only partial info about user browser (no cpu spec, platform version or device model). Although, we send an additional header `accept-ch` with response from server to request this data from client - on first request from current browser there will be no such data in any case and they will appear only on subsequent requests
 - if you need to use additional info, you may specify the header [`accept-ch`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-CH) in your app with `REQUEST_MANAGER_TOKEN`
 - client-hints is mostly more performant way to parse browser info and this is way it used if it's possible
 - currently only chromium based browsers support client hints, so for other browsers and bots user-agent header will be used to gather browser info
 
-### The problem with media on server and on client
+### Client-side rendering
 
-One of the SSR problem is render of the component which depends of current screen size, e.g. image carousel that should render specific number of images depending of screen width. By default, the exact screen size can be figured out only on client-side and we can't render such content on server identical to the client render. If this content is not important for the SEO we can use skeletons and spinners, but they are not suitable for every case.
+If you want to parse user agent [on the client](03-features/010-rendering/05-csr.md#csr-fallback), then you should use `ClientHintsCSRModule`:
 
-Client Hints modules provides the way to solve this problem in some way. It stores data about client devices in cookies and then use this cookies on server in next page loading.
+```tsx
+import { createApp } from '@tramvai/core';
+import { ClientHintsCSRModule } from '@tramvai/module-client-hints';
+
+createApp({
+  modules: [ClientHintsCSRModule],
+  // Also, there will be no conflict with ClientHintsModule, but ClientHintsCSRModule must be registered after ClientHintsModule strictly.
+  // modules: [ClientHintsModule, ClientHintsCSRModule],
+});
+```
+
+:::warning
+
+Usage of `ClientHintsCSRModule` will increase bundle size for ~ 18kb raw and 8kb gzip
+
+:::
 
 ### How does media work
 
@@ -52,6 +76,7 @@ When user enters the app for the first time, information about **real** device s
 :::
 
 This module tries to determine type of the user device using user-agent string, and separates the devices into three groups:
+
 - `mobile`
 - `tablet`
 - `desktop`
@@ -104,7 +129,7 @@ const state = {
 
 #### Use ClientHints in component
 
-If some component if depend of screen size:
+If some component depends on the screen size:
 
 1. When user loads app for the first time **is not possible** to guarantee the same exact render on server and client
 2. On first app load you may show some skeleton to the user by checking `supposed: true` property

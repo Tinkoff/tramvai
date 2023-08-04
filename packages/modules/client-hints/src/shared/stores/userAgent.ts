@@ -5,7 +5,5 @@ export const setUserAgent = createEvent<UserAgent>('setUserAgent');
 
 export const UserAgentStore = createReducer<UserAgent, 'userAgent'>('userAgent', null as any).on(
   setUserAgent,
-  (state, userAgent) => {
-    return userAgent;
-  }
+  (state, userAgent) => userAgent
 );

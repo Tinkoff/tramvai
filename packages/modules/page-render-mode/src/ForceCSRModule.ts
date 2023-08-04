@@ -10,9 +10,9 @@ import { PAGE_RENDER_DEFAULT_FALLBACK_COMPONENT } from './tokens';
 
 // default internal bundle, used for File-System components
 const FALLBACK_GROUP = '__default';
-// just some unic name
+// just some uniq name
 const FALLBACK_NAME = '__csr_fallback__';
-// just some unic path
+// just some uniq path
 const FALLBACK_PATH = '/__csr_fallback__/';
 // env for force CSR mode
 const FORCE_RENDER_ENV_KEY = 'TRAMVAI_FORCE_CLIENT_SIDE_RENDERING';

@@ -1,9 +1,6 @@
-import { Module, commandLineListTokens, provide } from '@tramvai/core';
-import { CONTEXT_TOKEN } from '@tramvai/tokens-common';
-import { COOKIE_MANAGER_TOKEN } from '@tramvai/tokens-cookie';
-import { readMediaCommand } from './server/readMedia';
-import { providers } from './shared/providers';
-import { userAgentProviders } from './server/userAgent';
+import { declareModule, provide } from '@tramvai/core';
+import { serverProviders } from './shared/providers.server';
+import { serverUserAgentProviders } from './server/userAgent';
 import { PARSER_CLIENT_HINTS_ENABLED } from './tokens';
 
 export * from './tokens';
@@ -12,25 +9,17 @@ export * from './shared/stores/mediaSelectors';
 export * from './shared/stores/media';
 export * from './shared/stores/userAgent';
 
-export { ClientHintsChildAppModule } from './child-app/module';
+export { ClientHintsChildAppModule } from './modules/child-app/module';
+export { ClientHintsCSRModule } from './modules/csr/server';
 
-@Module({
+export const ClientHintsModule = /* @__PURE__ */ declareModule({
+  name: 'ClientHintsModule',
   providers: [
-    ...providers,
-    ...userAgentProviders,
-    provide({
-      provide: commandLineListTokens.resolveUserDeps,
-      multi: true,
-      useFactory: readMediaCommand,
-      deps: {
-        context: CONTEXT_TOKEN,
-        cookieManager: COOKIE_MANAGER_TOKEN,
-      },
-    }),
+    ...serverProviders,
+    ...serverUserAgentProviders,
     provide({
       provide: PARSER_CLIENT_HINTS_ENABLED,
       useValue: true,
     }),
   ],
-})
-export class ClientHintsModule {}
+});

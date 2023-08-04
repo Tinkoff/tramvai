@@ -22,14 +22,16 @@
     "@tinkoff/user-agent": "0.0.0-stub",
     "@tinkoff/utils": "^2.1.2",
     "@tramvai/safe-strings": "0.0.0-stub",
+    "@tramvai/tokens-child-app": "0.0.0-stub",
     "@tramvai/tokens-common": "0.0.0-stub",
     "@tramvai/tokens-cookie": "0.0.0-stub",
-    "@tramvai/tokens-child-app": "0.0.0-stub"
+    "user-agent-data-types": "^0.3.1"
   },
   "peerDependencies": {
+    "@tinkoff/dippy": "0.0.0-stub",
+    "@tinkoff/logger": "0.0.0-stub",
     "@tramvai/core": "0.0.0-stub",
     "@tramvai/state": "0.0.0-stub",
-    "@tinkoff/dippy": "0.0.0-stub",
     "react": ">=16.14.0",
     "react-dom": ">=16.14.0",
     "tslib": "^2.4.0"

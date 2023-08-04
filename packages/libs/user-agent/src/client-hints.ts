@@ -17,7 +17,7 @@ const parseQuotedString = (str: string | undefined): string | undefined => {
   }
 };
 
-const parseBrowser = (brandsList: string): { browser: Browser; engine: Engine } => {
+const parseBrowserFromString = (brandsList: string): { browser: Browser; engine: Engine } => {
   const browser: Browser = {
     name: undefined,
     version: undefined,
@@ -54,6 +54,43 @@ const parseBrowser = (brandsList: string): { browser: Browser; engine: Engine } 
   return { browser, engine };
 };
 
+const parseBrowserFromUserAgentData = (
+  brands: Array<NavigatorUABrandVersion>
+): { browser: Browser; engine: Engine } => {
+  const browser: Browser = {
+    name: undefined,
+    version: undefined,
+    major: undefined,
+    browserEngine: '',
+  };
+  const engine: Engine = {
+    name: undefined,
+    version: undefined,
+  };
+
+  brands.forEach(({ brand, version }) => {
+    if (KNOWN_VENDORS.has(brand)) {
+      browser.name = brand.toLowerCase();
+      browser.version = version;
+      [browser.major] = version.split('.');
+    }
+
+    if (KNOWN_ENGINES.has(brand)) {
+      engine.name = brand.toLowerCase();
+      engine.version = version;
+    }
+  });
+
+  if (!browser.name && engine.name) {
+    browser.name = engine.name;
+    browser.version = engine.version;
+  }
+
+  browser.browserEngine = getBrowserEngine(browser.name, engine.name);
+
+  return { browser, engine };
+};
+
 /**
  *
  * @description
@@ -72,7 +109,7 @@ const parseBrowser = (brandsList: string): { browser: Browser; engine: Engine } 
 export const parseClientHintsHeaders = (
   headers: Record<string, string | string[] | undefined>
 ): UserAgent => {
-  const { browser, engine } = parseBrowser(
+  const { browser, engine } = parseBrowserFromString(
     (headers['sec-ch-ua-full-version-list'] as string) || (headers['sec-ch-ua'] as string)
   );
   const osName = parseQuotedString(headers['sec-ch-ua-platform'] as string);
@@ -95,7 +132,45 @@ export const parseClientHintsHeaders = (
       type: headers['sec-ch-ua-mobile'] === '?1' ? 'mobile' : 'desktop',
       vendor: undefined,
     },
-    // basically all of the browsers with client-hints support
+    // basically all the browsers with client-hints support
+    // also compatible with SameSite=None
+    sameSiteNoneCompatible: true,
+  };
+};
+
+/**
+ *
+ * @description
+ * Some of the data will be available if `UADataValues` were gotten from
+ * `getHighEntropyValues` async method, but it's not suitable for all cases.
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/User-Agent_Client_Hints_API
+ * @see https://wicg.github.io/ua-client-hints/#user-agent-model
+ *
+ * @param payload
+ */
+export const parseClientHintsUserAgentData = (payload: UADataValues): UserAgent => {
+  const { browser, engine } = parseBrowserFromUserAgentData(
+    payload.fullVersionList || payload.brands || []
+  );
+
+  return {
+    browser,
+    engine,
+    os: {
+      name: payload.platform,
+      version: payload.platformVersion,
+    },
+    cpu: {
+      architecture: payload.architecture,
+    },
+    mobileOS: getMobileOs(payload.platform),
+    device: {
+      model: payload.model,
+      type: payload.mobile ? 'mobile' : 'desktop',
+      vendor: undefined,
+    },
+    // basically all the browsers with client-hints support
     // also compatible with SameSite=None
     sameSiteNoneCompatible: true,
   };

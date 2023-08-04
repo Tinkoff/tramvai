@@ -25,7 +25,8 @@
     "ua-parser-js": "0.7.31"
   },
   "devDependencies": {
-    "@types/ua-parser-js": "^0.7.33"
+    "@types/ua-parser-js": "^0.7.33",
+    "user-agent-data-types": "^0.3.1"
   },
   "peerDependencies": {
     "@tramvai/cli": "0.0.0-stub",
