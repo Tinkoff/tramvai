@@ -164,6 +164,55 @@ export default function Page() {
 Page.actions = [query.prefetchAction()];
 ```
 
+#### SPA and dynamic url parameters
+
+For example, you have route like `/blog/:article/`, and a few specific urls on it - `/blog/first/` and `/blog/second/`. From any article you can made SPA-transition to another article.
+
+This case can be a little bit tricky for data prefetching:
+- for `prefetchAction`, you can't pass slug, and need to resolve it from `PAGE_SERVICE_TOKEN` in `key` and `fn`
+- for SPA-transitions on the same route, you need to pass slug to `useQuery` in component, and can resolve it from `useRoute` hook.
+
+Complete example:
+
+```tsx
+import { createQuery, useQuery } from '@tramvai/react-query';
+import { useRoute, PAGE_SERVICE_TOKEN } from '@tramvai/module-router';
+
+const query = createQuery({
+  key: (slug?: string) => {
+    // get slug from query options, otherwise from page service
+    const articleId = slug
+      || this.deps.pageService.getCurrentRoute().params.article;
+
+    // it is important, any dynamic part of query need to be saved in key
+    return ['article', articleId];
+  },
+  async fn(slug?: string) {
+    // get slug from query options, otherwise from page service
+    const articleId = slug
+      || this.deps.pageService.getCurrentRoute().params.article;
+
+    return this.deps.apiService.fetchArticle(articleId);
+  },
+  deps: {
+    apiService: API_SERVICE_TOKEN,
+    pageService: PAGE_SERVICE_TOKEN,
+  },
+});
+
+export default function Article() {
+  // the same data as `pageService.getCurrentRoute()` with routes changes subscription
+  const route = useRoute();
+  // after SPA-transitions, this query will be executed client-side, always with fresh slug
+  const { data, isLoading } = useQuery(query, route.params.article);
+
+  return <div>{isLoading ? 'loading...' : data}</div>;
+}
+
+// during the first page load, this query will be executed server-side, with actual slug from page service
+Article.actions = [query.prefetchAction()];
+```
+
 ### Dependencies
 
 Queries has full Dependency Injection support, so you can declare dependencies like in [DI providers](concepts/provider.md), in `deps` property. These dependencies will be available in the action `fn` and `key` functions фы `this.deps` property.
