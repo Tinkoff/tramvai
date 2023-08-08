@@ -36,6 +36,12 @@
         },
         {
             "path": "../../libs/logger"
+        },
+        {
+            "path": "../../libs/env-validators"
+        },
+        {
+            "path": "../metrics"
         }
     ]
 }

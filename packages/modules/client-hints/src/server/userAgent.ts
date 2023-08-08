@@ -4,12 +4,15 @@ import { provide } from '@tramvai/core';
 import {
   CREATE_CACHE_TOKEN,
   ENV_MANAGER_TOKEN,
+  ENV_USED_TOKEN,
   REQUEST_MANAGER_TOKEN,
   RESPONSE_MANAGER_TOKEN,
   STORE_TOKEN,
 } from '@tramvai/tokens-common';
+import { METRICS_MODULE_TOKEN } from '@tramvai/module-metrics';
 import { parseClientHints } from '@tinkoff/user-agent';
 import noop from '@tinkoff/utils/function/noop';
+import { isNumber } from '@tinkoff/env-validators';
 
 import { PARSER_CLIENT_HINTS_ENABLED, USER_AGENT_TOKEN } from '../tokens';
 import { setUserAgent } from '../shared/stores/userAgent';
@@ -17,13 +20,43 @@ import { parseUserAgentWithCache } from './parseUserAgentWithCache';
 
 export const serverUserAgentProviders: Provider[] = [
   provide({
-    provide: 'userAgentLruCache',
+    provide: 'userAgentCacheType',
+    useFactory: ({ envManager }) => envManager.get('TRAMVAI_USER_AGENT_CACHE_TYPE'),
+    deps: {
+      envManager: ENV_MANAGER_TOKEN,
+    },
+  }),
+  provide({
+    provide: ENV_USED_TOKEN,
+    useValue: [
+      {
+        key: 'TRAMVAI_USER_AGENT_CACHE_TYPE',
+        value: 'memory',
+        optional: true,
+        validator: (value) => value === 'memory' || value === 'memory-lfu',
+        dehydrate: false,
+      },
+      {
+        key: 'TRAMVAI_USER_AGENT_CACHE_MAX',
+        value: '50',
+        optional: true,
+        validator: isNumber,
+        dehydrate: false,
+      },
+    ],
+  }),
+  provide({
+    provide: 'userAgentMemoryCache',
     scope: Scope.SINGLETON,
-    useFactory: ({ createCache }) => {
-      return createCache('memory', { max: 50 });
+    useFactory: ({ createCache, envManager, cacheType }) => {
+      return createCache(cacheType, {
+        max: Number(envManager.get('TRAMVAI_USER_AGENT_CACHE_MAX')),
+      });
     },
     deps: {
       createCache: CREATE_CACHE_TOKEN,
+      envManager: ENV_MANAGER_TOKEN,
+      cacheType: 'userAgentCacheType',
     },
   }),
   provide({
@@ -48,11 +81,15 @@ export const serverUserAgentProviders: Provider[] = [
   }),
   provide({
     provide: USER_AGENT_TOKEN,
-    useFactory: ({ requestManager, cache, parserClientHintsEnabled, store }) => {
+    useFactory: ({ requestManager, cache, parserClientHintsEnabled, store, metrics }) => {
       const userAgent =
         parserClientHintsEnabled && requestManager.getHeader('sec-ch-ua')
           ? parseClientHints(requestManager.getHeaders())
-          : parseUserAgentWithCache(cache, requestManager.getHeader('user-agent') as string);
+          : parseUserAgentWithCache(
+              cache,
+              requestManager.getHeader('user-agent') as string,
+              metrics
+            );
 
       store.dispatch(setUserAgent(userAgent));
 
@@ -62,7 +99,35 @@ export const serverUserAgentProviders: Provider[] = [
       requestManager: REQUEST_MANAGER_TOKEN,
       parserClientHintsEnabled: PARSER_CLIENT_HINTS_ENABLED,
       store: STORE_TOKEN,
-      cache: 'userAgentLruCache',
+      cache: 'userAgentMemoryCache',
+      metrics: 'userAgentCacheMetrics',
+    },
+  }),
+  provide({
+    provide: 'userAgentCacheMetrics',
+    scope: Scope.SINGLETON,
+    useFactory: ({ metrics }) => {
+      const getCounter = metrics.counter({
+        name: 'user_agent_cache_gets',
+        help: 'Total attempts to get user agent parsed results from cache',
+        labelNames: ['result'],
+      });
+
+      return {
+        hit() {
+          getCounter.inc({
+            result: 'hit',
+          });
+        },
+        miss() {
+          getCounter.inc({
+            result: 'miss',
+          });
+        },
+      };
+    },
+    deps: {
+      metrics: METRICS_MODULE_TOKEN,
     },
   }),
 ];

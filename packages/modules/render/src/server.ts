@@ -298,13 +298,14 @@ Page Error Boundary will be rendered for the client`,
       deps: {
         requestManager: REQUEST_MANAGER_TOKEN,
         userAgent: USER_AGENT_TOKEN,
-        cache: 'modernSatisfiesLruCache',
+        cache: 'modernSatisfiesMemoryCache',
         cookieManager: COOKIE_MANAGER_TOKEN,
       },
     }),
     provide({
-      provide: 'modernSatisfiesLruCache',
+      provide: 'modernSatisfiesMemoryCache',
       scope: Scope.SINGLETON,
+      // @todo - use larger `max` option and `memory-lfu` type after successful TCORE-4668 experiment
       useFactory: ({ createCache }) => {
         return createCache('memory', { max: 50 });
       },

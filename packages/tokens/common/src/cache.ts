@@ -32,10 +32,11 @@ export interface Cache<T = any> {
   clear(): void;
 }
 
-export type CacheType = 'memory';
+export type CacheType = 'memory' | 'memory-lfu';
 
 export interface CacheOptionsByType<T> {
   memory: [Options<string, T> | undefined] | [];
+  ['memory-lfu']: [Options<string, T> | undefined] | [];
 }
 
 export type CacheFactory = <T, Type extends CacheType = 'memory'>(

@@ -11,6 +11,7 @@
   "browser": {
     "./lib/actions/actionPageRunner.js": "./lib/actions/actionPageRunner.browser.js",
     "./lib/cache/serverProviders.js": "./lib/cache/clientProviders.js",
+    "./lib/cache/cacheFactory.js": "./lib/cache/cacheFactory.browser.js",
     "./lib/index.es.js": "./lib/index.browser.js",
     "./lib/providers/serverProviders.js": "./lib/providers/clientProviders.js",
     "./lib/child-app/serverProviders.js": "./lib/child-app/clientProviders.js",
@@ -30,6 +31,7 @@
     "@tinkoff/errors": "0.0.0-stub",
     "@tinkoff/hook-runner": "0.0.0-stub",
     "@tinkoff/lru-cache-nano": "^7.8.1",
+    "@akashbabu/lfu-cache": "1.0.2",
     "@tinkoff/pubsub": "0.0.0-stub",
     "@tinkoff/url": "0.0.0-stub",
     "@tramvai/experiments": "0.0.0-stub",
