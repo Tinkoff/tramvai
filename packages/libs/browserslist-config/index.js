@@ -5,18 +5,18 @@
 
 const defaults = [
   // desktop
-  'Chrome >= 30',
-  'Safari >= 10',
-  'Firefox >= 40',
+  'Chrome >= 49',
+  'Safari >= 11',
+  'Firefox >= 52',
   'Opera >= 44',
   'Edge >= 16',
   // mobile
-  'ChromeAndroid >= 30',
+  'ChromeAndroid >= 40',
   'ios_saf >= 10',
   'Android >= 5',
   'OperaMobile >= 47',
   'UCAndroid >= 12',
-  'FirefoxAndroid >= 40',
+  'FirefoxAndroid >= 68',
 ];
 
 const modern = [
